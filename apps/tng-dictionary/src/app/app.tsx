@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Home from '../components/Home/Home';
 import VocabularyListIndex from '../components/VocabularyListIndex/VocabularyListIndex';
 import Credits from '../components/Credits/Credits';
+import TermsDetailComponent from '../components/TermsDetail/TermsDetail';
 
 export function App() {
   return (
@@ -15,6 +16,7 @@ export function App() {
         <Route path="/Credits" element={<Credits />} />
         <Route path="/vocabularyLists" element={<VocabularyListIndex />} />
         <Route path="/vocabularyLists/:id" element={<VocabularyListDetail />} />
+        <Route path="/terms" element={<TermsDetailComponent />} />
       </Routes>
     </BrowserRouter>
 
