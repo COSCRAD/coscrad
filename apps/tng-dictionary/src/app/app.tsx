@@ -14,9 +14,9 @@ export function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Credits" element={<Credits />} />
-        <Route path="/vocabularyLists" element={<VocabularyListIndex />} />
-        <Route path="/vocabularyLists/:id" element={<VocabularyListDetail />} />
-        <Route path="/terms" element={<TermsDetailComponent />} />
+        <Route path="/VocabularyLists" element={<VocabularyListIndex />} />
+        <Route path="/VocabularyLists/:id" element={<VocabularyListDetail />} />
+        <Route path="/Terms" element={<TermsDetailComponent />} />
       </Routes>
     </BrowserRouter>
 
