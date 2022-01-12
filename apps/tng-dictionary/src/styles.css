@@ -1,5 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
 .home {
     text-align: center;
-    position: relative;
+display: block;
+min-height: calc(100vh - 80px);
+}
+
+.credits {
+    min-height: calc(100vh - 80px);
+}
+
+.toolbar {
+    height: 80px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
 }

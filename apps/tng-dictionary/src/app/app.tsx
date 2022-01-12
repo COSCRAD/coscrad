@@ -7,18 +7,27 @@ import Home from '../components/Home/Home';
 import VocabularyListIndex from '../components/VocabularyListIndex/VocabularyListIndex';
 import Credits from '../components/Credits/Credits';
 import TermsDetailComponent from '../components/TermsDetail/TermsDetail';
+import Toolbar from '../components/Toolbar/Toolbar';
 
 export function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/Credits" element={<Credits />} />
-        <Route path="/VocabularyLists" element={<VocabularyListIndex />} />
-        <Route path="/VocabularyLists/:id" element={<VocabularyListDetail />} />
-        <Route path="/Terms" element={<TermsDetailComponent />} />
-      </Routes>
-    </BrowserRouter>
+
+
+    <div style={{ position: 'relative' }}>
+      <Toolbar />
+      <div style={{ marginTop: '80px' }}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/Credits" element={<Credits />} />
+            <Route path="/VocabularyLists" element={<VocabularyListIndex />} />
+            <Route path="/VocabularyLists/:id" element={<VocabularyListDetail />} />
+            <Route path="/Terms" element={<TermsDetailComponent />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </div>
+
 
 
   );
