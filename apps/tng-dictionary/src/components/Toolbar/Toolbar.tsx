@@ -1,6 +1,7 @@
 import './Toolbar.module.css';
 import { CssBaseline } from '@mui/material';
 import { AppBar } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 /* eslint-disable-next-line */
 export interface ToolbarProps { }
@@ -12,9 +13,9 @@ export function Toolbar(props: ToolbarProps) {
         className="toolbar"
         sx={{ bgcolor: 'red' }}
       >
-        <div>
+        <Link to="/">
           <h1>Tsilhqotin Dictionary</h1>
-        </div>
+        </Link>
       </AppBar>
     </CssBaseline>
   );

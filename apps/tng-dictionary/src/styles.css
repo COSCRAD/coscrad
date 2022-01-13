@@ -7,8 +7,7 @@ body {
 }
 
 .home {
-    text-align: center;
-display: block;
+text-align: center;
 min-height: calc(100vh - 80px);
 }
 
@@ -21,4 +20,20 @@ min-height: calc(100vh - 80px);
     text-align: center;
     justify-content: center;
     align-items: center;
+}
+
+.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.Center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+ 
 }

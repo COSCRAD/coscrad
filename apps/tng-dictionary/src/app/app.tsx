@@ -11,12 +11,11 @@ import Toolbar from '../components/Toolbar/Toolbar';
 
 export function App() {
   return (
+    <div>
 
-
-    <div style={{ position: 'relative' }}>
-      <Toolbar />
       <div style={{ marginTop: '80px' }}>
         <BrowserRouter>
+          <Toolbar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/Credits" element={<Credits />} />
@@ -27,9 +26,6 @@ export function App() {
         </BrowserRouter>
       </div>
     </div>
-
-
-
   );
 }
 
