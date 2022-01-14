@@ -24,8 +24,8 @@ export function VocabularyListIndex(props: VocabularyListIndexProps) {
   useEffect(() => {
     setAppState({ loading: true, vocabularyLists: null });
     const apiUrl = `http://localhost:3131/api/entities?type=vocabularyList`;
-    fetch(apiUrl,{mode:'cors'})
-      .then((res) =>res.json())
+    fetch(apiUrl, { mode: 'cors' })
+      .then((res) => res.json())
       .then((vocabularyLists) => {
         console.log({
           result: vocabularyLists
@@ -34,7 +34,7 @@ export function VocabularyListIndex(props: VocabularyListIndexProps) {
       }).catch(rej => console.log(rej))
   }, [setAppState]);
 
-  if(!appState.vocabularyLists || appState.vocabularyLists === []) return <Loading nameToDisplay={'All Vocabulary Lists'} />
+  if (!appState.vocabularyLists || appState.vocabularyLists === []) return <Loading nameToDisplay={'All Vocabulary Lists'} />
 
   const testTable = [{
     id: '1',
@@ -43,14 +43,14 @@ export function VocabularyListIndex(props: VocabularyListIndexProps) {
 
   return (
     <div>
-      <h1>Welcome to VocabularyListDetail!</h1>
+      <h1>Welcome to VocabularyLists INDEX</h1>
       {
         (appState.vocabularyLists as unknown as HasIdAndName[]).map((vocabularyList) =>
-        <Link to={`/vocabularyLists/${vocabularyList.id}`}>
-        <div>
-          {`${vocabularyList.id}: ${vocabularyList.name}`}
-        </div>
-        </Link>
+          <Link to={`/vocabularyLists/${vocabularyList.id}`}>
+            <div>
+              {`${vocabularyList.id}: ${vocabularyList.name}`}
+            </div>
+          </Link>
         )
       }
     </div>

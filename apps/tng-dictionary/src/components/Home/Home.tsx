@@ -11,9 +11,9 @@ export function Home(props: HomeProps) {
     <div>
       <div className='home'>
         <div className='Center' style={{ display: 'grid' }}>
-          <Link to="/terms"><Button sx={{ width: 310 }} variant="outlined">Terms</Button></Link>
-          <Link to="/VocabularyLists"><Button sx={{ width: 310, mt: 1 }} variant='outlined'>Paradigms and Vocabulary Lists</Button></Link>
-          <Link to="/credits"><Button sx={{ width: 310, mt: 1 }} variant='outlined'>Credits</Button></Link>
+          <Link to="/terms"><Button sx={{ width: 310, borderColor: 'red', color: 'red', borderRadius: '20px' }} variant="outlined">Terms</Button></Link>
+          <Link to="/VocabularyLists"><Button sx={{ width: 310, mt: 1, borderColor: 'red', color: 'red', borderRadius: '20px' }} variant='outlined'>Paradigms and Vocabulary Lists</Button></Link>
+          <Link to="/credits"><Button sx={{ width: 310, mt: 1, borderColor: 'red', color: 'red', borderRadius: '20px' }} variant='outlined'>Credits</Button></Link>
         </div>
       </div>
     </div>

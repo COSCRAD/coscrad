@@ -13,9 +13,9 @@ export function Toolbar(props: ToolbarProps) {
         className="toolbar"
         sx={{ bgcolor: 'red' }}
       >
-        <Link to="/">
-          <h1>Tsilhqotin Dictionary</h1>
-        </Link>
+
+        <h1>Tŝilhqot'in Dictionary</h1>
+
       </AppBar>
     </CssBaseline>
   );
