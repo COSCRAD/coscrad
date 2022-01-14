@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Loading from '../Loading/Loading';
-import Table, { TableProps } from '../Table/Table';
 import './VocabularyListIndex.module.css';
 
 type HasIdAndName = {
