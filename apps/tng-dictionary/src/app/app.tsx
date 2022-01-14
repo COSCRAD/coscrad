@@ -11,20 +11,18 @@ import Toolbar from '../components/Toolbar/Toolbar';
 
 export function App() {
   return (
-    <div>
 
-      <div style={{ marginTop: '80px' }}>
-        <BrowserRouter>
-          <Toolbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/Credits" element={<Credits />} />
-            <Route path="/VocabularyLists" element={<VocabularyListIndex />} />
-            <Route path="/VocabularyLists/:id" element={<VocabularyListDetail />} />
-            <Route path="/Terms" element={<TermsDetailComponent />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
+    <div style={{ marginTop: '80px' }}>
+      <BrowserRouter>
+        <Toolbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Credits" element={<Credits />} />
+          <Route path="/VocabularyLists" element={<VocabularyListIndex />} />
+          <Route path="/VocabularyLists/:id" element={<VocabularyListDetail />} />
+          <Route path="/Terms" element={<TermsDetailComponent />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

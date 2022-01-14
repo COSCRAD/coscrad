@@ -1,4 +1,3 @@
-import Toolbar from '../Toolbar/Toolbar';
 import './Home.module.css';
 import { Link } from "react-router-dom";
 import { Button } from '@mui/material';

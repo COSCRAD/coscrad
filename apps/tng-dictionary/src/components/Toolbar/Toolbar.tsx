@@ -1,7 +1,6 @@
 import './Toolbar.module.css';
 import { CssBaseline } from '@mui/material';
 import { AppBar } from '@mui/material';
-import { Link } from 'react-router-dom';
 
 /* eslint-disable-next-line */
 export interface ToolbarProps { }
