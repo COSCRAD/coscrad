@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Divider, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import VolumeUpTwoToneIcon from '@mui/icons-material/VolumeUpTwoTone';
+import ErrorIcon from '@mui/icons-material/Error';
 
 // TODO move this to shared interfaces lib
 export type TermData = {
@@ -30,10 +31,10 @@ export function Term(props: TermsDetailComponentProps) {
   const { termData } = props;
 
   if (!termData) return (
-    <div className='load'>
+    <div>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}>
-        <div style={{ color: 'white' }}>
-          <h1>Term not found</h1>
+        <div style={{ color: 'rgb(259,2,2)' }}>
+          <h1><ErrorIcon /> Term not found</h1>
           <h2>Lha ts'egwediʔal</h2>
           <h2 style={{ color: 'rgb(204, 170, 170)' }}>"One couldn't find the word."</h2>
         </div>

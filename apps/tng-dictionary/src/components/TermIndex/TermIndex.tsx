@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp, GridValueGetterParams } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
@@ -18,18 +19,18 @@ import Pagination from '@mui/material/Pagination';
 import TablePagination from '@mui/material/TablePagination'
 
 
-
-
 type ComponentState = {
   allTerms: TermData[];
-  searchContext: 'term' | 'termEnglish';
+  searchContext: 'term';
 }
+
+
 
 const stringIncludes = (input: string, textToMatch: string) => input.includes(textToMatch)
 
 const determineSelectedTerms = (allTerms: TermData[], filters: Record<string, string>) =>
   // @ts-ignore
-  allTerms.filter(term => doValuesMatchFilters(term, filters, stringIncludes))
+  allTerms.filter(TermData => doValuesMatchFilters(TermData, filters, stringIncludes))
 
 export default function DataGridDemo(): JSX.Element {
   const [componentState, setComponentState] = useState<ComponentState>({
@@ -101,16 +102,21 @@ export default function DataGridDemo(): JSX.Element {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setToggled(event.target.checked)
-    useEffect
 
   };
 
+  const [isToggled, setToggle] = useState(0);
+
+
   return (
+
     <ThemeProvider theme={theme}>
       <div className='termindex'>
         <h1 style={{ lineHeight: '0px' }}>Terms <MenuBookTwoToneIcon /></h1>
         <div style={{ padding: '0px' }}> {toggled ? [searchEnglish] : [searchTsilhqotin]} </div>
+
         <FormControlLabel control={<Switch onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} />} label={"Tŝilhqot'in / English"} />
+
       </div>
       <DataGrid
         rows={rows}
@@ -133,7 +139,8 @@ export default function DataGridDemo(): JSX.Element {
           )
         }}
       />
-    </ThemeProvider>
+    </ThemeProvider >
+
   );
 }
 

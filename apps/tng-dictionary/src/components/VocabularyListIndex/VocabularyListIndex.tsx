@@ -24,10 +24,14 @@ export interface VocabularyListIndexProps { }
 
 export function VocabularyListIndex(props: VocabularyListIndexProps) {
 
+
   const [appState, setAppState] = useState({
     loading: false,
-    vocabularyLists: null,
+    vocabularyLists: null
   });
+
+
+  // --------------------------------------------------------------------------------------
 
   useEffect(() => {
     setAppState({ loading: true, vocabularyLists: null });
@@ -57,32 +61,42 @@ export function VocabularyListIndex(props: VocabularyListIndexProps) {
     field: 'name',
     headerName: 'Vocabulary List',
     width: 150
-  }]
+  }];
 
   const stylez = {
     color: 'black'
   } as const
 
-
   const search =
-    <TextField placeholder="Search Vocabulary Lists" InputProps={{
-      sx: { borderRadius: '24px', bgcolor: 'white', width: '300px' },
-      endAdornment: (
-        <SearchIcon sx={{ color: 'rgb(159,2,2)' }} />
-      )
-    }} />;
+    <TextField placeholder="Search Vocabulary Lists"
+      InputProps={{
+        sx: { borderRadius: '24px', bgcolor: 'white', width: '300px' },
+        endAdornment: (
+          <SearchIcon sx={{ color: 'rgb(159,2,2)' }} />
+        )
+      }} />;
 
   return (
 
     <ThemeProvider theme={theme}>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .6 }}>
         <Typography style={center}>
-          <div style={{ background: 'rgb(159,2,2)', paddingTop: '4px', paddingBottom: '38px' }}>
+          <div style={{ background: 'rgb(159,2,2)', paddingTop: '2px', paddingBottom: '37px' }}>
             <h1 style={{ lineHeight: '0px', color: 'white' }}>Vocabulary Lists <MenuBookTwoToneIcon /> </h1>
             {search}
           </div>
           <Typography style={style}>
-            <DataGrid sx={height} rows={rows} columns={columns} rowsPerPageOptions={[20, 50, 100]}
+            <DataGrid sx={height} rows={rows} columns={columns} rowsPerPageOptions={[10, 50, 100]}
+              initialState={{
+                pagination: {
+                  pageSize: 10,
+                }
+              }}
+              components={{
+                Panel: () => (
+                  <p style={{ textAlign: 'center' }}>© 2022 Tŝilhqot'in National Government</p>
+                )
+              }}
             />
           </Typography>
         </Typography>
@@ -95,7 +109,7 @@ export function VocabularyListIndex(props: VocabularyListIndexProps) {
 export default VocabularyListIndex;
 
 const height = {
-  height: '70vh',
+  height: '65vh',
   width: '100vw',
   background: 'white',
   display: 'flex', flexDirection: "column-reverse"
@@ -118,7 +132,3 @@ const style = {
   width: 'fit-content',
 
 } as const
-
-
-
-
