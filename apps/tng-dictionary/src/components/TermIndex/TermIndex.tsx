@@ -21,21 +21,21 @@ import TablePagination from '@mui/material/TablePagination'
 
 type ComponentState = {
   allTerms: TermData[];
-  searchContext: 'term';
+  searchContext: 'term' | 'termEnglish'
 }
 
-
+const mapSwitchStateToSearchContext = (isChecked: boolean): 'term' | 'termEnglish' => isChecked ? 'termEnglish' : 'term';
 
 const stringIncludes = (input: string, textToMatch: string) => input.includes(textToMatch)
 
 const determineSelectedTerms = (allTerms: TermData[], filters: Record<string, string>) =>
   // @ts-ignore
-  allTerms.filter(TermData => doValuesMatchFilters(TermData, filters, stringIncludes))
+  allTerms.filter(term => doValuesMatchFilters(term, filters, stringIncludes))
 
 export default function DataGridDemo(): JSX.Element {
   const [componentState, setComponentState] = useState<ComponentState>({
     allTerms: [],
-    searchContext: 'term'
+    searchContext: 'term' || 'termEnglish'
   })
 
   const [searchResults, setSearchResults] = useState({
@@ -43,7 +43,7 @@ export default function DataGridDemo(): JSX.Element {
   });
 
   useEffect(() => {
-    setComponentState({ allTerms: [], searchContext: 'term' });
+    setComponentState({ allTerms: [], searchContext: 'term' || 'termEnglish' });
     const apiUrl = `http://localhost:3131/api/entities?type=term`;
     fetch(apiUrl, { mode: 'cors' })
       .then((res) => res.json())
@@ -98,14 +98,19 @@ export default function DataGridDemo(): JSX.Element {
   />;
 
   // SWITCHCOMPONENT
-  const [toggled, setToggled] = React.useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setToggled(event.target.checked)
+  const [toggled, setToggled] = React.useState(false); //handles switching from const searchTsilhqotin to const searchEnglish
 
-  };
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setToggled(event.target.checked);
+  }
 
-  const [isToggled, setToggle] = useState(0);
+  const handleChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setComponentState({
+      ...componentState,
+      searchContext: mapSwitchStateToSearchContext(event.target.checked)
+    })
+  }
 
 
   return (
@@ -113,9 +118,9 @@ export default function DataGridDemo(): JSX.Element {
     <ThemeProvider theme={theme}>
       <div className='termindex'>
         <h1 style={{ lineHeight: '0px' }}>Terms <MenuBookTwoToneIcon /></h1>
-        <div style={{ padding: '0px' }}> {toggled ? [searchEnglish] : [searchTsilhqotin]} </div>
+        <div style={{ padding: '0px' }}>  {toggled ? [searchEnglish] : [searchTsilhqotin]} </div>
 
-        <FormControlLabel control={<Switch onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} />} label={"Tŝilhqot'in / English"} />
+        <FormControlLabel control={<Switch onChange={e => { handleChange(e); handleChange2(e) }} inputProps={{ 'aria-label': 'controlled' }} />} label={"Tŝilhqot'in / English"} />
 
       </div>
       <DataGrid

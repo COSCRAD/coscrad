@@ -30,9 +30,6 @@ export function VocabularyListIndex(props: VocabularyListIndexProps) {
     vocabularyLists: null
   });
 
-
-  // --------------------------------------------------------------------------------------
-
   useEffect(() => {
     setAppState({ loading: true, vocabularyLists: null });
     const apiUrl = `http://localhost:3131/api/entities?type=vocabularyList`;
