@@ -8,15 +8,12 @@ import doValuesMatchFilters from '../../utilities/doValuesMatchFilters';
 import Loading from '../Loading/Loading';
 import TermData, { Term } from '../Term/Term';
 import { ThemeProvider, createTheme } from '@mui/material';
-import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { initial } from 'cypress/types/lodash';
 import Stack from '@mui/material/Stack';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuBookTwoToneIcon from '@mui/icons-material/MenuBookTwoTone';
-import Pagination from '@mui/material/Pagination';
-import TablePagination from '@mui/material/TablePagination'
+
 
 
 type ComponentState = {
@@ -64,7 +61,7 @@ export default function DataGridDemo(): JSX.Element {
   const columns: GridColDef[] = [{
     field: 'id',
     headerName: 'ID',
-    renderCell: (idParam: GridRenderCellParams<string>) => <Link to={`/terms/${idParam.value}`}><p>{idParam.value}</p></Link>,
+    renderCell: (idParam: GridRenderCellParams<string>) => <Link style={{ color: 'rgb(159,2,2)' }} to={`/terms/${idParam.value}`}><p>{idParam.value}</p></Link>,
     width: 50
   },
   {
