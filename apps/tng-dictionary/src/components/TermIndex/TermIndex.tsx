@@ -14,46 +14,53 @@ import Stack from '@mui/material/Stack';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuBookTwoToneIcon from '@mui/icons-material/MenuBookTwoTone';
 import { motion } from 'framer-motion';
+import stringIncludes from '../../utilities/matchers/stringIncludes';
 
-
+// Do not export this outside. TODO- generalize this functionality
+type SearchContext = 'term' | 'termEnglish';
 
 type ComponentState = {
   allTerms: TermData[];
-  searchContext: 'term' | 'termEnglish'
+  searchContext: SearchContext;
+  searchText: string;
+  selectedTerms: TermData[];
 }
 
-const mapSwitchStateToSearchContext = (isChecked: boolean): 'term' | 'termEnglish' => isChecked ? 'termEnglish' : 'term';
+const mapSwitchStateToSearchContext = (isChecked: boolean): SearchContext => isChecked ? 'termEnglish' : 'term';
 
-const stringIncludes = (input: string, textToMatch: string) => input.includes(textToMatch)
+const mapSearchContextToSwitchState = (searchContext: SearchContext): boolean => searchContext === 'termEnglish';
+
+// TODO These labels need to come from settings \ config
+const searchContextToPlaceholder: Record<SearchContext,string> = {
+  term: 'Search Tŝilhqot’in',
+  termEnglish: 'Search English'
+}
 
 const determineSelectedTerms = (allTerms: TermData[], filters: Record<string, string>) =>
-  // @ts-ignore
-  allTerms.filter(term => doValuesMatchFilters(term, filters, stringIncludes))
+  // @ts-ignore  
+allTerms.filter(term => doValuesMatchFilters(term, filters, stringIncludes))
 
 export default function DataGridDemo(): JSX.Element {
   const [componentState, setComponentState] = useState<ComponentState>({
     allTerms: [],
-    searchContext: 'term' || 'termEnglish'
+    searchContext: 'term',
+    searchText: '',
+    selectedTerms: []
   })
 
-  const [searchResults, setSearchResults] = useState({
-    selectedTerms: componentState.allTerms,
-  });
-
   useEffect(() => {
-    setComponentState({ allTerms: [], searchContext: 'term' || 'termEnglish' });
+    setComponentState({ allTerms: [], searchContext: 'term', searchText: '', selectedTerms: [] });
     const apiUrl = `http://localhost:3131/api/entities?type=term`;
     fetch(apiUrl, { mode: 'cors' })
       .then((res) => res.json())
       .then((allTerms) => {
-        setComponentState({ ...componentState, allTerms: allTerms });
-        setSearchResults({ selectedTerms: allTerms })
+        setComponentState({ ...componentState, allTerms: allTerms, selectedTerms: allTerms });
       }).catch(rej => console.log(rej))
   }, [setComponentState]);
 
   if (componentState.allTerms === []) return <Loading />
 
-  const rows: GridRowsProp = (searchResults.selectedTerms).map(term => ({
+  const rows: GridRowsProp = (componentState.selectedTerms).map(term => ({
     id: term.id,
     english: term.termEnglish,
     term: term.term
@@ -80,37 +87,32 @@ export default function DataGridDemo(): JSX.Element {
     resizable: true,
   }]
 
-  const searchTsilhqotin = <TextField placeholder="Search Tŝilhqot'in" onChange={(event) => setSearchResults({ selectedTerms: event.target.value ? determineSelectedTerms(componentState.allTerms, { [componentState.searchContext]: event.target.value }) : componentState.allTerms })} InputProps={{
+  const handleSearchTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setComponentState({
+      ...componentState,
+      searchText: event.target.value,
+      selectedTerms: event.target.value ? determineSelectedTerms(componentState.allTerms, { [componentState.searchContext]: event.target.value }) : componentState.allTerms
+    })
+  }
+  
+  const buildSearchElement = (placeholderText: string): JSX.Element => (<TextField value={componentState.searchText} placeholder={placeholderText} onChange={(event) => handleSearchTextChange(event)} InputProps={{
     sx: { borderRadius: '24px', bgcolor: 'white', width: '300px' },
     endAdornment: (
       <SearchIcon sx={search} />
     )
-  }} />;
-  const searchEnglish = <TextField placeholder={'Search English'} onChange={(event) => setSearchResults({ selectedTerms: event.target.value ? determineSelectedTerms(componentState.allTerms, { [componentState.searchContext]: event.target.value }) : componentState.allTerms })}
-    InputProps={{
-      sx: { borderRadius: '24px', bgcolor: 'white', width: '300px', boxShadow: '' },
-      endAdornment: (
-        <SearchIcon sx={search} />
-      ),
-    }}
-
-  />;
+  }} />)
 
   // SWITCHCOMPONENT
 
-  const [toggled, setToggled] = React.useState(false); //handles switching from const searchTsilhqotin to const searchEnglish
+  const handleSwitchStateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearchContext = mapSwitchStateToSearchContext(event.target.checked)
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setToggled(event.target.checked);
-  }
-
-  const handleChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
     setComponentState({
       ...componentState,
-      searchContext: mapSwitchStateToSearchContext(event.target.checked)
+      searchContext: newSearchContext,
+      selectedTerms: componentState.searchText ? determineSelectedTerms(componentState.allTerms, { [newSearchContext]: componentState.searchText }) : componentState.allTerms
     })
   }
-
 
   return (
 
@@ -118,9 +120,9 @@ export default function DataGridDemo(): JSX.Element {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .6 }}>
         <div className='termindex'>
           <h1 style={{ lineHeight: '0px' }}>Terms <MenuBookTwoToneIcon /></h1>
-          <div style={{ padding: '0px' }}>  {toggled ? [searchEnglish] : [searchTsilhqotin]} </div>
+          <div style={{ padding: '0px' }}>  {buildSearchElement(searchContextToPlaceholder[componentState.searchContext])} </div>
 
-          <FormControlLabel control={<Switch onChange={e => { handleChange(e); handleChange2(e) }} inputProps={{ 'aria-label': 'controlled' }} />} label={"Tŝilhqot'in / English"} />
+          <FormControlLabel control={<Switch checked={mapSearchContextToSwitchState(componentState.searchContext)} onChange={e => { handleSwitchStateChange(e) }} inputProps={{ 'aria-label': 'controlled' }} />} label={"Tŝilhqot'in / English"} />
 
         </div>
         <DataGrid

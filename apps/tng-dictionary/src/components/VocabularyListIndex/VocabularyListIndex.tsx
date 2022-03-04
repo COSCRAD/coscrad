@@ -1,8 +1,7 @@
 import { Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp, GridToolbar } from '@mui/x-data-grid';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Loading from '../Loading/Loading';
 import './VocabularyListIndex.module.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { motion } from 'framer-motion';
@@ -11,24 +10,19 @@ import SearchIcon from '@mui/icons-material/Search';
 import MenuBookTwoToneIcon from '@mui/icons-material/MenuBookTwoTone';
 import doValuesMatchFilters from '../../utilities/doValuesMatchFilters';
 import Stack from '@mui/material/Stack';
+import stringIncludes from '../../utilities/matchers/stringIncludes';
+import { HasIdAndName } from '../../types/HasNameAndId';
 
 
 
-type appState = {
+type ComponentState = {
   vocabularyLists: HasIdAndName[];
   searchContext: 'name'
 }
 
-const stringIncludes = (input: string, textToMatch: string) => input.includes(textToMatch)
-
-const determineSelectedTerms = (vocabularyLists: HasIdAndName[], filters: Record<string, string>) =>
+const determineSelectedVocabularyLists = (vocabularyLists: HasIdAndName[], filters: Record<string, string>) =>
   // @ts-ignore
   vocabularyLists.filter(name => doValuesMatchFilters(name, filters, stringIncludes))
-
-type HasIdAndName = {
-  id: string;
-  name: string;
-}
 
 const getData = async (endpoint: string) => fetch(endpoint).then(response => response.json())
 
@@ -37,7 +31,7 @@ export interface VocabularyListIndexProps { }
 
 export function VocabularyListIndex(props: VocabularyListIndexProps) {
 
-  const [appState, setAppState] = useState<appState>({
+  const [appState, setAppState] = useState<ComponentState>({
     //  loading: false,
     vocabularyLists: [],
     searchContext: 'name'
@@ -84,7 +78,7 @@ export function VocabularyListIndex(props: VocabularyListIndexProps) {
 
   const search =
     <TextField placeholder="Search Vocabulary Lists"
-      onChange={(event) => setSearchResults({ selectedLists: event.target.value ? determineSelectedTerms(appState.vocabularyLists, { [appState.searchContext]: event.target.value }) : appState.vocabularyLists })}
+      onChange={(event) => setSearchResults({ selectedLists: event.target.value ? determineSelectedVocabularyLists(appState.vocabularyLists, { [appState.searchContext]: event.target.value }) : appState.vocabularyLists })}
       InputProps={{
         sx: { borderRadius: '24px', bgcolor: 'white', width: '300px' },
         endAdornment: (
