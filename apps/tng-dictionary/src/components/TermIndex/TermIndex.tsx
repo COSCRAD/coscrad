@@ -13,6 +13,7 @@ import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuBookTwoToneIcon from '@mui/icons-material/MenuBookTwoTone';
+import { motion } from 'framer-motion';
 
 
 
@@ -67,15 +68,16 @@ export default function DataGridDemo(): JSX.Element {
   {
     field: 'term',
     headerName: 'Term',
-    minWidth: 200,
-    flex: 0,
+    minWidth: 290,
+    flex: .2,
     resizable: true,
   },
   {
     field: 'english',
     headerName: 'English',
     width: 150,
-    flex: 1
+    flex: 1,
+    resizable: true,
   }]
 
   const searchTsilhqotin = <TextField placeholder="Search Tŝilhqot'in" onChange={(event) => setSearchResults({ selectedTerms: event.target.value ? determineSelectedTerms(componentState.allTerms, { [componentState.searchContext]: event.target.value }) : componentState.allTerms })} InputProps={{
@@ -113,34 +115,36 @@ export default function DataGridDemo(): JSX.Element {
   return (
 
     <ThemeProvider theme={theme}>
-      <div className='termindex'>
-        <h1 style={{ lineHeight: '0px' }}>Terms <MenuBookTwoToneIcon /></h1>
-        <div style={{ padding: '0px' }}>  {toggled ? [searchEnglish] : [searchTsilhqotin]} </div>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .6 }}>
+        <div className='termindex'>
+          <h1 style={{ lineHeight: '0px' }}>Terms <MenuBookTwoToneIcon /></h1>
+          <div style={{ padding: '0px' }}>  {toggled ? [searchEnglish] : [searchTsilhqotin]} </div>
 
-        <FormControlLabel control={<Switch onChange={e => { handleChange(e); handleChange2(e) }} inputProps={{ 'aria-label': 'controlled' }} />} label={"Tŝilhqot'in / English"} />
+          <FormControlLabel control={<Switch onChange={e => { handleChange(e); handleChange2(e) }} inputProps={{ 'aria-label': 'controlled' }} />} label={"Tŝilhqot'in / English"} />
 
-      </div>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        rowsPerPageOptions={[10, 50, 100]}
-        initialState={{
-          pagination: {
-            pageSize: 10,
-          }
-        }}
-        sx={{ bgcolor: 'white', height: '65vh', display: 'flex', flexDirection: "column-reverse" }}
-        components={{
-          NoRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              <CircularProgress />
-            </Stack>
-          ),
-          Panel: () => (
-            <p style={{ textAlign: 'center' }}>© 2022 Tsilhqot'in National Government</p>
-          )
-        }}
-      />
+        </div>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          rowsPerPageOptions={[10, 50, 100]}
+          initialState={{
+            pagination: {
+              pageSize: 10,
+            }
+          }}
+          sx={{ background: 'white', height: '65vh', display: 'flex', flexDirection: "column-reverse" }}
+          components={{
+            NoRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                <CircularProgress />
+              </Stack>
+            ),
+            Panel: () => (
+              <p style={{ textAlign: 'center' }}>© 2022 Tsilhqot'in National Government</p>
+            )
+          }}
+        />
+      </motion.div>
     </ThemeProvider >
 
   );

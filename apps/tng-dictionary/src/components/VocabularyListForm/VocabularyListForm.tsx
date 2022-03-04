@@ -84,7 +84,7 @@ export function VocabularyListForm({ formItems }: VocabularyListFormProps) {
             value={currentState}
             label={name}
             onChange={e => updateFormState(formState, name, e.target.value as MaybeSelected<FormItemValue>)}
-            sx={{ borderRadius: '24px', backgroundColor: 'white' }}
+            sx={{ backgroundColor: 'white' }}
           >
             {
               labelsAndValues.map(({ value, display: label }) => (
@@ -99,14 +99,14 @@ export function VocabularyListForm({ formItems }: VocabularyListFormProps) {
 
   // TODO type the return value
   const buildSelectElementsForForm = (form: VocabularyListFormElement[], currentSelections: Record<string, MaybeSelected<FormItemValue>>) => (
-    <div>
+    <div style={{ display: 'flex', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px' }}>
       {form.filter(({ type }) => type === 'dropbox').map(formElement => buildSingleSelectElement(formElement, currentSelections[formElement.name]))}
     </div>
   )
 
   // TODO type return value
   const buildCheckboxesForForm = (form: VocabularyListFormElement[], currentSelections: Record<string, MaybeSelected<FormItemValue>>) => (
-    <div>
+    <div style={{ display: 'flex', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px' }}>
       {form.filter(({ type }) => type === 'checkbox').map(({ type, name, validValues }) => ({
         type,
         name,
@@ -136,7 +136,7 @@ export function VocabularyListForm({ formItems }: VocabularyListFormProps) {
     <div>
       <div style={{ padding: '14px', margin: 'auto' }}>
         <FormControl>
-          <div style={{ display: 'flex', width: '100%' }}>
+          <div style={{ display: 'flex', width: '100%', flexWrap: 'wrap', margin: 'auto' }}>
             {buildSelectElementsForForm(formItems, formState.currentSelections)}
             {buildCheckboxesForForm(formItems, formState.currentSelections)}
           </div>
@@ -174,7 +174,6 @@ const form = {
 const submit = {
   color: 'rgb(159,2,2)',
   borderColor: 'white',
-  borderRadius: '28px',
   textTransform: 'none',
   paddingBlock: '10px',
   margin: '2.5px',

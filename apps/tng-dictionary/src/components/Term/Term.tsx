@@ -1,9 +1,10 @@
 import './Term.module.css';
 import * as React from 'react';
-import { Divider, Typography } from '@mui/material';
+import { CardContent, Divider, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import VolumeUpTwoToneIcon from '@mui/icons-material/VolumeUpTwoTone';
-import ErrorIcon from '@mui/icons-material/Error';
+import ErrorTwoToneIcon from '@mui/icons-material/ErrorTwoTone';
+import { Card } from '@mui/material';
 
 // TODO move this to shared interfaces lib
 export type TermData = {
@@ -33,10 +34,10 @@ export function Term(props: TermsDetailComponentProps) {
   if (!termData) return (
     <div>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}>
-        <div style={{ color: 'rgb(259,2,2)' }}>
-          <h1><ErrorIcon /> Term not found</h1>
+        <div style={{ color: 'rgb(159,2,2)' }}>
+          <h1> Term not found <ErrorTwoToneIcon /></h1>
           <h2>Lha ts'egwediʔal</h2>
-          <h2 style={{ color: 'rgb(204, 170, 170)' }}>"One couldn't find the word."</h2>
+          <h2>"One couldn't find the word."</h2>
         </div>
       </motion.div>
     </div >
@@ -56,7 +57,9 @@ export function Term(props: TermsDetailComponentProps) {
   return (
 
     <div>
+
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}>
+
         <Typography sx={{ mb: 1.5, color: 'rgb(159,2,2)' }} variant='h5'>
           <b>{term}</b>
           <motion.div
@@ -85,6 +88,7 @@ export function Term(props: TermsDetailComponentProps) {
             Your browser does not support the audio element.
           </audio>
         </div>
+
       </motion.div>
     </div >
   );
