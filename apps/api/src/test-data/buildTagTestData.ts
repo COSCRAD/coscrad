@@ -7,9 +7,10 @@ type TagAndModels = {
 
 export default (): TagAndModels => ({
   tag: ['plants', 'animals', 'placenames', 'songs', 'legends'].map(
-    (text, index) => ({
-      id: String(index),
-      text,
-    })
+    (text, index) =>
+      new Tag({
+        id: String(index),
+        text,
+      })
   ),
 });

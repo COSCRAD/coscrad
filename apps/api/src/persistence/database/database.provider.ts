@@ -10,7 +10,6 @@ import { ArangoDatabaseForCollection } from './arango-database-for-collection';
 import { IDatabaseProvider } from './interfaces/database-provider';
 import { ArangoCollectionID } from './types/ArangoCollectionId';
 
-// TODO Should we rename this `ArangoDatabaseProvider` ?
 @Injectable()
 export class DatabaseProvider implements IDatabaseProvider {
   readonly #databaseConnection: ArangoConnection;

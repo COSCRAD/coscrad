@@ -1,14 +1,34 @@
 import { writeFileSync } from 'fs';
 import { getValidatorForEntity } from '../domain/domainModelValidators';
 import { Valid } from '../domain/domainModelValidators/Valid';
-import { EntityType, isEntityType } from '../domain/types/entityType';
+import {
+  EntityType,
+  EntityTypeToInstance,
+  isEntityType,
+} from '../domain/types/entityType';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
-import { getArangoCollectionID } from '../persistence/database/get-arango-collection-ids';
+import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
+import { getArangoCollectionIDFromEntityType } from '../persistence/database/get-arango-collection-ids';
 import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
+import { PartialDTO } from '../types/partial-dto';
 import buildTestData from './buildTestData';
+
+export type InMemorySnapshotOfDTOs = {
+  [K in keyof EntityTypeToInstance]?: PartialDTO<EntityTypeToInstance>[K][];
+};
+
 describe('buildTestData', () => {
   describe('the resulting test data', () => {
-    const testData = buildTestData();
+    const testData = Object.entries(buildTestData()).reduce(
+      (
+        accumulatedDataWithDtos: InMemorySnapshotOfDTOs,
+        [entityType, instances]
+      ) => ({
+        ...accumulatedDataWithDtos,
+        [entityType]: instances.map((instance) => instance.toDTO()),
+      }),
+      {}
+    );
 
     Object.entries(testData).forEach(([key, models]) => {
       describe(`Entity type key`, () => {
@@ -18,14 +38,17 @@ describe('buildTestData', () => {
 
         const entityType = key as EntityType;
         it(`should have a corresponding collection name`, () => {
-          const collectionName = getArangoCollectionID(entityType);
+          const collectionName =
+            getArangoCollectionIDFromEntityType(entityType);
         });
 
         describe(`the DTOs`, () => {
           it(`should have no duplicate IDs`, () => {
-            // It's not required to have an ID in the DTO- ID can be auto-assigned by DB
             const allIds = models
               .map((model) => model.id)
+              /**
+               * We have a separate check for missing `id` properties
+               */
               .filter((id) => !isNullOrUndefined(id));
 
             const numberOfIds = allIds.length;
@@ -39,6 +62,9 @@ describe('buildTestData', () => {
 
           models.forEach((dto, index) => {
             describe(`${entityType}(dto # ${index + 1})`, () => {
+              it(`should have an id`, () => {
+                expect(isStringWithNonzeroLength(dto.id)).toBe(true);
+              });
               it(`should satisfy invariant validation`, () => {
                 expect(entityValidator(dto)).toBe(Valid);
               });
@@ -51,9 +77,8 @@ describe('buildTestData', () => {
           Object.entries(testData).reduce(
             (acc, [key, models]) => ({
               ...acc,
-              [getArangoCollectionID(key as EntityType)]: models.map((model) =>
-                mapEntityDTOToDatabaseDTO(model)
-              ),
+              [getArangoCollectionIDFromEntityType(key as EntityType)]:
+                models.map((model) => mapEntityDTOToDatabaseDTO(model)),
             }),
             {}
           );

@@ -14,10 +14,15 @@ export type EntityType = ValueType<typeof entityTypes>;
 export const isEntityType = (input: unknown): input is EntityType =>
   Object.values(entityTypes).includes(input as EntityType);
 
-export const entityTypeToCtor = {
-  term: Term,
-  vocabularyList: VocabularyList,
-  tag: Tag,
+export type EntityTypeToInstance = {
+  term: Term;
+  vocabularyList: VocabularyList;
+  tag: Tag;
 };
 
-export type EntityTypeToInstance = typeof entityTypeToCtor;
+/**
+ * This represents the state of all domain models, excluding their `Connections`
+ */
+export type InMemorySnapshot = {
+  [K in keyof EntityTypeToInstance]?: EntityTypeToInstance[K][];
+};

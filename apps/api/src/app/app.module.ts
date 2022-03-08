@@ -11,12 +11,14 @@ import { EntityViewModelController } from './controllers/entityViewModel.control
 
 @Module({
   imports: [
-    AuthorizationModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: `${process.cwd()}/apps/api/src/app/config/${
+        process.env.NODE_ENV
+      }.env`,
       cache: false,
     }),
+    AuthorizationModule,
     DomainServicesModule,
     // ServeStaticModule.forRoot({
     //   // TODO get this from the config

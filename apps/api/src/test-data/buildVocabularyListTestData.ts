@@ -9,6 +9,7 @@ export default (): VocabularyListModels => ({
   vocabularyList: [
     // Vocabulary List 1
     {
+      id: 'vocabulary-list-id-1',
       name: 'test VL 1 chil',
       nameEnglish: 'test VL 1 engl',
       entries: [
@@ -44,6 +45,7 @@ export default (): VocabularyListModels => ({
     },
     // Vocabulary List 2
     {
+      id: 'vocabulary-list-id-2',
       name: 'test VL 2 CHIL- no engl name',
       entries: [
         {
@@ -55,5 +57,5 @@ export default (): VocabularyListModels => ({
       ],
       variables: [],
     },
-  ],
+  ].map((dto) => new VocabularyList(dto)),
 });

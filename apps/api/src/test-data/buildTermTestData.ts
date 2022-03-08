@@ -24,5 +24,5 @@ export default (): TermAndModels => ({
       contributorId: 'Jane Deer',
       id: '3',
     },
-  ],
+  ].map((dto) => new Term(dto)),
 });

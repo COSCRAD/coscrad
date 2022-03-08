@@ -7,6 +7,10 @@ module.exports = {
     },
   },
   testEnvironment: 'node',
+  testMatch: [
+    '<rootDir>/**/*.spec.ts',
+    '<rootDir>/**/*.test.ts'
+  ],
   transform: {
     '^.+\\.[tj]s$': 'ts-jest',
   },

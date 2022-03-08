@@ -1,17 +1,12 @@
-import { EntityType, EntityTypeToInstance } from '../domain/types/entityType';
-import { PartialDTO } from '../types/partial-dto';
+import { InMemorySnapshot } from '../domain/types/entityType';
 import buildTagTestData from './buildTagTestData';
 import buildTermTestData from './buildTermTestData';
 import buildVocabularyListTestData from './buildVocabularyListTestData';
 
-export type CollectionNamesAndModels = {
-  [k in EntityType]: PartialDTO<EntityTypeToInstance[k]>[];
-};
-
-export default (): CollectionNamesAndModels =>
+export default (): InMemorySnapshot =>
   ({
     ...buildTagTestData(),
     ...buildTermTestData(),
     ...buildVocabularyListTestData(),
     // TODO fix types
-  } as CollectionNamesAndModels);
+  } as InMemorySnapshot);

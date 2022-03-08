@@ -4,6 +4,7 @@ import { Database } from 'arangojs';
 import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
 import { Entity } from '../../domain/models/entity';
+import { InternalError } from '../../lib/errors/InternalError';
 import { PartialDTO } from '../../types/partial-dto';
 import { IDatabase } from './interfaces/database';
 
@@ -12,6 +13,9 @@ type ArangoDTO<T> = T & {
   _id: string;
 };
 
+/**
+ * TODO It seems we should sanatize inputs here.
+ */
 export class ArangoDatabase implements IDatabase {
   #db: Database;
 
@@ -84,7 +88,10 @@ export class ArangoDatabase implements IDatabase {
     dto: TCreateEntityDto,
     collectionName: string
   ): Promise<void> => {
-    // remove this check. It's the callers responsibility to verify the `Collection` exists
+    /**
+     * Although the caller should ensure this, it's nice to double check here
+     * as a means of making sure our query isn't subject to injection.
+     */
     const collectionExists = await this.#doesCollectionExist(collectionName);
 
     if (!collectionExists)
@@ -170,6 +177,35 @@ export class ArangoDatabase implements IDatabase {
   // TODO Add Replace
 
   // TODO Add Soft Delete
+
+  // TODO we should only expose a hard delete for test setup
+  delete = async <TUpdateEntityDTO>(
+    id: string,
+    collectionName: string
+  ): Promise<void> => {
+    const documentToRemove = await this.fetchById(id, collectionName);
+
+    if (isNotFound(documentToRemove))
+      throw new InternalError(
+        `You cannot remove document ${id} in collection ${collectionName} as it does not exist`
+      );
+
+    const query = `
+    REMOVE ${id} in ${collectionName}
+    `;
+
+    this.#db.query(query);
+  };
+
+  // TODO We only want this power within test utilities!
+  deleteAll = async (collectionName: string): Promise<void> => {
+    const query = `
+    FOR doc in ${collectionName}
+    REMOVE doc in ${collectionName}
+    `;
+
+    this.#db.query(query);
+  };
 
   #getKeyOfDocument = <TCreateEntityDto>(
     document: ArangoDTO<TCreateEntityDto>

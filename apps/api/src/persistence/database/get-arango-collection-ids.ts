@@ -10,7 +10,7 @@ const arangoCollectionIDs: {
   tag: 'tags',
 };
 
-export const getArangoCollectionID = (
+export const getArangoCollectionIDFromEntityType = (
   entityType: EntityType
 ): ArangoCollectionID => {
   if (Object.keys(arangoCollectionIDs).includes(entityType)) {
