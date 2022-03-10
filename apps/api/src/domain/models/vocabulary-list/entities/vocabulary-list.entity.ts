@@ -2,6 +2,7 @@ import isStringWithNonzeroLength from 'apps/api/src/lib/utilities/isStringWithNo
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { entityTypes } from '../../../types/entityType';
 import { determineAllMissingRequiredProperties } from '../../../utilities/validation/determine-all-missing-required-properties';
+import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { Entity } from '../../entity';
 import { VocabularyListVariable } from '../types/vocabulary-list-variable';
 import { VocabularyListEntry } from '../vocabulary-list-entry';
@@ -38,14 +39,17 @@ export class VocabularyList extends Entity {
     this.variables = [...(variables as VocabularyListVariable[])];
   }
 
+  // TODO move this to the domain model validator instead
   #validate(dto: unknown): dto is PartialDTO<VocabularyList> {
-    const missingProperties = determineAllMissingRequiredProperties<
-      PartialDTO<VocabularyList>
-    >(
-      // TODO remove cast
-      dto as PartialDTO<VocabularyList>,
-      ['id', 'entries', 'variables']
-    );
+    const test = dto as PartialDTO<VocabularyList>;
+
+    if (isNullOrUndefined(test)) return false;
+
+    const missingProperties = determineAllMissingRequiredProperties(test, [
+      'id',
+      'entries',
+      'variables',
+    ]);
 
     if (missingProperties.length) {
       const message = missingProperties

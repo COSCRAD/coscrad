@@ -11,6 +11,7 @@ export default (): TagAndModels => ({
       new Tag({
         id: String(index),
         text,
+        published: true,
       })
   ),
 });

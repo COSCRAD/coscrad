@@ -6,6 +6,7 @@ import { DatabaseProvider } from '../persistence/database/database.provider';
 import { RepositoryProvider } from '../persistence/repositories/repository.provider';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import buildConfigFilePath from './config/buildConfigFilePath';
 import { AddTagController } from './controllers/addTag.controller';
 import { EntityViewModelController } from './controllers/entityViewModel.controller';
 
@@ -13,9 +14,7 @@ import { EntityViewModelController } from './controllers/entityViewModel.control
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `${process.cwd()}/apps/api/src/app/config/${
-        process.env.NODE_ENV
-      }.env`,
+      envFilePath: buildConfigFilePath(process.env.NODE_ENV),
       cache: false,
     }),
     AuthorizationModule,

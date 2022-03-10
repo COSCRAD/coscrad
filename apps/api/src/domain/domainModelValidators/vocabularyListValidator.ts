@@ -5,6 +5,7 @@ import { PartialDTO } from '../../types/partial-dto';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
 import { entityTypes } from '../types/entityType';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
+import InvalidPublicationStatusError from './errors/InvalidPublicationStatusError';
 import NullOrUndefinedDTOError from './errors/NullOrUndefinedDTOError';
 import InvalidVocabularyListDTOError from './errors/vocabularyList/InvalidVocabularyListDTOError';
 import VocabularyListHasNoEntriesError from './errors/vocabularyList/VocabularyListHasNoEntriesError';
@@ -20,7 +21,8 @@ const vocabularyListValidator: DomainModelValidator = (
 
   const innerErrors: InternalError[] = [];
 
-  const { name, nameEnglish, id, entries } = dto as PartialDTO<VocabularyList>;
+  const { name, nameEnglish, id, entries, published } =
+    dto as PartialDTO<VocabularyList>;
 
   if (
     !isStringWithNonzeroLength(name) &&
@@ -30,6 +32,10 @@ const vocabularyListValidator: DomainModelValidator = (
 
   if (!Array.isArray(entries) || !entries.length)
     innerErrors.push(new VocabularyListHasNoEntriesError(id));
+
+  // TODO Validate inherited properties on the base class
+  if (typeof published !== 'boolean')
+    innerErrors.push(new InvalidPublicationStatusError(entityTypes.term));
 
   return innerErrors.length
     ? new InvalidVocabularyListDTOError(id, innerErrors)

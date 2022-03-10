@@ -1,33 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Database } from 'arangojs';
+import { Scheme } from '../../app/config/env.validation';
 
 // Alias for more clarity from the outside; TODO wrap `Database` with simpler API?
 export type ArangoConnection = Database;
-
-// TODO [refactor] break the following out into a utility
-const allowedSchemes = ['http', 'https'] as const;
-
-type Scheme = typeof allowedSchemes[number];
-
-const isValidScheme = (input: unknown): input is Scheme =>
-  ['http', 'https'].includes(input as string);
-
-const isPortRequired = (scheme: Scheme, port: `${number}`) => {
-  if (scheme === 'http' && port === '80') return false;
-  if (scheme === 'https' && port === '443') return false;
-
-  return true;
-};
 
 type Port = `${number}`;
 
 const isValidPort = (input: unknown): input is Port =>
   typeof input === 'string' && !isNaN(parseInt(input));
 
+const isPortRequired = (scheme: Scheme, port: `${number}`) => {
+  if (scheme === 'http' && port === '80') return false;
+  if (scheme === 'https' && port === '443') return false;
+  return true;
+};
+
 const buildFullHostURL = (
   domain: string,
-  scheme: Scheme = 'https',
+  scheme: Scheme = Scheme.https,
   port: Port = '443'
 ): string =>
   `${scheme}://${domain}${isPortRequired(scheme, port) ? `:${port}` : ''}`;
@@ -47,22 +39,24 @@ export class ArangoConnectionProvider {
       'ARANGO_DB_HOST_DOMAIN',
       'localhost'
     );
-    const dbHostScheme = this.configService.get<string>(
+    const dbHostScheme = this.configService.get<Scheme>(
       'ARANGO_DB_HOST_SCHEME',
-      'http'
+      Scheme.http
     );
-    const dbHostPort = this.configService.get<string>(
+
+    const dbHostPort = this.configService.get<Port>(
       'ARANGO_DB_HOST_PORT',
       '80'
     );
 
-    if (!isValidScheme(dbHostScheme))
-      throw new Error(
-        `Invalid config, scheme: ${dbHostScheme}. Allowed: http, https`
-      );
-
-    if (!isValidPort(dbHostPort))
-      throw new Error(`Invalid config, db port: ${dbHostPort}`);
+    console.log({
+      dbName,
+      dbHostDomain,
+      dbHostScheme,
+      dbHostPort,
+      dbPass,
+      dbUser,
+    });
 
     const systemDB = new Database({
       url: buildFullHostURL(dbHostDomain, dbHostScheme, dbHostPort),

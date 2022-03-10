@@ -14,7 +14,6 @@ export class AppController {
   @UseGuards(AuthGuard('jwt'))
   @Get('hello')
   getData(): MediaItem {
-    console.log(`You called get!`);
     return this.appService.getData();
   }
   @Get('')
@@ -25,7 +24,6 @@ export class AppController {
   @UseGuards(AuthGuard('jwt'))
   @Post('message')
   async create(@Body('data') data: string): Promise<void> {
-    console.log(`received data: ${data}`);
     this.appService.postData(data);
   }
 }
