@@ -16,28 +16,14 @@ export function Loading(): JSX.Element {
   return (
     <div className='load' style={background}>
 
-      <div className='loading' style={{
-        backgroundImage: ''
-
-      }}>
+      <div className='loading'>
         <Box sx={{ display: 'flex' }}>
-          <CircularProgress style={styles.loader} thickness={4} size={140} />
+          <CircularProgress style={styles.loader} thickness={4} size={140} variant="indeterminate" />
           <CircularProgress style={styles.track} thickness={4} size={140} value={100} variant="determinate" />
           <CircularProgress style={styles.background} thickness={22} size={140} value={100} variant="determinate" />
-          <motion.div
-            initial={{
-              opacity: 0.5
-            }}
-            animate={{
-              opacity: 1
-            }}
-            exit={{
-              opacity: 0
-            }}
-            transition={{ duration: 1.5 }}
-          >
-            <div className='Logo'><img height={80} src={logo} /></div>
-          </motion.div>
+          <div className='Logo'>
+            <img height={80} src={logo} />
+          </div>
         </Box>
       </div>
 
@@ -55,7 +41,7 @@ const styles = {
     position: 'absolute'
   },
   background: {
-    color: 'rgb(126,30,30) ',
+    color: 'rgb(126,30,30)',
     zIndex: '-2',
     position: 'absolute'
   }

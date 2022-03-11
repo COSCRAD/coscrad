@@ -3,14 +3,7 @@ import { Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material
 import VocabularyListContext, { FormItemValue, MaybeSelected, NoSelection, VocabularyListFormState } from '../../context/VocabularyListContext';
 import './VocabularyListForm.module.css';
 import { ThemeProvider, createTheme } from '@mui/material';
-import DoubleArrowRoundedIcon from '@mui/icons-material/DoubleArrowRounded';
-import DoubleArrowRounded from '@mui/icons-material/DoubleArrowRounded';
 import { Box } from '@mui/material';
-import { Switch } from '@mui/material';
-import { motion } from 'framer-motion';
-import { Card } from '@mui/material';
-import { Divider } from '@mui/material';
-
 
 export type LabelAndValue<T = any> = {
   display: string;

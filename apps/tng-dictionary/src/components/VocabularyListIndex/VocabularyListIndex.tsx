@@ -9,11 +9,10 @@ import { TextField, CircularProgress } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuBookTwoToneIcon from '@mui/icons-material/MenuBookTwoTone';
 import doValuesMatchFilters from '../../utilities/doValuesMatchFilters';
-import Stack from '@mui/material/Stack';
 import stringIncludes from '../../utilities/matchers/stringIncludes';
 import { HasIdAndName } from '../../types/HasNameAndId';
-
-
+import Test from '../sandbox/Test/Test';
+import MiniLoading from '../MiniLoading/mini-loading';
 
 type ComponentState = {
   vocabularyLists: HasIdAndName[];
@@ -62,9 +61,12 @@ export function VocabularyListIndex(props: VocabularyListIndexProps) {
     field: 'id',
     headerName: 'ID',
     renderCell: (idParam: GridRenderCellParams<string>) => (
-      <Link style={{ textDecoration: 'none' }} to={`/vocabularyLists/${idParam.value}`}><p style={{ color: 'rgb(159,2,2)' }}>{idParam.value}</p></Link>
+
+      <Link className='link' to={`/vocabularyLists/${idParam.value}`}>
+        <p>{idParam.value}</p>
+      </Link>
     ),
-    width: 150
+    width: 100
   }, {
     field: 'name',
     headerName: 'Vocabulary List',
@@ -72,31 +74,39 @@ export function VocabularyListIndex(props: VocabularyListIndexProps) {
     flex: 1
   }];
 
-  const stylez = {
-    color: 'black'
-  } as const
-
   const search =
-    <TextField placeholder="Search Vocabulary Lists"
-      onChange={(event) => setSearchResults({ selectedLists: event.target.value ? determineSelectedVocabularyLists(appState.vocabularyLists, { [appState.searchContext]: event.target.value }) : appState.vocabularyLists })}
-      InputProps={{
-        sx: { borderRadius: '24px', bgcolor: 'white', width: '300px' },
-        endAdornment: (
-          <SearchIcon sx={{ color: 'rgb(159,2,2)' }} />
-        )
-      }} />;
+    <div className='searchVocabulary'>
+      <TextField
+        placeholder="Search Vocabulary Lists"
+        className='searchBars'
+        onChange={(event) => setSearchResults({ selectedLists: event.target.value ? determineSelectedVocabularyLists(appState.vocabularyLists, { [appState.searchContext]: event.target.value }) : appState.vocabularyLists })}
+        InputProps={{
+          sx: { borderRadius: '24px' },
+          endAdornment:
+            (
+              <SearchIcon className='searchIcon' />
+            )
+        }} />
+    </div>
+    ;
 
   return (
 
     <ThemeProvider theme={theme}>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .6 }}>
-        <Typography style={center}>
-          <div style={searchConsole}>
-            <h1 style={header}>Vocabulary Lists <MenuBookTwoToneIcon /> </h1>
+        <div className='console'>
+          <section>
+            <h1 className='header' >
+              Vocabulary Lists <MenuBookTwoToneIcon className='headerIcon' />
+            </h1>
             {search}
-          </div>
-          <Typography style={style}>
-            <DataGrid sx={height} rows={rows} columns={columns} rowsPerPageOptions={[10, 50, 100]}
+          </section>
+          <Typography>
+            <DataGrid
+              className='grid'
+              rows={rows}
+              columns={columns}
+              rowsPerPageOptions={[10, 50, 100]}
               initialState={{
                 pagination: {
                   pageSize: 10,
@@ -104,32 +114,21 @@ export function VocabularyListIndex(props: VocabularyListIndexProps) {
               }}
               components={{
                 NoRowsOverlay: () => (
-                  <Stack height="100%" alignItems="center" justifyContent="center" >
-                    <CircularProgress sx={{ color: 'rgb(255,28,28)' }} />
-                  </Stack>
+                  <MiniLoading />
                 ),
                 Panel: () => (
-                  <p style={{ textAlign: 'center' }}>© 2022 Tŝilhqot'in National Government</p>
+                  <p>© 2022 Tŝilhqot’in National Government</p>
                 )
               }}
             />
           </Typography>
-        </Typography>
+        </div>
       </motion.div>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }
 
-
 export default VocabularyListIndex;
-
-const height = {
-  height: '65vh',
-  width: '100vw',
-  background: 'white',
-  display: 'flex',
-  flexDirection: "column-reverse"
-}
 
 const theme = createTheme({
   palette: {
@@ -137,25 +136,8 @@ const theme = createTheme({
       main: 'rgb(168,4,4)', // main color
     },
   },
-});
+})
 
-const center = {
-  textAlign: 'center',
-  justifySelf: 'center'
-} as const
-
-const style = {
-  width: 'fit-content',
-
-} as const
-
-const searchConsole = {
-  background: 'rgb(159,2,2)',
-  paddingTop: '2px',
-  paddingBottom: '37px'
-} as const
-
-const header = {
-  lineHeight: '0px',
-  color: 'white'
-} as const
+const search = {
+  color: 'rgb(159,2,2)'
+}

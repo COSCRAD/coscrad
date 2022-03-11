@@ -11,10 +11,7 @@ export interface ToolbarProps { }
 export function Toolbar(props: ToolbarProps) {
   return (
     <CssBaseline>
-      <AppBar
-        className="toolbar"
-        sx={{ bgcolor: 'rgb(159,2,2)' }}
-      >
+      <AppBar className="toolbar">
         {/*<div style={{}}><img src='https://www.tsilhqotin.ca/wp-content/uploads/2022/02/imageedit_14_8913908156.png' height={40}></img></div> */}
         <motion.div
           style={{ lineHeight: '80px' }}
@@ -29,10 +26,10 @@ export function Toolbar(props: ToolbarProps) {
           }}
           transition={{ duration: .6 }}
         >
-          <Link style={style} to={'/'}>
+          <Link className='navHeader' to={'/'}>
             <h2>
-              <img style={{ marginRight: '14px', verticalAlign: 'middle' }} className='tool' src='https://api.tsilhqotinlanguage.ca/uploads/tng_log_for_language_hub_2e4ec30f17.png' height={40}></img>
-              Tŝilhqot'in Dictionary
+              <img className='tool' src='https://api.tsilhqotinlanguage.ca/uploads/tng_log_for_language_hub_2e4ec30f17.png' height={40}></img>
+              Tŝilhqot’in Dictionary
             </h2>
           </Link>
         </motion.div>
@@ -43,7 +40,3 @@ export function Toolbar(props: ToolbarProps) {
 
 export default Toolbar;
 
-const style = {
-  textDecoration: 'none',
-  color: 'white',
-}

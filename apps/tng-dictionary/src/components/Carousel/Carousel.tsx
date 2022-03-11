@@ -50,51 +50,39 @@ export function Carousel(props: CarouselProps) {
 
   return (
 
-    <div>
-      <AnimatePresence>
 
-        <Card className="Cards">
+    <AnimatePresence>
 
-          <CardContent>
-            <motion.div key={currentIndex} initial={{ x: isToggled }} animate={{ x: 0, y: 0, scale: 1, rotate: 0, }} exit={{ x: 12, y: 0, scale: 1, rotate: 0, }} transition={{ duration: 1 }}>
-              <Term termData={currentItem} />
-              <Divider sx={{ background: 'rgb(150, 150, 150)' }} />
+      <Card className="Cards">
+        <CardContent>
+          <motion.div key={currentIndex} initial={{ x: isToggled }} animate={{ x: 0, y: 0, scale: 1, rotate: 0, }} exit={{ x: 12, y: 0, scale: 1, rotate: 0, }} transition={{ duration: 1 }}>
+            <Term termData={currentItem} />
+            <Divider className='Divider' />
+          </motion.div>
+
+          <div className='carouselButtons'>
+            <motion.div onClick={() => setToggle(prevValue => {
+              return prevValue ? -200 : -200;
+            })} whileHover={{ scale: 1.2, transition: { duration: 0.1 } }}
+              whileTap={{ scale: 0.9 }}>
+              <Button className='clicker' disableRipple={true} onClick={e => setIndex(cyclicDecrement(currentIndex, props.data.length - 1))}><ArrowBackIosNewOutlinedIcon /> Back</Button>
             </motion.div>
+            <motion.div onClick={() => setToggle(prevValue => {
+              return prevValue ? 200 : 200;
+            })} whileHover={{ scale: 1.1, transition: { duration: 0.1 } }}
+              whileTap={{ scale: 0.9 }}>
+              <Button className='clicker' disableRipple={true} onClick={e => setIndex(cyclicIncrement(currentIndex, props.data.length - 1))}>Next <ArrowForwardIosOutlinedIcon /></Button>
+            </motion.div>
+          </div>
 
-            <div style={clicker}>
-              <motion.div onClick={() => setToggle(prevValue => {
-                return prevValue ? -200 : -200;
-              })} whileHover={{ scale: 1.2, transition: { duration: 0.1 } }}
-                whileTap={{ scale: 0.9 }}>
-                <Button className='clicker' disableRipple={true} style={buttons} onClick={e => setIndex(cyclicDecrement(currentIndex, props.data.length - 1))}><ArrowBackIosNewOutlinedIcon /> Back</Button>
-              </motion.div>
-              <motion.div onClick={() => setToggle(prevValue => {
-                return prevValue ? 200 : 200;
-              })} whileHover={{ scale: 1.1, transition: { duration: 0.1 } }}
-                whileTap={{ scale: 0.9 }}>
-                <Button className='clicker' disableRipple={true} style={buttons} onClick={e => setIndex(cyclicIncrement(currentIndex, props.data.length - 1))}>Next <ArrowForwardIosOutlinedIcon /></Button>
-              </motion.div>
-            </div>
-          </CardContent>
+        </CardContent>
+      </Card>
 
-        </Card>
+    </AnimatePresence>
 
-      </AnimatePresence>
-    </div >
   );
 }
 
 export default Carousel;
 
-const buttons = {
-  color: 'rgb(159,2,2)'
-}
 
-const clicker = {
-  marginTop: '16px',
-  marginBottom: '0',
-  display: 'flex',
-  textAlign: 'center',
-  alignItems: 'center',
-  justifyContent: 'center'
-} as const;

@@ -13,7 +13,7 @@ import KeyboardReturnTwoToneIcon from '@mui/icons-material/KeyboardReturnTwoTone
 import { Link } from "react-router-dom";
 import { motion } from 'framer-motion';
 import Button from '@mui/material/Button';
-import { Typography, Divider } from '@mui/material';
+import { Typography, Divider, Card } from '@mui/material';
 
 
 
@@ -87,27 +87,12 @@ export function VocabularyListDetail(props: VocabularyListDetailProps) {
   })
 
   if (!selectedTerms.length) return (
-    <div className='home'>
-      <p>Vocabulary List: {id}</p>
-      <p>
-        {`${(appState.vocabularyList as unknown as HasIdAndName).id}: ${(appState.vocabularyList as unknown as HasIdAndName).name}`}
-      </p>
-      <h1>Selected Term</h1>
-      {/* TODO remove all casts */}
-      <VocabularyListForm formItems={(appState.vocabularyList as unknown as any).variables} />
-      Term not found. Please search again.
-    </div>
-  )
-  // Extract terms from entries into separate term array
-  // const allTerms = appState.vocabularyList.entries.map(({ term }: { term: Term }) => term);
+    <div className='vocabError' >
+      <section className='vocabHeader'>
 
-  return (
-
-    <div style={center}>
-      <div className='termindex'>
-        <h1 style={{ lineHeight: '0px' }}>Vocabulary List <InfoTwoToneIcon /></h1>
-        <div style={{ paddingBottom: '29px' }}>
-          <Link to="/VocabularyLists">
+        <h1 style={{ lineHeight: '0px' }}>Vocabulary List <InfoTwoToneIcon className='headerIcon' /></h1>
+        <div>
+          <Link to="/vocabularyLists">
             <motion.div
               whileHover={{ scale: 1.05, }}
               whileTap={{ scale: 0.95 }}>
@@ -117,6 +102,43 @@ export function VocabularyListDetail(props: VocabularyListDetailProps) {
             </motion.div>
           </Link>
         </div>
+
+      </section >
+      {/* TODO remove all casts */}
+      < div className='background' >
+        <VocabularyListForm formItems={(appState.vocabularyList as unknown as any).variables} />
+
+        <Card className='Cards'>
+          <div className='vocabNot'>
+            <h1> Term not found.</h1>
+            <h2>Lha ts'egwediʔal</h2>
+            <h2>"One couldn't find the word."</h2>
+          </div>
+        </Card>
+      </div >
+    </div >
+  )
+  // Extract terms from entries into separate term array
+  // const allTerms = appState.vocabularyList.entries.map(({ term }: { term: Term }) => term);
+
+  return (
+
+    <div className='background' style={center}>
+      <div className='termindex'>
+        <section className='sections'>
+          <h1 style={{ lineHeight: '0px' }}>Vocabulary List <InfoTwoToneIcon className='headerIcon' /></h1>
+          <div>
+            <Link to="/VocabularyLists">
+              <motion.div
+                whileHover={{ scale: 1.05, }}
+                whileTap={{ scale: 0.95 }}>
+                <Button variant="contained" style={style2} >
+                  Back <KeyboardReturnTwoToneIcon />
+                </Button>
+              </motion.div>
+            </Link>
+          </div>
+        </section>
       </div>
       {/* <p>Vocabulary List: {id}</p> */}
       {/*
@@ -138,7 +160,6 @@ export function VocabularyListDetail(props: VocabularyListDetailProps) {
       <Divider style={divider} />
 */}
 
-
       {/* TODO remove all casts */}
       {/* TODO Complete form filtering feature */}
 
@@ -152,13 +173,12 @@ export default VocabularyListDetail;
 
 const center = {
   position: 'absolute',
-  height: '90vh',
+  height: '100vh',
   width: '100vw',
-  // background: 'inherit',
   textAlign: 'center',
-  background: 'white',
+  //  background: 'white',
   overflowX: 'scroll',
-  paddingBottom: '10px'
+  paddingBottom: '100px'
 } as const
 
 const style2 = {

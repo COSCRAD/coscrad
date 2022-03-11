@@ -39,11 +39,10 @@ export function Home(props: HomeProps) {
   </Backdrop>;
   return (
 
-    <div style={{ position: 'relative' }}>
+    <div className='homeScreen'>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .6 }}>
         <div className='home'>
-          <div className='Center' style={{ display: 'grid' }}>
-
+          <div className='Center'>
             <Link to="/terms">
               <motion.div
                 whileHover={{ scale: 1.05, }}

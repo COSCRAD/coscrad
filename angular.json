@@ -81,10 +81,7 @@
             "main": "apps/tng-dictionary/src/main.tsx",
             "polyfills": "apps/tng-dictionary/src/polyfills.ts",
             "tsConfig": "apps/tng-dictionary/tsconfig.app.json",
-            "assets": [
-              "apps/tng-dictionary/src/favicon.ico",
-              "apps/tng-dictionary/src/assets"
-            ],
+            "assets": ["apps/tng-dictionary/src/favicon.ico", "apps/tng-dictionary/src/assets"],
             "styles": ["apps/tng-dictionary/src/styles.css"],
             "scripts": [],
             "webpackConfig": "@nrwl/react/plugins/webpack"
@@ -180,10 +177,7 @@
             "main": "apps/tw-research/src/main.ts",
             "polyfills": "apps/tw-research/src/polyfills.ts",
             "tsConfig": "apps/tw-research/tsconfig.app.json",
-            "assets": [
-              "apps/tw-research/src/favicon.ico",
-              "apps/tw-research/src/assets"
-            ],
+            "assets": ["apps/tw-research/src/favicon.ico", "apps/tw-research/src/assets"],
             "styles": ["apps/tw-research/src/styles.css"],
             "scripts": []
           },
@@ -244,10 +238,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/tw-research/src/**/*.ts",
-              "apps/tw-research/src/**/*.html"
-            ]
+            "lintFilePatterns": ["apps/tw-research/src/**/*.ts", "apps/tw-research/src/**/*.html"]
           }
         },
         "test": {

@@ -1,9 +1,7 @@
 import './TermsDetail.module.css';
 import * as React from 'react';
-import { Card, CardContent, Divider, Typography } from '@mui/material';
+import { Card, CardContent } from '@mui/material';
 import { motion } from 'framer-motion';
-import VocabularyListDetail from '../VocabularyListDetail/VocabularyListDetail';
-import VolumeUpTwoToneIcon from '@mui/icons-material/VolumeUpTwoTone';
 import TermData, { Term } from '../Term/Term';
 import Loading from '../Loading/Loading';
 import { useEffect, useState } from 'react';
@@ -44,37 +42,35 @@ export function TermsDetailComponent(props: TermsDetailComponentProps) {
   );
 
   return (
-    <div style={{ textAlign: 'center', alignContent: 'center', margin: '0 auto', alignSelf: 'center', color: 'white', padding: '0px' }}>
 
-      <div className='termindex' >
-        <h1 style={{ lineHeight: '0px' }}>Term <InfoTwoToneIcon /></h1>
-        <div style={{ paddingBottom: '29px' }}>
-          <Link to="/terms">
-            <motion.div
-              whileHover={{ scale: 1.05, }}
-              whileTap={{ scale: 0.95 }}>
-              <Button variant="contained" style={style2} >
-                Back <KeyboardReturnTwoToneIcon />
-              </Button>
-            </motion.div>
-          </Link>
-
-        </div>
-
-
+    <div className='backgroundTerm'>
+      <div className='termindex'>
+        <section style={{ paddingBottom: '28px' }}>
+          <h1 style={{ lineHeight: '0px' }}>Term <InfoTwoToneIcon className='headerIcon' /></h1>
+          <div>
+            <Link to="/terms">
+              <motion.div
+                whileHover={{ scale: 1.05, }}
+                whileTap={{ scale: 0.95 }}>
+                <Button variant="contained" style={style2} >
+                  Back <KeyboardReturnTwoToneIcon />
+                </Button>
+              </motion.div>
+            </Link>
+          </div>
+        </section>
       </div>
 
-
-      <Card sx={{ width: '100vw', minHeight: '100vh', margin: '0 auto' }}>
-        <div style={{ padding: '2px', paddingTop: '20px' }}>
-          <Card className="Cards" sx={{ minHeight: '250px' }}>
+      <Card className='background'>
+        <div className='CardsWrapper'>
+          <Card className="Cards">
             <CardContent>
               <Term termData={componentState.termData}></Term>
             </CardContent>
           </Card>
         </div>
       </Card>
-    </div >
+    </div>
 
   );
 }
