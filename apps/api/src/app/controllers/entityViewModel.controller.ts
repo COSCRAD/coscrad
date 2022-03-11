@@ -1,8 +1,8 @@
 import { Controller, Get, Query, Res } from '@nestjs/common';
-import { isError } from 'util';
 import { EntityId } from '../../domain/models/types/entity-id';
 import { isEntityId } from '../../domain/types/entity-id';
 import { isEntityType } from '../../domain/types/entityType';
+import { isInternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
@@ -62,12 +62,10 @@ export class EntityViewModelController {
       repositoryProvider: this.repositoryProvider,
     });
 
-    if (isError(allEntities))
+    if (isInternalError(allEntities))
       return res.status(httpStatusCodes.internalError).send({
         error: JSON.stringify(allEntities),
       });
-
-    allEntities;
 
     // This is doing too much!
     const result = !wasNotProvided(id)

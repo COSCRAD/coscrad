@@ -33,7 +33,6 @@ export default class TestRepositoryProvider extends RepositoryProvider {
   public async deleteAllEntitiesOfGivenType(
     entityType: EntityType
   ): Promise<void> {
-    console.log(`delete many: ${entityType}`);
     await (
       await this.databaseProvider.getDBInstance()
     ).deleteAll(getArangoCollectionIDFromEntityType(entityType));

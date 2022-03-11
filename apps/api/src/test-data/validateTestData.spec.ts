@@ -1,6 +1,6 @@
 import { writeFileSync } from 'fs';
 import { getValidatorForEntity } from '../domain/domainModelValidators';
-import { Valid } from '../domain/domainModelValidators/Valid';
+import { isValid } from '../domain/domainModelValidators/Valid';
 import {
   EntityType,
   EntityTypeToInstance,
@@ -31,15 +31,17 @@ describe('buildTestData', () => {
     );
 
     Object.entries(testData).forEach(([key, models]) => {
-      describe(`Entity type key`, () => {
+      describe(`Entity of type ${key}`, () => {
         it(`Should be a valid entity type`, () => {
-          expect(isEntityType(key)).toBeTruthy();
+          expect(isEntityType(key)).toBe(true);
         });
 
         const entityType = key as EntityType;
         it(`should have a corresponding collection name`, () => {
           const collectionName =
             getArangoCollectionIDFromEntityType(entityType);
+
+          expect(isStringWithNonzeroLength(collectionName)).toBe(true);
         });
 
         describe(`the DTOs`, () => {
@@ -66,7 +68,13 @@ describe('buildTestData', () => {
                 expect(isStringWithNonzeroLength(dto.id)).toBe(true);
               });
               it(`should satisfy invariant validation`, () => {
-                expect(entityValidator(dto)).toBe(Valid);
+                const validationResult = entityValidator(dto);
+
+                console.log({
+                  validationResult: validationResult,
+                });
+
+                expect(isValid(validationResult)).toBe(true);
               });
             });
           });

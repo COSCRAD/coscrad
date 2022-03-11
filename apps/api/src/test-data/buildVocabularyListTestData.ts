@@ -12,6 +12,7 @@ export default (): VocabularyListModels => ({
       id: 'vocabulary-list-id-1',
       name: 'test VL 1 chil',
       nameEnglish: 'test VL 1 engl',
+      published: true,
       entries: [
         {
           termId: '1',
@@ -47,6 +48,7 @@ export default (): VocabularyListModels => ({
     {
       id: 'vocabulary-list-id-2',
       name: 'test VL 2 CHIL- no engl name',
+      published: true,
       entries: [
         {
           termId: '2',

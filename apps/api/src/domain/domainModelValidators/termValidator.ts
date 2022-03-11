@@ -5,6 +5,7 @@ import { PartialDTO } from '../../types/partial-dto';
 import { Term } from '../models/term/entities/term.entity';
 import { entityTypes } from '../types/entityType';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
+import InvalidPublicationStatusError from './errors/InvalidPublicationStatusError';
 import NullOrUndefinedDTOError from './errors/NullOrUndefinedDTOError';
 import InvalidTermDTOError from './errors/term/InvalidTermDTOError';
 import TermHasNoTextInAnyLanguageError from './errors/term/TermHasNoTextInAnyLanguageError';
@@ -19,13 +20,17 @@ const termValidator: DomainModelValidator = (
 
   const innerErrors: InternalError[] = [];
 
-  const { term, termEnglish, id } = dto as PartialDTO<Term>;
+  const { term, termEnglish, id, published } = dto as PartialDTO<Term>;
 
   if (
     !isStringWithNonzeroLength(term) &&
     !isStringWithNonzeroLength(termEnglish)
   )
     innerErrors.push(new TermHasNoTextInAnyLanguageError(id));
+
+  // TODO Validate inherited properties on the base class
+  if (typeof published !== 'boolean')
+    innerErrors.push(new InvalidPublicationStatusError(entityTypes.term));
 
   return innerErrors.length ? new InvalidTermDTOError(id, innerErrors) : Valid;
 };

@@ -1,4 +1,5 @@
 import { EntityType, entityTypes } from '../../domain/types/entityType';
+import { InternalError } from '../../lib/errors/InternalError';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
 import buildTagViewModels from './viewModelBuilders/buildTagViewModels';
 import buildTermViewModels from './viewModelBuilders/buildTermViewModels';
@@ -25,7 +26,7 @@ export default (
     default:
       const exhaustiveCheck: never = entityType;
 
-      return new Error(
+      return new InternalError(
         `Cannot build view model for unsupported entity type: ${exhaustiveCheck}`
       );
   }

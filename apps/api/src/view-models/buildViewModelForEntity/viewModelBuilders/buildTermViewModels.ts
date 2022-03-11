@@ -4,7 +4,6 @@ import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
 import { ViewModelBuilderDependencies } from '../buildViewModelForEntity';
 import { TermViewModel } from '../viewModels';
 
-// Should we make this a class?
 export default async ({
   repositoryProvider,
 }: ViewModelBuilderDependencies): Promise<TermViewModel[]> => {
