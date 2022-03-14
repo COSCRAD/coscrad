@@ -2,11 +2,9 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildConfigFilePath from '../config/buildConfigFilePath';
-import {
-  allEnvironmentVariableKeys,
-  removeAllCustomEntironmentVariables,
-  validate,
-} from '../config/env.validation';
+import { validate } from '../config/env.validation';
+import buildAllEnvironmentVariableKeys from './constants/buildAllEnvironmentVariableKeys';
+import removeAllCustomEntironmentVariables from './__tests__/utilities/removeAllCustomEnvironmentVariables';
 
 /**
  * The purpose of the base '/' endpoint is to give us a sanity check that the
@@ -14,7 +12,7 @@ import {
  * guidance in how to setup more complex e2e tests of our api.
  */
 
-const bootstrapApp = (configFileName: string) =>
+const createAppModule = (configFileName: string) =>
   Test.createTestingModule({
     imports: [
       ConfigModule.forRoot({
@@ -57,16 +55,13 @@ describe('ConfigService', () => {
 
   describe('the environment', () => {
     it('should be test', () => {
-      console.log({
-        nodeenv: process.env.NODE_ENV,
-      });
       expect(process.env.NODE_ENV).toBe('test');
     });
   });
 
   describe('when all environment variables are valid', () => {
     beforeAll(async () => {
-      const moduleRef = await bootstrapApp('sample');
+      const moduleRef = await createAppModule('sample');
 
       app = moduleRef.createNestApplication();
       await app.init();
@@ -74,7 +69,7 @@ describe('ConfigService', () => {
     it('should set the variables appropriately', () => {
       const configService = app.get(ConfigService);
 
-      const config = allEnvironmentVariableKeys.reduce(
+      const config = buildAllEnvironmentVariableKeys().reduce(
         (accumulated, key) => ({
           ...accumulated,
           [key]: configService.get(key),
@@ -87,15 +82,16 @@ describe('ConfigService', () => {
   });
 
   describe('when the .env contains invalid variable declarations', () => {
-    const attemptBootstrap = () => bootstrapApp('invalid');
+    const attemptToCreateAppModule = () => createAppModule('invalid');
 
+    // We might want to check that the promise rejects here instead
     it('should throw', () => {
-      expect(attemptBootstrap).toThrow();
+      expect(attemptToCreateAppModule).toThrow();
 
       let configErrorMessage;
 
       try {
-        attemptBootstrap();
+        attemptToCreateAppModule();
       } catch (error) {
         configErrorMessage = error;
       }

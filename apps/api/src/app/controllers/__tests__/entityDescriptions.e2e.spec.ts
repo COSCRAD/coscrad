@@ -6,18 +6,21 @@ import { buildAllEntityDescriptions } from 'apps/api/src/view-models/entityDescr
 import * as request from 'supertest';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
+import buildConfigFilePath from '../../config/buildConfigFilePath';
+import { Environment } from '../../config/constants/Environment';
+import removeAllCustomEnvironmentVariables from '../../config/__tests__/utilities/removeAllCustomEnvironmentVariables';
 import { EntityViewModelController } from '../entityViewModel.controller';
 describe('GET /entities/descriptions', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
+    removeAllCustomEnvironmentVariables();
+
     const moduleRef = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
           isGlobal: true,
-          envFilePath: `${process.cwd()}/apps/api/src/app/config/${
-            process.env.NODE_ENV
-          }.env`,
+          envFilePath: buildConfigFilePath(Environment.test),
           cache: false,
         }),
       ],

@@ -4,11 +4,10 @@ import { ArangoConnectionProvider } from './arango-connection.provider';
 import { ArangoDatabase } from './arango-database';
 import { DatabaseProvider } from './database.provider';
 
-describe('AppController', () => {
+// TODO unskip!
+describe('Database Provider', () => {
   let databaseProvider: DatabaseProvider;
   let configService: ConfigService;
-
-  let arangoInstance;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -25,16 +24,20 @@ describe('AppController', () => {
     if (!arangoConnectionProvider)
       throw new Error('Connection provider not injected');
 
-    const databaseProvider = new DatabaseProvider(
+    databaseProvider = new DatabaseProvider(
       configService,
       arangoConnectionProvider
     );
-
-    arangoInstance = await databaseProvider.getDBInstance();
   });
 
   describe('get database instance', () => {
     describe('the returned instance', () => {
+      let arangoInstance;
+
+      beforeAll(async () => {
+        arangoInstance = await databaseProvider.getDBInstance();
+      });
+
       it('should not be null or undefined', () => {
         expect(arangoInstance).toBeTruthy();
       });

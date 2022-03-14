@@ -1,15 +1,13 @@
 import { INestApplication } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
+import removeAllCustomEntironmentVariables from '../../../app/config/__tests__/utilities/removeAllCustomEnvironmentVariables';
 import { AppController } from '../../app.controller';
 import { AppService } from '../../app.service';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
-import {
-  Environment,
-  removeAllCustomEntironmentVariables,
-  validate,
-} from '../../config/env.validation';
+import { Environment } from '../../config/constants/Environment';
+import { validate } from '../../config/env.validation';
 
 /**
  * The purpose of the base '/' endpoint is to give us a sanity check that the
@@ -49,25 +47,11 @@ describe('GET /', () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
-
-    console.log({
-      env: process.env.NODE_ENV,
-      db: app.get<ConfigService>(ConfigService).get('ARANGO_DB_NAME'),
-    });
   });
 
   const expectedDataInResponse = {
     message: 'Welcome to the COSCRAD API!',
   };
-
-  describe('the environment', () => {
-    it('should be test', () => {
-      console.log({
-        nodeenv: process.env.NODE_ENV,
-      });
-      expect(process.env.NODE_ENV).toBe('test');
-    });
-  });
 
   it(`should get the welcome message`, () => {
     return request(app.getHttpServer())

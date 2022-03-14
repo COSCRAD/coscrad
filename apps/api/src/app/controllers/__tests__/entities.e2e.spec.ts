@@ -1,19 +1,21 @@
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import { EntityType, entityTypes } from 'apps/api/src/domain/types/entityType';
+import { entityTypes } from 'apps/api/src/domain/types/entityType';
 import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
 import TestRepositoryProvider from 'apps/api/src/persistence/repositories/TestRepositoryProvider';
 import buildTestData from 'apps/api/src/test-data/buildTestData';
 import * as request from 'supertest';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
-import { removeAllCustomEntironmentVariables } from '../../config/env.validation';
+import buildConfigFilePath from '../../config/buildConfigFilePath';
+import { Environment } from '../../config/constants/Environment';
+import removeAllCustomEntironmentVariables from '../../config/__tests__/utilities/removeAllCustomEnvironmentVariables';
+import httpStatusCodes from '../../constants/httpStatusCodes';
 import { EntityViewModelController } from '../entityViewModel.controller';
 
 const originalEnv = process.env;
 
-const entityType = entityTypes.term;
 describe('GET /entities (fetch view models)', () => {
   let app: INestApplication;
 
@@ -25,7 +27,9 @@ describe('GET /entities (fetch view models)', () => {
 
   const testData = buildTestData();
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    jest.resetModules();
+
     /**
      * HACK We have experienced annoying side-effect issues with the way the
      * built-in ConfigService reads our `.env` files. We have a separate
@@ -39,24 +43,12 @@ describe('GET /entities (fetch view models)', () => {
      * https://github.com/nestjs/config/issues/168
      */
     removeAllCustomEntironmentVariables();
-  });
-
-  beforeEach(async () => {
-    jest.resetModules();
-
-    process.env = {
-      ...originalEnv,
-      NODE_ENV: 'test',
-      ARANGO_DB_NAME: 'e2etestdb',
-    };
 
     const moduleRef = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
           isGlobal: true,
-          envFilePath: `${process.cwd()}/apps/api/src/app/config/${
-            process.env.NODE_ENV
-          }.env`,
+          envFilePath: buildConfigFilePath(Environment.test),
           cache: false,
         }),
       ],
@@ -77,25 +69,9 @@ describe('GET /entities (fetch view models)', () => {
     app = moduleRef.createNestApplication();
     await app.init();
 
-    /**
-     * We empty the collections before **and** after each test, just in case.
-     */
-    const deleteAllDataPromises = Object.keys(testData).map(
-      (entityType: EntityType) =>
-        testRepositoryProvider.deleteAllEntitiesOfGivenType(entityType)
-    );
+    await testRepositoryProvider.testSetup();
 
-    await Promise.all(deleteAllDataPromises);
-
-    // Add all test data to the db using the repositories
-    const writePromises = Object.entries(testData).map(
-      ([entityType, instances]) =>
-        testRepositoryProvider
-          .forEntity(entityType as EntityType)
-          .createMany(instances)
-    );
-
-    await Promise.all(writePromises);
+    await testRepositoryProvider.addEntitiesOfManyTypes(testData);
   });
 
   describe(`when entity type is omitted`, () => {
@@ -103,34 +79,55 @@ describe('GET /entities (fetch view models)', () => {
       request(app.getHttpServer()).get(`/entities`).expect(400));
   });
 
-  describe(`?type=${entityType} (fetching many view models)`, () => {
-    it(`should fetch multiple entities of type ${entityType}`, () => {
-      return request(app.getHttpServer())
-        .get(`/entities`)
-        .query({
-          type: entityType,
-        })
-        .expect(200);
-      /**
-       * TODO
-       * - Snapshot the response
-       * - Specifically test `published` flag works here
-       */
+  Object.values(entityTypes).forEach((entityType) => {
+    describe(`?type=${entityType} (fetching many view models)`, () => {
+      it(`should fetch multiple entities of type ${entityType}`, () => {
+        return request(app.getHttpServer())
+          .get(`/entities`)
+          .query({
+            type: entityType,
+          })
+          .expect(httpStatusCodes.ok);
+        /**
+         * TODO
+         * - Snapshot the response
+         * - Specifically test `published` flag works here
+         */
+      });
     });
 
-    afterEach(async () => {
-      const deleteAllDataPromises = Object.keys(testData).map(
-        (entityType: EntityType) =>
-          testRepositoryProvider.deleteAllEntitiesOfGivenType(entityType)
-      );
+    describe(`?type=${entityType} when an id is provided`, () => {
+      describe('when no entity with that id exists', () => {
+        it(`should return not found`, () => {
+          return request(app.getHttpServer())
+            .get(`/entities`)
+            .query({
+              type: entityType,
+              id: 'bogus-id',
+            })
+            .expect(httpStatusCodes.notFound);
+        });
+      });
 
-      await Promise.all(deleteAllDataPromises);
-
-      process.env = originalEnv;
+      describe('when an entity with that id is found', () => {
+        it('should return a valid response', () => {
+          return request(app.getHttpServer())
+            .get(`/entities`)
+            .query({
+              type: entityType,
+              id: testData[entityType][0].id,
+            })
+            .expect(httpStatusCodes.ok);
+        });
+      });
     });
+  });
 
-    afterAll(async () => {
-      await app.close();
-    });
+  afterAll(async () => {
+    await testRepositoryProvider.testTeardown();
+
+    await app.close();
+
+    process.env = originalEnv;
   });
 });

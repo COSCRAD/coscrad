@@ -7,17 +7,8 @@ import {
   IsUrl,
   validateSync,
 } from 'class-validator';
-
-export enum Environment {
-  test = 'test',
-  development = 'development',
-  production = 'production',
-}
-
-export enum Scheme {
-  http = 'http',
-  https = 'https',
-}
+import { Environment } from './constants/Environment';
+import { Scheme } from './constants/Scheme';
 
 class EnvironmentVariables {
   @IsEnum(Environment)
@@ -61,24 +52,6 @@ class EnvironmentVariables {
   @IsNotEmpty()
   AUTH0_AUDIENCE: string;
 }
-
-export const allEnvironmentVariableKeys = [
-  'NODE_PORT',
-  'ARANGO_DB_HOST_SCHEME',
-  'ARANGO_DB_HOST_DOMAIN',
-  'ARANGO_DB_HOST_PORT',
-  'ARANGO_DB_ROOT_PASSWORD',
-  'ARANGO_DB_USER',
-  'ARANGO_DB_USER_PASSWORD',
-  'ARANGO_DB_NAME',
-  'AUTH0_ISSUER_URL',
-  'AUTH0_AUDIENCE',
-];
-
-export const removeAllCustomEntironmentVariables = (): void =>
-  allEnvironmentVariableKeys.forEach((envVar) => {
-    if (process.env[envVar]) delete process.env[envVar];
-  });
 
 export const validate = (
   config: Record<string, unknown>

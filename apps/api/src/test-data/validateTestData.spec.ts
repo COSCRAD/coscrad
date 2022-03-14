@@ -70,10 +70,6 @@ describe('buildTestData', () => {
               it(`should satisfy invariant validation`, () => {
                 const validationResult = entityValidator(dto);
 
-                console.log({
-                  validationResult: validationResult,
-                });
-
                 expect(isValid(validationResult)).toBe(true);
               });
             });
@@ -91,8 +87,11 @@ describe('buildTestData', () => {
             {}
           );
 
+        // TODO move this to a config- better yet avoid this whole write!
+        const testDataFilePath = `${process.cwd()}/apps/api/src/test-data/testData.json`;
+
         writeFileSync(
-          'testData.json',
+          testDataFilePath,
           JSON.stringify(testDataInDatabaseFormat)
         );
       });

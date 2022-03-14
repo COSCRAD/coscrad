@@ -33,6 +33,8 @@ const vocabularyListValidator: DomainModelValidator = (
   if (!Array.isArray(entries) || !entries.length)
     innerErrors.push(new VocabularyListHasNoEntriesError(id));
 
+  // TODO validate that `variables` is an array (could be empty)
+
   // TODO Validate inherited properties on the base class
   if (typeof published !== 'boolean')
     innerErrors.push(new InvalidPublicationStatusError(entityTypes.term));

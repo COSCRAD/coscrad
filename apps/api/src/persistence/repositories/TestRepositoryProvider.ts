@@ -1,5 +1,9 @@
 import { Entity } from '../../domain/models/entity';
-import { EntityType, InMemorySnapshot } from '../../domain/types/entityType';
+import {
+  EntityType,
+  entityTypes,
+  InMemorySnapshot,
+} from '../../domain/types/entityType';
 import { DatabaseProvider } from '../database/database.provider';
 import { getArangoCollectionIDFromEntityType } from '../database/get-arango-collection-ids';
 import { RepositoryProvider } from './repository.provider';
@@ -36,5 +40,24 @@ export default class TestRepositoryProvider extends RepositoryProvider {
     await (
       await this.databaseProvider.getDBInstance()
     ).deleteAll(getArangoCollectionIDFromEntityType(entityType));
+  }
+
+  /**
+   * Deletes all entity data (i.e. empties every entity collection);
+   */
+  private async deleteAllEntityData(): Promise<void> {
+    const deleteAllDataPromises = Object.values(entityTypes).map(
+      (entityType: EntityType) => this.deleteAllEntitiesOfGivenType(entityType)
+    );
+
+    await Promise.all(deleteAllDataPromises);
+  }
+
+  public async testSetup(): Promise<void> {
+    await this.deleteAllEntityData();
+  }
+
+  public async testTeardown(): Promise<void> {
+    await this.deleteAllEntityData();
   }
 }

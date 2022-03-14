@@ -5,8 +5,13 @@ type TermAndModels = {
   term: PartialDTO<Term>[];
 };
 
-export default (): TermAndModels => ({
-  term: [
+/**
+ * **note** When adding new test data \ modifying existing test data, be sure to
+ * run `validateTestData.spec.ts` to ensure your test data satisfies all domain
+ * invariants.
+ */
+export default (): Term[] =>
+  [
     {
       term: 'Chil-term-1',
       termEnglish: 'Engl-term-1',
@@ -27,5 +32,4 @@ export default (): TermAndModels => ({
       id: '3',
       published: false,
     },
-  ].map((dto) => new Term(dto)),
-});
+  ].map((dto) => new Term(dto));

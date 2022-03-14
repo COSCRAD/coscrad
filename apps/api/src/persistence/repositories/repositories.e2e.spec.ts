@@ -1,12 +1,11 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import buildConfigFilePath from '../../app/config/buildConfigFilePath';
+import { Environment } from '../../app/config/constants/Environment';
+import removeAllCustomEntironmentVariables from '../../app/config/__tests__/utilities/removeAllCustomEnvironmentVariables';
 import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForEntity';
 import { Entity } from '../../domain/models/entity';
-import {
-  EntityType,
-  entityTypes,
-  InMemorySnapshot,
-} from '../../domain/types/entityType';
+import { entityTypes, InMemorySnapshot } from '../../domain/types/entityType';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
 import buildTestData from '../../test-data/buildTestData';
@@ -28,11 +27,7 @@ describe('Repository provider > repositoryForEntity', () => {
   beforeEach(async () => {
     jest.resetModules();
 
-    process.env = {
-      ...originalEnv,
-      NODE_ENV: 'test',
-      ARANGO_DB_NAME: 'e2etestdb',
-    };
+    removeAllCustomEntironmentVariables();
 
     testData = buildTestData();
 
@@ -40,13 +35,7 @@ describe('Repository provider > repositoryForEntity', () => {
       imports: [
         ConfigModule.forRoot({
           isGlobal: true,
-          envFilePath: (() => {
-            const path = `${process.cwd()}/apps/api/src/app/config/${
-              process.env.NODE_ENV
-            }.env`;
-
-            return path;
-          })(),
+          envFilePath: buildConfigFilePath(Environment.test),
           cache: false,
         }),
       ],
@@ -58,17 +47,14 @@ describe('Repository provider > repositoryForEntity', () => {
     testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
 
     configService = moduleRef.get<ConfigService>(ConfigService);
+
+    await testRepositoryProvider.testSetup();
   });
 
   afterEach(async () => {
     process.env = originalEnv;
 
-    const deleteAllDataPromises = Object.keys(testData).map(
-      (entityType: EntityType) =>
-        testRepositoryProvider.deleteAllEntitiesOfGivenType(entityType)
-    );
-
-    await Promise.all(deleteAllDataPromises);
+    await testRepositoryProvider.testTeardown();
   });
 
   describe('the configuration', () => {
@@ -80,25 +66,7 @@ describe('Repository provider > repositoryForEntity', () => {
   Object.values(entityTypes).forEach((entityType) => {
     describe(`Repository for entity of type ${entityType}`, () => {
       beforeEach(async () => {
-        /**
-         * We empty the collections before **and** after each test, just in case.
-         */
-        const deleteAllDataPromises = Object.keys(testData).map(
-          (entityType: EntityType) =>
-            testRepositoryProvider.deleteAllEntitiesOfGivenType(entityType)
-        );
-
-        await Promise.all(deleteAllDataPromises);
-
-        // Add all test data to the db using the repositories
-        const writePromises = Object.entries(testData).map(
-          ([entityType, instances]) =>
-            testRepositoryProvider
-              .forEntity(entityType as EntityType)
-              .createMany(instances)
-        );
-
-        await Promise.all(writePromises);
+        await testRepositoryProvider.addEntitiesOfManyTypes(testData);
       });
       describe('fetchMany', () => {
         it('should return the expected result', async () => {

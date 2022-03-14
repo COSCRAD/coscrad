@@ -7,6 +7,7 @@ import { RepositoryProvider } from '../persistence/repositories/repository.provi
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import buildConfigFilePath from './config/buildConfigFilePath';
+import { validate } from './config/env.validation';
 import { AddTagController } from './controllers/addTag.controller';
 import { EntityViewModelController } from './controllers/entityViewModel.controller';
 
@@ -16,6 +17,7 @@ import { EntityViewModelController } from './controllers/entityViewModel.control
       isGlobal: true,
       envFilePath: buildConfigFilePath(process.env.NODE_ENV),
       cache: false,
+      validate,
     }),
     AuthorizationModule,
     DomainServicesModule,

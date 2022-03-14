@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Database } from 'arangojs';
-import { Scheme } from '../../app/config/env.validation';
+import { Scheme } from '../../app/config/constants/Scheme';
 
 // Alias for more clarity from the outside; TODO wrap `Database` with simpler API?
 export type ArangoConnection = Database;
@@ -48,15 +48,6 @@ export class ArangoConnectionProvider {
       'ARANGO_DB_HOST_PORT',
       '80'
     );
-
-    console.log({
-      dbName,
-      dbHostDomain,
-      dbHostScheme,
-      dbHostPort,
-      dbPass,
-      dbUser,
-    });
 
     const systemDB = new Database({
       url: buildFullHostURL(dbHostDomain, dbHostScheme, dbHostPort),
