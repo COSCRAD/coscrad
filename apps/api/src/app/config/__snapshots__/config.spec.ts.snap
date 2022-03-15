@@ -1,6 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ConfigService when all environment variables are valid should set the variables appropriately 1`] = `
+exports[`ConfigService when NODE_ENV is not inherited from the process should throw 1`] = `
+[Error: An instance of EnvironmentVariables has failed the validation:
+ - property NODE_ENV has failed the following constraints: isEnum 
+]
+`;
+
+exports[`ConfigService when all environment variables are valid the config service when reading environment variables should obtain the correct values 1`] = `
 Object {
   "ARANGO_DB_HOST_DOMAIN": "arango.mydomain.ca",
   "ARANGO_DB_HOST_PORT": 443,

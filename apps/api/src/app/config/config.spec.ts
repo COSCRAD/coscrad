@@ -3,8 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildConfigFilePath from '../config/buildConfigFilePath';
 import { validate } from '../config/env.validation';
-import buildAllEnvironmentVariableKeys from './constants/buildAllEnvironmentVariableKeys';
+import { buildAllCustomEnvironmentVariableKeys } from './__tests__/utilities/buildAllEnvironmentVariableKeys';
 import removeAllCustomEntironmentVariables from './__tests__/utilities/removeAllCustomEnvironmentVariables';
+
+const originalEnv = process.env;
 
 /**
  * The purpose of the base '/' endpoint is to give us a sanity check that the
@@ -49,10 +51,6 @@ describe('ConfigService', () => {
     removeAllCustomEntironmentVariables();
   });
 
-  const expectedDataInResponse = {
-    message: 'Welcome to the COSCRAD API!',
-  };
-
   describe('the environment', () => {
     it('should be test', () => {
       expect(process.env.NODE_ENV).toBe('test');
@@ -60,24 +58,36 @@ describe('ConfigService', () => {
   });
 
   describe('when all environment variables are valid', () => {
-    beforeAll(async () => {
-      const moduleRef = await createAppModule('sample');
+    describe('the config service', () => {
+      describe('when creating the module', () => {
+        it('should not throw', () => {
+          const attemptToCreateAppModule = () => createAppModule('sample');
 
-      app = moduleRef.createNestApplication();
-      await app.init();
-    });
-    it('should set the variables appropriately', () => {
-      const configService = app.get(ConfigService);
+          expect(attemptToCreateAppModule).not.toThrow();
+        });
+      });
+      describe('when reading environment variables', () => {
+        beforeAll(async () => {
+          const moduleRef = await createAppModule('sample');
 
-      const config = buildAllEnvironmentVariableKeys().reduce(
-        (accumulated, key) => ({
-          ...accumulated,
-          [key]: configService.get(key),
-        }),
-        {}
-      );
+          app = moduleRef.createNestApplication();
+          await app.init();
+        });
 
-      expect(config).toMatchSnapshot();
+        it('should obtain the correct values', () => {
+          const configService = app.get(ConfigService);
+
+          const config = buildAllCustomEnvironmentVariableKeys().reduce(
+            (accumulated, key) => ({
+              ...accumulated,
+              [key]: configService.get(key),
+            }),
+            {}
+          );
+
+          expect(config).toMatchSnapshot();
+        });
+      });
     });
   });
 
@@ -100,8 +110,35 @@ describe('ConfigService', () => {
     });
   });
 
+  describe('when NODE_ENV is not inherited from the process', () => {
+    beforeAll(() => {
+      delete process.env.NODE_ENV;
+    });
+
+    afterAll(() => {
+      process.env = originalEnv;
+    });
+
+    const attemptToCreateAppModule = () => createAppModule('sample');
+
+    // We might want to check that the promise rejects here instead
+    it('should throw', () => {
+      expect(attemptToCreateAppModule).toThrow();
+
+      let configErrorMessage;
+
+      try {
+        attemptToCreateAppModule();
+      } catch (error) {
+        configErrorMessage = error;
+      }
+
+      expect(configErrorMessage).toMatchSnapshot();
+    });
+  });
+
   afterEach(() => {
-    removeAllCustomEntironmentVariables();
+    process.env = originalEnv;
   });
 
   afterAll(async () => {

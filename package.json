@@ -7,7 +7,7 @@
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "nx": "nx",
     "start": "ng serve",
-    "serve:api": "nx run api:serve",
+    "serve:api": "NODE_ENV=development nx run api:serve",
     "serve:frontend": "ng serve --o",
     "serve:all": "concurrently \"npm run serve:api\" \"npm run serve:frontend\"",
     "start:db:dev": "./scripts/arangodb/start-arango-db.sh",
