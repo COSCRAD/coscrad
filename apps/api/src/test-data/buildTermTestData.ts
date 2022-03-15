@@ -1,9 +1,4 @@
 import { Term } from '../domain/models/term/entities/term.entity';
-import { PartialDTO } from '../types/partial-dto';
-
-type TermAndModels = {
-  term: PartialDTO<Term>[];
-};
 
 /**
  * **note** When adding new test data \ modifying existing test data, be sure to

@@ -1,7 +1,12 @@
 import { INestApplication } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import { entityTypes } from 'apps/api/src/domain/types/entityType';
+import getInstanceFactoryForEntity from 'apps/api/src/domain/factories/getInstanceFactoryForEntity';
+import {
+  EntityType,
+  entityTypes,
+  InMemorySnapshot,
+} from 'apps/api/src/domain/types/entityType';
 import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
 import TestRepositoryProvider from 'apps/api/src/persistence/repositories/TestRepositoryProvider';
 import buildTestData from 'apps/api/src/test-data/buildTestData';
@@ -16,16 +21,27 @@ import { EntityViewModelController } from '../entityViewModel.controller';
 
 const originalEnv = process.env;
 
-describe('GET /entities (fetch view models)', () => {
+describe('GET /entities (fetch view models)- all entities published', () => {
   let app: INestApplication;
 
   let databaseProvider: DatabaseProvider;
 
   let testRepositoryProvider: TestRepositoryProvider;
 
-  let configService: ConfigService;
-
   const testData = buildTestData();
+
+  const testDataWithAllEntitiesPublished = Object.entries(testData).reduce(
+    (accumulatedData: InMemorySnapshot, [entityType, instances]) => ({
+      ...accumulatedData,
+      [entityType]: instances.map((instance) =>
+        getInstanceFactoryForEntity(entityType as EntityType)({
+          ...instance.toDTO(),
+          published: true,
+        })
+      ),
+    }),
+    {}
+  );
 
   beforeAll(async () => {
     jest.resetModules();
@@ -64,14 +80,12 @@ describe('GET /entities (fetch view models)', () => {
 
     testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
 
-    configService = moduleRef.get<ConfigService>(ConfigService);
-
     app = moduleRef.createNestApplication();
     await app.init();
+  });
 
+  beforeEach(async () => {
     await testRepositoryProvider.testSetup();
-
-    await testRepositoryProvider.addEntitiesOfManyTypes(testData);
   });
 
   describe(`when entity type is omitted`, () => {
@@ -80,52 +94,95 @@ describe('GET /entities (fetch view models)', () => {
   });
 
   Object.values(entityTypes).forEach((entityType) => {
-    describe(`?type=${entityType} (fetching many view models)`, () => {
-      it(`should fetch multiple entities of type ${entityType}`, () => {
-        return request(app.getHttpServer())
-          .get(`/entities`)
-          .query({
-            type: entityType,
-          })
-          .expect(httpStatusCodes.ok);
-        /**
-         * TODO
-         * - Snapshot the response
-         * - Specifically test `published` flag works here
-         */
+    describe(`when querying for view models for entity of type ${entityType}`, () => {
+      describe('when an id is not provided', () => {
+        describe(`?type=${entityType} (fetching many view models) - all entities published`, () => {
+          beforeEach(async () => {
+            console.log({
+              testDataWithAllEntitiesPublishedForEntity: JSON.stringify(
+                testDataWithAllEntitiesPublished[entityType]
+              ),
+            });
+
+            await testRepositoryProvider.addEntitiesOfManyTypes(
+              testDataWithAllEntitiesPublished
+            );
+          });
+          it(`should fetch multiple entities of type ${entityType}`, async () => {
+            const res = await request(app.getHttpServer())
+              .get(`/entities`)
+              .query({
+                type: entityType,
+              });
+
+            const repoResponse = await testRepositoryProvider
+              .forEntity(entityType)
+              .fetchMany();
+
+            console.log({
+              repoResponse,
+            });
+
+            expect(res.status).toBe(httpStatusCodes.ok);
+
+            expect(res.body.length).toBe(
+              testDataWithAllEntitiesPublished[entityType].length
+            );
+
+            expect(res.body).toMatchSnapshot();
+          });
+        });
+      });
+
+      describe(`?type=${entityType} when an id is provided`, () => {
+        describe('when no entity with the id exists', () => {
+          beforeEach(async () => {
+            await testRepositoryProvider.addEntitiesOfManyTypes(
+              testDataWithAllEntitiesPublished
+            );
+          });
+          it(`should return not found`, () => {
+            return request(app.getHttpServer())
+              .get(`/entities`)
+              .query({
+                type: entityType,
+                id: 'bogus-id',
+              })
+              .expect(httpStatusCodes.notFound);
+          });
+        });
+
+        describe('when an entity with the id is found', () => {
+          beforeEach(async () => {
+            await testRepositoryProvider.addEntitiesOfManyTypes(
+              testDataWithAllEntitiesPublished
+            );
+          });
+          it('should return a valid response', async () => {
+            const entityToFind =
+              testDataWithAllEntitiesPublished[entityType][0];
+
+            const res = await request(app.getHttpServer())
+              .get(`/entities`)
+              .query({
+                type: entityType,
+                id: entityToFind.id,
+              });
+
+            expect(res.status).toBe(httpStatusCodes.ok);
+
+            expect(res.body.id).toBe(entityToFind.id);
+          });
+        });
       });
     });
 
-    describe(`?type=${entityType} when an id is provided`, () => {
-      describe('when no entity with that id exists', () => {
-        it(`should return not found`, () => {
-          return request(app.getHttpServer())
-            .get(`/entities`)
-            .query({
-              type: entityType,
-              id: 'bogus-id',
-            })
-            .expect(httpStatusCodes.notFound);
-        });
-      });
-
-      describe('when an entity with that id is found', () => {
-        it('should return a valid response', () => {
-          return request(app.getHttpServer())
-            .get(`/entities`)
-            .query({
-              type: entityType,
-              id: testData[entityType][0].id,
-            })
-            .expect(httpStatusCodes.ok);
-        });
-      });
+    afterEach(async () => {
+      await testRepositoryProvider.testTeardown();
     });
   });
 
   afterAll(async () => {
-    await testRepositoryProvider.testTeardown();
-
     await app.close();
 
     process.env = originalEnv;

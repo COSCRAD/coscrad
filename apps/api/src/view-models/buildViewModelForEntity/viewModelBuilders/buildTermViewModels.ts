@@ -14,6 +14,8 @@ export default async ({
   // We are swallowing the error. It would be good to at least log the invalid state.
   const allTermViewModels = searchResult
     .filter((result): result is Term => !isInternalError(result))
+    // TODO Make this happen in one place (not in every view model builder)
+    .filter(({ published }) => published)
     .map((term) => new TermViewModel(term));
 
   return allTermViewModels;

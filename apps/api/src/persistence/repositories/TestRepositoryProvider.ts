@@ -32,6 +32,8 @@ export default class TestRepositoryProvider extends RepositoryProvider {
           entityInstances as any
         )
     );
+
+    await Promise.all(writePromises);
   }
 
   public async deleteAllEntitiesOfGivenType(

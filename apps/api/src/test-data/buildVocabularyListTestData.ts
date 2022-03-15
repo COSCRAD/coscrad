@@ -11,7 +11,7 @@ const vocabularyListDTOs: PartialDTO<VocabularyList>[] = [
     id: 'vocabulary-list-id-1',
     name: 'test VL 1 chil',
     nameEnglish: 'test VL 1 engl',
-    published: true,
+    published: false,
     entries: [
       {
         termId: '1',

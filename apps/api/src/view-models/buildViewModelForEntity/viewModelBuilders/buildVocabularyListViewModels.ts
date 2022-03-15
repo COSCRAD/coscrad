@@ -18,7 +18,10 @@ export default async ({
 
   const allTerms = await termRepository.fetchMany().then((allTerms) =>
     // We filter out invalid DTOs in case they occur
-    allTerms.filter((term): term is Term => !isInternalError(term))
+    allTerms
+      .filter((term): term is Term => !isInternalError(term))
+      // TODO Make this happen in one place (not in every view model builder)
+      .filter(({ published }) => published)
   );
 
   const allVocabularyListViewModels = await vocabularyListRepository
@@ -26,6 +29,8 @@ export default async ({
     .then((vocabularyLists) =>
       vocabularyLists
         .filter((list): list is VocabularyList => !isInternalError(list))
+        // TODO Make this happen in one place (not in every view model builder)
+        .filter(({ published }) => published)
         .map((list) => new VocabularyListViewModel(list, allTerms))
     );
 

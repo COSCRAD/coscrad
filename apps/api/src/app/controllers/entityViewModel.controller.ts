@@ -1,7 +1,7 @@
 import { Controller, Get, Query, Res } from '@nestjs/common';
 import { EntityId } from '../../domain/models/types/entity-id';
 import { isEntityId } from '../../domain/types/entity-id';
-import { isEntityType } from '../../domain/types/entityType';
+import { entityTypes, isEntityType } from '../../domain/types/entityType';
 import { isInternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
@@ -15,7 +15,6 @@ import {
 } from '../../view-models/buildViewModelForEntity/viewModels/TermViewModel';
 import { buildAllEntityDescriptions } from '../../view-models/entityDescriptions/buildAllEntityDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
-import filterOutUnpublishedEntities from './utilities/filterOutUnpublishedEntities';
 
 type HasViewModelId = {
   id: ViewModelId;
@@ -40,6 +39,17 @@ const findEntityById = <T extends HasViewModelId>(
 export class EntityViewModelController {
   constructor(private readonly repositoryProvider: RepositoryProvider) {}
 
+  /**
+   *
+   * TODO[https://www.pivotaltracker.com/story/show/181577715]
+   * Breakout the logic here into two internal handlers:
+   * 1. When Id is provided (byId behaviour)
+   * 2. When Id is not provided (fetchManyBehaviour)
+   *
+   * Move the 'published' filtering to the database not view models.
+   * We need WHERE filters for this first
+   * See [https://www.pivotaltracker.com/story/show/181577715];
+   */
   @Get()
   async fetchMany(
     @Res() res,
@@ -78,11 +88,25 @@ export class EntityViewModelController {
 
     if (isNotFound(result)) return res.sendStatus(httpStatusCodes.notFound);
 
+    if (
+      !Array.isArray(result) &&
+      !(result instanceof TagViewModel) &&
+      !result.isPublished
+    )
+      return res.sendStatus(httpStatusCodes.notFound);
+
+    if (Array.isArray(result) && type === entityTypes.tag) {
+      console.log({
+        allEntities,
+        result,
+      });
+    }
+
     return Array.isArray(result)
       ? res
           .status(httpStatusCodes.ok)
-          // TODO remove cast
-          .send(filterOutUnpublishedEntities(result as any))
+          // TODO remove cast, also do the filtering before the view model
+          .send(result)
       : res.status(httpStatusCodes.ok).send(result);
   }
 

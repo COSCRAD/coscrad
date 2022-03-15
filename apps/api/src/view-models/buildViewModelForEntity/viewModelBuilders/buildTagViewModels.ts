@@ -13,6 +13,7 @@ export default async ({
 
   const allTagViewModels = searchResult
     .filter((result): result is Tag => !isInternalError(result))
+    // Note: There is no publication logic for Tags
     .map((tag) => new TagViewModel(tag));
 
   return allTagViewModels;

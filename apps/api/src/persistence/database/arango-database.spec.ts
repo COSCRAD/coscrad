@@ -1,4 +1,8 @@
-// Write test once we have cemented the design
+/**
+ *
+ * TODO [https://www.pivotaltracker.com/story/show/181577852] Add test
+ *
+ * */
 
 describe.skip('ArangoDatabase', () => {
   it('should have a test', () => {

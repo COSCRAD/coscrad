@@ -1,6 +1,5 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { EntityType } from '../types/entityType';
-import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import { EntityId } from './types/entity-id';
 import { EntityCompositeIdentifier } from './types/entityCompositeIdentifier';
 
@@ -26,11 +25,7 @@ export abstract class Entity {
   // TODO: Rename this 'isPublished' - db migration
   readonly published: boolean;
 
-  constructor(dto: unknown) {
-    // TODO Validate DTO
-    if (!this.#validateDTO(dto))
-      throw new Error(`Invalid dto for an entity: ${JSON.stringify(dto)}`);
-
+  constructor(dto: PartialDTO<Entity>) {
     this.id = dto.id;
 
     this.published = typeof dto.published === 'boolean' ? dto.published : false;
@@ -47,24 +42,8 @@ export abstract class Entity {
    * inheritance baggage.
    *  */
   toDTO<TEntity extends Entity>(this: TEntity): PartialDTO<TEntity> {
-    return JSON.parse(JSON.stringify(this));
+    const result = JSON.parse(JSON.stringify(this));
+
+    return result;
   }
-
-  /**
-   * TODO develop a general pattern \ directory structure for validation \ validators.
-   * One idea: Return a symbol Valid | Errors[] from a validator instead of a
-   * boolean flag.
-   *
-   * We may break the validators out into separate files. Then we will validate
-   * a DTO before passing it to the constructor in our `instance factory` methods
-   * in the mapping layer for the repositories.
-   *  */
-  #validateDTO = (dto: unknown): dto is PartialDTO<Entity> => {
-    const { id } = dto as PartialDTO<Entity>;
-
-    // A new entity will have id auto assigned by db
-    if (!isNullOrUndefined(id) && !isValidEntityId(id)) return false;
-
-    return true;
-  };
 }
