@@ -19,6 +19,7 @@ printenv | grep "COSCRAD_ENVIRONMENT";
 
 ARANGODB_LOCAL_DOCKER_SHARED_VOLUME_DIR_NAME="coscrad-arangodb-docker-shared-volume";
 ARANGODB_DOCKER_SHARED_SCRIPTS_DIR_NAME="docker-container-scripts";
+ARANGO_DB_SERVER="arangodbserver";
 
 # Derive project root path and confirm with user
 SCRIPTS_PATH="$PWD";
@@ -45,6 +46,42 @@ then
 fi
 
 echo $'\n>> COSCRAD_PROJECT_ROOT_PATH set to:' $COSCRAD_PROJECT_ROOT_PATH $'\n';
+
+SUGGESTED_APP_ENV_FILE="$COSCRAD_PROJECT_ROOT_PATH/apps/api/src/app/config/$COSCRAD_ENVIRONMENT.env";
+
+echo $'\nPlease confirm the correct .env file: '$SUGGESTED_APP_ENV_FILE' (y/n)';
+
+read project_env_file_answer;
+
+if [ $project_env_file_answer = "y" ];
+then
+    if [ -f "$SUGGESTED_APP_ENV_FILE" ];
+    then
+      COSCRAD_APP_ENV_FILE=$SUGGESTED_APP_ENV_FILE;
+    fi
+elif [ $project_env_file_answer = "n" ];
+then
+    while [ -z "$COSCRAD_APP_ENV_FILE" ]; do
+        read -p $'Please enter the correct absolute path for the project .env file for COSCRAD\n' new_project_env_file_answer
+        if [ -f "$new_project_env_file_answer" ];
+        then
+            COSCRAD_APP_ENV_FILE=${new_project_env_file_answer};
+        else
+            echo $'Please enter a valid .env file location\n'
+        fi
+    done
+fi
+
+echo $'\n>> COSCRAD_APP_ENV_FILE set to:' $COSCRAD_APP_ENV_FILE $'\n';
+
+# Get .env variables from app configuration
+source $COSCRAD_APP_ENV_FILE; set +a;
+# env $(cat $COSCRAD_APP_ENV_FILE | sed 's/#.*//g' | xargs)
+echo "ARANGO_DB_HOST_SCHEME: $ARANGO_DB_HOST_SCHEME";
+echo "ARANGO_DB_HOST_DOMAIN: $ARANGO_DB_HOST_DOMAIN";
+echo "ARANGO_DB_HOST_PORT: $ARANGO_DB_HOST_PORT";
+echo "ARANGO_DB_USER: $ARANGO_DB_USER";
+echo "ARANGO_DB_NAME: $ARANGO_DB_NAME";
 
 SUGGESTED_ARANGODB_LOCAL_DOCKER_SHARED_VOLUME_PATH="${COSCRAD_PROJECT_ROOT_PATH%/*}/$ARANGODB_LOCAL_DOCKER_SHARED_VOLUME_DIR_NAME";
 
@@ -123,7 +160,7 @@ DOCKER_PS=`sudo -u root docker ps`
 
 if [ -z "${DOCKER_PS##*$ARANGO_DB_SERVER*}" ];
 then
-  echo "Existing docker arango container on $ARANGO_DB_HOST_PORT";
+  echo "Existing docker arango container $ARANGO_DB_SERVER";
   if [ -z "${DOCKER_PS##*$ARANGO_DB_SERVER*}" ];
   then
     echo "stop & remove old instance of docker arango $ARANGO_DB_SERVER container";
