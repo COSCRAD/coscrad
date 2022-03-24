@@ -3,7 +3,7 @@ import { IsEnum, IsNotEmpty, IsNumber, IsString, IsUrl, validateSync } from 'cla
 import { Environment } from './constants/Environment';
 import { Scheme } from './constants/Scheme';
 
-class EnvironmentVariables {
+export class EnvironmentVariables {
     @IsEnum(Environment)
     NODE_ENV: Environment;
 

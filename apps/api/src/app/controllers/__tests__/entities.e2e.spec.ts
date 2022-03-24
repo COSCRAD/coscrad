@@ -1,30 +1,69 @@
-import { INestApplication } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { Test } from '@nestjs/testing'
-import getInstanceFactoryForEntity from 'apps/api/src/domain/factories/getInstanceFactoryForEntity'
-import { EntityType, entityTypes, InMemorySnapshot } from 'apps/api/src/domain/types/entityType'
-import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider'
-import TestRepositoryProvider from 'apps/api/src/persistence/repositories/TestRepositoryProvider'
-import buildTestData from 'apps/api/src/test-data/buildTestData'
-import * as request from 'supertest'
-import { DatabaseProvider } from '../../../persistence/database/database.provider'
-import { RepositoryProvider } from '../../../persistence/repositories/repository.provider'
-import buildConfigFilePath from '../../config/buildConfigFilePath'
-import { Environment } from '../../config/constants/Environment'
-import removeAllCustomEntironmentVariables from '../../config/__tests__/utilities/removeAllCustomEnvironmentVariables'
-import httpStatusCodes from '../../constants/httpStatusCodes'
-import { EntityViewModelController } from '../entityViewModel.controller'
+import { INestApplication } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Test } from '@nestjs/testing';
+import getInstanceFactoryForEntity from 'apps/api/src/domain/factories/getInstanceFactoryForEntity';
+import { EntityType, entityTypes, InMemorySnapshot } from 'apps/api/src/domain/types/entityType';
+import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
+import { RepositoryProvider } from 'apps/api/src/persistence/repositories/repository.provider';
+import TestRepositoryProvider from 'apps/api/src/persistence/repositories/__tests__/TestRepositoryProvider';
+import buildTestData from 'apps/api/src/test-data/buildTestData';
+import * as request from 'supertest';
+import { DatabaseProvider } from '../../../persistence/database/database.provider';
+import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import buildConfigFilePath from '../../config/buildConfigFilePath';
+import { Environment } from '../../config/constants/Environment';
+import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService.spec';
+import httpStatusCodes from '../../constants/httpStatusCodes';
+import { EntityViewModelController } from '../entityViewModel.controller';
 
-const originalEnv = process.env
+export const createTestModule = async (testDatabaseName: string) =>
+    Test.createTestingModule({
+        providers: [
+            {
+                provide: ConfigService,
+                useFactory: () =>
+                    buildMockConfigServiceSpec(
+                        {
+                            ARANGO_DB_NAME: testDatabaseName,
+                        },
+                        buildConfigFilePath(Environment.test)
+                    ),
+            },
+            {
+                provide: ArangoConnectionProvider,
+                useFactory: async (configService: ConfigService) => {
+                    const provider = new ArangoConnectionProvider(configService);
+
+                    await provider.initialize();
+
+                    return provider;
+                },
+                inject: [ConfigService],
+            },
+            {
+                provide: RepositoryProvider,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
+                    return new RepositoryProvider(new DatabaseProvider(arangoConnectionProvider));
+                },
+                inject: [ArangoConnectionProvider],
+            },
+        ],
+
+        controllers: [EntityViewModelController],
+    }).compile();
 
 describe('GET /entities (fetch view models)- all entities published', () => {
-    let app: INestApplication
+    const testDatabaseName = generateRandomTestDatabaseName();
 
-    let databaseProvider: DatabaseProvider
+    let app: INestApplication;
 
-    let testRepositoryProvider: TestRepositoryProvider
+    let arangoConnectionProvider: ArangoConnectionProvider;
 
-    const testData = buildTestData()
+    let databaseProvider: DatabaseProvider;
+
+    let testRepositoryProvider: TestRepositoryProvider;
+
+    const testData = buildTestData();
 
     const testDataWithAllEntitiesPublished = Object.entries(testData).reduce(
         (accumulatedData: InMemorySnapshot, [entityType, instances]) => ({
@@ -37,52 +76,32 @@ describe('GET /entities (fetch view models)- all entities published', () => {
             ),
         }),
         {}
-    )
+    );
 
     beforeAll(async () => {
-        jest.resetModules()
+        jest.resetModules();
 
-        /**
-         * HACK We have experienced annoying side-effect issues with the way the
-         * built-in ConfigService reads our `.env` files. We have a separate
-         * `${environment}.env` file for each unique environment. However,
-         * `process.env` apparently takes priority over these locally defined files.
-         * Forcing the local values to take precedence in the test environment has
-         * been an exercise in frustration.
-         *
-         * https://github.com/nestjs/config/issues/168
-         *
-         * https://github.com/nestjs/config/issues/168
-         */
-        removeAllCustomEntironmentVariables()
+        const moduleRef = await createTestModule(testDatabaseName);
 
-        const moduleRef = await Test.createTestingModule({
-            imports: [
-                ConfigModule.forRoot({
-                    isGlobal: true,
-                    envFilePath: buildConfigFilePath(Environment.test),
-                    cache: false,
-                }),
-            ],
-            controllers: [EntityViewModelController],
-            providers: [DatabaseProvider, RepositoryProvider, ArangoConnectionProvider],
-        }).compile()
+        arangoConnectionProvider =
+            moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 
-        databaseProvider = moduleRef.get<DatabaseProvider>(DatabaseProvider)
+        databaseProvider = new DatabaseProvider(arangoConnectionProvider);
 
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider)
+        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
 
-        app = moduleRef.createNestApplication()
-        await app.init()
-    })
+        app = moduleRef.createNestApplication();
+
+        await app.init();
+    });
 
     beforeEach(async () => {
-        await testRepositoryProvider.testSetup()
-    })
+        await testRepositoryProvider.testSetup();
+    });
 
     describe(`when entity type is omitted`, () => {
-        it('should return a 400', () => request(app.getHttpServer()).get(`/entities`).expect(400))
-    })
+        it('should return a 400', () => request(app.getHttpServer()).get(`/entities`).expect(400));
+    });
 
     Object.values(entityTypes).forEach((entityType) => {
         describe(`when querying for view models for entity of type ${entityType}`, () => {
@@ -91,31 +110,31 @@ describe('GET /entities (fetch view models)- all entities published', () => {
                     beforeEach(async () => {
                         await testRepositoryProvider.addEntitiesOfManyTypes(
                             testDataWithAllEntitiesPublished
-                        )
-                    })
+                        );
+                    });
                     it(`should fetch multiple entities of type ${entityType}`, async () => {
                         const res = await request(app.getHttpServer()).get(`/entities`).query({
                             type: entityType,
-                        })
+                        });
 
-                        expect(res.status).toBe(httpStatusCodes.ok)
+                        expect(res.status).toBe(httpStatusCodes.ok);
 
                         expect(res.body.length).toBe(
                             testDataWithAllEntitiesPublished[entityType].length
-                        )
+                        );
 
-                        expect(res.body).toMatchSnapshot()
-                    })
-                })
-            })
+                        expect(res.body).toMatchSnapshot();
+                    });
+                });
+            });
 
             describe(`?type=${entityType} when an id is provided`, () => {
                 describe('when no entity with the id exists', () => {
                     beforeEach(async () => {
                         await testRepositoryProvider.addEntitiesOfManyTypes(
                             testDataWithAllEntitiesPublished
-                        )
-                    })
+                        );
+                    });
                     it(`should return not found`, () => {
                         return request(app.getHttpServer())
                             .get(`/entities`)
@@ -123,40 +142,40 @@ describe('GET /entities (fetch view models)- all entities published', () => {
                                 type: entityType,
                                 id: 'bogus-id',
                             })
-                            .expect(httpStatusCodes.notFound)
-                    })
-                })
+                            .expect(httpStatusCodes.notFound);
+                    });
+                });
 
                 describe('when an entity with the id is found', () => {
                     beforeEach(async () => {
                         await testRepositoryProvider.addEntitiesOfManyTypes(
                             testDataWithAllEntitiesPublished
-                        )
-                    })
+                        );
+                    });
                     it('should return a valid response', async () => {
-                        const entityToFind = testDataWithAllEntitiesPublished[entityType][0]
+                        const entityToFind = testDataWithAllEntitiesPublished[entityType][0];
 
                         const res = await request(app.getHttpServer()).get(`/entities`).query({
                             type: entityType,
                             id: entityToFind.id,
-                        })
+                        });
 
-                        expect(res.status).toBe(httpStatusCodes.ok)
+                        expect(res.status).toBe(httpStatusCodes.ok);
 
-                        expect(res.body.id).toBe(entityToFind.id)
-                    })
-                })
-            })
-        })
+                        expect(res.body.id).toBe(entityToFind.id);
+                    });
+                });
+            });
+        });
 
         afterEach(async () => {
-            await testRepositoryProvider.testTeardown()
-        })
-    })
+            await testRepositoryProvider.testTeardown();
+        });
+    });
 
     afterAll(async () => {
-        await app.close()
+        await arangoConnectionProvider.dropDatabaseIfExists();
 
-        process.env = originalEnv
-    })
-})
+        await app.close();
+    });
+});

@@ -1,71 +1,48 @@
 import { INestApplication } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { Test } from '@nestjs/testing';
 import getInstanceFactoryForEntity from 'apps/api/src/domain/factories/getInstanceFactoryForEntity';
 import { Entity } from 'apps/api/src/domain/models/entity';
 import { EntityType, entityTypes } from 'apps/api/src/domain/types/entityType';
 import { InternalError, isInternalError } from 'apps/api/src/lib/errors/InternalError';
 import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
-import TestRepositoryProvider from 'apps/api/src/persistence/repositories/TestRepositoryProvider';
+import generateRandomTestDatabaseName from 'apps/api/src/persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import TestRepositoryProvider from 'apps/api/src/persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from 'apps/api/src/test-data/buildTestData';
 import * as request from 'supertest';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
-import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
-import buildConfigFilePath from '../../config/buildConfigFilePath';
-import { Environment } from '../../config/constants/Environment';
-import removeAllCustomEntironmentVariables from '../../config/__tests__/utilities/removeAllCustomEnvironmentVariables';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import { EntityViewModelController } from '../entityViewModel.controller';
-
-const originalEnv = process.env;
+import { createTestModule } from './entities.e2e.spec';
 
 type HasId = {
     id: string;
 };
 
 describe('GET /entities (fetch view models)- publication status filtering', () => {
+    const testDatabaseName = generateRandomTestDatabaseName();
+
+    const testData = buildTestData();
+
     let app: INestApplication;
+
+    let arangoConnectionProvider: ArangoConnectionProvider;
 
     let databaseProvider: DatabaseProvider;
 
     let testRepositoryProvider: TestRepositoryProvider;
 
-    const testData = buildTestData();
-
     beforeAll(async () => {
         jest.resetModules();
 
-        /**
-         * HACK We have experienced annoying side-effect issues with the way the
-         * built-in ConfigService reads our `.env` files. We have a separate
-         * `${environment}.env` file for each unique environment. However,
-         * `process.env` apparently takes priority over these locally defined files.
-         * Forcing the local values to take precedence in the test environment has
-         * been an exercise in frustration.
-         *
-         * https://github.com/nestjs/config/issues/168
-         *
-         * https://github.com/nestjs/config/issues/168
-         */
-        removeAllCustomEntironmentVariables();
+        const moduleRef = await createTestModule(testDatabaseName);
 
-        const moduleRef = await Test.createTestingModule({
-            imports: [
-                ConfigModule.forRoot({
-                    isGlobal: true,
-                    envFilePath: buildConfigFilePath(Environment.test),
-                    cache: false,
-                }),
-            ],
-            controllers: [EntityViewModelController],
-            providers: [DatabaseProvider, RepositoryProvider, ArangoConnectionProvider],
-        }).compile();
+        arangoConnectionProvider =
+            moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 
-        databaseProvider = moduleRef.get<DatabaseProvider>(DatabaseProvider);
+        databaseProvider = new DatabaseProvider(arangoConnectionProvider);
 
         testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
 
         app = moduleRef.createNestApplication();
+
         await app.init();
     });
 
@@ -79,6 +56,10 @@ describe('GET /entities (fetch view models)- publication status filtering', () =
             describe(`When quering for entity of type ${entityType}`, () => {
                 beforeEach(async () => {
                     await testRepositoryProvider.testSetup();
+                });
+
+                afterEach(async () => {
+                    await testRepositoryProvider.testTeardown();
                 });
                 describe('when an id is not provided', () => {
                     describe(`when some of the entities are unpublished`, () => {
@@ -256,10 +237,6 @@ describe('GET /entities (fetch view models)- publication status filtering', () =
 
                             expect((viewModel as HasId).id).toBe(publishedId);
                         });
-
-                        afterEach(async () => {
-                            await testRepositoryProvider.testTeardown();
-                        });
                     });
                 });
             });
@@ -268,6 +245,6 @@ describe('GET /entities (fetch view models)- publication status filtering', () =
     afterAll(async () => {
         await app.close();
 
-        process.env = originalEnv;
+        await arangoConnectionProvider.dropDatabaseIfExists();
     });
 });

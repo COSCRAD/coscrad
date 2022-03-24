@@ -1,8 +1,6 @@
-import { ConfigModule } from '@nestjs/config';
-import { Test } from '@nestjs/testing';
-import buildConfigFilePath from '../../app/config/buildConfigFilePath';
-import { Environment } from '../../app/config/constants/Environment';
+import { INestApplication } from '@nestjs/common';
 import removeAllCustomEntironmentVariables from '../../app/config/__tests__/utilities/removeAllCustomEnvironmentVariables';
+import { createTestModule } from '../../app/controllers/__tests__/entities.e2e.spec';
 import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForEntity';
 import { Entity } from '../../domain/models/entity';
 import { entityTypes } from '../../domain/types/entityType';
@@ -11,42 +9,45 @@ import { NotFound } from '../../lib/types/not-found';
 import buildTestData from '../../test-data/buildTestData';
 import { ArangoConnectionProvider } from '../database/arango-connection.provider';
 import { DatabaseProvider } from '../database/database.provider';
-import TestRepositoryProvider from './TestRepositoryProvider';
-
-const originalEnv = process.env;
+import generateRandomTestDatabaseName from './__tests__/generateRandomTestDatabaseName';
+import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 
 describe('Repository provider > repositoryForEntity', () => {
+    const testDatabaseName = generateRandomTestDatabaseName();
+
     const testData = buildTestData();
+
+    let arangoConnectionProvider: ArangoConnectionProvider;
 
     let databaseProvider: DatabaseProvider;
 
     let testRepositoryProvider: TestRepositoryProvider;
+
+    let app: INestApplication;
 
     beforeAll(async () => {
         jest.resetModules();
 
         removeAllCustomEntironmentVariables();
 
-        const moduleRef = await Test.createTestingModule({
-            imports: [
-                ConfigModule.forRoot({
-                    isGlobal: true,
-                    envFilePath: buildConfigFilePath(Environment.test),
-                    cache: false,
-                }),
-            ],
-            providers: [DatabaseProvider, ArangoConnectionProvider],
-        }).compile();
+        const moduleRef = await createTestModule(testDatabaseName);
 
-        databaseProvider = moduleRef.get<DatabaseProvider>(DatabaseProvider);
+        arangoConnectionProvider =
+            moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
+
+        databaseProvider = new DatabaseProvider(arangoConnectionProvider);
 
         testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
 
-        await testRepositoryProvider.testSetup();
+        app = moduleRef.createNestApplication();
+
+        await app.init();
     });
 
-    afterAll(() => {
-        process.env = originalEnv;
+    afterAll(async () => {
+        await testRepositoryProvider.testTeardown();
+
+        await app.close();
     });
 
     Object.values(entityTypes).forEach((entityType) => {

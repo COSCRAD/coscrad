@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
 import { Environment } from '../../app/config/constants/Environment';
 import { PersistenceModule } from '../persistence.module';
-import { RepositoryProvider } from './repository.provider';
+import { ArangoConnectionProvider } from './arango-connection.provider';
 
 /**
  * This is just a smoke test to make sure we can compile the module and get
@@ -11,8 +11,8 @@ import { RepositoryProvider } from './repository.provider';
  * available when requested elsewhere). It's mostly helpful for troubleshooting
  * the initial work of setting up the modules.
  */
-describe('Repository Provider', () => {
-    let repositoryProvider;
+describe('Arango Connection Provider', () => {
+    let arangoConnectionProvider: ArangoConnectionProvider;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -26,12 +26,13 @@ describe('Repository Provider', () => {
             ],
         }).compile();
 
-        repositoryProvider = moduleRef.get<RepositoryProvider>(RepositoryProvider);
+        arangoConnectionProvider =
+            moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
     });
 
     describe('the constructor', () => {
         it('should be truthy', () => {
-            expect(repositoryProvider).toBeTruthy();
+            expect(arangoConnectionProvider).toBeTruthy();
         });
     });
 });
