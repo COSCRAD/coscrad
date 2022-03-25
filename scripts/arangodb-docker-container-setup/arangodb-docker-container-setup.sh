@@ -27,23 +27,27 @@ SUGGESTED_COSCRAD_PROJECT_ROOT_PATH=$SCRIPTS_PATH;
 
 echo $'\nPlease confirm if this is the correct project root path for COSCRAD?: '$SUGGESTED_COSCRAD_PROJECT_ROOT_PATH' (y/n)';
 
-read project_path_answer;
-
-if [ $project_path_answer = "y" ];
-then
-    COSCRAD_PROJECT_ROOT_PATH=$SUGGESTED_COSCRAD_PROJECT_ROOT_PATH;
-elif [ $project_path_answer = "n" ];
-then
-    while [ -z "$COSCRAD_PROJECT_ROOT_PATH" ]; do
-        read -p $'Please enter the correct absolute path for the project root path for COSCRAD\n' new_project_path_answer
-        if [ -d "$new_project_path_answer" ];
-        then
-            COSCRAD_PROJECT_ROOT_PATH=${new_project_path_answer%/};
-        else
-            echo $'Please enter a valid path\n'
-        fi
-    done
-fi
+while [ -z "$COSCRAD_PROJECT_ROOT_PATH" ];
+do
+  read project_path_answer;
+  if [ $project_path_answer = "y" ];
+  then
+      COSCRAD_PROJECT_ROOT_PATH=$SUGGESTED_COSCRAD_PROJECT_ROOT_PATH;
+  elif [ $project_path_answer = "n" ];
+  then
+      while [ -z "$COSCRAD_PROJECT_ROOT_PATH" ]; do
+          read -p $'Please enter the correct absolute path for the project root path for COSCRAD\n' new_project_path_answer
+          if [ -d "$new_project_path_answer" ];
+          then
+              COSCRAD_PROJECT_ROOT_PATH=${new_project_path_answer%/};
+          else
+              echo $'Please enter a valid path\n'
+          fi
+      done
+  else
+    echo "Bad Input: Please enter y or n";
+  fi
+done
 
 echo $'\n>> COSCRAD_PROJECT_ROOT_PATH set to:' $COSCRAD_PROJECT_ROOT_PATH $'\n';
 
@@ -156,7 +160,7 @@ echo "Copied new ArangoDB Docker Container setup scripts directory to local Dock
 ARANGO_LOCAL_VOLUME_PATH_CMD=" -v $ARANGODB_LOCAL_DOCKER_SHARED_VOLUME_PATH:$ARANGODB_DESTINATION_CONTAINER_DOCKER_SHARED_VOLUME_PATH";
 
 echo "Check for existing instance of arango server"
-DOCKER_PS=`sudo -u root docker ps`
+DOCKER_PS=`sudo -u root docker ps`;
 
 if [ -z "${DOCKER_PS##*$ARANGO_DB_SERVER*}" ];
 then
@@ -212,3 +216,7 @@ do
      sleep 1
    fi
 done
+
+ARANGO_DOCKER_PORT=$(sudo docker container inspect --format='{{(index (index .NetworkSettings.Ports "8529/tcp") 0).HostPort}}' $ARANGO_DB_SERVER);
+
+echo $'\n\nVisit the new ArangoDB Instance at: ' $ARANGO_DB_HOST_SCHEME$'://'$ARANGO_DB_HOST_DOMAIN$':'$ARANGO_DOCKER_PORT;
