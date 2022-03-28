@@ -4,7 +4,7 @@ import { isValid } from '../domain/domainModelValidators/Valid';
 import { EntityType, EntityTypeToInstance, isEntityType } from '../domain/types/entityType';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
-import { getArangoCollectionIDFromEntityType } from '../persistence/database/get-arango-collection-ids';
+import { getArangoCollectionIDFromEntityType } from '../persistence/database/getArangoCollectionIDFromEntityType';
 import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
 import { PartialDTO } from '../types/partial-dto';
 import buildTestData from './buildTestData';

@@ -1,7 +1,7 @@
 import { Entity } from '../../../domain/models/entity';
 import { EntityType, entityTypes, InMemorySnapshot } from '../../../domain/types/entityType';
 import { DatabaseProvider } from '../../database/database.provider';
-import { getArangoCollectionIDFromEntityType } from '../../database/get-arango-collection-ids';
+import { getArangoCollectionIDFromEntityType } from '../../database/getArangoCollectionIDFromEntityType';
 import { RepositoryProvider } from '../repository.provider';
 
 export default class TestRepositoryProvider extends RepositoryProvider {
