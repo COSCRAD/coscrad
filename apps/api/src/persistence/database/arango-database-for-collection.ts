@@ -40,7 +40,8 @@ export class ArangoDatabaseForCollection<TEntity extends Entity>
     fetchMany(specification?: ISpecification<TEntity>): Promise<DatabaseDTO<TEntity>[]> {
         return this.#arangoDatabase.fetchMany<DatabaseDTO<TEntity>>(
             this.#collectionID,
-            specification
+            // TODO remove cast, handle mapping layer
+            specification as unknown as ISpecification<DatabaseDTO<TEntity>>
         );
     }
 

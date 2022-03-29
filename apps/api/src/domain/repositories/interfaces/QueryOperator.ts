@@ -1,2 +1,3 @@
-// Expand as needed
-export type QueryOperator = '==';
+export enum QueryOperator {
+    equals = '==',
+}
