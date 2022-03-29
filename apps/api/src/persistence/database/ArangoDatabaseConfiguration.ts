@@ -1,3 +1,4 @@
+import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { PartialDTO } from '../../types/partial-dto';
 
 export default class ArangoDatabaseConfiguration {
@@ -31,6 +32,6 @@ export default class ArangoDatabaseConfiguration {
     }
 
     public getConfig(): PartialDTO<ArangoDatabaseConfiguration> {
-        return JSON.parse(JSON.stringify(this));
+        return cloneToPlainObject(this);
     }
 }

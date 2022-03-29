@@ -6,7 +6,9 @@
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
         // TODO: Re-enable this
-        "@nrwl/nx/enforce-module-boundaries": [0]
+        "@nrwl/nx/enforce-module-boundaries": [0],
+        // When dealing generically with class instances we need object as a type
+        "@typescript-eslint/ban-types": [0]
       }
     },
     {

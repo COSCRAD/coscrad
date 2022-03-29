@@ -14,6 +14,8 @@ import { DataPropertyNames } from './data-property-names';
  * in which all properties (fields) are optional and all methods have been removed.
  */
 export type PartialDTO<T> = {
-    // Recurse on objects
-    [P in DataPropertyNames<T>]?: T[P] extends Record<string, unknown> ? PartialDTO<T[P]> : T[P];
+    // Recurse on all objects
+    // This is a rare case where object is ok as a type (Record<string,unknown> won't cut it)
+    /* eslint-disable */ //
+    [P in DataPropertyNames<T>]?: T[P] extends object ? PartialDTO<T[P]> : T[P];
 };

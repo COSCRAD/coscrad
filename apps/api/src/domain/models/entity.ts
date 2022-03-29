@@ -1,7 +1,10 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { EntityType } from '../types/entityType';
 import { EntityId } from './types/entity-id';
 import { EntityCompositeIdentifier } from './types/entityCompositeIdentifier';
+
+type EntityConstructor<T extends Entity = Entity> = new (dto: PartialDTO<T>) => T;
 
 export abstract class Entity {
     readonly id: EntityId;
@@ -28,8 +31,23 @@ export abstract class Entity {
      * inheritance baggage.
      *  */
     toDTO<TEntity extends Entity>(this: TEntity): PartialDTO<TEntity> {
-        const result = JSON.parse(JSON.stringify(this));
+        const result = cloneToPlainObject(this);
 
         return result;
+    }
+
+    /**
+     * We should consider requiring a clone with updates to pass through the
+     * factory and hence the validators, otherwise, clone will allow a backdoor
+     * to creating an invalid instance in the system.
+     *
+     * We only duplicate \ update instances using this method to avoid introducting
+     * side-effects. I.e. our entities are immutable data structures.
+     */
+    clone<T extends Entity>(this: T, overrides: PartialDTO<T> = {}): T {
+        return new (this.constructor as EntityConstructor<T>)({
+            ...this.toDTO(),
+            ...overrides,
+        });
     }
 }
