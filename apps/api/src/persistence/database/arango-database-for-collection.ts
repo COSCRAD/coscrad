@@ -1,5 +1,6 @@
 import { isArangoDatabase } from 'arangojs/database';
 import { Entity } from '../../domain/models/entity';
+import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { EntityId } from '../../domain/types/entity-id';
 import { Maybe } from '../../lib/types/maybe';
 import { PartialDTO } from '../../types/partial-dto';
@@ -14,55 +15,50 @@ import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
  * repositories layer.
  */
 export class ArangoDatabaseForCollection<TEntity extends Entity>
-  implements IDatabaseForCollection<TEntity>
+    implements IDatabaseForCollection<TEntity>
 {
-  #collectionID: ArangoCollectionID;
+    #collectionID: ArangoCollectionID;
 
-  #arangoDatabase: ArangoDatabase;
+    #arangoDatabase: ArangoDatabase;
 
-  constructor(
-    arangoDatabase: ArangoDatabase,
-    collectionName: ArangoCollectionID
-  ) {
-    this.#collectionID = collectionName;
+    constructor(arangoDatabase: ArangoDatabase, collectionName: ArangoCollectionID) {
+        this.#collectionID = collectionName;
 
-    this.#arangoDatabase = arangoDatabase;
+        this.#arangoDatabase = arangoDatabase;
 
-    if (isArangoDatabase(this.#arangoDatabase))
-      throw new Error(
-        `Received invalid arango db instance: ${JSON.stringify(arangoDatabase)}`
-      );
-  }
+        if (isArangoDatabase(this.#arangoDatabase))
+            throw new Error(
+                `Received invalid arango db instance: ${JSON.stringify(arangoDatabase)}`
+            );
+    }
 
-  // True Queries (return information)
-  fetchById(id: EntityId): Promise<Maybe<DatabaseDTO<PartialDTO<TEntity>>>> {
-    return this.#arangoDatabase.fetchById<DatabaseDTO<TEntity>>(
-      id,
-      this.#collectionID
-    );
-  }
+    // Queries (return information)
+    fetchById(id: EntityId): Promise<Maybe<DatabaseDTO<PartialDTO<TEntity>>>> {
+        return this.#arangoDatabase.fetchById<DatabaseDTO<TEntity>>(id, this.#collectionID);
+    }
 
-  fetchMany(): Promise<DatabaseDTO<TEntity>[]> {
-    return this.#arangoDatabase.fetchMany<DatabaseDTO<TEntity>>(
-      this.#collectionID
-    );
-  }
+    fetchMany(specification?: ISpecification<TEntity>): Promise<DatabaseDTO<TEntity>[]> {
+        return this.#arangoDatabase.fetchMany<DatabaseDTO<TEntity>>(
+            this.#collectionID,
+            specification
+        );
+    }
 
-  getCount(): Promise<number> {
-    return this.#arangoDatabase.getCount(this.#collectionID);
-  }
+    getCount(): Promise<number> {
+        return this.#arangoDatabase.getCount(this.#collectionID);
+    }
 
-  // Commands (mutate state)
-  create(databaseDTO: DatabaseDTO<PartialDTO<TEntity>>) {
-    // Handle the difference in _id \ _key between model and database
-    return this.#arangoDatabase.create(databaseDTO, this.#collectionID);
-  }
+    // Commands (mutate state)
+    create(databaseDTO: DatabaseDTO<PartialDTO<TEntity>>) {
+        // Handle the difference in _id \ _key between model and database
+        return this.#arangoDatabase.create(databaseDTO, this.#collectionID);
+    }
 
-  createMany(databaseDTOs: DatabaseDTO<PartialDTO<TEntity>>[]) {
-    return this.#arangoDatabase.createMany(databaseDTOs, this.#collectionID);
-  }
+    createMany(databaseDTOs: DatabaseDTO<PartialDTO<TEntity>>[]) {
+        return this.#arangoDatabase.createMany(databaseDTOs, this.#collectionID);
+    }
 
-  update(id: EntityId, updateDTO: DatabaseDTO<TEntity>) {
-    return this.#arangoDatabase.update(id, updateDTO, this.#collectionID);
-  }
+    update(id: EntityId, updateDTO: DatabaseDTO<TEntity>) {
+        return this.#arangoDatabase.update(id, updateDTO, this.#collectionID);
+    }
 }

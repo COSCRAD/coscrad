@@ -1,5 +1,4 @@
 import { INestApplication } from '@nestjs/common';
-import removeAllCustomEntironmentVariables from '../../app/config/__tests__/utilities/removeAllCustomEnvironmentVariables';
 import { createTestModule } from '../../app/controllers/__tests__/entities.e2e.spec';
 import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForEntity';
 import { Entity } from '../../domain/models/entity';
@@ -27,8 +26,6 @@ describe('Repository provider > repositoryForEntity', () => {
 
     beforeAll(async () => {
         jest.resetModules();
-
-        removeAllCustomEntironmentVariables();
 
         const moduleRef = await createTestModule(testDatabaseName);
 
@@ -60,14 +57,20 @@ describe('Repository provider > repositoryForEntity', () => {
                 await testRepositoryProvider.testTeardown();
             });
             describe('fetchMany', () => {
-                it('should return the expected result', async () => {
-                    const result = await testRepositoryProvider.forEntity(entityType).fetchMany();
+                describe('When no specification is provided', () => {
+                    it('should return the expected result', async () => {
+                        const result = await testRepositoryProvider
+                            .forEntity(entityType)
+                            .fetchMany();
 
-                    /**
-                     * TODO [https://www.pivotaltracker.com/story/show/181503421] setup a
-                     * custom matcher in Jest for comparing instances (not DTOs)
-                     * */
-                    expect(JSON.stringify(result)).toEqual(JSON.stringify(testData[entityType]));
+                        /**
+                         * TODO [https://www.pivotaltracker.com/story/show/181503421] setup a
+                         * custom matcher in Jest for comparing instances (not DTOs)
+                         * */
+                        expect(JSON.stringify(result)).toEqual(
+                            JSON.stringify(testData[entityType])
+                        );
+                    });
                 });
             });
 

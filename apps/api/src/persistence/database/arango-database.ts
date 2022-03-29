@@ -4,6 +4,7 @@ import { Database } from 'arangojs';
 import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
 import { Entity } from '../../domain/models/entity';
+import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { InternalError } from '../../lib/errors/InternalError';
 import { PartialDTO } from '../../types/partial-dto';
 import { IDatabase } from './interfaces/database';
@@ -52,11 +53,22 @@ export class ArangoDatabase implements IDatabase {
      * @param collectionName name of the collection
      * @returns array of `DTOs`, empty array if none found
      */
-    fetchMany = async <TCreateEntityDTO>(collectionName: string): Promise<TCreateEntityDTO[]> => {
-        const query = `
-      FOR t IN ${collectionName}
+    fetchMany = async <TCreateEntityDTO>(
+        collectionName: string,
+        specification?: ISpecification<TCreateEntityDTO>
+    ): Promise<TCreateEntityDTO[]> => {
+        const query = specification
+            ? `
+      FOR t IN ${collectionName} \n\t${specification.forAQL(`t`)()}
         return t
-      `;
+      `
+            : `FOR t IN ${collectionName} 
+      return t
+    `;
+
+        console.log({
+            query,
+        });
 
         const bindVars = {};
 

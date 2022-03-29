@@ -52,7 +52,7 @@ export const createTestModule = async (testDatabaseName: string) =>
         controllers: [EntityViewModelController],
     }).compile();
 
-describe('GET /entities (fetch view models)- all entities published', () => {
+describe.skip('GET /entities (fetch view models)- all entities published', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
     let app: INestApplication;

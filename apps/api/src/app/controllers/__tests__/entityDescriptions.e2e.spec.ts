@@ -3,7 +3,6 @@ import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/aran
 import generateRandomTestDatabaseName from 'apps/api/src/persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import { buildAllEntityDescriptions } from 'apps/api/src/view-models/entityDescriptions/buildAllEntityDescriptions';
 import * as request from 'supertest';
-import removeAllCustomEnvironmentVariables from '../../config/__tests__/utilities/removeAllCustomEnvironmentVariables';
 import { createTestModule } from './entities.e2e.spec';
 describe('GET /entities/descriptions', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
@@ -13,8 +12,6 @@ describe('GET /entities/descriptions', () => {
     let arangoConnectionProvider: ArangoConnectionProvider;
 
     beforeAll(async () => {
-        removeAllCustomEnvironmentVariables();
-
         const moduleRef = await createTestModule(testDatabaseName);
 
         arangoConnectionProvider =
