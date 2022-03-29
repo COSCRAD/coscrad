@@ -5,9 +5,7 @@ import { VocabularyList } from './vocabulary-list/entities/vocabulary-list.entit
 
 describe('the entity clone method', () => {
     describe('for a vocabularyList', () => {
-        const vocabularyListDto = buildTestData()[entityTypes.vocabularyList][0].toDTO();
-
-        const initialVocabularyList = new VocabularyList(vocabularyListDto);
+        const initialVocabularyList = buildTestData()[entityTypes.vocabularyList][0];
 
         describe('when no updates are provided', () => {
             const updatedVocabularyList = initialVocabularyList.clone();

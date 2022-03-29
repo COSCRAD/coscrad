@@ -4,7 +4,7 @@ import cloneToPlainObject from './cloneToPlainObject';
 type TestCase = {
     description: string;
     input: object;
-    output: Record<string, unknown>;
+    expectedOutput: Record<string, unknown>;
 };
 
 class DummyHelperClass {
@@ -48,7 +48,7 @@ const testCases: TestCase[] = [
     {
         description: 'when the input is an empty object {}',
         input: {},
-        output: {},
+        expectedOutput: {},
     },
     {
         description: 'when the input has no methods',
@@ -57,7 +57,7 @@ const testCases: TestCase[] = [
             bar: [1, 2, 3],
             baz: 'hello world',
         },
-        output: {
+        expectedOutput: {
             foo: 6,
             bar: [1, 2, 3],
             baz: 'hello world',
@@ -74,7 +74,7 @@ const testCases: TestCase[] = [
                 return `incoming message: ${message}`;
             },
         },
-        output: {
+        expectedOutput: {
             foo: [['a', 'ab'], 'abc'],
             bar: 78.5,
             baz: 'test prop',
@@ -83,12 +83,12 @@ const testCases: TestCase[] = [
     {
         description: 'a class instance with a nested property that is an instance',
         input: dummyClassInstance,
-        output: dummyClassDto,
+        expectedOutput: dummyClassDto,
     },
 ];
 
 describe('cloneToPlainObject', () =>
-    testCases.forEach(({ description, input, output }) => {
+    testCases.forEach(({ description, input, expectedOutput: output }) => {
         describe(description, () => {
             const result = cloneToPlainObject(input);
 

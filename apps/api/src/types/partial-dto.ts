@@ -15,7 +15,5 @@ import { DataPropertyNames } from './data-property-names';
  */
 export type PartialDTO<T> = {
     // Recurse on all objects
-    // This is a rare case where object is ok as a type (Record<string,unknown> won't cut it)
-    /* eslint-disable */ //
     [P in DataPropertyNames<T>]?: T[P] extends object ? PartialDTO<T[P]> : T[P];
 };
