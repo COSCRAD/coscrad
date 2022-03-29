@@ -7,6 +7,6 @@
     "emitDecoratorMetadata": true,
     "target": "es2015"
   },
-  "exclude": ["**/*.spec.ts"],
-  "include": ["**/*.ts", "src/view-models/buildViewModelForEntity/viewModels"]
+  "exclude": ["**/*.spec.ts","**/*.test.ts","**/*.d.ts","**/__tests__/*"],
+  "include": ["**/*.ts"]
 }

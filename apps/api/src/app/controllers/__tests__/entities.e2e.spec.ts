@@ -1,58 +1,16 @@
 import { INestApplication } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Test } from '@nestjs/testing';
 import getInstanceFactoryForEntity from 'apps/api/src/domain/factories/getInstanceFactoryForEntity';
 import { EntityType, entityTypes, InMemorySnapshot } from 'apps/api/src/domain/types/entityType';
 import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
-import { RepositoryProvider } from 'apps/api/src/persistence/repositories/repository.provider';
 import TestRepositoryProvider from 'apps/api/src/persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from 'apps/api/src/test-data/buildTestData';
 import * as request from 'supertest';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
-import buildConfigFilePath from '../../config/buildConfigFilePath';
-import { Environment } from '../../config/constants/Environment';
-import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService.spec';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import { EntityViewModelController } from '../entityViewModel.controller';
+import createTestModule from './createTestModule';
 
-export const createTestModule = async (testDatabaseName: string) =>
-    Test.createTestingModule({
-        providers: [
-            {
-                provide: ConfigService,
-                useFactory: () =>
-                    buildMockConfigServiceSpec(
-                        {
-                            ARANGO_DB_NAME: testDatabaseName,
-                        },
-                        buildConfigFilePath(Environment.test)
-                    ),
-            },
-            {
-                provide: ArangoConnectionProvider,
-                useFactory: async (configService: ConfigService) => {
-                    const provider = new ArangoConnectionProvider(configService);
-
-                    await provider.initialize();
-
-                    return provider;
-                },
-                inject: [ConfigService],
-            },
-            {
-                provide: RepositoryProvider,
-                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
-                    return new RepositoryProvider(new DatabaseProvider(arangoConnectionProvider));
-                },
-                inject: [ArangoConnectionProvider],
-            },
-        ],
-
-        controllers: [EntityViewModelController],
-    }).compile();
-
-describe.skip('GET /entities (fetch view models)- all entities published', () => {
+describe('GET /entities (fetch view models)- all entities published', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
     let app: INestApplication;

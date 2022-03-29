@@ -10,7 +10,7 @@ import buildTestData from 'apps/api/src/test-data/buildTestData';
 import * as request from 'supertest';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import { createTestModule } from './entities.e2e.spec';
+import createTestModule from './createTestModule';
 
 type HasId = {
     id: string;

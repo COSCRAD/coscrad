@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import { createTestModule } from '../../app/controllers/__tests__/entities.e2e.spec';
+import createTestModule from '../../app/controllers/__tests__/createTestModule';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import TermEnglishEquals from '../../domain/repositories/specifications/TermEnglishEquals';
 import { entityTypes } from '../../domain/types/entityType';

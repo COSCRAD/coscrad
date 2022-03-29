@@ -3,7 +3,7 @@ import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/aran
 import generateRandomTestDatabaseName from 'apps/api/src/persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import { buildAllEntityDescriptions } from 'apps/api/src/view-models/entityDescriptions/buildAllEntityDescriptions';
 import * as request from 'supertest';
-import { createTestModule } from './entities.e2e.spec';
+import createTestModule from './createTestModule';
 describe('GET /entities/descriptions', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 

@@ -23,9 +23,3 @@ export default (configOverrides: ConfigOverrides, envFilePath: string) => {
 
     return mockConfigService;
 };
-
-describe.skip('TODO: create test utilities dirs!', () => {
-    it('should be possible to have test utility directories!', () => {
-        expect(1).toBe(1);
-    });
-});
