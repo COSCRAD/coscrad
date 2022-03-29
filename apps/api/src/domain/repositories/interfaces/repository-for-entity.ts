@@ -14,7 +14,7 @@ export interface IRepositoryForEntity<TEntity extends Entity> {
     fetchById: (id: EntityId) => Promise<ResultOrError<Maybe<TEntity>>>;
 
     // Returns an empty array if none found
-    fetchMany: (speicification?: ISpecification<TEntity>) => Promise<ResultOrError<TEntity>[]>;
+    fetchMany: (specification?: ISpecification<TEntity>) => Promise<ResultOrError<TEntity>[]>;
 
     getCount: () => Promise<number>;
 
