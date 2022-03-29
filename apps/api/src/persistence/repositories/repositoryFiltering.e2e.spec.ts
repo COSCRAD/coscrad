@@ -1,11 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 import { createTestModule } from '../../app/controllers/__tests__/entities.e2e.spec';
 import { Term } from '../../domain/models/term/entities/term.entity';
+import TermEnglishEquals from '../../domain/repositories/specifications/TermEnglishEquals';
 import { entityTypes } from '../../domain/types/entityType';
 import buildTestData from '../../test-data/buildTestData';
 import { ArangoConnectionProvider } from '../database/arango-connection.provider';
 import { DatabaseProvider } from '../database/database.provider';
-import TermEnglishEquals from './Filters/TermEnglishEquals';
 import generateRandomTestDatabaseName from './__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 

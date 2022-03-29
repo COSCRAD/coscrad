@@ -1,3 +1,3 @@
 export enum QueryOperator {
-    equals = '==',
+    equals = 'equals',
 }

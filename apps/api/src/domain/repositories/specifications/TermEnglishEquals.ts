@@ -14,10 +14,6 @@ export default class TermEnglishEquals implements ISpecification<Term, string> {
         this.criterion = new Criterion(`termEnglish`, QueryOperator.equals, value);
     }
 
-    // forAQL(docName: string) {
-    //     return () => `FILTER ${docName}.termEnglish == '${this.value}'`;
-    // }
-
     isSatisfiedBy({ termEnglish }: Term): boolean {
         return termEnglish === this.value;
     }

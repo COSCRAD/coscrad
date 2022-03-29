@@ -79,10 +79,6 @@ export class ArangoDatabase implements IDatabase {
       return t
     `;
 
-        console.log({
-            query,
-        });
-
         const bindVars = {};
 
         const aqlQuery: AqlQuery = {
@@ -94,7 +90,6 @@ export class ArangoDatabase implements IDatabase {
 
         if (cursor.count === 0) return [];
 
-        // TODO remove cast
         return cursor.all();
     };
 
@@ -104,7 +99,6 @@ export class ArangoDatabase implements IDatabase {
         return isNotFound(results) ? 0 : results.length;
     };
 
-    // TODO Error handling.
     create = async <TCreateEntityDto>(
         dto: TCreateEntityDto,
         collectionName: string
@@ -136,7 +130,6 @@ export class ArangoDatabase implements IDatabase {
         dtos: TCreateEntityDto[],
         collectionName: string
     ): Promise<void> => {
-        // remove this check. It's the callers responsibility to verify the `Collection` exists
         const collectionExists = await this.#doesCollectionExist(collectionName);
 
         if (!collectionExists) throw new Error(`Collection ${collectionName} not found!`);
