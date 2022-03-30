@@ -6,7 +6,7 @@
     "nx": "nx",
     "serve:api": "cross-env NODE_ENV=development nx run api:serve",
     "serve:all": "concurrently \"npm run serve:api\" \"npm run serve:frontend\"",
-    "start:db:dev": "nx run api:test --skip-nx-cache -- -t 'buildTestData' && ./scripts/arangodb-docker-container-setup/arangodb-docker-container-setup.sh development",
+    "start:db:dev": "nx run api:test --skip-nx-cache --testFile 'validateTestData.spec.ts' && ./scripts/arangodb-docker-container-setup/arangodb-docker-container-setup.sh development",
     "start:db:staging": "./scripts/arangodb-docker-container-setup/start-arango-db.sh staging",
     "start:db:production": "./scripts/arangodb-docker-container-setup/start-arango-db.sh production",
     "lint:coscrad": "nx lint api && nx lint coscrad-frontend",

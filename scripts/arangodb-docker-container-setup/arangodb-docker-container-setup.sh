@@ -219,4 +219,4 @@ done
 
 ARANGO_DOCKER_PORT=$(sudo docker container inspect --format='{{(index (index .NetworkSettings.Ports "8529/tcp") 0).HostPort}}' $ARANGO_DB_SERVER);
 
-echo $'\n\nVisit the new ArangoDB Instance at: ' $ARANGO_DB_HOST_SCHEME$'://'$ARANGO_DB_HOST_DOMAIN$':'$ARANGO_DOCKER_PORT;
+echo $'\n\nVisit the new ArangoDB Instance at: ' $ARANGO_DB_HOST_SCHEME$'://'$ARANGO_DB_HOST_DOMAIN$':'$ARANGO_DOCKER_PORT $'\n\n';
