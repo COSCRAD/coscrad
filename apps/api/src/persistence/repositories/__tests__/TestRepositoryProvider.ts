@@ -1,5 +1,5 @@
 import { Entity } from '../../../domain/models/entity';
-import { EntityType, entityTypes, InMemorySnapshot } from '../../../domain/types/entityType';
+import { EntityType, entityTypes, InMemorySnapshot } from '../../../domain/types/entityTypes';
 import { DatabaseProvider } from '../../database/database.provider';
 import { getArangoCollectionIDFromEntityType } from '../../database/getArangoCollectionIDFromEntityType';
 import { RepositoryProvider } from '../repository.provider';

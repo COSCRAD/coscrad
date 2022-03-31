@@ -1,7 +1,7 @@
 import { writeFileSync } from 'fs';
 import { getValidatorForEntity } from '../domain/domainModelValidators';
 import { isValid } from '../domain/domainModelValidators/Valid';
-import { EntityType, EntityTypeToInstance, isEntityType } from '../domain/types/entityType';
+import { EntityType, EntityTypeToInstance, isEntityType } from '../domain/types/entityTypes';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
 import { getArangoCollectionIDFromEntityType } from '../persistence/database/getArangoCollectionIDFromEntityType';

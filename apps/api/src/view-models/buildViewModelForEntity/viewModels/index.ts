@@ -1,9 +1,6 @@
-import { TermViewModel } from './TermViewModel';
-import { VocabularyListSummaryViewModel } from './VocabularyListSummaryViewModel';
-import { VocabularyListViewModel } from './VocabularyListViewModel';
+import { TagViewModel } from './tag.view-model';
+import { TermViewModel } from './term.view-model';
+import { HasViewModelId, ViewModelId } from './types/ViewModelId';
+import { VocabularyListViewModel } from './vocabulary-list.view-model';
 
-export {
-  VocabularyListViewModel,
-  VocabularyListSummaryViewModel,
-  TermViewModel,
-};
+export { VocabularyListViewModel, TagViewModel, TermViewModel, ViewModelId, HasViewModelId };

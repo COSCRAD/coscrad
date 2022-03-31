@@ -1,8 +1,8 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
-import { EntityType } from '../types/entityType';
-import { EntityId } from './types/entity-id';
+import { EntityType } from '../types/entityTypes';
 import { EntityCompositeIdentifier } from './types/entityCompositeIdentifier';
+import { EntityId } from './types/EntityId';
 
 type EntityConstructor<T extends Entity = Entity> = new (dto: PartialDTO<T>) => T;
 

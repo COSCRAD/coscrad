@@ -1,4 +1,4 @@
-import { EntityType } from '../../domain/types/entityType';
+import { EntityType } from '../../domain/types/entityTypes';
 import { ArangoCollectionID } from './types/ArangoCollectionId';
 
 const entityTypeToArangoCollectionID: {

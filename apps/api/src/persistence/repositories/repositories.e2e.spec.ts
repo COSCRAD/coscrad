@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import createTestModule from '../../app/controllers/__tests__/createTestModule';
 import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForEntity';
 import { Entity } from '../../domain/models/entity';
-import { entityTypes } from '../../domain/types/entityType';
+import { entityTypes } from '../../domain/types/entityTypes';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
 import buildTestData from '../../test-data/buildTestData';

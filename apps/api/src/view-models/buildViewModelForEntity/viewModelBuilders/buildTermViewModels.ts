@@ -1,9 +1,9 @@
 import { Term } from 'apps/api/src/domain/models/term/entities/term.entity';
 import IsPublished from 'apps/api/src/domain/repositories/specifications/isPublished';
-import { entityTypes } from 'apps/api/src/domain/types/entityType';
+import { entityTypes } from 'apps/api/src/domain/types/entityTypes';
 import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
-import { ViewModelBuilderDependencies } from '../buildViewModelForEntity';
 import { TermViewModel } from '../viewModels';
+import { ViewModelBuilderDependencies } from './types/ViewModelBuilderDependencies';
 
 type Options = {
     shouldReturnUnpublishedEntities: boolean;

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForEntity';
 import { Entity } from '../../domain/models/entity';
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider';
-import { EntityType } from '../../domain/types/entityType';
+import { EntityType } from '../../domain/types/entityTypes';
 import { DatabaseProvider } from '../database/database.provider';
 import { getArangoCollectionIDFromEntityType } from '../database/getArangoCollectionIDFromEntityType';
 import { RepositoryForEntity } from './repository-for-entity';

@@ -1,6 +1,6 @@
 import { Entity } from 'apps/api/src/domain/models/entity';
 import { ISpecification } from 'apps/api/src/domain/repositories/interfaces/ISpecification';
-import { EntityId } from 'apps/api/src/domain/types/entity-id';
+import { EntityId } from 'apps/api/src/domain/types/EntityId';
 import { Maybe } from 'apps/api/src/lib/types/maybe';
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { DatabaseDTO } from '../utilities/mapEntityDTOToDatabaseDTO';

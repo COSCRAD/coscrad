@@ -1,7 +1,7 @@
 import { ResultOrError } from 'apps/api/src/types/ResultOrError';
 import { Maybe } from '../../../lib/types/maybe';
 import { Entity } from '../../models/entity';
-import { EntityId } from '../../types/entity-id';
+import { EntityId } from '../../types/EntityId';
 import { ISpecification } from './ISpecification';
 
 /**

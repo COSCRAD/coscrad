@@ -1,6 +1,6 @@
 import buildTestData from '../../test-data/buildTestData';
 import { PartialDTO } from '../../types/partial-dto';
-import { entityTypes } from '../types/entityType';
+import { entityTypes } from '../types/entityTypes';
 import { VocabularyList } from './vocabulary-list/entities/vocabulary-list.entity';
 
 describe('the entity clone method', () => {

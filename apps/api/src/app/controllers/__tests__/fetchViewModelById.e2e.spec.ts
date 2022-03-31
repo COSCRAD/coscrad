@@ -1,7 +1,6 @@
 import { INestApplication } from '@nestjs/common';
-import getInstanceFactoryForEntity from 'apps/api/src/domain/factories/getInstanceFactoryForEntity';
 import { Entity } from 'apps/api/src/domain/models/entity';
-import { EntityType, entityTypes, InMemorySnapshot } from 'apps/api/src/domain/types/entityType';
+import { EntityType, entityTypes, InMemorySnapshot } from 'apps/api/src/domain/types/entityTypes';
 import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
 import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
 import TestRepositoryProvider from 'apps/api/src/persistence/repositories/__tests__/TestRepositoryProvider';
@@ -30,8 +29,7 @@ describe('GET /entities (fetch view models)- all entities published', () => {
         (accumulatedData: InMemorySnapshot, [entityType, instances]) => ({
             ...accumulatedData,
             [entityType]: instances.map((instance) =>
-                getInstanceFactoryForEntity(entityType as EntityType)({
-                    ...instance.toDTO(),
+                instance.clone({
                     published: true,
                 })
             ),
@@ -117,8 +115,7 @@ describe('GET /entities (fetch view models)- all entities published', () => {
                         beforeEach(async () => {
                             await testRepositoryProvider.addEntitiesOfManyTypes(testData);
 
-                            const unpublishedInstance = getInstanceFactoryForEntity(entityType)({
-                                ...testData[entityType][0].toDTO(),
+                            const unpublishedInstance = testData[entityType][0].clone({
                                 published: false,
                                 id: unpublishedId,
                             });

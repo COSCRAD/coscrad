@@ -1,7 +1,6 @@
 import { INestApplication } from '@nestjs/common';
-import getInstanceFactoryForEntity from 'apps/api/src/domain/factories/getInstanceFactoryForEntity';
 import { Entity } from 'apps/api/src/domain/models/entity';
-import { EntityType, entityTypes, InMemorySnapshot } from 'apps/api/src/domain/types/entityType';
+import { EntityType, entityTypes, InMemorySnapshot } from 'apps/api/src/domain/types/entityTypes';
 import { InternalError, isInternalError } from 'apps/api/src/lib/errors/InternalError';
 import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
 import TestRepositoryProvider from 'apps/api/src/persistence/repositories/__tests__/TestRepositoryProvider';
@@ -30,8 +29,7 @@ describe('When fetching multiple entities (All entities published)', () => {
         (accumulatedData: InMemorySnapshot, [entityType, instances]) => ({
             ...accumulatedData,
             [entityType]: instances.map((instance) =>
-                getInstanceFactoryForEntity(entityType as EntityType)({
-                    ...instance.toDTO(),
+                instance.clone({
                     published: true,
                 })
             ),
@@ -68,8 +66,6 @@ describe('When fetching multiple entities (All entities published)', () => {
         .forEach((entityType) => {
             const endpointUnderTest = `/${buildViewModelPathForEntityType(entityType)}`;
 
-            const instanceFactoryForEntity = getInstanceFactoryForEntity(entityType);
-
             describe(`GET ${endpointUnderTest}`, () => {
                 describe('when all of the entities are published', () => {
                     beforeEach(async () => {
@@ -101,11 +97,11 @@ describe('When fetching multiple entities (All entities published)', () => {
                      * `published = true`
                      */
                     const publishedEntitiesToAdd = testData[entityType]
-                        .map((instance: Entity) => ({
-                            ...instance.toDTO(),
-                            published: true,
-                        }))
-                        .map((dto) => instanceFactoryForEntity(dto))
+                        .map((instance: Entity) =>
+                            instance.clone({
+                                published: true,
+                            })
+                        )
                         .filter((newInstance): newInstance is Entity => {
                             if (isInternalError(newInstance)) {
                                 throw new InternalError(
@@ -121,12 +117,12 @@ describe('When fetching multiple entities (All entities published)', () => {
                         });
 
                     const unpublishedEntitiesToAdd = testData[entityType]
-                        .map((instance, index) => ({
-                            ...instance.toDTO(),
-                            id: `UNPUBLISHED-00${index + 1}`,
-                            published: false,
-                        }))
-                        .map((dto) => instanceFactoryForEntity(dto))
+                        .map((instance, index) =>
+                            instance.clone({
+                                id: `UNPUBLISHED-00${index + 1}`,
+                                published: false,
+                            })
+                        )
                         // This shouldn't be needed, but typeCheck provides a logical guarantee
                         .filter((newInstance): newInstance is Entity => {
                             if (isInternalError(newInstance)) {

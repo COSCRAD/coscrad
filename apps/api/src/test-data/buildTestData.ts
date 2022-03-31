@@ -1,4 +1,4 @@
-import { entityTypes, InMemorySnapshot } from '../domain/types/entityType';
+import { entityTypes, InMemorySnapshot } from '../domain/types/entityTypes';
 import buildTagTestData from './buildTagTestData';
 import buildTermTestData from './buildTermTestData';
 import buildVocabularyListTestData from './buildVocabularyListTestData';
@@ -9,7 +9,7 @@ import buildVocabularyListTestData from './buildVocabularyListTestData';
  * invariants.
  */
 export default (): InMemorySnapshot => ({
-  [entityTypes.tag]: buildTagTestData(),
-  [entityTypes.term]: buildTermTestData(),
-  [entityTypes.vocabularyList]: buildVocabularyListTestData(),
+    [entityTypes.tag]: buildTagTestData(),
+    [entityTypes.term]: buildTermTestData(),
+    [entityTypes.vocabularyList]: buildVocabularyListTestData(),
 });

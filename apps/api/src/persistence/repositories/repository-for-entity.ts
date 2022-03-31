@@ -2,7 +2,7 @@ import { InstanceFactory } from '../../domain/factories/getInstanceFactoryForEnt
 import { Entity } from '../../domain/models/entity';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { IRepositoryForEntity } from '../../domain/repositories/interfaces/repository-for-entity';
-import { EntityId } from '../../domain/types/entity-id';
+import { EntityId } from '../../domain/types/EntityId';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { ResultOrError } from '../../types/ResultOrError';

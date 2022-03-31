@@ -1,5 +1,5 @@
 import { InternalError } from '../../lib/errors/InternalError';
-import { EntityType, entityTypes } from '../types/entityType';
+import { EntityType, entityTypes } from '../types/entityTypes';
 import tagValidator from './tagValidator';
 import termValidator from './termValidator';
 import { Valid } from './Valid';

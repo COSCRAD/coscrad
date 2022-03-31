@@ -1,7 +1,7 @@
 import { isArangoDatabase } from 'arangojs/database';
 import { Entity } from '../../domain/models/entity';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
-import { EntityId } from '../../domain/types/entity-id';
+import { EntityId } from '../../domain/types/EntityId';
 import { Maybe } from '../../lib/types/maybe';
 import { PartialDTO } from '../../types/partial-dto';
 import { ArangoDatabase } from './arango-database';

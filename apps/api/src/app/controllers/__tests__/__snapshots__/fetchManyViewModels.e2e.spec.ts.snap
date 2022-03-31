@@ -72,7 +72,6 @@ Array [
       },
     ],
     "id": "vocabulary-list-id-1",
-    "isPublished": true,
     "name": "test VL 1 chil",
     "nameEnglish": "test VL 1 engl",
     "variables": Array [
@@ -107,7 +106,6 @@ Array [
       },
     ],
     "id": "vocabulary-list-id-2",
-    "isPublished": true,
     "name": "test VL 2 CHIL- no engl name",
     "variables": Array [],
   },
@@ -119,7 +117,6 @@ Array [
   Object {
     "entries": Array [],
     "id": "vocabulary-list-id-1",
-    "isPublished": true,
     "name": "test VL 1 chil",
     "nameEnglish": "test VL 1 engl",
     "variables": Array [
@@ -142,7 +139,6 @@ Array [
   Object {
     "entries": Array [],
     "id": "vocabulary-list-id-2",
-    "isPublished": true,
     "name": "test VL 2 CHIL- no engl name",
     "variables": Array [],
   },

@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Term } from 'apps/api/src/domain/models/term/entities/term.entity';
+import { ViewModelId } from './types/ViewModelId';
 
 // TODO Add proper contributors repository \ collection
 const contributors = {
@@ -8,8 +9,6 @@ const contributors = {
 };
 
 const getContributorNameFromId = (id: string): string => contributors[id] || '';
-
-export type ViewModelId = string;
 
 export class TermViewModel {
     @ApiProperty({
@@ -24,7 +23,7 @@ export class TermViewModel {
     })
     readonly contributor: string;
 
-    @ApiPropertyOptional({
+    @ApiProperty({
         example: 'word, phrase, or sentence in the language',
         description: '',
     })

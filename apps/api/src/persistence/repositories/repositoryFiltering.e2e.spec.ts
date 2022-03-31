@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import createTestModule from '../../app/controllers/__tests__/createTestModule';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import TermEnglishEquals from '../../domain/repositories/specifications/TermEnglishEquals';
-import { entityTypes } from '../../domain/types/entityType';
+import { entityTypes } from '../../domain/types/entityTypes';
 import buildTestData from '../../test-data/buildTestData';
 import { ArangoConnectionProvider } from '../database/arango-connection.provider';
 import { DatabaseProvider } from '../database/database.provider';

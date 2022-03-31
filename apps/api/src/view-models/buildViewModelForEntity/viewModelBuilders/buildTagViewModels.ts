@@ -1,8 +1,8 @@
 import { Tag } from 'apps/api/src/domain/models/tag/tag.entity';
-import { entityTypes } from 'apps/api/src/domain/types/entityType';
+import { entityTypes } from 'apps/api/src/domain/types/entityTypes';
 import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
-import { ViewModelBuilderDependencies } from '../buildViewModelForEntity';
-import { TagViewModel } from '../viewModels/TagViewModel';
+import { TagViewModel } from '../viewModels/tag.view-model';
+import { ViewModelBuilderDependencies } from './types/ViewModelBuilderDependencies';
 
 export default async ({
     repositoryProvider,

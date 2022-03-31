@@ -1,9 +1,9 @@
-import { Term } from 'apps/api/src/domain/models/term/entities/term.entity'
-import { VocabularyList } from 'apps/api/src/domain/models/vocabulary-list/entities/vocabulary-list.entity'
-import { entityTypes } from 'apps/api/src/domain/types/entityType'
-import { isInternalError } from 'apps/api/src/lib/errors/InternalError'
-import { ViewModelBuilderDependencies } from '../buildViewModelForEntity'
-import { VocabularyListViewModel } from '../viewModels'
+import { Term } from 'apps/api/src/domain/models/term/entities/term.entity';
+import { VocabularyList } from 'apps/api/src/domain/models/vocabulary-list/entities/vocabulary-list.entity';
+import { entityTypes } from 'apps/api/src/domain/types/entityTypes';
+import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
+import { VocabularyListViewModel } from '../viewModels';
+import { ViewModelBuilderDependencies } from './types/ViewModelBuilderDependencies';
 
 // Should we make this a class?
 export default async ({
@@ -12,10 +12,10 @@ export default async ({
 }: ViewModelBuilderDependencies): Promise<VocabularyListViewModel[]> => {
     const vocabularyListRepository = repositoryProvider.forEntity<VocabularyList>(
         entityTypes.vocabularyList
-    )
+    );
 
     // We need to join the terms by id
-    const termRepository = repositoryProvider.forEntity<Term>(entityTypes.term)
+    const termRepository = repositoryProvider.forEntity<Term>(entityTypes.term);
 
     const allTerms = await termRepository.fetchMany().then((allTerms) =>
         // We filter out invalid DTOs in case they occur
@@ -23,7 +23,7 @@ export default async ({
             .filter((term): term is Term => !isInternalError(term))
             // TODO Make this happen in one place (not in every view model builder)
             .filter(({ published }) => published)
-    )
+    );
 
     const allVocabularyListViewModels = await vocabularyListRepository
         .fetchMany()
@@ -40,7 +40,7 @@ export default async ({
                             configService.get<string>('BASE_AUDIO_URL')
                         )
                 )
-        )
+        );
 
-    return allVocabularyListViewModels
-}
+    return allVocabularyListViewModels;
+};

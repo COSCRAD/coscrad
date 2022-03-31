@@ -11,7 +11,12 @@
                 "main": "apps/api/src/main.ts",
                 "tsConfig": "apps/api/tsconfig.app.json",
                 "assets": ["apps/api/src/assets"],
-                "tsPlugins": ["@nestjs/swagger/plugin"]
+                "tsPlugins": [{
+                    "name": "@nestjs/swagger/plugin",
+                    "options": {
+                        "dtoFilenameSuffix": [".entity.ts",".view-model.ts"]
+                    }
+                }]
             },
             "configurations": {
                 "production": {

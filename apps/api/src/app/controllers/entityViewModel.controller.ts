@@ -1,11 +1,11 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
-import { isEntityId } from '../../domain/types/entity-id';
-import { entityTypes } from '../../domain/types/entityType';
+import { isEntityId } from '../../domain/types/EntityId';
+import { entityTypes } from '../../domain/types/entityTypes';
 import { isInternalError } from '../../lib/errors/InternalError';
 import { isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
@@ -13,19 +13,21 @@ import { RepositoryProvider } from '../../persistence/repositories/repository.pr
 import buildTagViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTagViewModels';
 import buildTermViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTermViewModels';
 import buildVocabularyListViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildVocabularyListViewModels';
-import { VocabularyListViewModel } from '../../view-models/buildViewModelForEntity/viewModels';
-import { TagViewModel } from '../../view-models/buildViewModelForEntity/viewModels/TagViewModel';
 import {
+    HasViewModelId,
+    TagViewModel,
     TermViewModel,
-    ViewModelId,
-} from '../../view-models/buildViewModelForEntity/viewModels/TermViewModel';
+    VocabularyListViewModel,
+} from '../../view-models/buildViewModelForEntity/viewModels';
 import { buildAllEntityDescriptions } from '../../view-models/entityDescriptions/buildAllEntityDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import buildViewModelPathForEntityType from './utilities/buildViewModelPathForEntityType';
 
-type HasViewModelId = {
-    id: ViewModelId;
-};
+const buildByIdApiParamMetadata = () => ({
+    name: 'id',
+    required: true,
+    example: '2',
+});
 
 @ApiTags('entities')
 @Controller('entities')
@@ -41,6 +43,7 @@ export class EntityViewModelController {
     }
 
     /* ********** TERMS ********** */
+    @ApiOkResponse({ type: TermViewModel, isArray: true })
     @Get(buildViewModelPathForEntityType(entityTypes.term))
     async fetchTerms(@Res() res) {
         const allTermViewModels = await buildTermViewModels({
@@ -56,6 +59,8 @@ export class EntityViewModelController {
         return res.status(httpStatusCodes.ok).send(allTermViewModels.map(cloneToPlainObject));
     }
 
+    @ApiParam(buildByIdApiParamMetadata())
+    @ApiOkResponse({ type: TermViewModel })
     @Get(`${buildViewModelPathForEntityType(entityTypes.term)}/:id`)
     async fetchTermById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
@@ -89,6 +94,7 @@ export class EntityViewModelController {
     }
 
     /* ********** VOCABULARY LISTS ********** */
+    @ApiOkResponse({ type: VocabularyListViewModel, isArray: true })
     @Get(buildViewModelPathForEntityType(entityTypes.vocabularyList))
     async fetchVocabularyLists(@Res() res) {
         const allViewModels = await buildVocabularyListViewModels({
@@ -104,6 +110,8 @@ export class EntityViewModelController {
         return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
     }
 
+    @ApiParam(buildByIdApiParamMetadata())
+    @ApiOkResponse({ type: VocabularyListViewModel })
     @Get(`${buildViewModelPathForEntityType(entityTypes.vocabularyList)}/:id`)
     async fetchVocabularyListById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
@@ -151,6 +159,7 @@ export class EntityViewModelController {
     }
 
     /* ********** TAGS ********** */
+    @ApiOkResponse({ type: TagViewModel, isArray: true })
     @Get(buildViewModelPathForEntityType(entityTypes.tag))
     async fetchTags(@Res() res) {
         const allViewModels = await buildTagViewModels({
@@ -166,6 +175,8 @@ export class EntityViewModelController {
         return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
     }
 
+    @ApiParam(buildByIdApiParamMetadata())
+    @ApiOkResponse({ type: TagViewModel })
     @Get(`${buildViewModelPathForEntityType(entityTypes.tag)}/:id`)
     async fetchTagById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;

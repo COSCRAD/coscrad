@@ -1,7 +1,7 @@
-import { isEntityId } from '../../types/entity-id';
-import { EntityType, isEntityType } from '../../types/entityType';
+import { isEntityId } from '../../types/EntityId';
+import { EntityType, isEntityType } from '../../types/entityTypes';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
-import { EntityId } from './entity-id';
+import { EntityId } from './EntityId';
 
 /**
  * A `CompositeIdentifier` includes

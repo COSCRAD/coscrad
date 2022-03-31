@@ -1,4 +1,4 @@
-import { entityTypes } from '../../domain/types/entityType';
+import { entityTypes } from '../../domain/types/entityTypes';
 import { getArangoCollectionIDFromEntityType } from './getArangoCollectionIDFromEntityType';
 import { getAllArangoCollectionIDs } from './types/ArangoCollectionId';
 

@@ -7,7 +7,7 @@ import { Entity } from '../models/entity';
 import { Tag } from '../models/tag/tag.entity';
 import { Term } from '../models/term/entities/term.entity';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
-import { EntityType, entityTypes } from '../types/entityType';
+import { EntityType, entityTypes } from '../types/entityTypes';
 import buildInstanceFactory from './utilities/buildInstanceFactory';
 
 export type InstanceFactory<TEntity> = (dto: unknown) => ResultOrError<TEntity>;
