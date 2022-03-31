@@ -27,6 +27,10 @@ type EdgeConnectionContext = {
     from: Context;
 } & ContextMetadata;
 
+type SelfConnectionContext = {
+    self: Context;
+} & ContextMetadata;
+
 type EdgeConnectionCompositeIdentifier = {
     to: EntityCompositeIdentifier;
     from: EntityCompositeIdentifier;
@@ -34,6 +38,12 @@ type EdgeConnectionCompositeIdentifier = {
 
 type EdgeConnection = EdgeConnectionCompositeIdentifier & {
     context: EdgeConnectionContext[];
+};
+
+// We may want to refer to self-connections as something other than a `Connection` in the domain
+type SelfConnection = {
+    compositeId: EntityCompositeIdentifier;
+    context: SelfConnectionContext[];
 };
 
 type GraphQueryDirection = 'outgoing' | 'incoming' | 'undirected';
@@ -91,27 +101,14 @@ const sampleConnection: EdgeConnection = {
     ],
 };
 
-const sampleSelfConnection: EdgeConnection = {
-    // id?
-    to: {
-        type: entityTypes.term, // Pretend I am a book
-        id: '1234',
-    },
-    // Note do we want a different type for a self connection? e.g. a single `self` field?
-    from: {
+const sampleSelfConnection: SelfConnection = {
+    compositeId: {
         type: entityTypes.term, // Pretend I am a book
         id: '1234',
     },
     context: [
         {
-            // We should just have a single 'self' prop instead of dupulicating data
-            to: {
-                contextType: 'pageRange', //ContextType.pageRange
-                data: {
-                    pageRange: ['33'], // New PageRange(new Range(123,126))
-                },
-            },
-            from: {
+            self: {
                 contextType: 'pageRange', //ContextType.pageRange
                 data: {
                     pageRange: ['33'], // New PageRange(new Range(123,126))
@@ -120,26 +117,10 @@ const sampleSelfConnection: EdgeConnection = {
             tags: ['11', '17'], // tagId: 11 <-> 'animals', '17' ,-> 'bears'
             note: 'This page is about bears',
         },
-        {
-            // We should just have a single 'self' prop instead of dupulicating data
-            to: {
-                contextType: 'pageRange', //ContextType.pageRange
-                data: {
-                    pageRange: ['44', '45', '46', '47'], // New PageRange(new Range(123,126))
-                },
-            },
-            // We should just have a single 'self' prop instead of dupulicating data
-            from: {
-                contextType: 'pageRange', //ContextType.pageRange
-                data: {
-                    pageRange: ['44', '45', '46', '47'], // New PageRange(new Range(123,126))
-                },
-            },
-            tags: ['12'], // tagId: 12 <-> 'legeds'
-            note: 'This one is about how the sun was made',
-        },
     ],
 };
+
+sampleSelfConnection;
 
 export interface IConnectionRepository {
     // "Queries"
