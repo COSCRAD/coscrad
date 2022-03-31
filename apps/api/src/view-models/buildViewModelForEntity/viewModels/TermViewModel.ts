@@ -1,31 +1,55 @@
-import { Term } from 'apps/api/src/domain/models/term/entities/term.entity'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Term } from 'apps/api/src/domain/models/term/entities/term.entity';
 
 // TODO Add proper contributors repository \ collection
 const contributors = {
     1: 'Bella Alphonse',
     2: 'William Myers',
-}
+};
 
-const getContributorNameFromId = (id: string): string => contributors[id] || ''
+const getContributorNameFromId = (id: string): string => contributors[id] || '';
 
-export type ViewModelId = string
+export type ViewModelId = string;
 
 export class TermViewModel {
-    readonly id: ViewModelId
+    @ApiProperty({
+        example: '132',
+        description: 'a string identifier that uniquely identifies the term amongst other terms',
+    })
+    readonly id: ViewModelId;
 
-    readonly contributor: string
+    @ApiProperty({
+        example: 'Jane Doe',
+        description: 'The language speaker who contributed the term',
+    })
+    readonly contributor: string;
 
-    readonly term: string
+    @ApiPropertyOptional({
+        example: 'word, phrase, or sentence in the language',
+        description: '',
+    })
+    readonly term: string;
 
-    readonly termEnglish?: string
+    @ApiPropertyOptional({
+        example: 'He usually tells stories.',
+        description: 'translation into colonial language \\ gloss of the term',
+    })
+    readonly termEnglish?: string;
 
-    readonly audioURL?: string
+    @ApiPropertyOptional({
+        example: 'https://www.mysound.org/audio/hetellsstories.mp3',
+        description: 'a url for an audio recording of the given term in the language',
+    })
+    readonly audioURL?: string;
 
-    readonly sourceProject?: string
+    @ApiPropertyOptional({
+        example: 'Digital Verb Book v 1.0',
+        description:
+            'the name of the project through which this term was documented (if applicable)',
+    })
+    readonly sourceProject?: string;
 
-    readonly isPublished: boolean = false
-
-    readonly #baseAudioURL: string
+    readonly #baseAudioURL: string;
 
     constructor(term: Term, baseAudioURL: string) {
         const {
@@ -34,28 +58,25 @@ export class TermViewModel {
             term: text,
             termEnglish: textEnglish,
             audioFilename,
-            published: isPublished,
             sourceProject,
-        } = term
+        } = term;
 
-        this.#baseAudioURL = baseAudioURL
+        this.#baseAudioURL = baseAudioURL;
 
-        this.id = id
+        this.id = id;
 
-        this.contributor = getContributorNameFromId(contributorId)
+        this.contributor = getContributorNameFromId(contributorId);
 
-        this.term = text
+        this.term = text;
 
-        this.termEnglish = textEnglish
+        this.termEnglish = textEnglish;
 
-        if (audioFilename) this.audioURL = this.#buildAudioURL(audioFilename)
+        if (audioFilename) this.audioURL = this.#buildAudioURL(audioFilename);
 
-        if (typeof isPublished === 'boolean') this.isPublished = isPublished
-
-        if (sourceProject) this.sourceProject = sourceProject
+        if (sourceProject) this.sourceProject = sourceProject;
     }
 
     #buildAudioURL(filename: string, extension = 'mp3'): string {
-        return `${this.#baseAudioURL}${filename}.${extension}`
+        return `${this.#baseAudioURL}${filename}.${extension}`;
     }
 }

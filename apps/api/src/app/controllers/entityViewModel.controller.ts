@@ -1,14 +1,18 @@
-import { Controller, Get, Query, Res } from '@nestjs/common';
+import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { EntityId } from '../../domain/models/types/entity-id';
+import { ApiTags } from '@nestjs/swagger';
+import { Tag } from '../../domain/models/tag/tag.entity';
+import { Term } from '../../domain/models/term/entities/term.entity';
+import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { isEntityId } from '../../domain/types/entity-id';
-import { isEntityType } from '../../domain/types/entityType';
+import { entityTypes } from '../../domain/types/entityType';
 import { isInternalError } from '../../lib/errors/InternalError';
-import { Maybe } from '../../lib/types/maybe';
-import { isNotFound, NotFound } from '../../lib/types/not-found';
+import { isNotFound } from '../../lib/types/not-found';
+import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
-import buildViewModelForEntity from '../../view-models/buildViewModelForEntity/buildViewModelForEntity';
+import buildTagViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTagViewModels';
+import buildTermViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTermViewModels';
+import buildVocabularyListViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildVocabularyListViewModels';
 import { VocabularyListViewModel } from '../../view-models/buildViewModelForEntity/viewModels';
 import { TagViewModel } from '../../view-models/buildViewModelForEntity/viewModels/TagViewModel';
 import {
@@ -17,22 +21,10 @@ import {
 } from '../../view-models/buildViewModelForEntity/viewModels/TermViewModel';
 import { buildAllEntityDescriptions } from '../../view-models/entityDescriptions/buildAllEntityDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
+import buildViewModelPathForEntityType from './utilities/buildViewModelPathForEntityType';
 
 type HasViewModelId = {
     id: ViewModelId;
-};
-
-const NotProvided = Symbol('Client did not provide this param');
-
-const wasNotProvided = (input: unknown): input is typeof NotProvided => input === NotProvided;
-
-const findEntityById = <T extends HasViewModelId>(
-    idToFind: EntityId,
-    allEntities: T[]
-): Maybe<T> => {
-    const searchResult = allEntities.find(({ id }) => id === idToFind) || NotFound;
-
-    return searchResult;
 };
 
 @ApiTags('entities')
@@ -43,77 +35,163 @@ export class EntityViewModelController {
         private readonly configService: ConfigService
     ) {}
 
-    /**
-     *
-     * TODO[https://www.pivotaltracker.com/story/show/181577715]
-     * Breakout the logic here into two internal handlers:
-     * 1. When Id is provided (byId behaviour)
-     * 2. When Id is not provided (fetchManyBehaviour)
-     *
-     * Move the 'published' filtering to the database not view models.
-     * We need WHERE filters for this first
-     * See [https://www.pivotaltracker.com/story/show/181577715];
-     */
-    @ApiOperation({ summary: 'Fetch Entity' })
-    @ApiOkResponse()
-    @Get()
-    async fetchMany(
-        @Res() res,
-        @Query('type') type: string,
-        @Query('id') id: unknown = NotProvided
-    ) {
-        // TODO [refactor] move this in to a param validation layer
-        if (!isEntityType(type)) {
-            // TODO add error message
-            return res.sendStatus(400);
-        }
+    @Get('')
+    getAllEntityDescriptions() {
+        return buildAllEntityDescriptions();
+    }
 
-        // TODO avoid double-negative
-        if (!wasNotProvided(id) && !isEntityId(id)) {
-            // TODO add error message
-            return res.sendStatus(400);
-        }
-
-        const allEntities = await buildViewModelForEntity(type, {
+    /* ********** TERMS ********** */
+    @Get(buildViewModelPathForEntityType(entityTypes.term))
+    async fetchTerms(@Res() res) {
+        const allTermViewModels = await buildTermViewModels({
             repositoryProvider: this.repositoryProvider,
             configService: this.configService,
         });
 
-        if (isInternalError(allEntities))
+        if (isInternalError(allTermViewModels))
             return res.status(httpStatusCodes.internalError).send({
-                error: JSON.stringify(allEntities),
+                error: JSON.stringify(allTermViewModels),
             });
 
-        // This is doing too much!
-        const result = !wasNotProvided(id)
-            ? // TODO remove cast
-              findEntityById<TermViewModel | VocabularyListViewModel | TagViewModel>(
-                  id,
-                  allEntities
-              )
-            : allEntities;
-
-        if (isNotFound(result)) return res.sendStatus(httpStatusCodes.notFound);
-
-        if (!Array.isArray(result) && !(result instanceof TagViewModel) && !result.isPublished)
-            return res.sendStatus(httpStatusCodes.notFound);
-
-        /**
-         * TODO We should convert view models to DTOs before returning! Failing to
-         * do so is especially problematic if you use the `private` keyword instead
-         * of actual private fields. In that case your `private` data will leak,
-         * exposing internals and breaking the contract!
-         */
-        return Array.isArray(result)
-            ? res
-                  .status(httpStatusCodes.ok)
-                  // TODO remove cast, also do the filtering before the view model
-                  .send(result)
-            : res.status(httpStatusCodes.ok).send(result);
+        return res.status(httpStatusCodes.ok).send(allTermViewModels.map(cloneToPlainObject));
     }
 
-    @Get('descriptions')
-    getAllEntityDescriptions() {
-        return buildAllEntityDescriptions();
+    @Get(`${buildViewModelPathForEntityType(entityTypes.term)}/:id`)
+    async fetchTermById(@Res() res, @Param() params: unknown) {
+        const { id } = params as HasViewModelId;
+
+        if (!isEntityId(id))
+            return res.status(httpStatusCodes.badRequest).send({
+                error: `Invalid input for id: ${id}`,
+            });
+
+        const searchResult = await this.repositoryProvider
+            .forEntity<Term>(entityTypes.term)
+            .fetchById(id);
+
+        if (isInternalError(searchResult))
+            return res.status(httpStatusCodes.internalError).send({
+                error: JSON.stringify(searchResult),
+            });
+
+        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
+
+        if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
+
+        const termViewModel = new TermViewModel(
+            searchResult,
+            this.configService.get<string>('BASE_AUDIO_URL')
+        );
+
+        const dto = cloneToPlainObject(termViewModel);
+
+        return res.status(httpStatusCodes.ok).send(dto);
+    }
+
+    /* ********** VOCABULARY LISTS ********** */
+    @Get(buildViewModelPathForEntityType(entityTypes.vocabularyList))
+    async fetchVocabularyLists(@Res() res) {
+        const allViewModels = await buildVocabularyListViewModels({
+            repositoryProvider: this.repositoryProvider,
+            configService: this.configService,
+        });
+
+        if (isInternalError(allViewModels))
+            return res.status(httpStatusCodes.internalError).send({
+                error: JSON.stringify(allViewModels),
+            });
+
+        return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
+    }
+
+    @Get(`${buildViewModelPathForEntityType(entityTypes.vocabularyList)}/:id`)
+    async fetchVocabularyListById(@Res() res, @Param() params: unknown) {
+        const { id } = params as HasViewModelId;
+
+        if (!isEntityId(id))
+            return res.status(httpStatusCodes.badRequest).send({
+                error: `Invalid input for id: ${id}`,
+            });
+
+        // TODO break this out to a separate helper, it doesn't belong in the controller
+
+        const [vocabularyListSearchResult, allTerms] = await Promise.all([
+            this.repositoryProvider
+                .forEntity<VocabularyList>(entityTypes.vocabularyList)
+                .fetchById(id),
+            this.repositoryProvider
+                .forEntity<Term>(entityTypes.term)
+                .fetchMany()
+                .then((allResults) =>
+                    allResults.filter((result): result is Term => !isInternalError(result))
+                ),
+        ]);
+
+        if (isInternalError(vocabularyListSearchResult)) {
+            return res.status(httpStatusCodes.internalError).send({
+                error: JSON.stringify(vocabularyListSearchResult),
+            });
+        }
+
+        if (isNotFound(vocabularyListSearchResult))
+            return res.status(httpStatusCodes.notFound).send();
+
+        if (!vocabularyListSearchResult.published)
+            return res.status(httpStatusCodes.notFound).send();
+
+        const viewModel = new VocabularyListViewModel(
+            vocabularyListSearchResult,
+            allTerms,
+            this.configService.get<string>('BASE_AUDIO_URL')
+        );
+
+        const dto = cloneToPlainObject(viewModel);
+
+        return res.status(httpStatusCodes.ok).send(dto);
+    }
+
+    /* ********** TAGS ********** */
+    @Get(buildViewModelPathForEntityType(entityTypes.tag))
+    async fetchTags(@Res() res) {
+        const allViewModels = await buildTagViewModels({
+            repositoryProvider: this.repositoryProvider,
+            configService: this.configService,
+        });
+
+        if (isInternalError(allViewModels))
+            return res.status(httpStatusCodes.internalError).send({
+                error: JSON.stringify(allViewModels),
+            });
+
+        return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
+    }
+
+    @Get(`${buildViewModelPathForEntityType(entityTypes.tag)}/:id`)
+    async fetchTagById(@Res() res, @Param() params: unknown) {
+        const { id } = params as HasViewModelId;
+
+        if (!isEntityId(id))
+            return res.status(httpStatusCodes.badRequest).send({
+                error: `Invalid input for id: ${id}`,
+            });
+
+        const searchResult = await this.repositoryProvider
+            .forEntity<Tag>(entityTypes.tag)
+            .fetchById(id);
+
+        if (isInternalError(searchResult))
+            return res.status(httpStatusCodes.internalError).send({
+                error: JSON.stringify(searchResult),
+            });
+
+        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
+
+        if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
+
+        const viewModel = new TagViewModel(searchResult);
+
+        const dto = cloneToPlainObject(viewModel);
+
+        return res.status(httpStatusCodes.ok).send(dto);
     }
 }

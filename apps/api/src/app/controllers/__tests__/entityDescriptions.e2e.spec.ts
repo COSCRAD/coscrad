@@ -24,7 +24,7 @@ describe('GET /entities/descriptions', () => {
 
     it('should get the entity descriptions', () => {
         return request(app.getHttpServer())
-            .get('/entities/descriptions')
+            .get('/entities')
             .expect(200)
             .expect(buildAllEntityDescriptions());
     });

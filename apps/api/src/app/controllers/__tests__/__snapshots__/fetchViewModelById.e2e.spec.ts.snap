@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GET /entities (fetch view models)- all entities published When querying for a single View Model by ID GET /terms/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
+Object {
+  "contributor": "",
+  "id": "1",
+  "term": "Chil-term-1",
+  "termEnglish": "Engl-term-1",
+}
+`;
+
+exports[`GET /entities (fetch view models)- all entities published When querying for a single View Model by ID GET /vocabularyLists/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
+Object {
+  "entries": Array [
+    Object {
+      "term": Object {
+        "contributor": "",
+        "id": "1",
+        "term": "Chil-term-1",
+        "termEnglish": "Engl-term-1",
+      },
+      "variableValues": Object {
+        "person": "11",
+      },
+    },
+    Object {
+      "term": Object {
+        "contributor": "",
+        "id": "2",
+        "term": "Chil-term-2",
+        "termEnglish": "Engl-term-2",
+      },
+      "variableValues": Object {
+        "person": "21",
+      },
+    },
+  ],
+  "id": "vocabulary-list-id-1",
+  "isPublished": true,
+  "name": "test VL 1 chil",
+  "nameEnglish": "test VL 1 engl",
+  "variables": Array [
+    Object {
+      "name": "person",
+      "type": "dropbox",
+      "validValues": Array [
+        Object {
+          "display": "I",
+          "value": "11",
+        },
+        Object {
+          "display": "We",
+          "value": "21",
+        },
+      ],
+    },
+  ],
+}
+`;

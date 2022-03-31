@@ -44,6 +44,7 @@ export default class TestRepositoryProvider extends RepositoryProvider {
     }
 
     public async testSetup(): Promise<void> {
+        // In case the last test didn't clean up
         await this.deleteAllEntityData();
     }
 

@@ -19,7 +19,7 @@ export function AllEntities(props: AllEntitiesProps) {
 
     setAppState({ entitiesAndDescriptions: {} });
 
-    const apiUrl = `http://104.225.142.106:3131/api/entities/descriptions/`;
+    const apiUrl = `http://104.225.142.106:3131/api/entities/`;
 
     fetch(apiUrl, { mode: 'cors' })
       .then((res) =>{

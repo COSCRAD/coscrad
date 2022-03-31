@@ -217,8 +217,11 @@ export class ArangoDatabase implements IDatabase {
         { criterion: { field, operator, value } }: ISpecification<TModel>,
         docNamePlaceholder: string
     ): string {
+        // a string value must be wrapped in quotes in the query
+        const valueToCompare = typeof value === 'string' ? `'${value}'` : value;
+
         return `FILTER ${docNamePlaceholder}.${field} ${interpretQueryOperatorForAQL(
             operator
-        )} '${value}'`;
+        )} ${valueToCompare}`;
     }
 }

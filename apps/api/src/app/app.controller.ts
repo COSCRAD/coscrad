@@ -14,6 +14,7 @@ export class AppController {
     getData(): MediaItem {
         return this.appService.getData();
     }
+
     @Get('')
     @ApiOkResponse({ type: Message })
     getWelcomeMessage(): Message {
