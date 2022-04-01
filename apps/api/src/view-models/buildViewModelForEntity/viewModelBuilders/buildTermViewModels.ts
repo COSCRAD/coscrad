@@ -4,18 +4,16 @@ import { entityTypes } from 'apps/api/src/domain/types/entityTypes';
 import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
 import { TermViewModel } from '../viewModels';
 import { ViewModelBuilderDependencies } from './types/ViewModelBuilderDependencies';
+import {
+    getDefaultViewModelBuilderOptions,
+    ViewModelBuilderOptions,
+} from './types/ViewModelBuilderOptions';
 
-type Options = {
-    shouldReturnUnpublishedEntities: boolean;
-};
-
-const defaultOptions: Options = {
-    shouldReturnUnpublishedEntities: false,
-};
+const defaultOptions = getDefaultViewModelBuilderOptions();
 
 export default async (
     { repositoryProvider, configService }: ViewModelBuilderDependencies,
-    optionOverrides: Partial<Options> = defaultOptions
+    optionOverrides: Partial<ViewModelBuilderOptions> = defaultOptions
 ): Promise<TermViewModel[]> => {
     const { shouldReturnUnpublishedEntities } = {
         ...defaultOptions,

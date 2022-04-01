@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GET /entities (fetch view models)- all entities published When querying for a single View Model by ID GET /terms/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
+exports[`GET /entities (fetch view models) When querying for a single View Model by ID GET /terms/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
 Object {
   "contributor": "",
   "id": "1",
@@ -9,7 +9,7 @@ Object {
 }
 `;
 
-exports[`GET /entities (fetch view models)- all entities published When querying for a single View Model by ID GET /vocabularyLists/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
+exports[`GET /entities (fetch view models) When querying for a single View Model by ID GET /vocabularyLists/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
 Object {
   "entries": Array [
     Object {

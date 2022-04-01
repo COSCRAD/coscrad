@@ -1,17 +1,16 @@
-import { Typography } from '@mui/material';
-import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp, GridToolbar } from '@mui/x-data-grid';
+import MenuBookTwoToneIcon from '@mui/icons-material/MenuBookTwoTone';
+import SearchIcon from '@mui/icons-material/Search';
+import { TextField, Typography } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp } from '@mui/x-data-grid';
+import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './VocabularyListIndex.module.css';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { motion } from 'framer-motion';
-import { TextField, CircularProgress } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import MenuBookTwoToneIcon from '@mui/icons-material/MenuBookTwoTone';
+import { HasIdAndName } from '../../types/HasNameAndId';
 import doValuesMatchFilters from '../../utilities/doValuesMatchFilters';
 import stringIncludes from '../../utilities/matchers/stringIncludes';
-import { HasIdAndName } from '../../types/HasNameAndId';
 import MiniLoading from '../MiniLoading/mini-loading';
+import './VocabularyListIndex.module.css';
 
 type ComponentState = {
   vocabularyLists: HasIdAndName[];
@@ -40,7 +39,7 @@ export function VocabularyListIndex(props: VocabularyListIndexProps) {
 
   useEffect(() => {
     setAppState({ vocabularyLists: [], searchContext: 'name' });
-    const apiUrl = `http://localhost:3131/api/entities?type=vocabularyList`;
+    const apiUrl = `http://localhost:3131/api/entities/vocabularyLists`;
     fetch(apiUrl, { mode: 'cors' })
       .then((res) => res.json())
       .then((vocabularyLists) => {

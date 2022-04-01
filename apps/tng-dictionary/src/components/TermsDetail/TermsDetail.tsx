@@ -1,15 +1,14 @@
-import './TermsDetail.module.css';
-import * as React from 'react';
-import { Card, CardContent } from '@mui/material';
-import { motion } from 'framer-motion';
-import TermData, { Term } from '../Term/Term';
-import Loading from '../Loading/Loading';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import InfoTwoToneIcon from '@mui/icons-material/InfoTwoTone';
 import KeyboardReturnTwoToneIcon from '@mui/icons-material/KeyboardReturnTwoTone';
+import { Card, CardContent } from '@mui/material';
 import Button from '@mui/material/Button';
-import { Link } from "react-router-dom";
+import { motion } from 'framer-motion';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import Loading from '../Loading/Loading';
+import TermData, { Term } from '../Term/Term';
+import './TermsDetail.module.css';
 
 /* eslint-disable-next-line */
 export interface TermsDetailComponentProps { }
@@ -29,7 +28,7 @@ export function TermsDetailComponent(props: TermsDetailComponentProps) {
   useEffect(() => {
     setComponentState({ termData: null });
 
-    const apiUrl = `http://localhost:3131/api/entities?type=term&id=${id}`;
+    const apiUrl = `http://localhost:3131/api/entities/terms/${id}`;
     fetch(apiUrl, { mode: 'cors' })
       .then((res) => res.json())
       .then((term) => {

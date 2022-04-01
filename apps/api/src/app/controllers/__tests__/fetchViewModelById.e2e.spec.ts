@@ -12,7 +12,7 @@ import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForEntityType from '../utilities/buildViewModelPathForEntityType';
 import createTestModule from './createTestModule';
 
-describe('GET /entities (fetch view models)- all entities published', () => {
+describe('GET /entities (fetch view models)', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
     let app: INestApplication;
@@ -120,20 +120,11 @@ describe('GET /entities (fetch view models)- all entities published', () => {
                                 id: unpublishedId,
                             });
 
-                            /**
-                             * In case we broke the invariants.
-                             *
-                             * TODO [https://www.pivotaltracker.com/story/show/181577567]
-                             * Add a `clone` method on `Entity` to avoid this complication.
-                             */
-                            if (isInternalError(unpublishedInstance)) {
-                                throw unpublishedInstance;
-                            }
-
                             await testRepositoryProvider.addEntitiesOfSingleType(entityType, [
                                 unpublishedInstance,
                             ]);
                         });
+
                         it('should return not found', async () => {
                             const publishedAndUnpublishedInstancesFromRepo =
                                 await testRepositoryProvider

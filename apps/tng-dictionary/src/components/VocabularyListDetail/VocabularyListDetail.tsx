@@ -1,19 +1,18 @@
-import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import VocabularyListContext, { buildUnselectedFormData, FormItemValue, MaybeSelected } from '../../context/VocabularyListContext';
-import doValuesMatchFilters from '../../utilities/doValuesMatchFilters';
-import Loading from '../Loading/Loading';
-import VocabularyListForm, { VocabularyListFormElement } from '../VocabularyListForm/VocabularyListForm';
-import './VocabularyListDetail.module.css';
-import Carousel from '../Carousel/Carousel';
-import removeNoSelectionValuedPropsFromFilters from '../../utilities/removeNoSelectionValuedPropsFromFilters';
-import TermData from '../Term/Term';
 import InfoTwoToneIcon from '@mui/icons-material/InfoTwoTone';
 import KeyboardReturnTwoToneIcon from '@mui/icons-material/KeyboardReturnTwoTone';
-import { Link } from "react-router-dom";
-import { motion } from 'framer-motion';
+import { Card } from '@mui/material';
 import Button from '@mui/material/Button';
-import { Typography, Divider, Card } from '@mui/material';
+import { motion } from 'framer-motion';
+import { useContext, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import VocabularyListContext, { buildUnselectedFormData } from '../../context/VocabularyListContext';
+import doValuesMatchFilters from '../../utilities/doValuesMatchFilters';
+import removeNoSelectionValuedPropsFromFilters from '../../utilities/removeNoSelectionValuedPropsFromFilters';
+import Carousel from '../Carousel/Carousel';
+import Loading from '../Loading/Loading';
+import TermData from '../Term/Term';
+import VocabularyListForm, { VocabularyListFormElement } from '../VocabularyListForm/VocabularyListForm';
+import './VocabularyListDetail.module.css';
 
 
 
@@ -61,7 +60,7 @@ export function VocabularyListDetail(props: VocabularyListDetailProps) {
   useEffect(() => {
     setAppState({ loading: true, vocabularyList: null });
 
-    const apiUrl = `http://localhost:3131/api/entities?type=vocabularyList&id=${id}`;
+    const apiUrl = `http://localhost:3131/api/entities/vocabularyLists/${id}`;
     fetch(apiUrl, { mode: 'cors' })
       .then((res) => res.json())
       .then((vocabularyList) => {

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`When fetching multiple entities (All entities published) GET /terms when all of the entities are published should fetch multiple entities of type term 1`] = `
+exports[`When fetching multiple entities GET /terms when all of the entities are published should fetch multiple entities of type term 1`] = `
 Array [
   Object {
     "contributor": "",
@@ -22,7 +22,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities (All entities published) GET /terms when some of the entities are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple entities GET /terms when some of the entities are unpublished should return the expected number of results 1`] = `
 Array [
   Object {
     "contributor": "",
@@ -44,7 +44,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities (All entities published) GET /vocabularyLists when all of the entities are published should fetch multiple entities of type vocabularyList 1`] = `
+exports[`When fetching multiple entities GET /vocabularyLists when all of the entities are published should fetch multiple entities of type vocabularyList 1`] = `
 Array [
   Object {
     "entries": Array [
@@ -112,7 +112,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities (All entities published) GET /vocabularyLists when some of the entities are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple entities GET /vocabularyLists when some of the entities are unpublished should return the expected number of results 1`] = `
 Array [
   Object {
     "entries": Array [],

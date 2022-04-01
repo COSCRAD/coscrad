@@ -1,7 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { Entity } from 'apps/api/src/domain/models/entity';
 import { EntityType, entityTypes, InMemorySnapshot } from 'apps/api/src/domain/types/entityTypes';
-import { InternalError, isInternalError } from 'apps/api/src/lib/errors/InternalError';
 import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
 import TestRepositoryProvider from 'apps/api/src/persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from 'apps/api/src/test-data/buildTestData';
@@ -12,7 +11,7 @@ import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForEntityType from '../utilities/buildViewModelPathForEntityType';
 import createTestModule from './createTestModule';
 
-describe('When fetching multiple entities (All entities published)', () => {
+describe('When fetching multiple entities', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
     let app: INestApplication;
@@ -75,11 +74,9 @@ describe('When fetching multiple entities (All entities published)', () => {
                     });
 
                     it(`should fetch multiple entities of type ${entityType}`, async () => {
-                        const res = await request(app.getHttpServer())
-                            .get(`/entities${endpointUnderTest}`)
-                            .query({
-                                type: entityType,
-                            });
+                        const res = await request(app.getHttpServer()).get(
+                            `/entities${endpointUnderTest}`
+                        );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
 
@@ -96,49 +93,21 @@ describe('When fetching multiple entities (All entities published)', () => {
                      * Note that there is no requirement that the test data have
                      * `published = true`
                      */
-                    const publishedEntitiesToAdd = testData[entityType]
-                        .map((instance: Entity) =>
-                            instance.clone({
-                                published: true,
-                            })
-                        )
-                        .filter((newInstance): newInstance is Entity => {
-                            if (isInternalError(newInstance)) {
-                                throw new InternalError(
-                                    newInstance.innerErrors.reduce(
-                                        (accumulatedMessage: string, { message }) =>
-                                            accumulatedMessage + ` ${message}`,
-                                        ''
-                                    )
-                                );
-                            }
-
-                            return !isInternalError(newInstance);
-                        });
+                    const publishedEntitiesToAdd = testData[entityType].map((instance: Entity) =>
+                        instance.clone({
+                            published: true,
+                        })
+                    );
 
                     const unpublishedEntitiesToAdd = testData[entityType]
+                        // We want a different number of published \ unpublished terms
+                        .slice(0, -1)
                         .map((instance, index) =>
                             instance.clone({
                                 id: `UNPUBLISHED-00${index + 1}`,
                                 published: false,
                             })
-                        )
-                        // This shouldn't be needed, but typeCheck provides a logical guarantee
-                        .filter((newInstance): newInstance is Entity => {
-                            if (isInternalError(newInstance)) {
-                                throw new InternalError(
-                                    newInstance.innerErrors.reduce(
-                                        (accumulatedMessage: string, { message }) =>
-                                            accumulatedMessage + ` ${message}`,
-                                        ''
-                                    )
-                                );
-                            }
-
-                            return !isInternalError(newInstance);
-                        })
-                        // We want a different number of published \ unpublished terms
-                        .slice(0, -1);
+                        );
 
                     beforeEach(async () => {
                         await testRepositoryProvider.addEntitiesOfSingleType(entityType, [

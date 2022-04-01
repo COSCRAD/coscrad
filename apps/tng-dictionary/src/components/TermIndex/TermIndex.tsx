@@ -1,20 +1,19 @@
 
-import * as React from 'react';
-import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp, GridValueGetterParams } from '@mui/x-data-grid';
-import { Link } from 'react-router-dom';
-import { TextField } from '@mui/material';
-import { useEffect, useState } from 'react';
-import doValuesMatchFilters from '../../utilities/doValuesMatchFilters';
-import Loading from '../Loading/Loading';
-import TermData, { Term } from '../Term/Term';
-import { ThemeProvider, createTheme } from '@mui/material';
+import MenuBookTwoToneIcon from '@mui/icons-material/MenuBookTwoTone';
+import SearchIcon from '@mui/icons-material/Search';
+import { createTheme, TextField, ThemeProvider } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import SearchIcon from '@mui/icons-material/Search';
-import MenuBookTwoToneIcon from '@mui/icons-material/MenuBookTwoTone';
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp } from '@mui/x-data-grid';
 import { motion } from 'framer-motion';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import doValuesMatchFilters from '../../utilities/doValuesMatchFilters';
 import stringIncludes from '../../utilities/matchers/stringIncludes';
+import Loading from '../Loading/Loading';
 import MiniLoading from '../MiniLoading/mini-loading';
+import TermData from '../Term/Term';
 
 // Do not export this outside. TODO- generalize this functionality
 type SearchContext = 'term' | 'termEnglish';
@@ -50,7 +49,7 @@ export default function DataGridDemo(): JSX.Element {
 
   useEffect(() => {
     setComponentState({ allTerms: [], searchContext: 'term', searchText: '', selectedTerms: [] });
-    const apiUrl = `http://localhost:3131/api/entities?type=term`;
+    const apiUrl = `http://localhost:3131/api/entities/terms`;
     fetch(apiUrl, { mode: 'cors' })
       .then((res) => res.json())
       .then((allTerms) => {
