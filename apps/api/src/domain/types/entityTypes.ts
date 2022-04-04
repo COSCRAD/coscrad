@@ -7,7 +7,6 @@ export const entityTypes = {
     term: 'term',
     vocabularyList: 'vocabularyList',
     tag: 'tag',
-    note: 'note',
 } as const;
 
 export type EntityType = ValueType<typeof entityTypes>;
