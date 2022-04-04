@@ -122,6 +122,9 @@ const sampleSelfConnection: SelfConnection = {
 
 sampleSelfConnection;
 
+/**
+ * @deprecated This is from a previous brainstorming session. Move this to the docs!
+ */
 export interface IConnectionRepository {
     // "Queries"
     getConnectionsToEntity(
