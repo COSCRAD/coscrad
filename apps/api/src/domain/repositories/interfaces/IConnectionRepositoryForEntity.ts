@@ -1,5 +1,5 @@
 import { EntityCompositeIdentifier } from '../../models/types/entityCompositeIdentifier';
-import { EntityId } from '../../types/entity-id';
+import { EntityId } from '../../types/EntityId';
 
 type ContextType = string;
 
