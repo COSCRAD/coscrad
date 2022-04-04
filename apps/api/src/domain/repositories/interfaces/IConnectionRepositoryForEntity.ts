@@ -18,10 +18,13 @@ type ContextMetadata = {
     note: string;
 };
 
-type ConnectedEntityContext = {
+type SelfEntityContext = {
     self: Context;
-    other: Context;
 } & ContextMetadata;
+
+type ConnectedEntityContext = SelfEntityContext & {
+    other: Context;
+};
 
 type EdgeConnection = {
     /**
@@ -49,13 +52,13 @@ export interface IConnectionRepositoryForEntity {
     count(): Promise<number>;
 
     // Writes
-    connect(
-        relatedEntityCompositeID: EntityCompositeIdentifier,
-        context: ConnectedEntityContext,
-        note: string,
-        // This will hold `tagIDs` as tags are stored by reference
-        tags: string[]
-    ): Promise<void>;
+    // connect(
+    //     relatedEntityCompositeID: EntityCompositeIdentifier,
+    //     context: ConnectedEntityContext,
+    //     note: string,
+    //     // This will hold `tagIDs` as tags are stored by reference
+    //     tags: string[]
+    // ): Promise<void>;
 
     // Add delete when it is needed
 }
