@@ -1,4 +1,3 @@
-import { DomainModelValidator } from '.';
 import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
 import { PartialDTO } from '../../types/partial-dto';
@@ -9,6 +8,7 @@ import InvalidPublicationStatusError from './errors/InvalidPublicationStatusErro
 import NullOrUndefinedDTOError from './errors/NullOrUndefinedDTOError';
 import InvalidTermDTOError from './errors/term/InvalidTermDTOError';
 import TermHasNoTextInAnyLanguageError from './errors/term/TermHasNoTextInAnyLanguageError';
+import { DomainModelValidator } from './types/DomainModelValidator';
 import { Valid } from './Valid';
 
 const termValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {

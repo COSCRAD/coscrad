@@ -9,6 +9,18 @@ Object {
 }
 `;
 
+exports[`GET /entities (fetch view models) When querying for a single View Model by ID GET /transcribedAudioItems/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
+Object {
+  "audioURL": "https://www.myaudio.com:5555/media?id=123.mp3.mp3",
+  "id": "110",
+  "length": 20000,
+  "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+  "start": 0,
+}
+`;
+
 exports[`GET /entities (fetch view models) When querying for a single View Model by ID GET /vocabularyLists/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
 Object {
   "entries": Array [

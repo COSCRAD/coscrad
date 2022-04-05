@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Term } from 'apps/api/src/domain/models/term/entities/term.entity';
 import { ViewModelId } from './types/ViewModelId';
+import buildFullAudioURL from './utilities/buildFullAudioURL';
 
 // TODO Add proper contributors repository \ collection
 const contributors = {
@@ -76,6 +77,6 @@ export class TermViewModel {
     }
 
     #buildAudioURL(filename: string, extension = 'mp3'): string {
-        return `${this.#baseAudioURL}${filename}.${extension}`;
+        return buildFullAudioURL(this.#baseAudioURL, filename, extension);
     }
 }

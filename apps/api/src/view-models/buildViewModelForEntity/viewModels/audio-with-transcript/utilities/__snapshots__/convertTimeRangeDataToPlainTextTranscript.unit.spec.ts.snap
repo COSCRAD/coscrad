@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`convertTimeRangeDataToPlainTextTranscript when given data for a sample transcript should produce the expected plain text 1`] = `
+"
+[0] Once upon a time, not long ago, there lived three dogs. [400]
+[500] Each of these dogs had a collar of a different color. [900]
+[1000] One of these dogs did not obey his caller. [1400]
+[1500] This dog's collar was of a reddish color. [1900]
+[2000] One day the dog whose collar was a reddish color got into the collards [2400]
+[2500] to the spite of his caller. [2900]"
+`;
