@@ -1,7 +1,12 @@
 import { writeFileSync } from 'fs';
 import { getValidatorForEntity } from '../domain/domainModelValidators';
 import { isValid } from '../domain/domainModelValidators/Valid';
-import { EntityType, EntityTypeToInstance, isEntityType } from '../domain/types/entityTypes';
+import {
+    EntityType,
+    entityTypes,
+    EntityTypeToInstance,
+    isEntityType,
+} from '../domain/types/entityTypes';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
 import { getArangoCollectionIDFromEntityType } from '../persistence/database/getArangoCollectionIDFromEntityType';
@@ -23,7 +28,8 @@ describe('buildTestData', () => {
             {}
         );
 
-        Object.entries(testData).forEach(([key, models]) => {
+        Object.values(entityTypes).forEach((key) => {
+            const models = testData[key];
             describe(`Entity of type ${key}`, () => {
                 it(`Should be a valid entity type`, () => {
                     expect(isEntityType(key)).toBe(true);

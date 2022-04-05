@@ -1,11 +1,10 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import { EntityType, entityTypes } from '../types/entityTypes';
+import audioWithTranscriptValidator from './audioWithTranscriptValidator';
 import tagValidator from './tagValidator';
 import termValidator from './termValidator';
-import { Valid } from './Valid';
+import { DomainModelValidator } from './types/DomainModelValidator';
 import vocabularyListValidator from './vocabularyListValidator';
-
-export type DomainModelValidator = (inputDTO: unknown) => Valid | InternalError;
 
 // TODO should we put these on the classes and use polymorphism?
 export const getValidatorForEntity = (entityType: EntityType): DomainModelValidator => {
@@ -18,6 +17,9 @@ export const getValidatorForEntity = (entityType: EntityType): DomainModelValida
 
         case entityTypes.vocabularyList:
             return vocabularyListValidator;
+
+        case entityTypes.audioWithTranscript:
+            return audioWithTranscriptValidator;
 
         default:
             throw new InternalError(
