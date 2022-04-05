@@ -3,7 +3,8 @@ import { PartialDTO } from '../types/partial-dto';
 
 const dtos: PartialDTO<AudioWithTranscript>[] = [
     {
-        audioURL: 'https://www.myaudio.com/123.mp3',
+        id: '110',
+        audioFilename: '123.mp3',
         startMilliseconds: 0,
         lengthMilliseconds: 20000,
         transcript: {

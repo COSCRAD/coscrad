@@ -1,8 +1,10 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import { ResultOrError } from '../../types/ResultOrError';
+import audioWithTranscriptValidator from '../domainModelValidators/audioWithTranscriptValidator';
 import tagValidator from '../domainModelValidators/tagValidator';
 import termValidator from '../domainModelValidators/termValidator';
 import vocabularyListValidator from '../domainModelValidators/vocabularyListValidator';
+import { AudioWithTranscript } from '../models/audio-with-transcript/entities/audio-with-transcript.entity';
 import { Entity } from '../models/entity';
 import { Tag } from '../models/tag/tag.entity';
 import { Term } from '../models/term/entities/term.entity';
@@ -25,6 +27,13 @@ export default <TEntity extends Entity>(entityType: EntityType): InstanceFactory
         case entityTypes.tag:
             // @ts-expect-error TODO fix this tricky type error
             return buildInstanceFactory<Tag>(tagValidator, Tag);
+
+        case entityTypes.audioWithTranscript:
+            // @ts-expect-error TODO fix this tricky type error
+            return buildInstanceFactory<AudioWithTranscript>(
+                audioWithTranscriptValidator,
+                AudioWithTranscript
+            );
 
         default:
             throw new InternalError(

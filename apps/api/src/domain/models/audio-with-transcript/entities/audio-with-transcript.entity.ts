@@ -6,7 +6,7 @@ import { Transcript } from './Transcript';
 export class AudioWithTranscript extends Entity {
     readonly type = entityTypes.audioWithTranscript;
 
-    readonly audioURL: string;
+    readonly audioFilename: string;
 
     // we need to deal with units here
     readonly lengthMilliseconds: number;
@@ -18,9 +18,14 @@ export class AudioWithTranscript extends Entity {
     constructor(dto: PartialDTO<AudioWithTranscript>) {
         super(dto);
 
-        const { audioURL, lengthMilliseconds, startMilliseconds, transcript: transcriptDto } = dto;
+        const {
+            audioFilename,
+            lengthMilliseconds,
+            startMilliseconds,
+            transcript: transcriptDto,
+        } = dto;
 
-        this.audioURL = audioURL;
+        this.audioFilename = audioFilename;
 
         this.lengthMilliseconds = lengthMilliseconds;
 

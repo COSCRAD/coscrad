@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { AudioWithTranscript } from '../../domain/models/audio-with-transcript/entities/audio-with-transcript.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
@@ -10,6 +11,7 @@ import { isInternalError } from '../../lib/errors/InternalError';
 import { isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
+import buildAudioWithTranscriptViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildAudioWithTranscriptViewModels';
 import buildTagViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTagViewModels';
 import buildTermViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTermViewModels';
 import buildVocabularyListViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildVocabularyListViewModels';
@@ -19,6 +21,7 @@ import {
     TermViewModel,
     VocabularyListViewModel,
 } from '../../view-models/buildViewModelForEntity/viewModels';
+import { AudioWithTranscriptViewModel } from '../../view-models/buildViewModelForEntity/viewModels/audio-with-transcript/audio-with-transcript.view-model';
 import { buildAllEntityDescriptions } from '../../view-models/entityDescriptions/buildAllEntityDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import buildViewModelPathForEntityType from './utilities/buildViewModelPathForEntityType';
@@ -200,6 +203,57 @@ export class EntityViewModelController {
         if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
 
         const viewModel = new TagViewModel(searchResult);
+
+        const dto = cloneToPlainObject(viewModel);
+
+        return res.status(httpStatusCodes.ok).send(dto);
+    }
+
+    /* ********** AUDIO WITH TRANSRIPT ********** */
+    @ApiOkResponse({ type: AudioWithTranscriptViewModel, isArray: true })
+    @Get(buildViewModelPathForEntityType(entityTypes.audioWithTranscript))
+    async fetchAudioViewModelsWithTranscripts(@Res() res) {
+        const allViewModels = await buildAudioWithTranscriptViewModels({
+            repositoryProvider: this.repositoryProvider,
+            configService: this.configService,
+        });
+
+        if (isInternalError(allViewModels))
+            return res.status(httpStatusCodes.internalError).send({
+                error: JSON.stringify(allViewModels),
+            });
+
+        return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
+    }
+
+    @ApiParam(buildByIdApiParamMetadata())
+    @ApiOkResponse({ type: TagViewModel })
+    @Get(`${buildViewModelPathForEntityType(entityTypes.audioWithTranscript)}/:id`)
+    async fetchAudioWithTranscriptById(@Res() res, @Param() params: unknown) {
+        const { id } = params as HasViewModelId;
+
+        if (!isEntityId(id))
+            return res.status(httpStatusCodes.badRequest).send({
+                error: `Invalid input for id: ${id}`,
+            });
+
+        const searchResult = await this.repositoryProvider
+            .forEntity<AudioWithTranscript>(entityTypes.audioWithTranscript)
+            .fetchById(id);
+
+        if (isInternalError(searchResult))
+            return res.status(httpStatusCodes.internalError).send({
+                error: JSON.stringify(searchResult),
+            });
+
+        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
+
+        if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
+
+        const viewModel = new AudioWithTranscriptViewModel(
+            searchResult,
+            this.configService.get<string>('BASE_AUDIO_URL')
+        );
 
         const dto = cloneToPlainObject(viewModel);
 

@@ -44,6 +44,34 @@ Array [
 ]
 `;
 
+exports[`When fetching multiple entities GET /transcribedAudioItems when all of the entities are published should fetch multiple entities of type audioWithTranscript 1`] = `
+Array [
+  Object {
+    "audioURL": "https://www.myaudio.com:5555/media?id=123.mp3.mp3",
+    "id": "110",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+  },
+]
+`;
+
+exports[`When fetching multiple entities GET /transcribedAudioItems when some of the entities are unpublished should return the expected number of results 1`] = `
+Array [
+  Object {
+    "audioURL": "https://www.myaudio.com:5555/media?id=123.mp3.mp3",
+    "id": "110",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+  },
+]
+`;
+
 exports[`When fetching multiple entities GET /vocabularyLists when all of the entities are published should fetch multiple entities of type vocabularyList 1`] = `
 Array [
   Object {
