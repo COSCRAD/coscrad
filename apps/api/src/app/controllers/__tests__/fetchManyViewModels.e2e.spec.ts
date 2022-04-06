@@ -53,10 +53,6 @@ describe('When fetching multiple entities', () => {
         await app.init();
     });
 
-    beforeEach(async () => {
-        await testRepositoryProvider.testSetup();
-    });
-
     // These entities are always published
     const entityTypesToExclude: EntityType[] = [entityTypes.tag];
 
@@ -66,6 +62,14 @@ describe('When fetching multiple entities', () => {
             const endpointUnderTest = `/${buildViewModelPathForEntityType(entityType)}`;
 
             describe(`GET ${endpointUnderTest}`, () => {
+                beforeEach(async () => {
+                    await testRepositoryProvider.testSetup();
+                });
+
+                afterEach(async () => {
+                    await testRepositoryProvider.testTeardown();
+                });
+
                 describe('when all of the entities are published', () => {
                     beforeEach(async () => {
                         await testRepositoryProvider.addEntitiesOfManyTypes(
@@ -131,10 +135,6 @@ describe('When fetching multiple entities', () => {
                         expect(res.body).toMatchSnapshot();
                     });
                 });
-            });
-
-            afterEach(async () => {
-                await testRepositoryProvider.testTeardown();
             });
         });
 

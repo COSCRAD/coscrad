@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AudioWithTranscript } from '../../domain/models/audio-with-transcript/entities/audio-with-transcript.entity';
 import { Book } from '../../domain/models/book/entities/book.entity';
+import { Photograph } from '../../domain/models/photograph/entities/photograph.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
@@ -14,6 +15,7 @@ import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
 import buildAudioWithTranscriptViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildAudioWithTranscriptViewModels';
 import buildBookViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildBookViewModels';
+import buildPhotographViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildPhotographViewModels';
 import buildTagViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTagViewModels';
 import buildTermViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTermViewModels';
 import buildVocabularyListViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildVocabularyListViewModels';
@@ -25,6 +27,7 @@ import {
 } from '../../view-models/buildViewModelForEntity/viewModels';
 import { AudioWithTranscriptViewModel } from '../../view-models/buildViewModelForEntity/viewModels/audio-with-transcript/audio-with-transcript.view-model';
 import { BookViewModel } from '../../view-models/buildViewModelForEntity/viewModels/book.view-model';
+import { PhotographViewModel } from '../../view-models/buildViewModelForEntity/viewModels/photograph.view-model';
 import { buildAllEntityDescriptions } from '../../view-models/entityDescriptions/buildAllEntityDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import buildViewModelPathForEntityType from './utilities/buildViewModelPathForEntityType';
@@ -305,6 +308,57 @@ export class EntityViewModelController {
         if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
 
         const viewModel = new BookViewModel(searchResult);
+
+        const dto = cloneToPlainObject(viewModel);
+
+        return res.status(httpStatusCodes.ok).send(dto);
+    }
+
+    /* ********** PHOTOGRAPHS   ********** */
+    @ApiOkResponse({ type: PhotographViewModel, isArray: true })
+    @Get(buildViewModelPathForEntityType(entityTypes.photograph))
+    async fetchPhotographs(@Res() res) {
+        const allViewModels = await buildPhotographViewModels({
+            repositoryProvider: this.repositoryProvider,
+            configService: this.configService,
+        });
+
+        if (isInternalError(allViewModels))
+            return res.status(httpStatusCodes.internalError).send({
+                error: JSON.stringify(allViewModels),
+            });
+
+        return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
+    }
+
+    @ApiParam(buildByIdApiParamMetadata())
+    @ApiOkResponse({ type: PhotographViewModel })
+    @Get(`${buildViewModelPathForEntityType(entityTypes.photograph)}/:id`)
+    async fetchPhotographById(@Res() res, @Param() params: unknown) {
+        const { id } = params as HasViewModelId;
+
+        if (!isEntityId(id))
+            return res.status(httpStatusCodes.badRequest).send({
+                error: `Invalid input for id: ${id}`,
+            });
+
+        const searchResult = await this.repositoryProvider
+            .forEntity<Photograph>(entityTypes.photograph)
+            .fetchById(id);
+
+        if (isInternalError(searchResult))
+            return res.status(httpStatusCodes.internalError).send({
+                error: JSON.stringify(searchResult),
+            });
+
+        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
+
+        if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
+
+        const viewModel = new PhotographViewModel(
+            searchResult,
+            this.configService.get<string>('BASE_AUDIO_URL')
+        );
 
         const dto = cloneToPlainObject(viewModel);
 
