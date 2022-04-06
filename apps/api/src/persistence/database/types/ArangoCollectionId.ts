@@ -3,6 +3,7 @@ const arangoCollectionIDs = [
     'vocabulary_lists',
     'audio_with_transcript',
     'books',
+    'photographs',
     'tags',
 ] as const;
 

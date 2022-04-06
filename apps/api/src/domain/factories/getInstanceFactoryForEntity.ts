@@ -2,12 +2,14 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { ResultOrError } from '../../types/ResultOrError';
 import audioWithTranscriptValidator from '../domainModelValidators/audioWithTranscriptValidator';
 import bookValidator from '../domainModelValidators/bookValidator';
+import photographValidator from '../domainModelValidators/photographValidator';
 import tagValidator from '../domainModelValidators/tagValidator';
 import termValidator from '../domainModelValidators/termValidator';
 import vocabularyListValidator from '../domainModelValidators/vocabularyListValidator';
 import { AudioWithTranscript } from '../models/audio-with-transcript/entities/audio-with-transcript.entity';
 import { Book } from '../models/book/entities/book.entity';
 import { Entity } from '../models/entity';
+import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { Tag } from '../models/tag/tag.entity';
 import { Term } from '../models/term/entities/term.entity';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
@@ -40,6 +42,10 @@ export default <TEntity extends Entity>(entityType: EntityType): InstanceFactory
         case entityTypes.book:
             // @ts-expect-error TODO fix this tricky type error
             return buildInstanceFactory<Book>(bookValidator, Book);
+
+        case entityTypes.photograph:
+            // @ts-expect-error TODO fix this tricky type error
+            return buildInstanceFactory<Photograph>(photographValidator, Photograph);
 
         default:
             throw new InternalError(

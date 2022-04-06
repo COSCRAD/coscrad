@@ -2,6 +2,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { EntityType, entityTypes } from '../types/entityTypes';
 import audioWithTranscriptValidator from './audioWithTranscriptValidator';
 import bookValidator from './bookValidator';
+import photographValidator from './photographValidator';
 import tagValidator from './tagValidator';
 import termValidator from './termValidator';
 import { DomainModelValidator } from './types/DomainModelValidator';
@@ -24,6 +25,9 @@ export const getValidatorForEntity = (entityType: EntityType): DomainModelValida
 
         case entityTypes.book:
             return bookValidator;
+
+        case entityTypes.photograph:
+            return photographValidator;
 
         default:
             throw new InternalError(

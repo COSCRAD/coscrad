@@ -36,6 +36,36 @@ Array [
 ]
 `;
 
+exports[`When fetching multiple entities GET /photographs when all of the entities are published should fetch multiple entities of type photograph 1`] = `
+Array [
+  Object {
+    "id": "0",
+    "imageURL": "https://www.myaudio.com:5555/media?id=cat.png.png",
+    "photographer": "Susie McRealart",
+  },
+  Object {
+    "id": "1",
+    "imageURL": "https://www.myaudio.com:5555/media?id=dog.png.png",
+    "photographer": "Robert McRealart",
+  },
+]
+`;
+
+exports[`When fetching multiple entities GET /photographs when some of the entities are unpublished should return the expected number of results 1`] = `
+Array [
+  Object {
+    "id": "0",
+    "imageURL": "https://www.myaudio.com:5555/media?id=cat.png.png",
+    "photographer": "Susie McRealart",
+  },
+  Object {
+    "id": "1",
+    "imageURL": "https://www.myaudio.com:5555/media?id=dog.png.png",
+    "photographer": "Robert McRealart",
+  },
+]
+`;
+
 exports[`When fetching multiple entities GET /terms when all of the entities are published should fetch multiple entities of type term 1`] = `
 Array [
   Object {

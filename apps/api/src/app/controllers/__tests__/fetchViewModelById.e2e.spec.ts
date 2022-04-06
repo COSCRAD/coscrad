@@ -54,10 +54,6 @@ describe('GET /entities (fetch view models)', () => {
         await app.init();
     });
 
-    beforeEach(async () => {
-        await testRepositoryProvider.testSetup();
-    });
-
     // These entities are always published
     const entityTypesToExclude: EntityType[] = [entityTypes.tag];
 
@@ -69,6 +65,13 @@ describe('GET /entities (fetch view models)', () => {
             const buildFullPathFromId = (id: string): string => `${endpointUnderTest}/${id}`;
 
             describe(`When querying for a single View Model by ID`, () => {
+                beforeEach(async () => {
+                    await testRepositoryProvider.testSetup();
+                });
+
+                afterEach(async () => {
+                    await testRepositoryProvider.testTeardown();
+                });
                 describe(`GET ${endpointUnderTest}/:id`, () => {
                     describe('when the entity is published', () => {
                         describe('when no entity with the id exists', () => {
@@ -154,10 +157,6 @@ describe('GET /entities (fetch view models)', () => {
                         });
                     });
                 });
-            });
-
-            afterEach(async () => {
-                await testRepositoryProvider.testTeardown();
             });
         });
 
