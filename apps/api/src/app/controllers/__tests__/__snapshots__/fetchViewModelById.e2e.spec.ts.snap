@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GET /entities (fetch view models) When querying for a single View Model by ID GET /books/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
+Object {
+  "author": "John Doeburg",
+  "id": "23",
+  "publicationDate": "2002",
+  "subtitle": "The wolf's revenge",
+  "title": "Three Little Pigs",
+}
+`;
+
 exports[`GET /entities (fetch view models) When querying for a single View Model by ID GET /terms/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
 Object {
   "contributor": "",
