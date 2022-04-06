@@ -1,5 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`When fetching multiple entities GET /books when all of the entities are published should fetch multiple entities of type book 1`] = `
+Array [
+  Object {
+    "author": "John Doeburg",
+    "id": "23",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "Jane Donnaldson",
+    "id": "24",
+    "publicationDate": "2011",
+    "title": "An Adventure Story",
+  },
+]
+`;
+
+exports[`When fetching multiple entities GET /books when some of the entities are unpublished should return the expected number of results 1`] = `
+Array [
+  Object {
+    "author": "John Doeburg",
+    "id": "23",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "Jane Donnaldson",
+    "id": "24",
+    "publicationDate": "2011",
+    "title": "An Adventure Story",
+  },
+]
+`;
+
 exports[`When fetching multiple entities GET /terms when all of the entities are published should fetch multiple entities of type term 1`] = `
 Array [
   Object {

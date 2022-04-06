@@ -15,6 +15,7 @@ export default class BaseDomainModel {
         return result;
     }
 
+    // This allows us to use our instances as immutable data structures
     clone<T extends BaseDomainModel>(this: T, overrides: PartialDTO<T> = {}): T {
         return new (this.constructor as ModelConstructor<T>)({
             ...this.toDTO(),
