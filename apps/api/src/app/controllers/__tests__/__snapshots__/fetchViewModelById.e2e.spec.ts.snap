@@ -10,6 +10,14 @@ Object {
 }
 `;
 
+exports[`GET /entities (fetch view models) When querying for a single View Model by ID GET /photographs/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
+Object {
+  "id": "0",
+  "imageURL": "https://www.myaudio.com:5555/media?id=cat.png.png",
+  "photographer": "Susie McRealart",
+}
+`;
+
 exports[`GET /entities (fetch view models) When querying for a single View Model by ID GET /terms/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
 Object {
   "contributor": "",

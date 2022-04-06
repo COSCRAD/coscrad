@@ -1,6 +1,7 @@
 import { ValueType } from '../../lib/types/valueType';
 import { AudioWithTranscript } from '../models/audio-with-transcript/entities/audio-with-transcript.entity';
 import { Book } from '../models/book/entities/book.entity';
+import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { Tag } from '../models/tag/tag.entity';
 import { Term } from '../models/term/entities/term.entity';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
@@ -10,6 +11,7 @@ export const entityTypes = {
     vocabularyList: 'vocabularyList',
     audioWithTranscript: 'audioWithTranscript',
     book: 'book',
+    photograph: 'photograph',
     // TODO This doesn't belong here. It should be a stand-alone.
     tag: 'tag',
 } as const;
@@ -24,6 +26,7 @@ export type EntityTypeToInstance = {
     vocabularyList: VocabularyList;
     audioWithTranscript: AudioWithTranscript;
     book: Book;
+    photograph: Photograph;
     tag: Tag;
 };
 

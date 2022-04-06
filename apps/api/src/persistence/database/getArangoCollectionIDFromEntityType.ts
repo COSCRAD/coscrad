@@ -8,6 +8,7 @@ const entityTypeToArangoCollectionID: {
     vocabularyList: 'vocabulary_lists',
     audioWithTranscript: 'audio_with_transcript',
     book: 'books',
+    photograph: 'photographs',
     tag: 'tags',
 };
 
