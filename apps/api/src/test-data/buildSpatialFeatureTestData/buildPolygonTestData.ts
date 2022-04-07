@@ -20,4 +20,4 @@ const dtos: PartialDTO<Polygon>[] = [
 ];
 
 export default (): Polygon[] =>
-    dtos.map((dto, index) => new Polygon({ ...dto, id: `${index + 300}` }));
+    dtos.map((dto, index) => new Polygon({ ...dto, id: `${index + 300}`, published: true }));

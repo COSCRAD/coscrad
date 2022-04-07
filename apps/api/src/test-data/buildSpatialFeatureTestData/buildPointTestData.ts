@@ -18,6 +18,7 @@ const dtos: PartialDTO<Point>[] = pointCoordinates.map((point, index) => ({
 
         coordinates: point,
     },
+    published: true,
 }));
 
 export default (): Point[] => dtos.map((dto) => new Point(dto));

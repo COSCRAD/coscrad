@@ -29,5 +29,6 @@ export default () => [
     new Line({
         id: '223',
         geometry: buildLineGeometricFeature(pointSet1),
+        published: true,
     }),
 ];
