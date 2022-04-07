@@ -43,6 +43,11 @@ describe('buildTestData', () => {
                 });
 
                 describe(`the DTOs`, () => {
+                    it(`should have at least one test data DTO`, () => {
+                        const numberOfTestDataEntries = models.length;
+
+                        expect(numberOfTestDataEntries).toBeGreaterThan(0);
+                    });
                     it(`should have no duplicate IDs`, () => {
                         const allIds = models
                             .map((model) => model.id)

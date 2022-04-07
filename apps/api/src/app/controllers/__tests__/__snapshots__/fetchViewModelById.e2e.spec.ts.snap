@@ -18,6 +18,19 @@ Object {
 }
 `;
 
+exports[`GET /entities (fetch view models) When querying for a single View Model by ID GET /spatialFeatures/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
+Object {
+  "geometry": Object {
+    "coordinates": Array [
+      100,
+      0,
+    ],
+    "type": "Point",
+  },
+  "id": "100",
+}
+`;
+
 exports[`GET /entities (fetch view models) When querying for a single View Model by ID GET /terms/:id when the entity is published when an entity with the id is found should return the expected response 1`] = `
 Object {
   "contributor": "",

@@ -1,4 +1,5 @@
 import buildAudioWithTranscriptViewModels from './buildAudioWithTranscriptViewModels';
+import buildSpatialFeatureViewModels from './buildSpatialFeatureViewModels';
 import buildTagViewModels from './buildTagViewModels';
 import buildTermViewModels from './buildTermViewModels';
 import buildVocabularyListViewModels from './buildVocabularyListViewModels';
@@ -8,4 +9,5 @@ export default [
     buildVocabularyListViewModels,
     buildTagViewModels,
     buildAudioWithTranscriptViewModels,
+    buildSpatialFeatureViewModels,
 ];
