@@ -15,7 +15,7 @@ const polygonChainValidator = (
 
     const allErrors: InternalError[] = [];
 
-    // TODO
+    // TODO ADD remaining validation
     /**
      * Validate the 0th entry- the boundary line ring
      * Do not allow holes at this time

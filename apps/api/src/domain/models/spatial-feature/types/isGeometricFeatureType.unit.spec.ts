@@ -1,3 +1,4 @@
+import { GeometricFeatureType } from './GeometricFeatureType';
 import isGeometricFeatureType from './isGeometricFeatureType';
 /**
  * The main value in this test is that this is the first time I've created
@@ -5,7 +6,7 @@ import isGeometricFeatureType from './isGeometricFeatureType';
  * I want to make sure that I've got this right.
  */
 describe('isGeometricFeatureType', () => {
-    ['point', 'line', 'polygon'].forEach((featureType) =>
+    Object.values(GeometricFeatureType).forEach((featureType) =>
         describe(`For a valid feature type string identifier: ${featureType}`, () => {
             it('should return true', () => {
                 const isValid = isGeometricFeatureType(featureType);

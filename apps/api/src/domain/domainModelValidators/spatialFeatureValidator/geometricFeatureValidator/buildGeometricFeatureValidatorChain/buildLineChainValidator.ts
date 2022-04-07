@@ -17,8 +17,10 @@ const lineChainValidator = (
     const allErrors: InternalError[] = [];
 
     // TODO share this logic with PointValidator
-    const coordinateTypeErrors = (coordinates as LineCoordinates).reduce(
-        (accumulatedErrors: InternalError[], coordinate, index) => {
+    const coordinateTypeErrors = (coordinates as LineCoordinates)
+        // We need flatmap
+        .reduce((accumulatedPoints, [x, y]) => accumulatedPoints.concat(x, y), [])
+        .reduce((accumulatedErrors: InternalError[], coordinate, index) => {
             if (
                 !isNumber(coordinate, {
                     allowInfinity: false,
@@ -32,9 +34,7 @@ const lineChainValidator = (
                 );
 
             return accumulatedErrors;
-        },
-        []
-    );
+        }, []);
 
     allErrors.push(...coordinateTypeErrors);
 

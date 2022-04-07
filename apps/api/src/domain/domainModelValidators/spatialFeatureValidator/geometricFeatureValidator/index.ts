@@ -10,6 +10,7 @@ const geometricFeatureValidator: DomainModelValidator = (input: unknown): Valid 
 
     const { type } = test;
 
+    // Fail early as the chain validation pattern doesn't make sense without a valid geometric feature type
     if (!isGeometricFeatureType(type)) {
         return new InternalError(
             `Encountered a geometric feature DTO with an invalid type: ${type}`
