@@ -22,7 +22,7 @@ export default async ({
         entityTypes.audioWithTranscript
     );
 
-    const baseAudioURL = configService.get<string>('BASE_AUDIO_URL');
+    const baseAudioURL = configService.get<string>('BASE_DIGITAL_ASSET_URL');
 
     const searchResult = await repository.fetchMany();
 

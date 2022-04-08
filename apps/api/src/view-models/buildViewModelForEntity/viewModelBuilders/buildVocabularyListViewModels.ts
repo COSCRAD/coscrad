@@ -48,7 +48,7 @@ export default async (
                         new VocabularyListViewModel(
                             list,
                             allTerms,
-                            configService.get<string>('BASE_AUDIO_URL')
+                            configService.get<string>('BASE_DIGITAL_ASSET_URL')
                         )
                 )
         );

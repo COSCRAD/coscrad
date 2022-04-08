@@ -29,7 +29,9 @@ export default async (
     const allTermViewModels = searchResult
         // We are swallowing the error. It would be good to at least log the invalid state.
         .filter((result): result is Term => !isInternalError(result))
-        .map((term) => new TermViewModel(term, configService.get<string>('BASE_AUDIO_URL')));
+        .map(
+            (term) => new TermViewModel(term, configService.get<string>('BASE_DIGITAL_ASSET_URL'))
+        );
 
     return allTermViewModels;
 };

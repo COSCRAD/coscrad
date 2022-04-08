@@ -20,7 +20,7 @@ export default async (
         ...optionOverrides,
     };
 
-    const baseAudioURL = configService.get<string>('BASE_AUDIO_URL');
+    const baseAudioURL = configService.get<string>('BASE_DIGITAL_ASSET_URL');
 
     const isPublishedSpecification = shouldReturnUnpublishedEntities ? null : new IsPublished(true);
 

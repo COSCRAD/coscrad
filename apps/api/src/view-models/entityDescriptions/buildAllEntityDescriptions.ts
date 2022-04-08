@@ -15,6 +15,7 @@ const entityDescriptions: EntityDescriptions = {
         'An audio with transcript is an audio recording accompanied by a transcription',
     book: 'A book is a digital representation of a text, organized into pages',
     photograph: 'A Photograph is a digital representation of an analog photograph and its metadata',
+    spatialFeature: 'A spatial feature may be a point, line, or polygon on the map',
     tag: 'A tag is a classifier for an entity or a pair of related entities',
 };
 

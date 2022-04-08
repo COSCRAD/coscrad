@@ -9,6 +9,7 @@ const entityTypeToArangoCollectionID: {
     audioWithTranscript: 'audio_with_transcript',
     book: 'books',
     photograph: 'photographs',
+    spatialFeature: 'spatial_features',
     tag: 'tags',
 };
 

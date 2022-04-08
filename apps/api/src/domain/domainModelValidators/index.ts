@@ -3,6 +3,7 @@ import { EntityType, entityTypes } from '../types/entityTypes';
 import audioWithTranscriptValidator from './audioWithTranscriptValidator';
 import bookValidator from './bookValidator';
 import photographValidator from './photographValidator';
+import spatialFeatureValidator from './spatialFeatureValidator';
 import tagValidator from './tagValidator';
 import termValidator from './termValidator';
 import { DomainModelValidator } from './types/DomainModelValidator';
@@ -28,6 +29,9 @@ export const getValidatorForEntity = (entityType: EntityType): DomainModelValida
 
         case entityTypes.photograph:
             return photographValidator;
+
+        case entityTypes.spatialFeature:
+            return spatialFeatureValidator;
 
         default:
             throw new InternalError(

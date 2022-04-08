@@ -1,15 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Book } from 'apps/api/src/domain/models/book/entities/book.entity';
-import { EntityId } from 'apps/api/src/domain/types/EntityId';
+import { BaseViewModel } from './base.view-model';
 
-export class BookViewModel {
-    // Should this be `ViewModelId`
-    @ApiProperty({
-        example: '12',
-        description: 'uniquely identifies a tag amongst other tags',
-    })
-    readonly id: EntityId;
-
+export class BookViewModel extends BaseViewModel {
     @ApiProperty({
         example: 'How I won the Lottery',
         description: 'the title of the book',
@@ -32,12 +25,12 @@ export class BookViewModel {
         example: '1998',
         description: 'the date the book was published',
     })
-    readonly publicationDate: string;
+    readonly publicationDate?: string;
 
     // TODO Add Pages
 
     constructor({ id, title, subtitle, author, publicationDate }: Book) {
-        this.id = id;
+        super({ id });
 
         this.title = title;
 

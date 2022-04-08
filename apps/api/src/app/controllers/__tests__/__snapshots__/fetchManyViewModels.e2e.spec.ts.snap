@@ -40,12 +40,12 @@ exports[`When fetching multiple entities GET /photographs when all of the entiti
 Array [
   Object {
     "id": "0",
-    "imageURL": "https://www.myaudio.com:5555/media?id=cat.png.png",
+    "imageURL": "https://www.myaudio.com:5555/media?id=cat.png",
     "photographer": "Susie McRealart",
   },
   Object {
     "id": "1",
-    "imageURL": "https://www.myaudio.com:5555/media?id=dog.png.png",
+    "imageURL": "https://www.myaudio.com:5555/media?id=dog.png",
     "photographer": "Robert McRealart",
   },
 ]
@@ -55,13 +55,191 @@ exports[`When fetching multiple entities GET /photographs when some of the entit
 Array [
   Object {
     "id": "0",
-    "imageURL": "https://www.myaudio.com:5555/media?id=cat.png.png",
+    "imageURL": "https://www.myaudio.com:5555/media?id=cat.png",
     "photographer": "Susie McRealart",
   },
   Object {
     "id": "1",
-    "imageURL": "https://www.myaudio.com:5555/media?id=dog.png.png",
+    "imageURL": "https://www.myaudio.com:5555/media?id=dog.png",
     "photographer": "Robert McRealart",
+  },
+]
+`;
+
+exports[`When fetching multiple entities GET /spatialFeatures when all of the entities are published should fetch multiple entities of type spatialFeature 1`] = `
+Array [
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "100",
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        20,
+        10,
+      ],
+      "type": "Point",
+    },
+    "id": "101",
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        70.5,
+        23.5,
+      ],
+      "type": "Point",
+    },
+    "id": "102",
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        Array [
+          1,
+          2,
+        ],
+        Array [
+          1,
+          3,
+        ],
+        Array [
+          1.5,
+          3.5,
+        ],
+        Array [
+          3,
+          4.2,
+        ],
+      ],
+      "type": "LineString",
+    },
+    "id": "1",
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        Array [
+          Array [
+            1,
+            3,
+          ],
+          Array [
+            2,
+            5,
+          ],
+          Array [
+            1.5,
+            3.7,
+          ],
+          Array [
+            1.2,
+            3.3,
+          ],
+          Array [
+            1,
+            3,
+          ],
+        ],
+      ],
+      "type": "Polygon",
+    },
+    "id": "300",
+  },
+]
+`;
+
+exports[`When fetching multiple entities GET /spatialFeatures when some of the entities are unpublished should return the expected number of results 1`] = `
+Array [
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "100",
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        20,
+        10,
+      ],
+      "type": "Point",
+    },
+    "id": "101",
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        70.5,
+        23.5,
+      ],
+      "type": "Point",
+    },
+    "id": "102",
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        Array [
+          1,
+          2,
+        ],
+        Array [
+          1,
+          3,
+        ],
+        Array [
+          1.5,
+          3.5,
+        ],
+        Array [
+          3,
+          4.2,
+        ],
+      ],
+      "type": "LineString",
+    },
+    "id": "1",
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        Array [
+          Array [
+            1,
+            3,
+          ],
+          Array [
+            2,
+            5,
+          ],
+          Array [
+            1.5,
+            3.7,
+          ],
+          Array [
+            1.2,
+            3.3,
+          ],
+          Array [
+            1,
+            3,
+          ],
+        ],
+      ],
+      "type": "Polygon",
+    },
+    "id": "300",
   },
 ]
 `;
