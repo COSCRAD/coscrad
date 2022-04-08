@@ -1,16 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Photograph } from 'apps/api/src/domain/models/photograph/entities/photograph.entity';
-import { EntityId } from 'apps/api/src/domain/types/EntityId';
-import buildFullAudioURL from './utilities/buildFullAudioURL';
+import { BaseViewModel } from './base.view-model';
+import buildFullDigitalAssetURL from './utilities/buildFullDigitalAssetURL';
 
-export class PhotographViewModel {
-    // Should this be `ViewModelId`
-    @ApiProperty({
-        example: '12',
-        description: 'uniquely identifies a tag amongst other tags',
-    })
-    readonly id: EntityId;
-
+export class PhotographViewModel extends BaseViewModel {
     @ApiProperty({
         example: 'https://www.myimages.com/mountains.png',
         description: 'a url where the client can fetch a digital version of the photograph',
@@ -31,10 +24,10 @@ export class PhotographViewModel {
      */
 
     constructor({ id, filename, photographer }: Photograph, baseAudioURL: string) {
-        this.id = id;
+        super({ id });
 
         // We need to store the MIME/type on the Photograph domain model
-        this.imageURL = buildFullAudioURL(baseAudioURL, filename, 'png');
+        this.imageURL = buildFullDigitalAssetURL(baseAudioURL, filename, 'png');
 
         this.photographer = photographer;
     }

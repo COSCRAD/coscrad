@@ -14,10 +14,14 @@ import { Tag } from '../models/tag/tag.entity';
 import { Term } from '../models/term/entities/term.entity';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
 import { EntityType, entityTypes } from '../types/entityTypes';
+import buildSpatialFeatureFactory from './complexFactories/buildSpatialFeatureFactory';
 import buildInstanceFactory from './utilities/buildInstanceFactory';
 
 export type InstanceFactory<TEntity> = (dto: unknown) => ResultOrError<TEntity>;
 
+/**
+ * It would be nice to find a pattern that gives us better type safety.
+ */
 export default <TEntity extends Entity>(entityType: EntityType): InstanceFactory<TEntity> => {
     switch (entityType) {
         case entityTypes.term:
@@ -46,6 +50,10 @@ export default <TEntity extends Entity>(entityType: EntityType): InstanceFactory
         case entityTypes.photograph:
             // @ts-expect-error TODO fix this tricky type error
             return buildInstanceFactory<Photograph>(photographValidator, Photograph);
+
+        case entityTypes.spatialFeature:
+            // @ts-expect-error TODO fix this tricky type error
+            return buildSpatialFeatureFactory();
 
         default:
             throw new InternalError(

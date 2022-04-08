@@ -43,6 +43,16 @@ describe('buildTestData', () => {
                 });
 
                 describe(`the DTOs`, () => {
+                    /**
+                     * TODO Also check that entitiy types that correspond to a
+                     * union of models have at least one example of each member
+                     * of the union. (See e.g. `Spatial Feature`)
+                     */
+                    it(`should have at least one test data DTO`, () => {
+                        const numberOfTestDataEntries = models.length;
+
+                        expect(numberOfTestDataEntries).toBeGreaterThan(0);
+                    });
                     it(`should have no duplicate IDs`, () => {
                         const allIds = models
                             .map((model) => model.id)
@@ -89,7 +99,12 @@ describe('buildTestData', () => {
                 // TODO move this to a config- better yet avoid this whole write!
                 const testDataFilePath = `${process.cwd()}/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.json`;
 
-                writeFileSync(testDataFilePath, JSON.stringify(testDataInDatabaseFormat));
+                const numberOfSpacesToIndent = 4;
+
+                writeFileSync(
+                    testDataFilePath,
+                    JSON.stringify(testDataInDatabaseFormat, null, numberOfSpacesToIndent)
+                );
             });
         });
     });

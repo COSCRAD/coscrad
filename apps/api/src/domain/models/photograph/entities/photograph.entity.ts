@@ -11,6 +11,7 @@ export class Photograph extends Entity {
     // TODO make this a `contributorID`
     readonly photographer: string;
 
+    // Should we really cache this here?
     readonly dimensions: PhotographDimensions;
 
     constructor(dto: PartialDTO<Photograph>) {
