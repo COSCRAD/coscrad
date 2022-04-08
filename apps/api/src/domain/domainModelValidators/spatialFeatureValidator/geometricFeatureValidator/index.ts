@@ -1,12 +1,12 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { GeometricFeature } from '../../../models/spatial-feature/GeometricFeature';
+import { IGeometricFeature } from '../../../models/spatial-feature/GeometricFeature';
 import isGeometricFeatureType from '../../../models/spatial-feature/types/isGeometricFeatureType';
 import { DomainModelValidator } from '../../types/DomainModelValidator';
 import { Valid } from '../../Valid';
 import buildGeometricFeatureValidatorChain from './buildGeometricFeatureValidatorChain';
 
 const geometricFeatureValidator: DomainModelValidator = (input: unknown): Valid | InternalError => {
-    const test = input as GeometricFeature;
+    const test = input as IGeometricFeature;
 
     const { type } = test;
 

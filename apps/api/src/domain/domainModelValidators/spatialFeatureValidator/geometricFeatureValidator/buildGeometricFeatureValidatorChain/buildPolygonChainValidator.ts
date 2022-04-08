@@ -1,9 +1,9 @@
-import { GeometricFeature } from 'apps/api/src/domain/models/spatial-feature/GeometricFeature';
+import { IGeometricFeature } from 'apps/api/src/domain/models/spatial-feature/GeometricFeature';
 import { GeometricFeatureType } from 'apps/api/src/domain/models/spatial-feature/types/GeometricFeatureType';
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
 
 const polygonChainValidator = (
-    input: GeometricFeature,
+    input: IGeometricFeature,
     incomingErrors: InternalError[]
 ): InternalError[] => {
     const { type } = input;

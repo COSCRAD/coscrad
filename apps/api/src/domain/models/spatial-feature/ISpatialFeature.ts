@@ -1,9 +1,9 @@
 import { entityTypes } from '../../types/entityTypes';
 import { Entity } from '../entity';
-import { GeometricFeature } from './GeometricFeature';
+import { IGeometricFeature } from './GeometricFeature';
 
 export interface ISpatialFeature extends Entity {
     type: typeof entityTypes.spatialFeature;
 
-    geometry: GeometricFeature;
+    geometry: IGeometricFeature;
 }

@@ -19,6 +19,9 @@ import buildInstanceFactory from './utilities/buildInstanceFactory';
 
 export type InstanceFactory<TEntity> = (dto: unknown) => ResultOrError<TEntity>;
 
+/**
+ * It would be nice to find a pattern that gives us better type safety.
+ */
 export default <TEntity extends Entity>(entityType: EntityType): InstanceFactory<TEntity> => {
     switch (entityType) {
         case entityTypes.term:

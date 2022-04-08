@@ -1,7 +1,7 @@
 import { GeometricCoordinatesUnion } from './types/Coordinates/GeometricCoordinatesUnion';
 import { GeometricFeatureType } from './types/GeometricFeatureType';
 
-export interface GeometricFeature<
+export interface IGeometricFeature<
     TGeometricFeatureType extends GeometricFeatureType = GeometricFeatureType,
     UCoordinateType extends GeometricCoordinatesUnion = GeometricCoordinatesUnion
 > {

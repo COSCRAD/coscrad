@@ -1,17 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AudioWithTranscript } from 'apps/api/src/domain/models/audio-with-transcript/entities/audio-with-transcript.entity';
-import { EntityId } from 'apps/api/src/domain/models/types/EntityId';
+import { BaseViewModel } from '../base.view-model';
 import buildFullAudioURL from '../utilities/buildFullAudioURL';
 import convertTimeRangeDataToPlainTextTranscript from './utilities/convertTimeRangeDataToPlainTextTranscript';
 
-export class AudioWithTranscriptViewModel {
+export class AudioWithTranscriptViewModel extends BaseViewModel {
     readonly #baseAudioURL: string;
-
-    @ApiProperty({
-        example: '12',
-        description: 'uniquely identifies a tag amongst other tags',
-    })
-    readonly id: EntityId;
 
     @ApiProperty({
         example: 'https://www.mysounds.com/3pigs.mp3',
@@ -49,7 +43,7 @@ export class AudioWithTranscriptViewModel {
         }: AudioWithTranscript,
         baseAudioURL: string
     ) {
-        this.id = id;
+        super({ id });
 
         this.start = startMilliseconds;
 

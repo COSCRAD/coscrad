@@ -1,48 +1,30 @@
-import { GeometricFeature } from 'apps/api/src/domain/models/spatial-feature/GeometricFeature';
+import { IGeometricFeature } from 'apps/api/src/domain/models/spatial-feature/GeometricFeature';
 import { PointCoordinates } from 'apps/api/src/domain/models/spatial-feature/types/Coordinates/PointCoordinates';
 import { GeometricFeatureType } from 'apps/api/src/domain/models/spatial-feature/types/GeometricFeatureType';
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { isNumber } from 'class-validator';
+import { isValid } from '../../../Valid';
+import validatePosition2D from './utilities/validatePosition2D';
 
 const pointChainValidator = (
-    input: GeometricFeature,
+    input: IGeometricFeature,
     incomingErrors: InternalError[]
 ): InternalError[] => {
-    const { type, coordinates } = input;
+    const { type } = input;
 
     // Pass on the responsibility
     if (type !== GeometricFeatureType.point) return incomingErrors;
 
+    const { coordinates } = input as IGeometricFeature<
+        typeof GeometricFeatureType.point,
+        PointCoordinates
+    >;
+
     // Validate Coordinates
     const allErrors: InternalError[] = [];
 
-    if (coordinates.length !== 2)
-        allErrors.push(
-            new InternalError(
-                `A Geometric Point must have 2 coordinates. Received: ${coordinates.length}`
-            )
-        );
+    const coordinateValidationResult = validatePosition2D(coordinates);
 
-    const coordinateTypeErrors = (coordinates as PointCoordinates).reduce(
-        (accumulatedErrors: InternalError[], coordinate, index) => {
-            if (
-                !isNumber(coordinate, {
-                    allowInfinity: false,
-                    allowNaN: false,
-                })
-            )
-                return accumulatedErrors.concat(
-                    new InternalError(
-                        `Coordinate at index [${index}] is not a number: ${coordinate}`
-                    )
-                );
-
-            return accumulatedErrors;
-        },
-        []
-    );
-
-    allErrors.push(...coordinateTypeErrors);
+    if (!isValid(coordinateValidationResult)) allErrors.push(...coordinateValidationResult);
 
     // Add logic to validate coordinate ranges
 

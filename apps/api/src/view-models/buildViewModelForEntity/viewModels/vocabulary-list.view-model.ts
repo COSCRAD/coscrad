@@ -4,8 +4,8 @@ import { VocabularyListEntry } from 'apps/api/src/domain/models/vocabulary-list/
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import { VocabularyList } from '../../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { VocabularyListVariableValue } from '../../../domain/models/vocabulary-list/types/vocabulary-list-variable-value';
-import { EntityId } from '../../../domain/types/EntityId';
 import { NotFound } from '../../../lib/types/not-found';
+import { BaseViewModel } from './base.view-model';
 import { TermViewModel } from './term.view-model';
 
 type VariableValues = Record<string, VocabularyListVariableValue>;
@@ -29,7 +29,7 @@ class VocabularyListEntryViewModel {
     variableValues: VariableValues;
 }
 
-export class VocabularyListViewModel {
+export class VocabularyListViewModel extends BaseViewModel {
     @ApiPropertyOptional({
         example: 'Vocabulary List Name (in the language)',
         description: 'name of the vocabulary list, in the language',
@@ -41,12 +41,6 @@ export class VocabularyListViewModel {
         description: 'name of the vocabulary list, in the translation language',
     })
     readonly nameEnglish?: string;
-
-    @ApiProperty({
-        example: '3',
-        description: 'uniquely identifies the vocabulary list amongst other vocabulary lists',
-    })
-    readonly id: EntityId;
 
     @ApiProperty({
         type: VocabularyListEntry,
@@ -66,12 +60,14 @@ export class VocabularyListViewModel {
 
     readonly #baseAudioURL: string;
 
-    constructor(vocabularyList: VocabularyList, allTerms: Term[], baseAudioURL: string) {
-        const { entries, id, name, nameEnglish, variables } = vocabularyList;
+    constructor(
+        { entries, id, name, nameEnglish, variables }: VocabularyList,
+        allTerms: Term[],
+        baseAudioURL: string
+    ) {
+        super({ id });
 
         this.#baseAudioURL = baseAudioURL;
-
-        this.id = id;
 
         this.name = name;
 

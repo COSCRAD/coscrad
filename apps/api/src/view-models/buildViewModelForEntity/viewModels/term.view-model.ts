@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Term } from 'apps/api/src/domain/models/term/entities/term.entity';
-import { ViewModelId } from './types/ViewModelId';
+import { BaseViewModel } from './base.view-model';
 import buildFullAudioURL from './utilities/buildFullAudioURL';
 
 // TODO Add proper contributors repository \ collection
@@ -11,13 +11,7 @@ const contributors = {
 
 const getContributorNameFromId = (id: string): string => contributors[id] || '';
 
-export class TermViewModel {
-    @ApiProperty({
-        example: '132',
-        description: 'a string identifier that uniquely identifies the term amongst other terms',
-    })
-    readonly id: ViewModelId;
-
+export class TermViewModel extends BaseViewModel {
     @ApiProperty({
         example: 'Jane Doe',
         description: 'The language speaker who contributed the term',
@@ -51,19 +45,20 @@ export class TermViewModel {
 
     readonly #baseAudioURL: string;
 
-    constructor(term: Term, baseAudioURL: string) {
-        const {
+    constructor(
+        {
             id,
             contributorId,
             term: text,
             termEnglish: textEnglish,
             audioFilename,
             sourceProject,
-        } = term;
+        }: Term,
+        baseAudioURL: string
+    ) {
+        super({ id });
 
         this.#baseAudioURL = baseAudioURL;
-
-        this.id = id;
 
         this.contributor = getContributorNameFromId(contributorId);
 
