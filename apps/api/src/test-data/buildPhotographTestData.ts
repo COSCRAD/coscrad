@@ -3,7 +3,7 @@ import { PartialDTO } from '../types/partial-dto';
 
 const dtos: PartialDTO<Photograph>[] = [
     {
-        filename: 'cat.png',
+        filename: 'cat',
         photographer: 'Susie McRealart',
         dimensions: {
             widthPX: 300,
@@ -11,7 +11,7 @@ const dtos: PartialDTO<Photograph>[] = [
         },
     },
     {
-        filename: 'dog.png',
+        filename: 'dog',
         photographer: 'Robert McRealart',
         dimensions: {
             widthPX: 420,

@@ -46,7 +46,7 @@ export class EnvironmentVariables {
     AUTH0_AUDIENCE: string;
 
     @IsUrl()
-    BASE_AUDIO_URL: string;
+    BASE_DIGITAL_ASSET_URL: string;
 }
 
 export const validate = (config: Record<string, unknown>): EnvironmentVariables => {

@@ -19,7 +19,7 @@ async function bootstrap() {
     await tempArangoConnectionProvier.initialize();
 
     const swaggerConfig = new DocumentBuilder()
-        .setTitle('Coscrad API')
+        .setTitle('COSCRAD API')
         .setDescription('Powering a Web of Knowledge')
         .setVersion('0.0')
         .addTag('coscrad')

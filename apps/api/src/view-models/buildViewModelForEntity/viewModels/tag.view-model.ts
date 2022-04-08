@@ -1,14 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Tag } from 'apps/api/src/domain/models/tag/tag.entity';
-import { EntityId } from 'apps/api/src/domain/models/types/EntityId';
+import { BaseViewModel } from './base.view-model';
 
-export class TagViewModel {
-    @ApiProperty({
-        example: '12',
-        description: 'uniquely identifies a tag amongst other tags',
-    })
-    readonly id: EntityId;
-
+export class TagViewModel extends BaseViewModel {
     @ApiProperty({
         example: 'animals',
         description: 'the user-facing text for the tag',
@@ -16,7 +10,7 @@ export class TagViewModel {
     readonly text: string;
 
     constructor({ id, text }: Tag) {
-        this.id = id;
+        super({ id });
 
         this.text = text;
     }
