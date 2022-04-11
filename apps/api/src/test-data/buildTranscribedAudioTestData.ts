@@ -1,7 +1,7 @@
-import { AudioWithTranscript } from '../domain/models/audio-with-transcript/entities/audio-with-transcript.entity';
+import { TranscribedAudio } from '../domain/models/transcribed-audio/entities/transcribed-audio.entity';
 import { PartialDTO } from '../types/partial-dto';
 
-const dtos: PartialDTO<AudioWithTranscript>[] = [
+const dtos: PartialDTO<TranscribedAudio>[] = [
     {
         id: '110',
         audioFilename: '123.mp3',
@@ -24,4 +24,4 @@ const dtos: PartialDTO<AudioWithTranscript>[] = [
     },
 ];
 
-export default () => dtos.map((dto) => new AudioWithTranscript(dto));
+export default () => dtos.map((dto) => new TranscribedAudio(dto));

@@ -5,15 +5,13 @@ import NullOrUndefinedDTOError from './errors/NullOrUndefinedDTOError';
 import { DomainModelValidator } from './types/DomainModelValidator';
 import { Valid } from './Valid';
 
-const audioWithTranscriptValidator: DomainModelValidator = (
-    dto: unknown
-): Valid | InternalError => {
+const transcribedAudioValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
     // Return early, as we will get null pointers if we proceed
-    if (isNullOrUndefined(dto)) return new NullOrUndefinedDTOError(entityTypes.audioWithTranscript);
+    if (isNullOrUndefined(dto)) return new NullOrUndefinedDTOError(entityTypes.transcribedAudio);
 
     // TODO Add additional logic
 
     return Valid;
 };
 
-export default audioWithTranscriptValidator;
+export default transcribedAudioValidator;

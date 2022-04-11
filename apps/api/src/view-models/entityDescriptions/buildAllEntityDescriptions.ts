@@ -11,7 +11,7 @@ const entityDescriptions: EntityDescriptions = {
         'within the context of the vocabulary list',
     ].join(' '),
     // would `transcribedAudio` be a better name?
-    audioWithTranscript:
+    transcribedAudio:
         'An audio with transcript is an audio recording accompanied by a transcription',
     book: 'A book is a digital representation of a text, organized into pages',
     photograph: 'A Photograph is a digital representation of an analog photograph and its metadata',

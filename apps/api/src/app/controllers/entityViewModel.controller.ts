@@ -1,12 +1,12 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { AudioWithTranscript } from '../../domain/models/audio-with-transcript/entities/audio-with-transcript.entity';
 import { Book } from '../../domain/models/book/entities/book.entity';
 import { Photograph } from '../../domain/models/photograph/entities/photograph.entity';
 import { ISpatialFeature } from '../../domain/models/spatial-feature/ISpatialFeature';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { Term } from '../../domain/models/term/entities/term.entity';
+import { TranscribedAudio } from '../../domain/models/transcribed-audio/entities/transcribed-audio.entity';
 import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { isEntityId } from '../../domain/types/EntityId';
 import { entityTypes } from '../../domain/types/entityTypes';
@@ -14,12 +14,12 @@ import { isInternalError } from '../../lib/errors/InternalError';
 import { isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
-import buildAudioWithTranscriptViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildAudioWithTranscriptViewModels';
 import buildBookViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildBookViewModels';
 import buildPhotographViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildPhotographViewModels';
 import buildSpatialFeatureViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildSpatialFeatureViewModels';
 import buildTagViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTagViewModels';
 import buildTermViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTermViewModels';
+import buildTranscribedAudioViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTranscribedAudioViewModels';
 import buildVocabularyListViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildVocabularyListViewModels';
 import {
     HasViewModelId,
@@ -27,10 +27,10 @@ import {
     TermViewModel,
     VocabularyListViewModel,
 } from '../../view-models/buildViewModelForEntity/viewModels';
-import { AudioWithTranscriptViewModel } from '../../view-models/buildViewModelForEntity/viewModels/audio-with-transcript/audio-with-transcript.view-model';
 import { BookViewModel } from '../../view-models/buildViewModelForEntity/viewModels/book.view-model';
 import { PhotographViewModel } from '../../view-models/buildViewModelForEntity/viewModels/photograph.view-model';
 import { SpatialFeatureViewModel } from '../../view-models/buildViewModelForEntity/viewModels/spatial-data/spatial-feature.view-model';
+import { TranscribedAudioViewModel } from '../../view-models/buildViewModelForEntity/viewModels/transcribed-audio/transcribed-audio.view-model';
 import { buildAllEntityDescriptions } from '../../view-models/entityDescriptions/buildAllEntityDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import buildViewModelPathForEntityType from './utilities/buildViewModelPathForEntityType';
@@ -219,10 +219,10 @@ export class EntityViewModelController {
     }
 
     /* ********** AUDIO WITH TRANSRIPT ********** */
-    @ApiOkResponse({ type: AudioWithTranscriptViewModel, isArray: true })
-    @Get(buildViewModelPathForEntityType(entityTypes.audioWithTranscript))
+    @ApiOkResponse({ type: TranscribedAudioViewModel, isArray: true })
+    @Get(buildViewModelPathForEntityType(entityTypes.transcribedAudio))
     async fetchAudioViewModelsWithTranscripts(@Res() res) {
-        const allViewModels = await buildAudioWithTranscriptViewModels({
+        const allViewModels = await buildTranscribedAudioViewModels({
             repositoryProvider: this.repositoryProvider,
             configService: this.configService,
         });
@@ -237,8 +237,8 @@ export class EntityViewModelController {
 
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: TagViewModel })
-    @Get(`${buildViewModelPathForEntityType(entityTypes.audioWithTranscript)}/:id`)
-    async fetchAudioWithTranscriptById(@Res() res, @Param() params: unknown) {
+    @Get(`${buildViewModelPathForEntityType(entityTypes.transcribedAudio)}/:id`)
+    async fetchTranscribedAudioById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
         if (!isEntityId(id))
@@ -247,7 +247,7 @@ export class EntityViewModelController {
             });
 
         const searchResult = await this.repositoryProvider
-            .forEntity<AudioWithTranscript>(entityTypes.audioWithTranscript)
+            .forEntity<TranscribedAudio>(entityTypes.transcribedAudio)
             .fetchById(id);
 
         if (isInternalError(searchResult))
@@ -259,7 +259,7 @@ export class EntityViewModelController {
 
         if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
 
-        const viewModel = new AudioWithTranscriptViewModel(
+        const viewModel = new TranscribedAudioViewModel(
             searchResult,
             this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
         );

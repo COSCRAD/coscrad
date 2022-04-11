@@ -1,17 +1,17 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import { ResultOrError } from '../../types/ResultOrError';
-import audioWithTranscriptValidator from '../domainModelValidators/audioWithTranscriptValidator';
 import bookValidator from '../domainModelValidators/bookValidator';
 import photographValidator from '../domainModelValidators/photographValidator';
 import tagValidator from '../domainModelValidators/tagValidator';
 import termValidator from '../domainModelValidators/termValidator';
+import transcribedAudioValidator from '../domainModelValidators/transcribedAudioValidator';
 import vocabularyListValidator from '../domainModelValidators/vocabularyListValidator';
-import { AudioWithTranscript } from '../models/audio-with-transcript/entities/audio-with-transcript.entity';
 import { Book } from '../models/book/entities/book.entity';
 import { Entity } from '../models/entity';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { Tag } from '../models/tag/tag.entity';
 import { Term } from '../models/term/entities/term.entity';
+import { TranscribedAudio } from '../models/transcribed-audio/entities/transcribed-audio.entity';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
 import { EntityType, entityTypes } from '../types/entityTypes';
 import buildSpatialFeatureFactory from './complexFactories/buildSpatialFeatureFactory';
@@ -36,11 +36,11 @@ export default <TEntity extends Entity>(entityType: EntityType): InstanceFactory
             // @ts-expect-error TODO fix this tricky type error
             return buildInstanceFactory<Tag>(tagValidator, Tag);
 
-        case entityTypes.audioWithTranscript:
+        case entityTypes.transcribedAudio:
             // @ts-expect-error TODO fix this tricky type error
-            return buildInstanceFactory<AudioWithTranscript>(
-                audioWithTranscriptValidator,
-                AudioWithTranscript
+            return buildInstanceFactory<TranscribedAudio>(
+                transcribedAudioValidator,
+                TranscribedAudio
             );
 
         case entityTypes.book:

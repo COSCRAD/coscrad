@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AudioWithTranscript } from 'apps/api/src/domain/models/audio-with-transcript/entities/audio-with-transcript.entity';
+import { TranscribedAudio } from 'apps/api/src/domain/models/transcribed-audio/entities/transcribed-audio.entity';
 import { BaseViewModel } from '../base.view-model';
 import buildFullDigitalAssetURL from '../utilities/buildFullDigitalAssetURL';
 import convertTimeRangeDataToPlainTextTranscript from './utilities/convertTimeRangeDataToPlainTextTranscript';
 
-export class AudioWithTranscriptViewModel extends BaseViewModel {
+export class TranscribedAudioViewModel extends BaseViewModel {
     readonly #baseAudioURL: string;
 
     @ApiProperty({
@@ -40,7 +40,7 @@ export class AudioWithTranscriptViewModel extends BaseViewModel {
             audioFilename,
             startMilliseconds,
             lengthMilliseconds,
-        }: AudioWithTranscript,
+        }: TranscribedAudio,
         baseAudioURL: string
     ) {
         super({ id });

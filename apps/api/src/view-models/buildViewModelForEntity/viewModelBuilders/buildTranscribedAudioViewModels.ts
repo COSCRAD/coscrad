@@ -1,7 +1,7 @@
-import { AudioWithTranscript } from 'apps/api/src/domain/models/audio-with-transcript/entities/audio-with-transcript.entity';
+import { TranscribedAudio } from 'apps/api/src/domain/models/transcribed-audio/entities/transcribed-audio.entity';
 import { entityTypes } from 'apps/api/src/domain/types/entityTypes';
 import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
-import { AudioWithTranscriptViewModel } from '../viewModels/audio-with-transcript/audio-with-transcript.view-model';
+import { TranscribedAudioViewModel } from '../viewModels/transcribed-audio/transcribed-audio.view-model';
 import { ViewModelBuilderDependencies } from './types/ViewModelBuilderDependencies';
 
 /**
@@ -17,18 +17,16 @@ import { ViewModelBuilderDependencies } from './types/ViewModelBuilderDependenci
 export default async ({
     repositoryProvider,
     configService,
-}: ViewModelBuilderDependencies): Promise<AudioWithTranscriptViewModel[]> => {
-    const repository = repositoryProvider.forEntity<AudioWithTranscript>(
-        entityTypes.audioWithTranscript
-    );
+}: ViewModelBuilderDependencies): Promise<TranscribedAudioViewModel[]> => {
+    const repository = repositoryProvider.forEntity<TranscribedAudio>(entityTypes.transcribedAudio);
 
     const baseAudioURL = configService.get<string>('BASE_DIGITAL_ASSET_URL');
 
     const searchResult = await repository.fetchMany();
 
     const allViewModels = searchResult
-        .filter((result): result is AudioWithTranscript => !isInternalError(result))
-        .map((domainModel) => new AudioWithTranscriptViewModel(domainModel, baseAudioURL));
+        .filter((result): result is TranscribedAudio => !isInternalError(result))
+        .map((domainModel) => new TranscribedAudioViewModel(domainModel, baseAudioURL));
 
     return allViewModels;
 };

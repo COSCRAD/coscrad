@@ -1,4 +1,4 @@
-import { MediaTimeRange } from 'apps/api/src/domain/models/audio-with-transcript/entities/MediaTimeRange';
+import { MediaTimeRange } from 'apps/api/src/domain/models/transcribed-audio/entities/MediaTimeRange';
 
 export default (timeranges: MediaTimeRange[]): string =>
     timeranges.reduce(

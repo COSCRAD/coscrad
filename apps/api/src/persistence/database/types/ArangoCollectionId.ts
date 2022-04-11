@@ -1,7 +1,7 @@
 const arangoCollectionIDs = [
     'terms',
     'vocabulary_lists',
-    'audio_with_transcript',
+    'transcribed_audio',
     'books',
     'photographs',
     'spatial_features',

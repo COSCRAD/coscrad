@@ -3,8 +3,8 @@ import { entityTypes } from '../../../types/entityTypes';
 import { Entity } from '../../entity';
 import { Transcript } from './Transcript';
 
-export class AudioWithTranscript extends Entity {
-    readonly type = entityTypes.audioWithTranscript;
+export class TranscribedAudio extends Entity {
+    readonly type = entityTypes.transcribedAudio;
 
     readonly audioFilename: string;
 
@@ -15,7 +15,7 @@ export class AudioWithTranscript extends Entity {
 
     readonly transcript: Transcript;
 
-    constructor(dto: PartialDTO<AudioWithTranscript>) {
+    constructor(dto: PartialDTO<TranscribedAudio>) {
         super(dto);
 
         const {

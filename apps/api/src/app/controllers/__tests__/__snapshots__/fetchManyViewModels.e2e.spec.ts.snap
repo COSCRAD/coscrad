@@ -288,7 +288,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /transcribedAudioItems when all of the entities are published should fetch multiple entities of type audioWithTranscript 1`] = `
+exports[`When fetching multiple entities GET /transcribedAudioItems when all of the entities are published should fetch multiple entities of type transcribedAudio 1`] = `
 Array [
   Object {
     "audioURL": "https://www.myaudio.com:5555/media?id=123.mp3.mp3",

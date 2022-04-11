@@ -1,11 +1,11 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import { EntityType, entityTypes } from '../types/entityTypes';
-import audioWithTranscriptValidator from './audioWithTranscriptValidator';
 import bookValidator from './bookValidator';
 import photographValidator from './photographValidator';
 import spatialFeatureValidator from './spatialFeatureValidator';
 import tagValidator from './tagValidator';
 import termValidator from './termValidator';
+import transcribedAudioValidator from './transcribedAudioValidator';
 import { DomainModelValidator } from './types/DomainModelValidator';
 import vocabularyListValidator from './vocabularyListValidator';
 
@@ -21,8 +21,8 @@ export const getValidatorForEntity = (entityType: EntityType): DomainModelValida
         case entityTypes.vocabularyList:
             return vocabularyListValidator;
 
-        case entityTypes.audioWithTranscript:
-            return audioWithTranscriptValidator;
+        case entityTypes.transcribedAudio:
+            return transcribedAudioValidator;
 
         case entityTypes.book:
             return bookValidator;

@@ -110,11 +110,11 @@
             "variables": []
         }
     ],
-    "audio_with_transcript": [
+    "transcribed_audio": [
         {
             "_key": "110",
             "published": false,
-            "type": "audioWithTranscript",
+            "type": "transcribedAudio",
             "audioFilename": "123.mp3",
             "lengthMilliseconds": 20000,
             "startMilliseconds": 0,
