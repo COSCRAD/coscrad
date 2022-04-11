@@ -1,16 +1,16 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import { EntityId } from '../../../types/EntityId';
-import { EntityType, entityTypes } from '../../../types/entityTypes';
-import { Entity } from '../../entity';
+import { ResourceId } from '../../../types/ResourceId';
+import { ResourceType, resourceTypes } from '../../../types/resourceTypes';
+import { Resource } from '../../resource.entity';
 
-export class Term extends Entity {
-    readonly type: EntityType = entityTypes.term;
+export class Term extends Resource {
+    readonly type: ResourceType = resourceTypes.term;
 
     readonly term: string;
 
     readonly termEnglish?: string;
 
-    readonly contributorId: EntityId;
+    readonly contributorId: ResourceId;
 
     // TODO Create separate media item model
     readonly audioFilename?: string;

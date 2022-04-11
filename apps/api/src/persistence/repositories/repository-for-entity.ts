@@ -1,8 +1,8 @@
 import { InstanceFactory } from '../../domain/factories/getInstanceFactoryForEntity';
-import { Entity } from '../../domain/models/entity';
+import { Resource } from '../../domain/models/resource.entity';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { IRepositoryForEntity } from '../../domain/repositories/interfaces/repository-for-entity';
-import { EntityId } from '../../domain/types/EntityId';
+import { ResourceId } from '../../domain/types/ResourceId';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { ResultOrError } from '../../types/ResultOrError';
@@ -17,7 +17,9 @@ import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatab
  * the `instance factory` fails to build an instance because the dto violates
  * the model invariants that an easy to understand error is returned.
  */
-export class RepositoryForEntity<TEntity extends Entity> implements IRepositoryForEntity<TEntity> {
+export class RepositoryForEntity<TEntity extends Resource>
+    implements IRepositoryForEntity<TEntity>
+{
     #arangoDatabaseForEntitysCollection: ArangoDatabaseForCollection<TEntity>;
 
     // Typically just uses the model constructor
@@ -34,7 +36,7 @@ export class RepositoryForEntity<TEntity extends Entity> implements IRepositoryF
         this.#instanceFactory = instanceFactory;
     }
 
-    async fetchById(id: EntityId): Promise<ResultOrError<Maybe<TEntity>>> {
+    async fetchById(id: ResourceId): Promise<ResultOrError<Maybe<TEntity>>> {
         const searchResultForDTO = await this.#arangoDatabaseForEntitysCollection.fetchById(id);
 
         return isNotFound(searchResultForDTO)

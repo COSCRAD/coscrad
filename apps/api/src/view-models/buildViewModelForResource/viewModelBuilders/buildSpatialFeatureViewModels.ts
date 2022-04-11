@@ -1,6 +1,6 @@
 import { ISpatialFeature } from 'apps/api/src/domain/models/spatial-feature/ISpatialFeature';
 import IsPublished from 'apps/api/src/domain/repositories/specifications/isPublished';
-import { entityTypes } from 'apps/api/src/domain/types/entityTypes';
+import { resourceTypes } from 'apps/api/src/domain/types/resourceTypes';
 import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
 import { SpatialFeatureViewModel } from '../viewModels/spatial-data/spatial-feature.view-model';
 import { ViewModelBuilderDependencies } from './types/ViewModelBuilderDependencies';
@@ -22,8 +22,8 @@ export default async (
 
     const isPublishedSpecification = shouldReturnUnpublishedEntities ? null : new IsPublished(true);
 
-    const spatialFeatureRepository = repositoryProvider.forEntity<ISpatialFeature>(
-        entityTypes.spatialFeature
+    const spatialFeatureRepository = repositoryProvider.forResource<ISpatialFeature>(
+        resourceTypes.spatialFeature
     );
 
     const searchResult = await spatialFeatureRepository.fetchMany(isPublishedSpecification);

@@ -13,7 +13,7 @@ export const getValidSpatialFeatureInstanceForTest = (
 
     /**
      * Just to satisfy typeCheck. Technically, we don't check that a union
-     * that fulfills a single `entityType` has one instance for every member
+     * that fulfills a single `resourceType` has one instance for every member
      * in our test data, so we could hit this once I suppose.
      */
     if (!searchResult)

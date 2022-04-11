@@ -2,42 +2,42 @@ import { writeFileSync } from 'fs';
 import { getValidatorForEntity } from '../domain/domainModelValidators';
 import { isValid } from '../domain/domainModelValidators/Valid';
 import {
-    EntityType,
-    entityTypes,
-    EntityTypeToInstance,
-    isEntityType,
-} from '../domain/types/entityTypes';
+    isResourceType,
+    ResourceType,
+    resourceTypes,
+    ResourceTypeToInstance,
+} from '../domain/types/resourceTypes';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
-import { getArangoCollectionIDFromEntityType } from '../persistence/database/getArangoCollectionIDFromEntityType';
+import { getArangoCollectionIDFromResourceType } from '../persistence/database/getArangoCollectionIDFromResourceType';
 import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
 import { PartialDTO } from '../types/partial-dto';
 import buildTestData from './buildTestData';
 
 export type InMemorySnapshotOfDTOs = {
-    [K in keyof EntityTypeToInstance]?: PartialDTO<EntityTypeToInstance>[K][];
+    [K in keyof ResourceTypeToInstance]?: PartialDTO<ResourceTypeToInstance>[K][];
 };
 
 describe('buildTestData', () => {
     describe('the resulting test data', () => {
         const testData = Object.entries(buildTestData()).reduce(
-            (accumulatedDataWithDtos: InMemorySnapshotOfDTOs, [entityType, instances]) => ({
+            (accumulatedDataWithDtos: InMemorySnapshotOfDTOs, [ResourceType, instances]) => ({
                 ...accumulatedDataWithDtos,
-                [entityType]: instances.map((instance) => instance.toDTO()),
+                [ResourceType]: instances.map((instance) => instance.toDTO()),
             }),
             {}
         );
 
-        Object.values(entityTypes).forEach((key) => {
+        Object.values(resourceTypes).forEach((key) => {
             const models = testData[key];
-            describe(`Entity of type ${key}`, () => {
+            describe(`Resource of type ${key}`, () => {
                 it(`Should be a valid entity type`, () => {
-                    expect(isEntityType(key)).toBe(true);
+                    expect(isResourceType(key)).toBe(true);
                 });
 
-                const entityType = key as EntityType;
+                const ResourceType = key as ResourceType;
                 it(`should have a corresponding collection name`, () => {
-                    const collectionName = getArangoCollectionIDFromEntityType(entityType);
+                    const collectionName = getArangoCollectionIDFromResourceType(ResourceType);
 
                     expect(isStringWithNonzeroLength(collectionName)).toBe(true);
                 });
@@ -68,10 +68,10 @@ describe('buildTestData', () => {
                         expect(numberOfUniqueIds).toEqual(numberOfIds);
                     });
 
-                    const entityValidator = getValidatorForEntity(entityType);
+                    const entityValidator = getValidatorForEntity(ResourceType);
 
                     models.forEach((dto, index) => {
-                        describe(`${entityType}(dto # ${index + 1})`, () => {
+                        describe(`${ResourceType}(dto # ${index + 1})`, () => {
                             it(`should have an id`, () => {
                                 expect(isStringWithNonzeroLength(dto.id)).toBe(true);
                             });
@@ -85,13 +85,12 @@ describe('buildTestData', () => {
                 });
 
                 const testDataInDatabaseFormat =
-                    // Use `collectionNames` not `entityTypes` as keys
+                    // Use `collectionNames` not `resourceTypes` as keys
                     Object.entries(testData).reduce(
                         (acc, [key, models]) => ({
                             ...acc,
-                            [getArangoCollectionIDFromEntityType(key as EntityType)]: models.map(
-                                (model) => mapEntityDTOToDatabaseDTO(model)
-                            ),
+                            [getArangoCollectionIDFromResourceType(key as ResourceType)]:
+                                models.map((model) => mapEntityDTOToDatabaseDTO(model)),
                         }),
                         {}
                     );

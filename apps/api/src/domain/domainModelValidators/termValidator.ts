@@ -2,7 +2,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
 import { PartialDTO } from '../../types/partial-dto';
 import { Term } from '../models/term/entities/term.entity';
-import { entityTypes } from '../types/entityTypes';
+import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import InvalidPublicationStatusError from './errors/InvalidPublicationStatusError';
 import NullOrUndefinedDTOError from './errors/NullOrUndefinedDTOError';
@@ -13,7 +13,7 @@ import { Valid } from './Valid';
 
 const termValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
     // Return early, as we will get null pointers if we proceed
-    if (isNullOrUndefined(dto)) return new NullOrUndefinedDTOError(entityTypes.term);
+    if (isNullOrUndefined(dto)) return new NullOrUndefinedDTOError(resourceTypes.term);
 
     const innerErrors: InternalError[] = [];
 
@@ -24,7 +24,7 @@ const termValidator: DomainModelValidator = (dto: unknown): Valid | InternalErro
 
     // TODO Validate inherited properties on the base class
     if (typeof published !== 'boolean')
-        innerErrors.push(new InvalidPublicationStatusError(entityTypes.term));
+        innerErrors.push(new InvalidPublicationStatusError(resourceTypes.term));
 
     return innerErrors.length ? new InvalidTermDTOError(id, innerErrors) : Valid;
 };

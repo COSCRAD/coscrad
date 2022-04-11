@@ -1,5 +1,5 @@
 import { Tag } from 'apps/api/src/domain/models/tag/tag.entity';
-import { entityTypes } from 'apps/api/src/domain/types/entityTypes';
+import { resourceTypes } from 'apps/api/src/domain/types/resourceTypes';
 import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
 import { TagViewModel } from '../viewModels/tag.view-model';
 import { ViewModelBuilderDependencies } from './types/ViewModelBuilderDependencies';
@@ -7,7 +7,7 @@ import { ViewModelBuilderDependencies } from './types/ViewModelBuilderDependenci
 export default async ({
     repositoryProvider,
 }: ViewModelBuilderDependencies): Promise<TagViewModel[]> => {
-    const tagRepository = repositoryProvider.forEntity<Tag>(entityTypes.tag);
+    const tagRepository = repositoryProvider.forResource<Tag>(resourceTypes.tag);
 
     const searchResult = await tagRepository.fetchMany();
 

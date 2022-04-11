@@ -1,10 +1,10 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { PartialDTO } from '../../../../../types/partial-dto';
-import { Entity } from '../../../../models/entity';
-import { EntityType } from '../../../../types/entityTypes';
+import { Resource } from '../../../../models/resource.entity';
+import { ResourceType } from '../../../../types/resourceTypes';
 import { DomainModelValidator } from '../../../types/DomainModelValidator';
 
-export type DomainModelValidatorInvalidTestCase<TEntity extends Entity> = {
+export type DomainModelValidatorInvalidTestCase<TEntity extends Resource> = {
     description?: string;
     /**
      * Actually, this is unknown, but it's usually one-step away from a valid
@@ -15,12 +15,12 @@ export type DomainModelValidatorInvalidTestCase<TEntity extends Entity> = {
     expectedError: InternalError;
 };
 
-export type DomainModelValidatorTestCase<TEntity extends Entity> = {
-    entityType: EntityType; // TODO correlate this with TEntity
+export type DomainModelValidatorTestCase<TResource extends Resource> = {
+    resourceType: ResourceType; // TODO correlate this with TEntity
     validator: DomainModelValidator;
     validCases: {
         description?: string;
-        dto: PartialDTO<TEntity>;
+        dto: PartialDTO<TResource>;
     }[];
-    invalidCases: DomainModelValidatorInvalidTestCase<TEntity>[];
+    invalidCases: DomainModelValidatorInvalidTestCase<TResource>[];
 };

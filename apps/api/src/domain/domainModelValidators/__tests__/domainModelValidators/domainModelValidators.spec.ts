@@ -1,15 +1,15 @@
-import { entityTypes } from '../../../types/entityTypes';
+import { resourceTypes } from '../../../types/resourceTypes';
 import { Valid } from '../../Valid';
 import buildDomainModelValidatorTestCases from './buildDomainModelValidatorTestCases';
 
 const testCases = buildDomainModelValidatorTestCases();
 
 describe('Domain Model Vallidators', () => {
-    Object.values(entityTypes).forEach((entityType) => {
-        describe(`An entity of type ${entityType}`, () => {
+    Object.values(resourceTypes).forEach((resourceType) => {
+        describe(`An entity of type ${resourceType}`, () => {
             it('should have a domain model validator test case', () => {
                 const testCaseSearchResult = testCases.find(
-                    ({ entityType: testCaseEntityType }) => testCaseEntityType === entityType
+                    ({ resourceType: testCaseEntityType }) => testCaseEntityType === resourceType
                 );
 
                 expect(testCaseSearchResult).toBeTruthy();
@@ -17,8 +17,8 @@ describe('Domain Model Vallidators', () => {
         });
     });
 
-    testCases.forEach(({ entityType, validCases, invalidCases, validator }) => {
-        describe(`${entityType} validator`, () => {
+    testCases.forEach(({ resourceType, validCases, invalidCases, validator }) => {
+        describe(`${resourceType} validator`, () => {
             describe('When the DTO is valid', () => {
                 validCases.forEach(({ description, dto }, index) => {
                     describe(description || `valid case ${index + 1}`, () => {

@@ -1,13 +1,13 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Term } from '../../../../models/term/entities/term.entity';
-import { entityTypes } from '../../../../types/entityTypes';
+import { resourceTypes } from '../../../../types/resourceTypes';
 import InvalidTermDTOError from '../../../errors/term/InvalidTermDTOError';
 import TermHasNoTextInAnyLanguageError from '../../../errors/term/TermHasNoTextInAnyLanguageError';
 import termValidator from '../../../termValidator';
 import { DomainModelValidatorTestCase } from '../types/DomainModelValidatorTestCase';
 
 export const buildTermTestCase = (): DomainModelValidatorTestCase<Term> => ({
-    entityType: entityTypes.term,
+    resourceType: resourceTypes.term,
     validator: termValidator,
     validCases: [
         {

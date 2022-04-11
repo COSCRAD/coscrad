@@ -1,10 +1,10 @@
-import { EntityType } from '../../domain/types/entityTypes';
+import { ResourceType } from '../../domain/types/resourceTypes';
 
-type EntityDescriptions = {
-    [k in EntityType]: string;
+type ResourceDescriptions = {
+    [k in ResourceType]: string;
 };
 
-const entityDescriptions: EntityDescriptions = {
+const resourceDescriptions: ResourceDescriptions = {
     term: 'A term is a word, phrase, or sentence.',
     vocabularyList: [
         'A vocabulary list gathers terms with filters that apply',
@@ -19,4 +19,4 @@ const entityDescriptions: EntityDescriptions = {
     tag: 'A tag is a classifier for an entity or a pair of related entities',
 };
 
-export const buildAllEntityDescriptions = () => entityDescriptions;
+export const buildAllResourceDescriptions = () => resourceDescriptions;

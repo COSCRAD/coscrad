@@ -1,7 +1,7 @@
-import { Entity } from '../../../domain/models/entity';
-import { EntityType, entityTypes, InMemorySnapshot } from '../../../domain/types/entityTypes';
+import { Resource } from '../../../domain/models/resource.entity';
+import { InMemorySnapshot, ResourceType, resourceTypes } from '../../../domain/types/resourceTypes';
 import { DatabaseProvider } from '../../database/database.provider';
-import { getArangoCollectionIDFromEntityType } from '../../database/getArangoCollectionIDFromEntityType';
+import { getArangoCollectionIDFromResourceType } from '../../database/getArangoCollectionIDFromResourceType';
 import { RepositoryProvider } from '../repository.provider';
 
 export default class TestRepositoryProvider extends RepositoryProvider {
@@ -10,34 +10,37 @@ export default class TestRepositoryProvider extends RepositoryProvider {
     }
 
     // TODO We should correlate entity type with TEntity here
-    public async addEntitiesOfSingleType<TEntity extends Entity>(
-        entityType: EntityType,
-        entities: TEntity[]
+    public async addEntitiesOfSingleType<TResource extends Resource>(
+        ResourceType: ResourceType,
+        entities: TResource[]
     ): Promise<void> {
-        await this.forEntity<TEntity>(entityType).createMany(entities);
+        await this.forResource<TResource>(ResourceType).createMany(entities);
     }
 
     // TODO fix types
     public async addEntitiesOfManyTypes(snapshot: InMemorySnapshot): Promise<void> {
-        const writePromises = Object.entries(snapshot).map(([entityType, entityInstances]) =>
-            this.addEntitiesOfSingleType(entityType as EntityType, entityInstances as Entity[])
+        const writePromises = Object.entries(snapshot).map(([ResourceType, entityInstances]) =>
+            this.addEntitiesOfSingleType(
+                ResourceType as ResourceType,
+                entityInstances as Resource[]
+            )
         );
 
         await Promise.all(writePromises);
     }
 
-    public async deleteAllEntitiesOfGivenType(entityType: EntityType): Promise<void> {
+    public async deleteAllEntitiesOfGivenType(ResourceType: ResourceType): Promise<void> {
         await (
             await this.databaseProvider.getDBInstance()
-        ).deleteAll(getArangoCollectionIDFromEntityType(entityType));
+        ).deleteAll(getArangoCollectionIDFromResourceType(ResourceType));
     }
 
     /**
      * Deletes all entity data (i.e. empties every entity collection);
      */
     private async deleteAllEntityData(): Promise<void> {
-        const deleteAllDataPromises = Object.values(entityTypes).map((entityType: EntityType) =>
-            this.deleteAllEntitiesOfGivenType(entityType)
+        const deleteAllDataPromises = Object.values(resourceTypes).map(
+            (ResourceType: ResourceType) => this.deleteAllEntitiesOfGivenType(ResourceType)
         );
 
         await Promise.all(deleteAllDataPromises);

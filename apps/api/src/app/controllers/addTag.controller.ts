@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import TagAlreadyExistsError from '../../domain/domainModelValidators/errors/tag/TagAlreadyExistsError';
 import tagValidator from '../../domain/domainModelValidators/tagValidator';
 import { Tag } from '../../domain/models/tag/tag.entity';
-import { entityTypes } from '../../domain/types/entityTypes';
+import { resourceTypes } from '../../domain/types/resourceTypes';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
 import { PartialDTO } from '../../types/partial-dto';
@@ -16,7 +16,7 @@ export class AddTagController {
     @UseGuards(AuthGuard('jwt'))
     @Post()
     async addOneTag(@Res() res, @Query('text') text: string) {
-        const tagRepository = this.repositoryProvider.forEntity<Tag>(entityTypes.tag);
+        const tagRepository = this.repositoryProvider.forResource<Tag>(resourceTypes.tag);
 
         // We should add `Where filters`
         const allTagsQueryResult = await tagRepository.fetchMany();
@@ -73,7 +73,7 @@ export class AddTagController {
     //     return res.status(httpStatusCodes.badRequest).send('Invalid tag text');
 
     //   const tagRepository = this.repositoryProvider.forEntity<Tag>(
-    //     entityTypes.tag
+    //     resourceTypes.tag
     //   );
 
     //   const existingTagResult = await tagRepository.fetchById(id);

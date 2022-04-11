@@ -1,8 +1,8 @@
-import { EntityId } from 'apps/api/src/domain/types/EntityId';
+import { ResourceId } from 'apps/api/src/domain/types/ResourceId';
 import { Maybe } from 'apps/api/src/lib/types/maybe';
 
 export interface IDatabase {
-    fetchById: <TEntityDTO>(id: EntityId, collectionName: string) => Promise<Maybe<TEntityDTO>>;
+    fetchById: <TEntityDTO>(id: ResourceId, collectionName: string) => Promise<Maybe<TEntityDTO>>;
 
     fetchMany: <TEntityDTO>(collectionName: string) => Promise<Maybe<TEntityDTO[]>>;
 
@@ -12,5 +12,5 @@ export interface IDatabase {
 
     getCount: (collectionName: string) => Promise<number>;
 
-    update: <TEntityDTO>(id: EntityId, dto: TEntityDTO, collectionName: string) => Promise<void>;
+    update: <TEntityDTO>(id: ResourceId, dto: TEntityDTO, collectionName: string) => Promise<void>;
 }

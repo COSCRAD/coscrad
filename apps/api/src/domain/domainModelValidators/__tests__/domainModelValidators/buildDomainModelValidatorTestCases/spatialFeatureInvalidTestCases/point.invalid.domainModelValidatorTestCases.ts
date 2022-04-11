@@ -1,5 +1,5 @@
 import { GeometricFeatureType } from 'apps/api/src/domain/models/spatial-feature/types/GeometricFeatureType';
-import { entityTypes } from 'apps/api/src/domain/types/entityTypes';
+import { resourceTypes } from 'apps/api/src/domain/types/resourceTypes';
 import { Point } from '../../../../../models/spatial-feature/point.entity';
 import InvalidEntityDTOError from '../../../../errors/InvalidEntityDTOError';
 import { DomainModelValidatorInvalidTestCase } from '../../types/DomainModelValidatorTestCase';
@@ -17,6 +17,6 @@ export const buildPointInvalidTestCases = (): DomainModelValidatorInvalidTestCas
                 coordinates: [12, 'foo' as unknown as number],
             },
         },
-        expectedError: new InvalidEntityDTOError(entityTypes.spatialFeature, validPointDTO.id),
+        expectedError: new InvalidEntityDTOError(resourceTypes.spatialFeature, validPointDTO.id),
     },
 ];

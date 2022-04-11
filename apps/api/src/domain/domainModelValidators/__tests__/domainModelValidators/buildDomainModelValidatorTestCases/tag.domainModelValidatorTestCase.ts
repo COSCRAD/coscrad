@@ -1,16 +1,16 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Tag } from '../../../../models/tag/tag.entity';
-import { entityTypes } from '../../../../types/entityTypes';
+import { resourceTypes } from '../../../../types/resourceTypes';
 import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
 import TagHasNoTextError from '../../../errors/tag/TagHasNoTextError';
 import tagValidator from '../../../tagValidator';
 import { DomainModelValidatorTestCase } from '../types/DomainModelValidatorTestCase';
 import getValidEntityInstaceForTest from '../utilities/getValidEntityInstaceForTest';
 
-const validTagDTO = getValidEntityInstaceForTest(entityTypes.tag).toDTO();
+const validTagDTO = getValidEntityInstaceForTest(resourceTypes.tag).toDTO();
 
 export const buildTagTestCase = (): DomainModelValidatorTestCase<Tag> => ({
-    entityType: entityTypes.tag,
+    resourceType: resourceTypes.tag,
     validator: tagValidator,
     validCases: [
         {
@@ -24,7 +24,7 @@ export const buildTagTestCase = (): DomainModelValidatorTestCase<Tag> => ({
                 ...validTagDTO,
                 text: undefined,
             },
-            expectedError: new InvalidEntityDTOError(entityTypes.tag, validTagDTO.id, [
+            expectedError: new InvalidEntityDTOError(resourceTypes.tag, validTagDTO.id, [
                 new TagHasNoTextError(validTagDTO.id),
                 // TODO remove cast
             ]) as InternalError,

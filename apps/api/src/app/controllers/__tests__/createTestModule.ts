@@ -6,7 +6,7 @@ import { DatabaseProvider } from '../../../persistence/database/database.provide
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
-import { EntityViewModelController } from '../entityViewModel.controller';
+import { ResourceViewModelController } from '../resourceViewModel.controller';
 
 export default async (testDatabaseName: string) =>
     Test.createTestingModule({
@@ -41,5 +41,5 @@ export default async (testDatabaseName: string) =>
             },
         ],
 
-        controllers: [EntityViewModelController],
+        controllers: [ResourceViewModelController],
     }).compile();

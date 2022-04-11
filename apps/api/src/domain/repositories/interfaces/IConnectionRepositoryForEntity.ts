@@ -1,5 +1,5 @@
-import { EntityCompositeIdentifier } from '../../models/types/entityCompositeIdentifier';
-import { EntityId } from '../../types/EntityId';
+import { ResourceCompositeIdentifier } from '../../models/types/entityCompositeIdentifier';
+import { ResourceId } from '../../types/ResourceId';
 
 type ContextType = string;
 
@@ -13,40 +13,40 @@ type Context = {
 
 type ContextMetadata = {
     // These will be stored by reference
-    tags: EntityId[];
+    tags: ResourceId[];
 
     note: string;
 };
 
-type SelfEntityContext = {
+type SelfResourceContext = {
     self: Context;
 } & ContextMetadata;
 
-type ConnectedEntityContext = SelfEntityContext & {
+type ConnectedResourceContext = SelfResourceContext & {
     other: Context;
 };
 
 type EdgeConnection = {
     /**
-     * This only needs to be unique within the array of EdgeConnections for this entity.
+     * This only needs to be unique within the array of EdgeConnections for this resource.
      * We can use the edge document ID if we want, but this is an implementation detail.
      */
     id: string;
 
-    context: ConnectedEntityContext;
+    context: ConnectedResourceContext;
 };
 
-type ConnectedEntity = {
-    compositeIdentifier: EntityCompositeIdentifier;
+type ConnectedResource = {
+    compositeIdentifier: ResourceCompositeIdentifier;
 
     connections: EdgeConnection[];
 };
 
-// We may want to make this generic to correlate Entity and Context Types
-export interface IConnectionRepositoryForEntity {
+// We may want to make this generic to correlate Resource and Context Types
+export interface IConnectionRepositoryForResource {
     // Reads
     // add specification-based filtering when needed
-    fetchMany(): Promise<ConnectedEntity[]>;
+    fetchMany(): Promise<ConnectedResource[]>;
 
     // add specification-based filtering when needed
     count(): Promise<number>;

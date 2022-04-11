@@ -1,6 +1,10 @@
 import { INestApplication } from '@nestjs/common';
-import { Entity } from 'apps/api/src/domain/models/entity';
-import { EntityType, entityTypes, InMemorySnapshot } from 'apps/api/src/domain/types/entityTypes';
+import { Resource } from 'apps/api/src/domain/models/resource.entity';
+import {
+    InMemorySnapshot,
+    ResourceType,
+    resourceTypes,
+} from 'apps/api/src/domain/types/resourceTypes';
 import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
 import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
 import TestRepositoryProvider from 'apps/api/src/persistence/repositories/__tests__/TestRepositoryProvider';
@@ -9,7 +13,7 @@ import * as request from 'supertest';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import buildViewModelPathForEntityType from '../utilities/buildViewModelPathForEntityType';
+import buildViewModelPathForRe from '../utilities/buildViewModelPathForResourceType';
 import createTestModule from './createTestModule';
 
 describe('GET /entities (fetch view models)', () => {
@@ -26,9 +30,9 @@ describe('GET /entities (fetch view models)', () => {
     const testData = buildTestData();
 
     const testDataWithAllEntitiesPublished = Object.entries(testData).reduce(
-        (accumulatedData: InMemorySnapshot, [entityType, instances]) => ({
+        (accumulatedData: InMemorySnapshot, [Re, instances]) => ({
             ...accumulatedData,
-            [entityType]: instances.map((instance) =>
+            [Re]: instances.map((instance) =>
                 instance.clone({
                     published: true,
                 })
@@ -55,12 +59,12 @@ describe('GET /entities (fetch view models)', () => {
     });
 
     // These entities are always published
-    const entityTypesToExclude: EntityType[] = [entityTypes.tag];
+    const resourceTypesToExclude: ResourceType[] = [resourceTypes.tag];
 
-    Object.values(entityTypes)
-        .filter((entityType) => !entityTypesToExclude.includes(entityType))
-        .forEach((entityType) => {
-            const endpointUnderTest = `/${buildViewModelPathForEntityType(entityType)}`;
+    Object.values(resourceTypes)
+        .filter((Re) => !resourceTypesToExclude.includes(Re))
+        .forEach((Re) => {
+            const endpointUnderTest = `/${buildViewModelPathForRe(Re)}`;
 
             const buildFullPathFromId = (id: string): string => `${endpointUnderTest}/${id}`;
 
@@ -73,8 +77,8 @@ describe('GET /entities (fetch view models)', () => {
                     await testRepositoryProvider.testTeardown();
                 });
                 describe(`GET ${endpointUnderTest}/:id`, () => {
-                    describe('when the entity is published', () => {
-                        describe('when no entity with the id exists', () => {
+                    describe('when the resource is published', () => {
+                        describe('when no resource with the id exists', () => {
                             beforeEach(async () => {
                                 await testRepositoryProvider.addEntitiesOfManyTypes(
                                     testDataWithAllEntitiesPublished
@@ -88,7 +92,7 @@ describe('GET /entities (fetch view models)', () => {
                             });
                         });
 
-                        describe('when an entity with the id is found', () => {
+                        describe('when an resource with the id is found', () => {
                             beforeEach(async () => {
                                 await testRepositoryProvider.addEntitiesOfManyTypes(
                                     testDataWithAllEntitiesPublished
@@ -96,34 +100,33 @@ describe('GET /entities (fetch view models)', () => {
                             });
 
                             it('should return the expected response', async () => {
-                                const entityToFind =
-                                    testDataWithAllEntitiesPublished[entityType][0];
+                                const resourceToFind = testDataWithAllEntitiesPublished[Re][0];
 
                                 const res = await request(app.getHttpServer()).get(
-                                    `/entities${buildFullPathFromId(entityToFind.id)}`
+                                    `/entities${buildFullPathFromId(resourceToFind.id)}`
                                 );
 
                                 expect(res.status).toBe(httpStatusCodes.ok);
 
-                                expect(res.body.id).toBe(entityToFind.id);
+                                expect(res.body.id).toBe(resourceToFind.id);
 
                                 expect(res.body).toMatchSnapshot();
                             });
                         });
                     });
 
-                    describe('when an entity with the id is unpublished', () => {
+                    describe('when an resource with the id is unpublished', () => {
                         const unpublishedId = 'unpublished-01';
 
                         beforeEach(async () => {
                             await testRepositoryProvider.addEntitiesOfManyTypes(testData);
 
-                            const unpublishedInstance = testData[entityType][0].clone({
+                            const unpublishedInstance = testData[Re][0].clone({
                                 published: false,
                                 id: unpublishedId,
                             });
 
-                            await testRepositoryProvider.addEntitiesOfSingleType(entityType, [
+                            await testRepositoryProvider.addEntitiesOfSingleType(Re, [
                                 unpublishedInstance,
                             ]);
                         });
@@ -131,25 +134,25 @@ describe('GET /entities (fetch view models)', () => {
                         it('should return not found', async () => {
                             const publishedAndUnpublishedInstancesFromRepo =
                                 await testRepositoryProvider
-                                    .forEntity(entityType)
+                                    .forResource(Re)
                                     .fetchMany()
                                     .then((result) =>
                                         result.filter(
-                                            (singleInstance): singleInstance is Entity =>
+                                            (singleInstance): singleInstance is Resource =>
                                                 !isInternalError(singleInstance)
                                         )
                                     );
 
                             /**
                              * Given 404 is not a very specific symptom, let's be sure the
-                             * unpubished entity was in the db to start with
+                             * unpubished resource was in the db to start with
                              */
-                            const isUnpublishedEntityIdInDB =
+                            const isUnpublishedresourceIdInDB =
                                 publishedAndUnpublishedInstancesFromRepo.some(
                                     ({ id }) => id === unpublishedId
                                 );
 
-                            expect(isUnpublishedEntityIdInDB).toBe(true);
+                            expect(isUnpublishedresourceIdInDB).toBe(true);
 
                             return request(app.getHttpServer())
                                 .get(`/entities${buildFullPathFromId(unpublishedId)}`)

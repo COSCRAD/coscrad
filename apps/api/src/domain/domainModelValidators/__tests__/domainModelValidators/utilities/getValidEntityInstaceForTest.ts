@@ -1,7 +1,7 @@
 import buildTestData from '../../../../../test-data/buildTestData';
-import { EntityType, EntityTypeToInstance } from '../../../../types/entityTypes';
+import { ResourceType, ResourceTypeToInstance } from '../../../../types/resourceTypes';
 
-export default <TEntityType extends EntityType>(
-    entityType: TEntityType
-): EntityTypeToInstance[TEntityType] =>
-    buildTestData()[entityType][0] as EntityTypeToInstance[TEntityType];
+export default <TResourceType extends ResourceType>(
+    ResourceType: TResourceType
+): ResourceTypeToInstance[TResourceType] =>
+    buildTestData()[ResourceType][0] as ResourceTypeToInstance[TResourceType];

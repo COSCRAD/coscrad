@@ -1,13 +1,13 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import { entityTypes } from '../../types/entityTypes';
-import { Entity } from '../entity';
+import { resourceTypes } from '../../types/resourceTypes';
+import { Resource } from '../resource.entity';
 import { IGeometricFeature } from './GeometricFeature';
 import { ISpatialFeature } from './ISpatialFeature';
 import { LineCoordinates } from './types/Coordinates/LineCoordinates';
 import { GeometricFeatureType } from './types/GeometricFeatureType';
 
-export class Line extends Entity implements ISpatialFeature {
-    readonly type = entityTypes.spatialFeature;
+export class Line extends Resource implements ISpatialFeature {
+    readonly type = resourceTypes.spatialFeature;
 
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.line, LineCoordinates>;
 

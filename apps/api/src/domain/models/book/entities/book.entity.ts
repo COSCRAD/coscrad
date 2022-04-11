@@ -1,10 +1,10 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import { entityTypes } from '../../../types/entityTypes';
-import { Entity } from '../../entity';
+import { resourceTypes } from '../../../types/resourceTypes';
+import { Resource } from '../../resource.entity';
 import BookPage from './BookPage';
 
-export class Book extends Entity {
-    readonly type = entityTypes.book;
+export class Book extends Resource {
+    readonly type = resourceTypes.book;
 
     readonly title: string;
 

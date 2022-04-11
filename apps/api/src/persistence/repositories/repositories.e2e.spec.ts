@@ -1,8 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import createTestModule from '../../app/controllers/__tests__/createTestModule';
 import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForEntity';
-import { Entity } from '../../domain/models/entity';
-import { entityTypes } from '../../domain/types/entityTypes';
+import { Resource } from '../../domain/models/resource.entity';
+import { resourceTypes } from '../../domain/types/resourceTypes';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
 import buildTestData from '../../test-data/buildTestData';
@@ -47,8 +47,8 @@ describe('Repository provider > repositoryForEntity', () => {
         await app.close();
     });
 
-    Object.values(entityTypes).forEach((entityType) => {
-        describe(`Repository for entity of type ${entityType}`, () => {
+    Object.values(resourceTypes).forEach((resourceType) => {
+        describe(`Repository for entity of type ${resourceType}`, () => {
             beforeEach(async () => {
                 await testRepositoryProvider.addEntitiesOfManyTypes(testData);
             });
@@ -60,7 +60,7 @@ describe('Repository provider > repositoryForEntity', () => {
                 describe('When no specification is provided', () => {
                     it('should return the expected result', async () => {
                         const result = await testRepositoryProvider
-                            .forEntity(entityType)
+                            .forResource(resourceType)
                             .fetchMany();
 
                         /**
@@ -68,7 +68,7 @@ describe('Repository provider > repositoryForEntity', () => {
                          * custom matcher in Jest for comparing instances (not DTOs)
                          * */
                         expect(JSON.stringify(result)).toEqual(
-                            JSON.stringify(testData[entityType])
+                            JSON.stringify(testData[resourceType])
                         );
                     });
                 });
@@ -77,10 +77,10 @@ describe('Repository provider > repositoryForEntity', () => {
             describe('fetchById', () => {
                 describe('when there is an entity with the given id', () => {
                     it('should return the expected result', async () => {
-                        const entityToFind = testData[entityType][0];
+                        const entityToFind = testData[resourceType][0];
 
                         const result = await testRepositoryProvider
-                            .forEntity(entityType)
+                            .forResource(resourceType)
                             .fetchById(entityToFind.id);
 
                         // TODO custom matcher (Same as above)
@@ -91,7 +91,7 @@ describe('Repository provider > repositoryForEntity', () => {
                 describe('when there is no entity with the given id', () => {
                     it('should return not found', async () => {
                         const result = await testRepositoryProvider
-                            .forEntity(entityType)
+                            .forResource(resourceType)
                             .fetchById('BOGUS-ENTITY-ID');
 
                         // TODO custom matcher (Same as above)
@@ -103,10 +103,10 @@ describe('Repository provider > repositoryForEntity', () => {
             //
             describe('getCount', () => {
                 it('should return the expected count', async () => {
-                    const expectedCount = testData[entityType].length;
+                    const expectedCount = testData[resourceType].length;
 
                     const actualCount = await testRepositoryProvider
-                        .forEntity(entityType)
+                        .forResource(resourceType)
                         .getCount();
 
                     expect(actualCount).toEqual(expectedCount);
@@ -116,11 +116,11 @@ describe('Repository provider > repositoryForEntity', () => {
             describe('create', () => {
                 it('should successfully create the new entity', async () => {
                     const dtoForEntityToCreate = {
-                        ...testData[entityType][0].toDTO(),
+                        ...testData[resourceType][0].toDTO(),
                         id: 'BRAND-NEW-ENTITY-ID',
                     };
 
-                    const entityFactory = getInstanceFactoryForEntity(entityType);
+                    const entityFactory = getInstanceFactoryForEntity(resourceType);
 
                     const newEntityInstance = entityFactory(dtoForEntityToCreate);
 
@@ -131,10 +131,12 @@ describe('Repository provider > repositoryForEntity', () => {
                      */
                     if (isInternalError(newEntityInstance)) throw newEntityInstance;
 
-                    await testRepositoryProvider.forEntity(entityType).create(newEntityInstance);
+                    await testRepositoryProvider
+                        .forResource(resourceType)
+                        .create(newEntityInstance);
 
                     const entityFetchedAfterCreation = await testRepositoryProvider
-                        .forEntity(entityType)
+                        .forResource(resourceType)
                         .fetchById(newEntityInstance.id);
 
                     expect(entityFetchedAfterCreation).not.toBe(NotFound);
@@ -147,9 +149,9 @@ describe('Repository provider > repositoryForEntity', () => {
 
             describe('createMany', () => {
                 it('should successfully create all new entities', async () => {
-                    const entityFactory = getInstanceFactoryForEntity(entityType);
+                    const entityFactory = getInstanceFactoryForEntity(resourceType);
 
-                    const newEntitiesToCreateOrErrors = testData[entityType]
+                    const newEntitiesToCreateOrErrors = testData[resourceType]
                         .map((oldEntity, index) => ({
                             ...oldEntity.toDTO(),
                             id: `NEW-ENTITY-ID-${index + 1}`,
@@ -164,7 +166,7 @@ describe('Repository provider > repositoryForEntity', () => {
                     if (newEntitiesToCreateOrErrors.some(isInternalError))
                         throw new InternalError(
                             [
-                                `Encountered invalid test data for entity of type: ${entityType}.`,
+                                `Encountered invalid test data for entity of type: ${resourceType}.`,
                                 `\n You may want to run validateTestData.spec.ts`,
                             ].join(' ')
                         );
@@ -175,16 +177,17 @@ describe('Repository provider > repositoryForEntity', () => {
                      * factory.
                      */
                     const newEntitiesToCreate = newEntitiesToCreateOrErrors.filter(
-                        (entityOrError): entityOrError is Entity => !isInternalError(entityOrError)
+                        (entityOrError): entityOrError is Resource =>
+                            !isInternalError(entityOrError)
                     );
 
                     await testRepositoryProvider
-                        .forEntity(entityType)
+                        .forResource(resourceType)
                         .createMany(newEntitiesToCreate);
 
                     newEntitiesToCreate.forEach(async (entity) => {
                         const entityFetchedAfterCreation = await testRepositoryProvider
-                            .forEntity(entityType)
+                            .forResource(resourceType)
                             .fetchById(entity.id);
 
                         expect(entityFetchedAfterCreation).not.toBe(NotFound);

@@ -10,7 +10,7 @@ import { AppService } from './app.service';
 import buildConfigFilePath from './config/buildConfigFilePath';
 import { validate } from './config/env.validation';
 import { AddTagController } from './controllers/addTag.controller';
-import { EntityViewModelController } from './controllers/entityViewModel.controller';
+import { ResourceViewModelController } from './controllers/resourceViewModel.controller';
 
 @Module({
     imports: [
@@ -24,7 +24,7 @@ import { EntityViewModelController } from './controllers/entityViewModel.control
         DomainServicesModule,
         PersistenceModule.forRootAsync(),
     ],
-    controllers: [AppController, EntityViewModelController, AddTagController],
+    controllers: [AppController, ResourceViewModelController, AddTagController],
     providers: [AppService, DatabaseProvider, RepositoryProvider],
 })
 export class AppModule {}

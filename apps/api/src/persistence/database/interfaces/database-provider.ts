@@ -1,11 +1,11 @@
-import { Entity } from 'apps/api/src/domain/models/entity';
+import { Resource } from 'apps/api/src/domain/models/resource.entity';
 import { IDatabase } from './database';
 import { IDatabaseForCollection } from './database-for-collection';
 
 export interface IDatabaseProvider {
     getDBInstance: () => IDatabase;
 
-    getDatabaseForCollection: <TEntity extends Entity>(
+    getDatabaseForCollection: <TEntity extends Resource>(
         collectionId: string
     ) => IDatabaseForCollection<TEntity>;
 }

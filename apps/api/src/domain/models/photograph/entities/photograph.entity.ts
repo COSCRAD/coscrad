@@ -1,10 +1,10 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import { entityTypes } from '../../../types/entityTypes';
-import { Entity } from '../../entity';
+import { resourceTypes } from '../../../types/resourceTypes';
+import { Resource } from '../../resource.entity';
 import PhotographDimensions from './PhotographDimensions';
 
-export class Photograph extends Entity {
-    readonly type = entityTypes.photograph;
+export class Photograph extends Resource {
+    readonly type = resourceTypes.photograph;
 
     readonly filename: string;
 

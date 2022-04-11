@@ -8,32 +8,32 @@ import { Tag } from '../../domain/models/tag/tag.entity';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { TranscribedAudio } from '../../domain/models/transcribed-audio/entities/transcribed-audio.entity';
 import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
-import { isEntityId } from '../../domain/types/EntityId';
-import { entityTypes } from '../../domain/types/entityTypes';
+import { isResourceId } from '../../domain/types/ResourceId';
+import { resourceTypes } from '../../domain/types/resourceTypes';
 import { isInternalError } from '../../lib/errors/InternalError';
 import { isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
-import buildBookViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildBookViewModels';
-import buildPhotographViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildPhotographViewModels';
-import buildSpatialFeatureViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildSpatialFeatureViewModels';
-import buildTagViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTagViewModels';
-import buildTermViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTermViewModels';
-import buildTranscribedAudioViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildTranscribedAudioViewModels';
-import buildVocabularyListViewModels from '../../view-models/buildViewModelForEntity/viewModelBuilders/buildVocabularyListViewModels';
+import buildBookViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildBookViewModels';
+import buildPhotographViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildPhotographViewModels';
+import buildSpatialFeatureViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildSpatialFeatureViewModels';
+import buildTagViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildTagViewModels';
+import buildTermViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildTermViewModels';
+import buildTranscribedAudioViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildTranscribedAudioViewModels';
+import buildVocabularyListViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildVocabularyListViewModels';
 import {
     HasViewModelId,
     TagViewModel,
     TermViewModel,
     VocabularyListViewModel,
-} from '../../view-models/buildViewModelForEntity/viewModels';
-import { BookViewModel } from '../../view-models/buildViewModelForEntity/viewModels/book.view-model';
-import { PhotographViewModel } from '../../view-models/buildViewModelForEntity/viewModels/photograph.view-model';
-import { SpatialFeatureViewModel } from '../../view-models/buildViewModelForEntity/viewModels/spatial-data/spatial-feature.view-model';
-import { TranscribedAudioViewModel } from '../../view-models/buildViewModelForEntity/viewModels/transcribed-audio/transcribed-audio.view-model';
-import { buildAllEntityDescriptions } from '../../view-models/entityDescriptions/buildAllEntityDescriptions';
+} from '../../view-models/buildViewModelForResource/viewModels';
+import { BookViewModel } from '../../view-models/buildViewModelForResource/viewModels/book.view-model';
+import { PhotographViewModel } from '../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
+import { SpatialFeatureViewModel } from '../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
+import { TranscribedAudioViewModel } from '../../view-models/buildViewModelForResource/viewModels/transcribed-audio/transcribed-audio.view-model';
+import { buildAllResourceDescriptions } from '../../view-models/resourceDescriptions/buildAllResourceDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
-import buildViewModelPathForEntityType from './utilities/buildViewModelPathForEntityType';
+import buildViewModelPathForResourceType from './utilities/buildViewModelPathForResourceType';
 
 const buildByIdApiParamMetadata = () => ({
     name: 'id',
@@ -41,22 +41,22 @@ const buildByIdApiParamMetadata = () => ({
     example: '2',
 });
 
-@ApiTags('entities')
-@Controller('entities')
-export class EntityViewModelController {
+@ApiTags('resources')
+@Controller('resources')
+export class ResourceViewModelController {
     constructor(
         private readonly repositoryProvider: RepositoryProvider,
         private readonly configService: ConfigService
     ) {}
 
     @Get('')
-    getAllEntityDescriptions() {
-        return buildAllEntityDescriptions();
+    getAllResourceDescriptions() {
+        return buildAllResourceDescriptions();
     }
 
     /* ********** TERMS ********** */
     @ApiOkResponse({ type: TermViewModel, isArray: true })
-    @Get(buildViewModelPathForEntityType(entityTypes.term))
+    @Get(buildViewModelPathForResourceType(resourceTypes.term))
     async fetchTerms(@Res() res) {
         const allTermViewModels = await buildTermViewModels({
             repositoryProvider: this.repositoryProvider,
@@ -73,17 +73,17 @@ export class EntityViewModelController {
 
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: TermViewModel })
-    @Get(`${buildViewModelPathForEntityType(entityTypes.term)}/:id`)
+    @Get(`${buildViewModelPathForResourceType(resourceTypes.term)}/:id`)
     async fetchTermById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isEntityId(id))
+        if (!isResourceId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
 
         const searchResult = await this.repositoryProvider
-            .forEntity<Term>(entityTypes.term)
+            .forResource<Term>(resourceTypes.term)
             .fetchById(id);
 
         if (isInternalError(searchResult))
@@ -107,7 +107,7 @@ export class EntityViewModelController {
 
     /* ********** VOCABULARY LISTS ********** */
     @ApiOkResponse({ type: VocabularyListViewModel, isArray: true })
-    @Get(buildViewModelPathForEntityType(entityTypes.vocabularyList))
+    @Get(buildViewModelPathForResourceType(resourceTypes.vocabularyList))
     async fetchVocabularyLists(@Res() res) {
         const allViewModels = await buildVocabularyListViewModels({
             repositoryProvider: this.repositoryProvider,
@@ -124,11 +124,11 @@ export class EntityViewModelController {
 
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: VocabularyListViewModel })
-    @Get(`${buildViewModelPathForEntityType(entityTypes.vocabularyList)}/:id`)
+    @Get(`${buildViewModelPathForResourceType(resourceTypes.vocabularyList)}/:id`)
     async fetchVocabularyListById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isEntityId(id))
+        if (!isResourceId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
@@ -137,10 +137,10 @@ export class EntityViewModelController {
 
         const [vocabularyListSearchResult, allTerms] = await Promise.all([
             this.repositoryProvider
-                .forEntity<VocabularyList>(entityTypes.vocabularyList)
+                .forResource<VocabularyList>(resourceTypes.vocabularyList)
                 .fetchById(id),
             this.repositoryProvider
-                .forEntity<Term>(entityTypes.term)
+                .forResource<Term>(resourceTypes.term)
                 .fetchMany()
                 .then((allResults) =>
                     allResults.filter((result): result is Term => !isInternalError(result))
@@ -172,7 +172,7 @@ export class EntityViewModelController {
 
     /* ********** TAGS ********** */
     @ApiOkResponse({ type: TagViewModel, isArray: true })
-    @Get(buildViewModelPathForEntityType(entityTypes.tag))
+    @Get(buildViewModelPathForResourceType(resourceTypes.tag))
     async fetchTags(@Res() res) {
         const allViewModels = await buildTagViewModels({
             repositoryProvider: this.repositoryProvider,
@@ -189,17 +189,17 @@ export class EntityViewModelController {
 
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: TagViewModel })
-    @Get(`${buildViewModelPathForEntityType(entityTypes.tag)}/:id`)
+    @Get(`${buildViewModelPathForResourceType(resourceTypes.tag)}/:id`)
     async fetchTagById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isEntityId(id))
+        if (!isResourceId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
 
         const searchResult = await this.repositoryProvider
-            .forEntity<Tag>(entityTypes.tag)
+            .forResource<Tag>(resourceTypes.tag)
             .fetchById(id);
 
         if (isInternalError(searchResult))
@@ -220,7 +220,7 @@ export class EntityViewModelController {
 
     /* ********** AUDIO WITH TRANSRIPT ********** */
     @ApiOkResponse({ type: TranscribedAudioViewModel, isArray: true })
-    @Get(buildViewModelPathForEntityType(entityTypes.transcribedAudio))
+    @Get(buildViewModelPathForResourceType(resourceTypes.transcribedAudio))
     async fetchAudioViewModelsWithTranscripts(@Res() res) {
         const allViewModels = await buildTranscribedAudioViewModels({
             repositoryProvider: this.repositoryProvider,
@@ -237,17 +237,17 @@ export class EntityViewModelController {
 
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: TagViewModel })
-    @Get(`${buildViewModelPathForEntityType(entityTypes.transcribedAudio)}/:id`)
+    @Get(`${buildViewModelPathForResourceType(resourceTypes.transcribedAudio)}/:id`)
     async fetchTranscribedAudioById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isEntityId(id))
+        if (!isResourceId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
 
         const searchResult = await this.repositoryProvider
-            .forEntity<TranscribedAudio>(entityTypes.transcribedAudio)
+            .forResource<TranscribedAudio>(resourceTypes.transcribedAudio)
             .fetchById(id);
 
         if (isInternalError(searchResult))
@@ -271,7 +271,7 @@ export class EntityViewModelController {
 
     /* ********** BOOKS ********** */
     @ApiOkResponse({ type: BookViewModel, isArray: true })
-    @Get(buildViewModelPathForEntityType(entityTypes.book))
+    @Get(buildViewModelPathForResourceType(resourceTypes.book))
     async fetchBooks(@Res() res) {
         const allViewModels = await buildBookViewModels({
             repositoryProvider: this.repositoryProvider,
@@ -288,17 +288,17 @@ export class EntityViewModelController {
 
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: BookViewModel })
-    @Get(`${buildViewModelPathForEntityType(entityTypes.book)}/:id`)
+    @Get(`${buildViewModelPathForResourceType(resourceTypes.book)}/:id`)
     async fetchBookById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isEntityId(id))
+        if (!isResourceId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
 
         const searchResult = await this.repositoryProvider
-            .forEntity<Book>(entityTypes.book)
+            .forResource<Book>(resourceTypes.book)
             .fetchById(id);
 
         if (isInternalError(searchResult))
@@ -319,7 +319,7 @@ export class EntityViewModelController {
 
     /* ********** PHOTOGRAPHS   ********** */
     @ApiOkResponse({ type: PhotographViewModel, isArray: true })
-    @Get(buildViewModelPathForEntityType(entityTypes.photograph))
+    @Get(buildViewModelPathForResourceType(resourceTypes.photograph))
     async fetchPhotographs(@Res() res) {
         const allViewModels = await buildPhotographViewModels({
             repositoryProvider: this.repositoryProvider,
@@ -336,17 +336,17 @@ export class EntityViewModelController {
 
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: PhotographViewModel })
-    @Get(`${buildViewModelPathForEntityType(entityTypes.photograph)}/:id`)
+    @Get(`${buildViewModelPathForResourceType(resourceTypes.photograph)}/:id`)
     async fetchPhotographById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isEntityId(id))
+        if (!isResourceId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
 
         const searchResult = await this.repositoryProvider
-            .forEntity<Photograph>(entityTypes.photograph)
+            .forResource<Photograph>(resourceTypes.photograph)
             .fetchById(id);
 
         if (isInternalError(searchResult))
@@ -370,7 +370,7 @@ export class EntityViewModelController {
 
     /* ********** SPATIAL FEATURE   ********** */
     @ApiOkResponse({ type: SpatialFeatureViewModel, isArray: true })
-    @Get(buildViewModelPathForEntityType(entityTypes.spatialFeature))
+    @Get(buildViewModelPathForResourceType(resourceTypes.spatialFeature))
     async fetchSpatialFeatures(@Res() res) {
         const allViewModels = await buildSpatialFeatureViewModels({
             repositoryProvider: this.repositoryProvider,
@@ -387,17 +387,17 @@ export class EntityViewModelController {
 
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: SpatialFeatureViewModel })
-    @Get(`${buildViewModelPathForEntityType(entityTypes.spatialFeature)}/:id`)
+    @Get(`${buildViewModelPathForResourceType(resourceTypes.spatialFeature)}/:id`)
     async fetchSpatialFeatureById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isEntityId(id))
+        if (!isResourceId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
 
         const searchResult = await this.repositoryProvider
-            .forEntity<ISpatialFeature>(entityTypes.spatialFeature)
+            .forResource<ISpatialFeature>(resourceTypes.spatialFeature)
             .fetchById(id);
 
         if (isInternalError(searchResult))

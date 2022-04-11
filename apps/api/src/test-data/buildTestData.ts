@@ -1,4 +1,4 @@
-import { entityTypes, InMemorySnapshot } from '../domain/types/entityTypes';
+import { InMemorySnapshot, resourceTypes } from '../domain/types/resourceTypes';
 import buildBookTestData from './buildBookTestData';
 import buildPhotographTestData from './buildPhotographTestData';
 import buildSpatialFeatureTestData from './buildSpatialFeatureTestData';
@@ -13,11 +13,11 @@ import buildVocabularyListTestData from './buildVocabularyListTestData';
  * invariants.
  */
 export default (): InMemorySnapshot => ({
-    [entityTypes.tag]: buildTagTestData(),
-    [entityTypes.term]: buildTermTestData(),
-    [entityTypes.vocabularyList]: buildVocabularyListTestData(),
-    [entityTypes.transcribedAudio]: buildTranscribedAudioTestData(),
-    [entityTypes.book]: buildBookTestData(),
-    [entityTypes.photograph]: buildPhotographTestData(),
-    [entityTypes.spatialFeature]: buildSpatialFeatureTestData(),
+    [resourceTypes.tag]: buildTagTestData(),
+    [resourceTypes.term]: buildTermTestData(),
+    [resourceTypes.vocabularyList]: buildVocabularyListTestData(),
+    [resourceTypes.transcribedAudio]: buildTranscribedAudioTestData(),
+    [resourceTypes.book]: buildBookTestData(),
+    [resourceTypes.photograph]: buildPhotographTestData(),
+    [resourceTypes.spatialFeature]: buildSpatialFeatureTestData(),
 });

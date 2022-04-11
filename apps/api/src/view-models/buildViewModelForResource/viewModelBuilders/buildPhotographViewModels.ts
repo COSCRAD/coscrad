@@ -1,6 +1,6 @@
 import { Photograph } from 'apps/api/src/domain/models/photograph/entities/photograph.entity';
 import IsPublished from 'apps/api/src/domain/repositories/specifications/isPublished';
-import { entityTypes } from 'apps/api/src/domain/types/entityTypes';
+import { resourceTypes } from 'apps/api/src/domain/types/resourceTypes';
 import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
 import { PhotographViewModel } from '../viewModels/photograph.view-model';
 import { ViewModelBuilderDependencies } from './types/ViewModelBuilderDependencies';
@@ -24,7 +24,9 @@ export default async (
 
     const isPublishedSpecification = shouldReturnUnpublishedEntities ? null : new IsPublished(true);
 
-    const photographRepository = repositoryProvider.forEntity<Photograph>(entityTypes.photograph);
+    const photographRepository = repositoryProvider.forResource<Photograph>(
+        resourceTypes.photograph
+    );
 
     const searchResult = await photographRepository.fetchMany(isPublishedSpecification);
 

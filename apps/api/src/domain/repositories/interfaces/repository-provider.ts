@@ -1,7 +1,9 @@
-import { Entity } from '../../models/entity';
-import { EntityType } from '../../types/entityTypes';
+import { Resource } from '../../models/resource.entity';
+import { ResourceType } from '../../types/resourceTypes';
 import { IRepositoryForEntity } from './repository-for-entity';
 
 export interface IRepositoryProvider {
-    forEntity: <TEntity extends Entity>(entityType: EntityType) => IRepositoryForEntity<TEntity>;
+    forResource: <TEntity extends Resource>(
+        resourceType: ResourceType
+    ) => IRepositoryForEntity<TEntity>;
 }

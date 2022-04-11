@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForEntity';
-import { Entity } from '../../domain/models/entity';
+import { Resource } from '../../domain/models/resource.entity';
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider';
-import { EntityType } from '../../domain/types/entityTypes';
+import { ResourceType } from '../../domain/types/resourceTypes';
 import { DatabaseProvider } from '../database/database.provider';
-import { getArangoCollectionIDFromEntityType } from '../database/getArangoCollectionIDFromEntityType';
+import { getArangoCollectionIDFromResourceType } from '../database/getArangoCollectionIDFromResourceType';
 import { RepositoryForEntity } from './repository-for-entity';
 
 @Injectable()
 export class RepositoryProvider implements IRepositoryProvider {
     constructor(protected databaseProvider: DatabaseProvider) {}
 
-    forEntity<TEntity extends Entity>(entityType: EntityType) {
-        return new RepositoryForEntity<TEntity>(
+    forResource<TResource extends Resource>(resourceType: ResourceType) {
+        return new RepositoryForEntity<TResource>(
             this.databaseProvider,
-            getArangoCollectionIDFromEntityType(entityType),
-            getInstanceFactoryForEntity(entityType)
+            getArangoCollectionIDFromResourceType(resourceType),
+            getInstanceFactoryForEntity(resourceType)
         );
     }
 }

@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import createTestModule from '../../app/controllers/__tests__/createTestModule';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import TermEnglishEquals from '../../domain/repositories/specifications/TermEnglishEquals';
-import { entityTypes } from '../../domain/types/entityTypes';
+import { resourceTypes } from '../../domain/types/resourceTypes';
 import buildTestData from '../../test-data/buildTestData';
 import { ArangoConnectionProvider } from '../database/arango-connection.provider';
 import { DatabaseProvider } from '../database/database.provider';
@@ -57,7 +57,7 @@ describe('Repository for entity (with filters)', () => {
             it('should find the matching data', async () => {
                 const textToMatch = 'foobar';
 
-                const matchingTerms = testData[entityTypes.term].map(
+                const matchingTerms = testData[resourceTypes.term].map(
                     (term) =>
                         new Term({
                             ...term.toDTO(),
@@ -65,7 +65,7 @@ describe('Repository for entity (with filters)', () => {
                         })
                 );
 
-                const nonMatchingTerms = testData[entityTypes.term]
+                const nonMatchingTerms = testData[resourceTypes.term]
                     .map(
                         (term, index) =>
                             new Term({
@@ -78,12 +78,12 @@ describe('Repository for entity (with filters)', () => {
 
                 const allTerms = [...matchingTerms, ...nonMatchingTerms];
 
-                await testRepositoryProvider.addEntitiesOfSingleType(entityTypes.term, allTerms);
+                await testRepositoryProvider.addEntitiesOfSingleType(resourceTypes.term, allTerms);
 
                 const specification = new TermEnglishEquals(textToMatch);
 
                 const foundTerms = await testRepositoryProvider
-                    .forEntity<Term>(entityTypes.term)
+                    .forResource<Term>(resourceTypes.term)
                     .fetchMany(specification);
 
                 expect(foundTerms.length).toBe(matchingTerms.length);
@@ -94,16 +94,16 @@ describe('Repository for entity (with filters)', () => {
 
         describe('when there is no data that matches the specification', () => {
             it('should return an empty result set', async () => {
-                const terms = testData[entityTypes.term];
+                const terms = testData[resourceTypes.term];
 
                 const unmatchedSearchTerm = 'abcdefghijklmnopqrstuvwxyz-123';
 
                 const specification = new TermEnglishEquals(unmatchedSearchTerm);
 
-                await testRepositoryProvider.addEntitiesOfSingleType(entityTypes.term, terms);
+                await testRepositoryProvider.addEntitiesOfSingleType(resourceTypes.term, terms);
 
                 const searchResult = await testRepositoryProvider
-                    .forEntity<Term>(entityTypes.term)
+                    .forResource<Term>(resourceTypes.term)
                     .fetchMany(specification);
 
                 expect(searchResult).toEqual([]);

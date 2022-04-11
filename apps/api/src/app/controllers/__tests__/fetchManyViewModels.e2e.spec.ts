@@ -1,6 +1,10 @@
 import { INestApplication } from '@nestjs/common';
-import { Entity } from 'apps/api/src/domain/models/entity';
-import { EntityType, entityTypes, InMemorySnapshot } from 'apps/api/src/domain/types/entityTypes';
+import { Resource } from 'apps/api/src/domain/models/resource.entity';
+import {
+    InMemorySnapshot,
+    ResourceType,
+    resourceTypes,
+} from 'apps/api/src/domain/types/resourceTypes';
 import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
 import TestRepositoryProvider from 'apps/api/src/persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from 'apps/api/src/test-data/buildTestData';
@@ -8,7 +12,7 @@ import * as request from 'supertest';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import buildViewModelPathForEntityType from '../utilities/buildViewModelPathForEntityType';
+import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
 import createTestModule from './createTestModule';
 
 describe('When fetching multiple entities', () => {
@@ -25,9 +29,9 @@ describe('When fetching multiple entities', () => {
     const testData = buildTestData();
 
     const testDataWithAllEntitiesPublished = Object.entries(testData).reduce(
-        (accumulatedData: InMemorySnapshot, [entityType, instances]) => ({
+        (accumulatedData: InMemorySnapshot, [ResourceType, instances]) => ({
             ...accumulatedData,
-            [entityType]: instances.map((instance) =>
+            [ResourceType]: instances.map((instance) =>
                 instance.clone({
                     published: true,
                 })
@@ -54,12 +58,12 @@ describe('When fetching multiple entities', () => {
     });
 
     // These entities are always published
-    const entityTypesToExclude: EntityType[] = [entityTypes.tag];
+    const resourceTypesToExclude: ResourceType[] = [resourceTypes.tag];
 
-    Object.values(entityTypes)
-        .filter((entityType) => !entityTypesToExclude.includes(entityType))
-        .forEach((entityType) => {
-            const endpointUnderTest = `/${buildViewModelPathForEntityType(entityType)}`;
+    Object.values(resourceTypes)
+        .filter((ResourceType) => !resourceTypesToExclude.includes(ResourceType))
+        .forEach((ResourceType) => {
+            const endpointUnderTest = `/${buildViewModelPathForResourceType(ResourceType)}`;
 
             describe(`GET ${endpointUnderTest}`, () => {
                 beforeEach(async () => {
@@ -77,7 +81,7 @@ describe('When fetching multiple entities', () => {
                         );
                     });
 
-                    it(`should fetch multiple entities of type ${entityType}`, async () => {
+                    it(`should fetch multiple entities of type ${ResourceType}`, async () => {
                         const res = await request(app.getHttpServer()).get(
                             `/entities${endpointUnderTest}`
                         );
@@ -85,7 +89,7 @@ describe('When fetching multiple entities', () => {
                         expect(res.status).toBe(httpStatusCodes.ok);
 
                         expect(res.body.length).toBe(
-                            testDataWithAllEntitiesPublished[entityType].length
+                            testDataWithAllEntitiesPublished[ResourceType].length
                         );
 
                         expect(res.body).toMatchSnapshot();
@@ -97,13 +101,14 @@ describe('When fetching multiple entities', () => {
                      * Note that there is no requirement that the test data have
                      * `published = true`
                      */
-                    const publishedEntitiesToAdd = testData[entityType].map((instance: Entity) =>
-                        instance.clone({
-                            published: true,
-                        })
+                    const publishedEntitiesToAdd = testData[ResourceType].map(
+                        (instance: Resource) =>
+                            instance.clone({
+                                published: true,
+                            })
                     );
 
-                    const unpublishedEntitiesToAdd = testData[entityType]
+                    const unpublishedEntitiesToAdd = testData[ResourceType]
                         // We want a different number of published \ unpublished terms
                         .slice(0, -1)
                         .map((instance, index) =>
@@ -114,7 +119,7 @@ describe('When fetching multiple entities', () => {
                         );
 
                     beforeEach(async () => {
-                        await testRepositoryProvider.addEntitiesOfSingleType(entityType, [
+                        await testRepositoryProvider.addEntitiesOfSingleType(ResourceType, [
                             ...unpublishedEntitiesToAdd,
                             ...publishedEntitiesToAdd,
                         ]);

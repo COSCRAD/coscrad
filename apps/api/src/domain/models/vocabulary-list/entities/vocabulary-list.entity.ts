@@ -1,11 +1,11 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import { entityTypes } from '../../../types/entityTypes';
-import { Entity } from '../../entity';
+import { resourceTypes } from '../../../types/resourceTypes';
+import { Resource } from '../../resource.entity';
 import { VocabularyListEntry } from '../vocabulary-list-entry';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
-export class VocabularyList extends Entity {
-    readonly type = entityTypes.vocabularyList;
+export class VocabularyList extends Resource {
+    readonly type = resourceTypes.vocabularyList;
 
     readonly name?: string;
 

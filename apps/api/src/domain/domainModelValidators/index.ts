@@ -1,5 +1,5 @@
 import { InternalError } from '../../lib/errors/InternalError';
-import { EntityType, entityTypes } from '../types/entityTypes';
+import { ResourceType, resourceTypes } from '../types/resourceTypes';
 import bookValidator from './bookValidator';
 import photographValidator from './photographValidator';
 import spatialFeatureValidator from './spatialFeatureValidator';
@@ -10,32 +10,32 @@ import { DomainModelValidator } from './types/DomainModelValidator';
 import vocabularyListValidator from './vocabularyListValidator';
 
 // TODO should we put these on the classes and use polymorphism?
-export const getValidatorForEntity = (entityType: EntityType): DomainModelValidator => {
-    switch (entityType) {
-        case entityTypes.tag:
+export const getValidatorForEntity = (resourceType: ResourceType): DomainModelValidator => {
+    switch (resourceType) {
+        case resourceTypes.tag:
             return tagValidator;
 
-        case entityTypes.term:
+        case resourceTypes.term:
             return termValidator;
 
-        case entityTypes.vocabularyList:
+        case resourceTypes.vocabularyList:
             return vocabularyListValidator;
 
-        case entityTypes.transcribedAudio:
+        case resourceTypes.transcribedAudio:
             return transcribedAudioValidator;
 
-        case entityTypes.book:
+        case resourceTypes.book:
             return bookValidator;
 
-        case entityTypes.photograph:
+        case resourceTypes.photograph:
             return photographValidator;
 
-        case entityTypes.spatialFeature:
+        case resourceTypes.spatialFeature:
             return spatialFeatureValidator;
 
         default:
             throw new InternalError(
-                `Failed to get validator for unknown entity type: ${entityType}`
+                `Failed to get validator for unknown entity type: ${resourceType}`
             );
     }
 };

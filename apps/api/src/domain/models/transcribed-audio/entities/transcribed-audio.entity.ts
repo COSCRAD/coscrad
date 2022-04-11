@@ -1,10 +1,10 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import { entityTypes } from '../../../types/entityTypes';
-import { Entity } from '../../entity';
+import { resourceTypes } from '../../../types/resourceTypes';
+import { Resource } from '../../resource.entity';
 import { Transcript } from './Transcript';
 
-export class TranscribedAudio extends Entity {
-    readonly type = entityTypes.transcribedAudio;
+export class TranscribedAudio extends Resource {
+    readonly type = resourceTypes.transcribedAudio;
 
     readonly audioFilename: string;
 

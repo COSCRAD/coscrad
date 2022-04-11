@@ -7,7 +7,7 @@ import { Term } from '../models/term/entities/term.entity';
 import { TranscribedAudio } from '../models/transcribed-audio/entities/transcribed-audio.entity';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
 
-export const entityTypes = {
+export const resourceTypes = {
     term: 'term',
     vocabularyList: 'vocabularyList',
     transcribedAudio: 'transcribedAudio',
@@ -18,13 +18,13 @@ export const entityTypes = {
     tag: 'tag',
 } as const;
 
-export type EntityType = ValueType<typeof entityTypes>;
+export type ResourceType = ValueType<typeof resourceTypes>;
 
-export const isEntityType = (input: unknown): input is EntityType =>
-    Object.values(entityTypes).includes(input as EntityType);
+export const isResourceType = (input: unknown): input is ResourceType =>
+    Object.values(resourceTypes).includes(input as ResourceType);
 
 // We should use this for type inference a few places.
-export type EntityTypeToInstance = {
+export type ResourceTypeToInstance = {
     term: Term;
     vocabularyList: VocabularyList;
     transcribedAudio: TranscribedAudio;
@@ -38,5 +38,5 @@ export type EntityTypeToInstance = {
  * This represents the state of all domain models, excluding their `Connections`
  */
 export type InMemorySnapshot = {
-    [K in EntityType]?: EntityTypeToInstance[K][];
+    [K in ResourceType]?: ResourceTypeToInstance[K][];
 };

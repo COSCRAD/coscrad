@@ -1,9 +1,9 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import { entityTypes } from '../../types/entityTypes';
-import { Entity } from '../entity';
+import { resourceTypes } from '../../types/resourceTypes';
+import { Resource } from '../resource.entity';
 
-export class Tag extends Entity {
-    type = entityTypes.tag;
+export class Tag extends Resource {
+    type = resourceTypes.tag;
 
     text: string;
 

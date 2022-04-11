@@ -2,7 +2,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
 import { PartialDTO } from '../../types/partial-dto';
 import { Tag } from '../models/tag/tag.entity';
-import { entityTypes } from '../types/entityTypes';
+import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
 import InvalidPublicationStatusError from './errors/InvalidPublicationStatusError';
@@ -13,8 +13,8 @@ import { Valid } from './Valid';
 
 const tagValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
     if (isNullOrUndefined(dto))
-        return new InvalidEntityDTOError(entityTypes.tag, undefined, [
-            new NullOrUndefinedDTOError(entityTypes.tag),
+        return new InvalidEntityDTOError(resourceTypes.tag, undefined, [
+            new NullOrUndefinedDTOError(resourceTypes.tag),
         ]);
 
     const innerErrors: InternalError[] = [];
@@ -25,9 +25,11 @@ const tagValidator: DomainModelValidator = (dto: unknown): Valid | InternalError
 
     // TODO Validate inherited properties on the base class
     if (typeof published !== 'boolean')
-        innerErrors.push(new InvalidPublicationStatusError(entityTypes.tag));
+        innerErrors.push(new InvalidPublicationStatusError(resourceTypes.tag));
 
-    return innerErrors.length ? new InvalidEntityDTOError(entityTypes.tag, id, innerErrors) : Valid;
+    return innerErrors.length
+        ? new InvalidEntityDTOError(resourceTypes.tag, id, innerErrors)
+        : Valid;
 };
 
 export default tagValidator;

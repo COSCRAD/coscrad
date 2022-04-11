@@ -1,11 +1,11 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { EntityType } from '../../types/entityTypes';
+import { ResourceType } from '../../types/resourceTypes';
 
 export default class TermHasNoTextInAnyLanguageError extends InternalError {
-    constructor(entityType?: EntityType) {
+    constructor(resourceType?: ResourceType) {
         const message = [
             `A null or undefined DTO was provided`,
-            entityType ? `for entity of type ${entityType}` : ``,
+            resourceType ? `for entity of type ${resourceType}` : ``,
         ].join(' ');
 
         super(message);

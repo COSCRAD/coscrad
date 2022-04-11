@@ -3,7 +3,7 @@ import { isNotFound, NotFound } from 'apps/api/src/lib/types/not-found';
 import { Database } from 'arangojs';
 import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
-import { Entity } from '../../domain/models/entity';
+import { Resource } from '../../domain/models/resource.entity';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { QueryOperator } from '../../domain/repositories/interfaces/QueryOperator';
 import { InternalError } from '../../lib/errors/InternalError';
@@ -40,7 +40,7 @@ export class ArangoDatabase implements IDatabase {
         this.#db = database;
     }
 
-    fetchById = async <TCreateEntityDto extends PartialDTO<Entity>>(
+    fetchById = async <TCreateEntityDto extends PartialDTO<Resource>>(
         id: string,
         collectionName: string
     ): Promise<Maybe<TCreateEntityDto>> => {

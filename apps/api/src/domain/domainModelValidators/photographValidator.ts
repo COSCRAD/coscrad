@@ -2,7 +2,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
 import { PartialDTO } from '../../types/partial-dto';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
-import { entityTypes } from '../types/entityTypes';
+import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
 import NullOrUndefinedDTOError from './errors/NullOrUndefinedDTOError';
@@ -10,7 +10,7 @@ import { DomainModelValidator } from './types/DomainModelValidator';
 import { Valid } from './Valid';
 
 const photographValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
-    if (isNullOrUndefined(dto)) return new NullOrUndefinedDTOError(entityTypes.photograph);
+    if (isNullOrUndefined(dto)) return new NullOrUndefinedDTOError(resourceTypes.photograph);
 
     const allErrors: InternalError[] = [];
 
@@ -28,7 +28,7 @@ const photographValidator: DomainModelValidator = (dto: unknown): Valid | Intern
     if (widthPX < 0) allErrors.push(new InternalError(`A photograph cannot have a negative width`));
 
     return allErrors.length > 0
-        ? new InvalidEntityDTOError(entityTypes.photograph, id, allErrors)
+        ? new InvalidEntityDTOError(resourceTypes.photograph, id, allErrors)
         : Valid;
 };
 
