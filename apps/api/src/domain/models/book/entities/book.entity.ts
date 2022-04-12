@@ -1,10 +1,16 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { resourceTypes } from '../../../types/resourceTypes';
+import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { Resource } from '../../resource.entity';
 import BookPage from './BookPage';
 
 export class Book extends Resource {
     readonly type = resourceTypes.book;
+
+    readonly allowedContextTypes = [
+        EdgeConnectionContextType.general,
+        EdgeConnectionContextType.pageRange,
+    ];
 
     readonly title: string;
 

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`When fetching multiple entities GET /books when all of the entities are published should fetch multiple entities of type book 1`] = `
+exports[`When fetching multiple resources GET /books when all of the resources are published should fetch multiple resources of type book 1`] = `
 Array [
   Object {
     "author": "John Doeburg",
@@ -18,7 +18,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /books when some of the entities are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /books when some of the resources are unpublished should return the expected number of results 1`] = `
 Array [
   Object {
     "author": "John Doeburg",
@@ -36,7 +36,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /photographs when all of the entities are published should fetch multiple entities of type photograph 1`] = `
+exports[`When fetching multiple resources GET /photographs when all of the resources are published should fetch multiple resources of type photograph 1`] = `
 Array [
   Object {
     "id": "0",
@@ -51,7 +51,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /photographs when some of the entities are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /photographs when some of the resources are unpublished should return the expected number of results 1`] = `
 Array [
   Object {
     "id": "0",
@@ -66,7 +66,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /spatialFeatures when all of the entities are published should fetch multiple entities of type spatialFeature 1`] = `
+exports[`When fetching multiple resources GET /spatialFeatures when all of the resources are published should fetch multiple resources of type spatialFeature 1`] = `
 Array [
   Object {
     "geometry": Object {
@@ -155,7 +155,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /spatialFeatures when some of the entities are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /spatialFeatures when some of the resources are unpublished should return the expected number of results 1`] = `
 Array [
   Object {
     "geometry": Object {
@@ -244,7 +244,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /terms when all of the entities are published should fetch multiple entities of type term 1`] = `
+exports[`When fetching multiple resources GET /terms when all of the resources are published should fetch multiple resources of type term 1`] = `
 Array [
   Object {
     "contributor": "",
@@ -266,7 +266,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /terms when some of the entities are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /terms when some of the resources are unpublished should return the expected number of results 1`] = `
 Array [
   Object {
     "contributor": "",
@@ -288,7 +288,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /transcribedAudioItems when all of the entities are published should fetch multiple entities of type transcribedAudio 1`] = `
+exports[`When fetching multiple resources GET /transcribedAudioItems when all of the resources are published should fetch multiple resources of type transcribedAudio 1`] = `
 Array [
   Object {
     "audioURL": "https://www.myaudio.com:5555/media?id=123.mp3.mp3",
@@ -302,7 +302,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /transcribedAudioItems when some of the entities are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /transcribedAudioItems when some of the resources are unpublished should return the expected number of results 1`] = `
 Array [
   Object {
     "audioURL": "https://www.myaudio.com:5555/media?id=123.mp3.mp3",
@@ -316,7 +316,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /vocabularyLists when all of the entities are published should fetch multiple entities of type vocabularyList 1`] = `
+exports[`When fetching multiple resources GET /vocabularyLists when all of the resources are published should fetch multiple resources of type vocabularyList 1`] = `
 Array [
   Object {
     "entries": Array [
@@ -384,7 +384,7 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple entities GET /vocabularyLists when some of the entities are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /vocabularyLists when some of the resources are unpublished should return the expected number of results 1`] = `
 Array [
   Object {
     "entries": Array [],

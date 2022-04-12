@@ -5,7 +5,7 @@ import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-li
 import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import InvalidPublicationStatusError from './errors/InvalidPublicationStatusError';
-import NullOrUndefinedDTOError from './errors/NullOrUndefinedDTOError';
+import NullOrUndefinedResourceDTOError from './errors/NullOrUndefinedResourceDTOError';
 import InvalidVocabularyListDTOError from './errors/vocabularyList/InvalidVocabularyListDTOError';
 import VocabularyListHasNoEntriesError from './errors/vocabularyList/VocabularyListHasNoEntriesError';
 import VocabularyListHasNoNameInAnyLanguageError from './errors/vocabularyList/VocabularyListHasNoNameInAnyLanguageError';
@@ -14,7 +14,7 @@ import { Valid } from './Valid';
 
 const vocabularyListValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
     // Return early, as we will get null pointers if we proceed
-    if (isNullOrUndefined(dto)) return new NullOrUndefinedDTOError(resourceTypes.term);
+    if (isNullOrUndefined(dto)) return new NullOrUndefinedResourceDTOError(resourceTypes.term);
 
     const innerErrors: InternalError[] = [];
 

@@ -15,7 +15,7 @@ import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
 import createTestModule from './createTestModule';
 
-describe('When fetching multiple entities', () => {
+describe('When fetching multiple resources', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
     let app: INestApplication;
@@ -28,7 +28,7 @@ describe('When fetching multiple entities', () => {
 
     const testData = buildTestData();
 
-    const testDataWithAllEntitiesPublished = Object.entries(testData).reduce(
+    const testDataWithAllResourcesPublished = Object.entries(testData).reduce(
         (accumulatedData: InMemorySnapshot, [ResourceType, instances]) => ({
             ...accumulatedData,
             [ResourceType]: instances.map((instance) =>
@@ -57,7 +57,7 @@ describe('When fetching multiple entities', () => {
         await app.init();
     });
 
-    // These entities are always published
+    // These resources are always published
     const resourceTypesToExclude: ResourceType[] = [resourceTypes.tag];
 
     Object.values(resourceTypes)
@@ -74,41 +74,41 @@ describe('When fetching multiple entities', () => {
                     await testRepositoryProvider.testTeardown();
                 });
 
-                describe('when all of the entities are published', () => {
+                describe('when all of the resources are published', () => {
                     beforeEach(async () => {
                         await testRepositoryProvider.addEntitiesOfManyTypes(
-                            testDataWithAllEntitiesPublished
+                            testDataWithAllResourcesPublished
                         );
                     });
 
-                    it(`should fetch multiple entities of type ${ResourceType}`, async () => {
+                    it(`should fetch multiple resources of type ${ResourceType}`, async () => {
                         const res = await request(app.getHttpServer()).get(
-                            `/entities${endpointUnderTest}`
+                            `/resources${endpointUnderTest}`
                         );
 
                         expect(res.status).toBe(httpStatusCodes.ok);
 
                         expect(res.body.length).toBe(
-                            testDataWithAllEntitiesPublished[ResourceType].length
+                            testDataWithAllResourcesPublished[ResourceType].length
                         );
 
                         expect(res.body).toMatchSnapshot();
                     });
                 });
 
-                describe(`when some of the entities are unpublished`, () => {
+                describe(`when some of the resources are unpublished`, () => {
                     /**
                      * Note that there is no requirement that the test data have
                      * `published = true`
                      */
-                    const publishedEntitiesToAdd = testData[ResourceType].map(
+                    const publishedResourcesToAdd = testData[ResourceType].map(
                         (instance: Resource) =>
                             instance.clone({
                                 published: true,
                             })
                     );
 
-                    const unpublishedEntitiesToAdd = testData[ResourceType]
+                    const unpublishedResourcesToAdd = testData[ResourceType]
                         // We want a different number of published \ unpublished terms
                         .slice(0, -1)
                         .map((instance, index) =>
@@ -120,21 +120,21 @@ describe('When fetching multiple entities', () => {
 
                     beforeEach(async () => {
                         await testRepositoryProvider.addEntitiesOfSingleType(ResourceType, [
-                            ...unpublishedEntitiesToAdd,
-                            ...publishedEntitiesToAdd,
+                            ...unpublishedResourcesToAdd,
+                            ...publishedResourcesToAdd,
                         ]);
                     });
 
                     it('should return the expected number of results', async () => {
                         const res = await request(app.getHttpServer()).get(
-                            `/entities${endpointUnderTest}`
+                            `/resources${endpointUnderTest}`
                         );
 
-                        expect(res.body.length).toBe(publishedEntitiesToAdd.length);
+                        expect(res.body.length).toBe(publishedResourcesToAdd.length);
 
                         // Sanity check
-                        expect(publishedEntitiesToAdd.length).not.toEqual(
-                            unpublishedEntitiesToAdd.length
+                        expect(publishedResourcesToAdd.length).not.toEqual(
+                            unpublishedResourcesToAdd.length
                         );
 
                         expect(res.body).toMatchSnapshot();

@@ -2,7 +2,7 @@ import { GeometricFeatureType } from 'apps/api/src/domain/models/spatial-feature
 import { resourceTypes } from 'apps/api/src/domain/types/resourceTypes';
 import { Point } from '../../../../../models/spatial-feature/point.entity';
 import InvalidEntityDTOError from '../../../../errors/InvalidEntityDTOError';
-import { DomainModelValidatorInvalidTestCase } from '../../types/DomainModelValidatorTestCase';
+import { DomainModelValidatorInvalidTestCase } from '../../../types/DomainModelValidatorTestCase';
 import { getValidSpatialFeatureInstanceForTest } from '../utils/getValidSpatialFeatureInstanceForTest';
 
 const validPointDTO = getValidSpatialFeatureInstanceForTest(GeometricFeatureType.point);

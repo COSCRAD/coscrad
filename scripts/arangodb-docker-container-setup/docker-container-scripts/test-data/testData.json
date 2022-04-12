@@ -4,30 +4,45 @@
             "_key": "0",
             "published": true,
             "type": "tag",
+            "allowedContextTypes": [
+                "general"
+            ],
             "text": "plants"
         },
         {
             "_key": "1",
             "published": true,
             "type": "tag",
+            "allowedContextTypes": [
+                "general"
+            ],
             "text": "animals"
         },
         {
             "_key": "2",
             "published": true,
             "type": "tag",
+            "allowedContextTypes": [
+                "general"
+            ],
             "text": "placenames"
         },
         {
             "_key": "3",
             "published": true,
             "type": "tag",
+            "allowedContextTypes": [
+                "general"
+            ],
             "text": "songs"
         },
         {
             "_key": "4",
             "published": true,
             "type": "tag",
+            "allowedContextTypes": [
+                "general"
+            ],
             "text": "legends"
         }
     ],
@@ -36,6 +51,9 @@
             "_key": "1",
             "published": true,
             "type": "term",
+            "allowedContextTypes": [
+                "general"
+            ],
             "term": "Chil-term-1",
             "termEnglish": "Engl-term-1",
             "contributorId": "John Doe"
@@ -44,6 +62,9 @@
             "_key": "2",
             "published": true,
             "type": "term",
+            "allowedContextTypes": [
+                "general"
+            ],
             "term": "Chil-term-2",
             "termEnglish": "Engl-term-2",
             "contributorId": "John Doe"
@@ -52,6 +73,9 @@
             "_key": "3",
             "published": false,
             "type": "term",
+            "allowedContextTypes": [
+                "general"
+            ],
             "term": "Chil-term-no-english",
             "contributorId": "Jane Deer"
         }
@@ -61,6 +85,9 @@
             "_key": "vocabulary-list-id-1",
             "published": false,
             "type": "vocabularyList",
+            "allowedContextTypes": [
+                "general"
+            ],
             "name": "test VL 1 chil",
             "nameEnglish": "test VL 1 engl",
             "entries": [
@@ -98,6 +125,9 @@
             "_key": "vocabulary-list-id-2",
             "published": true,
             "type": "vocabularyList",
+            "allowedContextTypes": [
+                "general"
+            ],
             "name": "test VL 2 CHIL- no engl name",
             "entries": [
                 {
@@ -115,6 +145,9 @@
             "_key": "110",
             "published": false,
             "type": "transcribedAudio",
+            "allowedContextTypes": [
+                "general"
+            ],
             "audioFilename": "123.mp3",
             "lengthMilliseconds": 20000,
             "startMilliseconds": 0,
@@ -139,6 +172,10 @@
             "_key": "23",
             "published": true,
             "type": "book",
+            "allowedContextTypes": [
+                "general",
+                "pageRange"
+            ],
             "title": "Three Little Pigs",
             "subtitle": "The wolf's revenge",
             "author": "John Doeburg",
@@ -160,6 +197,10 @@
             "_key": "24",
             "published": false,
             "type": "book",
+            "allowedContextTypes": [
+                "general",
+                "pageRange"
+            ],
             "title": "An Adventure Story",
             "author": "Jane Donnaldson",
             "publicationDate": "2011",
@@ -177,6 +218,9 @@
             "_key": "0",
             "published": false,
             "type": "photograph",
+            "allowedContextTypes": [
+                "general"
+            ],
             "filename": "cat",
             "photographer": "Susie McRealart",
             "dimensions": {
@@ -188,6 +232,9 @@
             "_key": "1",
             "published": false,
             "type": "photograph",
+            "allowedContextTypes": [
+                "general"
+            ],
             "filename": "dog",
             "photographer": "Robert McRealart",
             "dimensions": {
@@ -201,6 +248,9 @@
             "_key": "100",
             "published": true,
             "type": "spatialFeature",
+            "allowedContextTypes": [
+                "general"
+            ],
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -213,6 +263,9 @@
             "_key": "101",
             "published": true,
             "type": "spatialFeature",
+            "allowedContextTypes": [
+                "general"
+            ],
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -225,6 +278,9 @@
             "_key": "102",
             "published": true,
             "type": "spatialFeature",
+            "allowedContextTypes": [
+                "general"
+            ],
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -237,6 +293,9 @@
             "_key": "1",
             "published": false,
             "type": "spatialFeature",
+            "allowedContextTypes": [
+                "general"
+            ],
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -263,6 +322,9 @@
             "_key": "300",
             "published": true,
             "type": "spatialFeature",
+            "allowedContextTypes": [
+                "general"
+            ],
             "geometry": {
                 "type": "Polygon",
                 "coordinates": [

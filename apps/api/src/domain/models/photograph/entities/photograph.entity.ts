@@ -1,10 +1,13 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { resourceTypes } from '../../../types/resourceTypes';
+import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { Resource } from '../../resource.entity';
 import PhotographDimensions from './PhotographDimensions';
 
 export class Photograph extends Resource {
     readonly type = resourceTypes.photograph;
+
+    readonly allowedContextTypes = [EdgeConnectionContextType.general];
 
     readonly filename: string;
 

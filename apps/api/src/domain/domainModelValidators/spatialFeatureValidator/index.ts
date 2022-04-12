@@ -3,13 +3,14 @@ import { ISpatialFeature } from '../../models/spatial-feature/ISpatialFeature';
 import { resourceTypes } from '../../types/resourceTypes';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
 import InvalidEntityDTOError from '../errors/InvalidEntityDTOError';
-import NullOrUndefinedDTOError from '../errors/NullOrUndefinedDTOError';
+import NullOrUndefinedResourceDTOError from '../errors/NullOrUndefinedResourceDTOError';
 import { DomainModelValidator } from '../types/DomainModelValidator';
 import { isValid, Valid } from '../Valid';
 import geometricFeatureValidator from './geometricFeatureValidator';
 
 const spatialFeatureValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
-    if (isNullOrUndefined(dto)) return new NullOrUndefinedDTOError(resourceTypes.spatialFeature);
+    if (isNullOrUndefined(dto))
+        return new NullOrUndefinedResourceDTOError(resourceTypes.spatialFeature);
 
     const allErrors: InternalError[] = [];
 

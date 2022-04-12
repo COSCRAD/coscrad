@@ -1,5 +1,6 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { resourceTypes } from '../../types/resourceTypes';
+import { EdgeConnectionContextType } from '../context/types/EdgeConnectionContextType';
 import { Resource } from '../resource.entity';
 import { IGeometricFeature } from './GeometricFeature';
 import { ISpatialFeature } from './ISpatialFeature';
@@ -8,6 +9,8 @@ import { GeometricFeatureType } from './types/GeometricFeatureType';
 
 export class Polygon extends Resource implements ISpatialFeature {
     readonly type = resourceTypes.spatialFeature;
+
+    readonly allowedContextTypes = [EdgeConnectionContextType.general];
 
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.polygon, PolygonCoordinates>;
 
