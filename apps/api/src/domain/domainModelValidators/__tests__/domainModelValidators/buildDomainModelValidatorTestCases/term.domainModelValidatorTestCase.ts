@@ -4,7 +4,7 @@ import { resourceTypes } from '../../../../types/resourceTypes';
 import InvalidTermDTOError from '../../../errors/term/InvalidTermDTOError';
 import TermHasNoTextInAnyLanguageError from '../../../errors/term/TermHasNoTextInAnyLanguageError';
 import termValidator from '../../../termValidator';
-import { DomainModelValidatorTestCase } from '../types/DomainModelValidatorTestCase';
+import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
 
 export const buildTermTestCase = (): DomainModelValidatorTestCase<Term> => ({
     resourceType: resourceTypes.term,

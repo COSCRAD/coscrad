@@ -6,7 +6,7 @@ import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
 import InvalidPublicationStatusError from './errors/InvalidPublicationStatusError';
-import NullOrUndefinedDTOError from './errors/NullOrUndefinedDTOError';
+import NullOrUndefinedResourceDTOError from './errors/NullOrUndefinedResourceDTOError';
 import TagHasNoTextError from './errors/tag/TagHasNoTextError';
 import { DomainModelValidator } from './types/DomainModelValidator';
 import { Valid } from './Valid';
@@ -14,7 +14,7 @@ import { Valid } from './Valid';
 const tagValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
     if (isNullOrUndefined(dto))
         return new InvalidEntityDTOError(resourceTypes.tag, undefined, [
-            new NullOrUndefinedDTOError(resourceTypes.tag),
+            new NullOrUndefinedResourceDTOError(resourceTypes.tag),
         ]);
 
     const innerErrors: InternalError[] = [];

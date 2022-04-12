@@ -5,7 +5,7 @@ import InvalidVocabularyListDTOError from '../../../errors/vocabularyList/Invali
 import VocabularyListHasNoEntriesError from '../../../errors/vocabularyList/VocabularyListHasNoEntriesError';
 import VocabularyListHasNoNameInAnyLanguageError from '../../../errors/vocabularyList/VocabularyListHasNoNameInAnyLanguageError';
 import vocabularyListValidator from '../../../vocabularyListValidator';
-import { DomainModelValidatorTestCase } from '../types/DomainModelValidatorTestCase';
+import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
 import getValidEntityInstaceForTest from '../utilities/getValidEntityInstaceForTest';
 
 const validVocabularyListDTO = getValidEntityInstaceForTest(resourceTypes.vocabularyList).toDTO();

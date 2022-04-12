@@ -16,7 +16,7 @@ import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForRe from '../utilities/buildViewModelPathForResourceType';
 import createTestModule from './createTestModule';
 
-describe('GET /entities (fetch view models)', () => {
+describe('GET /resources (fetch view models)', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
     let app: INestApplication;
@@ -29,7 +29,7 @@ describe('GET /entities (fetch view models)', () => {
 
     const testData = buildTestData();
 
-    const testDataWithAllEntitiesPublished = Object.entries(testData).reduce(
+    const testDataWithAllResourcesPublished = Object.entries(testData).reduce(
         (accumulatedData: InMemorySnapshot, [Re, instances]) => ({
             ...accumulatedData,
             [Re]: instances.map((instance) =>
@@ -58,7 +58,7 @@ describe('GET /entities (fetch view models)', () => {
         await app.init();
     });
 
-    // These entities are always published
+    // These resources are always published
     const resourceTypesToExclude: ResourceType[] = [resourceTypes.tag];
 
     Object.values(resourceTypes)
@@ -81,13 +81,13 @@ describe('GET /entities (fetch view models)', () => {
                         describe('when no resource with the id exists', () => {
                             beforeEach(async () => {
                                 await testRepositoryProvider.addEntitiesOfManyTypes(
-                                    testDataWithAllEntitiesPublished
+                                    testDataWithAllResourcesPublished
                                 );
                             });
 
                             it(`should return not found`, () => {
                                 return request(app.getHttpServer())
-                                    .get(`/entities${buildFullPathFromId('bogus-id')}`)
+                                    .get(`/resources${buildFullPathFromId('bogus-id')}`)
                                     .expect(httpStatusCodes.notFound);
                             });
                         });
@@ -95,15 +95,15 @@ describe('GET /entities (fetch view models)', () => {
                         describe('when an resource with the id is found', () => {
                             beforeEach(async () => {
                                 await testRepositoryProvider.addEntitiesOfManyTypes(
-                                    testDataWithAllEntitiesPublished
+                                    testDataWithAllResourcesPublished
                                 );
                             });
 
                             it('should return the expected response', async () => {
-                                const resourceToFind = testDataWithAllEntitiesPublished[Re][0];
+                                const resourceToFind = testDataWithAllResourcesPublished[Re][0];
 
                                 const res = await request(app.getHttpServer()).get(
-                                    `/entities${buildFullPathFromId(resourceToFind.id)}`
+                                    `/resources${buildFullPathFromId(resourceToFind.id)}`
                                 );
 
                                 expect(res.status).toBe(httpStatusCodes.ok);
@@ -155,7 +155,7 @@ describe('GET /entities (fetch view models)', () => {
                             expect(isUnpublishedresourceIdInDB).toBe(true);
 
                             return request(app.getHttpServer())
-                                .get(`/entities${buildFullPathFromId(unpublishedId)}`)
+                                .get(`/resources${buildFullPathFromId(unpublishedId)}`)
                                 .expect(httpStatusCodes.notFound);
                         });
                     });

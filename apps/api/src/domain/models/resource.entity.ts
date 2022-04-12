@@ -2,12 +2,15 @@ import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { ResourceId } from '../types/ResourceId';
 import { ResourceType } from '../types/resourceTypes';
 import BaseDomainModel from './BaseDomainModel';
+import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
 import { ResourceCompositeIdentifier } from './types/entityCompositeIdentifier';
 
 export abstract class Resource extends BaseDomainModel {
+    abstract readonly type: ResourceType;
+
     readonly id: ResourceId;
 
-    abstract readonly type: ResourceType;
+    abstract readonly allowedContextTypes: EdgeConnectionContextType[];
 
     // TODO: Rename this 'isPublished' - db migration
     readonly published: boolean;
@@ -24,4 +27,13 @@ export abstract class Resource extends BaseDomainModel {
         type: this.type,
         id: this.id,
     });
+
+    // protected registerAllowedContextType<TResource extends Resource>(
+    //     this: TResource,
+    //     contextType: EdgeConnectionContextType
+    // ): void {
+    //     this.clone<TResource>({
+    //         allowedContextTypes: [...new Set(this.allowedContextTypes.concat(contextType))],
+    //     } as Partial<TResource>);
+    // }
 }

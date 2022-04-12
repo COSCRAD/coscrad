@@ -1,9 +1,12 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { resourceTypes } from '../../types/resourceTypes';
+import { EdgeConnectionContextType } from '../context/types/EdgeConnectionContextType';
 import { Resource } from '../resource.entity';
 
 export class Tag extends Resource {
     type = resourceTypes.tag;
+
+    readonly allowedContextTypes = [EdgeConnectionContextType.general];
 
     text: string;
 

@@ -2,7 +2,7 @@ import { GeometricFeatureType } from 'apps/api/src/domain/models/spatial-feature
 import { resourceTypes } from 'apps/api/src/domain/types/resourceTypes';
 import { Line } from '../../../../../models/spatial-feature/line.entity';
 import InvalidEntityDTOError from '../../../../errors/InvalidEntityDTOError';
-import { DomainModelValidatorInvalidTestCase } from '../../types/DomainModelValidatorTestCase';
+import { DomainModelValidatorInvalidTestCase } from '../../../types/DomainModelValidatorTestCase';
 import { getValidSpatialFeatureInstanceForTest } from '../utils/getValidSpatialFeatureInstanceForTest';
 
 const validLineDTO = getValidSpatialFeatureInstanceForTest(GeometricFeatureType.line);

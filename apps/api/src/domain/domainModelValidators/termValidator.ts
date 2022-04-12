@@ -5,7 +5,7 @@ import { Term } from '../models/term/entities/term.entity';
 import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import InvalidPublicationStatusError from './errors/InvalidPublicationStatusError';
-import NullOrUndefinedDTOError from './errors/NullOrUndefinedDTOError';
+import NullOrUndefinedResourceDTOError from './errors/NullOrUndefinedResourceDTOError';
 import InvalidTermDTOError from './errors/term/InvalidTermDTOError';
 import TermHasNoTextInAnyLanguageError from './errors/term/TermHasNoTextInAnyLanguageError';
 import { DomainModelValidator } from './types/DomainModelValidator';
@@ -13,7 +13,7 @@ import { Valid } from './Valid';
 
 const termValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
     // Return early, as we will get null pointers if we proceed
-    if (isNullOrUndefined(dto)) return new NullOrUndefinedDTOError(resourceTypes.term);
+    if (isNullOrUndefined(dto)) return new NullOrUndefinedResourceDTOError(resourceTypes.term);
 
     const innerErrors: InternalError[] = [];
 

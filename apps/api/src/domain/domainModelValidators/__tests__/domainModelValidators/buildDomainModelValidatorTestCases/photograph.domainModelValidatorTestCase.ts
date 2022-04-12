@@ -2,9 +2,9 @@ import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Photograph } from '../../../../models/photograph/entities/photograph.entity';
 import { resourceTypes } from '../../../../types/resourceTypes';
 import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
-import NullOrUndefinedDTOError from '../../../errors/NullOrUndefinedDTOError';
+import NullOrUndefinedResourceDTOError from '../../../errors/NullOrUndefinedResourceDTOError';
 import photographValidator from '../../../photographValidator';
-import { DomainModelValidatorTestCase } from '../types/DomainModelValidatorTestCase';
+import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
 import getValidEntityInstaceForTest from '../utilities/getValidEntityInstaceForTest';
 
 const validDTO = getValidEntityInstaceForTest(resourceTypes.photograph).toDTO();
@@ -21,7 +21,9 @@ export const buildPhotographTestCase = (): DomainModelValidatorTestCase<Photogra
         {
             description: 'the dto is null',
             invalidDTO: null,
-            expectedError: new NullOrUndefinedDTOError(resourceTypes.photograph) as InternalError,
+            expectedError: new NullOrUndefinedResourceDTOError(
+                resourceTypes.photograph
+            ) as InternalError,
         },
         {
             description: 'No photographer is specified',

@@ -1,11 +1,14 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { resourceTypes } from '../../../types/resourceTypes';
+import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { Resource } from '../../resource.entity';
 import { VocabularyListEntry } from '../vocabulary-list-entry';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
 export class VocabularyList extends Resource {
     readonly type = resourceTypes.vocabularyList;
+
+    readonly allowedContextTypes = [EdgeConnectionContextType.general];
 
     readonly name?: string;
 
