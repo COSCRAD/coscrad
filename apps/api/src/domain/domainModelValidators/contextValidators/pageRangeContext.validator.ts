@@ -1,5 +1,5 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { PageRangeContext } from '../../models/context/page-range/page-range.context.entity';
+import { PageRangeContext } from '../../models/context/page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from '../../models/context/types/EdgeConnectionContextType';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
 import DuplicatePageIdentifierError from '../errors/context/DuplicatePageIdentifierError';
