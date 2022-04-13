@@ -4,7 +4,7 @@ export const isInternalError = (input: unknown): input is InternalError =>
     input instanceof InternalError;
 
 export class InternalError extends Error {
-    innerErrors: Error[];
+    innerErrors: Error[] = [];
 
     constructor(message: string, innerErrors: Error[] = []) {
         super(message);
