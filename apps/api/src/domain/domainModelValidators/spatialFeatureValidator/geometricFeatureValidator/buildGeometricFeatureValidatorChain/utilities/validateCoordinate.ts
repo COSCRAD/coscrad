@@ -2,7 +2,7 @@ import { InternalError } from 'apps/api/src/lib/errors/InternalError';
 import { isNumber } from 'class-validator';
 import { Valid } from '../../../../Valid';
 
-export default (coordinate: number, index?: number): Valid | InternalError => {
+export default (coordinate: unknown, index?: number): Valid | InternalError => {
     if (
         !isNumber(coordinate, {
             allowInfinity: false,
