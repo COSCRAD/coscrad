@@ -1,7 +1,7 @@
 import { PageIdentifier } from 'apps/api/src/domain/models/book/entities/types/PageIdentifier';
 import { PartialDTO } from '../../../../../types/partial-dto';
 import EmptyPageRangeError from '../../../../domainModelValidators/errors/context/EmptyPageRangeError';
-import { PageRangeContext } from '../../../../models/context/page-range/page-range.context.entity';
+import { PageRangeContext } from '../../../../models/context/page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from '../../../../models/context/types/EdgeConnectionContextType';
 import { pageRangeContextValidator } from '../../../contextValidators/pageRangeContext.validator';
 import DuplicatePageIdentifierError from '../../../errors/context/DuplicatePageIdentifierError';
