@@ -1,9 +1,10 @@
-import { Position2D } from 'apps/api/src/domain/models/spatial-feature/types/Coordinates/Position2D';
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
 import { isValid, Valid } from '../../../../Valid';
 import validateCoordinate from './validateCoordinate';
 
-export default (input: Position2D): Valid | InternalError[] => {
+export default (input: unknown): Valid | InternalError[] => {
+    if (!Array.isArray(input)) return [new InternalError(`A 2D coordinate must be an array`)];
+
     const allErrors = input.reduce(
         (accumulatedErrors: InternalError[], coordinate, index) => {
             const validationResult = validateCoordinate(coordinate, index);
