@@ -4,4 +4,5 @@ export enum EdgeConnectionContextType {
     timeRange = 'timeRange',
     textField = 'textField',
     point2D = 'point2D',
+    freeMultiline = 'freeMultiline',
 }
