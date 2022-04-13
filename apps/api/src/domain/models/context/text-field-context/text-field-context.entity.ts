@@ -9,8 +9,18 @@ export class TextFieldContext extends EdgeConnectionContext {
     readonly target: string;
 
     /**
-     * The range of characters to use for the context. Use [o,s.length] for the
-     * entire text field to be used as context.
+     * The range of characters to use for the context.
+     *
+     * TODO [design] How should we represent the entire string as context?
+     * We'll worry about this when we hit the use case
+     * Ideas:
+     * - Use [o,s.length] for the entire text field to be used as context.
+     *     - Con- you need to update this if the string length is updated
+     * - Have a symbol \ constant string 'entire'
+     * - Make this property optional
+     *     - Cons- bad practice. It's better to have a symbol or special string
+     *        constant so you are certain \ acting with intent.
+     *  - Have a separate context type for this case
      */
     readonly charRange: [number, number];
 

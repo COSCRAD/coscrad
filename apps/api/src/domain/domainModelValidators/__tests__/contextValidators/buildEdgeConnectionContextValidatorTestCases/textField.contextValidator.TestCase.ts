@@ -4,6 +4,7 @@ import { TextFieldContext } from '../../../../models/context/text-field-context/
 import { EdgeConnectionContextType } from '../../../../models/context/types/EdgeConnectionContextType';
 import { textFieldContextValidator } from '../../../contextValidators/textFieldContext.validator';
 import EmptyTextTargetFieldInContextError from '../../../errors/context/EmptyTextTargetFieldInContextError';
+import InvalidCharRangeError from '../../../errors/context/InvalidCharRangeError';
 import NullOrUndefinedEdgeConnectionContextDTOError from '../../../errors/context/NullOrUndefinedEdgeConnectionContextDTOError';
 import { ContextModelValidatorTestCase } from '../types/ContextModelValidatorTestCase';
 import createInvalidContextErrorFactory from './utilities/createInvalidContextErrorFactory';
@@ -45,9 +46,38 @@ export const buildTextFieldContextTestCase =
                     new EmptyTextTargetFieldInContextError() as InternalError,
                 ]) as InternalError,
             },
-            // The char range is missing ?? this should be optional?
-            // the char range has the wrong order
-            // negative value for start
-            // out of range end
+            {
+                description: 'the char range has its start < end',
+                invalidDTO: {
+                    ...validDTO,
+                    charRange: [3, 1],
+                },
+                expectedError: topLevelErrorFactory([new InvalidCharRangeError([3, 1])]),
+            },
+            {
+                description: 'the start index is negative',
+                invalidDTO: {
+                    ...validDTO,
+                    charRange: [-1, 1],
+                },
+                expectedError: topLevelErrorFactory([new InvalidCharRangeError([-1, 1])]),
+            },
+            // TODO Break out type validation separately
+            {
+                description: 'the start index is not an integer',
+                invalidDTO: {
+                    ...validDTO,
+                    charRange: [2.3, 3],
+                },
+                expectedError: topLevelErrorFactory([new InvalidCharRangeError([2.3, 3])]),
+            },
+            {
+                description: 'the end index is not an integer',
+                invalidDTO: {
+                    ...validDTO,
+                    charRange: [5, 9.0234],
+                },
+                expectedError: topLevelErrorFactory([new InvalidCharRangeError([5, 9.0234])]),
+            },
         ],
     });
