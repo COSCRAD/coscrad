@@ -31,6 +31,10 @@ export const textFieldContextValidator = (input: unknown): Valid | InternalError
     // TODO [design] How do we represent the entire text field as context? In the future `charRange` **might** be optional
     if (charRange[0] > charRange[1]) allErrors.push(new InvalidCharRangeError(charRange));
 
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/181894276]
+     * Add inner errors for invalid char ranges
+     */
     if (charRange.some((charIndex) => charIndex < 0))
         allErrors.push(new InvalidCharRangeError(charRange));
 
