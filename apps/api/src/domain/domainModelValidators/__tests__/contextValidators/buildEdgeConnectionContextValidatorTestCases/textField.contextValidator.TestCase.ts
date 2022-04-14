@@ -47,7 +47,7 @@ export const buildTextFieldContextTestCase =
                 ]) as InternalError,
             },
             {
-                description: 'the char range has its start < end',
+                description: 'the char range has its start > end',
                 invalidDTO: {
                     ...validDTO,
                     charRange: [3, 1],

@@ -6,11 +6,12 @@ import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
 import NullOrUndefinedResourceDTOError from './errors/NullOrUndefinedResourceDTOError';
-import { DomainModelValidator as DMV } from './types/DomainModelValidator';
+import { DomainModelValidator } from './types/DomainModelValidator';
 import { Valid } from './Valid';
 
-const photographValidator: DMV = (dto: unknown): Valid | InternalError => {
-    if (isNullOrUndefined(dto)) return new NullOrUndefinedResourceDTOError(resourceTypes.photograph);
+const photographValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
+    if (isNullOrUndefined(dto))
+        return new NullOrUndefinedResourceDTOError(resourceTypes.photograph);
 
     const allErrors: InternalError[] = [];
 
