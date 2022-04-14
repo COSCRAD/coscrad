@@ -1,3 +1,4 @@
+import { Line2D } from 'apps/api/src/domain/models/spatial-feature/types/Coordinates/Line2d';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { PartialDTO } from '../../../../../types/partial-dto';
 import InvalidLineInFreeMultilineError from '../../../../domainModelValidators/errors/context/InvalidLineInFreeMultilineError';
@@ -5,6 +6,7 @@ import MissingLineContextError from '../../../../domainModelValidators/errors/co
 import { FreeMultilineContext } from '../../../../models/context/free-multiline-context/free-multiline-context.entity';
 import { EdgeConnectionContextType } from '../../../../models/context/types/EdgeConnectionContextType';
 import { freeMultilineContextValidator } from '../../../contextValidators/freeMultilineContext.validator';
+import InvalidLineTypeError from '../../../errors/context/InvalidLineTypeError';
 import NullOrUndefinedEdgeConnectionContextDTOError from '../../../errors/context/NullOrUndefinedEdgeConnectionContextDTOError';
 import { ContextModelValidatorTestCase } from '../types/ContextModelValidatorTestCase';
 import createInvalidContextErrorFactory from './utilities/createInvalidContextErrorFactory';
@@ -57,6 +59,22 @@ export const buildFreeMultilineTestCase =
                 expectedError: topLevelErrorFactory([new MissingLineContextError()]),
             },
             {
+                description: 'the line context is an empty array',
+                invalidDTO: {
+                    ...validDTO,
+                    lines: [],
+                },
+                expectedError: topLevelErrorFactory([new MissingLineContextError()]),
+            },
+            {
+                description: 'the lines property has the wrong type',
+                invalidDTO: {
+                    ...validDTO,
+                    lines: 'haha' as unknown as Line2D[],
+                },
+                expectedError: topLevelErrorFactory([new InvalidLineTypeError('haha')]),
+            },
+            {
                 description: 'one of the points in the first line is invalid',
                 invalidDTO: {
                     ...validDTO,
@@ -87,6 +105,14 @@ export const buildFreeMultilineTestCase =
                     ],
                 },
                 expectedError: topLevelErrorFactory([new InvalidLineInFreeMultilineError(1)]),
+            },
+            {
+                description: 'the third line is empty',
+                invalidDTO: {
+                    ...validDTO,
+                    lines: [...(validDTO.lines as Line2D[]), []],
+                },
+                expectedError: topLevelErrorFactory([new InvalidLineInFreeMultilineError(2)]),
             },
         ],
     });

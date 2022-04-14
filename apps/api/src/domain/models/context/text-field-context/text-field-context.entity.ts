@@ -14,7 +14,9 @@ export class TextFieldContext extends EdgeConnectionContext {
      * TODO [design] How should we represent the entire string as context?
      * We'll worry about this when we hit the use case
      * Ideas:
-     * - Use [o,s.length] for the entire text field to be used as context.
+     * - Use [o,model[target].length], where model[target] is the value of the
+     * target string property on the associated model for the entire text field
+     * to be used as context.
      *     - Con- you need to update this if the string length is updated
      * - Have a symbol \ constant string 'entire'
      * - Make this property optional

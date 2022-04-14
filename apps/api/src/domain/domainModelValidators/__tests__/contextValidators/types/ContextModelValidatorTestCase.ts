@@ -16,12 +16,12 @@ export type ContextModelValidatorInvalidTestCase<TContextModel> = {
     expectedError: InternalError;
 };
 
-export type ContextModelValidatorTestCase<TResource> = {
-    contextType: EdgeConnectionContextType; // TODO correlate this with TResource
+export type ContextModelValidatorTestCase<TContextModel> = {
+    contextType: EdgeConnectionContextType; // TODO correlate this with TContextModel
     validator: DomainModelValidator;
     validCases: {
         description?: string;
-        dto: PartialDTO<TResource>;
+        dto: PartialDTO<TContextModel>;
     }[];
-    invalidCases: ContextModelValidatorInvalidTestCase<TResource>[];
+    invalidCases: ContextModelValidatorInvalidTestCase<TContextModel>[];
 };
