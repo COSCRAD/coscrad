@@ -1,6 +1,6 @@
 import { Resource } from 'apps/api/src/domain/models/resource.entity';
 import { ISpecification } from 'apps/api/src/domain/repositories/interfaces/ISpecification';
-import { ResourceId } from 'apps/api/src/domain/types/ResourceId';
+import { EntityId } from 'apps/api/src/domain/types/ResourceId';
 import { Maybe } from 'apps/api/src/lib/types/maybe';
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { DatabaseDTO } from '../utilities/mapEntityDTOToDatabaseDTO';
@@ -13,7 +13,7 @@ export interface IDatabaseForCollection<TEntity extends Resource> {
     // TODO we need an abstraction around `db` dependency
     //   constructor: (db: ?,collectionName: string) => IDatabase;
 
-    fetchById: (id: ResourceId) => Promise<Maybe<DatabaseDTO<PartialDTO<TEntity>>>>;
+    fetchById: (id: EntityId) => Promise<Maybe<DatabaseDTO<PartialDTO<TEntity>>>>;
 
     // Returns an empty array if none found
     // TODO abstract the filters
@@ -27,5 +27,5 @@ export interface IDatabaseForCollection<TEntity extends Resource> {
 
     createMany: (dto: DatabaseDTO<PartialDTO<TEntity>>[]) => Promise<void>;
 
-    update: (id: ResourceId, dto: DatabaseDTO<PartialDTO<TEntity>>) => Promise<void>;
+    update: (id: EntityId, dto: DatabaseDTO<PartialDTO<TEntity>>) => Promise<void>;
 }

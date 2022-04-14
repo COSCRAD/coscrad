@@ -2,7 +2,7 @@ import { InstanceFactory } from '../../domain/factories/getInstanceFactoryForEnt
 import { Resource } from '../../domain/models/resource.entity';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { IRepositoryForEntity } from '../../domain/repositories/interfaces/repository-for-entity';
-import { ResourceId } from '../../domain/types/ResourceId';
+import { EntityId } from '../../domain/types/ResourceId';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { ResultOrError } from '../../types/ResultOrError';
@@ -36,7 +36,7 @@ export class RepositoryForEntity<TEntity extends Resource>
         this.#instanceFactory = instanceFactory;
     }
 
-    async fetchById(id: ResourceId): Promise<ResultOrError<Maybe<TEntity>>> {
+    async fetchById(id: EntityId): Promise<ResultOrError<Maybe<TEntity>>> {
         const searchResultForDTO = await this.#arangoDatabaseForEntitysCollection.fetchById(id);
 
         return isNotFound(searchResultForDTO)

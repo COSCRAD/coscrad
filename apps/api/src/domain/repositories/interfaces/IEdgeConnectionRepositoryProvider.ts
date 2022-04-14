@@ -3,8 +3,8 @@ import { IConnectionRepositoryForResource } from './IConnectionRepositoryForEnti
 import { INoteRepository } from './INoteRepository';
 
 export interface IEdgeConnectionRepositoryProvider {
-    forEntity(
-        entityCompositeIdentifier: ResourceCompositeIdentifier
+    forResource(
+        resourceCompositeIdentifier: ResourceCompositeIdentifier
     ): IConnectionRepositoryForResource;
 
     // TODO [design]: Should this go here or on the `RepositoryProvider.forEntity('note')`?

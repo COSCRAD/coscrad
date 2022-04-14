@@ -1,5 +1,5 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import { ResourceId } from '../types/ResourceId';
+import { EntityId } from '../types/ResourceId';
 import { ResourceType } from '../types/resourceTypes';
 import BaseDomainModel from './BaseDomainModel';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
@@ -8,7 +8,7 @@ import { ResourceCompositeIdentifier } from './types/entityCompositeIdentifier';
 export abstract class Resource extends BaseDomainModel {
     abstract readonly type: ResourceType;
 
-    readonly id: ResourceId;
+    readonly id: EntityId;
 
     abstract readonly allowedContextTypes: EdgeConnectionContextType[];
 

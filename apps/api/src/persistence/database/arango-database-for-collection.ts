@@ -1,7 +1,7 @@
 import { isArangoDatabase } from 'arangojs/database';
 import { Resource } from '../../domain/models/resource.entity';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
-import { ResourceId } from '../../domain/types/ResourceId';
+import { EntityId } from '../../domain/types/ResourceId';
 import { Maybe } from '../../lib/types/maybe';
 import { PartialDTO } from '../../types/partial-dto';
 import { ArangoDatabase } from './arango-database';
@@ -33,7 +33,7 @@ export class ArangoDatabaseForCollection<TEntity extends Resource>
     }
 
     // Queries (return information)
-    fetchById(id: ResourceId): Promise<Maybe<DatabaseDTO<PartialDTO<TEntity>>>> {
+    fetchById(id: EntityId): Promise<Maybe<DatabaseDTO<PartialDTO<TEntity>>>> {
         return this.#arangoDatabase.fetchById<DatabaseDTO<TEntity>>(id, this.#collectionID);
     }
 
@@ -59,7 +59,7 @@ export class ArangoDatabaseForCollection<TEntity extends Resource>
         return this.#arangoDatabase.createMany(databaseDTOs, this.#collectionID);
     }
 
-    update(id: ResourceId, updateDTO: DatabaseDTO<TEntity>) {
+    update(id: EntityId, updateDTO: DatabaseDTO<TEntity>) {
         return this.#arangoDatabase.update(id, updateDTO, this.#collectionID);
     }
 }

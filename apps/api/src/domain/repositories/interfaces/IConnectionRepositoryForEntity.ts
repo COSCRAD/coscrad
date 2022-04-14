@@ -1,5 +1,5 @@
 import { ResourceCompositeIdentifier } from '../../models/types/entityCompositeIdentifier';
-import { ResourceId } from '../../types/ResourceId';
+import { EntityId } from '../../types/ResourceId';
 
 type ContextType = string;
 
@@ -13,7 +13,7 @@ type Context = {
 
 type ContextMetadata = {
     // These will be stored by reference
-    tags: ResourceId[];
+    tags: EntityId[];
 
     note: string;
 };

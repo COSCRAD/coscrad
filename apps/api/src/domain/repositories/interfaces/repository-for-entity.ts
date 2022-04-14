@@ -1,7 +1,7 @@
 import { ResultOrError } from 'apps/api/src/types/ResultOrError';
 import { Maybe } from '../../../lib/types/maybe';
 import { Resource } from '../../models/resource.entity';
-import { ResourceId } from '../../types/ResourceId';
+import { EntityId } from '../../types/ResourceId';
 import { ISpecification } from './ISpecification';
 
 /**
@@ -11,7 +11,7 @@ import { ISpecification } from './ISpecification';
  * we need to deal with `graph edge` relationships.
  */
 export interface IRepositoryForEntity<TEntity extends Resource> {
-    fetchById: (id: ResourceId) => Promise<ResultOrError<Maybe<TEntity>>>;
+    fetchById: (id: EntityId) => Promise<ResultOrError<Maybe<TEntity>>>;
 
     // Returns an empty array if none found
     fetchMany: (specification?: ISpecification<TEntity>) => Promise<ResultOrError<TEntity>[]>;

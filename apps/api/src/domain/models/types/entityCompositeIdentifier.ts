@@ -1,4 +1,4 @@
-import { isResourceId, ResourceId } from '../../types/ResourceId';
+import { EntityId, isResourceId } from '../../types/ResourceId';
 import { isResourceType, ResourceType } from '../../types/resourceTypes';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
 
@@ -11,7 +11,7 @@ import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefin
  */
 export type ResourceCompositeIdentifier<TResourceType = ResourceType> = {
     type: TResourceType;
-    id: ResourceId;
+    id: EntityId;
 };
 
 export const isResourceCompositeIdentifier = (

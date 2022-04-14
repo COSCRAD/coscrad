@@ -1,5 +1,5 @@
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import { ResourceId } from '../../../types/ResourceId';
+import { EntityId } from '../../../types/ResourceId';
 import { ResourceType, resourceTypes } from '../../../types/resourceTypes';
 import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { Resource } from '../../resource.entity';
@@ -13,7 +13,7 @@ export class Term extends Resource {
 
     readonly termEnglish?: string;
 
-    readonly contributorId: ResourceId;
+    readonly contributorId: EntityId;
 
     // TODO Create separate media item model
     readonly audioFilename?: string;

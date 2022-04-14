@@ -7,6 +7,6 @@ import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLe
  * - express our types in a domain-specific \ declarative manner
  * - change the type of all `Resource IDs` in-step in the future
  */
-export type ResourceId = string;
+export type EntityId = string;
 
-export const isResourceId = (test: unknown): test is ResourceId => isStringWithNonzeroLength(test);
+export const isResourceId = (test: unknown): test is EntityId => isStringWithNonzeroLength(test);
