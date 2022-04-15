@@ -14,7 +14,7 @@ export class Tag extends Resource {
     published = true;
 
     constructor(dto: PartialDTO<Tag>) {
-        super(dto);
+        super({ ...dto, type: resourceTypes.tag });
 
         this.text = dto.text;
     }

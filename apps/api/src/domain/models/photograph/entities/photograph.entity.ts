@@ -18,7 +18,7 @@ export class Photograph extends Resource {
     readonly dimensions: PhotographDimensions;
 
     constructor(dto: PartialDTO<Photograph>) {
-        super(dto);
+        super({ ...dto, type: resourceTypes.photograph });
 
         const { filename, photographer, dimensions: dimensionsDTO } = dto;
 

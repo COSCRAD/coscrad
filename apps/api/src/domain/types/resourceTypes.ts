@@ -1,5 +1,6 @@
 import { ValueType } from '../../lib/types/valueType';
 import { Book } from '../models/book/entities/book.entity';
+import { EdgeConnection } from '../models/context/edge-connection.entity';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { ISpatialFeature } from '../models/spatial-feature/ISpatialFeature';
 import { Tag } from '../models/tag/tag.entity';
@@ -37,6 +38,11 @@ export type ResourceTypeToInstance = {
 /**
  * This represents the state of all domain models, excluding their `Connections`
  */
-export type InMemorySnapshot = {
+export type InMemorySnapshotOfResources = {
     [K in ResourceType]?: ResourceTypeToInstance[K][];
+};
+
+export type InMemorySnapshot = {
+    resources: InMemorySnapshotOfResources;
+    connections: EdgeConnection[];
 };

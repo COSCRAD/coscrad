@@ -19,7 +19,7 @@ export class VocabularyList extends Resource {
     readonly variables: VocabularyListVariable[];
 
     constructor(dto: PartialDTO<VocabularyList>) {
-        super(dto);
+        super({ ...dto, type: resourceTypes.vocabularyList });
 
         const { name, nameEnglish, entries, variables } = dto;
 

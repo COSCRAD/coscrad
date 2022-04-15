@@ -11,6 +11,9 @@ export enum EdgeConnectionType {
     dual = 'dual',
 }
 
+export const isEdgeConnectionType = (input: unknown): input is EdgeConnectionType =>
+    Object.values(EdgeConnectionType).includes(input as EdgeConnectionType);
+
 export enum EdgeConnectionMemberRole {
     to = 'to',
     from = 'from',
@@ -18,7 +21,7 @@ export enum EdgeConnectionMemberRole {
 }
 
 // Consider using a class for this
-type EdgeConnectionMember<TContextModel extends ContextModelUnion = ContextModelUnion> = {
+export type EdgeConnectionMember<TContextModel extends ContextModelUnion = ContextModelUnion> = {
     compositeIdentifier: ResourceCompositeIdentifier;
     context: TContextModel;
     role: EdgeConnectionMemberRole;
@@ -40,8 +43,10 @@ export class EdgeConnection extends BaseDomainModel {
 
     readonly note: string;
 
-    constructor({ id, members, tagIDs, note }: PartialDTO<EdgeConnection>) {
+    constructor({ id, members, tagIDs, note, type }: PartialDTO<EdgeConnection>) {
         super();
+
+        this.type = type;
 
         this.id = id;
 

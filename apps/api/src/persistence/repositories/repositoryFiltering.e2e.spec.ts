@@ -12,7 +12,7 @@ import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 describe('Repository for entity (with filters)', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
-    const testData = buildTestData();
+    const testData = buildTestData().resources;
 
     let arangoConnectionProvider: ArangoConnectionProvider;
 

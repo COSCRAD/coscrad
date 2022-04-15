@@ -9,7 +9,7 @@ import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 export type TimeRangeWithoutData = Pick<MediaTimeRange, 'inPoint' | 'outPoint'>;
 
 export class TimeRangeContext extends EdgeConnectionContext {
-    type: EdgeConnectionContextType.timeRange;
+    readonly type = EdgeConnectionContextType.timeRange;
 
     timeRange: TimeRangeWithoutData;
 

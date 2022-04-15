@@ -1,45 +1,45 @@
 {
     "tags": [
         {
+            "type": "tag",
             "_key": "0",
             "published": true,
-            "type": "tag",
             "allowedContextTypes": [
                 "general"
             ],
             "text": "plants"
         },
         {
+            "type": "tag",
             "_key": "1",
             "published": true,
-            "type": "tag",
             "allowedContextTypes": [
                 "general"
             ],
             "text": "animals"
         },
         {
+            "type": "tag",
             "_key": "2",
             "published": true,
-            "type": "tag",
             "allowedContextTypes": [
                 "general"
             ],
             "text": "placenames"
         },
         {
+            "type": "tag",
             "_key": "3",
             "published": true,
-            "type": "tag",
             "allowedContextTypes": [
                 "general"
             ],
             "text": "songs"
         },
         {
+            "type": "tag",
             "_key": "4",
             "published": true,
-            "type": "tag",
             "allowedContextTypes": [
                 "general"
             ],
@@ -48,9 +48,9 @@
     ],
     "terms": [
         {
+            "type": "term",
             "_key": "1",
             "published": true,
-            "type": "term",
             "allowedContextTypes": [
                 "general"
             ],
@@ -59,9 +59,9 @@
             "contributorId": "John Doe"
         },
         {
+            "type": "term",
             "_key": "2",
             "published": true,
-            "type": "term",
             "allowedContextTypes": [
                 "general"
             ],
@@ -70,9 +70,9 @@
             "contributorId": "John Doe"
         },
         {
+            "type": "term",
             "_key": "3",
             "published": false,
-            "type": "term",
             "allowedContextTypes": [
                 "general"
             ],
@@ -82,9 +82,9 @@
     ],
     "vocabulary_lists": [
         {
+            "type": "vocabularyList",
             "_key": "vocabulary-list-id-1",
             "published": false,
-            "type": "vocabularyList",
             "allowedContextTypes": [
                 "general"
             ],
@@ -122,9 +122,9 @@
             ]
         },
         {
+            "type": "vocabularyList",
             "_key": "vocabulary-list-id-2",
             "published": true,
-            "type": "vocabularyList",
             "allowedContextTypes": [
                 "general"
             ],
@@ -142,9 +142,9 @@
     ],
     "transcribed_audio": [
         {
+            "type": "transcribedAudio",
             "_key": "110",
             "published": false,
-            "type": "transcribedAudio",
             "allowedContextTypes": [
                 "general"
             ],
@@ -169,9 +169,9 @@
     ],
     "books": [
         {
+            "type": "book",
             "_key": "23",
             "published": true,
-            "type": "book",
             "allowedContextTypes": [
                 "general",
                 "pageRange"
@@ -194,9 +194,9 @@
             ]
         },
         {
+            "type": "book",
             "_key": "24",
             "published": false,
-            "type": "book",
             "allowedContextTypes": [
                 "general",
                 "pageRange"
@@ -215,9 +215,9 @@
     ],
     "photographs": [
         {
+            "type": "photograph",
             "_key": "0",
             "published": true,
-            "type": "photograph",
             "allowedContextTypes": [
                 "general"
             ],
@@ -229,9 +229,9 @@
             }
         },
         {
+            "type": "photograph",
             "_key": "1",
             "published": true,
-            "type": "photograph",
             "allowedContextTypes": [
                 "general"
             ],
@@ -245,9 +245,9 @@
     ],
     "spatial_features": [
         {
+            "type": "spatialFeature",
             "_key": "100",
             "published": true,
-            "type": "spatialFeature",
             "allowedContextTypes": [
                 "general"
             ],
@@ -260,9 +260,9 @@
             }
         },
         {
+            "type": "spatialFeature",
             "_key": "101",
             "published": true,
-            "type": "spatialFeature",
             "allowedContextTypes": [
                 "general"
             ],
@@ -275,9 +275,9 @@
             }
         },
         {
+            "type": "spatialFeature",
             "_key": "102",
             "published": true,
-            "type": "spatialFeature",
             "allowedContextTypes": [
                 "general"
             ],
@@ -290,9 +290,9 @@
             }
         },
         {
+            "type": "spatialFeature",
             "_key": "1",
             "published": false,
-            "type": "spatialFeature",
             "allowedContextTypes": [
                 "general"
             ],
@@ -319,9 +319,9 @@
             }
         },
         {
+            "type": "spatialFeature",
             "_key": "300",
             "published": true,
-            "type": "spatialFeature",
             "allowedContextTypes": [
                 "general"
             ],

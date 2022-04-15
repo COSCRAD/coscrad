@@ -17,7 +17,7 @@ export const pageRangeContextValidator = (input: unknown): Valid | InternalError
 
     const allErrors: InternalError[] = [];
 
-    const { pages } = input as PageRangeContext;
+    const { pageIdentifiers: pages } = input as PageRangeContext;
 
     if (!Array.isArray(pages))
         allErrors.push(new InternalError(`Invalid type for pages property: ${typeof pages}`));

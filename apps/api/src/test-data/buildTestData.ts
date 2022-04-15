@@ -1,5 +1,6 @@
 import { InMemorySnapshot, resourceTypes } from '../domain/types/resourceTypes';
 import buildBookTestData from './buildBookTestData';
+import buildEdgeConnectionTestData from './buildEdgeConnectionTestData';
 import buildPhotographTestData from './buildPhotographTestData';
 import buildSpatialFeatureTestData from './buildSpatialFeatureTestData';
 import buildTagTestData from './buildTagTestData';
@@ -13,11 +14,14 @@ import buildVocabularyListTestData from './buildVocabularyListTestData';
  * invariants.
  */
 export default (): InMemorySnapshot => ({
-    [resourceTypes.tag]: buildTagTestData(),
-    [resourceTypes.term]: buildTermTestData(),
-    [resourceTypes.vocabularyList]: buildVocabularyListTestData(),
-    [resourceTypes.transcribedAudio]: buildTranscribedAudioTestData(),
-    [resourceTypes.book]: buildBookTestData(),
-    [resourceTypes.photograph]: buildPhotographTestData(),
-    [resourceTypes.spatialFeature]: buildSpatialFeatureTestData(),
+    resources: {
+        [resourceTypes.tag]: buildTagTestData(),
+        [resourceTypes.term]: buildTermTestData(),
+        [resourceTypes.vocabularyList]: buildVocabularyListTestData(),
+        [resourceTypes.transcribedAudio]: buildTranscribedAudioTestData(),
+        [resourceTypes.book]: buildBookTestData(),
+        [resourceTypes.photograph]: buildPhotographTestData(),
+        [resourceTypes.spatialFeature]: buildSpatialFeatureTestData(),
+    },
+    connections: buildEdgeConnectionTestData(),
 });

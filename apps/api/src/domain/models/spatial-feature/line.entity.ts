@@ -15,7 +15,7 @@ export class Line extends Resource implements ISpatialFeature {
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.line, LineCoordinates>;
 
     constructor(dto: PartialDTO<Line>) {
-        super(dto);
+        super({ ...dto, type: resourceTypes.spatialFeature });
 
         const { geometry: geometryDTO } = dto;
 
