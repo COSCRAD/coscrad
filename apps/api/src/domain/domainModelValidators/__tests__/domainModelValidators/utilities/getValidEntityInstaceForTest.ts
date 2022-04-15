@@ -4,4 +4,4 @@ import { ResourceType, ResourceTypeToInstance } from '../../../../types/resource
 export default <TResourceType extends ResourceType>(
     ResourceType: TResourceType
 ): ResourceTypeToInstance[TResourceType] =>
-    buildTestData()[ResourceType][0] as ResourceTypeToInstance[TResourceType];
+    buildTestData().resources[ResourceType][0] as ResourceTypeToInstance[TResourceType];

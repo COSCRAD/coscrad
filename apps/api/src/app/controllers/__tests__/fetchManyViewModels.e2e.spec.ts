@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { Resource } from 'apps/api/src/domain/models/resource.entity';
 import {
-    InMemorySnapshot,
+    InMemorySnapshotOfResources,
     ResourceType,
     resourceTypes,
 } from 'apps/api/src/domain/types/resourceTypes';
@@ -26,10 +26,10 @@ describe('When fetching multiple resources', () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
-    const testData = buildTestData();
+    const testData = buildTestData().resources;
 
     const testDataWithAllResourcesPublished = Object.entries(testData).reduce(
-        (accumulatedData: InMemorySnapshot, [ResourceType, instances]) => ({
+        (accumulatedData: InMemorySnapshotOfResources, [ResourceType, instances]) => ({
             ...accumulatedData,
             [ResourceType]: instances.map((instance) =>
                 instance.clone({

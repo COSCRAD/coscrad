@@ -5,7 +5,7 @@ import { VocabularyList } from './vocabulary-list/entities/vocabulary-list.entit
 
 describe('the (base) resource clone method', () => {
     describe('for a vocabularyList', () => {
-        const initialVocabularyList = buildTestData()[resourceTypes.vocabularyList][0];
+        const initialVocabularyList = buildTestData().resources[resourceTypes.vocabularyList][0];
 
         describe('when no updates are provided', () => {
             const updatedVocabularyList = initialVocabularyList.clone();

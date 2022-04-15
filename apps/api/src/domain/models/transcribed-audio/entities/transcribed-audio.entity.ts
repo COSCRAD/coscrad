@@ -19,7 +19,7 @@ export class TranscribedAudio extends Resource {
     readonly transcript: Transcript;
 
     constructor(dto: PartialDTO<TranscribedAudio>) {
-        super(dto);
+        super({ ...dto, type: resourceTypes.term });
 
         const {
             audioFilename,

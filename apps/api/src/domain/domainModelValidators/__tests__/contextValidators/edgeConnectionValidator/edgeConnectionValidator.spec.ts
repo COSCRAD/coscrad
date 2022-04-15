@@ -24,19 +24,21 @@ buildEdgeConnectionValidatorTestCases().forEach(({ validCases, invalidCases }) =
         });
     });
 
-    invalidCases.forEach(({ description, invalidDTO, expectedError }) => {
-        describe('When the DTO for the Edge Connection is invalid', () => {
-            describe(description, () => {
-                it('should return the expected Error', () => {
-                    const result = edgeConnectionValidator(invalidDTO);
+    invalidCases
+        // .filter(({ description }) => description.includes('not consistent with the resource type'))
+        .forEach(({ description, invalidDTO, expectedError }) => {
+            describe('When the DTO for the Edge Connection is invalid', () => {
+                describe(description, () => {
+                    it('should return the expected Error', () => {
+                        const result = edgeConnectionValidator(invalidDTO);
 
-                    expect(result).toEqual(expectedError);
+                        expect(result).toEqual(expectedError);
 
-                    expect((result as InternalError).innerErrors).toEqual(
-                        expectedError.innerErrors
-                    );
+                        expect((result as InternalError).innerErrors).toEqual(
+                            expectedError.innerErrors
+                        );
+                    });
                 });
             });
         });
-    });
 });

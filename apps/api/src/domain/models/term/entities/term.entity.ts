@@ -23,7 +23,7 @@ export class Term extends Resource {
 
     // The constructor should only be called after validating the input DTO
     constructor(dto: PartialDTO<Term>) {
-        super(dto);
+        super({ ...dto, type: resourceTypes.term });
 
         /**
          * TODO [design]: We should abstract this pattern of having text in multiple

@@ -11,7 +11,7 @@ import createInvalidContextErrorFactory from './utilities/createInvalidContextEr
 
 const validDTO: PartialDTO<PageRangeContext> = {
     type: EdgeConnectionContextType.pageRange,
-    pages: ['1', '2', '4', 'vii'],
+    pageIdentifiers: ['1', '2', '4', 'vii'],
 };
 
 const topLevelErrorFactory = createInvalidContextErrorFactory(EdgeConnectionContextType.pageRange);
@@ -33,26 +33,29 @@ export const buildPageRangeTestCase = (): ContextModelValidatorTestCase<PageRang
             ),
         },
         {
-            description: 'no pages are specified',
+            description: 'no page identifiers are specified',
             invalidDTO: {
                 ...validDTO,
-                pages: [],
+                pageIdentifiers: [],
             },
             expectedError: topLevelErrorFactory([new EmptyPageRangeError()]),
         },
         {
-            description: 'the pages include duplicates',
+            description: 'the page identifiers include duplicates',
             invalidDTO: {
                 ...validDTO,
                 // TODO remove cast
-                pages: [
-                    ...(validDTO.pages as PageIdentifier[]),
-                    validDTO.pages[0],
-                    validDTO.pages[3],
+                pageIdentifiers: [
+                    ...(validDTO.pageIdentifiers as PageIdentifier[]),
+                    validDTO.pageIdentifiers[0],
+                    validDTO.pageIdentifiers[3],
                 ],
             },
             expectedError: topLevelErrorFactory([
-                new DuplicatePageIdentifierError([validDTO.pages[0], validDTO.pages[3]]),
+                new DuplicatePageIdentifierError([
+                    validDTO.pageIdentifiers[0],
+                    validDTO.pageIdentifiers[3],
+                ]),
             ]),
         },
     ],

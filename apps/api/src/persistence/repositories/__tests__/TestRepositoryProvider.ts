@@ -1,5 +1,9 @@
 import { Resource } from '../../../domain/models/resource.entity';
-import { InMemorySnapshot, ResourceType, resourceTypes } from '../../../domain/types/resourceTypes';
+import {
+    InMemorySnapshotOfResources,
+    ResourceType,
+    resourceTypes,
+} from '../../../domain/types/resourceTypes';
 import { DatabaseProvider } from '../../database/database.provider';
 import { getArangoCollectionIDFromResourceType } from '../../database/getArangoCollectionIDFromResourceType';
 import { RepositoryProvider } from '../repository.provider';
@@ -18,7 +22,7 @@ export default class TestRepositoryProvider extends RepositoryProvider {
     }
 
     // TODO fix types
-    public async addEntitiesOfManyTypes(snapshot: InMemorySnapshot): Promise<void> {
+    public async addEntitiesOfManyTypes(snapshot: InMemorySnapshotOfResources): Promise<void> {
         const writePromises = Object.entries(snapshot).map(([ResourceType, entityInstances]) =>
             this.addEntitiesOfSingleType(
                 ResourceType as ResourceType,

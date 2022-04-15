@@ -14,7 +14,7 @@ import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 describe('Repository provider > repositoryForEntity', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
-    const testData = buildTestData();
+    const testData = buildTestData().resources;
 
     let arangoConnectionProvider: ArangoConnectionProvider;
 

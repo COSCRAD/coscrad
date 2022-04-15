@@ -15,7 +15,7 @@ export class Polygon extends Resource implements ISpatialFeature {
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.polygon, PolygonCoordinates>;
 
     constructor(dto: PartialDTO<Polygon>) {
-        super(dto);
+        super({ ...dto, type: resourceTypes.spatialFeature });
 
         const { geometry: geometryDTO } = dto;
 

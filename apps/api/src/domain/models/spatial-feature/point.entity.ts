@@ -15,7 +15,7 @@ export class Point extends Resource implements ISpatialFeature {
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>;
 
     constructor(dto: PartialDTO<Point>) {
-        super(dto);
+        super({ ...dto, type: resourceTypes.spatialFeature });
 
         const { geometry: geometryDTO } = dto;
 

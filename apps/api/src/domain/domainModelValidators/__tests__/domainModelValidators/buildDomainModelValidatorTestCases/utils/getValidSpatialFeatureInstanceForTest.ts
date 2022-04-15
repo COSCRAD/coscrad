@@ -7,7 +7,7 @@ export const getValidSpatialFeatureInstanceForTest = (
     geometryType: GeometricFeatureType
 ): ISpatialFeature => {
     // Find the first `Spatial Feature` model with this geometry type from the test data
-    const searchResult = buildTestData().spatialFeature.find(
+    const searchResult = buildTestData().resources.spatialFeature.find(
         ({ geometry: { type } }) => type === geometryType
     );
 
