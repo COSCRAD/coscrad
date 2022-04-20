@@ -16,7 +16,7 @@ import ContextTypeIsNotAllowedForGivenResourceTypeError from '../../../../errors
 import InvalidEdgeConnectionDTOError from '../../../../errors/context/edgeConnections/InvalidEdgeConnectionDTOError';
 import InvalidEdgeConnectionMemberRolesError from '../../../../errors/context/edgeConnections/InvalidEdgeConnectionMemberRolesError';
 import InvalidNumberOfMembersInEdgeConnectionError from '../../../../errors/context/edgeConnections/InvalidNumberOfMembersInEdgeConnectionError';
-import InvalidChronologicallyOrderedTimeRangeError from '../../../../errors/context/InvalidChronologicallyOrderedTimeRangeError';
+import InvalidEdgeConnectionContextModelError from '../../../../errors/context/InvalidEdgeConnectionContextModelError';
 import { EdgeConnectionValidatorTestCase } from '../types/EdgeConnectionValidatorTestCase';
 
 const buildTopLevelError = (innerErrors: InternalError[]): InternalError =>
@@ -281,22 +281,15 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                         },
                     ],
                 },
-                expectedError: buildTopLevelError([
-                    new InvalidChronologicallyOrderedTimeRangeError({
-                        inPoint: 1200,
-                        outPoint: 1000,
-                    }),
-                ]),
+                /**
+                 * **note:** we don't want to validate the inner errors of
+                 * `InvalidEdgeConnectionContextModelError` here, as
+                 * this is an integration test. We just want to make sure it indeed
+                 * picks up on the top level error. Getting these inner errors right
+                 * should be tested in `edgeConnectionContextValidator.spec.ts`
+                 */
+                expectedError: buildTopLevelError([new InvalidEdgeConnectionContextModelError([])]),
             },
-            /**
-             * TODO Add invalid cases
-             * - deferred context model validation invalid cases
-             *     - How far do we want to go here? We already have the lower level
-             *      test. This is essentially an integration test. We only need to
-             *      build confidence that this higher level validator correctly
-             *      "relays the message" from the lower layer
-             */
-            // TODO validate types on DTO
         ],
     },
 ];
