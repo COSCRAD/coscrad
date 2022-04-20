@@ -19,7 +19,8 @@ import InvalidEdgeConnectionTypeError from '../../errors/context/edgeConnections
 import InvalidNumberOfMembersInEdgeConnectionError from '../../errors/context/edgeConnections/InvalidNumberOfMembersInEdgeConnectionError';
 import NoteMissingFromEdgeConnectionError from '../../errors/context/edgeConnections/NoteMissingFromEdgeConnectionError';
 import NullOrUndefinedEdgeConnectionDTOError from '../../errors/context/edgeConnections/NullOrUndefindEdgeConnectionDTOError';
-import { Valid } from '../../Valid';
+import { isValid, Valid } from '../../Valid';
+import validateContextModelInvariants from '../validateContextModelInvariants';
 
 const buildTopLevelError = (innerErrors: InternalError[]): InternalError =>
     new InvalidEdgeConnectionDTOError(innerErrors);
@@ -126,12 +127,22 @@ export default (input: unknown): Valid | InternalError => {
     if (disallowedContextTypeErrors.length > 0) allErrors.push(...disallowedContextTypeErrors);
 
     /**
-     * TODO [https://www.pivotaltracker.com/story/show/181939924]
-     *
-     *  Validate that the context model satisfies its own invariants -> defer to
-     *  context model invariant validation layer
+     *  Here we validate that the context model invariant validation rules are
+     * satisfied. We defer to the context model invariant validators for this.
      *
      **/
+    const contextModelInvariantErrors = members.reduce(
+        (accumulatedErrors: InternalError[], { context }) => {
+            const validationResult = validateContextModelInvariants(context);
+
+            return isValid(validationResult)
+                ? accumulatedErrors
+                : accumulatedErrors.concat(validationResult);
+        },
+        []
+    );
+
+    if (contextModelInvariantErrors.length > 0) allErrors.push(...contextModelInvariantErrors);
 
     return allErrors.length > 0 ? buildTopLevelError(allErrors) : Valid;
 };
