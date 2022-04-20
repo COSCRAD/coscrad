@@ -32,7 +32,6 @@ export class DatabaseProvider implements IDatabaseProvider {
     };
 
     // TODO [type-safety] Can we correlate entity `DTOs` with `collection IDs`?
-    // @ts-expect-error TODO fix the following!
     getDatabaseForCollection = <TEntity extends Resource>(
         collectionName: ArangoCollectionID
     ): ArangoDatabaseForCollection<TEntity> => {

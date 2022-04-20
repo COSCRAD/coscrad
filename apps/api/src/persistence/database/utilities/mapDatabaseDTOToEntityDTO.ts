@@ -1,10 +1,10 @@
-import { Resource } from 'apps/api/src/domain/models/resource.entity';
+import { HasEntityID } from 'apps/api/src/domain/models/types/HasEntityId';
 import { isResourceId } from 'apps/api/src/domain/types/ResourceId';
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { DatabaseDTO } from './mapEntityDTOToDatabaseDTO';
 
-export default <TEntity extends Resource>(
-    databaseDTO: DatabaseDTO<PartialDTO<TEntity>>
+export default <TEntity extends HasEntityID>(
+    databaseDTO: DatabaseDTO<TEntity>
 ): PartialDTO<TEntity> =>
     Object.entries(databaseDTO).reduce(
         (accumulatedMappedObject: PartialDTO<TEntity>, [key, value]) => {

@@ -47,9 +47,7 @@ export default (input: unknown): Valid | InternalError => {
     // TODO Rename this to `isEntityId`
     if (!isResourceId(id)) allErrors.push(new InvalidEdgeConnectionIDError(id));
 
-    // TODO Validate for members array is null or undefined
-
-    // TODO Check that none of the members is null or undefined
+    // TODO Validate members array is not null or undefined (part of type checks)
     const numberOfMembers = members.length;
 
     // Validate edge connection type against number of members

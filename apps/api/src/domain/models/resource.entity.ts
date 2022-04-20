@@ -9,8 +9,9 @@ import BaseDomainModel from './BaseDomainModel';
 import { ContextModelUnion } from './context/types/ContextModelUnion';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
 import { ResourceCompositeIdentifier } from './types/entityCompositeIdentifier';
+import { HasEntityID } from './types/HasEntityId';
 
-export abstract class Resource extends BaseDomainModel {
+export abstract class Resource extends BaseDomainModel implements HasEntityID {
     readonly type: ResourceType;
 
     readonly id: EntityId;

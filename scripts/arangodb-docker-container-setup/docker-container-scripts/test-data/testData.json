@@ -1,357 +1,405 @@
 {
-    "tags": [
-        {
-            "type": "tag",
-            "_key": "0",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "text": "plants"
-        },
-        {
-            "type": "tag",
-            "_key": "1",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "text": "animals"
-        },
-        {
-            "type": "tag",
-            "_key": "2",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "text": "placenames"
-        },
-        {
-            "type": "tag",
-            "_key": "3",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "text": "songs"
-        },
-        {
-            "type": "tag",
-            "_key": "4",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "text": "legends"
-        }
-    ],
-    "terms": [
-        {
-            "type": "term",
-            "_key": "1",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "term": "Chil-term-1",
-            "termEnglish": "Engl-term-1",
-            "contributorId": "John Doe"
-        },
-        {
-            "type": "term",
-            "_key": "2",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "term": "Chil-term-2",
-            "termEnglish": "Engl-term-2",
-            "contributorId": "John Doe"
-        },
-        {
-            "type": "term",
-            "_key": "3",
-            "published": false,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "term": "Chil-term-no-english",
-            "contributorId": "Jane Deer"
-        }
-    ],
-    "vocabulary_lists": [
-        {
-            "type": "vocabularyList",
-            "_key": "vocabulary-list-id-1",
-            "published": false,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "name": "test VL 1 chil",
-            "nameEnglish": "test VL 1 engl",
-            "entries": [
-                {
-                    "termId": "1",
-                    "variableValues": {
-                        "person": "11"
+    "resources": {
+        "tags": [
+            {
+                "type": "tag",
+                "_key": "0",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "text": "plants"
+            },
+            {
+                "type": "tag",
+                "_key": "1",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "text": "animals"
+            },
+            {
+                "type": "tag",
+                "_key": "2",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "text": "placenames"
+            },
+            {
+                "type": "tag",
+                "_key": "3",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "text": "songs"
+            },
+            {
+                "type": "tag",
+                "_key": "4",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "text": "legends"
+            }
+        ],
+        "terms": [
+            {
+                "type": "term",
+                "_key": "1",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "term": "Chil-term-1",
+                "termEnglish": "Engl-term-1",
+                "contributorId": "John Doe"
+            },
+            {
+                "type": "term",
+                "_key": "2",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "term": "Chil-term-2",
+                "termEnglish": "Engl-term-2",
+                "contributorId": "John Doe"
+            },
+            {
+                "type": "term",
+                "_key": "3",
+                "published": false,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "term": "Chil-term-no-english",
+                "contributorId": "Jane Deer"
+            }
+        ],
+        "vocabulary_lists": [
+            {
+                "type": "vocabularyList",
+                "_key": "vocabulary-list-id-1",
+                "published": false,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "name": "test VL 1 chil",
+                "nameEnglish": "test VL 1 engl",
+                "entries": [
+                    {
+                        "termId": "1",
+                        "variableValues": {
+                            "person": "11"
+                        }
+                    },
+                    {
+                        "termId": "2",
+                        "variableValues": {
+                            "person": "21"
+                        }
                     }
-                },
-                {
-                    "termId": "2",
-                    "variableValues": {
-                        "person": "21"
+                ],
+                "variables": [
+                    {
+                        "name": "person",
+                        "type": "dropbox",
+                        "validValues": [
+                            {
+                                "display": "I",
+                                "value": "11"
+                            },
+                            {
+                                "display": "We",
+                                "value": "21"
+                            }
+                        ]
                     }
-                }
-            ],
-            "variables": [
-                {
-                    "name": "person",
-                    "type": "dropbox",
-                    "validValues": [
+                ]
+            },
+            {
+                "type": "vocabularyList",
+                "_key": "vocabulary-list-id-2",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "name": "test VL 2 CHIL- no engl name",
+                "entries": [
+                    {
+                        "termId": "2",
+                        "variableValues": {
+                            "person": "23"
+                        }
+                    }
+                ],
+                "variables": []
+            }
+        ],
+        "transcribed_audio": [
+            {
+                "type": "transcribedAudio",
+                "_key": "110",
+                "published": false,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "audioFilename": "123.mp3",
+                "lengthMilliseconds": 20000,
+                "startMilliseconds": 0,
+                "transcript": {
+                    "timeRanges": [
                         {
-                            "display": "I",
-                            "value": "11"
+                            "inPoint": 12000,
+                            "outPoint": 15550,
+                            "data": "There once was a little wooden boy."
                         },
                         {
-                            "display": "We",
-                            "value": "21"
+                            "inPoint": 18300,
+                            "outPoint": 19240,
+                            "data": "His name was Pinocchio."
                         }
                     ]
                 }
-            ]
-        },
-        {
-            "type": "vocabularyList",
-            "_key": "vocabulary-list-id-2",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "name": "test VL 2 CHIL- no engl name",
-            "entries": [
-                {
-                    "termId": "2",
-                    "variableValues": {
-                        "person": "23"
-                    }
-                }
-            ],
-            "variables": []
-        }
-    ],
-    "transcribed_audio": [
-        {
-            "type": "transcribedAudio",
-            "_key": "110",
-            "published": false,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "audioFilename": "123.mp3",
-            "lengthMilliseconds": 20000,
-            "startMilliseconds": 0,
-            "transcript": {
-                "timeRanges": [
+            }
+        ],
+        "books": [
+            {
+                "type": "book",
+                "_key": "23",
+                "published": true,
+                "allowedContextTypes": [
+                    "general",
+                    "pageRange"
+                ],
+                "title": "Three Little Pigs",
+                "subtitle": "The wolf's revenge",
+                "author": "John Doeburg",
+                "publicationDate": "2002",
+                "pages": [
                     {
-                        "inPoint": 12000,
-                        "outPoint": 15550,
-                        "data": "There once was a little wooden boy."
+                        "identifier": "1",
+                        "text": "foo",
+                        "translation": "dee foo"
                     },
                     {
-                        "inPoint": 18300,
-                        "outPoint": 19240,
-                        "data": "His name was Pinocchio."
+                        "identifier": "2",
+                        "text": "blah blah blah",
+                        "translation": "blahas"
+                    }
+                ]
+            },
+            {
+                "type": "book",
+                "_key": "24",
+                "published": false,
+                "allowedContextTypes": [
+                    "general",
+                    "pageRange"
+                ],
+                "title": "An Adventure Story",
+                "author": "Jane Donnaldson",
+                "publicationDate": "2011",
+                "pages": [
+                    {
+                        "identifier": "ix",
+                        "text": "blah blah blah",
+                        "translation": "blahas"
                     }
                 ]
             }
-        }
-    ],
-    "books": [
-        {
-            "type": "book",
-            "_key": "23",
-            "published": true,
-            "allowedContextTypes": [
-                "general",
-                "pageRange"
-            ],
-            "title": "Three Little Pigs",
-            "subtitle": "The wolf's revenge",
-            "author": "John Doeburg",
-            "publicationDate": "2002",
-            "pages": [
-                {
-                    "identifier": "1",
-                    "text": "foo",
-                    "translation": "dee foo"
-                },
-                {
-                    "identifier": "2",
-                    "text": "blah blah blah",
-                    "translation": "blahas"
+        ],
+        "photographs": [
+            {
+                "type": "photograph",
+                "_key": "0",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "filename": "cat",
+                "photographer": "Susie McRealart",
+                "dimensions": {
+                    "widthPX": 300,
+                    "heightPX": 400
                 }
-            ]
-        },
-        {
-            "type": "book",
-            "_key": "24",
-            "published": false,
-            "allowedContextTypes": [
-                "general",
-                "pageRange"
-            ],
-            "title": "An Adventure Story",
-            "author": "Jane Donnaldson",
-            "publicationDate": "2011",
-            "pages": [
-                {
-                    "identifier": "ix",
-                    "text": "blah blah blah",
-                    "translation": "blahas"
+            },
+            {
+                "type": "photograph",
+                "_key": "1",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "filename": "dog",
+                "photographer": "Robert McRealart",
+                "dimensions": {
+                    "widthPX": 420,
+                    "heightPX": 285
                 }
-            ]
-        }
-    ],
-    "photographs": [
-        {
-            "type": "photograph",
-            "_key": "0",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "filename": "cat",
-            "photographer": "Susie McRealart",
-            "dimensions": {
-                "widthPX": 300,
-                "heightPX": 400
             }
-        },
-        {
-            "type": "photograph",
-            "_key": "1",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "filename": "dog",
-            "photographer": "Robert McRealart",
-            "dimensions": {
-                "widthPX": 420,
-                "heightPX": 285
-            }
-        }
-    ],
-    "spatial_features": [
-        {
-            "type": "spatialFeature",
-            "_key": "100",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    100,
-                    0
-                ]
-            }
-        },
-        {
-            "type": "spatialFeature",
-            "_key": "101",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    20,
-                    10
-                ]
-            }
-        },
-        {
-            "type": "spatialFeature",
-            "_key": "102",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    70.5,
-                    23.5
-                ]
-            }
-        },
-        {
-            "type": "spatialFeature",
-            "_key": "1",
-            "published": false,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        1,
-                        2
-                    ],
-                    [
-                        1,
-                        3
-                    ],
-                    [
-                        1.5,
-                        3.5
-                    ],
-                    [
-                        3,
-                        4.2
+        ],
+        "spatial_features": [
+            {
+                "type": "spatialFeature",
+                "_key": "100",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        100,
+                        0
                     ]
-                ]
-            }
-        },
-        {
-            "type": "spatialFeature",
-            "_key": "300",
-            "published": true,
-            "allowedContextTypes": [
-                "general"
-            ],
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [
-                    [
+                }
+            },
+            {
+                "type": "spatialFeature",
+                "_key": "101",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        20,
+                        10
+                    ]
+                }
+            },
+            {
+                "type": "spatialFeature",
+                "_key": "102",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        70.5,
+                        23.5
+                    ]
+                }
+            },
+            {
+                "type": "spatialFeature",
+                "_key": "1",
+                "published": false,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                        [
+                            1,
+                            2
+                        ],
                         [
                             1,
                             3
-                        ],
-                        [
-                            2,
-                            5
                         ],
                         [
                             1.5,
-                            3.7
+                            3.5
                         ],
                         [
-                            1.2,
-                            3.3
-                        ],
-                        [
-                            1,
-                            3
+                            3,
+                            4.2
                         ]
                     ]
-                ]
+                }
+            },
+            {
+                "type": "spatialFeature",
+                "_key": "300",
+                "published": true,
+                "allowedContextTypes": [
+                    "general"
+                ],
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [
+                                1,
+                                3
+                            ],
+                            [
+                                2,
+                                5
+                            ],
+                            [
+                                1.5,
+                                3.7
+                            ],
+                            [
+                                1.2,
+                                3.3
+                            ],
+                            [
+                                1,
+                                3
+                            ]
+                        ]
+                    ]
+                }
             }
+        ]
+    },
+    "edges": [
+        {
+            "_to": "terms/1",
+            "_from": "terms/1",
+            "type": "self",
+            "_key": "1",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "textField",
+                        "target": "term",
+                        "charRange": [
+                            0,
+                            3
+                        ]
+                    }
+                }
+            ],
+            "tagIDs": [
+                "0"
+            ],
+            "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
+        },
+        {
+            "_to": "books/24",
+            "_from": "books/24",
+            "type": "self",
+            "_key": "2",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "pageRange",
+                        "pageIdentifiers": [
+                            "ix"
+                        ]
+                    }
+                }
+            ],
+            "tagIDs": [
+                "1"
+            ],
+            "note": "These pages are about bears"
         }
     ]
 }

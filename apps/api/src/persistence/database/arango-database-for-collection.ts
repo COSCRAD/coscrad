@@ -3,7 +3,6 @@ import { Resource } from '../../domain/models/resource.entity';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { EntityId } from '../../domain/types/ResourceId';
 import { Maybe } from '../../lib/types/maybe';
-import { PartialDTO } from '../../types/partial-dto';
 import { ArangoDatabase } from './arango-database';
 import { IDatabaseForCollection } from './interfaces/database-for-collection';
 import { ArangoCollectionID } from './types/ArangoCollectionId';
@@ -33,7 +32,7 @@ export class ArangoDatabaseForCollection<TEntity extends Resource>
     }
 
     // Queries (return information)
-    fetchById(id: EntityId): Promise<Maybe<DatabaseDTO<PartialDTO<TEntity>>>> {
+    fetchById(id: EntityId): Promise<Maybe<DatabaseDTO<TEntity>>> {
         return this.#arangoDatabase.fetchById<DatabaseDTO<TEntity>>(id, this.#collectionID);
     }
 
@@ -50,12 +49,12 @@ export class ArangoDatabaseForCollection<TEntity extends Resource>
     }
 
     // Commands (mutate state)
-    create(databaseDTO: DatabaseDTO<PartialDTO<TEntity>>) {
+    create(databaseDTO: DatabaseDTO<TEntity>) {
         // Handle the difference in _id \ _key between model and database
         return this.#arangoDatabase.create(databaseDTO, this.#collectionID);
     }
 
-    createMany(databaseDTOs: DatabaseDTO<PartialDTO<TEntity>>[]) {
+    createMany(databaseDTOs: DatabaseDTO<TEntity>[]) {
         return this.#arangoDatabase.createMany(databaseDTOs, this.#collectionID);
     }
 
