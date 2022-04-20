@@ -1,8 +1,11 @@
 import { writeFileSync } from 'fs';
 import { getValidatorForEntity } from '../domain/domainModelValidators';
-import edgeConnectionValidator from '../domain/domainModelValidators/contextValidators/edgeConnectionValidator';
+import validateEdgeConnection from '../domain/domainModelValidators/contextValidators/validateEdgeConnection';
 import { isValid, Valid } from '../domain/domainModelValidators/Valid';
-import { EdgeConnectionMemberRole } from '../domain/models/context/edge-connection.entity';
+import {
+    EdgeConnection,
+    EdgeConnectionMemberRole,
+} from '../domain/models/context/edge-connection.entity';
 import { Resource } from '../domain/models/resource.entity';
 import {
     isResourceType,
@@ -11,31 +14,45 @@ import {
     ResourceTypeToInstance,
 } from '../domain/types/resourceTypes';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
+import { isInternalError } from '../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
 import { getArangoCollectionIDFromResourceType } from '../persistence/database/getArangoCollectionIDFromResourceType';
+import mapEdgeConnectionDTOToArangoEdgeDocument from '../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
 import { PartialDTO } from '../types/partial-dto';
 import buildTestData from './buildTestData';
 
-export type InMemorySnapshotOfDTOs = {
+export type InMemorySnapshotOfResourceDTOs = {
     [K in keyof ResourceTypeToInstance]?: PartialDTO<ResourceTypeToInstance>[K][];
 };
 
+type InMemorySnapshotOfConnectionDTOs = {
+    connections?: PartialDTO<EdgeConnection>[];
+};
+
+type InMemorySnapshotOfDTOs = {
+    resources: InMemorySnapshotOfResourceDTOs;
+} & InMemorySnapshotOfConnectionDTOs;
+
 describe('buildTestData', () => {
+    const testData = buildTestData();
+
+    const { connections: connectionTestData, resources: resourceTestData } = testData;
+
+    const resourceTestDataDTOs = Object.entries(resourceTestData).reduce(
+        (accumulatedDataWithDtos: InMemorySnapshotOfResourceDTOs, [ResourceType, instances]) => ({
+            ...accumulatedDataWithDtos,
+            [ResourceType]: instances.map((instance) => instance.toDTO()),
+        }),
+        {}
+    );
+
+    const connectionTestDataDTOs = connectionTestData.map((instance) => instance.toDTO());
+
     describe('test data for resources', () => {
         describe('the resulting test data', () => {
-            const resourceTestData = buildTestData().resources;
-
-            const testData = Object.entries(resourceTestData).reduce(
-                (accumulatedDataWithDtos: InMemorySnapshotOfDTOs, [ResourceType, instances]) => ({
-                    ...accumulatedDataWithDtos,
-                    [ResourceType]: instances.map((instance) => instance.toDTO()),
-                }),
-                {}
-            );
-
             Object.values(resourceTypes).forEach((key) => {
-                const models = testData[key];
+                const models = resourceTestDataDTOs[key];
                 describe(`Resource of type ${key}`, () => {
                     it(`Should be a valid entity type`, () => {
                         expect(isResourceType(key)).toBe(true);
@@ -89,35 +106,12 @@ describe('buildTestData', () => {
                             });
                         });
                     });
-
-                    const testDataInDatabaseFormat =
-                        // Use `collectionNames` not `resourceTypes` as keys
-                        Object.entries(testData).reduce(
-                            (acc, [key, models]) => ({
-                                ...acc,
-                                [getArangoCollectionIDFromResourceType(key as ResourceType)]:
-                                    models.map((model) => mapEntityDTOToDatabaseDTO(model)),
-                            }),
-                            {}
-                        );
-
-                    // TODO move this to a config- better yet avoid this whole write!
-                    const testDataFilePath = `${process.cwd()}/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.json`;
-
-                    const numberOfSpacesToIndent = 4;
-
-                    writeFileSync(
-                        testDataFilePath,
-                        JSON.stringify(testDataInDatabaseFormat, null, numberOfSpacesToIndent)
-                    );
                 });
             });
         });
     });
 
-    describe.skip('test data for edge connections', () => {
-        const { connections: connectionTestData, resources: resourceTestData } = buildTestData();
-
+    describe('test data for edge connections', () => {
         const doesMemberWithResourceTypeAndRoleExist = (
             targetResourceType: ResourceType,
             targetRole: EdgeConnectionMemberRole
@@ -131,8 +125,10 @@ describe('buildTestData', () => {
             /**
              * Ensure there is a `self`,`to`, and `from` edge connection instance
              * for each resource type.
+             *
+             * TODO: Unskip this.
              */
-            describe(`the resource type: ${resourceType}`, () => {
+            describe.skip(`the resource type: ${resourceType}`, () => {
                 Object.values(EdgeConnectionMemberRole).forEach((role) => {
                     it(`should have one instance that is associated with a ${role} connection`, () => {
                         const result = doesMemberWithResourceTypeAndRoleExist(resourceType, role);
@@ -143,53 +139,105 @@ describe('buildTestData', () => {
             });
         });
 
-        connectionTestData.forEach((edgeConnection, index) => {
-            describe(`Edge Connection at index ${index}`, () => {
-                it(`should satisfy the invariants for an Edge Connection`, () => {
-                    const validationResult = edgeConnectionValidator(edgeConnection);
+        connectionTestData
+            /**
+             * TODO: [https://www.pivotaltracker.com/story/show/181936287]
+             * Remove this filter after seeding test data.
+             *
+             */
+            .filter(({ note }) => note.includes('pages are about'))
+            .forEach((edgeConnection, index) => {
+                describe(`Edge Connection at index ${index}`, () => {
+                    it(`should satisfy the invariants for an Edge Connection`, () => {
+                        const validationResult = validateEdgeConnection(edgeConnection);
 
-                    expect(validationResult).toBe(Valid);
-                });
-
-                const { members, tagIDs } = edgeConnection;
-
-                it(`should reference only tags that are in the test data`, () => {
-                    const areAllTagsInSnapshot = tagIDs.every((tagID) =>
-                        resourceTestData[resourceTypes.tag].some(({ id }) => id === tagID)
-                    );
-
-                    expect(areAllTagsInSnapshot).toBe(true);
-                });
-
-                members.forEach(
-                    ({ compositeIdentifier: { id: memberId, type: resourceType }, context }) => {
-                        describe(`the member with composite ID ${resourceType}/${memberId}`, () => {
-                            it(`should reference resource instances that are in the test data`, () => {
-                                const areAllResourcesInSnapshot = resourceTestData[
-                                    resourceType
-                                ].some(
-                                    ({ id: resourceInstanceId }) => resourceInstanceId === memberId
-                                );
-
-                                expect(areAllResourcesInSnapshot).toBe(true);
+                        if (isInternalError(validationResult)) {
+                            console.log({
+                                innerErrors: validationResult.innerErrors,
                             });
+                        }
 
-                            describe(`its context`, () => {
-                                it(`should be consistent with the state of ${resourceType}/${memberId}`, () => {
-                                    const correspondingResourceInstance = (
-                                        resourceTestData[resourceType] as { id: string }[]
-                                    ).find(({ id }) => id === memberId) as Resource;
+                        expect(validationResult).toBe(Valid);
+                    });
 
-                                    const validationResult =
-                                        correspondingResourceInstance.validateContext(context);
+                    const { members, tagIDs } = edgeConnection;
 
-                                    expect(validationResult).toBe(Valid);
+                    it(`should reference only tags that are in the test data`, () => {
+                        const areAllTagsInSnapshot = tagIDs.every((tagID) =>
+                            resourceTestData[resourceTypes.tag].some(({ id }) => id === tagID)
+                        );
+
+                        expect(areAllTagsInSnapshot).toBe(true);
+                    });
+
+                    members.forEach(
+                        ({
+                            compositeIdentifier: { id: memberId, type: resourceType },
+                            context,
+                        }) => {
+                            describe(`the member with composite ID ${resourceType}/${memberId}`, () => {
+                                it(`should reference resource instances that are in the test data`, () => {
+                                    const areAllResourcesInSnapshot = resourceTestData[
+                                        resourceType
+                                    ].some(
+                                        ({ id: resourceInstanceId }) =>
+                                            resourceInstanceId === memberId
+                                    );
+
+                                    expect(areAllResourcesInSnapshot).toBe(true);
+                                });
+
+                                describe(`its context`, () => {
+                                    it(`should be consistent with the state of ${resourceType}/${memberId}`, () => {
+                                        const correspondingResourceInstance = (
+                                            resourceTestData[resourceType] as { id: string }[]
+                                        ).find(({ id }) => id === memberId) as Resource;
+
+                                        const validationResult =
+                                            correspondingResourceInstance.validateContext(context);
+
+                                        expect(validationResult).toBe(Valid);
+                                    });
                                 });
                             });
-                        });
-                    }
-                );
+                        }
+                    );
+                });
             });
-        });
+    });
+
+    // If the test succeeds, write the data!
+    afterAll(() => {
+        const resourceTestDataInDatabaseFormat =
+            // Use `collectionNames` not `resourceTypes` as keys
+            Object.entries(resourceTestDataDTOs).reduce(
+                (acc, [key, models]) => ({
+                    ...acc,
+                    [getArangoCollectionIDFromResourceType(key as ResourceType)]: models.map(
+                        (model) => mapEntityDTOToDatabaseDTO(model)
+                    ),
+                }),
+                {}
+            );
+
+        const connectionTestDataInDatabaseFormat = connectionTestDataDTOs.map(
+            mapEdgeConnectionDTOToArangoEdgeDocument
+        );
+
+        const fullSnapshotInDatabaseFormat = {
+            resources: resourceTestDataInDatabaseFormat,
+            // note the change in this key ~~connections~~ -> edges
+            edges: connectionTestDataInDatabaseFormat,
+        };
+
+        // TODO move this to a config- better yet avoid this whole write!
+        const testDataFilePath = `${process.cwd()}/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.json`;
+
+        const numberOfSpacesToIndent = 4;
+
+        writeFileSync(
+            testDataFilePath,
+            JSON.stringify(fullSnapshotInDatabaseFormat, null, numberOfSpacesToIndent)
+        );
     });
 });

@@ -2,7 +2,11 @@ import { EdgeConnection } from '../../domain/models/context/edge-connection.enti
 import buildDualEdgeConnectionTestData from './buildDualEdgeConnectionTestData';
 import buildSelfConnectionTestData from './buildSelfConnectionTestData';
 
-export default (): EdgeConnection[] => [
-    ...buildSelfConnectionTestData(),
-    ...buildDualEdgeConnectionTestData(),
-];
+export default (): EdgeConnection[] =>
+    [...buildSelfConnectionTestData(), ...buildDualEdgeConnectionTestData()]
+        // We generate IDs at the top level to guarantee uniqueness
+        .map((instance, index) =>
+            instance.clone({
+                id: `${index + 1}`,
+            })
+        );

@@ -3,11 +3,11 @@ import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import { EntityId } from '../../types/ResourceId';
 import BaseDomainModel from '../BaseDomainModel';
 import { ResourceCompositeIdentifier } from '../types/entityCompositeIdentifier';
+import { HasEntityID } from '../types/HasEntityId';
 import { ContextModelUnion } from './types/ContextModelUnion';
 
 export enum EdgeConnectionType {
     self = 'self',
-    // TODO Is there a better name for this?
     dual = 'dual',
 }
 
@@ -27,7 +27,7 @@ export type EdgeConnectionMember<TContextModel extends ContextModelUnion = Conte
     role: EdgeConnectionMemberRole;
 };
 
-export class EdgeConnection extends BaseDomainModel {
+export class EdgeConnection extends BaseDomainModel implements HasEntityID {
     type: EdgeConnectionType;
 
     id: EntityId;

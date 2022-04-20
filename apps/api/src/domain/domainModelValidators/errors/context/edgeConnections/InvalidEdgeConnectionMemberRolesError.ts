@@ -18,7 +18,8 @@ export default class InvalidEdgeConnectionMemberRolesError extends InternalError
                             compositeIdentifier
                         )}`,
                         `has an invalid role: ${role}`,
-                    ].join(' ')
+                    ].join(' '),
+                    '/n'
                 ),
             ''
         );

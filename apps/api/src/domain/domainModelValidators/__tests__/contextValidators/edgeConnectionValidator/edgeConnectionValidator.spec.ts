@@ -7,7 +7,7 @@
  */
 
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import edgeConnectionValidator from '../../../contextValidators/edgeConnectionValidator/index';
+import validateEdgeConnection from '../../../contextValidators/validateEdgeConnection/index';
 import { Valid } from '../../../Valid';
 import buildEdgeConnectionValidatorTestCases from './buildEdgeConnectionValidatorTestCases';
 
@@ -16,7 +16,7 @@ buildEdgeConnectionValidatorTestCases().forEach(({ validCases, invalidCases }) =
         describe('When the DTO for an Edge Connection is valid', () => {
             describe(description || `Valid test case #${index}`, () => {
                 it('should return Valid', () => {
-                    const result = edgeConnectionValidator(dto);
+                    const result = validateEdgeConnection(dto);
 
                     expect(result).toBe(Valid);
                 });
@@ -30,7 +30,7 @@ buildEdgeConnectionValidatorTestCases().forEach(({ validCases, invalidCases }) =
             describe('When the DTO for the Edge Connection is invalid', () => {
                 describe(description, () => {
                     it('should return the expected Error', () => {
-                        const result = edgeConnectionValidator(invalidDTO);
+                        const result = validateEdgeConnection(invalidDTO);
 
                         expect(result).toEqual(expectedError);
 
