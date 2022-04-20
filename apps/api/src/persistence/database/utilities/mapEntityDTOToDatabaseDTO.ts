@@ -6,19 +6,14 @@ export type DatabaseDTO<TEntityDTO extends HasEntityID = HasEntityID> = Omit<TEn
     _key: string;
 };
 
-export default <TEntity extends HasEntityID>(
-    entityDTO: PartialDTO<TEntity>
-): DatabaseDTO<TEntity> =>
-    Object.entries(entityDTO).reduce(
-        (accumulatedMappedObject: DatabaseDTO<TEntity>, [key, value]) => {
-            if (key === 'id') {
-                // Note invalid ids will be omitted from the output
-                if (isResourceId(value)) accumulatedMappedObject['_key'] = value as string;
-            } else {
-                accumulatedMappedObject[key] = value;
-            }
+export default <T extends HasEntityID>(entityDTO: PartialDTO<T>): DatabaseDTO<T> =>
+    Object.entries(entityDTO).reduce((accumulatedMappedObject: DatabaseDTO<T>, [key, value]) => {
+        if (key === 'id') {
+            // Note invalid ids will be omitted from the output
+            if (isResourceId(value)) accumulatedMappedObject['_key'] = value as string;
+        } else {
+            accumulatedMappedObject[key] = value;
+        }
 
-            return accumulatedMappedObject as unknown as DatabaseDTO<TEntity>;
-        },
-        {} as DatabaseDTO<TEntity>
-    );
+        return accumulatedMappedObject as unknown as DatabaseDTO<T>;
+    }, {} as DatabaseDTO<T>);

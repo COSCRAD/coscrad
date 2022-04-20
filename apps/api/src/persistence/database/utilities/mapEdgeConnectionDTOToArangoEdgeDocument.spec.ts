@@ -8,9 +8,8 @@ import { PageRangeContext } from 'apps/api/src/domain/models/context/page-range-
 import { TimeRangeContext } from 'apps/api/src/domain/models/context/time-range-context/time-range-context.entity';
 import { resourceTypes } from 'apps/api/src/domain/types/resourceTypes';
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import mapEdgeConnectionDTOToArangoEdgeDocument, {
-    ArangoEdgeDocument,
-} from './mapEdgeConnectionDTOToArangoEdgeDocument';
+import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
+import mapEdgeConnectionDTOToArangoEdgeDocument from './mapEdgeConnectionDTOToArangoEdgeDocument';
 
 type TestCase = {
     description: string;

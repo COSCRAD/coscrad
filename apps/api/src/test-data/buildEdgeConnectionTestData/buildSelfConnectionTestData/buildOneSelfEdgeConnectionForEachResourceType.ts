@@ -28,7 +28,6 @@ export default (): EdgeConnection[] =>
             ],
         },
         {
-            id: '123',
             type: EdgeConnectionType.self,
             tagIDs: ['1'],
             note: 'These pages are about bears',

@@ -361,6 +361,7 @@
             "_to": "terms/1",
             "_from": "terms/1",
             "type": "self",
+            "_key": "1",
             "members": [
                 {
                     "role": "self",
@@ -383,7 +384,7 @@
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "123",
+            "_key": "2",
             "members": [
                 {
                     "role": "self",
