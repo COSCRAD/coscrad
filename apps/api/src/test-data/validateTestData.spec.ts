@@ -128,7 +128,7 @@ describe('buildTestData', () => {
              *
              * TODO: Unskip this.
              */
-            describe.skip(`the resource type: ${resourceType}`, () => {
+            describe(`the resource type: ${resourceType}`, () => {
                 Object.values(EdgeConnectionMemberRole).forEach((role) => {
                     it(`should have one instance that is associated with a ${role} connection`, () => {
                         const result = doesMemberWithResourceTypeAndRoleExist(resourceType, role);
@@ -139,74 +139,63 @@ describe('buildTestData', () => {
             });
         });
 
-        connectionTestData
-            /**
-             * TODO: [https://www.pivotaltracker.com/story/show/181936287]
-             * Remove this filter after seeding test data.
-             *
-             */
-            .filter(({ note }) => note.includes('pages are about'))
-            .forEach((edgeConnection, index) => {
-                describe(`Edge Connection at index ${index}`, () => {
-                    it(`should satisfy the invariants for an Edge Connection`, () => {
-                        const validationResult = validateEdgeConnection(edgeConnection);
+        connectionTestData.forEach((edgeConnection, index) => {
+            describe(`Edge Connection at index ${index}`, () => {
+                it(`should satisfy the invariants for an Edge Connection`, () => {
+                    const validationResult = validateEdgeConnection(edgeConnection);
 
-                        if (isInternalError(validationResult)) {
-                            console.log({
-                                innerErrors: validationResult.innerErrors,
-                            });
-                        }
+                    if (isInternalError(validationResult)) {
+                        console.log({
+                            innerErrors: validationResult.innerErrors,
+                        });
+                    }
 
-                        expect(validationResult).toBe(Valid);
-                    });
-
-                    const { members, tagIDs } = edgeConnection;
-
-                    it(`should reference only tags that are in the test data`, () => {
-                        const areAllTagsInSnapshot = tagIDs.every((tagID) =>
-                            resourceTestData[resourceTypes.tag].some(({ id }) => id === tagID)
-                        );
-
-                        expect(areAllTagsInSnapshot).toBe(true);
-                    });
-
-                    members.forEach(
-                        ({
-                            compositeIdentifier: { id: memberId, type: resourceType },
-                            context,
-                        }) => {
-                            describe(`the member with composite ID ${resourceType}/${memberId}`, () => {
-                                it(`should reference resource instances that are in the test data`, () => {
-                                    const areAllResourcesInSnapshot = resourceTestData[
-                                        resourceType
-                                    ].some(
-                                        ({ id: resourceInstanceId }) =>
-                                            resourceInstanceId === memberId
-                                    );
-
-                                    expect(areAllResourcesInSnapshot).toBe(true);
-                                });
-
-                                describe(`its context`, () => {
-                                    it(`should be consistent with the state of ${resourceType}/${memberId}`, () => {
-                                        const correspondingResourceInstance = (
-                                            resourceTestData[resourceType] as { id: string }[]
-                                        ).find(({ id }) => id === memberId) as Resource;
-
-                                        const validationResult =
-                                            correspondingResourceInstance.validateContext(context);
-
-                                        expect(validationResult).toBe(Valid);
-                                    });
-                                });
-                            });
-                        }
-                    );
+                    expect(validationResult).toBe(Valid);
                 });
+
+                const { members, tagIDs } = edgeConnection;
+
+                it(`should reference only tags that are in the test data`, () => {
+                    const areAllTagsInSnapshot = tagIDs.every((tagID) =>
+                        resourceTestData[resourceTypes.tag].some(({ id }) => id === tagID)
+                    );
+
+                    expect(areAllTagsInSnapshot).toBe(true);
+                });
+
+                members.forEach(
+                    ({ compositeIdentifier: { id: memberId, type: resourceType }, context }) => {
+                        describe(`the member with composite ID ${resourceType}/${memberId}`, () => {
+                            it(`should reference resource instances that are in the test data`, () => {
+                                const areAllResourcesInSnapshot = resourceTestData[
+                                    resourceType
+                                ].some(
+                                    ({ id: resourceInstanceId }) => resourceInstanceId === memberId
+                                );
+
+                                expect(areAllResourcesInSnapshot).toBe(true);
+                            });
+
+                            describe(`its context`, () => {
+                                it(`should be consistent with the state of ${resourceType}/${memberId}`, () => {
+                                    const correspondingResourceInstance = (
+                                        resourceTestData[resourceType] as { id: string }[]
+                                    ).find(({ id }) => id === memberId) as Resource;
+
+                                    const validationResult =
+                                        correspondingResourceInstance.validateContext(context);
+
+                                    expect(validationResult).toBe(Valid);
+                                });
+                            });
+                        });
+                    }
+                );
             });
+        });
     });
 
-    // If the test succeeds, write the data!
+    // If the test succeeds, write the data
     afterAll(() => {
         const resourceTestDataInDatabaseFormat =
             // Use `collectionNames` not `resourceTypes` as keys

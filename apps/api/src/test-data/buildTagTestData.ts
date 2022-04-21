@@ -9,7 +9,7 @@ export default (): Tag[] =>
     ['plants', 'animals', 'placenames', 'songs', 'legends'].map(
         (text, index) =>
             new Tag({
-                id: String(index),
+                id: String(index + 1),
                 text,
                 published: true,
             })

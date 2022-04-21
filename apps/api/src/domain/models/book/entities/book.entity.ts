@@ -1,5 +1,6 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { resourceTypes } from '../../../types/resourceTypes';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
@@ -55,8 +56,11 @@ export class Book extends Resource {
             []
         );
 
-        // TODO Break this out into a proper error
-        if (missingPages.length > 0) return new InternalError(`Missing pages`);
+        if (missingPages.length > 0)
+            return new PageRangeContextHasSuperfluousPageIdentifiersError(
+                missingPages,
+                this.getCompositeIdentifier()
+            );
 
         return Valid;
     }

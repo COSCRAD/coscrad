@@ -3,7 +3,7 @@
         "tags": [
             {
                 "type": "tag",
-                "_key": "0",
+                "_key": "1",
                 "published": true,
                 "allowedContextTypes": [
                     "general"
@@ -12,7 +12,7 @@
             },
             {
                 "type": "tag",
-                "_key": "1",
+                "_key": "2",
                 "published": true,
                 "allowedContextTypes": [
                     "general"
@@ -21,7 +21,7 @@
             },
             {
                 "type": "tag",
-                "_key": "2",
+                "_key": "3",
                 "published": true,
                 "allowedContextTypes": [
                     "general"
@@ -30,7 +30,7 @@
             },
             {
                 "type": "tag",
-                "_key": "3",
+                "_key": "4",
                 "published": true,
                 "allowedContextTypes": [
                     "general"
@@ -39,7 +39,7 @@
             },
             {
                 "type": "tag",
-                "_key": "4",
+                "_key": "5",
                 "published": true,
                 "allowedContextTypes": [
                     "general"
@@ -53,7 +53,8 @@
                 "_key": "1",
                 "published": true,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "textField"
                 ],
                 "term": "Chil-term-1",
                 "termEnglish": "Engl-term-1",
@@ -64,7 +65,8 @@
                 "_key": "2",
                 "published": true,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "textField"
                 ],
                 "term": "Chil-term-2",
                 "termEnglish": "Engl-term-2",
@@ -75,7 +77,8 @@
                 "_key": "3",
                 "published": false,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "textField"
                 ],
                 "term": "Chil-term-no-english",
                 "contributorId": "Jane Deer"
@@ -87,7 +90,8 @@
                 "_key": "vocabulary-list-id-1",
                 "published": false,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "textField"
                 ],
                 "name": "test VL 1 chil",
                 "nameEnglish": "test VL 1 engl",
@@ -127,7 +131,8 @@
                 "_key": "vocabulary-list-id-2",
                 "published": true,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "textField"
                 ],
                 "name": "test VL 2 CHIL- no engl name",
                 "entries": [
@@ -147,7 +152,8 @@
                 "_key": "110",
                 "published": false,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "textField"
                 ],
                 "audioFilename": "123.mp3",
                 "lengthMilliseconds": 20000,
@@ -220,7 +226,9 @@
                 "_key": "0",
                 "published": true,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "point2D",
+                    "freeMultiline"
                 ],
                 "filename": "cat",
                 "photographer": "Susie McRealart",
@@ -234,13 +242,31 @@
                 "_key": "1",
                 "published": true,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "point2D",
+                    "freeMultiline"
                 ],
                 "filename": "dog",
                 "photographer": "Robert McRealart",
                 "dimensions": {
                     "widthPX": 420,
                     "heightPX": 285
+                }
+            },
+            {
+                "type": "photograph",
+                "_key": "2",
+                "published": true,
+                "allowedContextTypes": [
+                    "general",
+                    "point2D",
+                    "freeMultiline"
+                ],
+                "filename": "wildflower",
+                "photographer": "Kenny Tree-Huggens",
+                "dimensions": {
+                    "widthPX": 1200,
+                    "heightPX": 1500
                 }
             }
         ],
@@ -250,7 +276,9 @@
                 "_key": "100",
                 "published": true,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "point2D",
+                    "freeMultiline"
                 ],
                 "geometry": {
                     "type": "Point",
@@ -265,7 +293,9 @@
                 "_key": "101",
                 "published": true,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "point2D",
+                    "freeMultiline"
                 ],
                 "geometry": {
                     "type": "Point",
@@ -280,7 +310,9 @@
                 "_key": "102",
                 "published": true,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "point2D",
+                    "freeMultiline"
                 ],
                 "geometry": {
                     "type": "Point",
@@ -295,7 +327,9 @@
                 "_key": "1",
                 "published": false,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "point2D",
+                    "freeMultiline"
                 ],
                 "geometry": {
                     "type": "LineString",
@@ -324,7 +358,9 @@
                 "_key": "300",
                 "published": true,
                 "allowedContextTypes": [
-                    "general"
+                    "general",
+                    "point2D",
+                    "freeMultiline"
                 ],
                 "geometry": {
                     "type": "Polygon",
@@ -358,8 +394,8 @@
     },
     "edges": [
         {
-            "_to": "terms/1",
-            "_from": "terms/1",
+            "_to": "terms/2",
+            "_from": "terms/2",
             "type": "self",
             "_key": "1",
             "members": [
@@ -376,7 +412,7 @@
                 }
             ],
             "tagIDs": [
-                "0"
+                "1"
             ],
             "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
         },
@@ -397,9 +433,349 @@
                 }
             ],
             "tagIDs": [
+                "2"
+            ],
+            "note": "This page is about bears"
+        },
+        {
+            "_to": "vocabulary_lists/vocabulary-list-id-2",
+            "_from": "vocabulary_lists/vocabulary-list-id-2",
+            "type": "self",
+            "_key": "3",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "textField",
+                        "target": "name",
+                        "charRange": [
+                            0,
+                            1
+                        ]
+                    }
+                }
+            ],
+            "tagIDs": [],
+            "note": "This is the first letter of the list name"
+        },
+        {
+            "_to": "spatial_features/300",
+            "_from": "spatial_features/300",
+            "type": "self",
+            "_key": "4",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "point2D",
+                        "point": [
+                            2,
+                            5
+                        ]
+                    }
+                }
+            ],
+            "tagIDs": [
+                "3"
+            ],
+            "note": "there is a placename for this point at the base of the mountain"
+        },
+        {
+            "_to": "spatial_features/300",
+            "_from": "spatial_features/300",
+            "type": "self",
+            "_key": "5",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "freeMultiline",
+                        "lines": [
+                            [
+                                [
+                                    1.2,
+                                    3.8
+                                ],
+                                [
+                                    1.3,
+                                    3.9
+                                ],
+                                [
+                                    1.4,
+                                    4
+                                ]
+                            ]
+                        ]
+                    }
+                }
+            ],
+            "tagIDs": [
+                "3"
+            ],
+            "note": "this is the path they took through the woods"
+        },
+        {
+            "_to": "transcribed_audio/110",
+            "_from": "transcribed_audio/110",
+            "type": "self",
+            "_key": "6",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "timeRange",
+                        "timeRange": {
+                            "inPoint": 11000,
+                            "outPoint": 12950
+                        }
+                    }
+                }
+            ],
+            "tagIDs": [
+                "4"
+            ],
+            "note": "this clip talks about songs"
+        },
+        {
+            "_to": "photographs/2",
+            "_from": "photographs/2",
+            "type": "self",
+            "_key": "7",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "freeMultiline",
+                        "lines": [
+                            [
+                                [
+                                    0,
+                                    200
+                                ],
+                                [
+                                    100,
+                                    300
+                                ],
+                                [
+                                    200,
+                                    400
+                                ],
+                                [
+                                    250,
+                                    475
+                                ]
+                            ]
+                        ]
+                    }
+                }
+            ],
+            "tagIDs": [
                 "1"
             ],
-            "note": "These pages are about bears"
+            "note": "this is the stem of the flower"
+        },
+        {
+            "_to": "photographs/2",
+            "_from": "photographs/2",
+            "type": "self",
+            "_key": "8",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "point2D",
+                        "point": [
+                            0,
+                            200
+                        ]
+                    }
+                }
+            ],
+            "tagIDs": [
+                "1"
+            ],
+            "note": "this is the base of the flower"
+        },
+        {
+            "_to": "books/24",
+            "_from": "books/24",
+            "type": "self",
+            "_key": "9",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "pageRange",
+                        "pageIdentifiers": [
+                            "ix"
+                        ]
+                    }
+                }
+            ],
+            "tagIDs": [
+                "2"
+            ],
+            "note": "this section is the best part of an illustrated book about birds"
+        },
+        {
+            "_to": "terms/2",
+            "_from": "terms/2",
+            "type": "self",
+            "_key": "10",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "tagIDs": [
+                "1"
+            ],
+            "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
+        },
+        {
+            "_to": "books/24",
+            "_from": "books/24",
+            "type": "self",
+            "_key": "11",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "tagIDs": [
+                "2"
+            ],
+            "note": "This page is about bears"
+        },
+        {
+            "_to": "vocabulary_lists/vocabulary-list-id-2",
+            "_from": "vocabulary_lists/vocabulary-list-id-2",
+            "type": "self",
+            "_key": "12",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "tagIDs": [],
+            "note": "This is the first letter of the list name"
+        },
+        {
+            "_to": "spatial_features/300",
+            "_from": "spatial_features/300",
+            "type": "self",
+            "_key": "13",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "tagIDs": [
+                "3"
+            ],
+            "note": "there is a placename for this point at the base of the mountain"
+        },
+        {
+            "_to": "spatial_features/300",
+            "_from": "spatial_features/300",
+            "type": "self",
+            "_key": "14",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "tagIDs": [
+                "3"
+            ],
+            "note": "this is the path they took through the woods"
+        },
+        {
+            "_to": "transcribed_audio/110",
+            "_from": "transcribed_audio/110",
+            "type": "self",
+            "_key": "15",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "tagIDs": [
+                "4"
+            ],
+            "note": "this clip talks about songs"
+        },
+        {
+            "_to": "photographs/2",
+            "_from": "photographs/2",
+            "type": "self",
+            "_key": "16",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "tagIDs": [
+                "1"
+            ],
+            "note": "this is the stem of the flower"
+        },
+        {
+            "_to": "photographs/2",
+            "_from": "photographs/2",
+            "type": "self",
+            "_key": "17",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "tagIDs": [
+                "1"
+            ],
+            "note": "this is the base of the flower"
+        },
+        {
+            "_to": "books/24",
+            "_from": "books/24",
+            "type": "self",
+            "_key": "18",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "tagIDs": [
+                "2"
+            ],
+            "note": "this section is the best part of an illustrated book about birds"
         }
     ]
 }

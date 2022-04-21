@@ -18,6 +18,14 @@ const dtos: PartialDTO<Photograph>[] = [
             heightPX: 285,
         },
     },
+    {
+        filename: 'wildflower',
+        photographer: 'Kenny Tree-Huggens',
+        dimensions: {
+            widthPX: 1200,
+            heightPX: 1500,
+        },
+    },
 ];
 
 export default (): Photograph[] =>

@@ -6,7 +6,7 @@ import { EntityId } from '../types/ResourceId';
 import { ResourceType } from '../types/resourceTypes';
 import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedForGivenResourceType';
 import BaseDomainModel from './BaseDomainModel';
-import { ContextModelUnion } from './context/types/ContextModelUnion';
+import { EdgeConnectionContext } from './context/context.entity';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
 import { ResourceCompositeIdentifier } from './types/entityCompositeIdentifier';
 import { HasEntityID } from './types/HasEntityId';
@@ -44,11 +44,14 @@ export abstract class Resource extends BaseDomainModel implements HasEntityID {
      * a context model and the resource instance to which it refers depends on the
      * state of the resource. Therefore, this seems like a good place for this logic.
      */
-    validateContext(context: ContextModelUnion): Valid | InternalError {
+    validateContext(context: EdgeConnectionContext): Valid | InternalError {
         const { type } = context;
 
-        if (!this.allowedContextTypes.includes(type))
+        if (!this.allowedContextTypes.includes(type)) {
             return new InternalError(`Disallowed context type for ${this.type}: ${type}`);
+        }
+
+        if (type === EdgeConnectionContextType.general) return Valid;
 
         const validator = this[`validate${capitalizeFirstLetter(type)}Context`];
 

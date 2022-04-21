@@ -1,13 +1,14 @@
+import { InternalError } from 'apps/api/src/lib/errors/InternalError';
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { Valid } from '../../../domainModelValidators/Valid';
 import { EntityId } from '../../../types/ResourceId';
 import { ResourceType, resourceTypes } from '../../../types/resourceTypes';
-import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
+import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
+import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 
 export class Term extends Resource {
     readonly type: ResourceType = resourceTypes.term;
-
-    readonly allowedContextTypes = [EdgeConnectionContextType.general];
 
     readonly term: string;
 
@@ -53,5 +54,10 @@ export class Term extends Resource {
         this.audioFilename = dto.audioFilename;
 
         if (dto.sourceProject) this.sourceProject = dto.sourceProject;
+    }
+
+    // TODO We should 'goodlist' properties that can be targets for this context as well
+    validateTextFieldContext(context: TextFieldContext): Valid | InternalError {
+        return validateTextFieldContextForModel(this, context);
     }
 }

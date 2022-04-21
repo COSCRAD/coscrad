@@ -122,7 +122,12 @@ export default (input: unknown): Valid | InternalError => {
         []
     );
 
-    if (disallowedContextTypeErrors.length > 0) allErrors.push(...disallowedContextTypeErrors);
+    if (disallowedContextTypeErrors.length > 0) {
+        console.log({
+            disallowedContextTypeForOneOfTheseMembers: members,
+        });
+        allErrors.push(...disallowedContextTypeErrors);
+    }
 
     /**
      *  Here we validate that the context model invariant validation rules are
