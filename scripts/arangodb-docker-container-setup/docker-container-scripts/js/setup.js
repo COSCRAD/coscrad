@@ -25,20 +25,21 @@ else {
   testDataFlag = false;
   print("Loading empty collections\n");
 }
-  
+
 const testData = require(process.env.ARANGODB_DESTINATION_CONTAINER_DOCKER_SHARED_VOLUME_SCRIPTS_PATH + '/test-data/testData.json');
 
-const collectionNames = Object.keys(testData);
+print(typeof testData.resources);
 
-// Add Collections and data
-collectionNames.forEach(collectionName => {
+// const collectionNames = Object.keys(testData);
+print('Document Collections')
+for (collectionName in testData.resources) {
   print(`Attempting to add collection "${collectionName}" to ${process.env.ARANGO_DB_NAME}`);
   // TODO: need to pass in collection type document or edge
   if (db._create(collectionName)) {
     print(`Created Collection ${collectionName}`);
     if (testDataFlag) {
       print(`Attempting to add data to collection "${collectionName}"`);
-      const data = testData[collectionName];
+      const data = testData.resources[collectionName];
       data.forEach(document => {
         if (db._collection(collectionName).save(document)) {
           print(`Added document to Collection ${collectionName}`);
@@ -52,4 +53,26 @@ collectionNames.forEach(collectionName => {
   else {
     print(`Collection "${collectionName}" could not be created`);
   }
-});
+}
+
+print('Edge Collections')
+const edgeCollectionName = 'ResourceConnections';
+print(`Attempting to add collection "${edgeCollectionName}" to ${process.env.ARANGO_DB_NAME}`);
+// TODO: need to pass in collection type document or edge
+if (db._create(edgeCollectionName)) {
+  print(`Created Collection ${edgeCollectionName}`);
+  if (testDataFlag) {
+     testData.edges.forEach(edge => {
+        print(`Attempting to add data to collection "${edgeCollectionName}"`);
+        if (db._collection(edgeCollectionName).save(edge)) {
+          print(`Added document to Collection ${edgeCollectionName}`);
+        }
+        else {
+          print(`Document could not be added to "${edgeCollectionName}"`);
+        }
+      });
+  }
+}
+else {
+  print(`Collection "${edgeCollectionName}" could not be created`);
+}
