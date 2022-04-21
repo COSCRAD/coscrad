@@ -1,0 +1,28 @@
+{
+    "root": "apps/tsilhqotin-language-hub-e2e",
+    "sourceRoot": "apps/tsilhqotin-language-hub-e2e/src",
+    "projectType": "application",
+    "targets": {
+        "e2e": {
+            "executor": "@nrwl/cypress:cypress",
+            "options": {
+                "cypressConfig": "apps/tsilhqotin-language-hub-e2e/cypress.json",
+                "devServerTarget": "tsilhqotin-language-hub:serve"
+            },
+            "configurations": {
+                "production": {
+                    "devServerTarget": "tsilhqotin-language-hub:serve:production"
+                }
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["apps/tsilhqotin-language-hub-e2e/**/*.{js,ts}"]
+            }
+        }
+    },
+    "tags": [],
+    "implicitDependencies": ["tsilhqotin-language-hub"]
+}
