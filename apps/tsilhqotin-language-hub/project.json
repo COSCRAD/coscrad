@@ -1,0 +1,73 @@
+{
+    "root": "apps/tsilhqotin-language-hub",
+    "sourceRoot": "apps/tsilhqotin-language-hub/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/web:webpack",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "compiler": "babel",
+                "outputPath": "dist/apps/tsilhqotin-language-hub",
+                "index": "apps/tsilhqotin-language-hub/src/index.html",
+                "baseHref": "/",
+                "main": "apps/tsilhqotin-language-hub/src/main.tsx",
+                "polyfills": "apps/tsilhqotin-language-hub/src/polyfills.ts",
+                "tsConfig": "apps/tsilhqotin-language-hub/tsconfig.app.json",
+                "assets": [
+                    "apps/tsilhqotin-language-hub/src/favicon.ico",
+                    "apps/tsilhqotin-language-hub/src/assets"
+                ],
+                "styles": ["apps/tsilhqotin-language-hub/src/styles.css"],
+                "scripts": [],
+                "webpackConfig": "@nrwl/react/plugins/webpack"
+            },
+            "configurations": {
+                "production": {
+                    "fileReplacements": [
+                        {
+                            "replace": "apps/tsilhqotin-language-hub/src/environments/environment.ts",
+                            "with": "apps/tsilhqotin-language-hub/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nrwl/web:dev-server",
+            "options": {
+                "buildTarget": "tsilhqotin-language-hub:build",
+                "hmr": true
+            },
+            "configurations": {
+                "production": {
+                    "buildTarget": "tsilhqotin-language-hub:build:production",
+                    "hmr": false
+                }
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["apps/tsilhqotin-language-hub/**/*.{ts,tsx,js,jsx}"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/apps/tsilhqotin-language-hub"],
+            "options": {
+                "jestConfig": "apps/tsilhqotin-language-hub/jest.config.js",
+                "passWithNoTests": true
+            }
+        }
+    },
+    "tags": []
+}

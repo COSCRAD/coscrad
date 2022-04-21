@@ -1,0 +1,129 @@
+/*
+
+https://www.tsilhqotin.ca/wp-content/uploads/2020/12/IMG_2516-scaled-e1607038804272.jpg
+https://www.tsilhqotin.ca/wp-content/uploads/2020/12/tsilhqotin_fire-scaled.jpg
+https://www.tsilhqotin.ca/wp-content/uploads/2020/11/cropped-tsilhqotin_horse-scaled-2.jpg
+
+*/
+body, html {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .navbar {
+    height: 100px;
+    display: flex;
+  }
+
+  .tool {
+    margin-right: 15px;
+    vertical-align: bottom;
+  }
+  
+  .topDiv {
+    background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2020/12/IMG_2516-scaled-e1607038804272.jpg');
+    background-position: center;
+    background-size: cover;
+    background-position: left;
+    height: calc(100vh - 100px);
+  }
+  
+  .midDiv {
+    background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg');
+    height: 100vh;
+    background-position: center;
+  }
+  
+  .bottomDiv {
+    background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_dried_salmon-scaled.jpg');
+    background-position: center;
+    background-size: cover;
+    background-position: left;
+    height: 100vh;
+  }
+  
+  .Language {
+    background-color: rgba(7, 7, 7, 0.377) !important;
+    display: block;
+  }
+  
+  .title {
+    padding-left: 7vw;
+    color: white;
+  }
+  
+  .navTitle {
+    font-size: 2vw;
+    padding-left: 5vw;
+    padding-top: 2vh;
+  }
+  
+  .dialect {
+    border-style: solid;
+    width: fit-content;
+    font-size: 28px;
+    padding-left: 3.5vw;
+    padding-right: 3.5vw;
+    padding-top: 1vh;
+    padding-bottom: 1.5vh;
+    background-color: rgba(7, 7, 7, 0.377);
+  }
+  
+  .dialect:hover {
+    background-color: rgba(7, 7, 7, 0.777);
+    transition: 1s;
+    transition-duration: 1s;
+  }
+  
+  p {
+    padding: 0;
+    margin: 0;
+    font-size: 28px;
+  }
+  
+
+{/*Pixel 5*/}
+@media only screen and (max-width:500px) {
+    .navTitle {
+      font-size: 6vw !important;
+    }
+    .title {
+      font-size: 4vh !important;
+    }
+  }
+  
+  {/*Samsung s10*/}
+  @media only screen and (max-width: 600px) {
+    .navTitle {
+      font-size: 5vw;
+    }
+    .title {
+      font-size: 3vh !important;
+    }
+  }
+  
+  {/*Ipad mini*/}
+  @media only screen and (max-width: 800px) {
+    .navTitle {
+      font-size: 3vh;
+    }
+    .title {
+      font-size: 3vh !important;
+    }
+  
+  }
+  
+  @media only screen and (min-width: 800px) {
+    .navTitle {
+      font-size: 4vh;
+    }
+    .title {
+      font-size: 4vh !important;
+    }
+    
+  }
+  
+  .About, .Contact, .Funders, .Links, .Stream {
+    min-height: 100vh;
+  }
