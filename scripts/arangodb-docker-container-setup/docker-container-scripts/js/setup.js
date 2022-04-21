@@ -56,11 +56,11 @@ for (collectionName in testData.resources) {
 }
 
 print('Edge Collections')
-const edgeCollectionName = 'ResourceConnections';
+const edgeCollectionName = 'resource_connections';
 print(`Attempting to add collection "${edgeCollectionName}" to ${process.env.ARANGO_DB_NAME}`);
 // TODO: need to pass in collection type document or edge
-if (db._create(edgeCollectionName)) {
-  print(`Created Collection ${edgeCollectionName}`);
+if (db._createEdgeCollection(edgeCollectionName)) {
+  print(`Created Edge Collection ${edgeCollectionName}`);
   if (testDataFlag) {
      testData.edges.forEach(edge => {
         print(`Attempting to add data to collection "${edgeCollectionName}"`);
