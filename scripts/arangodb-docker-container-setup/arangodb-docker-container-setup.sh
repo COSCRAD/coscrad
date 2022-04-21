@@ -186,6 +186,9 @@ wait
 
 echo "Starting new fresh instance of [$ARANGO_DB_SERVER]"
 
+# TODO support ssl for arango docker container
+# [https://www.arangodb.com/docs/stable/programs-arangod-ssl.html]
+
 sudo -u root docker run \
 --name $ARANGO_DB_SERVER \
 -p $ARANGO_DB_HOST_PORT:8529 \
