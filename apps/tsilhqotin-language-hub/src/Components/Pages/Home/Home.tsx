@@ -3,12 +3,12 @@ import './Home.module.css';
 
 function App() {
     return (
-        <Typography variant="h1">
+        <Typography>
             <div className="topDiv">
                 <div className="title" style={{ marginTop: '55vh', position: 'absolute' }}>
                     <div style={{ paddingBottom: '1vw' }}>
                         <b>Tŝilhqot’in Ch’ih Yaltɨg</b>
-                        <p>We’re speaking the Tŝilhqot’in language</p>
+                        <p className="heroTitle">We’re speaking the Tŝilhqot’in language</p>
                     </div>
                     <div className="dialect">Dialect</div>
                 </div>
