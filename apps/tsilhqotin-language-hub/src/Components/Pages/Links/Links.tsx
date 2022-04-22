@@ -20,12 +20,13 @@ export function Links(props: LinksProps) {
                 <a
                     href="https://dspace.library.uvic.ca/bitstream/handle/1828/934/Linda%20Smith%20Niminh%20thesis%202008.pdf?sequence=1&isAllowed=y"
                     target={'_blank'}
+                    rel="noreferrer"
                 >
                     Here
                 </a>{' '}
                 is a link to Linda Smith’s thesis “Súwh-tŝ’éghèdúdính: the Tsìnlhqút’ín Nímính
                 Spiritual Path”. Linda completed her Master of Arts degree at the{' '}
-                <a href="https://www.uvic.ca/" target={'_blank'}>
+                <a href="https://www.uvic.ca/" target={'_blank'} rel="noreferrer">
                     {' '}
                     University of Victoria
                 </a>
@@ -37,6 +38,7 @@ export function Links(props: LinksProps) {
                 <a
                     href="https://www.youtube.com/watch?v=t2zt1JVtdj0&feature=youtu.be"
                     target={'_blank'}
+                    rel="noreferrer"
                 >
                     Here
                 </a>{' '}
@@ -47,7 +49,7 @@ export function Links(props: LinksProps) {
             </p>
             <p>Tŝilhqot’in Dialogue</p>
             <p>
-                <a href="https://youtu.be/BW4551zAfHI" target={'_blank'}>
+                <a href="https://youtu.be/BW4551zAfHI" target={'_blank'} rel="noreferrer">
                     This
                 </a>{' '}
                 cartoon has a dialogue between ant and bear. It teaches introductions and farewells.
@@ -58,6 +60,7 @@ export function Links(props: LinksProps) {
                 <a
                     href="https://www.firstvoices.com/explore/FV/sections/Data/Athabascan/Tsilhqot%27in%20(Xeni%20Gwet%27in)/Tsilhqot%27in%20(Xeni%20Gwet%27in)"
                     target="_blank"
+                    rel="noreferrer"
                 >
                     Here
                 </a>{' '}
@@ -68,7 +71,11 @@ export function Links(props: LinksProps) {
             </p>
             <p>Unicode Keyboard </p>
             <p>
-                <a href="http://www.languagegeek.com/dene/keyboards/romdene.html" target={'_blank'}>
+                <a
+                    href="http://www.languagegeek.com/dene/keyboards/romdene.html"
+                    target={'_blank'}
+                    rel="noreferrer"
+                >
                     Here
                 </a>{' '}
                 is a link to the keyboards by Language Geek. Scroll down to find the download and
@@ -81,7 +88,11 @@ export function Links(props: LinksProps) {
             <p> Font Conversion </p>
             <p style={{ margin: '0' }}>
                 For the more technically inclined- Aidan Pine put together{' '}
-                <a href="https://github.com/roedoejet/convertextract" target={'_blank'}>
+                <a
+                    href="https://github.com/roedoejet/convertextract"
+                    target={'_blank'}
+                    rel="noreferrer"
+                >
                     convertextract
                 </a>
                 , a really cool tool that can be used to batch convert documents to Unicode.
