@@ -26,6 +26,7 @@ export function Teachers(props: TeachersProps) {
                         <a
                             href="http://www.tsilhqotinlanguage.ca/wp-content/uploads/2018/11/Alphabet_v10.pdf"
                             target="_blank"
+                            rel="noreferrer"
                         >
                             Alphabet_v10
                         </a>
@@ -33,13 +34,18 @@ export function Teachers(props: TeachersProps) {
 
                     <p>
                         Play the associated{' '}
-                        <a href="http://www.tsilhqotinlanguage.ca/game/Alphabet" target="_blank">
+                        <a
+                            href="http://www.tsilhqotinlanguage.ca/game/Alphabet"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
                             game
                         </a>{' '}
                         on the web or download it as an App on{' '}
                         <a
                             href="https://play.google.com/store/apps/details?id=ca.tsilhqotinlanguage.tsilhqotinalphabet"
                             target="_blank"
+                            rel="noreferrer"
                         >
                             Google Play
                         </a>

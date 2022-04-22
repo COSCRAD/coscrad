@@ -55,7 +55,6 @@
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
-            "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["apps/tsilhqotin-language-hub/**/*.{ts,tsx,js,jsx}"]
             }

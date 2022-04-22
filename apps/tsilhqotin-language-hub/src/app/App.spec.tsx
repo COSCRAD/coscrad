@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-
 import App from './app';
 
 describe('App', () => {
@@ -9,9 +8,9 @@ describe('App', () => {
         expect(baseElement).toBeTruthy();
     });
 
-    it('should have a greeting as the title', () => {
+    it('should include our tagline', () => {
         const { getByText } = render(<App />);
 
-        expect(getByText(/Welcome tsilhqotin-language-hub/gi)).toBeTruthy();
+        expect(getByText(/We’re speaking the Tŝilhqot’in language/gi)).toBeTruthy();
     });
 });

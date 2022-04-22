@@ -18,7 +18,7 @@ export function Funders(props: FundersProps) {
                     <h2 style={{ textAlign: 'center' }}>Language Program</h2>
                     <h3>National Research Council</h3>
                     <p>
-                        <a href="https://nrc.canada.ca/en" target={'_blank'}>
+                        <a href="https://nrc.canada.ca/en" target={'_blank'} rel="noreferrer">
                             Here is a link to the NRC website.
                         </a>
                     </p>
@@ -27,6 +27,7 @@ export function Funders(props: FundersProps) {
                         <a
                             href="https://www.bac-lac.gc.ca/eng/discover/aboriginal-heritage/initiatives/listen/Pages/default.aspx"
                             target="_blank"
+                            rel="noreferrer"
                         >
                             Here is a link to the LHOV website.
                         </a>
@@ -39,19 +40,20 @@ export function Funders(props: FundersProps) {
                         <a
                             href="https://www.canada.ca/en/canadian-heritage/services/funding/aboriginal-peoples/northern-broadcasting.html"
                             target="_blank"
+                            rel="noreferrer"
                         >
                             Here is a link to the NAB website.
                         </a>
                     </p>
                     <h3>First Peoples Cultural Council</h3>
                     <p>
-                        <a href="http://www.fpcc.ca/" target="_blank">
+                        <a href="http://www.fpcc.ca/" target="_blank" rel="noreferrer">
                             Here is a link to the FPCC website.
                         </a>
                     </p>
                     <h3>Cariboo Chilcotin Aboriginal Training Employment Centre</h3>
                     <p>
-                        <a href="http://www.ccatec.com/" target="_blank">
+                        <a href="http://www.ccatec.com/" target="_blank" rel="noreferrer">
                             Here is a link to CCATEC's website.
                         </a>
                     </p>
@@ -61,7 +63,7 @@ export function Funders(props: FundersProps) {
                     <h3>Indigitization</h3>
                     <p>
                         “The{' '}
-                        <a href="https://www.indigitization.ca/" target="_blank">
+                        <a href="https://www.indigitization.ca/" target="_blank" rel="noreferrer">
                             Indigitization Grant Program
                         </a>{' '}
                         is a grant funding opportunity sponsored by the Irving K. Barber Learning
@@ -72,7 +74,7 @@ export function Funders(props: FundersProps) {
                     <h3>BC Capacity Initiative</h3>
                     <p>
                         Our work has previously been funded in part through the{' '}
-                        <a href="https://www.bccapacity.org/" target="_blank">
+                        <a href="https://www.bccapacity.org/" target="_blank" rel="noreferrer">
                             BC Capacity Initiative
                         </a>{' '}
                         (BCCI).
@@ -81,7 +83,7 @@ export function Funders(props: FundersProps) {
                     <h3>Simon Fraser University First Nations Languages Centre</h3>
                     <p>
                         We partnered with{' '}
-                        <a href="https://www.sfu.ca/fnlc.html" target="_blank">
+                        <a href="https://www.sfu.ca/fnlc.html" target="_blank" rel="noreferrer">
                             SFU
                         </a>{' '}
                         as part of the 7 year project, First Nations Languages in the Twenty-first
@@ -97,6 +99,7 @@ export function Funders(props: FundersProps) {
                         <a
                             href="https://www.newrelationshiptrust.ca/initiatives/elders-youth/"
                             target="_blank"
+                            rel="noreferrer"
                         >
                             {' '}
                             New Relationship Trust BC First Nation Elders & Youth Grant Initiative

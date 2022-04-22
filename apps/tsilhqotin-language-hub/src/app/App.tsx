@@ -13,7 +13,7 @@ import Navbar from '../Components/Widgets/Navbar/Navbar';
 
 export function App() {
     return (
-        <Typography>
+        <Typography component={'span'} variant={'body2'}>
             <BrowserRouter>
                 <Navbar />
                 <Routes>
