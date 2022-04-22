@@ -3,7 +3,7 @@ import './Home.module.css';
 
 function App() {
     return (
-        <Typography>
+        <Typography component={'span'} variant={'body2'}>
             <div className="topDiv">
                 <div className="title" style={{ marginTop: '55vh', position: 'absolute' }}>
                     <div style={{ paddingBottom: '1vw' }}>
