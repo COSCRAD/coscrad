@@ -1,30 +1,38 @@
-import { Typography } from '@mui/material';
-import './Navbar.module.css';
+import React from 'react';
+import { Bars, Nav, NavBtn, NavBtnLink, NavLink, NavMenu } from './NavbarElements';
 
-export default function Navbar() {
+const Navbar = () => {
     return (
-        <Typography>
-            <nav className="navbar">
-                <a className="navTitle" href="/">
+        <>
+            <Nav>
+                <NavLink to="/">
                     <img
+                        src={
+                            'https://api.tsilhqotinlanguage.ca/uploads/tng_log_for_language_hub_2e4ec30f17.png'
+                        }
                         alt="logo"
-                        className="tool"
-                        src="https://api.tsilhqotinlanguage.ca/uploads/tng_log_for_language_hub_2e4ec30f17.png"
-                        height={40}
-                    ></img>
-                    Tŝilhqot’in Language
-                </a>
-                <div style={{ padding: '10px' }}>
-                    <a href="/About">About</a>
-                    <a href="/Apps">Apps</a>
-                    <a href="/Songs">Songs</a>
-                    <a href="/Videos">Videos</a>
-                    <a href="/Teachers">Teachers</a>
-                    <a href="/Funders">Funders</a>
-                    <a href="/Greetings">Greetings</a>
-                    <a href="/Links">Links</a>
-                </div>
-            </nav>
-        </Typography>
+                        width={35}
+                    />
+                </NavLink>
+                <Bars />
+                <NavMenu>
+                    <NavLink to="/About">About</NavLink>
+                    <NavLink to="/Apps">Apps</NavLink>
+                    <NavLink to="/Songs">Songs</NavLink>
+                    <NavLink to="/Videos">Videos</NavLink>
+                    <NavLink to="/Teachers">Teachers</NavLink>
+                    <NavLink to="/Funders">Funders</NavLink>
+                    <NavLink to="/Greetings">Greetings</NavLink>
+                    <NavLink to="/Links">Links</NavLink>
+                    {/* Second Nav */}
+                    {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
+                </NavMenu>
+                <NavBtn>
+                    <NavBtnLink to="/signin">TDVB</NavBtnLink>
+                </NavBtn>
+            </Nav>
+        </>
     );
-}
+};
+
+export default Navbar;
