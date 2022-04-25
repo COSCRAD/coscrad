@@ -115,6 +115,7 @@ describe(`resource model context state validators`, () => {
                         resourceTypes.photograph,
                         resourceTypes.vocabularyList,
                         resourceTypes.term,
+                        resourceTypes.transcribedAudio,
                     ] as ResourceType[]
                 ).includes(type)
             )

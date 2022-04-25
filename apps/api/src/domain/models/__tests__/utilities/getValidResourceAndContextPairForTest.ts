@@ -49,10 +49,6 @@ export default <
 
     // This shouldn't happen as `validateTestData.spec.ts` forces us to seed data with consistent state
     if (isNullOrUndefined(targetResource)) {
-        console.log({
-            [targetResourceType]: resources[targetResourceType],
-        });
-
         throw new InternalError(
             `There is no resource in the test data with composite id: ${formatResourceCompositeIdentifier(
                 targetMember.compositeIdentifier
