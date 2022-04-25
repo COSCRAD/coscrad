@@ -105,11 +105,19 @@ describe(`resource model context state validators`, () => {
             expect(missingValidCases).toEqual([]);
         });
     });
-    //
-
+    // REMOVE FILTER!!!!!!!!!!!!!!!!!!!!!!
     testCases
         .filter(({ validCases }) =>
-            validCases.some(({ resource: { type } }) => type === resourceTypes.book)
+            validCases.some(({ resource: { type } }) =>
+                (
+                    [
+                        resourceTypes.book,
+                        resourceTypes.photograph,
+                        resourceTypes.vocabularyList,
+                        resourceTypes.term,
+                    ] as ResourceType[]
+                ).includes(type)
+            )
         )
         .forEach(({ validCases, invalidCases }) => {
             describe(`For a resource of type: ${validCases[0].resource.type}`, () => {

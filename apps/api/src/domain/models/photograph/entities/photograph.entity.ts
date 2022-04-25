@@ -1,16 +1,20 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
+import findAllPointsInLineNotWithinBounds from 'apps/api/src/lib/validation/geometry/findAllPointsInLineNotWithinBounds';
+import isPointWithinBounds from 'apps/api/src/lib/validation/geometry/isPointWithinBounds';
 import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import formatPosition2D from 'apps/api/src/view-models/presentation/formatPosition2D';
 import FreeMultilineContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/freeMultilineContext/FreeMultilineContextOutOfBoundsError';
 import PointContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pointContext/PointContextOutOfBoundsError';
-import { isValid, Valid } from '../../../domainModelValidators/Valid';
+import { Valid } from '../../../domainModelValidators/Valid';
 import { resourceTypes } from '../../../types/resourceTypes';
 import { FreeMultilineContext } from '../../context/free-multiline-context/free-multiline-context.entity';
 import { PointContext } from '../../context/point-context/point-context.entity';
+import { Boundable2D } from '../../interfaces/Boundable2D';
 import { Resource } from '../../resource.entity';
+import { Position2D } from '../../spatial-feature/types/Coordinates/Position2D';
 import PhotographDimensions from './PhotographDimensions';
 
-export class Photograph extends Resource {
+export class Photograph extends Resource implements Boundable2D {
     readonly type = resourceTypes.photograph;
 
     readonly filename: string;
@@ -42,26 +46,36 @@ export class Photograph extends Resource {
 
     // TODO break out the validate point logic into a validation library instead
     validateFreeMultilineContext({ lines }: FreeMultilineContext): Valid | InternalError {
-        const allErrors: InternalError[] = [];
+        const allErrors: InternalError[] = lines.reduce(
+            (accumulatedErrors: InternalError[], line, index) => {
+                const invalidPointsForThisLine = findAllPointsInLineNotWithinBounds(
+                    line,
+                    this.getGeometricBounds()
+                );
 
-        lines.forEach((line) => {
-            const allErrorsForThisLine = line.reduce(
-                (accumulatedErrors: InternalError[], point) => {
-                    const pointValidationResult = this.validatePoint2DContext({
-                        point,
-                    } as PointContext);
+                if (invalidPointsForThisLine.length > 0) {
+                    const invalidPointsMessage = invalidPointsForThisLine.reduce(
+                        (accumulatedMessage, { index, point }) =>
+                            accumulatedMessage.concat(
+                                `index: ${index},`,
+                                `point: ${formatPosition2D(point)}`,
+                                '\n'
+                            ),
+                        ''
+                    );
 
-                    return isValid(pointValidationResult)
-                        ? accumulatedErrors
-                        : accumulatedErrors.concat(
-                              new InternalError(`Point out of bounds: ${formatPosition2D(point)}`)
-                          );
-                },
-                []
-            );
+                    // TODO: Break this out into a dedicated error
+                    return accumulatedErrors.concat(
+                        new InternalError(
+                            `Invalid line at index: ${index} in free multiline context. \n Invalid points: ${invalidPointsMessage}`
+                        )
+                    );
+                }
 
-            allErrors.push(...allErrorsForThisLine);
-        });
+                return accumulatedErrors;
+            },
+            []
+        );
 
         if (allErrors.length > 0)
             return new FreeMultilineContextOutOfBoundsError(
@@ -73,15 +87,23 @@ export class Photograph extends Resource {
     }
 
     validatePoint2DContext({ point }: PointContext): Valid | InternalError {
-        const [x, y] = point;
-
-        if (x < 0 || x > this.dimensions.widthPX || y < 0 || y > this.dimensions.heightPX)
+        if (!isPointWithinBounds(point, ...this.getGeometricBounds()))
             return new PointContextOutOfBoundsError(
                 point,
-                [this.dimensions.heightPX, this.dimensions.widthPX],
+                this.getGeometricBounds(),
                 this.getCompositeIdentifier()
             );
 
         return Valid;
+    }
+
+    /**
+     * @returns [height,width]
+     */
+    getGeometricBounds(): [Position2D, Position2D] {
+        return [
+            [0, this.dimensions.heightPX],
+            [0, this.dimensions.widthPX],
+        ];
     }
 }

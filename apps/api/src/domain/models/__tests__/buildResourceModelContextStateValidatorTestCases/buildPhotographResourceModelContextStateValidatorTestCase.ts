@@ -24,7 +24,10 @@ const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
         }),
         expectedError: new PointContextOutOfBoundsError(
             [105, 90],
-            [100, 100],
+            [
+                [0, 100],
+                [0, 100],
+            ],
             validPhotograph.getCompositeIdentifier()
         ),
     },
