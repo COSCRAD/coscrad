@@ -227,7 +227,7 @@ describe('buildTestData', () => {
         const fullSnapshotInDatabaseFormat = {
             resources: resourceTestDataInDatabaseFormat,
             // note the change in this key ~~connections~~ -> edges
-            edges: connectionTestDataInDatabaseFormat,
+            resource_edge_connections: connectionTestDataInDatabaseFormat,
         };
 
         // TODO move this to a config- better yet avoid this whole write!
