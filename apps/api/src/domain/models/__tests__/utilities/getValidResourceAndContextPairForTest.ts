@@ -7,9 +7,6 @@ import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-unde
 import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { Resource } from '../../resource.entity';
 
-/**
- * TODO: Dissect this TypeScript magic on the `pro-d` channel on slack
- */
 export default <
     TResourceType extends ResourceType,
     UEdgeConnectionContextType extends EdgeConnectionContextType

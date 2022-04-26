@@ -13,7 +13,7 @@ const vocabularyList = validCases[0].resource.clone({
 });
 
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
-    ...buildAllInvalidTestCasesForResource(resourceTypes.book),
+    ...buildAllInvalidTestCasesForResource(resourceTypes.vocabularyList),
     {
         description: `vocabulary list does not have the property targetted in the text field context`,
         resource: vocabularyList,
