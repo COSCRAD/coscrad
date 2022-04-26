@@ -120,23 +120,31 @@ describe('buildTestData', () => {
                 .filter(({ compositeIdentifier: { type } }) => type === targetResourceType)
                 .some(({ role }) => role === targetRole);
 
-        Object.values(resourceTypes).forEach((resourceType) => {
+        Object.values(resourceTypes)
             /**
-             * Ensure there is a `self`,`to`, and `from` edge connection instance
-             * for each resource type.
+             * TODO [https://www.pivotaltracker.com/story/show/181861405]
              *
-             * TODO: Unskip this.
+             * Remove this filter.
              */
-            describe(`the resource type: ${resourceType}`, () => {
-                Object.values(EdgeConnectionMemberRole).forEach((role) => {
-                    it(`should have one instance that is associated with a ${role} connection`, () => {
-                        const result = doesMemberWithResourceTypeAndRoleExist(resourceType, role);
+            .filter((resourceType) => resourceType !== resourceTypes.tag)
+            .forEach((resourceType) => {
+                /**
+                 * Ensure there is a `self`,`to`, and `from` edge connection instance
+                 * for each resource type.
+                 */
+                describe(`the resource type: ${resourceType}`, () => {
+                    Object.values(EdgeConnectionMemberRole).forEach((role) => {
+                        it(`should have one instance that is associated with a ${role} connection`, () => {
+                            const result = doesMemberWithResourceTypeAndRoleExist(
+                                resourceType,
+                                role
+                            );
 
-                        expect(result).toBe(true);
+                            expect(result).toBe(true);
+                        });
                     });
                 });
             });
-        });
 
         connectionTestData.forEach((edgeConnection, index) => {
             describe(`Edge Connection at index ${index}`, () => {

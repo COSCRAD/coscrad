@@ -23,7 +23,7 @@ const termMissingTermEnglishProperty = validTerm.clone({
 });
 
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
-    ...buildAllInvalidTestCasesForResource(resourceTypes.book),
+    ...buildAllInvalidTestCasesForResource(resourceTypes.term),
     {
         description: 'when the context targets an undefined "term" field',
         resource: termMissingTermProperty,

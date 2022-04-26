@@ -27,7 +27,7 @@ const timeRangeWithInvalidInPoint: TimeRangeWithoutData = {
 };
 
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
-    ...buildAllInvalidTestCasesForResource(resourceTypes.book),
+    ...buildAllInvalidTestCasesForResource(resourceTypes.transcribedAudio),
     {
         description: `The out point of the time range context is too big`,
         resource: validTranscribedAudio,

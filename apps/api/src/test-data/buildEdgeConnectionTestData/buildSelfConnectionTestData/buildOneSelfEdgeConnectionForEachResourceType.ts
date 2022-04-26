@@ -74,32 +74,33 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
                     id: '300',
                     type: resourceTypes.spatialFeature,
                 },
-                context: new PointContext({ point: [2.0, 5.0] }).toDTO(),
+                context: new GeneralContext(),
+                // context: new PointContext({ point: [2.0, 5.0] }).toDTO(),
             },
         ],
     },
-    {
-        tagIDs: ['3'],
-        note: 'this is the path they took through the woods',
-        members: [
-            {
-                role,
-                compositeIdentifier: {
-                    id: '300',
-                    type: resourceTypes.spatialFeature,
-                },
-                context: new FreeMultilineContext({
-                    lines: [
-                        [
-                            [1.2, 3.8],
-                            [1.3, 3.9],
-                            [1.4, 4.0],
-                        ],
-                    ],
-                }).toDTO(),
-            },
-        ],
-    },
+    // {
+    //     tagIDs: ['3'],
+    //     note: 'this is the path they took through the woods',
+    //     members: [
+    //         {
+    //             role,
+    //             compositeIdentifier: {
+    //                 id: '300',
+    //                 type: resourceTypes.spatialFeature,
+    //             },
+    //             context: new FreeMultilineContext({
+    //                 lines: [
+    //                     [
+    //                         [1.2, 3.8],
+    //                         [1.3, 3.9],
+    //                         [1.4, 4.0],
+    //                     ],
+    //                 ],
+    //             }).toDTO(),
+    //         },
+    //     ],
+    // },
     {
         tagIDs: ['4'],
         note: 'this clip talks about songs',
@@ -174,7 +175,7 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
             },
         ],
     },
-].map((partialDTO) => new EdgeConnection({ type: EdgeConnectionType.self, ...partialDTO }));
+].map((partialDTO) => new EdgeConnection({ ...partialDTO, type: EdgeConnectionType.self }));
 
 const selfEdgeConnectionsWithGeneralContext = selfEdgeConnectionInstancesWithSpecificContext.map(
     (edgeConnection) =>
