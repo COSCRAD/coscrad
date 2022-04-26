@@ -21,5 +21,5 @@ export const isResourceCompositeIdentifier = (
 
     const { type, id } = input as ResourceCompositeIdentifier;
 
-    isResourceType(type) && isResourceId(id);
+    return isResourceType(type) && isResourceId(id);
 };

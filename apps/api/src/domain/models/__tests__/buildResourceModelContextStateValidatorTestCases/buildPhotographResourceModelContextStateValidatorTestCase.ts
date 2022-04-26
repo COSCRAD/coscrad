@@ -4,6 +4,7 @@ import { resourceTypes } from '../../../types/resourceTypes';
 import { FreeMultilineContext } from '../../context/free-multiline-context/free-multiline-context.entity';
 import { PointContext } from '../../context/point-context/point-context.entity';
 import { ResourceModelContextStateValidatorInvalidTestCase } from '../resourceModelContextStateValidators.spec';
+import buildAllInvalidTestCasesForResource from '../utilities/buildAllInvalidTestCasesForResource';
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
 
 const validCases = buildAllValidTestCasesForResource(resourceTypes.photograph);
@@ -16,6 +17,7 @@ const validPhotograph = validCases[0].resource.clone({
 });
 
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
+    ...buildAllInvalidTestCasesForResource(resourceTypes.photograph),
     {
         description: `the 2d point is outside the horizontal bounds of the photograph`,
         resource: validPhotograph,

@@ -5,6 +5,7 @@ import {
     TimeRangeWithoutData,
 } from '../../context/time-range-context/time-range-context.entity';
 import { ResourceModelContextStateValidatorInvalidTestCase } from '../resourceModelContextStateValidators.spec';
+import buildAllInvalidTestCasesForResource from '../utilities/buildAllInvalidTestCasesForResource';
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
 
 const validCases = buildAllValidTestCasesForResource(resourceTypes.transcribedAudio);
@@ -26,6 +27,7 @@ const timeRangeWithInvalidInPoint: TimeRangeWithoutData = {
 };
 
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
+    ...buildAllInvalidTestCasesForResource(resourceTypes.book),
     {
         description: `The out point of the time range context is too big`,
         resource: validTranscribedAudio,

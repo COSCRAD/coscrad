@@ -14,7 +14,6 @@ import {
     ResourceTypeToInstance,
 } from '../domain/types/resourceTypes';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
-import { isInternalError } from '../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
 import { getArangoCollectionIDFromResourceType } from '../persistence/database/getArangoCollectionIDFromResourceType';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
@@ -143,12 +142,6 @@ describe('buildTestData', () => {
             describe(`Edge Connection at index ${index}`, () => {
                 it(`should satisfy the invariants for an Edge Connection`, () => {
                     const validationResult = validateEdgeConnection(edgeConnection);
-
-                    if (isInternalError(validationResult)) {
-                        console.log({
-                            innerErrors: validationResult.innerErrors,
-                        });
-                    }
 
                     expect(validationResult).toBe(Valid);
                 });
