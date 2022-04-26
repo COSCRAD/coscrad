@@ -51,21 +51,22 @@ describe(`resource model context state validators`, () => {
                 }) => resourceType === testCaseResourceType && contextType === testCaseContextType
             );
 
-    const allResourceTypeContextTypeCombos = Object.keys(resourceTypes).flatMap(
-        (resourceType: ResourceType) =>
+    const allResourceTypeContextTypeCombos = Object.keys(resourceTypes)
+        .filter((resourceType) => resourceType !== resourceTypes.tag)
+        .flatMap((resourceType: ResourceType) =>
             Object.keys(EdgeConnectionContextType).map(
                 (
                     contextType: EdgeConnectionContextType
                 ): [ResourceType, EdgeConnectionContextType] => [resourceType, contextType]
             )
-    );
+        );
 
     const allowedResourceTypeContextTypeCombos = allResourceTypeContextTypeCombos.filter(
         ([resourceType, contextType]) =>
             isContextAllowedForGivenResourceType(contextType, resourceType)
     );
 
-    describe.skip(`the test cases should be comprehensive`, () => {
+    describe(`the test cases should be comprehensive`, () => {
         it('should have at least one valid test case for each resource type \\ allowed context type combo', () => {
             const missingValidCases = allowedResourceTypeContextTypeCombos.reduce(
                 (acc: [ResourceType, EdgeConnectionContextType][], [resourceType, contextType]) =>
@@ -105,20 +106,11 @@ describe(`resource model context state validators`, () => {
             expect(missingValidCases).toEqual([]);
         });
     });
-    // REMOVE FILTER!!!!!!!!!!!!!!!!!!!!!!
+
     testCases
+        // TODO [https://www.pivotaltracker.com/story/show/181861405] remove filter
         .filter(({ validCases }) =>
-            validCases.some(({ resource: { type } }) =>
-                (
-                    [
-                        resourceTypes.book,
-                        resourceTypes.photograph,
-                        resourceTypes.vocabularyList,
-                        resourceTypes.term,
-                        resourceTypes.transcribedAudio,
-                    ] as ResourceType[]
-                ).includes(type)
-            )
+            validCases.some(({ resource: { type } }) => type !== resourceTypes.tag)
         )
         .forEach(({ validCases, invalidCases }) => {
             describe(`For a resource of type: ${validCases[0].resource.type}`, () => {

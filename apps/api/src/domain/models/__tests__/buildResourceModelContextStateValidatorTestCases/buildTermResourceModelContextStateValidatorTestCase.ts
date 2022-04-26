@@ -3,6 +3,7 @@ import InconsistentCharRangeError from '../../../domainModelValidators/errors/co
 import { resourceTypes } from '../../../types/resourceTypes';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { ResourceModelContextStateValidatorInvalidTestCase } from '../resourceModelContextStateValidators.spec';
+import buildAllInvalidTestCasesForResource from '../utilities/buildAllInvalidTestCasesForResource';
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
 
 const validCases = buildAllValidTestCasesForResource(resourceTypes.term);
@@ -22,6 +23,7 @@ const termMissingTermEnglishProperty = validTerm.clone({
 });
 
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
+    ...buildAllInvalidTestCasesForResource(resourceTypes.book),
     {
         description: 'when the context targets an undefined "term" field',
         resource: termMissingTermProperty,

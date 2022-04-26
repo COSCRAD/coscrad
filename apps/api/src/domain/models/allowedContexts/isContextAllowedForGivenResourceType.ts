@@ -12,8 +12,13 @@ const resourceTypeToAllowedContextTypes = {
     ],
     [resourceTypes.spatialFeature]: [
         EdgeConnectionContextType.general,
-        EdgeConnectionContextType.point2D,
-        EdgeConnectionContextType.freeMultiline,
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/181978898]
+         *
+         * Support specific context models for spatial features.
+         */
+        // EdgeConnectionContextType.point2D,
+        // EdgeConnectionContextType.freeMultiline,
     ],
     // TODO [https://www.pivotaltracker.com/story/show/181861405] remove tag from resource types
     [resourceTypes.tag]: [EdgeConnectionContextType.general],
