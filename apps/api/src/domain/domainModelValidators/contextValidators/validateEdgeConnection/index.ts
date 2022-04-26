@@ -1,5 +1,5 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/partial-dto';
 import isContextAllowedForGivenResourceType from '../../../models/allowedContexts/isContextAllowedForGivenResourceType';
 import {
     EdgeConnection,
@@ -31,7 +31,7 @@ const buildTopLevelError = (innerErrors: InternalError[]): InternalError =>
 export default (input: unknown): Valid | InternalError => {
     if (isNullOrUndefined(input)) return new NullOrUndefinedEdgeConnectionDTOError();
 
-    const test = input as PartialDTO<EdgeConnection>;
+    const test = input as DTO<EdgeConnection>;
 
     const { note, type: edgeConnectionType, id } = test;
 

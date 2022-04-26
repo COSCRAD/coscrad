@@ -4,7 +4,6 @@ import { ISpecification } from '../../domain/repositories/interfaces/ISpecificat
 import { EntityId } from '../../domain/types/ResourceId';
 import { Maybe } from '../../lib/types/maybe';
 import { ArangoDatabase } from './arango-database';
-import { IDatabaseForCollection } from './interfaces/database-for-collection';
 import { ArangoCollectionID } from './types/ArangoCollectionId';
 import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
 
@@ -13,9 +12,7 @@ import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
  * and _id), not an `EntityDTO`. The mapping is taken care of in the
  * repositories layer.
  */
-export class ArangoDatabaseForCollection<TEntity extends Resource>
-    implements IDatabaseForCollection<TEntity>
-{
+export class ArangoDatabaseForCollection<TEntity extends Resource> {
     #collectionID: ArangoCollectionID;
 
     #arangoDatabase: ArangoDatabase;

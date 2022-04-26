@@ -1,6 +1,6 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/partial-dto';
 import { Book } from '../models/book/entities/book.entity';
 import BookPage from '../models/book/entities/BookPage';
 import { resourceTypes } from '../types/resourceTypes';
@@ -11,7 +11,7 @@ import { Valid } from './Valid';
 const bookValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
     const allErrors: InternalError[] = [];
 
-    const { title, id, published, pages } = dto as PartialDTO<Book>;
+    const { title, id, published, pages } = dto as DTO<Book>;
 
     // TODO fix me
     if (!isStringWithNonzeroLength(title))

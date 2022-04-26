@@ -2,6 +2,7 @@ import EmptyTargetForTextFieldContextError from '../../../domainModelValidators/
 import InconsistentCharRangeError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/textFieldContext/InconsistentCharRangeError';
 import { resourceTypes } from '../../../types/resourceTypes';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
+import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { ResourceModelContextStateValidatorInvalidTestCase } from '../resourceModelContextStateValidators.spec';
 import buildAllInvalidTestCasesForResource from '../utilities/buildAllInvalidTestCasesForResource';
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
@@ -28,6 +29,7 @@ const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
         description: 'when the context targets an undefined "term" field',
         resource: termMissingTermProperty,
         context: new TextFieldContext({
+            type: EdgeConnectionContextType.textField,
             target: 'term',
             charRange: [0, 1],
         }),
@@ -40,6 +42,7 @@ const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
         description: 'when the context targets an undefined "termEnglish" field',
         resource: termMissingTermEnglishProperty,
         context: new TextFieldContext({
+            type: EdgeConnectionContextType.textField,
             target: 'termEnglish',
             charRange: [0, 1],
         }),
@@ -52,6 +55,7 @@ const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
         description: 'text field context targets an out of range character',
         resource: validTerm,
         context: new TextFieldContext({
+            type: EdgeConnectionContextType.textField,
             target: 'term',
             charRange: [0, validTerm.term.length],
         }),

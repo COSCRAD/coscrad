@@ -5,8 +5,10 @@ import buildSelfConnectionTestData from './buildSelfConnectionTestData';
 export default (): EdgeConnection[] =>
     [...buildSelfConnectionTestData(), ...buildDualEdgeConnectionTestData()]
         // We generate IDs at the top level to guarantee uniqueness
-        .map((instance, index) =>
-            instance.clone({
-                id: `${index + 1}`,
-            })
+        .map(
+            (dto, index) =>
+                new EdgeConnection({
+                    ...dto,
+                    id: `${index + 1}`,
+                })
         );

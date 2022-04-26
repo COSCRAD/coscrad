@@ -7,8 +7,7 @@ import { Resource } from '../../domain/models/resource.entity';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { QueryOperator } from '../../domain/repositories/interfaces/QueryOperator';
 import { InternalError } from '../../lib/errors/InternalError';
-import { PartialDTO } from '../../types/partial-dto';
-import { IDatabase } from './interfaces/database';
+import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
 
 type ArangoDTO<T> = T & {
     _key: string;
@@ -30,7 +29,7 @@ const interpretQueryOperatorForAQL = (operator: QueryOperator): string => {
 /**
  * TODO It seems we should sanatize inputs here.
  */
-export class ArangoDatabase implements IDatabase {
+export class ArangoDatabase {
     #db: Database;
 
     constructor(database: Database) {
@@ -40,11 +39,11 @@ export class ArangoDatabase implements IDatabase {
         this.#db = database;
     }
 
-    fetchById = async <TCreateEntityDto extends PartialDTO<Resource>>(
+    fetchById = async <TDatabaseDTO extends DatabaseDTO<Resource>>(
         id: string,
         collectionName: string
-    ): Promise<Maybe<TCreateEntityDto>> => {
-        const allEntities = await this.fetchMany<TCreateEntityDto>(collectionName);
+    ): Promise<Maybe<TDatabaseDTO>> => {
+        const allEntities = await this.fetchMany<TDatabaseDTO>(collectionName);
 
         if (allEntities.length === 0) return NotFound;
 
@@ -66,10 +65,10 @@ export class ArangoDatabase implements IDatabase {
      * @param collectionName name of the collection
      * @returns array of `DTOs`, empty array if none found
      */
-    fetchMany = async <TCreateEntityDTO>(
+    fetchMany = async <TEntityDTO>(
         collectionName: string,
-        specification?: ISpecification<TCreateEntityDTO>
-    ): Promise<TCreateEntityDTO[]> => {
+        specification?: ISpecification<TEntityDTO>
+    ): Promise<TEntityDTO[]> => {
         const query = specification
             ? `
       FOR t IN ${collectionName} \n\t${this.#convertSpecificationToAQLFilter(specification, 't')}
@@ -99,10 +98,7 @@ export class ArangoDatabase implements IDatabase {
         return isNotFound(results) ? 0 : results.length;
     };
 
-    create = async <TCreateEntityDto>(
-        dto: TCreateEntityDto,
-        collectionName: string
-    ): Promise<void> => {
+    create = async <TEntityDTO>(dto: TEntityDTO, collectionName: string): Promise<void> => {
         /**
          * Although the caller should ensure this, it's nice to double check here
          * as a means of making sure our query isn't subject to injection.
@@ -126,10 +122,7 @@ export class ArangoDatabase implements IDatabase {
         });
     };
 
-    createMany = async <TCreateEntityDto>(
-        dtos: TCreateEntityDto[],
-        collectionName: string
-    ): Promise<void> => {
+    createMany = async <TEntityDTO>(dtos: TEntityDTO[], collectionName: string): Promise<void> => {
         const collectionExists = await this.#doesCollectionExist(collectionName);
 
         if (!collectionExists) throw new Error(`Collection ${collectionName} not found!`);
@@ -165,7 +158,9 @@ export class ArangoDatabase implements IDatabase {
             );
 
         // TODO remove cast
-        const key = this.#getKeyOfDocument(documentToUpdate as ArangoDTO<TUpdateEntityDTO>);
+        const key = this.#getKeyOfDocument(
+            documentToUpdate as unknown as ArangoDTO<TUpdateEntityDTO>
+        );
 
         if (isNotFound(key))
             throw new Error(`No property '_key' was found on document: ${documentToUpdate}`);
@@ -203,7 +198,7 @@ export class ArangoDatabase implements IDatabase {
         this.#db.query(query);
     };
 
-    #getKeyOfDocument = <TCreateEntityDto>(document: ArangoDTO<TCreateEntityDto>): Maybe<string> =>
+    #getKeyOfDocument = <TEntityDTO>(document: ArangoDTO<TEntityDTO>): Maybe<string> =>
         typeof document._key === 'string' ? document._key : NotFound;
 
     #doesCollectionExist = async (collectionName: string): Promise<boolean> =>

@@ -12,10 +12,12 @@ export const buildTermTestCase = (): DomainModelValidatorTestCase<Term> => ({
     validCases: [
         {
             dto: {
+                type: resourceTypes.term,
                 term: 'test term in language',
                 termEnglish: 'test term in english',
                 id: '123',
                 published: true,
+                contributorId: '123',
             },
         },
     ],

@@ -1,4 +1,4 @@
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/partial-dto';
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
@@ -26,7 +26,7 @@ export class TextFieldContext extends EdgeConnectionContext {
      */
     readonly charRange: [number, number];
 
-    constructor({ target, charRange }: PartialDTO<TextFieldContext>) {
+    constructor({ target, charRange }: DTO<TextFieldContext>) {
         super();
 
         this.target = target;

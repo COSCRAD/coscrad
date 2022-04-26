@@ -1,4 +1,4 @@
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/partial-dto';
 import { Position2D } from '../../spatial-feature/types/Coordinates/Position2D';
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
@@ -8,7 +8,7 @@ export class PointContext extends EdgeConnectionContext {
 
     readonly point: Position2D;
 
-    constructor({ point }: PartialDTO<PointContext>) {
+    constructor({ point }: DTO<PointContext>) {
         super();
 
         this.point = [...(point as Position2D)];

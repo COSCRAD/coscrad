@@ -1,9 +1,10 @@
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DeepPartial } from 'apps/api/src/types/DeepPartial';
+import { DTO } from 'apps/api/src/types/partial-dto';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import { EnvironmentVariables } from '../../env.validation';
 
-type ConfigOverrides = PartialDTO<EnvironmentVariables>;
+type ConfigOverrides = DeepPartial<DTO<EnvironmentVariables>>;
 
 export default (configOverrides: ConfigOverrides, envFilePath: string) => {
     const realConfig = dotenv.parse(fs.readFileSync(envFilePath));

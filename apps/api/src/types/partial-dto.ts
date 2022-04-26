@@ -1,19 +1,54 @@
-import { DataPropertyNames } from './data-property-names';
-
 /**
- * We follow the approach [here](https://bigfont.ca/data-transfer-object-wrapper/)
- * This type corresponds to a `data transfer object` in which all methods have
- * been removed from the instance and all properties are `optional`. While one
- * can define a separate `createDTO`and `updateDTO` which may differ in which
- * properties are required \ present, we elect to defer such distinction dynamically
- * to dto validation in our instance factories (currently the model constructors).
+ * We follow the approach [here](https://github.com/tamj0rd2/dto/blob/master/src/dto.ts)
  */
 
 /**
  * Converts the type of an instance of a model to a `DTO` for said model,
- * in which all properties (fields) are optional and all methods have been removed.
+ * Respects optionality modifiers of the instance type. Use `DeepPartial` to
+ * make properties optional.
  */
-export type PartialDTO<T> = {
-    // Recurse on all objects
-    [P in DataPropertyNames<T>]?: T[P] extends object ? PartialDTO<T[P]> : T[P];
-};
+
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+type IsOptional<T> = Extract<T, undefined> extends never ? false : true;
+export type Func = (...args: any[]) => any;
+type IsFunction<T> = T extends Func ? true : false;
+type IsValueType<T> = T extends
+    | string
+    | number
+    | boolean
+    | null
+    | undefined
+    | Func
+    | Set<any>
+    | Map<any, any>
+    | Date
+    | Array<any>
+    ? true
+    : false;
+
+type ReplaceDate<T> = T extends Date ? string : T;
+type ReplaceSet<T> = T extends Set<infer X> ? X[] : T;
+type ReplaceMap<T> = T extends Map<infer K, infer I>
+    ? Record<
+          K extends string | number | symbol ? K : string,
+          IsValueType<I> extends true ? I : { [K in keyof ExcludeFuncsFromObj<I>]: DTO<I[K]> }
+      >
+    : T;
+type ReplaceArray<T> = T extends Array<infer X> ? DTO<X>[] : T;
+
+type ExcludeFuncsFromObj<T> = Pick<
+    T,
+    { [K in keyof T]: IsFunction<T[K]> extends true ? never : K }[keyof T]
+>;
+
+type DTOified<T> = IsValueType<T> extends true
+    ? ReplaceDate<ReplaceMap<ReplaceSet<ReplaceArray<T>>>>
+    : { [K in keyof ExcludeFuncsFromObj<T>]: DTO<T[K]> };
+
+export type DTO<T> = IsFunction<T> extends true
+    ? never
+    : IsOptional<T> extends true
+    ? DTOified<Exclude<T, undefined>> | null
+    : DTOified<T>;

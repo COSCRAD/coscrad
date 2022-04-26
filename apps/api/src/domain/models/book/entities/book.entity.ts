@@ -1,5 +1,5 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/partial-dto';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { resourceTypes } from '../../../types/resourceTypes';
@@ -23,7 +23,7 @@ export class Book extends Resource {
 
     pages: BookPage[];
 
-    constructor(dto: PartialDTO<Book>) {
+    constructor(dto: DTO<Book>) {
         super({ ...dto, type: resourceTypes.book });
 
         const { title, subtitle, author, publicationDate, pages: pageDTOs } = dto;

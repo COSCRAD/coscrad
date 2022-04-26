@@ -3,7 +3,6 @@ import { Resource } from '../../domain/models/resource.entity';
 import { ArangoConnection, ArangoConnectionProvider } from './arango-connection.provider';
 import { ArangoDatabase } from './arango-database';
 import { ArangoDatabaseForCollection } from './arango-database-for-collection';
-import { IDatabaseProvider } from './interfaces/database-provider';
 import { ArangoCollectionID } from './types/ArangoCollectionId';
 
 /**
@@ -14,7 +13,7 @@ import { ArangoCollectionID } from './types/ArangoCollectionId';
  * to dependency injection.
  */
 @Injectable()
-export class DatabaseProvider implements IDatabaseProvider {
+export class DatabaseProvider {
     readonly #databaseConnection: ArangoConnection;
 
     #arangoInstance: ArangoDatabase;

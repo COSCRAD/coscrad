@@ -5,45 +5,30 @@
                 "type": "tag",
                 "_key": "1",
                 "published": true,
-                "allowedContextTypes": [
-                    "general"
-                ],
                 "text": "plants"
             },
             {
                 "type": "tag",
                 "_key": "2",
                 "published": true,
-                "allowedContextTypes": [
-                    "general"
-                ],
                 "text": "animals"
             },
             {
                 "type": "tag",
                 "_key": "3",
                 "published": true,
-                "allowedContextTypes": [
-                    "general"
-                ],
                 "text": "placenames"
             },
             {
                 "type": "tag",
                 "_key": "4",
                 "published": true,
-                "allowedContextTypes": [
-                    "general"
-                ],
                 "text": "songs"
             },
             {
                 "type": "tag",
                 "_key": "5",
                 "published": true,
-                "allowedContextTypes": [
-                    "general"
-                ],
                 "text": "legends"
             }
         ],
@@ -52,10 +37,6 @@
                 "type": "term",
                 "_key": "1",
                 "published": true,
-                "allowedContextTypes": [
-                    "general",
-                    "textField"
-                ],
                 "term": "Chil-term-1",
                 "termEnglish": "Engl-term-1",
                 "contributorId": "John Doe"
@@ -64,10 +45,6 @@
                 "type": "term",
                 "_key": "2",
                 "published": true,
-                "allowedContextTypes": [
-                    "general",
-                    "textField"
-                ],
                 "term": "Chil-term-2",
                 "termEnglish": "Engl-term-2",
                 "contributorId": "John Doe"
@@ -76,10 +53,6 @@
                 "type": "term",
                 "_key": "3",
                 "published": false,
-                "allowedContextTypes": [
-                    "general",
-                    "textField"
-                ],
                 "term": "Chil-term-no-english",
                 "contributorId": "Jane Deer"
             }
@@ -89,10 +62,6 @@
                 "type": "vocabularyList",
                 "_key": "vocabulary-list-id-1",
                 "published": false,
-                "allowedContextTypes": [
-                    "general",
-                    "textField"
-                ],
                 "name": "test VL 1 chil",
                 "nameEnglish": "test VL 1 engl",
                 "entries": [
@@ -130,10 +99,6 @@
                 "type": "vocabularyList",
                 "_key": "vocabulary-list-id-2",
                 "published": true,
-                "allowedContextTypes": [
-                    "general",
-                    "textField"
-                ],
                 "name": "test VL 2 CHIL- no engl name",
                 "entries": [
                     {
@@ -150,11 +115,7 @@
             {
                 "type": "transcribedAudio",
                 "_key": "110",
-                "published": false,
-                "allowedContextTypes": [
-                    "general",
-                    "timeRange"
-                ],
+                "published": true,
                 "audioFilename": "123.mp3",
                 "lengthMilliseconds": 20000,
                 "startMilliseconds": 0,
@@ -179,10 +140,6 @@
                 "type": "book",
                 "_key": "23",
                 "published": true,
-                "allowedContextTypes": [
-                    "general",
-                    "pageRange"
-                ],
                 "title": "Three Little Pigs",
                 "subtitle": "The wolf's revenge",
                 "author": "John Doeburg",
@@ -204,10 +161,6 @@
                 "type": "book",
                 "_key": "24",
                 "published": false,
-                "allowedContextTypes": [
-                    "general",
-                    "pageRange"
-                ],
                 "title": "An Adventure Story",
                 "author": "Jane Donnaldson",
                 "publicationDate": "2011",
@@ -225,11 +178,6 @@
                 "type": "photograph",
                 "_key": "0",
                 "published": true,
-                "allowedContextTypes": [
-                    "general",
-                    "point2D",
-                    "freeMultiline"
-                ],
                 "filename": "cat",
                 "photographer": "Susie McRealart",
                 "dimensions": {
@@ -241,11 +189,6 @@
                 "type": "photograph",
                 "_key": "1",
                 "published": true,
-                "allowedContextTypes": [
-                    "general",
-                    "point2D",
-                    "freeMultiline"
-                ],
                 "filename": "dog",
                 "photographer": "Robert McRealart",
                 "dimensions": {
@@ -257,11 +200,6 @@
                 "type": "photograph",
                 "_key": "2",
                 "published": true,
-                "allowedContextTypes": [
-                    "general",
-                    "point2D",
-                    "freeMultiline"
-                ],
                 "filename": "wildflower",
                 "photographer": "Kenny Tree-Huggens",
                 "dimensions": {
@@ -275,9 +213,6 @@
                 "type": "spatialFeature",
                 "_key": "100",
                 "published": true,
-                "allowedContextTypes": [
-                    "general"
-                ],
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
@@ -290,9 +225,6 @@
                 "type": "spatialFeature",
                 "_key": "101",
                 "published": true,
-                "allowedContextTypes": [
-                    "general"
-                ],
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
@@ -305,9 +237,6 @@
                 "type": "spatialFeature",
                 "_key": "102",
                 "published": true,
-                "allowedContextTypes": [
-                    "general"
-                ],
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
@@ -319,10 +248,7 @@
             {
                 "type": "spatialFeature",
                 "_key": "1",
-                "published": false,
-                "allowedContextTypes": [
-                    "general"
-                ],
+                "published": true,
                 "geometry": {
                     "type": "LineString",
                     "coordinates": [
@@ -349,9 +275,6 @@
                 "type": "spatialFeature",
                 "_key": "300",
                 "published": true,
-                "allowedContextTypes": [
-                    "general"
-                ],
                 "geometry": {
                     "type": "Polygon",
                     "coordinates": [
