@@ -31,8 +31,10 @@ export class TextFieldContext extends EdgeConnectionContext {
 
         this.target = target;
 
-        // TODO remove cast
-        // Avoid side-effects
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/182005586]
+         * Remove this cast.
+         */
         this.charRange = [...(charRange as [number, number])];
     }
 }

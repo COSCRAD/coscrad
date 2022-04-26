@@ -133,8 +133,7 @@ describe(`mapEdgeConnectionMembersToArangoDocumentDirectionAttributes`, () =>
         describe(description, () => {
             it('should return the expected result', () => {
                 // ACT
-                // TODO [https://www.pivotaltracker.com/story/show/181890024] remove cast
-                const result = mapEdgeConnectionDTOToArangoEdgeDocument(input as EdgeConnection);
+                const result = mapEdgeConnectionDTOToArangoEdgeDocument(input);
 
                 expect(result).toEqual(expectedResult);
             });

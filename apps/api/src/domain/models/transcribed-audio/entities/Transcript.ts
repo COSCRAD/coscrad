@@ -9,10 +9,6 @@ export class Transcript extends BaseDomainModel {
     constructor({ timeRanges }: DTO<Transcript>) {
         super();
 
-        // Avoid sharing side-effect references
-        // TODO Why is the cast necessary? Fix PartialDTO.
-        this.timeRanges = (timeRanges as MediaTimeRange[]).map(
-            (timerange) => new MediaTimeRange(timerange)
-        );
+        this.timeRanges = timeRanges.map((timerange) => new MediaTimeRange(timerange));
     }
 }

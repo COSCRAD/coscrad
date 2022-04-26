@@ -1,4 +1,3 @@
-import { PageIdentifier } from 'apps/api/src/domain/models/book/entities/types/PageIdentifier';
 import { DTO } from '../../../../../types/partial-dto';
 import EmptyPageRangeError from '../../../../domainModelValidators/errors/context/EmptyPageRangeError';
 import { PageRangeContext } from '../../../../models/context/page-range-context/page-range.context.entity';
@@ -44,9 +43,8 @@ export const buildPageRangeTestCase = (): ContextModelValidatorTestCase<PageRang
             description: 'the page identifiers include duplicates',
             invalidDTO: {
                 ...validDTO,
-                // TODO remove cast
                 pageIdentifiers: [
-                    ...(validDTO.pageIdentifiers as PageIdentifier[]),
+                    ...validDTO.pageIdentifiers,
                     validDTO.pageIdentifiers[0],
                     validDTO.pageIdentifiers[3],
                 ],

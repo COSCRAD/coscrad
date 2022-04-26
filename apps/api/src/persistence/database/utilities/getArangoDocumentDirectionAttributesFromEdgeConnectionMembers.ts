@@ -16,8 +16,7 @@ export default (
     edgeConnectionType: EdgeConnectionType
 ): HasArangoDocumentDirectionAttributes => {
     if (edgeConnectionType === EdgeConnectionType.self) {
-        // TODO [https://www.pivotaltracker.com/story/show/181890024] remove cast
-        const compositeIdentifier = members[0].compositeIdentifier as ResourceCompositeIdentifier;
+        const compositeIdentifier = members[0].compositeIdentifier;
 
         const compositeIdentifierInArangoFormat =
             convertResourceCompositeIdentifierToArangoDocumentHandle(compositeIdentifier);

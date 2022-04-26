@@ -28,10 +28,9 @@ export class VocabularyList extends Resource {
 
         this.nameEnglish = nameEnglish;
 
-        // TODO type guard for this (validation already complete at this point)
-        this.entries = [...(entries as VocabularyListEntry[])];
+        this.entries = [...entries];
 
-        this.variables = [...(variables as VocabularyListVariable[])];
+        this.variables = [...variables];
     }
 
     validateTextFieldContext(context: TextFieldContext): Valid | InternalError {

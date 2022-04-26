@@ -37,7 +37,7 @@ export class Book extends Resource {
         this.publicationDate = publicationDate;
 
         // TODO remove all casts like this
-        this.pages = (pageDTOs as BookPage[]).map((pageDTO) => new BookPage(pageDTO));
+        this.pages = pageDTOs.map((pageDTO) => new BookPage(pageDTO));
     }
 
     protected validatePageRangeContext(context: PageRangeContext): Valid | InternalError {

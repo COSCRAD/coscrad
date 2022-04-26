@@ -36,6 +36,8 @@ type ReplaceMap<T> = T extends Map<infer K, infer I>
           IsValueType<I> extends true ? I : { [K in keyof ExcludeFuncsFromObj<I>]: DTO<I[K]> }
       >
     : T;
+
+// This causes troubles with Tuple types. See `TextFieldContext.charRange` in a DTO for example
 type ReplaceArray<T> = T extends Array<infer X> ? DTO<X>[] : T;
 
 type ExcludeFuncsFromObj<T> = Pick<

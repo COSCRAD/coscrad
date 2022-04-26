@@ -11,6 +11,11 @@ export class PointContext extends EdgeConnectionContext {
     constructor({ point }: DTO<PointContext>) {
         super();
 
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/182005586]
+         *
+         * Remove cast.
+         */
         this.point = [...(point as Position2D)];
     }
 }

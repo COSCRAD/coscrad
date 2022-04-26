@@ -14,6 +14,6 @@ export default <TEntity extends Resource = Resource>(
 
         if (!isValid(validationResult)) return validationResult;
 
-        // We must cast unless we can use the validator as a type guard
+        // We must cast unless we can make the validator into a type guard
         return new Ctor(dto as DTO<TEntity>);
     };

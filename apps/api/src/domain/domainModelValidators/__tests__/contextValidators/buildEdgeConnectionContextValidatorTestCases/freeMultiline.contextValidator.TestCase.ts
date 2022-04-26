@@ -110,7 +110,7 @@ export const buildFreeMultilineTestCase =
                 description: 'the third line is empty',
                 invalidDTO: {
                     ...validDTO,
-                    lines: [...(validDTO.lines as Line2D[]), []],
+                    lines: [...validDTO.lines, []],
                 },
                 expectedError: topLevelErrorFactory([new InvalidLineInFreeMultilineError(2)]),
             },
