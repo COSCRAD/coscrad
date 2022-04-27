@@ -1,18 +1,6 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import formatPosition2D from '../../../../../../view-models/presentation/formatPosition2D';
 import formatResourceCompositeIdentifier from '../../../../../../view-models/presentation/formatResourceCompositeIdentifier';
-import { Position2D } from '../../../../../models/spatial-feature/types/Coordinates/Position2D';
 import { ResourceCompositeIdentifier } from '../../../../../models/types/entityCompositeIdentifier';
-
-// TODO refactor using format helpers in presentation layer
-const formatPointsAsList = (points: Position2D[]): string =>
-    points
-        .reduce(
-            (accumulatedString, point) => accumulatedString.concat(formatPosition2D(point), ','),
-            ''
-        )
-        // remove trailing ','
-        .slice(0, -1);
 
 export default class FreeMultilineContextOutOfBoundsError extends InternalError {
     constructor(

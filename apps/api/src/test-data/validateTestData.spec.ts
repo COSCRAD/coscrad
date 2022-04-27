@@ -2,10 +2,7 @@ import { writeFileSync } from 'fs';
 import { getValidatorForEntity } from '../domain/domainModelValidators';
 import validateEdgeConnection from '../domain/domainModelValidators/contextValidators/validateEdgeConnection';
 import { isValid, Valid } from '../domain/domainModelValidators/Valid';
-import {
-    EdgeConnection,
-    EdgeConnectionMemberRole,
-} from '../domain/models/context/edge-connection.entity';
+import { EdgeConnectionMemberRole } from '../domain/models/context/edge-connection.entity';
 import { Resource } from '../domain/models/resource.entity';
 import {
     isResourceType,
@@ -21,17 +18,9 @@ import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEnti
 import { DTO } from '../types/DTO';
 import buildTestData from './buildTestData';
 
-export type InMemorySnapshotOfResourceDTOs = {
+type InMemorySnapshotOfResourceDTOs = {
     [K in keyof ResourceTypeToInstance]?: DTO<ResourceTypeToInstance>[K][];
 };
-
-type InMemorySnapshotOfConnectionDTOs = {
-    connections?: DTO<EdgeConnection>[];
-};
-
-type InMemorySnapshotOfDTOs = {
-    resources: InMemorySnapshotOfResourceDTOs;
-} & InMemorySnapshotOfConnectionDTOs;
 
 describe('buildTestData', () => {
     const testData = buildTestData();

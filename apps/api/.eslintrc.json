@@ -8,7 +8,8 @@
         // TODO: Re-enable this
         "@nrwl/nx/enforce-module-boundaries": [2],
         // When dealing generically with class instances we need object as a type
-        "@typescript-eslint/ban-types": [0]
+        "@typescript-eslint/ban-types": [0],
+        "@typescript-eslint/no-unused-vars": [2]
       }
     },
     {

@@ -7,6 +7,8 @@ export default class DisallowedContextTypeForResourceError extends InternalError
         contextType: EdgeConnectionContextType,
         resourceCompositeIdentifier: ResourceCompositeIdentifier
     ) {
-        super(`Disallowed context type for resource type`);
+        super(
+            `Disallowed context type: ${contextType} for resource type: ${resourceCompositeIdentifier}`
+        );
     }
 }
