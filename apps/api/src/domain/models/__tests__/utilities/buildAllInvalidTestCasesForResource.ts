@@ -23,7 +23,7 @@ export default <TResourceType extends ResourceType = ResourceType>(
             );
 
             const testCase = {
-                description: `when a ${resourceType} receives a context with disallowed type" ${contextType}`,
+                description: `when a ${resourceType} receives a context with disallowed type: ${contextType}`,
                 context: getValidContextOfTypeForTest(contextType),
                 resource,
                 expectedError,

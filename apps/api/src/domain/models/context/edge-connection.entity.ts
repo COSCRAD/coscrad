@@ -1,5 +1,5 @@
 import cloneToPlainObject from 'apps/api/src/lib/utilities/cloneToPlainObject';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { EntityId } from '../../types/ResourceId';
 import BaseDomainModel from '../BaseDomainModel';
 import { ResourceCompositeIdentifier } from '../types/entityCompositeIdentifier';
@@ -43,7 +43,7 @@ export class EdgeConnection extends BaseDomainModel implements HasEntityID {
 
     readonly note: string;
 
-    constructor({ id, members, tagIDs, note, type }: PartialDTO<EdgeConnection>) {
+    constructor({ id, members, tagIDs, note, type }: DTO<EdgeConnection>) {
         super();
 
         this.type = type;

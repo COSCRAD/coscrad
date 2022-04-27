@@ -1,4 +1,4 @@
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { InternalError } from '../../lib/errors/InternalError';
 import capitalizeFirstLetter from '../../lib/utilities/strings/capitalizeFirstLetter';
 import DisallowedContextTypeForResourceError from '../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';
@@ -17,12 +17,10 @@ export abstract class Resource extends BaseDomainModel implements HasEntityID {
 
     readonly id: EntityId;
 
-    readonly allowedContextTypes: EdgeConnectionContextType[];
-
     // TODO: Rename this 'isPublished' - db migration
     readonly published: boolean;
 
-    constructor(dto: PartialDTO<Resource>) {
+    constructor(dto: DTO<Resource>) {
         super();
 
         this.type = dto.type;
@@ -30,8 +28,10 @@ export abstract class Resource extends BaseDomainModel implements HasEntityID {
         this.id = dto.id;
 
         this.published = typeof dto.published === 'boolean' ? dto.published : false;
+    }
 
-        this.allowedContextTypes = getAllowedContextsForModel(this.type);
+    getAllowedContextTypes() {
+        return getAllowedContextsForModel(this.type);
     }
 
     getCompositeIdentifier = (): ResourceCompositeIdentifier => ({
@@ -51,7 +51,7 @@ export abstract class Resource extends BaseDomainModel implements HasEntityID {
 
         if (type === EdgeConnectionContextType.general) return Valid;
 
-        if (!this.allowedContextTypes.includes(type)) {
+        if (!this.getAllowedContextTypes().includes(type)) {
             return new DisallowedContextTypeForResourceError(type, this.getCompositeIdentifier());
         }
 

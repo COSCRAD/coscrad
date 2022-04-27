@@ -6,14 +6,15 @@ import {
 } from 'apps/api/src/domain/models/context/edge-connection.entity';
 import { PageRangeContext } from 'apps/api/src/domain/models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from 'apps/api/src/domain/models/context/time-range-context/time-range-context.entity';
+import { EdgeConnectionContextType } from 'apps/api/src/domain/models/context/types/EdgeConnectionContextType';
 import { resourceTypes } from 'apps/api/src/domain/types/resourceTypes';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
 import mapEdgeConnectionDTOToArangoEdgeDocument from './mapEdgeConnectionDTOToArangoEdgeDocument';
 
 type TestCase = {
     description: string;
-    input: PartialDTO<EdgeConnection>;
+    input: DTO<EdgeConnection>;
     expectedResult: ArangoEdgeDocument;
 };
 
@@ -30,6 +31,7 @@ const selfEdgeConnection = {
                 type: resourceTypes.book,
             },
             context: new PageRangeContext({
+                type: EdgeConnectionContextType.pageRange,
                 pageIdentifiers: ['ix'],
             }).toDTO(),
         },
@@ -37,6 +39,7 @@ const selfEdgeConnection = {
 };
 
 const validPageRangeContext = new PageRangeContext({
+    type: EdgeConnectionContextType.pageRange,
     pageIdentifiers: ['1', '2', '3', 'iv'],
 });
 
@@ -52,6 +55,8 @@ const buildValidBookEdgeConnectionMember = (
 });
 
 const validTimeRangeContext = new TimeRangeContext({
+    type: EdgeConnectionContextType.timeRange,
+
     timeRange: {
         inPoint: 3789,
         outPoint: 3890,
@@ -128,8 +133,7 @@ describe(`mapEdgeConnectionMembersToArangoDocumentDirectionAttributes`, () =>
         describe(description, () => {
             it('should return the expected result', () => {
                 // ACT
-                // TODO [https://www.pivotaltracker.com/story/show/181890024] remove cast
-                const result = mapEdgeConnectionDTOToArangoEdgeDocument(input as EdgeConnection);
+                const result = mapEdgeConnectionDTOToArangoEdgeDocument(input);
 
                 expect(result).toEqual(expectedResult);
             });

@@ -1,5 +1,5 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { resourceTypes } from '../../../types/resourceTypes';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
@@ -19,7 +19,7 @@ export class VocabularyList extends Resource {
 
     readonly variables: VocabularyListVariable[];
 
-    constructor(dto: PartialDTO<VocabularyList>) {
+    constructor(dto: DTO<VocabularyList>) {
         super({ ...dto, type: resourceTypes.vocabularyList });
 
         const { name, nameEnglish, entries, variables } = dto;
@@ -28,10 +28,9 @@ export class VocabularyList extends Resource {
 
         this.nameEnglish = nameEnglish;
 
-        // TODO type guard for this (validation already complete at this point)
-        this.entries = [...(entries as VocabularyListEntry[])];
+        this.entries = [...entries];
 
-        this.variables = [...(variables as VocabularyListVariable[])];
+        this.variables = [...variables];
     }
 
     validateTextFieldContext(context: TextFieldContext): Valid | InternalError {

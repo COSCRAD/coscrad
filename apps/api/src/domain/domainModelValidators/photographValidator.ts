@@ -1,6 +1,6 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
@@ -15,7 +15,7 @@ const photographValidator: DomainModelValidator = (dto: unknown): Valid | Intern
 
     const allErrors: InternalError[] = [];
 
-    const { photographer, id, dimensions } = dto as PartialDTO<Photograph>;
+    const { photographer, id, dimensions } = dto as DTO<Photograph>;
 
     if (!isStringWithNonzeroLength(photographer))
         allErrors.push(new InternalError(`The photographer must be specified`));

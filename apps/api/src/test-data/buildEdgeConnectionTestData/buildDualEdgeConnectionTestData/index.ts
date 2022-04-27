@@ -1,6 +1,7 @@
 import { EdgeConnectionContextType } from 'apps/api/src/domain/models/context/types/EdgeConnectionContextType';
 import { resourceTypes } from 'apps/api/src/domain/types/resourceTypes';
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
+import { DTO } from 'apps/api/src/types/DTO';
 import formatResourceCompositeIdentifier from 'apps/api/src/view-models/presentation/formatResourceCompositeIdentifier';
 import {
     EdgeConnection,
@@ -24,7 +25,7 @@ const buildDummyNoteForDualConnection = (
         formatResourceCompositeIdentifier(fromMember.compositeIdentifier),
     ].join(' ');
 
-const generateComprehensiveDualEdgeConnectionTestData = (): EdgeConnection[] => {
+const generateComprehensiveDualEdgeConnectionTestData = (): DTO<EdgeConnection>[] => {
     const validSelfMembers = buildOneSelfEdgeConnectionForEachResourceType()
         .flatMap(({ members }) => members)
         .filter(
@@ -54,10 +55,13 @@ const generateComprehensiveDualEdgeConnectionTestData = (): EdgeConnection[] => 
                 throw new InternalError(`Failed to find a self member of type ${resourceType}`);
             }
 
-            return allToMembers.concat({
+            const result = allToMembers.concat({
                 ...firstSelfMemberOfGivenType,
                 role: EdgeConnectionMemberRole.to,
-            });
+                // TODO remove cast
+            } as EdgeConnectionMember);
+
+            return result;
         }, []);
 
     const oneFromMemberOfEachResourceType = oneToMemberOfEachResourceType.map((toMember) => ({
@@ -69,19 +73,20 @@ const generateComprehensiveDualEdgeConnectionTestData = (): EdgeConnection[] => 
         const fromMember =
             oneFromMemberOfEachResourceType[(index + 1) % oneToMemberOfEachResourceType.length];
 
-        return new EdgeConnection({
+        return {
             type: EdgeConnectionType.dual,
             // TODO generate this at the top level instead
             id: `${2000 + index}`,
             members: [toMember, fromMember],
             note: buildDummyNoteForDualConnection(toMember, fromMember),
-        });
+            tagIDs: [],
+        };
     });
 
     return edgeConnections;
 };
 
-export default (): EdgeConnection[] => [
+export default (): DTO<EdgeConnection>[] => [
     ...generateComprehensiveDualEdgeConnectionTestData(),
     ...buildOneDualEdgeConnectionForEveryContextType(),
     ...buildOneFromConnectionForInstanceOfEachResourceType(),

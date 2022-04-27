@@ -1,5 +1,5 @@
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 
 export default class ArangoDatabaseConfiguration {
     readonly dbPass: string;
@@ -19,7 +19,7 @@ export default class ArangoDatabaseConfiguration {
         dbHostUrl,
         dbRootPass,
         dbUser,
-    }: PartialDTO<ArangoDatabaseConfiguration>) {
+    }: DTO<ArangoDatabaseConfiguration>) {
         this.dbPass = dbPass;
 
         this.dbName = dbName;
@@ -31,7 +31,7 @@ export default class ArangoDatabaseConfiguration {
         this.dbUser = dbUser;
     }
 
-    public getConfig(): PartialDTO<ArangoDatabaseConfiguration> {
+    public getConfig(): DTO<ArangoDatabaseConfiguration> {
         return cloneToPlainObject(this);
     }
 }

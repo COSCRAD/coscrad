@@ -16,6 +16,8 @@ export const buildVocabularyListTestCase = (): DomainModelValidatorTestCase<Voca
     validCases: [
         {
             dto: {
+                type: resourceTypes.vocabularyList,
+                variables: [],
                 name: 'vlist name in language',
                 nameEnglish: 'vlist name in English',
                 id: '123',

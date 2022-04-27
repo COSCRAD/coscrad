@@ -1,9 +1,12 @@
 import { Line } from '../../domain/models/spatial-feature/line.entity';
 import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
-import { PartialDTO } from '../../types/partial-dto';
+import { resourceTypes } from '../../domain/types/resourceTypes';
+import { DTO } from '../../types/DTO';
 
-const dtos: PartialDTO<Line>[] = [
+const dtos: DTO<Line>[] = [
     {
+        type: resourceTypes.spatialFeature,
+        published: true,
         id: '1',
         geometry: {
             type: GeometricFeatureType.line,

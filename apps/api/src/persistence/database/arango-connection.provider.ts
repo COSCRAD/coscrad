@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Database } from 'arangojs';
 import { Scheme } from '../../app/config/constants/Scheme';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import ArangoDatabaseConfiguration from './ArangoDatabaseConfiguration';
 import DatabaseAlreadyInitializedError from './errors/DatabaseAlreadyInitializedError';
 import DatabaseCannotBeDroppedError from './errors/DatabaseCannotBeDroppedError';
@@ -99,7 +99,7 @@ export class ArangoConnectionProvider {
         return this.#connection;
     }
 
-    public setDatabaseConfiguration(config: PartialDTO<ArangoDatabaseConfiguration>) {
+    public setDatabaseConfiguration(config: DTO<ArangoDatabaseConfiguration>) {
         this.#databaseConfiguration = new ArangoDatabaseConfiguration({
             ...config,
         });

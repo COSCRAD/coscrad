@@ -1,7 +1,7 @@
 import { Photograph } from '../domain/models/photograph/entities/photograph.entity';
-import { PartialDTO } from '../types/partial-dto';
+import { resourceTypes } from '../domain/types/resourceTypes';
 
-const dtos: PartialDTO<Photograph>[] = [
+const dtos = [
     {
         filename: 'cat',
         photographer: 'Susie McRealart',
@@ -29,4 +29,12 @@ const dtos: PartialDTO<Photograph>[] = [
 ];
 
 export default (): Photograph[] =>
-    dtos.map((dto, index) => new Photograph({ ...dto, id: `${index}`, published: true }));
+    dtos.map(
+        (dto, index) =>
+            new Photograph({
+                ...dto,
+                id: `${index}`,
+                published: true,
+                type: resourceTypes.photograph,
+            })
+    );

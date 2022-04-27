@@ -18,15 +18,15 @@ import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLengt
 import { getArangoCollectionIDFromResourceType } from '../persistence/database/getArangoCollectionIDFromResourceType';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
-import { PartialDTO } from '../types/partial-dto';
+import { DTO } from '../types/DTO';
 import buildTestData from './buildTestData';
 
 export type InMemorySnapshotOfResourceDTOs = {
-    [K in keyof ResourceTypeToInstance]?: PartialDTO<ResourceTypeToInstance>[K][];
+    [K in keyof ResourceTypeToInstance]?: DTO<ResourceTypeToInstance>[K][];
 };
 
 type InMemorySnapshotOfConnectionDTOs = {
-    connections?: PartialDTO<EdgeConnection>[];
+    connections?: DTO<EdgeConnection>[];
 };
 
 type InMemorySnapshotOfDTOs = {

@@ -1,5 +1,5 @@
 import { DomainModelCtor } from 'apps/api/src/lib/types/DomainModelCtor';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { DomainModelValidator } from '../../domainModelValidators/types/DomainModelValidator';
 import { isValid } from '../../domainModelValidators/Valid';
 import { Resource } from '../../models/resource.entity';
@@ -14,6 +14,6 @@ export default <TEntity extends Resource = Resource>(
 
         if (!isValid(validationResult)) return validationResult;
 
-        // We must cast unless we can use the validator as a type guard
-        return new Ctor(dto as PartialDTO<TEntity>);
+        // We must cast unless we can make the validator into a type guard
+        return new Ctor(dto as DTO<TEntity>);
     };

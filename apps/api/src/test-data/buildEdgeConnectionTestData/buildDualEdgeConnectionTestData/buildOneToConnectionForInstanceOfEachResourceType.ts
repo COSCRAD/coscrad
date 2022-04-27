@@ -1,3 +1,4 @@
+import { DTO } from 'apps/api/src/types/DTO';
 import { EdgeConnection } from '../../../domain/models/context/edge-connection.entity';
 
 /**
@@ -7,4 +8,4 @@ import { EdgeConnection } from '../../../domain/models/context/edge-connection.e
  * that we add a variety of test data for each new `ResourceType` and
  * `EdgeConnectionContextType`.
  */
-export default (): EdgeConnection[] => [];
+export default (): DTO<EdgeConnection>[] => [];

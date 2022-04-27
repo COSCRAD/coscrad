@@ -2,6 +2,7 @@ import EmptyTargetForTextFieldContextError from '../../../domainModelValidators/
 import InconsistentCharRangeError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/textFieldContext/InconsistentCharRangeError';
 import { resourceTypes } from '../../../types/resourceTypes';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
+import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { ResourceModelContextStateValidatorInvalidTestCase } from '../resourceModelContextStateValidators.spec';
 import buildAllInvalidTestCasesForResource from '../utilities/buildAllInvalidTestCasesForResource';
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
@@ -18,6 +19,7 @@ const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
         description: `vocabulary list does not have the property targetted in the text field context`,
         resource: vocabularyList,
         context: new TextFieldContext({
+            type: EdgeConnectionContextType.textField,
             target: 'bogus',
             charRange: [0, 0],
         }),
@@ -29,6 +31,7 @@ const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
             nameEnglish: undefined,
         }),
         context: new TextFieldContext({
+            type: EdgeConnectionContextType.textField,
             target: 'termEnglish',
             charRange: [0, 0],
         }),
@@ -38,6 +41,7 @@ const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
         description: `the char range's end index is out of range`,
         resource: vocabularyList,
         context: new TextFieldContext({
+            type: EdgeConnectionContextType.textField,
             target: 'name',
             charRange: [0, 5],
         }),

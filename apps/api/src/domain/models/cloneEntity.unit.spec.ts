@@ -1,5 +1,5 @@
 import buildTestData from '../../test-data/buildTestData';
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import { resourceTypes } from '../types/resourceTypes';
 import { VocabularyList } from './vocabulary-list/entities/vocabulary-list.entity';
 
@@ -29,7 +29,7 @@ describe('the (base) resource clone method', () => {
 
             const newNameEnglish = 'new name english';
 
-            const updates: PartialDTO<VocabularyList> = {
+            const updates: Partial<DTO<VocabularyList>> = {
                 name: newName,
                 nameEnglish: newNameEnglish,
             };

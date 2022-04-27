@@ -3,6 +3,7 @@ import PointContextOutOfBoundsError from '../../../domainModelValidators/errors/
 import { resourceTypes } from '../../../types/resourceTypes';
 import { FreeMultilineContext } from '../../context/free-multiline-context/free-multiline-context.entity';
 import { PointContext } from '../../context/point-context/point-context.entity';
+import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { ResourceModelContextStateValidatorInvalidTestCase } from '../resourceModelContextStateValidators.spec';
 import buildAllInvalidTestCasesForResource from '../utilities/buildAllInvalidTestCasesForResource';
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
@@ -22,6 +23,7 @@ const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
         description: `the 2d point is outside the horizontal bounds of the photograph`,
         resource: validPhotograph,
         context: new PointContext({
+            type: EdgeConnectionContextType.point2D,
             point: [105, 90],
         }),
         expectedError: new PointContextOutOfBoundsError(
@@ -37,6 +39,7 @@ const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
         description: `the free multiline has a point that is outside the horizontal bounds of the photograph`,
         resource: validPhotograph,
         context: new FreeMultilineContext({
+            type: EdgeConnectionContextType.freeMultiline,
             lines: [
                 [
                     [0, 10],
@@ -55,6 +58,7 @@ const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
         description: `the free multiline has a multiple lines with point(s) that are outside the horizontal bounds of the photograph`,
         resource: validPhotograph,
         context: new FreeMultilineContext({
+            type: EdgeConnectionContextType.freeMultiline,
             lines: [
                 [
                     [10, 20],

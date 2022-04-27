@@ -1,7 +1,7 @@
 import { Book } from '../domain/models/book/entities/book.entity';
-import { PartialDTO } from '../types/partial-dto';
+import { resourceTypes } from '../domain/types/resourceTypes';
 
-const dtos: PartialDTO<Book>[] = [
+const dtos = [
     {
         id: '23',
         title: 'Three Little Pigs',
@@ -37,6 +37,9 @@ const dtos: PartialDTO<Book>[] = [
         // The publication status should not be true if there are no pages
         published: false,
     },
-];
+].map((dto) => ({
+    ...dto,
+    type: resourceTypes.book,
+}));
 
 export default (): Book[] => dtos.map((dto) => new Book(dto));

@@ -1,5 +1,5 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 
 // This is a value-object
@@ -9,7 +9,7 @@ export default class PhotographDimensions extends BaseDomainModel {
 
     readonly heightPX: number;
 
-    constructor({ widthPX, heightPX }: PartialDTO<PhotographDimensions>) {
+    constructor({ widthPX, heightPX }: DTO<PhotographDimensions>) {
         super();
 
         this.widthPX = widthPX;

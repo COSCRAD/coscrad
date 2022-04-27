@@ -1,4 +1,4 @@
 import { Resource } from '../../domain/models/resource.entity';
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 
-export type DomainModelCtor<TEntity extends Resource> = new (dto: PartialDTO<TEntity>) => TEntity;
+export type DomainModelCtor<TEntity extends Resource> = new (dto: DTO<TEntity>) => TEntity;

@@ -1,4 +1,4 @@
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { resourceTypes } from '../../types/resourceTypes';
 import { Resource } from '../resource.entity';
 import { IGeometricFeature } from './GeometricFeature';
@@ -11,7 +11,7 @@ export class Polygon extends Resource implements ISpatialFeature {
 
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.polygon, PolygonCoordinates>;
 
-    constructor(dto: PartialDTO<Polygon>) {
+    constructor(dto: DTO<Polygon>) {
         super({ ...dto, type: resourceTypes.spatialFeature });
 
         const { geometry: geometryDTO } = dto;

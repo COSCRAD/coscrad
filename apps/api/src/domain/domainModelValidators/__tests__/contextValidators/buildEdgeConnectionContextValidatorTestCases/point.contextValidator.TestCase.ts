@@ -1,5 +1,5 @@
 import { Position2D } from 'apps/api/src/domain/models/spatial-feature/types/Coordinates/Position2D';
-import { PartialDTO } from '../../../../../types/partial-dto';
+import { DTO } from '../../../../../types/DTO';
 import { PointContext } from '../../../../models/context/point-context/point-context.entity';
 import { EdgeConnectionContextType } from '../../../../models/context/types/EdgeConnectionContextType';
 import { pointContextValidator } from '../../../contextValidators/pointContext.validator';
@@ -9,7 +9,7 @@ import PointNotSpecifiedError from '../../../errors/context/PointNotSpecifiedErr
 import { ContextModelValidatorTestCase } from '../types/ContextModelValidatorTestCase';
 import createInvalidContextErrorFactory from './utilities/createInvalidContextErrorFactory';
 
-const validDTO: PartialDTO<PointContext> = {
+const validDTO: DTO<PointContext> = {
     type: EdgeConnectionContextType.point2D,
     point: [2.4, 55],
 };

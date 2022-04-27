@@ -4,6 +4,7 @@ import {
     TimeRangeContext,
     TimeRangeWithoutData,
 } from '../../context/time-range-context/time-range-context.entity';
+import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { ResourceModelContextStateValidatorInvalidTestCase } from '../resourceModelContextStateValidators.spec';
 import buildAllInvalidTestCasesForResource from '../utilities/buildAllInvalidTestCasesForResource';
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
@@ -29,9 +30,10 @@ const timeRangeWithInvalidInPoint: TimeRangeWithoutData = {
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
     ...buildAllInvalidTestCasesForResource(resourceTypes.transcribedAudio),
     {
-        description: `The out point of the time range context is too big`,
+        description: `the out point of the time range context is too big`,
         resource: validTranscribedAudio,
         context: new TimeRangeContext({
+            type: EdgeConnectionContextType.timeRange,
             timeRange: timeRangeWithInvalidOutPoint,
         }),
         expectedError: new InconsistentTimeRangeError(
@@ -43,6 +45,7 @@ const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
         description: `The in point of the time range context is too small`,
         resource: validTranscribedAudio,
         context: new TimeRangeContext({
+            type: EdgeConnectionContextType.timeRange,
             timeRange: timeRangeWithInvalidInPoint,
         }),
         expectedError: new InconsistentTimeRangeError(

@@ -23,6 +23,7 @@ const buildTopLevelError = (innerErrors: InternalError[]): InternalError =>
     new InvalidEdgeConnectionDTOError(innerErrors);
 
 const validPageRangeContext = new PageRangeContext({
+    type: EdgeConnectionContextType.pageRange,
     pageIdentifiers: ['1', '2', '3', 'iv'],
 });
 
@@ -38,6 +39,7 @@ const buildValidBookEdgeConnectionMember = (
 });
 
 const validTimeRangeContext = new TimeRangeContext({
+    type: EdgeConnectionContextType.timeRange,
     timeRange: {
         inPoint: 3789,
         outPoint: 3890,
@@ -241,6 +243,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                         {
                             role: EdgeConnectionMemberRole.to,
                             context: new TimeRangeContext({
+                                type: EdgeConnectionContextType.timeRange,
                                 timeRange: {
                                     inPoint: 3789,
                                     outPoint: 3890,
@@ -273,6 +276,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                                 EdgeConnectionMemberRole.to
                             ),
                             context: new TimeRangeContext({
+                                type: EdgeConnectionContextType.timeRange,
                                 timeRange: {
                                     inPoint: 1200,
                                     outPoint: 1000,

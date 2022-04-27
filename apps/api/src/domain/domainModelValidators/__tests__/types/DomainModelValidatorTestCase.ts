@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import { PartialDTO } from '../../../../types/partial-dto';
+import { DTO } from '../../../../types/DTO';
 import { ResourceType } from '../../../types/resourceTypes';
 import { DomainModelValidator } from '../../types/DomainModelValidator';
 
@@ -10,7 +10,7 @@ export type DomainModelValidatorInvalidTestCase<TEntity> = {
      * model, so the type inference is helpful. Casting an invalid DTO
      * in the test case builder is probably the lesser evil.
      */
-    invalidDTO: PartialDTO<TEntity>;
+    invalidDTO: Partial<DTO<TEntity>>;
     expectedError: InternalError;
 };
 
@@ -19,7 +19,7 @@ export type DomainModelValidatorTestCase<TResource> = {
     validator: DomainModelValidator;
     validCases: {
         description?: string;
-        dto: PartialDTO<TResource>;
+        dto: DTO<TResource>;
     }[];
     invalidCases: DomainModelValidatorInvalidTestCase<TResource>[];
 };

@@ -1,4 +1,4 @@
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 import { PageIdentifier } from './types/PageIdentifier';
 
@@ -9,7 +9,7 @@ export default class BookPage extends BaseDomainModel {
 
     readonly translation: string;
 
-    constructor({ identifier, text, translation }: PartialDTO<BookPage>) {
+    constructor({ identifier, text, translation }: DTO<BookPage>) {
         super();
 
         this.identifier = identifier;

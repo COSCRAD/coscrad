@@ -1,5 +1,4 @@
-import { PageIdentifier } from 'apps/api/src/domain/models/book/entities/types/PageIdentifier';
-import { PartialDTO } from '../../../../../types/partial-dto';
+import { DTO } from '../../../../../types/DTO';
 import EmptyPageRangeError from '../../../../domainModelValidators/errors/context/EmptyPageRangeError';
 import { PageRangeContext } from '../../../../models/context/page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from '../../../../models/context/types/EdgeConnectionContextType';
@@ -9,7 +8,7 @@ import NullOrUndefinedEdgeConnectionContextDTOError from '../../../errors/contex
 import { ContextModelValidatorTestCase } from '../types/ContextModelValidatorTestCase';
 import createInvalidContextErrorFactory from './utilities/createInvalidContextErrorFactory';
 
-const validDTO: PartialDTO<PageRangeContext> = {
+const validDTO: DTO<PageRangeContext> = {
     type: EdgeConnectionContextType.pageRange,
     pageIdentifiers: ['1', '2', '4', 'vii'],
 };
@@ -44,9 +43,8 @@ export const buildPageRangeTestCase = (): ContextModelValidatorTestCase<PageRang
             description: 'the page identifiers include duplicates',
             invalidDTO: {
                 ...validDTO,
-                // TODO remove cast
                 pageIdentifiers: [
-                    ...(validDTO.pageIdentifiers as PageIdentifier[]),
+                    ...validDTO.pageIdentifiers,
                     validDTO.pageIdentifiers[0],
                     validDTO.pageIdentifiers[3],
                 ],

@@ -3,6 +3,8 @@ import { FreeMultilineContext } from 'apps/api/src/domain/models/context/free-mu
 import { GeneralContext } from 'apps/api/src/domain/models/context/general-context/general-context.entity';
 import { PointContext } from 'apps/api/src/domain/models/context/point-context/point-context.entity';
 import { TimeRangeContext } from 'apps/api/src/domain/models/context/time-range-context/time-range-context.entity';
+import { EdgeConnectionContextType } from 'apps/api/src/domain/models/context/types/EdgeConnectionContextType';
+import { DTO } from 'apps/api/src/types/DTO';
 import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
@@ -25,6 +27,7 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
                     type: resourceTypes.term,
                 },
                 context: new TextFieldContext({
+                    type: EdgeConnectionContextType.textField,
                     target: 'term',
                     charRange: [0, 3],
                 }).toDTO(),
@@ -42,6 +45,7 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
                     type: resourceTypes.book,
                 },
                 context: new PageRangeContext({
+                    type: EdgeConnectionContextType.pageRange,
                     pageIdentifiers: ['ix'],
                 }).toDTO(),
             },
@@ -58,6 +62,7 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
                     type: resourceTypes.vocabularyList,
                 },
                 context: new TextFieldContext({
+                    type: EdgeConnectionContextType.textField,
                     target: 'name',
                     charRange: [0, 1],
                 }).toDTO(),
@@ -112,6 +117,7 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
                     type: resourceTypes.transcribedAudio,
                 },
                 context: new TimeRangeContext({
+                    type: EdgeConnectionContextType.timeRange,
                     timeRange: {
                         inPoint: 11000,
                         outPoint: 12950,
@@ -131,6 +137,7 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
                     type: resourceTypes.photograph,
                 },
                 context: new FreeMultilineContext({
+                    type: EdgeConnectionContextType.freeMultiline,
                     lines: [
                         [
                             [0, 200],
@@ -154,6 +161,7 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
                     type: resourceTypes.photograph,
                 },
                 context: new PointContext({
+                    type: EdgeConnectionContextType.point2D,
                     point: [0, 200],
                 }),
             },
@@ -170,26 +178,27 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
                     type: resourceTypes.book,
                 },
                 context: new PageRangeContext({
+                    type: EdgeConnectionContextType.pageRange,
                     pageIdentifiers: ['ix'],
                 }),
             },
         ],
     },
-].map((partialDTO) => new EdgeConnection({ ...partialDTO, type: EdgeConnectionType.self }));
+].map((partialDTO) => ({ ...partialDTO, type: EdgeConnectionType.self }));
 
 const selfEdgeConnectionsWithGeneralContext = selfEdgeConnectionInstancesWithSpecificContext.map(
-    (edgeConnection) =>
-        edgeConnection.clone({
-            members: [
-                {
-                    ...edgeConnection.members[0],
-                    context: new GeneralContext().toDTO(),
-                },
-            ],
-        })
+    (edgeConnection) => ({
+        ...edgeConnection,
+        members: [
+            {
+                ...edgeConnection.members[0],
+                context: new GeneralContext().toDTO(),
+            },
+        ],
+    })
 );
 
-export default (): EdgeConnection[] => [
+export default (): Omit<DTO<EdgeConnection>, 'id'>[] => [
     ...selfEdgeConnectionInstancesWithSpecificContext,
     ...selfEdgeConnectionsWithGeneralContext,
 ];

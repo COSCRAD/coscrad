@@ -1,4 +1,4 @@
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 import { MediaTimeRange } from './MediaTimeRange';
 
@@ -6,13 +6,9 @@ export class Transcript extends BaseDomainModel {
     // TODO rename this, as it includes the data as well
     timeRanges: MediaTimeRange[];
 
-    constructor({ timeRanges }: PartialDTO<Transcript>) {
+    constructor({ timeRanges }: DTO<Transcript>) {
         super();
 
-        // Avoid sharing side-effect references
-        // TODO Why is the cast necessary? Fix PartialDTO.
-        this.timeRanges = (timeRanges as MediaTimeRange[]).map(
-            (timerange) => new MediaTimeRange(timerange)
-        );
+        this.timeRanges = timeRanges.map((timerange) => new MediaTimeRange(timerange));
     }
 }

@@ -1,8 +1,7 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import { Book } from '../models/book/entities/book.entity';
-import BookPage from '../models/book/entities/BookPage';
 import { resourceTypes } from '../types/resourceTypes';
 import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
 import { DomainModelValidator } from './types/DomainModelValidator';
@@ -11,13 +10,13 @@ import { Valid } from './Valid';
 const bookValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
     const allErrors: InternalError[] = [];
 
-    const { title, id, published, pages } = dto as PartialDTO<Book>;
+    const { title, id, published, pages } = dto as DTO<Book>;
 
     // TODO fix me
     if (!isStringWithNonzeroLength(title))
         allErrors.push(new InternalError('A book must have a title'));
 
-    if (published && (pages as BookPage[]).length === 0)
+    if (published && pages.length === 0)
         allErrors.push(new InternalError('You cannot publish a book that has no pages'));
 
     if (allErrors.length > 0) return new InvalidEntityDTOError(resourceTypes.book, id, allErrors);

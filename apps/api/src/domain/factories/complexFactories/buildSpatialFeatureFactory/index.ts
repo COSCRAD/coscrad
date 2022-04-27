@@ -1,4 +1,4 @@
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import spatialFeatureValidator from '../../../domainModelValidators/spatialFeatureValidator';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { ISpatialFeature } from '../../../models/spatial-feature/ISpatialFeature';
@@ -11,7 +11,7 @@ const spatialDataFactory: InstanceFactory<ISpatialFeature> = (dto: unknown) => {
     // Return error if the dto does not satisfy domain model invariants
     if (!isValid(validationResult)) return validationResult;
 
-    return buildSpatialFeatureModel(dto as PartialDTO<ISpatialFeature>);
+    return buildSpatialFeatureModel(dto as DTO<ISpatialFeature>);
 };
 
 export default () => spatialDataFactory;

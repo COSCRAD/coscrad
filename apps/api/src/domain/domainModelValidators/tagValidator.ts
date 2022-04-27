@@ -1,6 +1,6 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import { Tag } from '../models/tag/tag.entity';
 import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
@@ -19,7 +19,7 @@ const tagValidator: DomainModelValidator = (dto: unknown): Valid | InternalError
 
     const innerErrors: InternalError[] = [];
 
-    const { text, id, published } = dto as PartialDTO<Tag>;
+    const { text, id, published } = dto as DTO<Tag>;
 
     if (!isStringWithNonzeroLength(text)) innerErrors.push(new TagHasNoTextError(id));
 

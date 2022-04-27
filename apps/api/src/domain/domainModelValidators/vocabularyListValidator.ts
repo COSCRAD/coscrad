@@ -1,6 +1,6 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
 import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
@@ -18,7 +18,7 @@ const vocabularyListValidator: DomainModelValidator = (dto: unknown): Valid | In
 
     const innerErrors: InternalError[] = [];
 
-    const { name, nameEnglish, id, entries, published } = dto as PartialDTO<VocabularyList>;
+    const { name, nameEnglish, id, entries, published } = dto as DTO<VocabularyList>;
 
     if (!isStringWithNonzeroLength(name) && !isStringWithNonzeroLength(nameEnglish))
         innerErrors.push(new VocabularyListHasNoNameInAnyLanguageError(id));

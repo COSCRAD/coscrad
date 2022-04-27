@@ -1,7 +1,7 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
 import findAllPointsInLineNotWithinBounds from 'apps/api/src/lib/validation/geometry/findAllPointsInLineNotWithinBounds';
 import isPointWithinBounds from 'apps/api/src/lib/validation/geometry/isPointWithinBounds';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import formatPosition2D from 'apps/api/src/view-models/presentation/formatPosition2D';
 import FreeMultilineContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/freeMultilineContext/FreeMultilineContextOutOfBoundsError';
 import PointContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pointContext/PointContextOutOfBoundsError';
@@ -25,7 +25,7 @@ export class Photograph extends Resource implements Boundable2D {
     // Should we really cache this here?
     readonly dimensions: PhotographDimensions;
 
-    constructor(dto: PartialDTO<Photograph>) {
+    constructor(dto: DTO<Photograph>) {
         super({ ...dto, type: resourceTypes.photograph });
 
         const { filename, photographer, dimensions: dimensionsDTO } = dto;

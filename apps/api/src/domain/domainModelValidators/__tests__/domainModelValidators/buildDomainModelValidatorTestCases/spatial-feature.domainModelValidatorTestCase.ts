@@ -4,10 +4,7 @@ import { resourceTypes } from '../../../../types/resourceTypes';
 import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
 import NullOrUndefinedResourceDTOError from '../../../errors/NullOrUndefinedResourceDTOError';
 import spatialFeatureValidator from '../../../spatialFeatureValidator';
-import {
-    DomainModelValidatorInvalidTestCase,
-    DomainModelValidatorTestCase,
-} from '../../types/DomainModelValidatorTestCase';
+import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
 import { buildLineInvalidTestCases } from './spatialFeatureInvalidTestCases/line.invalid.domainModelValidatorTestCases';
 import { buildPointInvalidTestCases } from './spatialFeatureInvalidTestCases/point.invalid.domainModelValidatorTestCases';
 import { buildPolygonInvalidTestCases } from './spatialFeatureInvalidTestCases/polygon.invalid.domainModelValidatorTestCases';
@@ -23,8 +20,7 @@ const modelSpecificTestCases = [
     ...buildPointInvalidTestCases(),
     ...buildLineInvalidTestCases(),
     ...buildPolygonInvalidTestCases(),
-    // TODO remove cast
-] as unknown as DomainModelValidatorInvalidTestCase<ISpatialFeature>[];
+];
 
 export const buildSpatialFeatureTestCase = (): DomainModelValidatorTestCase<ISpatialFeature> => ({
     resourceType: resourceTypes.spatialFeature,

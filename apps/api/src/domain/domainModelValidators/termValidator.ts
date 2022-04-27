@@ -1,6 +1,6 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import { Term } from '../models/term/entities/term.entity';
 import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
@@ -17,7 +17,7 @@ const termValidator: DomainModelValidator = (dto: unknown): Valid | InternalErro
 
     const innerErrors: InternalError[] = [];
 
-    const { term, termEnglish, id, published } = dto as PartialDTO<Term>;
+    const { term, termEnglish, id, published } = dto as DTO<Term>;
 
     if (!isStringWithNonzeroLength(term) && !isStringWithNonzeroLength(termEnglish))
         innerErrors.push(new TermHasNoTextInAnyLanguageError(id));

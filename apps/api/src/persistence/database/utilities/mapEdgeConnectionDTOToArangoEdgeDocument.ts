@@ -1,9 +1,10 @@
 import { EdgeConnection } from 'apps/api/src/domain/models/context/edge-connection.entity';
+import { DTO } from 'apps/api/src/types/DTO';
 import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
 import getArangoDocumentDirectionAttributesFromEdgeConnectionMembers from './getArangoDocumentDirectionAttributesFromEdgeConnectionMembers';
 import mapEntityDTOToDatabaseDTO from './mapEntityDTOToDatabaseDTO';
 
-export default (edgeConnection: EdgeConnection): ArangoEdgeDocument =>
+export default (edgeConnection: DTO<EdgeConnection>): ArangoEdgeDocument =>
     mapEntityDTOToDatabaseDTO<Omit<ArangoEdgeDocument, '_key'> & { id: string }>({
         ...getArangoDocumentDirectionAttributesFromEdgeConnectionMembers(
             edgeConnection.members,

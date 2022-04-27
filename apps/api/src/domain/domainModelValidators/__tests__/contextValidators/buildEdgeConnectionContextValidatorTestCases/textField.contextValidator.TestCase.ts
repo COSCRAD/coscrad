@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import { PartialDTO } from '../../../../../types/partial-dto';
+import { DTO } from '../../../../../types/DTO';
 import { TextFieldContext } from '../../../../models/context/text-field-context/text-field-context.entity';
 import { EdgeConnectionContextType } from '../../../../models/context/types/EdgeConnectionContextType';
 import { textFieldContextValidator } from '../../../contextValidators/textFieldContext.validator';
@@ -9,7 +9,7 @@ import NullOrUndefinedEdgeConnectionContextDTOError from '../../../errors/contex
 import { ContextModelValidatorTestCase } from '../types/ContextModelValidatorTestCase';
 import createInvalidContextErrorFactory from './utilities/createInvalidContextErrorFactory';
 
-const validDTO: PartialDTO<TextFieldContext> = {
+const validDTO: DTO<TextFieldContext> = {
     type: EdgeConnectionContextType.textField,
     target: 'term',
     charRange: [3, 5],

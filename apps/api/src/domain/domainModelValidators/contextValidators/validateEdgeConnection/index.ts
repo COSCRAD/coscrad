@@ -1,9 +1,7 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
 import isContextAllowedForGivenResourceType from '../../../models/allowedContexts/isContextAllowedForGivenResourceType';
 import {
     EdgeConnection,
-    EdgeConnectionMember,
     EdgeConnectionMemberRole,
     EdgeConnectionType,
     isEdgeConnectionType,
@@ -31,11 +29,13 @@ const buildTopLevelError = (innerErrors: InternalError[]): InternalError =>
 export default (input: unknown): Valid | InternalError => {
     if (isNullOrUndefined(input)) return new NullOrUndefinedEdgeConnectionDTOError();
 
-    const test = input as PartialDTO<EdgeConnection>;
+    /**
+     * TODO cast to `DTO<EdgeConnection>`. Why does that type have trouble resolving
+     * the type of the `members` property?
+     */
+    const test = input as EdgeConnection;
 
-    const { note, type: edgeConnectionType, id } = test;
-
-    const members = test.members as EdgeConnectionMember[];
+    const { note, type: edgeConnectionType, id, members } = test;
 
     const allErrors: InternalError[] = [];
 

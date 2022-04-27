@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import { PartialDTO } from '../../../../../types/partial-dto';
+import { DTO } from '../../../../../types/DTO';
 import {
     TimeRangeContext,
     TimeRangeWithoutData,
@@ -12,7 +12,7 @@ import NullOrUndefinedEdgeConnectionContextDTOError from '../../../errors/contex
 import { ContextModelValidatorTestCase } from '../types/ContextModelValidatorTestCase';
 import createInvalidContextErrorFactory from './utilities/createInvalidContextErrorFactory';
 
-const validDTO: PartialDTO<TimeRangeContext> = {
+const validDTO: DTO<TimeRangeContext> = {
     type: EdgeConnectionContextType.timeRange,
     timeRange: {
         inPoint: 22000,

@@ -1,5 +1,5 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { resourceTypes } from '../../../types/resourceTypes';
@@ -23,7 +23,7 @@ export class Book extends Resource {
 
     pages: BookPage[];
 
-    constructor(dto: PartialDTO<Book>) {
+    constructor(dto: DTO<Book>) {
         super({ ...dto, type: resourceTypes.book });
 
         const { title, subtitle, author, publicationDate, pages: pageDTOs } = dto;
@@ -37,7 +37,7 @@ export class Book extends Resource {
         this.publicationDate = publicationDate;
 
         // TODO remove all casts like this
-        this.pages = (pageDTOs as BookPage[]).map((pageDTO) => new BookPage(pageDTO));
+        this.pages = pageDTOs.map((pageDTO) => new BookPage(pageDTO));
     }
 
     protected validatePageRangeContext(context: PageRangeContext): Valid | InternalError {

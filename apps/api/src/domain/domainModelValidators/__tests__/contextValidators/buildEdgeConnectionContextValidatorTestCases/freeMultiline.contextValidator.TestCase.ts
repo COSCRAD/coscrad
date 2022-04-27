@@ -1,6 +1,6 @@
 import { Line2D } from 'apps/api/src/domain/models/spatial-feature/types/Coordinates/Line2d';
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import { PartialDTO } from '../../../../../types/partial-dto';
+import { DTO } from '../../../../../types/DTO';
 import InvalidLineInFreeMultilineError from '../../../../domainModelValidators/errors/context/InvalidLineInFreeMultilineError';
 import MissingLineContextError from '../../../../domainModelValidators/errors/context/MissingLineContextError';
 import { FreeMultilineContext } from '../../../../models/context/free-multiline-context/free-multiline-context.entity';
@@ -11,7 +11,7 @@ import NullOrUndefinedEdgeConnectionContextDTOError from '../../../errors/contex
 import { ContextModelValidatorTestCase } from '../types/ContextModelValidatorTestCase';
 import createInvalidContextErrorFactory from './utilities/createInvalidContextErrorFactory';
 
-const validDTO: PartialDTO<FreeMultilineContext> = {
+const validDTO: DTO<FreeMultilineContext> = {
     type: EdgeConnectionContextType.freeMultiline,
 
     lines: [
@@ -110,7 +110,7 @@ export const buildFreeMultilineTestCase =
                 description: 'the third line is empty',
                 invalidDTO: {
                     ...validDTO,
-                    lines: [...(validDTO.lines as Line2D[]), []],
+                    lines: [...validDTO.lines, []],
                 },
                 expectedError: topLevelErrorFactory([new InvalidLineInFreeMultilineError(2)]),
             },

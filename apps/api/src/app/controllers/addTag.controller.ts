@@ -6,7 +6,8 @@ import { Tag } from '../../domain/models/tag/tag.entity';
 import { resourceTypes } from '../../domain/types/resourceTypes';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
-import { PartialDTO } from '../../types/partial-dto';
+import { DeepPartial } from '../../types/DeepPartial';
+import { DTO } from '../../types/DTO';
 import httpStatusCodes from '../constants/httpStatusCodes';
 
 @Controller('tags')
@@ -41,7 +42,7 @@ export class AddTagController {
                 .status(httpStatusCodes.badRequest)
                 .send(JSON.stringify(new TagAlreadyExistsError(text)));
 
-        const createTagDto: PartialDTO<Tag> = {
+        const createTagDto: DeepPartial<DTO<Tag>> = {
             text,
         };
 
@@ -52,7 +53,8 @@ export class AddTagController {
                 .status(httpStatusCodes.badRequest)
                 .send(JSON.stringify(domainValidationResult));
 
-        await tagRepository.create(new Tag(createTagDto));
+        // TODO We need to think about ID generation or else make ID optional here
+        await tagRepository.create(new Tag(createTagDto as DTO<Tag>));
 
         // Send `Ack`
         return res.sendStatus(httpStatusCodes.ok);

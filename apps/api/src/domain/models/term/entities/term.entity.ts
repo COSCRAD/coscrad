@@ -1,5 +1,5 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { EntityId } from '../../../types/ResourceId';
 import { ResourceType, resourceTypes } from '../../../types/resourceTypes';
@@ -10,7 +10,7 @@ import validateTextFieldContextForModel from '../../shared/contextValidators/val
 export class Term extends Resource {
     readonly type: ResourceType = resourceTypes.term;
 
-    readonly term: string;
+    readonly term?: string;
 
     readonly termEnglish?: string;
 
@@ -20,10 +20,10 @@ export class Term extends Resource {
     readonly audioFilename?: string;
 
     // We may want to use tags for this
-    readonly sourceProject: string;
+    readonly sourceProject?: string;
 
     // The constructor should only be called after validating the input DTO
-    constructor(dto: PartialDTO<Term>) {
+    constructor(dto: DTO<Term>) {
         super({ ...dto, type: resourceTypes.term });
 
         /**

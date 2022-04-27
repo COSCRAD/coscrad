@@ -1,12 +1,12 @@
 import { HasEntityID } from 'apps/api/src/domain/models/types/HasEntityId';
 import { isResourceId } from 'apps/api/src/domain/types/ResourceId';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 
 export type DatabaseDTO<TEntityDTO extends HasEntityID = HasEntityID> = Omit<TEntityDTO, 'id'> & {
     _key: string;
 };
 
-export default <T extends HasEntityID>(entityDTO: PartialDTO<T>): DatabaseDTO<T> =>
+export default <T extends HasEntityID>(entityDTO: DTO<T>): DatabaseDTO<T> =>
     Object.entries(entityDTO).reduce((accumulatedMappedObject: DatabaseDTO<T>, [key, value]) => {
         if (key === 'id') {
             // Note invalid ids will be omitted from the output

@@ -1,9 +1,12 @@
+import { IGeometricFeature } from '../../domain/models/spatial-feature/GeometricFeature';
 import { Polygon } from '../../domain/models/spatial-feature/polygon.entity';
+import { PolygonCoordinates } from '../../domain/models/spatial-feature/types/Coordinates/PolygonCoordinates';
 import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
-import { PartialDTO } from '../../types/partial-dto';
+import { resourceTypes } from '../../domain/types/resourceTypes';
 
-const dtos: PartialDTO<Polygon>[] = [
+const dtos = [
     {
+        type: resourceTypes.spatialFeature,
         geometry: {
             type: GeometricFeatureType.polygon,
             coordinates: [
@@ -15,7 +18,8 @@ const dtos: PartialDTO<Polygon>[] = [
                     [1.0, 3.0],
                 ],
             ],
-        },
+            // TODO Remove cast
+        } as IGeometricFeature<typeof GeometricFeatureType.polygon, PolygonCoordinates>,
     },
 ];
 

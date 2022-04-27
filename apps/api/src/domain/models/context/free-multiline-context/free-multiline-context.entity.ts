@@ -1,5 +1,5 @@
 import cloneToPlainObject from 'apps/api/src/lib/utilities/cloneToPlainObject';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { Line2D } from '../../spatial-feature/types/Coordinates/Line2d';
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
@@ -15,7 +15,7 @@ export class FreeMultilineContext extends EdgeConnectionContext {
 
     readonly lines: Line2D[];
 
-    constructor({ lines }: PartialDTO<FreeMultilineContext>) {
+    constructor({ lines }: DTO<FreeMultilineContext>) {
         super();
 
         // Avoid side-effects

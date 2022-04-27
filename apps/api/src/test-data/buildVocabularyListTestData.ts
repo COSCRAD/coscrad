@@ -1,7 +1,8 @@
 import { VocabularyList } from '../domain/models/vocabulary-list/entities/vocabulary-list.entity';
-import { PartialDTO } from '../types/partial-dto';
+import { DropboxOrCheckbox } from '../domain/models/vocabulary-list/types/dropbox-or-checkbox';
+import { resourceTypes } from '../domain/types/resourceTypes';
 
-const vocabularyListDTOs: PartialDTO<VocabularyList>[] = [
+const vocabularyListDTOs = [
     // Vocabulary List 1
     {
         id: 'vocabulary-list-id-1',
@@ -25,7 +26,7 @@ const vocabularyListDTOs: PartialDTO<VocabularyList>[] = [
         variables: [
             {
                 name: 'person',
-                type: 'dropbox',
+                type: 'dropbox' as DropboxOrCheckbox,
                 validValues: [
                     {
                         display: 'I',
@@ -61,4 +62,7 @@ const vocabularyListDTOs: PartialDTO<VocabularyList>[] = [
  * run `validateTestData.spec.ts` to ensure your test data satisfies all domain
  * invariants.
  */
-export default (): VocabularyList[] => vocabularyListDTOs.map((dto) => new VocabularyList(dto));
+export default (): VocabularyList[] =>
+    vocabularyListDTOs.map(
+        (dto) => new VocabularyList({ ...dto, type: resourceTypes.vocabularyList })
+    );
