@@ -4,7 +4,7 @@ import { ISpecification } from '../../domain/repositories/interfaces/ISpecificat
 import { EntityId } from '../../domain/types/ResourceId';
 import { Maybe } from '../../lib/types/maybe';
 import { ArangoDatabase } from './arango-database';
-import { ArangoCollectionID } from './types/ArangoCollectionId';
+import { ArangoResourceCollectionID } from './types/ArangoCollectionId';
 import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
 
 /**
@@ -13,11 +13,11 @@ import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
  * repositories layer.
  */
 export class ArangoDatabaseForCollection<TEntity extends Resource> {
-    #collectionID: ArangoCollectionID;
+    #collectionID: ArangoResourceCollectionID;
 
     #arangoDatabase: ArangoDatabase;
 
-    constructor(arangoDatabase: ArangoDatabase, collectionName: ArangoCollectionID) {
+    constructor(arangoDatabase: ArangoDatabase, collectionName: ArangoResourceCollectionID) {
         this.#collectionID = collectionName;
 
         this.#arangoDatabase = arangoDatabase;

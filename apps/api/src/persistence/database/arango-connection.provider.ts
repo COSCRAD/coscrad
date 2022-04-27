@@ -186,6 +186,7 @@ export class ArangoConnectionProvider {
 
         if (!doesDatabaseExist) return;
 
+        // for safety, you can only drop a db whose name includes the dummy db infix
         if (!canDatabaseBeDropped(dbName)) throw new DatabaseCannotBeDroppedError(dbName);
 
         await this.#getAdminDBConnection({

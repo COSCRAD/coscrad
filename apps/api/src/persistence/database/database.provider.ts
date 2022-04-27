@@ -3,7 +3,7 @@ import { Resource } from '../../domain/models/resource.entity';
 import { ArangoConnection, ArangoConnectionProvider } from './arango-connection.provider';
 import { ArangoDatabase } from './arango-database';
 import { ArangoDatabaseForCollection } from './arango-database-for-collection';
-import { ArangoCollectionID } from './types/ArangoCollectionId';
+import { ArangoResourceCollectionID } from './types/ArangoCollectionId';
 
 /**
  * TODO [https://www.pivotaltracker.com/story/show/181559601]
@@ -32,7 +32,7 @@ export class DatabaseProvider {
 
     // TODO [type-safety] Can we correlate entity `DTOs` with `collection IDs`?
     getDatabaseForCollection = <TEntity extends Resource>(
-        collectionName: ArangoCollectionID
+        collectionName: ArangoResourceCollectionID
     ): ArangoDatabaseForCollection<TEntity> => {
         if (!this.#arangoInstance)
             // TODO should we inject this?

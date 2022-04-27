@@ -1,4 +1,4 @@
-const arangoCollectionIDs = [
+const arangoResourceCollectionIDs = [
     'terms',
     'vocabulary_lists',
     'transcribed_audio',
@@ -7,6 +7,19 @@ const arangoCollectionIDs = [
     'spatial_features',
     'tags',
 ] as const;
+
+const arangoEdgeCollectionID = 'edge_connections';
+
+const arangoCollectionIDs = [...arangoResourceCollectionIDs, arangoEdgeCollectionID] as const;
+
+export type ArangoResourceCollectionID = typeof arangoResourceCollectionIDs[number];
+
+export const isArangoResourceCollectionID = (input: unknown): input is ArangoResourceCollectionID =>
+    arangoResourceCollectionIDs.includes(input as ArangoResourceCollectionID);
+
+export const getAllArangoResourceCollectionIDs = (): ArangoResourceCollectionID[] => [
+    ...arangoResourceCollectionIDs,
+];
 
 export type ArangoCollectionID = typeof arangoCollectionIDs[number];
 
