@@ -1,8 +1,8 @@
-import { ResourceType } from '../../domain/types/resourceTypes';
-import { ArangoCollectionID } from './types/ArangoCollectionId';
+import { isResourceType, ResourceType } from '../../domain/types/resourceTypes';
+import { ArangoResourceCollectionID } from './types/ArangoCollectionId';
 
 const resourceTypeToArangoCollectionID: {
-    [k in ResourceType]: ArangoCollectionID;
+    [k in ResourceType]: ArangoResourceCollectionID;
 } = {
     term: 'terms',
     vocabularyList: 'vocabulary_lists',
@@ -15,7 +15,7 @@ const resourceTypeToArangoCollectionID: {
 
 export const getArangoCollectionIDFromResourceType = (
     resourceType: ResourceType
-): ArangoCollectionID => {
+): ArangoResourceCollectionID => {
     if (Object.keys(resourceTypeToArangoCollectionID).includes(resourceType)) {
         const result = resourceTypeToArangoCollectionID[resourceType];
 
@@ -23,4 +23,18 @@ export const getArangoCollectionIDFromResourceType = (
     }
 
     throw new Error(`Cannot identify collection ID for unsupported entity: ${resourceType}`);
+};
+
+export const getResourceTypeFromArangoCollectionID = (
+    collectionID: ArangoResourceCollectionID
+): ResourceType => {
+    const searchResult = Object.entries(resourceTypeToArangoCollectionID).find(
+        ([_, collectionNameInLookupTable]) => collectionNameInLookupTable === collectionID
+    )?.[0];
+
+    if (!isResourceType(searchResult)) {
+        throw new Error(`Cannot identify collection ID for unsupported entity: ${collectionID}`);
+    }
+
+    return searchResult;
 };

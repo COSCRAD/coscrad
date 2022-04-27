@@ -1,7 +1,9 @@
-type ToAndFrom = {
-    _to: string;
+import { ArangoDocumentHandle } from './ArangoDocumentHandle';
 
-    _from: string;
+type ToAndFrom = {
+    _to: ArangoDocumentHandle;
+
+    _from: ArangoDocumentHandle;
 };
 
 export type HasArangoDocumentDirectionAttributes<T = undefined> = T extends undefined

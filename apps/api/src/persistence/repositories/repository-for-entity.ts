@@ -8,7 +8,7 @@ import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { ResultOrError } from '../../types/ResultOrError';
 import { ArangoDatabaseForCollection } from '../database/arango-database-for-collection';
 import { DatabaseProvider } from '../database/database.provider';
-import { ArangoCollectionID } from '../database/types/ArangoCollectionId';
+import { ArangoResourceCollectionID } from '../database/types/ArangoCollectionId';
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
 
@@ -27,7 +27,7 @@ export class RepositoryForEntity<TEntity extends Resource>
 
     constructor(
         arangoDatabaseProvider: DatabaseProvider,
-        collectionName: ArangoCollectionID,
+        collectionName: ArangoResourceCollectionID,
         instanceFactory: InstanceFactory<TEntity>
     ) {
         this.#arangoDatabaseForEntitysCollection =
