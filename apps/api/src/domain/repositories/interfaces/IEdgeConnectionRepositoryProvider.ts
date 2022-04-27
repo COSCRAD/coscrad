@@ -1,12 +1,15 @@
-import { ResourceCompositeIdentifier } from '../../models/types/entityCompositeIdentifier';
-import { IConnectionRepositoryForResource } from './IConnectionRepositoryForEntity';
-import { INoteRepository } from './INoteRepository';
+import { IEdgeConnectionRepository } from './IEdgeConnectionRepository';
 
 export interface IEdgeConnectionRepositoryProvider {
-    forResource(
-        resourceCompositeIdentifier: ResourceCompositeIdentifier
-    ): IConnectionRepositoryForResource;
+    getEdgeConnectionRepository: () => IEdgeConnectionRepository;
 
-    // TODO [design]: Should this go here or on the `RepositoryProvider.forEntity('note')`?
-    forNotes(): INoteRepository;
+    // Add write methods when implementing commands
+    // create: (entity: EdgeConnection) => Promise<void>;
+
+    // // Consider using transactions instead
+    // createMany: (entities: EdgeConnection[]) => Promise<void>;
+
+    // forResource(
+    //     resourceCompositeIdentifier: ResourceCompositeIdentifier
+    // ): IConnectionRepositoryForResource;
 }
