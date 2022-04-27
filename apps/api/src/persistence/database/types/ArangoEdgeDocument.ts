@@ -3,7 +3,7 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from 'apps/api/src/domain/models/context/edge-connection.entity';
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { HasArangoDocumentDirectionAttributes } from '../types/HasArangoDocumentDirectionAttributes';
 
 type ArangoEdgeMemberContext = {

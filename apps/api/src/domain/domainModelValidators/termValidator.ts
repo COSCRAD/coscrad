@@ -1,6 +1,6 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
-import { DTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import { Term } from '../models/term/entities/term.entity';
 import { resourceTypes } from '../types/resourceTypes';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';

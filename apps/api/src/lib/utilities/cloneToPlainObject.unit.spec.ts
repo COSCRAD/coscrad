@@ -1,4 +1,4 @@
-import { DTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import cloneToPlainObject from './cloneToPlainObject';
 
 type TestCase = {

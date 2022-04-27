@@ -1,5 +1,5 @@
 import buildTestData from '../../test-data/buildTestData';
-import { DTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import { resourceTypes } from '../types/resourceTypes';
 import { VocabularyList } from './vocabulary-list/entities/vocabulary-list.entity';
 

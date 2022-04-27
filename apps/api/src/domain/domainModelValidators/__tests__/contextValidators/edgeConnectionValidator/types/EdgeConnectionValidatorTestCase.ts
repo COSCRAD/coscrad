@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import { DTO } from '../../../../../../types/partial-dto';
+import { DTO } from '../../../../../../types/DTO';
 import { EdgeConnection } from '../../../../../models/context/edge-connection.entity';
 
 // We alias here in case we want to go a different direction in the future

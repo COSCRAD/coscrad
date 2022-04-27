@@ -1,6 +1,6 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
-import { DTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import { Book } from '../models/book/entities/book.entity';
 import { resourceTypes } from '../types/resourceTypes';
 import InvalidEntityDTOError from './errors/InvalidEntityDTOError';

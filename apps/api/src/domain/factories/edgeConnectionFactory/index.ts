@@ -1,4 +1,4 @@
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { ResultOrError } from 'apps/api/src/types/ResultOrError';
 import validateEdgeConnection from '../../domainModelValidators/contextValidators/validateEdgeConnection';
 import { isValid } from '../../domainModelValidators/Valid';

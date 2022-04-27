@@ -1,4 +1,4 @@
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { Position2D } from '../../spatial-feature/types/Coordinates/Position2D';
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';

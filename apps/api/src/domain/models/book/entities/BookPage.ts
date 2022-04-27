@@ -1,4 +1,4 @@
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 import { PageIdentifier } from './types/PageIdentifier';
 

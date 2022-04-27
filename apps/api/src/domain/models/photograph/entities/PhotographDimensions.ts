@@ -1,5 +1,5 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 
 // This is a value-object

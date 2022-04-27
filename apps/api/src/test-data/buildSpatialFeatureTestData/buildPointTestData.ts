@@ -2,7 +2,7 @@ import { Point } from '../../domain/models/spatial-feature/point.entity';
 import { Position2D } from '../../domain/models/spatial-feature/types/Coordinates/Position2D';
 import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
 import { resourceTypes } from '../../domain/types/resourceTypes';
-import { DTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 
 const pointCoordinates: Position2D[] = [
     [100.0, 0],

@@ -1,5 +1,5 @@
 import cloneToPlainObject from 'apps/api/src/lib/utilities/cloneToPlainObject';
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { EntityId } from '../../types/ResourceId';
 import BaseDomainModel from '../BaseDomainModel';
 import { ResourceCompositeIdentifier } from '../types/entityCompositeIdentifier';

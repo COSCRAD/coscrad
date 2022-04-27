@@ -1,6 +1,6 @@
 import { Line2D } from 'apps/api/src/domain/models/spatial-feature/types/Coordinates/Line2d';
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import { DTO } from '../../../../../types/partial-dto';
+import { DTO } from '../../../../../types/DTO';
 import InvalidLineInFreeMultilineError from '../../../../domainModelValidators/errors/context/InvalidLineInFreeMultilineError';
 import MissingLineContextError from '../../../../domainModelValidators/errors/context/MissingLineContextError';
 import { FreeMultilineContext } from '../../../../models/context/free-multiline-context/free-multiline-context.entity';

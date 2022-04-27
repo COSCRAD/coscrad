@@ -1,4 +1,4 @@
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { resourceTypes } from '../../types/resourceTypes';
 import { Resource } from '../resource.entity';
 import { IGeometricFeature } from './GeometricFeature';

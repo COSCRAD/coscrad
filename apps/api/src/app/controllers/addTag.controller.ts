@@ -7,7 +7,7 @@ import { resourceTypes } from '../../domain/types/resourceTypes';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
 import { DeepPartial } from '../../types/DeepPartial';
-import { DTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import httpStatusCodes from '../constants/httpStatusCodes';
 
 @Controller('tags')

@@ -1,6 +1,6 @@
 import { Maybe } from 'apps/api/src/lib/types/maybe';
 import { NotFound } from 'apps/api/src/lib/types/not-found';
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
 

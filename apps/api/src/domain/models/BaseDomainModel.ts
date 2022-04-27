@@ -1,6 +1,6 @@
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { DeepPartial } from '../../types/DeepPartial';
-import { DTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 
 type ModelConstructor<T extends BaseDomainModel = BaseDomainModel> = new (dto: DTO<T>) => T;
 

@@ -18,7 +18,7 @@ import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLengt
 import { getArangoCollectionIDFromResourceType } from '../persistence/database/getArangoCollectionIDFromResourceType';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
-import { DTO } from '../types/partial-dto';
+import { DTO } from '../types/DTO';
 import buildTestData from './buildTestData';
 
 export type InMemorySnapshotOfResourceDTOs = {

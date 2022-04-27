@@ -1,4 +1,4 @@
-import { DTO } from '../../../../../types/partial-dto';
+import { DTO } from '../../../../../types/DTO';
 import EmptyPageRangeError from '../../../../domainModelValidators/errors/context/EmptyPageRangeError';
 import { PageRangeContext } from '../../../../models/context/page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from '../../../../models/context/types/EdgeConnectionContextType';

@@ -1,4 +1,4 @@
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { InternalError } from '../../lib/errors/InternalError';
 import capitalizeFirstLetter from '../../lib/utilities/strings/capitalizeFirstLetter';
 import DisallowedContextTypeForResourceError from '../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';

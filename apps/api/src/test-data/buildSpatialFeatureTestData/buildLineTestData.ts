@@ -1,7 +1,7 @@
 import { Line } from '../../domain/models/spatial-feature/line.entity';
 import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
 import { resourceTypes } from '../../domain/types/resourceTypes';
-import { DTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 
 const dtos: DTO<Line>[] = [
     {

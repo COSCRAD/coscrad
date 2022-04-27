@@ -1,5 +1,5 @@
 import { Position2D } from 'apps/api/src/domain/models/spatial-feature/types/Coordinates/Position2D';
-import { DTO } from '../../../../../types/partial-dto';
+import { DTO } from '../../../../../types/DTO';
 import { PointContext } from '../../../../models/context/point-context/point-context.entity';
 import { EdgeConnectionContextType } from '../../../../models/context/types/EdgeConnectionContextType';
 import { pointContextValidator } from '../../../contextValidators/pointContext.validator';

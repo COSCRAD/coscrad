@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import { DTO } from '../../../../../types/partial-dto';
+import { DTO } from '../../../../../types/DTO';
 import { EdgeConnectionContextType } from '../../../../models/context/types/EdgeConnectionContextType';
 import { DomainModelValidator } from '../../../types/DomainModelValidator';
 

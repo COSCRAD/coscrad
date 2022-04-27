@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import { DTO } from '../../../../../types/partial-dto';
+import { DTO } from '../../../../../types/DTO';
 import { TextFieldContext } from '../../../../models/context/text-field-context/text-field-context.entity';
 import { EdgeConnectionContextType } from '../../../../models/context/types/EdgeConnectionContextType';
 import { textFieldContextValidator } from '../../../contextValidators/textFieldContext.validator';

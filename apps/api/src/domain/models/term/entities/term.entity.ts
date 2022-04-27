@@ -1,5 +1,5 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { EntityId } from '../../../types/ResourceId';
 import { ResourceType, resourceTypes } from '../../../types/resourceTypes';

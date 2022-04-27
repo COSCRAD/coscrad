@@ -1,5 +1,5 @@
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { ISpatialFeature } from '../../../models/spatial-feature/ISpatialFeature';
 import { Line } from '../../../models/spatial-feature/line.entity';
 import { Point } from '../../../models/spatial-feature/point.entity';

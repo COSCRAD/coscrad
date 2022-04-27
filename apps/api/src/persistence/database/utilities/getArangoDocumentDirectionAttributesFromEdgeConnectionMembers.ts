@@ -4,7 +4,7 @@ import {
 } from 'apps/api/src/domain/models/context/edge-connection.entity';
 import { ResourceCompositeIdentifier } from 'apps/api/src/domain/models/types/entityCompositeIdentifier';
 import { InternalError } from 'apps/api/src/lib/errors/InternalError';
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { HasArangoDocumentDirectionAttributes } from '../types/HasArangoDocumentDirectionAttributes';
 import convertResourceCompositeIdentifierToArangoDocumentHandle from './convertResourceCompositeIdentifierToArangoDocumentHandle';
 

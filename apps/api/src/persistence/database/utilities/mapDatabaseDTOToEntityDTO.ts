@@ -1,6 +1,6 @@
 import { HasEntityID } from 'apps/api/src/domain/models/types/HasEntityId';
 import { isResourceId } from 'apps/api/src/domain/types/ResourceId';
-import { DTO } from 'apps/api/src/types/partial-dto';
+import { DTO } from 'apps/api/src/types/DTO';
 import { DatabaseDTO } from './mapEntityDTOToDatabaseDTO';
 
 export default <TEntity extends HasEntityID>(databaseDTO: DatabaseDTO<TEntity>): DTO<TEntity> =>

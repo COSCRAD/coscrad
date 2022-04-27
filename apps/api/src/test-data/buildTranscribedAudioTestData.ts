@@ -1,10 +1,8 @@
 import { TranscribedAudio } from '../domain/models/transcribed-audio/entities/transcribed-audio.entity';
 import { resourceTypes } from '../domain/types/resourceTypes';
-import { DTO } from '../types/partial-dto';
+import { DTO } from '../types/DTO';
 
-type Foo = DTO<TranscribedAudio>;
-
-const dto: Foo = {
+const dto: DTO<TranscribedAudio> = {
     id: '110',
     type: resourceTypes.transcribedAudio,
     audioFilename: '123.mp3',

@@ -1,5 +1,5 @@
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
-import { DTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 
 export default class ArangoDatabaseConfiguration {
     readonly dbPass: string;
