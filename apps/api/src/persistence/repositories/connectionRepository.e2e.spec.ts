@@ -37,12 +37,51 @@ describe('Repository provider > getEdgeConnectionRepository', () => {
     });
 
     afterAll(async () => {
-        await testRepositoryProvider.testTeardown();
+        // await testRepositoryProvider.testTeardown();
 
         await app.close();
     });
 
-    testData;
+    const { connections, resources } = testData;
+
+    connections
+        .filter((_, index) => index === 0)
+        .forEach((connection) =>
+            describe(`connection with id: ${connection.id}`, () => {
+                beforeEach(async () => {
+                    // await testRepositoryProvider.testSetup();
+
+                    await testRepositoryProvider.addEntitiesOfManyTypes(resources);
+
+                    await testRepositoryProvider
+                        .getEdgeConnectionRepository()
+                        .createMany(connections);
+                });
+
+                // afterEach(async () => {
+                //     await testRepositoryProvider.testTeardown();
+                // });
+
+                describe('fetchById', () => {
+                    describe(`when there is an edge connection with the given id: ${connection.id}`, () => {
+                        it('should return the entity', async () => {
+                            const expectedResult = connections.find(
+                                ({ id: testInstanceId }) => testInstanceId === connection.id
+                            );
+
+                            const actualResult = await testRepositoryProvider
+                                .getEdgeConnectionRepository()
+                                .fetchById(connection.id);
+
+                            // In case expectedResult didn't find anything with the search
+                            expect(actualResult).toBeTruthy();
+
+                            expect(actualResult).toEqual(expectedResult);
+                        });
+                    });
+                });
+            })
+        );
 
     /**
      * There's only one edge connection.

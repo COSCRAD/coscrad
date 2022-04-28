@@ -100,6 +100,21 @@ describe('buildTestData', () => {
     });
 
     describe('test data for edge connections', () => {
+        it(`should have no duplicate IDs`, () => {
+            const allIds = connectionTestData
+                .map((connection) => connection.id)
+                /**
+                 * We have a separate check for missing `id` properties
+                 */
+                .filter((id) => !isNullOrUndefined(id));
+
+            const numberOfIds = allIds.length;
+
+            const numberOfUniqueIds = [...new Set(allIds)].length;
+
+            expect(numberOfUniqueIds).toEqual(numberOfIds);
+        });
+
         const doesMemberWithResourceTypeAndRoleExist = (
             targetResourceType: ResourceType,
             targetRole: EdgeConnectionMemberRole
@@ -206,7 +221,7 @@ describe('buildTestData', () => {
         const fullSnapshotInDatabaseFormat = {
             resources: resourceTestDataInDatabaseFormat,
             // note the change in this key ~~connections~~ -> edges
-            resource_edge_connections: connectionTestDataInDatabaseFormat,
+            resource_resource_edge_connections: connectionTestDataInDatabaseFormat,
         };
 
         // TODO move this to a config- better yet avoid this whole write!

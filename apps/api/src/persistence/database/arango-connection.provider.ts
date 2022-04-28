@@ -161,7 +161,11 @@ export class ArangoConnectionProvider {
 
         if (doesCollectionExist) return;
 
-        await this.#connection.createCollection(collectionName);
+        if (collectionName === 'resource_edge_connections') {
+            await this.#connection.createEdgeCollection(collectionName);
+        } else {
+            await this.#connection.createCollection(collectionName);
+        }
     }
 
     #doesDatabaseExist = async (databaseName: string) => {

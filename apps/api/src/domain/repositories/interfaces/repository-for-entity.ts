@@ -1,6 +1,6 @@
 import { Maybe } from '../../../lib/types/maybe';
 import { ResultOrError } from '../../../types/ResultOrError';
-import { Resource } from '../../models/resource.entity';
+import { HasEntityID } from '../../models/types/HasEntityId';
 import { EntityId } from '../../types/ResourceId';
 import { ISpecification } from './ISpecification';
 
@@ -10,7 +10,7 @@ import { ISpecification } from './ISpecification';
  * methods on concrete repositories for more model-specific behaviour. Also,
  * we need to deal with `graph edge` relationships.
  */
-export interface IRepositoryForEntity<TEntity extends Resource> {
+export interface IRepositoryForEntity<TEntity extends HasEntityID> {
     fetchById: (id: EntityId) => Promise<ResultOrError<Maybe<TEntity>>>;
 
     // Returns an empty array if none found

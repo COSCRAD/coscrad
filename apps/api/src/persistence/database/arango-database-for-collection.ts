@@ -1,10 +1,10 @@
 import { isArangoDatabase } from 'arangojs/database';
-import { Resource } from '../../domain/models/resource.entity';
+import { HasEntityID } from '../../domain/models/types/HasEntityId';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { EntityId } from '../../domain/types/ResourceId';
 import { Maybe } from '../../lib/types/maybe';
 import { ArangoDatabase } from './arango-database';
-import { ArangoResourceCollectionID } from './types/ArangoCollectionId';
+import { ArangoCollectionID } from './types/ArangoCollectionId';
 import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
 
 /**
@@ -12,12 +12,12 @@ import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
  * and _id), not an `EntityDTO`. The mapping is taken care of in the
  * repositories layer.
  */
-export class ArangoDatabaseForCollection<TEntity extends Resource> {
-    #collectionID: ArangoResourceCollectionID;
+export class ArangoDatabaseForCollection<TEntity extends HasEntityID> {
+    #collectionID: ArangoCollectionID;
 
     #arangoDatabase: ArangoDatabase;
 
-    constructor(arangoDatabase: ArangoDatabase, collectionName: ArangoResourceCollectionID) {
+    constructor(arangoDatabase: ArangoDatabase, collectionName: ArangoCollectionID) {
         this.#collectionID = collectionName;
 
         this.#arangoDatabase = arangoDatabase;

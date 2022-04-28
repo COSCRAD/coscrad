@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Resource } from '../../domain/models/resource.entity';
+import { HasEntityID } from '../../domain/models/types/HasEntityId';
 import { ArangoConnection, ArangoConnectionProvider } from './arango-connection.provider';
 import { ArangoDatabase } from './arango-database';
 import { ArangoDatabaseForCollection } from './arango-database-for-collection';
-import { ArangoResourceCollectionID } from './types/ArangoCollectionId';
+import { ArangoCollectionID } from './types/ArangoCollectionId';
 
 /**
  * TODO [https://www.pivotaltracker.com/story/show/181559601]
@@ -31,8 +31,8 @@ export class DatabaseProvider {
     };
 
     // TODO [type-safety] Can we correlate entity `DTOs` with `collection IDs`?
-    getDatabaseForCollection = <TEntity extends Resource>(
-        collectionName: ArangoResourceCollectionID
+    getDatabaseForCollection = <TEntity extends HasEntityID>(
+        collectionName: ArangoCollectionID
     ): ArangoDatabaseForCollection<TEntity> => {
         if (!this.#arangoInstance)
             // TODO should we inject this?
