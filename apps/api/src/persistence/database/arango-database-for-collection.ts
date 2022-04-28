@@ -5,10 +5,10 @@ import { EntityId } from '../../domain/types/ResourceId';
 import { Maybe } from '../../lib/types/maybe';
 import { ArangoDatabase } from './arango-database';
 import { ArangoCollectionID } from './types/ArangoCollectionId';
-import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
+import { DatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
 
 /**
- * Note that at this level we are working with a `DatabaseDTO` (has _key
+ * Note that at this level we are working with a `DatabaseDocument` (has _key
  * and _id), not an `EntityDTO`. The mapping is taken care of in the
  * repositories layer.
  */
@@ -29,15 +29,15 @@ export class ArangoDatabaseForCollection<TEntity extends HasEntityID> {
     }
 
     // Queries (return information)
-    fetchById(id: EntityId): Promise<Maybe<DatabaseDTO<TEntity>>> {
-        return this.#arangoDatabase.fetchById<DatabaseDTO<TEntity>>(id, this.#collectionID);
+    fetchById(id: EntityId): Promise<Maybe<DatabaseDocument<TEntity>>> {
+        return this.#arangoDatabase.fetchById<DatabaseDocument<TEntity>>(id, this.#collectionID);
     }
 
-    fetchMany(specification?: ISpecification<TEntity>): Promise<DatabaseDTO<TEntity>[]> {
-        return this.#arangoDatabase.fetchMany<DatabaseDTO<TEntity>>(
+    fetchMany(specification?: ISpecification<TEntity>): Promise<DatabaseDocument<TEntity>[]> {
+        return this.#arangoDatabase.fetchMany<DatabaseDocument<TEntity>>(
             this.#collectionID,
             // TODO remove cast, handle mapping layer
-            specification as unknown as ISpecification<DatabaseDTO<TEntity>>
+            specification as unknown as ISpecification<DatabaseDocument<TEntity>>
         );
     }
 
@@ -46,16 +46,16 @@ export class ArangoDatabaseForCollection<TEntity extends HasEntityID> {
     }
 
     // Commands (mutate state)
-    create(databaseDTO: DatabaseDTO<TEntity>) {
+    create(DatabaseDocument: DatabaseDocument<TEntity>) {
         // Handle the difference in _id \ _key between model and database
-        return this.#arangoDatabase.create(databaseDTO, this.#collectionID);
+        return this.#arangoDatabase.create(DatabaseDocument, this.#collectionID);
     }
 
-    createMany(databaseDTOs: DatabaseDTO<TEntity>[]) {
-        return this.#arangoDatabase.createMany(databaseDTOs, this.#collectionID);
+    createMany(DatabaseDocuments: DatabaseDocument<TEntity>[]) {
+        return this.#arangoDatabase.createMany(DatabaseDocuments, this.#collectionID);
     }
 
-    update(id: EntityId, updateDTO: DatabaseDTO<TEntity>) {
+    update(id: EntityId, updateDTO: DatabaseDocument<TEntity>) {
         return this.#arangoDatabase.update(id, updateDTO, this.#collectionID);
     }
 }

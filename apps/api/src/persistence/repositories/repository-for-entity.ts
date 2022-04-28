@@ -6,14 +6,12 @@ import { IRepositoryForEntity } from '../../domain/repositories/interfaces/repos
 import { EntityId } from '../../domain/types/ResourceId';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
+import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
 import { ArangoDatabaseForCollection } from '../database/arango-database-for-collection';
 import { DatabaseProvider } from '../database/database.provider';
 import { ArangoCollectionID } from '../database/types/ArangoCollectionId';
-import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
-import mapEntityDTOToDatabaseDTO, {
-    DatabaseDTO,
-} from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import { DatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDTO';
 
 /**
  * TODO We need to add error handling. It is especially important that if
@@ -30,16 +28,16 @@ export class RepositoryForEntity<TEntity extends HasEntityID & BaseDomainModel>
     // Typically just uses the model constructor
     #instanceFactory: InstanceFactory<TEntity>;
 
-    #mapDocumentToEntityDTO;
+    #mapDocumentToEntityDTO: (doc: DatabaseDocument<TEntity>) => DTO<TEntity>;
 
-    #mapEntityDTOToDocument;
+    #mapEntityDTOToDocument: (dto: DTO<TEntity>) => DatabaseDocument<TEntity>;
 
     constructor(
         arangoDatabaseProvider: DatabaseProvider,
         collectionName: ArangoCollectionID,
         instanceFactory: InstanceFactory<TEntity>,
-        documentToEntity = mapDatabaseDTOToEntityDTO,
-        entityToDocument = mapEntityDTOToDatabaseDTO
+        documentToEntity,
+        entityToDocument
     ) {
         this.#arangoDatabaseForEntitysCollection =
             arangoDatabaseProvider.getDatabaseForCollection<TEntity>(collectionName);
@@ -82,7 +80,7 @@ export class RepositoryForEntity<TEntity extends HasEntityID & BaseDomainModel>
             .map((dto) => this.#mapEntityDTOToDocument(dto));
 
         return this.#arangoDatabaseForEntitysCollection.createMany(
-            createDTOs as DatabaseDTO<TEntity>[]
+            createDTOs as DatabaseDocument<TEntity>[]
         );
     }
 

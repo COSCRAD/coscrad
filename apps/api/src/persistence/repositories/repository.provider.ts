@@ -8,8 +8,11 @@ import { IRepositoryProvider } from '../../domain/repositories/interfaces/reposi
 import { ResourceType } from '../../domain/types/resourceTypes';
 import { DatabaseProvider } from '../database/database.provider';
 import { getArangoCollectionIDFromResourceType } from '../database/getArangoCollectionIDFromResourceType';
+import { arangoEdgeCollectionID } from '../database/types/ArangoCollectionId';
 import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapArangoEdgeDocumentToEdgeConnectionDTO';
+import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
+import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
 import { RepositoryForEntity } from './repository-for-entity';
 
 @Injectable()
@@ -19,9 +22,8 @@ export class RepositoryProvider implements IRepositoryProvider, IEdgeConnectionR
     getEdgeConnectionRepository() {
         return new RepositoryForEntity<EdgeConnection>(
             this.databaseProvider,
-            'resource_edge_connections',
+            arangoEdgeCollectionID,
             edgeConnectionFactory,
-            // @ts-expect-error TODO fix types
             mapArangoEdgeDocumentToEdgeConnectionDTO,
             mapEdgeConnectionDTOToArangoEdgeDocument
         );
@@ -31,7 +33,9 @@ export class RepositoryProvider implements IRepositoryProvider, IEdgeConnectionR
         return new RepositoryForEntity<TResource>(
             this.databaseProvider,
             getArangoCollectionIDFromResourceType(resourceType),
-            getInstanceFactoryForEntity(resourceType)
+            getInstanceFactoryForEntity(resourceType),
+            mapDatabaseDTOToEntityDTO,
+            mapEntityDTOToDatabaseDTO
         );
     }
 }

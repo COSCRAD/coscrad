@@ -6,6 +6,7 @@ import {
 } from '../../../domain/types/resourceTypes';
 import { DatabaseProvider } from '../../database/database.provider';
 import { getArangoCollectionIDFromResourceType } from '../../database/getArangoCollectionIDFromResourceType';
+import { arangoEdgeCollectionID } from '../../database/types/ArangoCollectionId';
 import { RepositoryProvider } from '../repository.provider';
 
 export default class TestRepositoryProvider extends RepositoryProvider {
@@ -40,7 +41,7 @@ export default class TestRepositoryProvider extends RepositoryProvider {
     }
 
     public async deleteAllEdges(): Promise<void> {
-        await this.databaseProvider.getDBInstance().deleteAll('resource_edge_connections');
+        await this.databaseProvider.getDBInstance().deleteAll(arangoEdgeCollectionID);
     }
 
     /**
