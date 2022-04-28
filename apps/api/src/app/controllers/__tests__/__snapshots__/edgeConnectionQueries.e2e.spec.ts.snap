@@ -1,0 +1,1356 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: book should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "19",
+    "note": "That is why transcribedAudio/110 is related to book/24",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 11000,
+            "outPoint": 12950,
+          },
+          "type": "timeRange",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "20",
+    "note": "That is why book/24 is related to photograph/2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "lines": Array [
+            Array [
+              Array [
+                0,
+                200,
+              ],
+              Array [
+                100,
+                300,
+              ],
+              Array [
+                200,
+                400,
+              ],
+              Array [
+                250,
+                475,
+              ],
+            ],
+          ],
+          "type": "freeMultiline",
+        },
+        "role": "from",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: photograph should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "20",
+    "note": "That is why book/24 is related to photograph/2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "lines": Array [
+            Array [
+              Array [
+                0,
+                200,
+              ],
+              Array [
+                100,
+                300,
+              ],
+              Array [
+                200,
+                400,
+              ],
+              Array [
+                250,
+                475,
+              ],
+            ],
+          ],
+          "type": "freeMultiline",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "21",
+    "note": "That is why photograph/2 is related to spatialFeature/300",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "lines": Array [
+            Array [
+              Array [
+                0,
+                200,
+              ],
+              Array [
+                100,
+                300,
+              ],
+              Array [
+                200,
+                400,
+              ],
+              Array [
+                250,
+                475,
+              ],
+            ],
+          ],
+          "type": "freeMultiline",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "from",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: spatialFeature should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "21",
+    "note": "That is why photograph/2 is related to spatialFeature/300",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "lines": Array [
+            Array [
+              Array [
+                0,
+                200,
+              ],
+              Array [
+                100,
+                300,
+              ],
+              Array [
+                200,
+                400,
+              ],
+              Array [
+                250,
+                475,
+              ],
+            ],
+          ],
+          "type": "freeMultiline",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "22",
+    "note": "That is why spatialFeature/300 is related to term/2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            3,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: term should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "17",
+    "note": "That is why term/2 is related to vocabularyList/vocabulary-list-id-2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            3,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "vocabulary-list-id-2",
+          "type": "vocabularyList",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            1,
+          ],
+          "target": "name",
+          "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "22",
+    "note": "That is why spatialFeature/300 is related to term/2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            3,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: transcribedAudio should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "18",
+    "note": "That is why vocabularyList/vocabulary-list-id-2 is related to transcribedAudio/110",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "vocabulary-list-id-2",
+          "type": "vocabularyList",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            1,
+          ],
+          "target": "name",
+          "type": "textField",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 11000,
+            "outPoint": 12950,
+          },
+          "type": "timeRange",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "19",
+    "note": "That is why transcribedAudio/110 is related to book/24",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 11000,
+            "outPoint": 12950,
+          },
+          "type": "timeRange",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
+        },
+        "role": "from",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: vocabularyList should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "17",
+    "note": "That is why term/2 is related to vocabularyList/vocabulary-list-id-2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            3,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "vocabulary-list-id-2",
+          "type": "vocabularyList",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            1,
+          ],
+          "target": "name",
+          "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "18",
+    "note": "That is why vocabularyList/vocabulary-list-id-2 is related to transcribedAudio/110",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "vocabulary-list-id-2",
+          "type": "vocabularyList",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            1,
+          ],
+          "target": "name",
+          "type": "textField",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 11000,
+            "outPoint": 12950,
+          },
+          "type": "timeRange",
+        },
+        "role": "from",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/notes should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "1",
+    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            3,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "2",
+    "note": "This page is about bears",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "3",
+    "note": "This is the first letter of the list name",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "vocabulary-list-id-2",
+          "type": "vocabularyList",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            1,
+          ],
+          "target": "name",
+          "type": "textField",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "4",
+    "note": "there is a placename for this point at the base of the mountain",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "5",
+    "note": "this clip talks about songs",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 11000,
+            "outPoint": 12950,
+          },
+          "type": "timeRange",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "6",
+    "note": "this is the stem of the flower",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "lines": Array [
+            Array [
+              Array [
+                0,
+                200,
+              ],
+              Array [
+                100,
+                300,
+              ],
+              Array [
+                200,
+                400,
+              ],
+              Array [
+                250,
+                475,
+              ],
+            ],
+          ],
+          "type": "freeMultiline",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "7",
+    "note": "this is the base of the flower",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "point": Array [
+            0,
+            200,
+          ],
+          "type": "point2D",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "8",
+    "note": "this section is the best part of an illustrated book about birds",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "9",
+    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "10",
+    "note": "This page is about bears",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "11",
+    "note": "This is the first letter of the list name",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "vocabulary-list-id-2",
+          "type": "vocabularyList",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "12",
+    "note": "there is a placename for this point at the base of the mountain",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "13",
+    "note": "this clip talks about songs",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "14",
+    "note": "this is the stem of the flower",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "15",
+    "note": "this is the base of the flower",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "16",
+    "note": "this section is the best part of an illustrated book about birds",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "17",
+    "note": "That is why term/2 is related to vocabularyList/vocabulary-list-id-2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            3,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "vocabulary-list-id-2",
+          "type": "vocabularyList",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            1,
+          ],
+          "target": "name",
+          "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "18",
+    "note": "That is why vocabularyList/vocabulary-list-id-2 is related to transcribedAudio/110",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "vocabulary-list-id-2",
+          "type": "vocabularyList",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            1,
+          ],
+          "target": "name",
+          "type": "textField",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 11000,
+            "outPoint": 12950,
+          },
+          "type": "timeRange",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "19",
+    "note": "That is why transcribedAudio/110 is related to book/24",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 11000,
+            "outPoint": 12950,
+          },
+          "type": "timeRange",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "20",
+    "note": "That is why book/24 is related to photograph/2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "lines": Array [
+            Array [
+              Array [
+                0,
+                200,
+              ],
+              Array [
+                100,
+                300,
+              ],
+              Array [
+                200,
+                400,
+              ],
+              Array [
+                250,
+                475,
+              ],
+            ],
+          ],
+          "type": "freeMultiline",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "21",
+    "note": "That is why photograph/2 is related to spatialFeature/300",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "lines": Array [
+            Array [
+              Array [
+                0,
+                200,
+              ],
+              Array [
+                100,
+                300,
+              ],
+              Array [
+                200,
+                400,
+              ],
+              Array [
+                250,
+                475,
+              ],
+            ],
+          ],
+          "type": "freeMultiline",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "22",
+    "note": "That is why spatialFeature/300 is related to term/2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            3,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: book should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "2",
+    "note": "This page is about bears",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "8",
+    "note": "this section is the best part of an illustrated book about birds",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "10",
+    "note": "This page is about bears",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "16",
+    "note": "this section is the best part of an illustrated book about birds",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: photograph should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "6",
+    "note": "this is the stem of the flower",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "lines": Array [
+            Array [
+              Array [
+                0,
+                200,
+              ],
+              Array [
+                100,
+                300,
+              ],
+              Array [
+                200,
+                400,
+              ],
+              Array [
+                250,
+                475,
+              ],
+            ],
+          ],
+          "type": "freeMultiline",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "7",
+    "note": "this is the base of the flower",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "point": Array [
+            0,
+            200,
+          ],
+          "type": "point2D",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "14",
+    "note": "this is the stem of the flower",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "15",
+    "note": "this is the base of the flower",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: spatialFeature should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "4",
+    "note": "there is a placename for this point at the base of the mountain",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "12",
+    "note": "there is a placename for this point at the base of the mountain",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: term should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "1",
+    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            3,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "9",
+    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: transcribedAudio should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "5",
+    "note": "this clip talks about songs",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 11000,
+            "outPoint": 12950,
+          },
+          "type": "timeRange",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "13",
+    "note": "this clip talks about songs",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: vocabularyList should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "3",
+    "note": "This is the first letter of the list name",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "vocabulary-list-id-2",
+          "type": "vocabularyList",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            1,
+          ],
+          "target": "name",
+          "type": "textField",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "11",
+    "note": "This is the first letter of the list name",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "vocabulary-list-id-2",
+          "type": "vocabularyList",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+  },
+]
+`;
