@@ -6,6 +6,7 @@ import {
 } from '../../../domain/types/resourceTypes';
 import { DatabaseProvider } from '../../database/database.provider';
 import { getArangoCollectionIDFromResourceType } from '../../database/getArangoCollectionIDFromResourceType';
+import { arangoEdgeCollectionID } from '../../database/types/ArangoCollectionId';
 import { RepositoryProvider } from '../repository.provider';
 
 export default class TestRepositoryProvider extends RepositoryProvider {
@@ -33,10 +34,14 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         await Promise.all(writePromises);
     }
 
-    public async deleteAllEntitiesOfGivenType(ResourceType: ResourceType): Promise<void> {
+    public async deleteAllResourcesOfGivenType(ResourceType: ResourceType): Promise<void> {
         await (
             await this.databaseProvider.getDBInstance()
         ).deleteAll(getArangoCollectionIDFromResourceType(ResourceType));
+    }
+
+    public async deleteAllEdges(): Promise<void> {
+        await this.databaseProvider.getDBInstance().deleteAll(arangoEdgeCollectionID);
     }
 
     /**
@@ -44,7 +49,7 @@ export default class TestRepositoryProvider extends RepositoryProvider {
      */
     private async deleteAllEntityData(): Promise<void> {
         const deleteAllDataPromises = Object.values(resourceTypes).map(
-            (ResourceType: ResourceType) => this.deleteAllEntitiesOfGivenType(ResourceType)
+            (ResourceType: ResourceType) => this.deleteAllResourcesOfGivenType(ResourceType)
         );
 
         await Promise.all(deleteAllDataPromises);
@@ -53,9 +58,13 @@ export default class TestRepositoryProvider extends RepositoryProvider {
     public async testSetup(): Promise<void> {
         // In case the last test didn't clean up
         await this.deleteAllEntityData();
+
+        await this.deleteAllEdges();
     }
 
     public async testTeardown(): Promise<void> {
         await this.deleteAllEntityData();
+
+        await this.deleteAllEdges();
     }
 }

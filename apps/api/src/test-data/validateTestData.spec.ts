@@ -64,20 +64,6 @@ describe('buildTestData', () => {
 
                             expect(numberOfTestDataEntries).toBeGreaterThan(0);
                         });
-                        it(`should have no duplicate IDs`, () => {
-                            const allIds = models
-                                .map((model) => model.id)
-                                /**
-                                 * We have a separate check for missing `id` properties
-                                 */
-                                .filter((id) => !isNullOrUndefined(id));
-
-                            const numberOfIds = allIds.length;
-
-                            const numberOfUniqueIds = [...new Set(allIds)].length;
-
-                            expect(numberOfUniqueIds).toEqual(numberOfIds);
-                        });
 
                         const entityValidator = getValidatorForEntity(ResourceType);
 
@@ -100,6 +86,21 @@ describe('buildTestData', () => {
     });
 
     describe('test data for edge connections', () => {
+        it(`should have no duplicate IDs`, () => {
+            const allIds = connectionTestData
+                .map((connection) => connection.id)
+                /**
+                 * We have a separate check for missing `id` properties
+                 */
+                .filter((id) => !isNullOrUndefined(id));
+
+            const numberOfIds = allIds.length;
+
+            const numberOfUniqueIds = [...new Set(allIds)].length;
+
+            expect(numberOfUniqueIds).toEqual(numberOfIds);
+        });
+
         const doesMemberWithResourceTypeAndRoleExist = (
             targetResourceType: ResourceType,
             targetRole: EdgeConnectionMemberRole

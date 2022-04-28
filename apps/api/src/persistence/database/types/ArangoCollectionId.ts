@@ -8,7 +8,7 @@ const arangoResourceCollectionIDs = [
     'tags',
 ] as const;
 
-const arangoEdgeCollectionID = 'edge_connections';
+export const arangoEdgeCollectionID = 'resource_edge_connections';
 
 const arangoCollectionIDs = [...arangoResourceCollectionIDs, arangoEdgeCollectionID] as const;
 
