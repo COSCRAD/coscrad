@@ -206,12 +206,6 @@ describe('When querying for edge connections', () => {
                                 ({ type }) => type === EdgeConnectionType.dual
                             );
 
-                            // dualConnections.forEach((c) =>
-                            //     console.log({
-                            //         dualConnection: JSON.stringify(c),
-                            //     })
-                            // );
-
                             const compositeIdentifierToQuery = dualConnections
                                 .flatMap(({ members }) => members)
                                 .map(({ compositeIdentifier }) => compositeIdentifier)
