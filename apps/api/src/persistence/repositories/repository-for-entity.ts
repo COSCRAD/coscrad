@@ -77,20 +77,9 @@ export class RepositoryForEntity<TEntity extends HasEntityID & BaseDomainModel>
     }
 
     async createMany(entities: TEntity[]) {
-        if (((entities[0] as unknown as { type: string }).type as string) === 'self')
-            console.log('CREATE MANY...................');
         const createDTOs = entities
             .map((entity) => entity.toDTO())
-            .map((dto) => {
-                const result = this.#mapEntityDTOToDocument(dto);
-
-                console.log({
-                    entityDTO: JSON.stringify(dto),
-                    result: JSON.stringify(result),
-                });
-
-                return result;
-            });
+            .map((dto) => this.#mapEntityDTOToDocument(dto));
 
         return this.#arangoDatabaseForEntitysCollection.createMany(
             createDTOs as DatabaseDTO<TEntity>[]

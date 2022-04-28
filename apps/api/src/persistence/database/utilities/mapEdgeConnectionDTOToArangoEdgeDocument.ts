@@ -4,10 +4,8 @@ import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
 import getArangoDocumentDirectionAttributesFromEdgeConnectionMembers from './getArangoDocumentDirectionAttributesFromEdgeConnectionMembers';
 import mapEntityDTOToDatabaseDTO from './mapEntityDTOToDatabaseDTO';
 
-export default (edgeConnection: DTO<EdgeConnection>): ArangoEdgeDocument => {
-    console.log(`map EdgeConnectionDTO to ArangoEdgeDocument`);
-
-    return mapEntityDTOToDatabaseDTO<Omit<ArangoEdgeDocument, '_key'> & { id: string }>({
+export default (edgeConnection: DTO<EdgeConnection>): ArangoEdgeDocument =>
+    mapEntityDTOToDatabaseDTO<Omit<ArangoEdgeDocument, '_key'> & { id: string }>({
         ...getArangoDocumentDirectionAttributesFromEdgeConnectionMembers(
             edgeConnection.members,
             edgeConnection.type
@@ -18,4 +16,3 @@ export default (edgeConnection: DTO<EdgeConnection>): ArangoEdgeDocument => {
             context,
         })),
     });
-};
