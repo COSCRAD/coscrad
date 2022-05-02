@@ -41,8 +41,10 @@ const buildByIdApiParamMetadata = () => ({
     example: '2',
 });
 
-@ApiTags('resources')
-@Controller('resources')
+export const RESOURCES_ROUTE_PREFIX = 'resources';
+
+@ApiTags(RESOURCES_ROUTE_PREFIX)
+@Controller(RESOURCES_ROUTE_PREFIX)
 export class ResourceViewModelController {
     constructor(
         private readonly repositoryProvider: RepositoryProvider,
@@ -51,7 +53,11 @@ export class ResourceViewModelController {
 
     @Get('')
     getAllResourceDescriptions() {
-        return buildAllResourceDescriptions();
+        const appGlobalPrefix = this.configService.get<string>('GLOBAL_PREFIX');
+
+        const fullResourcesBasePath = `/${appGlobalPrefix}/${RESOURCES_ROUTE_PREFIX}`;
+
+        return buildAllResourceDescriptions(fullResourcesBasePath);
     }
 
     /* ********** TERMS ********** */

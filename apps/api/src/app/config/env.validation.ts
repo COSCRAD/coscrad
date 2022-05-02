@@ -47,6 +47,10 @@ export class EnvironmentVariables {
 
     @IsUrl()
     BASE_DIGITAL_ASSET_URL: string;
+
+    @IsString()
+    @IsNotEmpty()
+    GLOBAL_PREFIX: string;
 }
 
 export const validate = (config: Record<string, unknown>): EnvironmentVariables => {

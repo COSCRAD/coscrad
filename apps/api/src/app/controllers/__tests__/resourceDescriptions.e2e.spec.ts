@@ -1,10 +1,12 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { resourceTypes } from '../../../domain/types/resourceTypes';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
-import { buildAllResourceDescriptions } from '../../../view-models/resourceDescriptions/buildAllResourceDescriptions';
+import { ResourceDescriptionAndLink } from '../../../view-models/resourceDescriptions/buildAllResourceDescriptions';
+import httpStatusCodes from '../../constants/httpStatusCodes';
 import createTestModule from './createTestModule';
-describe('GET /entities/descriptions', () => {
+describe('GET /resources', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
     let app: INestApplication;
@@ -22,11 +24,33 @@ describe('GET /entities/descriptions', () => {
         await app.init();
     });
 
-    it('should get the entity descriptions', () => {
-        return request(app.getHttpServer())
-            .get('/resources')
-            .expect(200)
-            .expect(buildAllResourceDescriptions());
+    it('should return a 200', async () => {
+        const result = await request(app.getHttpServer()).get('/resources');
+
+        expect(result.status).toBe(httpStatusCodes.ok);
+    });
+
+    it('should return one description for each resource type', async () => {
+        const result = await request(app.getHttpServer()).get('/resources');
+
+        const body = result.body as ResourceDescriptionAndLink[];
+
+        // TODO [optimization]: avoid loop within loop here
+        const isThereAnEntryForEveryResourceType = Object.values(resourceTypes).every(
+            (resourceType) =>
+                body.some(
+                    ({ resourceType: responseResourceType }) =>
+                        resourceType === responseResourceType
+                )
+        );
+
+        expect(isThereAnEntryForEveryResourceType).toBe(true);
+    });
+
+    it('should return the expected result', async () => {
+        const result = await request(app.getHttpServer()).get('/resources');
+
+        expect(result.body).toMatchSnapshot();
     });
 
     afterAll(async () => {

@@ -1,12 +1,12 @@
 import { Controller, Get, Query, Res } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { isDeepStrictEqual } from 'util';
 import {
     EdgeConnection,
     EdgeConnectionType,
 } from '../../domain/models/context/edge-connection.entity';
 import { isResourceId } from '../../domain/types/ResourceId';
-import { isResourceType } from '../../domain/types/resourceTypes';
+import { isResourceType, ResourceType, resourceTypes } from '../../domain/types/resourceTypes';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
@@ -47,12 +47,16 @@ export class EdgeConnectionController {
         return res.status(httpStatusCodes.ok).send(noteViewModels.map(cloneToPlainObject));
     }
 
+    @ApiQuery({
+        name: 'type',
+        enum: Object.values(resourceTypes),
+    })
     @Get('selfNotes')
     async fetchResourceSelfConnections(
         @Res() res,
         // be careful, these are actually unknown but Swagger uses this type for doc generation
         @Query('id') id: string,
-        @Query('type') type: string
+        @Query('type') type: ResourceType
     ) {
         if (!isResourceId(id))
             return res
@@ -87,6 +91,10 @@ export class EdgeConnectionController {
         );
     }
 
+    @ApiQuery({
+        name: 'type',
+        enum: Object.values(resourceTypes),
+    })
     @Get('forResource')
     async fetchConnectionsForResource(
         @Res() res,

@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GET /resources should return the expected result 1`] = `
+Array [
+  Object {
+    "description": "A term is a word, phrase, or sentence.",
+    "link": "/api/resources/terms",
+    "resourceType": "term",
+  },
+  Object {
+    "description": "A vocabulary list gathers terms with filters that apply within the context of the vocabulary list",
+    "link": "/api/resources/vocabularyLists",
+    "resourceType": "vocabularyList",
+  },
+  Object {
+    "description": "An audio with transcript is an audio recording accompanied by a transcription",
+    "link": "/api/resources/transcribedAudioItems",
+    "resourceType": "transcribedAudio",
+  },
+  Object {
+    "description": "A book is a digital representation of a text, organized into pages",
+    "link": "/api/resources/books",
+    "resourceType": "book",
+  },
+  Object {
+    "description": "A Photograph is a digital representation of an analog photograph and its metadata",
+    "link": "/api/resources/photographs",
+    "resourceType": "photograph",
+  },
+  Object {
+    "description": "A spatial feature may be a point, line, or polygon on the map",
+    "link": "/api/resources/spatialFeatures",
+    "resourceType": "spatialFeature",
+  },
+  Object {
+    "description": "A tag is a classifier for an entity or a pair of related entities",
+    "link": "/api/resources/tags",
+    "resourceType": "tag",
+  },
+]
+`;

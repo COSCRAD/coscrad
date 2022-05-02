@@ -3,20 +3,17 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
-import { ArangoConnectionProvider } from './persistence/database/arango-connection.provider';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, { cors: true });
-    const globalPrefix = 'api';
+
+    const globalPrefix = app.get(ConfigService).get<string>('GLOBAL_PREFIX', 'api');
+
     app.setGlobalPrefix(globalPrefix);
 
     // app.enableCors({});
 
     const port = app.get(ConfigService).get<string>('NODE_PORT', '3987');
-
-    const tempArangoConnectionProvier = new ArangoConnectionProvider(app.get(ConfigService));
-
-    await tempArangoConnectionProvier.initialize();
 
     const swaggerConfig = new DocumentBuilder()
         .setTitle('COSCRAD API')
