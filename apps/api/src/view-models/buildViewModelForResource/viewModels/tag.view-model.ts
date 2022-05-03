@@ -7,11 +7,11 @@ export class TagViewModel extends BaseViewModel {
         example: 'animals',
         description: 'the user-facing text for the tag',
     })
-    readonly text: string;
+    readonly label: string;
 
-    constructor({ id, text }: Tag) {
+    constructor({ id, label }: Tag) {
         super({ id });
 
-        this.text = text;
+        this.label = label;
     }
 }

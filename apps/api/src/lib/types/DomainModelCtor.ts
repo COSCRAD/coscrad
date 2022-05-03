@@ -1,4 +1,4 @@
-import { Resource } from '../../domain/models/resource.entity';
+import BaseDomainModel from '../../domain/models/BaseDomainModel';
 import { DTO } from '../../types/DTO';
 
-export type DomainModelCtor<TEntity extends Resource> = new (dto: DTO<TEntity>) => TEntity;
+export type DomainModelCtor<TEntity extends BaseDomainModel> = new (dto: DTO<TEntity>) => TEntity;

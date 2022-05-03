@@ -8,6 +8,7 @@ import { Environment } from '../../config/constants/Environment';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import { EdgeConnectionController } from '../edgeConnection.controller';
 import { ResourceViewModelController } from '../resourceViewModel.controller';
+import { TagController } from '../tag.controller';
 
 export default async (testDatabaseName: string) =>
     Test.createTestingModule({
@@ -42,5 +43,5 @@ export default async (testDatabaseName: string) =>
             },
         ],
 
-        controllers: [ResourceViewModelController, EdgeConnectionController],
+        controllers: [ResourceViewModelController, EdgeConnectionController, TagController],
     }).compile();

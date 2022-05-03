@@ -108,7 +108,7 @@ describe('When querying for edge connections', () => {
                             );
                         }
 
-                        const expectedRelevantSelfConnections = selfConnections.filter(
+                        const expectedSelfConnectionsForTheGivenResource = selfConnections.filter(
                             ({ members }) =>
                                 isDeepStrictEqual(
                                     members[0].compositeIdentifier,
@@ -117,7 +117,7 @@ describe('When querying for edge connections', () => {
                         );
 
                         const expectedNumberOfFoundConnections =
-                            expectedRelevantSelfConnections.length;
+                            expectedSelfConnectionsForTheGivenResource.length;
 
                         const { id, type } = compositeIdToQuery;
 

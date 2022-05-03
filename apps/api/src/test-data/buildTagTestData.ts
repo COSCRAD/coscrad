@@ -7,9 +7,9 @@ import { Tag } from '../domain/models/tag/tag.entity';
  */
 export default (): Tag[] =>
     ['plants', 'animals', 'placenames', 'songs', 'legends'].map(
-        (text, index) =>
+        (label, index) =>
             new Tag({
                 id: String(index + 1),
-                text,
+                label,
             })
     );

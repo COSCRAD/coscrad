@@ -9,9 +9,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import buildConfigFilePath from './config/buildConfigFilePath';
 import { validate } from './config/env.validation';
-import { AddTagController } from './controllers/addTag.controller';
 import { EdgeConnectionController } from './controllers/edgeConnection.controller';
 import { ResourceViewModelController } from './controllers/resourceViewModel.controller';
+import { TagController } from './controllers/tag.controller';
 
 @Module({
     imports: [
@@ -29,7 +29,7 @@ import { ResourceViewModelController } from './controllers/resourceViewModel.con
         AppController,
         ResourceViewModelController,
         EdgeConnectionController,
-        AddTagController,
+        TagController,
     ],
     providers: [AppService, DatabaseProvider, RepositoryProvider],
 })

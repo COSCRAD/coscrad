@@ -6,7 +6,7 @@ import {
 } from '../../../domain/types/resourceTypes';
 import { DatabaseProvider } from '../../database/database.provider';
 import { getArangoCollectionIDFromResourceType } from '../../database/getArangoCollectionIDFromResourceType';
-import { arangoEdgeCollectionID } from '../../database/types/ArangoCollectionId';
+import { arangoEdgeCollectionID, tagCollectionID } from '../../database/types/ArangoCollectionId';
 import { RepositoryProvider } from '../repository.provider';
 
 export default class TestRepositoryProvider extends RepositoryProvider {
@@ -16,10 +16,10 @@ export default class TestRepositoryProvider extends RepositoryProvider {
 
     // TODO We should correlate entity type with TEntity here
     public async addEntitiesOfSingleType<TResource extends Resource>(
-        ResourceType: ResourceType,
+        resourceType: ResourceType,
         entities: TResource[]
     ): Promise<void> {
-        await this.forResource<TResource>(ResourceType).createMany(entities);
+        await this.forResource<TResource>(resourceType).createMany(entities);
     }
 
     // TODO fix types
@@ -38,6 +38,10 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         await (
             await this.databaseProvider.getDBInstance()
         ).deleteAll(getArangoCollectionIDFromResourceType(ResourceType));
+    }
+
+    public async deleteAllTags(): Promise<void> {
+        await this.databaseProvider.getDBInstance().deleteAll(tagCollectionID);
     }
 
     public async deleteAllEdges(): Promise<void> {
@@ -66,5 +70,7 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         await this.deleteAllEntityData();
 
         await this.deleteAllEdges();
+
+        await this.deleteAllTags();
     }
 }

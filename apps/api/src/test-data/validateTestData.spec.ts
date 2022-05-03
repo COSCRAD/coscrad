@@ -143,14 +143,6 @@ describe('buildTestData', () => {
                         allTags.some(({ id }) => id === tagID)
                     );
 
-                    if (!areAllTagsInSnapshot) {
-                        console.log({
-                            allTags,
-                            tagIDs,
-                            whyDidItFail: "I don't know",
-                        });
-                    }
-
                     expect(areAllTagsInSnapshot).toBe(true);
                 });
 

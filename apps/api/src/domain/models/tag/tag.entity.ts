@@ -5,13 +5,13 @@ import BaseDomainModel from '../BaseDomainModel';
 export class Tag extends BaseDomainModel {
     id: EntityId;
 
-    text: string;
+    label: string;
 
     constructor(dto: DTO<Tag>) {
         super();
 
         this.id = dto.id;
 
-        this.text = dto.text;
+        this.label = dto.label;
     }
 }

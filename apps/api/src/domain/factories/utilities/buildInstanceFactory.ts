@@ -2,10 +2,10 @@ import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { DTO } from '../../../types/DTO';
 import { DomainModelValidator } from '../../domainModelValidators/types/DomainModelValidator';
 import { isValid } from '../../domainModelValidators/Valid';
-import { Resource } from '../../models/resource.entity';
+import BaseDomainModel from '../../models/BaseDomainModel';
 import { InstanceFactory } from '../getInstanceFactoryForEntity';
 
-export default <TEntity extends Resource = Resource>(
+export default <TEntity extends BaseDomainModel = BaseDomainModel>(
         validator: DomainModelValidator,
         Ctor: DomainModelCtor<TEntity>
     ): InstanceFactory<TEntity> =>

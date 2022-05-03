@@ -13,9 +13,9 @@ const tagValidator: DomainModelValidator = (dto: unknown): Valid | InternalError
 
     const innerErrors: InternalError[] = [];
 
-    const { text, id } = dto as DTO<Tag>;
+    const { label, id } = dto as DTO<Tag>;
 
-    if (!isStringWithNonzeroLength(text)) innerErrors.push(new TagHasNoTextError(id));
+    if (!isStringWithNonzeroLength(label)) innerErrors.push(new TagHasNoTextError(id));
 
     return innerErrors.length ? new InvalidTagDTOError(dto, innerErrors) : Valid;
 };

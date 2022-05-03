@@ -4,9 +4,9 @@ export const isInternalError = (input: unknown): input is InternalError =>
     input instanceof InternalError;
 
 export class InternalError extends Error {
-    innerErrors: Error[] = [];
+    innerErrors: InternalError[] = [];
 
-    constructor(message: string, innerErrors: Error[] = []) {
+    constructor(message: string, innerErrors: InternalError[] = []) {
         super(message);
 
         const invalidInnerErrors = innerErrors.filter((error) => !isError(error));
@@ -19,5 +19,15 @@ export class InternalError extends Error {
             );
 
         this.innerErrors = [...innerErrors];
+    }
+
+    toString(): string {
+        return this.innerErrors.reduce(
+            (message, innerError) =>
+                message + innerError.innerErrors
+                    ? innerError.innerErrors.toString()
+                    : innerError.message,
+            ''
+        );
     }
 }

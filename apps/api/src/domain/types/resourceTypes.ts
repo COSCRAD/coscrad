@@ -30,7 +30,6 @@ export type ResourceTypeToInstance = {
     book: Book;
     photograph: Photograph;
     spatialFeature: ISpatialFeature;
-    tag: Tag;
 };
 
 /**
