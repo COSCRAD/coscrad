@@ -1,11 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { Resource } from '../../../domain/models/resource.entity';
-import {
-    InMemorySnapshotOfResources,
-    ResourceType,
-    resourceTypes,
-} from '../../../domain/types/resourceTypes';
+import { InMemorySnapshotOfResources, resourceTypes } from '../../../domain/types/resourceTypes';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
@@ -58,110 +54,106 @@ describe('GET /resources (fetch view models)', () => {
         await app.init();
     });
 
-    // These resources are always published
-    const resourceTypesToExclude: ResourceType[] = [resourceTypes.tag];
+    Object.values(resourceTypes).forEach((resourceType) => {
+        const endpointUnderTest = `/${buildViewModelPathForRe(resourceType)}`;
 
-    Object.values(resourceTypes)
-        .filter((Re) => !resourceTypesToExclude.includes(Re))
-        .forEach((Re) => {
-            const endpointUnderTest = `/${buildViewModelPathForRe(Re)}`;
+        const buildFullPathFromId = (id: string): string => `${endpointUnderTest}/${id}`;
 
-            const buildFullPathFromId = (id: string): string => `${endpointUnderTest}/${id}`;
+        describe(`When querying for a single View Model by ID`, () => {
+            beforeEach(async () => {
+                await testRepositoryProvider.testSetup();
+            });
 
-            describe(`When querying for a single View Model by ID`, () => {
-                beforeEach(async () => {
-                    await testRepositoryProvider.testSetup();
-                });
-
-                afterEach(async () => {
-                    await testRepositoryProvider.testTeardown();
-                });
-                describe(`GET ${endpointUnderTest}/:id`, () => {
-                    describe('when the resource is published', () => {
-                        describe('when no resource with the id exists', () => {
-                            beforeEach(async () => {
-                                await testRepositoryProvider.addEntitiesOfManyTypes(
-                                    testDataWithAllResourcesPublished
-                                );
-                            });
-
-                            it(`should return not found`, () => {
-                                return request(app.getHttpServer())
-                                    .get(`/resources${buildFullPathFromId('bogus-id')}`)
-                                    .expect(httpStatusCodes.notFound);
-                            });
+            afterEach(async () => {
+                await testRepositoryProvider.testTeardown();
+            });
+            describe(`GET ${endpointUnderTest}/:id`, () => {
+                describe('when the resource is published', () => {
+                    describe('when no resource with the id exists', () => {
+                        beforeEach(async () => {
+                            await testRepositoryProvider.addEntitiesOfManyTypes(
+                                testDataWithAllResourcesPublished
+                            );
                         });
 
-                        describe('when an resource with the id is found', () => {
-                            beforeEach(async () => {
-                                await testRepositoryProvider.addEntitiesOfManyTypes(
-                                    testDataWithAllResourcesPublished
-                                );
-                            });
-
-                            it('should return the expected response', async () => {
-                                const resourceToFind = testDataWithAllResourcesPublished[Re][0];
-
-                                const res = await request(app.getHttpServer()).get(
-                                    `/resources${buildFullPathFromId(resourceToFind.id)}`
-                                );
-
-                                expect(res.status).toBe(httpStatusCodes.ok);
-
-                                expect(res.body.id).toBe(resourceToFind.id);
-
-                                expect(res.body).toMatchSnapshot();
-                            });
+                        it(`should return not found`, () => {
+                            return request(app.getHttpServer())
+                                .get(`/resources${buildFullPathFromId('bogus-id')}`)
+                                .expect(httpStatusCodes.notFound);
                         });
                     });
 
-                    describe('when an resource with the id is unpublished', () => {
-                        const unpublishedId = 'unpublished-01';
-
+                    describe('when an resource with the id is found', () => {
                         beforeEach(async () => {
-                            await testRepositoryProvider.addEntitiesOfManyTypes(testData);
-
-                            const unpublishedInstance = testData[Re][0].clone({
-                                published: false,
-                                id: unpublishedId,
-                            });
-
-                            await testRepositoryProvider.addEntitiesOfSingleType(Re, [
-                                unpublishedInstance,
-                            ]);
+                            await testRepositoryProvider.addEntitiesOfManyTypes(
+                                testDataWithAllResourcesPublished
+                            );
                         });
 
-                        it('should return not found', async () => {
-                            const publishedAndUnpublishedInstancesFromRepo =
-                                await testRepositoryProvider
-                                    .forResource(Re)
-                                    .fetchMany()
-                                    .then((result) =>
-                                        result.filter(
-                                            (singleInstance): singleInstance is Resource =>
-                                                !isInternalError(singleInstance)
-                                        )
-                                    );
+                        it('should return the expected response', async () => {
+                            const resourceToFind =
+                                testDataWithAllResourcesPublished[resourceType][0];
 
-                            /**
-                             * Given 404 is not a very specific symptom, let's be sure the
-                             * unpubished resource was in the db to start with
-                             */
-                            const isUnpublishedresourceIdInDB =
-                                publishedAndUnpublishedInstancesFromRepo.some(
-                                    ({ id }) => id === unpublishedId
+                            const res = await request(app.getHttpServer()).get(
+                                `/resources${buildFullPathFromId(resourceToFind.id)}`
+                            );
+
+                            expect(res.status).toBe(httpStatusCodes.ok);
+
+                            expect(res.body.id).toBe(resourceToFind.id);
+
+                            expect(res.body).toMatchSnapshot();
+                        });
+                    });
+                });
+
+                describe('when an resource with the id is unpublished', () => {
+                    const unpublishedId = 'unpublished-01';
+
+                    beforeEach(async () => {
+                        await testRepositoryProvider.addEntitiesOfManyTypes(testData);
+
+                        const unpublishedInstance = testData[resourceType][0].clone({
+                            published: false,
+                            id: unpublishedId,
+                        });
+
+                        await testRepositoryProvider.addEntitiesOfSingleType(resourceType, [
+                            unpublishedInstance,
+                        ]);
+                    });
+
+                    it('should return not found', async () => {
+                        const publishedAndUnpublishedInstancesFromRepo =
+                            await testRepositoryProvider
+                                .forResource(resourceType)
+                                .fetchMany()
+                                .then((result) =>
+                                    result.filter(
+                                        (singleInstance): singleInstance is Resource =>
+                                            !isInternalError(singleInstance)
+                                    )
                                 );
 
-                            expect(isUnpublishedresourceIdInDB).toBe(true);
+                        /**
+                         * Given 404 is not a very specific symptom, let's be sure the
+                         * unpubished resource was in the db to start with
+                         */
+                        const isUnpublishedresourceIdInDB =
+                            publishedAndUnpublishedInstancesFromRepo.some(
+                                ({ id }) => id === unpublishedId
+                            );
 
-                            return request(app.getHttpServer())
-                                .get(`/resources${buildFullPathFromId(unpublishedId)}`)
-                                .expect(httpStatusCodes.notFound);
-                        });
+                        expect(isUnpublishedresourceIdInDB).toBe(true);
+
+                        return request(app.getHttpServer())
+                            .get(`/resources${buildFullPathFromId(unpublishedId)}`)
+                            .expect(httpStatusCodes.notFound);
                     });
                 });
             });
         });
+    });
 
     afterAll(async () => {
         await arangoConnectionProvider.dropDatabaseIfExists();

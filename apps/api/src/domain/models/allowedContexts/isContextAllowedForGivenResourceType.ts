@@ -20,8 +20,6 @@ const resourceTypeToAllowedContextTypes = {
         // EdgeConnectionContextType.point2D,
         // EdgeConnectionContextType.freeMultiline,
     ],
-    // TODO [https://www.pivotaltracker.com/story/show/181861405] remove tag from resource types
-    [resourceTypes.tag]: [EdgeConnectionContextType.general],
     [resourceTypes.term]: [EdgeConnectionContextType.general, EdgeConnectionContextType.textField],
     [resourceTypes.transcribedAudio]: [
         EdgeConnectionContextType.general,

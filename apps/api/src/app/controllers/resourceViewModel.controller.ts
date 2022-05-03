@@ -4,7 +4,6 @@ import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Book } from '../../domain/models/book/entities/book.entity';
 import { Photograph } from '../../domain/models/photograph/entities/photograph.entity';
 import { ISpatialFeature } from '../../domain/models/spatial-feature/ISpatialFeature';
-import { Tag } from '../../domain/models/tag/tag.entity';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { TranscribedAudio } from '../../domain/models/transcribed-audio/entities/transcribed-audio.entity';
 import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
@@ -17,7 +16,6 @@ import { RepositoryProvider } from '../../persistence/repositories/repository.pr
 import buildBookViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildBookViewModels';
 import buildPhotographViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildPhotographViewModels';
 import buildSpatialFeatureViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildSpatialFeatureViewModels';
-import buildTagViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildTagViewModels';
 import buildTermViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildTermViewModels';
 import buildTranscribedAudioViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildTranscribedAudioViewModels';
 import buildVocabularyListViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildVocabularyListViewModels';
@@ -170,54 +168,6 @@ export class ResourceViewModelController {
             allTerms,
             this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
         );
-
-        const dto = cloneToPlainObject(viewModel);
-
-        return res.status(httpStatusCodes.ok).send(dto);
-    }
-
-    /* ********** TAGS ********** */
-    @ApiOkResponse({ type: TagViewModel, isArray: true })
-    @Get(buildViewModelPathForResourceType(resourceTypes.tag))
-    async fetchTags(@Res() res) {
-        const allViewModels = await buildTagViewModels({
-            repositoryProvider: this.repositoryProvider,
-            configService: this.configService,
-        });
-
-        if (isInternalError(allViewModels))
-            return res.status(httpStatusCodes.internalError).send({
-                error: JSON.stringify(allViewModels),
-            });
-
-        return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
-    }
-
-    @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: TagViewModel })
-    @Get(`${buildViewModelPathForResourceType(resourceTypes.tag)}/:id`)
-    async fetchTagById(@Res() res, @Param() params: unknown) {
-        const { id } = params as HasViewModelId;
-
-        if (!isResourceId(id))
-            return res.status(httpStatusCodes.badRequest).send({
-                error: `Invalid input for id: ${id}`,
-            });
-
-        const searchResult = await this.repositoryProvider
-            .forResource<Tag>(resourceTypes.tag)
-            .fetchById(id);
-
-        if (isInternalError(searchResult))
-            return res.status(httpStatusCodes.internalError).send({
-                error: JSON.stringify(searchResult),
-            });
-
-        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
-
-        if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
-
-        const viewModel = new TagViewModel(searchResult);
 
         const dto = cloneToPlainObject(viewModel);
 

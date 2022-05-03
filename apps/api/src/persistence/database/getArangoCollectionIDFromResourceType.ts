@@ -10,7 +10,6 @@ const resourceTypeToArangoCollectionID: {
     book: 'books',
     photograph: 'photographs',
     spatialFeature: 'spatial_features',
-    tag: 'tags',
 };
 
 export const getArangoCollectionIDFromResourceType = (

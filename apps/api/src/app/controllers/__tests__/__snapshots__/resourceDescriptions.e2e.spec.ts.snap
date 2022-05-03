@@ -32,10 +32,5 @@ Array [
     "link": "/api/resources/spatialFeatures",
     "resourceType": "spatialFeature",
   },
-  Object {
-    "description": "A tag is a classifier for an entity or a pair of related entities",
-    "link": "/api/resources/tags",
-    "resourceType": "tag",
-  },
 ]
 `;

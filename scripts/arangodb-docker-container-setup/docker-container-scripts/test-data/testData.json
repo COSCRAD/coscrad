@@ -1,37 +1,5 @@
 {
     "resources": {
-        "tags": [
-            {
-                "type": "tag",
-                "_key": "1",
-                "published": true,
-                "text": "plants"
-            },
-            {
-                "type": "tag",
-                "_key": "2",
-                "published": true,
-                "text": "animals"
-            },
-            {
-                "type": "tag",
-                "_key": "3",
-                "published": true,
-                "text": "placenames"
-            },
-            {
-                "type": "tag",
-                "_key": "4",
-                "published": true,
-                "text": "songs"
-            },
-            {
-                "type": "tag",
-                "_key": "5",
-                "published": true,
-                "text": "legends"
-            }
-        ],
         "terms": [
             {
                 "type": "term",

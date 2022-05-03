@@ -15,7 +15,6 @@ import buildVocabularyListTestData from './buildVocabularyListTestData';
  */
 export default (): InMemorySnapshot => ({
     resources: {
-        [resourceTypes.tag]: buildTagTestData(),
         [resourceTypes.term]: buildTermTestData(),
         [resourceTypes.vocabularyList]: buildVocabularyListTestData(),
         [resourceTypes.transcribedAudio]: buildTranscribedAudioTestData(),
@@ -24,4 +23,5 @@ export default (): InMemorySnapshot => ({
         [resourceTypes.spatialFeature]: buildSpatialFeatureTestData(),
     },
     connections: buildEdgeConnectionTestData(),
+    tags: buildTagTestData(),
 });

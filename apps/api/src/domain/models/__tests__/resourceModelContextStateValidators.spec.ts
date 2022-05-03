@@ -51,15 +51,14 @@ describe(`resource model context state validators`, () => {
                 }) => resourceType === testCaseResourceType && contextType === testCaseContextType
             );
 
-    const allResourceTypeContextTypeCombos = Object.keys(resourceTypes)
-        .filter((resourceType) => resourceType !== resourceTypes.tag)
-        .flatMap((resourceType: ResourceType) =>
+    const allResourceTypeContextTypeCombos = Object.keys(resourceTypes).flatMap(
+        (resourceType: ResourceType) =>
             Object.keys(EdgeConnectionContextType).map(
                 (
                     contextType: EdgeConnectionContextType
                 ): [ResourceType, EdgeConnectionContextType] => [resourceType, contextType]
             )
-        );
+    );
 
     const allowedResourceTypeContextTypeCombos = allResourceTypeContextTypeCombos.filter(
         ([resourceType, contextType]) =>
@@ -107,38 +106,33 @@ describe(`resource model context state validators`, () => {
         });
     });
 
-    testCases
-        // TODO [https://www.pivotaltracker.com/story/show/181861405] remove filter
-        .filter(({ validCases }) =>
-            validCases.some(({ resource: { type } }) => type !== resourceTypes.tag)
-        )
-        .forEach(({ validCases, invalidCases }) => {
-            describe(`For a resource of type: ${validCases[0].resource.type}`, () => {
-                describe(`when the context is valid`, () => {
-                    validCases.forEach(({ resource, context, description }) => {
-                        describe(description, () => {
-                            it('should return Valid', () => {
-                                const validationResult = resource.validateContext(context);
+    testCases.forEach(({ validCases, invalidCases }) => {
+        describe(`For a resource of type: ${validCases[0].resource.type}`, () => {
+            describe(`when the context is valid`, () => {
+                validCases.forEach(({ resource, context, description }) => {
+                    describe(description, () => {
+                        it('should return Valid', () => {
+                            const validationResult = resource.validateContext(context);
 
-                                expect(validationResult).toBe(Valid);
-                            });
+                            expect(validationResult).toBe(Valid);
                         });
                     });
                 });
+            });
 
-                describe('when the context is not valid', () => {
-                    invalidCases.forEach(({ resource, context, description, expectedError }) => {
-                        describe(description, () => {
-                            it('should return the expected error', () => {
-                                const validationResult = resource.validateContext(context);
+            describe('when the context is not valid', () => {
+                invalidCases.forEach(({ resource, context, description, expectedError }) => {
+                    describe(description, () => {
+                        it('should return the expected error', () => {
+                            const validationResult = resource.validateContext(context);
 
-                                expect(validationResult).toEqual(expectedError);
+                            expect(validationResult).toEqual(expectedError);
 
-                                // TODO Do we need to check inner errors?
-                            });
+                            // TODO Do we need to check inner errors?
                         });
                     });
                 });
             });
         });
+    });
 });

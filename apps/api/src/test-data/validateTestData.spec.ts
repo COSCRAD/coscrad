@@ -110,31 +110,21 @@ describe('buildTestData', () => {
                 .filter(({ compositeIdentifier: { type } }) => type === targetResourceType)
                 .some(({ role }) => role === targetRole);
 
-        Object.values(resourceTypes)
+        Object.values(resourceTypes).forEach((resourceType) => {
             /**
-             * TODO [https://www.pivotaltracker.com/story/show/181861405]
-             *
-             * Remove this filter.
+             * Ensure there is a `self`,`to`, and `from` edge connection instance
+             * for each resource type.
              */
-            .filter((resourceType) => resourceType !== resourceTypes.tag)
-            .forEach((resourceType) => {
-                /**
-                 * Ensure there is a `self`,`to`, and `from` edge connection instance
-                 * for each resource type.
-                 */
-                describe(`the resource type: ${resourceType}`, () => {
-                    Object.values(EdgeConnectionMemberRole).forEach((role) => {
-                        it(`should have one instance that is associated with a ${role} connection`, () => {
-                            const result = doesMemberWithResourceTypeAndRoleExist(
-                                resourceType,
-                                role
-                            );
+            describe(`the resource type: ${resourceType}`, () => {
+                Object.values(EdgeConnectionMemberRole).forEach((role) => {
+                    it(`should have one instance that is associated with a ${role} connection`, () => {
+                        const result = doesMemberWithResourceTypeAndRoleExist(resourceType, role);
 
-                            expect(result).toBe(true);
-                        });
+                        expect(result).toBe(true);
                     });
                 });
             });
+        });
 
         connectionTestData.forEach((edgeConnection, index) => {
             describe(`Edge Connection at index ${index}`, () => {
@@ -147,9 +137,19 @@ describe('buildTestData', () => {
                 const { members, tagIDs } = edgeConnection;
 
                 it(`should reference only tags that are in the test data`, () => {
+                    const { tags: allTags } = testData;
+
                     const areAllTagsInSnapshot = tagIDs.every((tagID) =>
-                        resourceTestData[resourceTypes.tag].some(({ id }) => id === tagID)
+                        allTags.some(({ id }) => id === tagID)
                     );
+
+                    if (!areAllTagsInSnapshot) {
+                        console.log({
+                            allTags,
+                            tagIDs,
+                            whyDidItFail: "I don't know",
+                        });
+                    }
 
                     expect(areAllTagsInSnapshot).toBe(true);
                 });

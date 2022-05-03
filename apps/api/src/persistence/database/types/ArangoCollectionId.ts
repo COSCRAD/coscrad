@@ -5,12 +5,17 @@ const arangoResourceCollectionIDs = [
     'books',
     'photographs',
     'spatial_features',
-    'tags',
 ] as const;
 
 export const arangoEdgeCollectionID = 'resource_edge_connections';
 
-const arangoCollectionIDs = [...arangoResourceCollectionIDs, arangoEdgeCollectionID] as const;
+export const tagCollectionID = 'tags';
+
+const arangoCollectionIDs = [
+    ...arangoResourceCollectionIDs,
+    arangoEdgeCollectionID,
+    tagCollectionID,
+] as const;
 
 export type ArangoResourceCollectionID = typeof arangoResourceCollectionIDs[number];
 

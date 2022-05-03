@@ -15,8 +15,6 @@ export const resourceTypes = {
     book: 'book',
     photograph: 'photograph',
     spatialFeature: 'spatialFeature',
-    // TODO This doesn't belong here. It should be a stand-alone.
-    tag: 'tag',
 } as const;
 
 export type ResourceType = ValueType<typeof resourceTypes>;
@@ -45,4 +43,5 @@ export type InMemorySnapshotOfResources = {
 export type InMemorySnapshot = {
     resources: InMemorySnapshotOfResources;
     connections: EdgeConnection[];
+    tags: Tag[];
 };

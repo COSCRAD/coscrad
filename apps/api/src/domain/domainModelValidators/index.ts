@@ -3,7 +3,6 @@ import { ResourceType, resourceTypes } from '../types/resourceTypes';
 import bookValidator from './bookValidator';
 import photographValidator from './photographValidator';
 import spatialFeatureValidator from './spatialFeatureValidator';
-import tagValidator from './tagValidator';
 import termValidator from './termValidator';
 import transcribedAudioValidator from './transcribedAudioValidator';
 import { DomainModelValidator } from './types/DomainModelValidator';
@@ -12,9 +11,6 @@ import vocabularyListValidator from './vocabularyListValidator';
 // TODO should we put these on the classes and use polymorphism?
 export const getValidatorForEntity = (resourceType: ResourceType): DomainModelValidator => {
     switch (resourceType) {
-        case resourceTypes.tag:
-            return tagValidator;
-
         case resourceTypes.term:
             return termValidator;
 

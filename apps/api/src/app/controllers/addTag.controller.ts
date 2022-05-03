@@ -1,64 +1,55 @@
-import { Controller, Post, Query, Res, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import TagAlreadyExistsError from '../../domain/domainModelValidators/errors/tag/TagAlreadyExistsError';
-import tagValidator from '../../domain/domainModelValidators/tagValidator';
-import { Tag } from '../../domain/models/tag/tag.entity';
-import { resourceTypes } from '../../domain/types/resourceTypes';
-import { InternalError, isInternalError } from '../../lib/errors/InternalError';
+import { Controller } from '@nestjs/common';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
-import { DeepPartial } from '../../types/DeepPartial';
-import { DTO } from '../../types/DTO';
-import httpStatusCodes from '../constants/httpStatusCodes';
 
 @Controller('tags')
 export class AddTagController {
     constructor(private readonly repositoryProvider: RepositoryProvider) {}
 
-    @UseGuards(AuthGuard('jwt'))
-    @Post()
-    async addOneTag(@Res() res, @Query('text') text: string) {
-        const tagRepository = this.repositoryProvider.forResource<Tag>(resourceTypes.tag);
+    // @UseGuards(AuthGuard('jwt'))
+    // @Post()
+    // async addOneTag(@Res() res, @Query('text') text: string) {
+    //     const tagRepository = this.repositoryProvider.forResource<Tag>(resourceTypes.tag);
 
-        // We should add `Where filters`
-        const allTagsQueryResult = await tagRepository.fetchMany();
+    //     // We should add `Where filters`
+    //     const allTagsQueryResult = await tagRepository.fetchMany();
 
-        const allErrors = allTagsQueryResult.filter((result): result is InternalError =>
-            isInternalError(result)
-        );
+    //     const allErrors = allTagsQueryResult.filter((result): result is InternalError =>
+    //         isInternalError(result)
+    //     );
 
-        if (allErrors.length)
-            return res.status(httpStatusCodes.badRequest).send(JSON.stringify(allTagsQueryResult));
+    //     if (allErrors.length)
+    //         return res.status(httpStatusCodes.badRequest).send(JSON.stringify(allTagsQueryResult));
 
-        // We have established there were no errors at this point
-        const allTags = allTagsQueryResult as Tag[];
+    //     // We have established there were no errors at this point
+    //     const allTags = allTagsQueryResult as Tag[];
 
-        const existingTagWithSameText = allTags.find(
-            ({ text: textOfExistingTag }) => text === textOfExistingTag
-        );
+    //     const existingTagWithSameText = allTags.find(
+    //         ({ text: textOfExistingTag }) => text === textOfExistingTag
+    //     );
 
-        // Check if there is already a tag with the requested text
-        if (existingTagWithSameText)
-            return res
-                .status(httpStatusCodes.badRequest)
-                .send(JSON.stringify(new TagAlreadyExistsError(text)));
+    //     // Check if there is already a tag with the requested text
+    //     if (existingTagWithSameText)
+    //         return res
+    //             .status(httpStatusCodes.badRequest)
+    //             .send(JSON.stringify(new TagAlreadyExistsError(text)));
 
-        const createTagDto: DeepPartial<DTO<Tag>> = {
-            text,
-        };
+    //     const createTagDto: DeepPartial<DTO<Tag>> = {
+    //         text,
+    //     };
 
-        const domainValidationResult = tagValidator(createTagDto);
+    //     const domainValidationResult = tagValidator(createTagDto);
 
-        if (isInternalError(domainValidationResult))
-            return res
-                .status(httpStatusCodes.badRequest)
-                .send(JSON.stringify(domainValidationResult));
+    //     if (isInternalError(domainValidationResult))
+    //         return res
+    //             .status(httpStatusCodes.badRequest)
+    //             .send(JSON.stringify(domainValidationResult));
 
-        // TODO We need to think about ID generation or else make ID optional here
-        await tagRepository.create(new Tag(createTagDto as DTO<Tag>));
+    //     // TODO We need to think about ID generation or else make ID optional here
+    //     await tagRepository.create(new Tag(createTagDto as DTO<Tag>));
 
-        // Send `Ack`
-        return res.sendStatus(httpStatusCodes.ok);
-    }
+    //     // Send `Ack`
+    //     return res.sendStatus(httpStatusCodes.ok);
+    // }
 
     // TODO support update
     // @UseGuards(AuthGuard('jwt'))

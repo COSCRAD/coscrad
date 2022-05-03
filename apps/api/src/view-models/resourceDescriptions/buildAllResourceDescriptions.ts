@@ -40,10 +40,6 @@ const resourceDescriptions: ResourceDescription[] = [
         resourceType: resourceTypes.spatialFeature,
         description: 'A spatial feature may be a point, line, or polygon on the map',
     },
-    {
-        resourceType: resourceTypes.tag,
-        description: 'A tag is a classifier for an entity or a pair of related entities',
-    },
 ];
 
 export const buildAllResourceDescriptions = (

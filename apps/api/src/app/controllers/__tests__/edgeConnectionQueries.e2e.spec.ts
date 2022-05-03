@@ -83,62 +83,59 @@ describe('When querying for edge connections', () => {
 
     describe(`GET /connections/selfNotes`, () => {
         describe(`when the resource composite id is valid`, () => {
-            Object.values(resourceTypes)
-                // TODO [https://www.pivotaltracker.com/story/show/181861405] remove filter
-                .filter((resourceType) => resourceType !== resourceTypes.tag)
-                .forEach((resourceType) =>
-                    describe(`for a resource of type: ${resourceType}`, () => {
-                        it(`should return the expected result`, async () => {
-                            await testRepositoryProvider
-                                .getEdgeConnectionRepository()
-                                .createMany(connections);
+            Object.values(resourceTypes).forEach((resourceType) =>
+                describe(`for a resource of type: ${resourceType}`, () => {
+                    it(`should return the expected result`, async () => {
+                        await testRepositoryProvider
+                            .getEdgeConnectionRepository()
+                            .createMany(connections);
 
-                            const selfConnections = connections.filter(
-                                ({ type }) => type === EdgeConnectionType.self
+                        const selfConnections = connections.filter(
+                            ({ type }) => type === EdgeConnectionType.self
+                        );
+
+                        const compositeIdToQuery = selfConnections
+                            .flatMap(({ members }) => members)
+                            .find(
+                                ({ compositeIdentifier: { type } }) => type === resourceType
+                            )?.compositeIdentifier;
+
+                        if (!isResourceCompositeIdentifier(compositeIdToQuery)) {
+                            throw new InternalError(
+                                `Failed to find a self edge for: ${formatResourceCompositeIdentifier(
+                                    compositeIdToQuery
+                                )}`
                             );
+                        }
 
-                            const compositeIdToQuery = selfConnections
-                                .flatMap(({ members }) => members)
-                                .find(
-                                    ({ compositeIdentifier: { type } }) => type === resourceType
-                                )?.compositeIdentifier;
+                        const expectedRelevantSelfConnections = selfConnections.filter(
+                            ({ members }) =>
+                                isDeepStrictEqual(
+                                    members[0].compositeIdentifier,
+                                    compositeIdToQuery
+                                )
+                        );
 
-                            if (!isResourceCompositeIdentifier(compositeIdToQuery)) {
-                                throw new InternalError(
-                                    `Failed to find a self edge for: ${formatResourceCompositeIdentifier(
-                                        compositeIdToQuery
-                                    )}`
-                                );
-                            }
+                        const expectedNumberOfFoundConnections =
+                            expectedRelevantSelfConnections.length;
 
-                            const expectedRelevantSelfConnections = selfConnections.filter(
-                                ({ members }) =>
-                                    isDeepStrictEqual(
-                                        members[0].compositeIdentifier,
-                                        compositeIdToQuery
-                                    )
-                            );
+                        const { id, type } = compositeIdToQuery;
 
-                            const expectedNumberOfFoundConnections =
-                                expectedRelevantSelfConnections.length;
+                        const queryResult = await request(app.getHttpServer())
+                            .get('/connections/selfNotes')
+                            .query({
+                                id,
+                                type,
+                            });
 
-                            const { id, type } = compositeIdToQuery;
+                        expect(queryResult.status).toBe(httpStatusCodes.ok);
 
-                            const queryResult = await request(app.getHttpServer())
-                                .get('/connections/selfNotes')
-                                .query({
-                                    id,
-                                    type,
-                                });
+                        expect(queryResult.body.length).toBe(expectedNumberOfFoundConnections);
 
-                            expect(queryResult.status).toBe(httpStatusCodes.ok);
-
-                            expect(queryResult.body.length).toBe(expectedNumberOfFoundConnections);
-
-                            expect(queryResult.body).toMatchSnapshot();
-                        });
-                    })
-                );
+                        expect(queryResult.body).toMatchSnapshot();
+                    });
+                })
+            );
         });
 
         describe(`when the id for the resource is invalid`, () => {
@@ -192,57 +189,51 @@ describe('When querying for edge connections', () => {
         });
 
         describe(`when the composite id for the resource is valid`, () => {
-            Object.values(resourceTypes)
-                // TODO [https://www.pivotaltracker.com/story/show/181861405] remove filter
-                .filter((resourceType) => resourceType !== resourceTypes.tag)
-                .forEach((resourceType) =>
-                    describe(`for a resource of type: ${resourceType}`, () => {
-                        it(`should return the expected result`, async () => {
-                            await testRepositoryProvider
-                                .getEdgeConnectionRepository()
-                                .createMany(connections);
+            Object.values(resourceTypes).forEach((resourceType) =>
+                describe(`for a resource of type: ${resourceType}`, () => {
+                    it(`should return the expected result`, async () => {
+                        await testRepositoryProvider
+                            .getEdgeConnectionRepository()
+                            .createMany(connections);
 
-                            const dualConnections = connections.filter(
-                                ({ type }) => type === EdgeConnectionType.dual
+                        const dualConnections = connections.filter(
+                            ({ type }) => type === EdgeConnectionType.dual
+                        );
+
+                        const compositeIdentifierToQuery = dualConnections
+                            .flatMap(({ members }) => members)
+                            .map(({ compositeIdentifier }) => compositeIdentifier)
+                            .find(({ type }) => type === resourceType);
+
+                        if (!isResourceCompositeIdentifier(compositeIdentifierToQuery)) {
+                            throw new InternalError(
+                                `Failed to find a dual connection for resource of type: ${resourceType}`
                             );
+                        }
 
-                            const compositeIdentifierToQuery = dualConnections
-                                .flatMap(({ members }) => members)
-                                .map(({ compositeIdentifier }) => compositeIdentifier)
-                                .find(({ type }) => type === resourceType);
+                        const expectedNumberOfResults = dualConnections.filter(({ members }) =>
+                            members.some(({ compositeIdentifier }) =>
+                                isDeepStrictEqual(compositeIdentifier, compositeIdentifierToQuery)
+                            )
+                        ).length;
 
-                            if (!isResourceCompositeIdentifier(compositeIdentifierToQuery)) {
-                                throw new InternalError(
-                                    `Failed to find a dual connection for resource of type: ${resourceType}`
-                                );
-                            }
+                        const { id, type } = compositeIdentifierToQuery;
 
-                            const expectedNumberOfResults = dualConnections.filter(({ members }) =>
-                                members.some(({ compositeIdentifier }) =>
-                                    isDeepStrictEqual(
-                                        compositeIdentifier,
-                                        compositeIdentifierToQuery
-                                    )
-                                )
-                            ).length;
+                        const result = await request(app.getHttpServer())
+                            .get('/connections/forResource')
+                            .query({
+                                id,
+                                type,
+                            });
 
-                            const { id, type } = compositeIdentifierToQuery;
+                        expect(result.status).toBe(httpStatusCodes.ok);
 
-                            const result = await request(app.getHttpServer())
-                                .get('/connections/forResource')
-                                .query({
-                                    id,
-                                    type,
-                                });
+                        expect(result.body?.length).toBe(expectedNumberOfResults);
 
-                            expect(result.status).toBe(httpStatusCodes.ok);
-
-                            expect(result.body?.length).toBe(expectedNumberOfResults);
-
-                            expect(result.body).toMatchSnapshot();
-                        });
-                    })
-                );
+                        expect(result.body).toMatchSnapshot();
+                    });
+                })
+            );
         });
     });
 });

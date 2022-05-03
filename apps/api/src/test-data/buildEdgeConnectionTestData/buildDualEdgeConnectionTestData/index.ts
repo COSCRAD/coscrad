@@ -39,14 +39,8 @@ const generateComprehensiveDualEdgeConnectionTestData = (): DTO<EdgeConnection>[
                 member.context.type !== EdgeConnectionContextType.general
         );
 
-    const oneToMemberOfEachResourceType = Object.values(resourceTypes)
-        /**
-         * TODO [https://www.pivotaltracker.com/story/show/181861405]
-         *
-         * Remove filter.
-         */
-        .filter((resourceType) => resourceType !== resourceTypes.tag)
-        .reduce((allToMembers: EdgeConnectionMember[], resourceType) => {
+    const oneToMemberOfEachResourceType = Object.values(resourceTypes).reduce(
+        (allToMembers: EdgeConnectionMember[], resourceType) => {
             const firstSelfMemberOfGivenType = validSelfMembers.find(
                 ({ compositeIdentifier: { type } }) => type === resourceType
             );
@@ -62,7 +56,9 @@ const generateComprehensiveDualEdgeConnectionTestData = (): DTO<EdgeConnection>[
             } as EdgeConnectionMember);
 
             return result;
-        }, []);
+        },
+        []
+    );
 
     const oneFromMemberOfEachResourceType = oneToMemberOfEachResourceType.map((toMember) => ({
         ...toMember,

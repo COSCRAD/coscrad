@@ -1,17 +1,16 @@
 import { DTO } from '../../../types/DTO';
-import { resourceTypes } from '../../types/resourceTypes';
-import { Resource } from '../resource.entity';
+import { EntityId } from '../../types/ResourceId';
+import BaseDomainModel from '../BaseDomainModel';
 
-export class Tag extends Resource {
-    type = resourceTypes.tag;
+export class Tag extends BaseDomainModel {
+    id: EntityId;
 
     text: string;
 
-    // Draft mode not currently supported for tags
-    published = true;
-
     constructor(dto: DTO<Tag>) {
-        super({ ...dto, type: resourceTypes.tag });
+        super();
+
+        this.id = dto.id;
 
         this.text = dto.text;
     }

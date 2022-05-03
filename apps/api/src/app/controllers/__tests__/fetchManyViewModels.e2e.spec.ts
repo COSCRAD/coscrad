@@ -1,11 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { Resource } from '../../../domain/models/resource.entity';
-import {
-    InMemorySnapshotOfResources,
-    ResourceType,
-    resourceTypes,
-} from '../../../domain/types/resourceTypes';
+import { InMemorySnapshotOfResources, resourceTypes } from '../../../domain/types/resourceTypes';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
@@ -57,91 +53,85 @@ describe('When fetching multiple resources', () => {
         await app.init();
     });
 
-    // These resources are always published
-    const resourceTypesToExclude: ResourceType[] = [resourceTypes.tag];
+    Object.values(resourceTypes).forEach((ResourceType) => {
+        const endpointUnderTest = `/${buildViewModelPathForResourceType(ResourceType)}`;
 
-    Object.values(resourceTypes)
-        .filter((ResourceType) => !resourceTypesToExclude.includes(ResourceType))
-        .forEach((ResourceType) => {
-            const endpointUnderTest = `/${buildViewModelPathForResourceType(ResourceType)}`;
+        describe(`GET ${endpointUnderTest}`, () => {
+            beforeEach(async () => {
+                await testRepositoryProvider.testSetup();
+            });
 
-            describe(`GET ${endpointUnderTest}`, () => {
+            afterEach(async () => {
+                await testRepositoryProvider.testTeardown();
+            });
+
+            describe('when all of the resources are published', () => {
                 beforeEach(async () => {
-                    await testRepositoryProvider.testSetup();
+                    await testRepositoryProvider.addEntitiesOfManyTypes(
+                        testDataWithAllResourcesPublished
+                    );
                 });
 
-                afterEach(async () => {
-                    await testRepositoryProvider.testTeardown();
-                });
-
-                describe('when all of the resources are published', () => {
-                    beforeEach(async () => {
-                        await testRepositoryProvider.addEntitiesOfManyTypes(
-                            testDataWithAllResourcesPublished
-                        );
-                    });
-
-                    it(`should fetch multiple resources of type ${ResourceType}`, async () => {
-                        const res = await request(app.getHttpServer()).get(
-                            `/resources${endpointUnderTest}`
-                        );
-
-                        expect(res.status).toBe(httpStatusCodes.ok);
-
-                        expect(res.body.length).toBe(
-                            testDataWithAllResourcesPublished[ResourceType].length
-                        );
-
-                        expect(res.body).toMatchSnapshot();
-                    });
-                });
-
-                describe(`when some of the resources are unpublished`, () => {
-                    /**
-                     * Note that there is no requirement that the test data have
-                     * `published = true`
-                     */
-                    const publishedResourcesToAdd = testData[ResourceType].map(
-                        (instance: Resource) =>
-                            instance.clone({
-                                published: true,
-                            })
+                it(`should fetch multiple resources of type ${ResourceType}`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        `/resources${endpointUnderTest}`
                     );
 
-                    const unpublishedResourcesToAdd = testData[ResourceType]
-                        // We want a different number of published \ unpublished terms
-                        .slice(0, -1)
-                        .map((instance, index) =>
-                            instance.clone({
-                                id: `UNPUBLISHED-00${index + 1}`,
-                                published: false,
-                            })
-                        );
+                    expect(res.status).toBe(httpStatusCodes.ok);
 
-                    beforeEach(async () => {
-                        await testRepositoryProvider.addEntitiesOfSingleType(ResourceType, [
-                            ...unpublishedResourcesToAdd,
-                            ...publishedResourcesToAdd,
-                        ]);
-                    });
+                    expect(res.body.length).toBe(
+                        testDataWithAllResourcesPublished[ResourceType].length
+                    );
 
-                    it('should return the expected number of results', async () => {
-                        const res = await request(app.getHttpServer()).get(
-                            `/resources${endpointUnderTest}`
-                        );
+                    expect(res.body).toMatchSnapshot();
+                });
+            });
 
-                        expect(res.body.length).toBe(publishedResourcesToAdd.length);
+            describe(`when some of the resources are unpublished`, () => {
+                /**
+                 * Note that there is no requirement that the test data have
+                 * `published = true`
+                 */
+                const publishedResourcesToAdd = testData[ResourceType].map((instance: Resource) =>
+                    instance.clone({
+                        published: true,
+                    })
+                );
 
-                        // Sanity check
-                        expect(publishedResourcesToAdd.length).not.toEqual(
-                            unpublishedResourcesToAdd.length
-                        );
+                const unpublishedResourcesToAdd = testData[ResourceType]
+                    // We want a different number of published \ unpublished terms
+                    .slice(0, -1)
+                    .map((instance, index) =>
+                        instance.clone({
+                            id: `UNPUBLISHED-00${index + 1}`,
+                            published: false,
+                        })
+                    );
 
-                        expect(res.body).toMatchSnapshot();
-                    });
+                beforeEach(async () => {
+                    await testRepositoryProvider.addEntitiesOfSingleType(ResourceType, [
+                        ...unpublishedResourcesToAdd,
+                        ...publishedResourcesToAdd,
+                    ]);
+                });
+
+                it('should return the expected number of results', async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        `/resources${endpointUnderTest}`
+                    );
+
+                    expect(res.body.length).toBe(publishedResourcesToAdd.length);
+
+                    // Sanity check
+                    expect(publishedResourcesToAdd.length).not.toEqual(
+                        unpublishedResourcesToAdd.length
+                    );
+
+                    expect(res.body).toMatchSnapshot();
                 });
             });
         });
+    });
 
     afterAll(async () => {
         await arangoConnectionProvider.dropDatabaseIfExists();

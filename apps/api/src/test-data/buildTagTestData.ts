@@ -1,5 +1,4 @@
 import { Tag } from '../domain/models/tag/tag.entity';
-import { resourceTypes } from '../domain/types/resourceTypes';
 
 /**
  * **note** When adding new test data \ modifying existing test data, be sure to
@@ -12,7 +11,5 @@ export default (): Tag[] =>
             new Tag({
                 id: String(index + 1),
                 text,
-                published: true,
-                type: resourceTypes.tag,
             })
     );
