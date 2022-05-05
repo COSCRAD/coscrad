@@ -5,8 +5,12 @@ export interface LinksProps {}
 
 export function Links(props: LinksProps) {
     return (
-        <div style={{ padding: '12px', paddingTop: '0' }}>
-            <h1>Links</h1>
+        <div className="page">
+            <div id="heading">
+                <div id="container">
+                    <h1 id="pageTitle">Links</h1>
+                </div>
+            </div>
             <p>Tŝilhqot’in National Government</p>
             <p>
                 This website is an undertaking of the{' '}
