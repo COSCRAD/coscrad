@@ -5,82 +5,92 @@ https://www.tsilhqotin.ca/wp-content/uploads/2020/12/tsilhqotin_fire-scaled.jpg
 https://www.tsilhqotin.ca/wp-content/uploads/2020/11/cropped-tsilhqotin_horse-scaled-2.jpg
 
 */
-body, html {
+body,
+html {
     width: 100% !important;
     padding: 0 !important;
     margin: 0 !important;
     background-position: center;
     background-size: 100vw !important;
-    background:rgb(68, 147, 204);
-  }
-h1 {
-  margin-top: 0;
 }
-  .navbar {
+
+.logo {
+    padding-left: 25px;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+.navbar {
     height: 100px !important;
     display: flex;
     align-items: center;
     margin-top: 0 auto !important;
-    background-color: transparent;
+    background-color: white;
     box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.389);
-  }
+}
 
-  a:link {
+a:link {
     color: rgb(252, 252, 252) !important;
-  }
-  a:visited {
-    text-decoration: none;
-  }
+}
 
-  a {
+a:visited {
+    text-decoration: none;
+}
+
+a {
     color: rgb(255, 255, 255) !important;
     text-decoration: none;
-  }
+}
 
-  .tool {
+.tool {
     margin-right: 15px;
     vertical-align: bottom;
-  }
-  
-  .topDiv {
+}
+
+.topDiv {
     background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2020/12/IMG_2516-scaled-e1607038804272.jpg');
     background-position: bottom;
     background-size: cover;
     background-position: center;
     height: calc(100vh - 95px);
-  }
-  
-  .midDiv {
+}
+
+.midDiv {
     background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg');
     height: 100vh;
     background-position: center;
-  }
-  
-  .bottomDiv {
+}
+
+.bottomDiv {
     background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_dried_salmon-scaled.jpg');
     background-position: center;
     background-size: cover;
     background-position: left;
     height: 100vh;
-  }
-  
-  .Language {
+}
+
+.Language {
     background-color: rgba(7, 7, 7, 0.377) !important;
     display: block;
-  }
-  
-  .title {
+}
+
+.title {
     padding-left: 7vw;
     color: white;
-  }
-  
-  .navTitle {
+    margin-top: 50vh;
+    position: absolute;
+    z-index: 1;
+}
+
+.navTitle {
     font-size: 2vw;
     padding-left: 5vw;
     padding-top: 2vh;
-  }
-  
-  .dialect {
+}
+
+.dialect {
     border-style: solid;
     width: fit-content;
     font-size: 28px;
@@ -89,62 +99,205 @@ h1 {
     padding-top: 1vh;
     padding-bottom: 1.5vh;
     background-color: rgba(7, 7, 7, 0.377);
-  }
-  
-  .dialect:hover {
+}
+
+.Home {
+    background-color: #102b46c6;
+}
+
+.dialect:hover {
     background-color: rgba(7, 7, 7, 0.777);
     transition: 1s;
     transition-duration: 1s;
-  }
-  
-  .heroTitle {
+}
+
+.heroTitle {
     padding: 0;
     margin: 0;
     font-size: 28px;
-  }
-  
+}
 
-{/*Pixel 5*/}
-@media only screen and (max-width:500px) {
+/*Pixel 5*/
+
+@media only screen and (max-width: 500px) {
     .navTitle {
-      font-size: 6vw !important;
+        font-size: 6vw !important;
     }
+
     .title {
-      font-size: 4vh !important;
+        font-size: 4vh !important;
     }
-  }
-  
-  {/*Samsung s10*/}
-  @media only screen and (max-width: 600px) {
+}
+
+/*Samsung s10*/
+
+@media only screen and (max-width: 600px) {
     .navTitle {
-      font-size: 5vw;
+        font-size: 5vw;
     }
+
     .title {
-      font-size: 3vh !important;
+        font-size: 3vh !important;
     }
-  }
-  
-  {/*Ipad mini*/}
-  @media only screen and (max-width: 800px) {
+}
+
+@media only screen and (max-width: 800px) {
     .navTitle {
-      font-size: 3vh;
+        font-size: 3vh;
     }
+
     .title {
-      font-size: 3vh !important;
+        font-size: 3vh !important;
     }
-  
-  }
-  
-  @media only screen and (min-width: 800px) {
+}
+
+@media only screen and (min-width: 800px) {
     .navTitle {
-      font-size: 4vh;
+        font-size: 4vh;
     }
+
     .title {
-      font-size: 4vh !important;
+        font-size: 4vh !important;
     }
-    
-  }
-  
-  .About, .Contact, .Funders, .Links, .Stream {
+}
+
+@media only screen and (min-width: 768px) {
+    .menu__btn {
+        display: none !important;
+    }
+}
+
+.About,
+.Contact,
+.Funders,
+.Links,
+.Stream {
     min-height: 100vh;
-  }
+}
+
+#menu__toggle {
+    opacity: 0;
+    position: relative fixed;
+}
+
+#menu__toggle:checked + .menu__btn > span {
+    transform: rotate(45deg);
+}
+
+#menu__toggle:checked + .menu__btn > span::before {
+    top: 0;
+    transform: rotate(0deg);
+}
+
+#menu__toggle:checked + .menu__btn > span::after {
+    top: 0;
+    transform: rotate(90deg);
+}
+
+#menu__toggle:checked ~ .menu__box {
+    left: 0 !important;
+}
+
+.menu__btn {
+    position: absolute !important;
+    top: 30px;
+    right: 30px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.menu__btn > span,
+.menu__btn > span::before,
+.menu__btn > span::after {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: red;
+    transition-duration: 0.25s;
+}
+
+.menu__btn > span::before {
+    content: '';
+    top: -8px;
+}
+
+.menu__btn > span::after {
+    content: '';
+    top: 8px;
+}
+
+.menu__box {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 100vw;
+    width: 100vw;
+    height: 100%;
+    margin: 0;
+    padding: 80px 0;
+    list-style: none;
+    background-color: #102b46;
+    transition-duration: 0.75s;
+    z-index: 1 !important;
+}
+
+.menu__item:active {
+    overflow: hidden !important;
+}
+
+.menu__btn:active {
+    overflow: hidden !important;
+}
+
+.menu__item {
+    display: block;
+    padding: 12px 24px;
+    color: #fff !important;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    transition-duration: 0.25s;
+    text-align: center;
+}
+
+.menu__box,
+.menu__item {
+    z-index: 10 !important;
+}
+
+.menu__item:hover {
+    background-color: #8a2222;
+}
+
+.nav__header {
+    color: red;
+    font-size: 24px;
+    font-weight: 500;
+    text-decoration: none;
+    transition-duration: 0.25s;
+    padding-left: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    vertical-align: text-top !important;
+    margin: -10px !important;
+    z-index: top !important;
+}
+
+.logo {
+    vertical-align: middle;
+    padding-right: 10px;
+}
+
+.navLinks {
+    text-align: center !important;
+    margin: 0 auto !important;
+}
