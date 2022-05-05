@@ -12,6 +12,59 @@ html {
     margin: 0 !important;
     background-position: center;
     background-size: 100vw !important;
+    background-image: linear-gradient(
+            112.5deg,
+            rgb(214, 214, 214) 0%,
+            rgb(214, 214, 214) 10%,
+            rgb(195, 195, 195) 10%,
+            rgb(195, 195, 195) 53%,
+            rgb(176, 176, 176) 53%,
+            rgb(176, 176, 176) 55%,
+            rgb(157, 157, 157) 55%,
+            rgb(157, 157, 157) 60%,
+            rgb(137, 137, 137) 60%,
+            rgb(137, 137, 137) 88%,
+            rgb(118, 118, 118) 88%,
+            rgb(118, 118, 118) 91%,
+            rgb(99, 99, 99) 91%,
+            rgb(99, 99, 99) 100%
+        ),
+        linear-gradient(
+            157.5deg,
+            rgb(214, 214, 214) 0%,
+            rgb(214, 214, 214) 10%,
+            rgb(195, 195, 195) 10%,
+            rgb(195, 195, 195) 53%,
+            rgb(176, 176, 176) 53%,
+            rgb(176, 176, 176) 55%,
+            rgb(157, 157, 157) 55%,
+            rgb(157, 157, 157) 60%,
+            rgb(137, 137, 137) 60%,
+            rgb(137, 137, 137) 88%,
+            rgb(118, 118, 118) 88%,
+            rgb(118, 118, 118) 91%,
+            rgb(99, 99, 99) 91%,
+            rgb(99, 99, 99) 100%
+        ),
+        linear-gradient(
+            135deg,
+            rgb(214, 214, 214) 0%,
+            rgb(214, 214, 214) 10%,
+            rgb(195, 195, 195) 10%,
+            rgb(195, 195, 195) 53%,
+            rgb(176, 176, 176) 53%,
+            rgb(176, 176, 176) 55%,
+            rgb(157, 157, 157) 55%,
+            rgb(157, 157, 157) 60%,
+            rgb(137, 137, 137) 60%,
+            rgb(137, 137, 137) 88%,
+            rgb(118, 118, 118) 88%,
+            rgb(118, 118, 118) 91%,
+            rgb(99, 99, 99) 91%,
+            rgb(99, 99, 99) 100%
+        ),
+        linear-gradient(90deg, rgb(195, 195, 195), rgb(228, 228, 228));
+    background-blend-mode: overlay, overlay, overlay, normal;
 }
 
 .logo {
@@ -96,8 +149,8 @@ a {
     font-size: 28px;
     padding-left: 3.5vw;
     padding-right: 3.5vw;
-    padding-top: 1vh;
-    padding-bottom: 1.5vh;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
     background-color: rgba(7, 7, 7, 0.377);
 }
 
@@ -112,9 +165,9 @@ a {
 }
 
 .heroTitle {
-    padding: 0;
+    padding: 2px;
     margin: 0;
-    font-size: 28px;
+    font-size: 24px;
 }
 
 /*Pixel 5*/
@@ -178,6 +231,7 @@ a {
 #menu__toggle {
     opacity: 0;
     position: relative fixed;
+    background: green !important;
 }
 
 #menu__toggle:checked + .menu__btn > span {
@@ -245,7 +299,51 @@ a {
     margin: 0;
     padding: 80px 0;
     list-style: none;
-    background-color: #102b46;
+    background-image: repeating-linear-gradient(
+            0deg,
+            hsla(284, 43%, 48%, 0.05) 0px,
+            hsla(284, 43%, 48%, 0.05) 1px,
+            transparent 1px,
+            transparent 11px,
+            hsla(284, 43%, 48%, 0.05) 11px,
+            hsla(284, 43%, 48%, 0.05) 12px,
+            transparent 12px,
+            transparent 32px
+        ),
+        repeating-linear-gradient(
+            135deg,
+            hsla(284, 43%, 48%, 0.05) 0px,
+            hsla(284, 43%, 48%, 0.05) 1px,
+            transparent 1px,
+            transparent 11px,
+            hsla(284, 43%, 48%, 0.05) 11px,
+            hsla(284, 43%, 48%, 0.05) 12px,
+            transparent 12px,
+            transparent 32px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            hsla(284, 43%, 48%, 0.05) 0px,
+            hsla(284, 43%, 48%, 0.05) 1px,
+            transparent 1px,
+            transparent 11px,
+            hsla(284, 43%, 48%, 0.05) 11px,
+            hsla(284, 43%, 48%, 0.05) 12px,
+            transparent 12px,
+            transparent 32px
+        ),
+        repeating-linear-gradient(
+            45deg,
+            hsla(284, 43%, 48%, 0.05) 0px,
+            hsla(284, 43%, 48%, 0.05) 1px,
+            transparent 1px,
+            transparent 11px,
+            hsla(284, 43%, 48%, 0.05) 11px,
+            hsla(284, 43%, 48%, 0.05) 12px,
+            transparent 12px,
+            transparent 32px
+        ),
+        linear-gradient(90deg, rgb(0, 0, 0), rgb(42, 49, 172));
     transition-duration: 0.75s;
     z-index: 1 !important;
 }
@@ -300,4 +398,51 @@ a {
 .navLinks {
     text-align: center !important;
     margin: 0 auto !important;
+}
+
+#googlePlay {
+    margin: 0 auto;
+}
+
+#heading {
+    background-position: no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    color: white;
+    filter: grayscale(20%);
+}
+
+#container {
+    width: 100%;
+    background: url(https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg)
+        no-repeat center center;
+    background-position: no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.384), 0 6px 20px 0 rgba(0, 0, 0, 0.384);
+}
+
+.page {
+    min-height: calc(100vh - 100px);
+}
+
+.pageContent {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+#pageTitle {
+    text-align: center;
+    padding-bottom: 35px;
+    padding-top: 50px;
+}
+
+.appCard {
+    width: 350px;
+    text-align: center;
+    margin: auto;
 }

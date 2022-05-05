@@ -5,8 +5,12 @@ export interface GreetingsProps {}
 
 export function Greetings(props: GreetingsProps) {
     return (
-        <div>
-            <h1>Welcome to Greetings!</h1>
+        <div className="page">
+            <div id="heading">
+                <div id="container">
+                    <h1 id="pageTitle">Greetings</h1>
+                </div>
+            </div>
         </div>
     );
 }
