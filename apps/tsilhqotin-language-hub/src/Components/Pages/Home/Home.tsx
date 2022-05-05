@@ -1,14 +1,10 @@
 import { Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 import './Home.module.css';
 
 function App() {
     return (
-        <Typography component={'span'} variant={'body2'}>
-            <div
-                style={{
-                    backgroundColor: 'rgba(7, 7, 7, 0.377)',
-                }}
-            ></div>
+        <Typography className="page" component={'span'} variant={'body2'}>
             <div
                 style={{
                     backgroundColor: 'rgba(7, 7, 7, 0.377)',
@@ -22,9 +18,9 @@ function App() {
                             <b>Tŝilhqot’in Ch’ih Yaltɨg</b>
                             <p className="heroTitle">We’re speaking the Tŝilhqot’in language</p>
                         </div>
-                        <div id="top" className="dialect">
+                        <Link to={'/About'} id="top" className="dialect">
                             Dialect
-                        </div>
+                        </Link>
                     </div>
                 </div>
                 <div id="mid" className="midDiv"></div>

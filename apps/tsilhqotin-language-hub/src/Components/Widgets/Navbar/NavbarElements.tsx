@@ -3,7 +3,51 @@ import { NavLink as Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const Nav = styled.nav`
-    background: #102b46;
+    background-image: repeating-linear-gradient(
+            0deg,
+            hsla(284, 43%, 48%, 0.05) 0px,
+            hsla(284, 43%, 48%, 0.05) 1px,
+            transparent 1px,
+            transparent 11px,
+            hsla(284, 43%, 48%, 0.05) 11px,
+            hsla(284, 43%, 48%, 0.05) 12px,
+            transparent 12px,
+            transparent 32px
+        ),
+        repeating-linear-gradient(
+            135deg,
+            hsla(284, 43%, 48%, 0.05) 0px,
+            hsla(284, 43%, 48%, 0.05) 1px,
+            transparent 1px,
+            transparent 11px,
+            hsla(284, 43%, 48%, 0.05) 11px,
+            hsla(284, 43%, 48%, 0.05) 12px,
+            transparent 12px,
+            transparent 32px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            hsla(284, 43%, 48%, 0.05) 0px,
+            hsla(284, 43%, 48%, 0.05) 1px,
+            transparent 1px,
+            transparent 11px,
+            hsla(284, 43%, 48%, 0.05) 11px,
+            hsla(284, 43%, 48%, 0.05) 12px,
+            transparent 12px,
+            transparent 32px
+        ),
+        repeating-linear-gradient(
+            45deg,
+            hsla(284, 43%, 48%, 0.05) 0px,
+            hsla(284, 43%, 48%, 0.05) 1px,
+            transparent 1px,
+            transparent 11px,
+            hsla(284, 43%, 48%, 0.05) 11px,
+            hsla(284, 43%, 48%, 0.05) 12px,
+            transparent 12px,
+            transparent 32px
+        ),
+        linear-gradient(90deg, rgb(0, 0, 0), rgb(42, 49, 172));
     height: 80px;
     display: flex;
     justify-content: space-between;
@@ -66,9 +110,8 @@ export const NavBtn = styled.nav`
     }
 `;
 
-export const NavBtnLink = styled(Link)`
+export const NavBtnLink = styled.div`
     border-radius: 4px;
-    background: red;
     padding: 10px 22px;
     color: white;
     outline: none;
@@ -80,7 +123,5 @@ export const NavBtnLink = styled(Link)`
     margin-left: 24px;
     &:hover {
         transition: all 0.2s ease-in-out;
-        background: #fff;
-        color: #010606;
     }
 `;
