@@ -5,8 +5,12 @@ export interface SongsProps {}
 
 export function Songs(props: SongsProps) {
     return (
-        <div>
-            <h1>Welcome to Songs!</h1>
+        <div className="page">
+            <div id="heading">
+                <div id="container">
+                    <h1 id="pageTitle">Songs</h1>
+                </div>
+            </div>
         </div>
     );
 }

@@ -5,8 +5,12 @@ export interface VideosProps {}
 
 export function Videos(props: VideosProps) {
     return (
-        <div>
-            <h1>Welcome to Videos!</h1>
+        <div className="page">
+            <div id="heading">
+                <div id="container">
+                    <h1 id="pageTitle">Videos</h1>
+                </div>
+            </div>
         </div>
     );
 }
