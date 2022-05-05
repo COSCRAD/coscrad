@@ -1,10 +1,9 @@
-import HorizontalSplitIcon from '@mui/icons-material/HorizontalSplit';
+import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink as Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const Nav = styled.nav`
     background: #102b46;
-    color: green;
     height: 80px;
     display: flex;
     justify-content: space-between;
@@ -27,7 +26,7 @@ export const NavLink = styled(Link)`
     }
 `;
 
-export const Bars = styled(HorizontalSplitIcon)`
+export const Bars = styled(MenuIcon)`
     display: none;
     color: red;
     @media screen and (max-width: 768px) {

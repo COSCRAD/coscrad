@@ -5,7 +5,7 @@ export interface AboutProps {}
 
 export function About(props: AboutProps) {
     return (
-        <div style={{ minHeight: '100vh' }}>
+        <div style={{ minHeight: '100vh', paddingTop: '70px' }}>
             <h1>About</h1>
             <h2>Tŝilhqot’in Ch’ih Yaltɨg</h2>
             <div>Xenchuh ʔElhghaʔeyuwh Jid Gwetowh Gudzɨsh, ʔEguh Chuh Seʔagunt’ih</div>
