@@ -84,17 +84,13 @@ h1 {
     box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.389);
 }
 
-a:link {
-    color: rgb(252, 252, 252) !important;
-}
-
 a:visited {
     text-decoration: none;
 }
 
 a {
-    color: rgb(255, 255, 255) !important;
-    text-decoration: none;
+    color: rgb(255, 0, 0);
+    text-decoration: underline;
 }
 
 .tool {
@@ -150,12 +146,16 @@ a {
     padding-left: 3.5vw;
     padding-right: 3.5vw;
     padding-top: 2vh;
-    padding-bottom: 2vh;
+    padding-bottom: 2.5vh;
     background-color: rgba(7, 7, 7, 0.377);
+    color: white;
+    text-decoration: none;
 }
 
 .Home {
     background-color: #102b46c6;
+    padding-bottom: 0;
+    margin-bottom: 0;
 }
 
 .dialect:hover {
@@ -430,9 +430,15 @@ a {
     min-height: calc(100vh - 100px);
 }
 
+.backdrop {
+    background: rgba(18, 10, 86, 0.5) !important;
+    height: calc(100vh - 95px) !important;
+}
+
 .pageContent {
     padding-left: 30px;
     padding-right: 30px;
+    padding-bottom: 30px;
 }
 
 #pageTitle {
