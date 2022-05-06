@@ -45,6 +45,10 @@ const resourceDescriptions: ResourceDescription[] = [
         description:
             'A bibliographic reference is a reference to, but not a digital representation of, a research resource',
     },
+    {
+        resourceType: resourceTypes.song,
+        description: 'A song includes lyrics and url link to audio recording.',
+    },
 ];
 
 export const buildAllResourceDescriptions = (

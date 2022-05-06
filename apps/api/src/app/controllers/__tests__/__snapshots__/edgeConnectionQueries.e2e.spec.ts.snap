@@ -280,6 +280,76 @@ Array [
 ]
 `;
 
+exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: song should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "24",
+    "note": "That is why spatialFeature/300 is related to song/2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "song",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 200,
+            "outPoint": 1500,
+          },
+          "type": "timeRange",
+        },
+        "role": "from",
+      },
+    ],
+  },
+  Object {
+    "id": "25",
+    "note": "That is why song/2 is related to term/2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "song",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 200,
+            "outPoint": 1500,
+          },
+          "type": "timeRange",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            3,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+  },
+]
+`;
+
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: spatialFeature should return the expected result 1`] = `
 Array [
   Object {
@@ -1510,6 +1580,47 @@ Array [
       },
     ],
     "tags": Array [],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: song should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "9",
+    "note": "this is a song",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "song",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 200,
+            "outPoint": 1500,
+          },
+          "type": "timeRange",
+        },
+        "role": "self",
+      },
+    ],
+  },
+  Object {
+    "id": "18",
+    "note": "this is a song",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "song",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
   },
 ]
 `;
