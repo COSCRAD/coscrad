@@ -12,7 +12,7 @@ export function About(props: AboutProps) {
                 </div>
             </div>
             <div className="pageContent">
-                <h2>Tŝilhqot’in Ch’ih Yaltɨg</h2>
+                <h1>Tŝilhqot’in Ch’ih Yaltɨg</h1>
                 <div>Xenchuh ʔElhghaʔeyuwh Jid Gwetowh Gudzɨsh, ʔEguh Chuh Seʔagunt’ih</div>
                 <div>Loose translation of Tŝilhqot’in Language- Respecting our Diversity</div>
                 <audio
