@@ -18,6 +18,7 @@ export const resourceTypes = {
     photograph: 'photograph',
     spatialFeature: 'spatialFeature',
     bibliographicReference: 'bibliographicReference',
+    song: 'song',
 } as const;
 
 export type ResourceType = ValueType<typeof resourceTypes>;
@@ -34,6 +35,7 @@ export type ResourceTypeToInstance = {
     photograph: Photograph;
     spatialFeature: ISpatialFeature;
     bibliographicReference: IBibliographicReference;
+    song: Song;
 };
 
 /**

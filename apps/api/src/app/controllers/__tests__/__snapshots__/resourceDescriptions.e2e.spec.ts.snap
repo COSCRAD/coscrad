@@ -32,5 +32,10 @@ Array [
     "link": "/api/resources/spatialFeatures",
     "resourceType": "spatialFeature",
   },
+  Object {
+    "description": "A song includes lyrics and url link to audio recording.",
+    "link": "/api/resources/songs",
+    "resourceType": "song",
+  },
 ]
 `;

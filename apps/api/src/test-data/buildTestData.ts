@@ -4,6 +4,7 @@ import buildBookTestData from './buildBookTestData';
 import buildCategoryTestData from './buildCategoryTestData';
 import buildEdgeConnectionTestData from './buildEdgeConnectionTestData';
 import buildPhotographTestData from './buildPhotographTestData';
+import buildSongTestData from './buildSongTestData';
 import buildSpatialFeatureTestData from './buildSpatialFeatureTestData';
 import buildTagTestData from './buildTagTestData';
 import buildTermTestData from './buildTermTestData';
@@ -24,6 +25,7 @@ export default (): InMemorySnapshot => ({
         [resourceTypes.photograph]: buildPhotographTestData(),
         [resourceTypes.spatialFeature]: buildSpatialFeatureTestData(),
         [resourceTypes.bibliographicReference]: buildBibliographicReferenceTestData(),
+        [resourceTypes.song]: buildSongTestData(),
     },
     connections: buildEdgeConnectionTestData(),
     tags: buildTagTestData(),

@@ -1,3 +1,4 @@
+import { DTO } from 'apps/api/src/types/DTO';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -14,7 +15,7 @@ import { resourceTypes } from '../../../domain/types/resourceTypes';
 
 const role = EdgeConnectionMemberRole.self;
 
-const selfEdgeConnectionInstancesWithSpecificContext = [
+const foo: Partial<DTO<EdgeConnection>>[] = [
     {
         note: 'This first 4 letters of this term form a syllable that indicates this is a plant ',
         members: [
@@ -166,7 +167,30 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
             },
         ],
     },
-].map((partialDTO) => ({ ...partialDTO, type: EdgeConnectionType.self }));
+    {
+        note: 'this is a song',
+        members: [
+            {
+                role,
+                compositeIdentifier: {
+                    id: '1',
+                    type: resourceTypes.song,
+                },
+                context: new TimeRangeContext({
+                    timeRange: {
+                        inPoint: 300,
+                        outPoint: 500,
+                    },
+                    type: EdgeConnectionContextType.timeRange,
+                }),
+            },
+        ],
+    },
+];
+const selfEdgeConnectionInstancesWithSpecificContext = foo.map((partialDTO) => ({
+    ...partialDTO,
+    type: EdgeConnectionType.self,
+}));
 
 const selfEdgeConnectionsWithGeneralContext = selfEdgeConnectionInstancesWithSpecificContext.map(
     (edgeConnection) => ({
@@ -186,4 +210,4 @@ export default (uniqueIdOffset: number): EdgeConnection[] =>
             ...dto,
             id: `${index + uniqueIdOffset}`,
         }))
-        .map((dto) => new EdgeConnection(dto));
+        .map((dto) => new EdgeConnection(dto as DTO<EdgeConnection>));
