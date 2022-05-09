@@ -1,5 +1,6 @@
 import { ValueType } from '../../lib/types/valueType';
 import { Book } from '../models/book/entities/book.entity';
+import { CategorizedTree } from '../models/categories/types/CategorizedTree';
 import { EdgeConnection } from '../models/context/edge-connection.entity';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { ISpatialFeature } from '../models/spatial-feature/ISpatialFeature';
@@ -43,4 +44,10 @@ export type InMemorySnapshot = {
     resources: InMemorySnapshotOfResources;
     connections: EdgeConnection[];
     tags: Tag[];
+    /**
+     * We do not intend to leak the abstraction of how the categories are
+     * represented in the database here. Defer this to (the db specific) document
+     * mapping layer.
+     */
+    categoryTree: CategorizedTree;
 };

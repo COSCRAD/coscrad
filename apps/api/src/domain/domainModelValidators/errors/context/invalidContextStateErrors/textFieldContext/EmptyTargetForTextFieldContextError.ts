@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import formatResourceCompositeIdentifier from '../../../../../../view-models/presentation/formatResourceCompositeIdentifier';
-import { ResourceCompositeIdentifier } from '../../../../../models/types/entityCompositeIdentifier';
+import { ResourceCompositeIdentifier } from '../../../../../models/types/ResourceCompositeIdentifier';
 
 export default class EmptyTargetForTextFieldContextError extends InternalError {
     constructor(targetModel: ResourceCompositeIdentifier, targetField: string) {

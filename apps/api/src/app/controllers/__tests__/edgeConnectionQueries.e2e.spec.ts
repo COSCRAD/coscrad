@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { isDeepStrictEqual } from 'util';
 import { EdgeConnectionType } from '../../../domain/models/context/edge-connection.entity';
-import { isResourceCompositeIdentifier } from '../../../domain/models/types/entityCompositeIdentifier';
+import { isResourceCompositeIdentifier } from '../../../domain/models/types/ResourceCompositeIdentifier';
 import { resourceTypes } from '../../../domain/types/resourceTypes';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
