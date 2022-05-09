@@ -2,8 +2,8 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
 import { EntityId } from '../../types/ResourceId';
 import BaseDomainModel from '../BaseDomainModel';
-import { ResourceCompositeIdentifier } from '../types/entityCompositeIdentifier';
 import { HasEntityID } from '../types/HasEntityId';
+import { ResourceCompositeIdentifier } from '../types/ResourceCompositeIdentifier';
 import { ContextModelUnion } from './types/ContextModelUnion';
 
 export enum EdgeConnectionType {

@@ -9,8 +9,8 @@ import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedFo
 import BaseDomainModel from './BaseDomainModel';
 import { EdgeConnectionContext } from './context/context.entity';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
-import { ResourceCompositeIdentifier } from './types/entityCompositeIdentifier';
 import { HasEntityID } from './types/HasEntityId';
+import { ResourceCompositeIdentifier } from './types/ResourceCompositeIdentifier';
 
 export abstract class Resource extends BaseDomainModel implements HasEntityID {
     readonly type: ResourceType;

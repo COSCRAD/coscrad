@@ -5,7 +5,7 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
-import { ResourceCompositeIdentifier } from '../../../domain/models/types/entityCompositeIdentifier';
+import { ResourceCompositeIdentifier } from '../../../domain/models/types/ResourceCompositeIdentifier';
 import { isResourceId } from '../../../domain/types/ResourceId';
 import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../../lib/errors/InternalError';
