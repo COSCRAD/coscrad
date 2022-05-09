@@ -2,6 +2,7 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
 import { EntityId } from '../../types/ResourceId';
 import BaseDomainModel from '../BaseDomainModel';
+import { noteType } from '../categories/types/ResourceTypeOrNoteType';
 import { HasEntityID } from '../types/HasEntityId';
 import { ResourceCompositeIdentifier } from '../types/ResourceCompositeIdentifier';
 import { ContextModelUnion } from './types/ContextModelUnion';
@@ -56,5 +57,12 @@ export class EdgeConnection extends BaseDomainModel implements HasEntityID {
         this.tagIDs = Array.isArray(tagIDs) && tagIDs.length > 0 ? cloneToPlainObject(tagIDs) : [];
 
         this.note = note;
+    }
+
+    getCompositeIdentifier() {
+        return {
+            type: noteType,
+            id: this.id,
+        } as const;
     }
 }
