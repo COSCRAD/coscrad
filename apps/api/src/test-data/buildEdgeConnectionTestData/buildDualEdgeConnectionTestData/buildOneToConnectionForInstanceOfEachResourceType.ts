@@ -1,5 +1,4 @@
 import { EdgeConnection } from '../../../domain/models/context/edge-connection.entity';
-import { DTO } from '../../../types/DTO';
 
 /**
  * We split up seeding our test \ demonstration data for `Edge Connections` into
@@ -8,4 +7,4 @@ import { DTO } from '../../../types/DTO';
  * that we add a variety of test data for each new `ResourceType` and
  * `EdgeConnectionContextType`.
  */
-export default (): DTO<EdgeConnection>[] => [];
+export default (): EdgeConnection[] => [];
