@@ -164,7 +164,10 @@ export class ArangoConnectionProvider {
 
         if (doesCollectionExist) return;
 
-        // TODO Improve this once there is a second edge connection to add
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/182132515]
+         * cleanup the references
+         */
         if (isArangoEdgeCollectionCollectionID(collectionName)) {
             await this.#connection.createEdgeCollection(collectionName);
         } else {

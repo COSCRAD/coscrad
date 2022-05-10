@@ -6,53 +6,6 @@ import { ResourceOrNoteCompositeIdentifier } from '../../../models/categories/ty
 import { noteType } from '../../../models/categories/types/ResourceTypeOrNoteType';
 import { InMemorySnapshot } from '../../../types/resourceTypes';
 
-// type ResourceReferences = {
-//     // TODO correlate resourceType with key
-//     [K in keyof InMemorySnapshotOfResources]: EntityId[];
-// };
-
-// type NoteAndResourceReferences = {
-//     resources: ResourceReferences;
-//     notes: EntityId[];
-// };
-
-// const buildEmptyResourceReferences = (): ResourceReferences =>
-//     Object.values(resourceTypes).reduce(
-//         (acc, resourceType) => ({
-//             ...acc,
-//             [resourceType]: [],
-//         }),
-//         {}
-//     );
-
-// const buildEmptyNoteAndResourceReferences = (): NoteAndResourceReferences => ({
-//     notes: [],
-//     resources: buildEmptyResourceReferences(),
-// });
-
-// const sortNoteAndResourceReferences = (
-//     compositeIdentifiers: ResourceOrNoteCompositeIdentifier[]
-// ): NoteAndResourceReferences =>
-//     compositeIdentifiers.reduce((acc: NoteAndResourceReferences, { id, type }) => {
-//         // TODO Use maps instead
-//         if (isResourceType(type))
-//             return {
-//                 ...acc,
-//                 resources: {
-//                     ...acc.resources,
-//                     [type]: acc.resources[type].concat(id),
-//                 },
-//             };
-
-//         if (type === noteType)
-//             return {
-//                 ...acc,
-//                 notes: acc.notes.concat(id),
-//             };
-
-//         throw new InternalError(`Invalid note or resource type: ${type}`);
-//     }, buildEmptyNoteAndResourceReferences());
-
 type ErrorFactory = (invalidReferences: ResourceOrNoteCompositeIdentifier[]) => InternalError;
 
 export default (

@@ -25,6 +25,12 @@ import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEnti
 import { DTO } from '../types/DTO';
 import buildTestData from './buildTestData';
 
+/**
+ * TODO [https://www.pivotaltracker.com/story/show/182134037]
+ *
+ * Break out mapping test data to database format into separate
+ * utilities.
+ */
 type InMemorySnapshotOfResourceDTOs = {
     [K in keyof ResourceTypeToInstance]?: DTO<ResourceTypeToInstance>[K][];
 };
@@ -250,6 +256,12 @@ describe('buildTestData', () => {
 
     // If the test succeeds, write the data
     afterAll(() => {
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/182134037]
+         *
+         * Break out mapping test data to database format into separate
+         * utilities.
+         */
         const resourceTestDataInDatabaseFormat =
             // Use `collectionNames` not `resourceTypes` as keys
             Object.entries(resourceTestDataDTOs).reduce(
@@ -288,7 +300,7 @@ describe('buildTestData', () => {
 
         writeFileSync(
             testDataFilePath,
-            JSON.stringify(fullSnapshotInDatabaseFormat, null, numberOfSpacesToIndent)
+            JSON.stringify(fullSnapshotInDatabaseFormat, null, numberOfSpacesToIndent).concat('\n')
         );
     });
 });

@@ -7,7 +7,7 @@ import { HasEntityIdAndLabel } from '../../../interfaces/HasEntityIdAndLabel';
 import { ValidatesItsExternalState } from '../../../interfaces/ValidatesItsExternalState';
 import { EntityId } from '../../../types/ResourceId';
 import { InMemorySnapshot } from '../../../types/resourceTypes';
-import validateReferencesAgainstExternalState from '../../../utilities/validation/validateReferencesAgainstExternalState';
+import validateEntityReferencesAgainstExternalState from '../../../utilities/validation/validateEntityReferencesAgainstExternalState';
 import BaseDomainModel from '../../BaseDomainModel';
 import InvalidExternalReferenceInCategoryError from '../errors/InvalidExternalReferenceInCategoryError';
 import { ResourceOrNoteCompositeIdentifier } from '../types/ResourceOrNoteCompositeIdentifier';
@@ -22,7 +22,10 @@ export class Category
 
     members: ResourceOrNoteCompositeIdentifier[];
 
-    constructor({ id, label, members }: DTO<Category>) {
+    // These are `Category` IDs for the children categories of this category
+    childrenIDs: EntityId[];
+
+    constructor({ id, label, members, childrenIDs }: DTO<Category>) {
         super();
 
         this.id = id;
@@ -30,10 +33,12 @@ export class Category
         this.label = label;
 
         this.members = cloneToPlainObject(members);
+
+        this.childrenIDs = [...childrenIDs];
     }
 
     validateExternalState(externalState: DeepPartial<InMemorySnapshot>): Valid | InternalError {
-        return validateReferencesAgainstExternalState(
+        return validateEntityReferencesAgainstExternalState(
             externalState,
             this.members,
             (missing: ResourceOrNoteCompositeIdentifier[]) =>
