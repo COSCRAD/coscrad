@@ -15,8 +15,6 @@ type ArangoEdgeMemberContext = {
 type ArangoEdgeDocumentWithoutSystemAttributes = {
     type: EdgeConnectionType;
 
-    tagIDs: string[];
-
     note: string;
 
     members: ArangoEdgeMemberContext[];

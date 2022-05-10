@@ -6,7 +6,12 @@ import {
 } from '../../../domain/types/resourceTypes';
 import { DatabaseProvider } from '../../database/database.provider';
 import { getArangoCollectionIDFromResourceType } from '../../database/getArangoCollectionIDFromResourceType';
-import { arangoEdgeCollectionID, tagCollectionID } from '../../database/types/ArangoCollectionId';
+import {
+    categoryCollectionID,
+    categoryEdgeCollectionID,
+    edgeConnectionCollectionID,
+    tagCollectionID,
+} from '../../database/types/ArangoCollectionId';
 import { RepositoryProvider } from '../repository.provider';
 
 export default class TestRepositoryProvider extends RepositoryProvider {
@@ -45,16 +50,19 @@ export default class TestRepositoryProvider extends RepositoryProvider {
     }
 
     public async deleteAllEdges(): Promise<void> {
-        await this.databaseProvider.getDBInstance().deleteAll(arangoEdgeCollectionID);
+        await this.databaseProvider.getDBInstance().deleteAll(edgeConnectionCollectionID);
+
+        await this.databaseProvider.getDBInstance().deleteAll(categoryEdgeCollectionID);
     }
 
     /**
      * Deletes all entity data (i.e. empties every entity collection);
      */
     private async deleteAllEntityData(): Promise<void> {
-        const deleteAllDataPromises = Object.values(resourceTypes).map(
-            (ResourceType: ResourceType) => this.deleteAllResourcesOfGivenType(ResourceType)
-        );
+        const deleteAllDataPromises = Object.values(resourceTypes)
+            .map((ResourceType: ResourceType) => this.deleteAllResourcesOfGivenType(ResourceType))
+            .concat(this.databaseProvider.getDBInstance().deleteAll(tagCollectionID))
+            .concat(this.databaseProvider.getDBInstance().deleteAll(categoryCollectionID));
 
         await Promise.all(deleteAllDataPromises);
     }

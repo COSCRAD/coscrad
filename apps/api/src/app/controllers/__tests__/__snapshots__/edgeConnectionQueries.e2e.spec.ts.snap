@@ -3,7 +3,7 @@
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: book should return the expected result 1`] = `
 Array [
   Object {
-    "id": "19",
+    "id": "2002",
     "note": "That is why transcribedAudio/110 is related to book/24",
     "relatedResources": Array [
       Object {
@@ -36,7 +36,7 @@ Array [
     ],
   },
   Object {
-    "id": "20",
+    "id": "2003",
     "note": "That is why book/24 is related to photograph/2",
     "relatedResources": Array [
       Object {
@@ -90,7 +90,7 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: photograph should return the expected result 1`] = `
 Array [
   Object {
-    "id": "20",
+    "id": "2003",
     "note": "That is why book/24 is related to photograph/2",
     "relatedResources": Array [
       Object {
@@ -139,7 +139,7 @@ Array [
     ],
   },
   Object {
-    "id": "21",
+    "id": "2004",
     "note": "That is why photograph/2 is related to spatialFeature/300",
     "relatedResources": Array [
       Object {
@@ -190,7 +190,7 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: spatialFeature should return the expected result 1`] = `
 Array [
   Object {
-    "id": "21",
+    "id": "2004",
     "note": "That is why photograph/2 is related to spatialFeature/300",
     "relatedResources": Array [
       Object {
@@ -236,7 +236,7 @@ Array [
     ],
   },
   Object {
-    "id": "22",
+    "id": "2005",
     "note": "That is why spatialFeature/300 is related to term/2",
     "relatedResources": Array [
       Object {
@@ -272,8 +272,8 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: term should return the expected result 1`] = `
 Array [
   Object {
-    "id": "17",
-    "note": "That is why term/2 is related to vocabularyList/vocabulary-list-id-2",
+    "id": "2000",
+    "note": "That is why term/2 is related to vocabularyList/2",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
@@ -292,7 +292,7 @@ Array [
       },
       Object {
         "compositeIdentifier": Object {
-          "id": "vocabulary-list-id-2",
+          "id": "2",
           "type": "vocabularyList",
         },
         "context": Object {
@@ -308,7 +308,7 @@ Array [
     ],
   },
   Object {
-    "id": "22",
+    "id": "2005",
     "note": "That is why spatialFeature/300 is related to term/2",
     "relatedResources": Array [
       Object {
@@ -344,12 +344,12 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: transcribedAudio should return the expected result 1`] = `
 Array [
   Object {
-    "id": "18",
-    "note": "That is why vocabularyList/vocabulary-list-id-2 is related to transcribedAudio/110",
+    "id": "2001",
+    "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
-          "id": "vocabulary-list-id-2",
+          "id": "2",
           "type": "vocabularyList",
         },
         "context": Object {
@@ -379,7 +379,7 @@ Array [
     ],
   },
   Object {
-    "id": "19",
+    "id": "2002",
     "note": "That is why transcribedAudio/110 is related to book/24",
     "relatedResources": Array [
       Object {
@@ -417,8 +417,8 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: vocabularyList should return the expected result 1`] = `
 Array [
   Object {
-    "id": "17",
-    "note": "That is why term/2 is related to vocabularyList/vocabulary-list-id-2",
+    "id": "2000",
+    "note": "That is why term/2 is related to vocabularyList/2",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
@@ -437,7 +437,7 @@ Array [
       },
       Object {
         "compositeIdentifier": Object {
-          "id": "vocabulary-list-id-2",
+          "id": "2",
           "type": "vocabularyList",
         },
         "context": Object {
@@ -453,12 +453,12 @@ Array [
     ],
   },
   Object {
-    "id": "18",
-    "note": "That is why vocabularyList/vocabulary-list-id-2 is related to transcribedAudio/110",
+    "id": "2001",
+    "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
-          "id": "vocabulary-list-id-2",
+          "id": "2",
           "type": "vocabularyList",
         },
         "context": Object {
@@ -538,7 +538,7 @@ Array [
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
-          "id": "vocabulary-list-id-2",
+          "id": "2",
           "type": "vocabularyList",
         },
         "context": Object {
@@ -702,7 +702,7 @@ Array [
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
-          "id": "vocabulary-list-id-2",
+          "id": "2",
           "type": "vocabularyList",
         },
         "context": Object {
@@ -793,8 +793,8 @@ Array [
     ],
   },
   Object {
-    "id": "17",
-    "note": "That is why term/2 is related to vocabularyList/vocabulary-list-id-2",
+    "id": "2000",
+    "note": "That is why term/2 is related to vocabularyList/2",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
@@ -813,7 +813,7 @@ Array [
       },
       Object {
         "compositeIdentifier": Object {
-          "id": "vocabulary-list-id-2",
+          "id": "2",
           "type": "vocabularyList",
         },
         "context": Object {
@@ -829,12 +829,12 @@ Array [
     ],
   },
   Object {
-    "id": "18",
-    "note": "That is why vocabularyList/vocabulary-list-id-2 is related to transcribedAudio/110",
+    "id": "2001",
+    "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
-          "id": "vocabulary-list-id-2",
+          "id": "2",
           "type": "vocabularyList",
         },
         "context": Object {
@@ -864,7 +864,7 @@ Array [
     ],
   },
   Object {
-    "id": "19",
+    "id": "2002",
     "note": "That is why transcribedAudio/110 is related to book/24",
     "relatedResources": Array [
       Object {
@@ -897,7 +897,7 @@ Array [
     ],
   },
   Object {
-    "id": "20",
+    "id": "2003",
     "note": "That is why book/24 is related to photograph/2",
     "relatedResources": Array [
       Object {
@@ -946,7 +946,7 @@ Array [
     ],
   },
   Object {
-    "id": "21",
+    "id": "2004",
     "note": "That is why photograph/2 is related to spatialFeature/300",
     "relatedResources": Array [
       Object {
@@ -992,7 +992,7 @@ Array [
     ],
   },
   Object {
-    "id": "22",
+    "id": "2005",
     "note": "That is why spatialFeature/300 is related to term/2",
     "relatedResources": Array [
       Object {
@@ -1321,7 +1321,7 @@ Array [
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
-          "id": "vocabulary-list-id-2",
+          "id": "2",
           "type": "vocabularyList",
         },
         "context": Object {
@@ -1342,7 +1342,7 @@ Array [
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
-          "id": "vocabulary-list-id-2",
+          "id": "2",
           "type": "vocabularyList",
         },
         "context": Object {
