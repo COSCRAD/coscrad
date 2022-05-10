@@ -2,10 +2,13 @@ import { writeFileSync } from 'fs';
 import { getValidatorForEntity } from '../domain/domainModelValidators';
 import categoryValidator from '../domain/domainModelValidators/categoryValidator';
 import validateEdgeConnection from '../domain/domainModelValidators/contextValidators/validateEdgeConnection';
+import tagValidator from '../domain/domainModelValidators/tagValidator';
 import { isValid, Valid } from '../domain/domainModelValidators/Valid';
 import { Category } from '../domain/models/categories/entities/category.entity';
+import { CategorizedTree } from '../domain/models/categories/types/CategorizedTree';
 import { EdgeConnectionMemberRole } from '../domain/models/context/edge-connection.entity';
 import { Resource } from '../domain/models/resource.entity';
+import { EntityId } from '../domain/models/types/EntityId';
 import {
     isResourceType,
     ResourceType,
@@ -15,14 +18,39 @@ import {
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
 import { getArangoCollectionIDFromResourceType } from '../persistence/database/getArangoCollectionIDFromResourceType';
+import { categoryCollectionID } from '../persistence/database/types/ArangoCollectionId';
+import { ArangoDocumentHandle } from '../persistence/database/types/ArangoDocumentHandle';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
 import { DTO } from '../types/DTO';
 import buildTestData from './buildTestData';
 
+/**
+ * TODO [https://www.pivotaltracker.com/story/show/182134037]
+ *
+ * Break out mapping test data to database format into separate
+ * utilities.
+ */
 type InMemorySnapshotOfResourceDTOs = {
     [K in keyof ResourceTypeToInstance]?: DTO<ResourceTypeToInstance>[K][];
 };
+
+const buildCategoryDocHandle = (id: EntityId): ArangoDocumentHandle =>
+    `${categoryCollectionID}/${id}`;
+
+const buildEdgeDocumentsFromCategoryNodeDTOs = (categoryNodes: CategorizedTree) =>
+    categoryNodes.reduce(
+        (acc, { childrenIDs, id: parentId }) =>
+            childrenIDs.length === 0
+                ? acc
+                : acc.concat(
+                      childrenIDs.map((childId) => ({
+                          _to: buildCategoryDocHandle(childId),
+                          _from: buildCategoryDocHandle(parentId),
+                      }))
+                  ),
+        []
+    );
 
 describe('buildTestData', () => {
     const testData = buildTestData();
@@ -31,6 +59,7 @@ describe('buildTestData', () => {
         categoryTree: categoryTestData,
         connections: connectionTestData,
         resources: resourceTestData,
+        tags: tagTestData,
     } = testData;
 
     const resourceTestDataDTOs = Object.entries(resourceTestData).reduce(
@@ -140,17 +169,7 @@ describe('buildTestData', () => {
                     expect(validationResult).toBe(Valid);
                 });
 
-                const { members, tagIDs } = edgeConnection;
-
-                it(`should reference only tags that are in the test data`, () => {
-                    const { tags: allTags } = testData;
-
-                    const areAllTagsInSnapshot = tagIDs.every((tagID) =>
-                        allTags.some(({ id }) => id === tagID)
-                    );
-
-                    expect(areAllTagsInSnapshot).toBe(true);
-                });
+                const { members } = edgeConnection;
 
                 members.forEach(
                     ({ compositeIdentifier: { id: memberId, type: resourceType }, context }) => {
@@ -184,6 +203,25 @@ describe('buildTestData', () => {
         });
 
         describe('category test data', () => {
+            it('should contain tags that satisfy invariant validation rules', () => {
+                const tagsThatFailInvariantValidation = tagTestData.filter(
+                    // Note it's ok to pass an instance to a DTO validator
+                    (tag) => !isValid(tagValidator(tag))
+                );
+
+                expect(tagsThatFailInvariantValidation).toEqual([]);
+            });
+
+            it('should reference only entities that exist in the test data', () => {
+                const categoriesWithResourcesThatAreNotInSnapshot = tagTestData.filter(
+                    (tag) => !isValid(tag.validateExternalState(testData))
+                );
+
+                expect(categoriesWithResourcesThatAreNotInSnapshot).toEqual([]);
+            });
+        });
+
+        describe('category test data', () => {
             it('should contain categories that satisfy invariant validation rules', () => {
                 const categoriesThatFailInvariantValidation = categoryTestData.filter(
                     (categoryNodeDTO) => !isValid(categoryValidator(categoryNodeDTO))
@@ -201,7 +239,9 @@ describe('buildTestData', () => {
             });
 
             it('should reference only other categories in the test data as child categories', () => {
-                const allChildCategoryIDs = categoryTestData.flatMap(({ children }) => children);
+                const allChildCategoryIDs = categoryTestData.flatMap(
+                    ({ childrenIDs }) => childrenIDs
+                );
 
                 const allCategoryIDs = categoryTestData.map(({ id }) => id);
 
@@ -216,6 +256,12 @@ describe('buildTestData', () => {
 
     // If the test succeeds, write the data
     afterAll(() => {
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/182134037]
+         *
+         * Break out mapping test data to database format into separate
+         * utilities.
+         */
         const resourceTestDataInDatabaseFormat =
             // Use `collectionNames` not `resourceTypes` as keys
             Object.entries(resourceTestDataDTOs).reduce(
@@ -232,10 +278,19 @@ describe('buildTestData', () => {
             mapEdgeConnectionDTOToArangoEdgeDocument
         );
 
+        const tagTestDataInDatabaseFormat = tagTestData.map(mapEntityDTOToDatabaseDTO);
+
+        const categoryTestDataInDatabsaeFormat = categoryTestData.map(mapEntityDTOToDatabaseDTO);
+
+        const categoryEdges = buildEdgeDocumentsFromCategoryNodeDTOs(categoryTestData);
+
         const fullSnapshotInDatabaseFormat = {
             resources: resourceTestDataInDatabaseFormat,
             // note the change in this key ~~connections~~ -> edges
             resource_edge_connections: connectionTestDataInDatabaseFormat,
+            tags: tagTestDataInDatabaseFormat,
+            categories: categoryTestDataInDatabsaeFormat,
+            categoryEdges,
         };
 
         // TODO move this to a config- better yet avoid this whole write!
@@ -245,7 +300,7 @@ describe('buildTestData', () => {
 
         writeFileSync(
             testDataFilePath,
-            JSON.stringify(fullSnapshotInDatabaseFormat, null, numberOfSpacesToIndent)
+            JSON.stringify(fullSnapshotInDatabaseFormat, null, numberOfSpacesToIndent).concat('\n')
         );
     });
 });

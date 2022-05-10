@@ -21,7 +21,6 @@ type TestCase = {
 const selfEdgeConnection = {
     id: '123',
     type: EdgeConnectionType.self,
-    tagIDs: ['1'],
     note: 'These pages are about bears',
     members: [
         {
@@ -81,7 +80,6 @@ const dualEdgeConnection = new EdgeConnection({
         buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
     ],
     id: '123',
-    tagIDs: ['55'],
     note: 'These are both about bears',
 }).toDTO();
 
@@ -94,7 +92,7 @@ const testCases: TestCase[] = [
             _to: 'books/24',
             _key: '123',
             type: EdgeConnectionType.self,
-            tagIDs: ['1'],
+
             note: 'These pages are about bears',
             members: [
                 {
@@ -112,7 +110,7 @@ const testCases: TestCase[] = [
             _to: 'transcribed_audio/15',
             _key: '123',
             type: EdgeConnectionType.dual,
-            tagIDs: ['55'],
+
             note: 'These are both about bears',
             members: [
                 {

@@ -32,7 +32,6 @@ const edgeConnections: DTO<EdgeConnection>[] = [
         type: EdgeConnectionType.self,
         id: '1',
         note: 'the note',
-        tagIDs: ['1', '22', '444'],
         members: [
             {
                 role: EdgeConnectionMemberRole.self,

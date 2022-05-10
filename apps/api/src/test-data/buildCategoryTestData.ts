@@ -12,7 +12,7 @@ export default (): CategorizedTree => [
                 id: '1',
             },
         ],
-        children: ['2', '3'],
+        childrenIDs: ['2', '3'],
     },
     {
         id: '2',
@@ -27,13 +27,13 @@ export default (): CategorizedTree => [
                 id: '23',
             },
         ],
-        children: ['4', '5', '11'],
+        childrenIDs: ['4', '5', '11'],
     },
     {
         id: '3',
         label: 'birds',
         members: [],
-        children: [],
+        childrenIDs: [],
     },
     {
         id: '4',
@@ -44,19 +44,19 @@ export default (): CategorizedTree => [
                 id: '2',
             },
         ],
-        children: ['8', '10'],
+        childrenIDs: ['8', '10'],
     },
     {
         id: '5',
         label: 'felines',
         members: [],
-        children: ['6', '7'],
+        childrenIDs: ['6', '7'],
     },
     {
         id: '6',
         label: 'big cats',
         members: [],
-        children: [],
+        childrenIDs: [],
     },
     {
         id: '7',
@@ -71,7 +71,7 @@ export default (): CategorizedTree => [
                 id: '0',
             },
         ],
-        children: [],
+        childrenIDs: [],
     },
     {
         id: '8',
@@ -82,7 +82,7 @@ export default (): CategorizedTree => [
                 id: '101',
             },
         ],
-        children: [],
+        childrenIDs: [],
     },
     {
         id: '9',
@@ -97,7 +97,7 @@ export default (): CategorizedTree => [
                 id: '102',
             },
         ],
-        children: [],
+        childrenIDs: [],
     },
     {
         id: '10',
@@ -108,7 +108,7 @@ export default (): CategorizedTree => [
                 id: '1',
             },
         ],
-        children: [],
+        childrenIDs: [],
     },
     {
         id: '11',
@@ -119,25 +119,25 @@ export default (): CategorizedTree => [
                 id: '24',
             },
         ],
-        children: [],
+        childrenIDs: [],
     },
     {
         id: '12',
         label: 'film',
         members: [],
-        children: ['13', '14'],
+        childrenIDs: ['13', '14'],
     },
     {
         id: '13',
         label: 'props',
         members: [],
-        children: ['16', '17', '18'],
+        childrenIDs: ['16', '17', '18'],
     },
     {
         id: '14',
         label: 'wardrobe',
         members: [],
-        children: [],
+        childrenIDs: [],
     },
     {
         id: '15',
@@ -148,13 +148,13 @@ export default (): CategorizedTree => [
                 id: '110',
             },
         ],
-        children: [],
+        childrenIDs: [],
     },
     {
         id: '16',
         label: 'adornments',
         members: [],
-        children: ['15'],
+        childrenIDs: ['15'],
     },
     {
         id: '17',
@@ -165,13 +165,13 @@ export default (): CategorizedTree => [
                 id: '1',
             },
         ],
-        children: [],
+        childrenIDs: [],
     },
     {
         id: '18',
         // Duplicate label ok, but not duplicate ID
         label: 'tools',
         members: [],
-        children: [],
+        childrenIDs: [],
     },
 ];
