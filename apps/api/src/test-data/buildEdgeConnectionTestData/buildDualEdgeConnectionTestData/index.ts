@@ -7,7 +7,6 @@ import {
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
 import { resourceTypes } from '../../../domain/types/resourceTypes';
 import { InternalError } from '../../../lib/errors/InternalError';
-import { DTO } from '../../../types/DTO';
 import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatResourceCompositeIdentifier';
 import buildOneSelfEdgeConnectionForEachResourceType from '../buildSelfConnectionTestData/buildOneSelfEdgeConnectionForEachResourceType';
 import buildOneDualEdgeConnectionForEveryContextType from './buildOneDualEdgeConnectionForEveryContextType';
@@ -25,8 +24,10 @@ const buildDummyNoteForDualConnection = (
         formatResourceCompositeIdentifier(fromMember.compositeIdentifier),
     ].join(' ');
 
-const generateComprehensiveDualEdgeConnectionTestData = (): DTO<EdgeConnection>[] => {
-    const validSelfMembers = buildOneSelfEdgeConnectionForEachResourceType()
+const generateComprehensiveDualEdgeConnectionTestData = (
+    uniqueIdOffset: number
+): EdgeConnection[] => {
+    const validSelfMembers = buildOneSelfEdgeConnectionForEachResourceType(uniqueIdOffset)
         .flatMap(({ members }) => members)
         .filter(
             (member) =>
@@ -65,7 +66,7 @@ const generateComprehensiveDualEdgeConnectionTestData = (): DTO<EdgeConnection>[
         role: EdgeConnectionMemberRole.from,
     }));
 
-    const edgeConnections = oneToMemberOfEachResourceType.map((toMember, index) => {
+    const edgeConnectionDTOs = oneToMemberOfEachResourceType.map((toMember, index) => {
         const fromMember =
             oneFromMemberOfEachResourceType[(index + 1) % oneToMemberOfEachResourceType.length];
 
@@ -79,11 +80,11 @@ const generateComprehensiveDualEdgeConnectionTestData = (): DTO<EdgeConnection>[
         };
     });
 
-    return edgeConnections;
+    return edgeConnectionDTOs.map((dto) => new EdgeConnection(dto));
 };
 
-export default (): DTO<EdgeConnection>[] => [
-    ...generateComprehensiveDualEdgeConnectionTestData(),
+export default (uniqueIdOffset: number): EdgeConnection[] => [
+    ...generateComprehensiveDualEdgeConnectionTestData(uniqueIdOffset),
     ...buildOneDualEdgeConnectionForEveryContextType(),
     ...buildOneFromConnectionForInstanceOfEachResourceType(),
     ...buildOneToConnectionForInstanceOfEachResourceType(),
