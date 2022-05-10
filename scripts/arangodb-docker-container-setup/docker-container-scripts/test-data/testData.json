@@ -278,7 +278,7 @@
             "_to": "terms/2",
             "_from": "terms/2",
             "type": "self",
-            "_key": "0",
+            "_key": "1",
             "members": [
                 {
                     "role": "self",
@@ -292,16 +292,13 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "1"
-            ],
             "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
         },
         {
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "1",
+            "_key": "2",
             "members": [
                 {
                     "role": "self",
@@ -313,16 +310,13 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "2"
-            ],
             "note": "This page is about bears"
         },
         {
             "_to": "vocabulary_lists/2",
             "_from": "vocabulary_lists/2",
             "type": "self",
-            "_key": "2",
+            "_key": "3",
             "members": [
                 {
                     "role": "self",
@@ -336,14 +330,13 @@
                     }
                 }
             ],
-            "tagIDs": [],
             "note": "This is the first letter of the list name"
         },
         {
             "_to": "spatial_features/300",
             "_from": "spatial_features/300",
             "type": "self",
-            "_key": "3",
+            "_key": "4",
             "members": [
                 {
                     "role": "self",
@@ -352,16 +345,13 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "3"
-            ],
             "note": "there is a placename for this point at the base of the mountain"
         },
         {
             "_to": "transcribed_audio/110",
             "_from": "transcribed_audio/110",
             "type": "self",
-            "_key": "4",
+            "_key": "5",
             "members": [
                 {
                     "role": "self",
@@ -374,16 +364,13 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "4"
-            ],
             "note": "this clip talks about songs"
         },
         {
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "5",
+            "_key": "6",
             "members": [
                 {
                     "role": "self",
@@ -412,16 +399,13 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "1"
-            ],
             "note": "this is the stem of the flower"
         },
         {
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "6",
+            "_key": "7",
             "members": [
                 {
                     "role": "self",
@@ -434,16 +418,13 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "1"
-            ],
             "note": "this is the base of the flower"
         },
         {
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "7",
+            "_key": "8",
             "members": [
                 {
                     "role": "self",
@@ -455,32 +436,11 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "2"
-            ],
             "note": "this section is the best part of an illustrated book about birds"
         },
         {
             "_to": "terms/2",
             "_from": "terms/2",
-            "type": "self",
-            "_key": "8",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "tagIDs": [
-                "1"
-            ],
-            "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
-        },
-        {
-            "_to": "books/24",
-            "_from": "books/24",
             "type": "self",
             "_key": "9",
             "members": [
@@ -491,14 +451,11 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "2"
-            ],
-            "note": "This page is about bears"
+            "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
         },
         {
-            "_to": "vocabulary_lists/2",
-            "_from": "vocabulary_lists/2",
+            "_to": "books/24",
+            "_from": "books/24",
             "type": "self",
             "_key": "10",
             "members": [
@@ -509,12 +466,11 @@
                     }
                 }
             ],
-            "tagIDs": [],
-            "note": "This is the first letter of the list name"
+            "note": "This page is about bears"
         },
         {
-            "_to": "spatial_features/300",
-            "_from": "spatial_features/300",
+            "_to": "vocabulary_lists/2",
+            "_from": "vocabulary_lists/2",
             "type": "self",
             "_key": "11",
             "members": [
@@ -525,14 +481,11 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "3"
-            ],
-            "note": "there is a placename for this point at the base of the mountain"
+            "note": "This is the first letter of the list name"
         },
         {
-            "_to": "transcribed_audio/110",
-            "_from": "transcribed_audio/110",
+            "_to": "spatial_features/300",
+            "_from": "spatial_features/300",
             "type": "self",
             "_key": "12",
             "members": [
@@ -543,14 +496,11 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "4"
-            ],
-            "note": "this clip talks about songs"
+            "note": "there is a placename for this point at the base of the mountain"
         },
         {
-            "_to": "photographs/2",
-            "_from": "photographs/2",
+            "_to": "transcribed_audio/110",
+            "_from": "transcribed_audio/110",
             "type": "self",
             "_key": "13",
             "members": [
@@ -561,10 +511,7 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "1"
-            ],
-            "note": "this is the stem of the flower"
+            "note": "this clip talks about songs"
         },
         {
             "_to": "photographs/2",
@@ -579,14 +526,11 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "1"
-            ],
-            "note": "this is the base of the flower"
+            "note": "this is the stem of the flower"
         },
         {
-            "_to": "books/24",
-            "_from": "books/24",
+            "_to": "photographs/2",
+            "_from": "photographs/2",
             "type": "self",
             "_key": "15",
             "members": [
@@ -597,8 +541,20 @@
                     }
                 }
             ],
-            "tagIDs": [
-                "2"
+            "note": "this is the base of the flower"
+        },
+        {
+            "_to": "books/24",
+            "_from": "books/24",
+            "type": "self",
+            "_key": "16",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
             ],
             "note": "this section is the best part of an illustrated book about birds"
         },
@@ -631,7 +587,6 @@
                     }
                 }
             ],
-            "tagIDs": [],
             "note": "That is why term/2 is related to vocabularyList/2"
         },
         {
@@ -662,7 +617,6 @@
                     }
                 }
             ],
-            "tagIDs": [],
             "note": "That is why vocabularyList/2 is related to transcribedAudio/110"
         },
         {
@@ -691,7 +645,6 @@
                     }
                 }
             ],
-            "tagIDs": [],
             "note": "That is why transcribedAudio/110 is related to book/24"
         },
         {
@@ -736,7 +689,6 @@
                     }
                 }
             ],
-            "tagIDs": [],
             "note": "That is why book/24 is related to photograph/2"
         },
         {
@@ -778,7 +730,6 @@
                     }
                 }
             ],
-            "tagIDs": [],
             "note": "That is why photograph/2 is related to spatialFeature/300"
         },
         {
@@ -805,8 +756,290 @@
                     }
                 }
             ],
-            "tagIDs": [],
             "note": "That is why spatialFeature/300 is related to term/2"
+        }
+    ],
+    "tags": [
+        {
+            "_key": "1",
+            "label": "plants",
+            "members": []
+        },
+        {
+            "_key": "2",
+            "label": "animals",
+            "members": []
+        },
+        {
+            "_key": "3",
+            "label": "placenames",
+            "members": []
+        },
+        {
+            "_key": "4",
+            "label": "songs",
+            "members": []
+        },
+        {
+            "_key": "5",
+            "label": "legends",
+            "members": []
+        }
+    ],
+    "categories": [
+        {
+            "_key": "1",
+            "label": "animals",
+            "members": [
+                {
+                    "type": "vocabularyList",
+                    "id": "1"
+                }
+            ],
+            "childrenIDs": [
+                "2",
+                "3"
+            ]
+        },
+        {
+            "_key": "2",
+            "label": "mammals",
+            "members": [
+                {
+                    "type": "term",
+                    "id": "1"
+                },
+                {
+                    "type": "book",
+                    "id": "23"
+                }
+            ],
+            "childrenIDs": [
+                "4",
+                "5",
+                "11"
+            ]
+        },
+        {
+            "_key": "3",
+            "label": "birds",
+            "members": [],
+            "childrenIDs": []
+        },
+        {
+            "_key": "4",
+            "label": "canines",
+            "members": [
+                {
+                    "type": "term",
+                    "id": "2"
+                }
+            ],
+            "childrenIDs": [
+                "8",
+                "10"
+            ]
+        },
+        {
+            "_key": "5",
+            "label": "felines",
+            "members": [],
+            "childrenIDs": [
+                "6",
+                "7"
+            ]
+        },
+        {
+            "_key": "6",
+            "label": "big cats",
+            "members": [],
+            "childrenIDs": []
+        },
+        {
+            "_key": "7",
+            "label": "domestic cats",
+            "members": [
+                {
+                    "type": "vocabularyList",
+                    "id": "2"
+                },
+                {
+                    "type": "photograph",
+                    "id": "0"
+                }
+            ],
+            "childrenIDs": []
+        },
+        {
+            "_key": "8",
+            "label": "wolves",
+            "members": [
+                {
+                    "type": "spatialFeature",
+                    "id": "101"
+                }
+            ],
+            "childrenIDs": []
+        },
+        {
+            "_key": "9",
+            "label": "songs",
+            "members": [
+                {
+                    "type": "term",
+                    "id": "3"
+                },
+                {
+                    "type": "spatialFeature",
+                    "id": "102"
+                }
+            ],
+            "childrenIDs": []
+        },
+        {
+            "_key": "10",
+            "label": "domestic dogs",
+            "members": [
+                {
+                    "type": "photograph",
+                    "id": "1"
+                }
+            ],
+            "childrenIDs": []
+        },
+        {
+            "_key": "11",
+            "label": "rodents",
+            "members": [
+                {
+                    "type": "book",
+                    "id": "24"
+                }
+            ],
+            "childrenIDs": []
+        },
+        {
+            "_key": "12",
+            "label": "film",
+            "members": [],
+            "childrenIDs": [
+                "13",
+                "14"
+            ]
+        },
+        {
+            "_key": "13",
+            "label": "props",
+            "members": [],
+            "childrenIDs": [
+                "16",
+                "17",
+                "18"
+            ]
+        },
+        {
+            "_key": "14",
+            "label": "wardrobe",
+            "members": [],
+            "childrenIDs": []
+        },
+        {
+            "_key": "15",
+            "label": "tools",
+            "members": [
+                {
+                    "type": "transcribedAudio",
+                    "id": "110"
+                }
+            ],
+            "childrenIDs": []
+        },
+        {
+            "_key": "16",
+            "label": "adornments",
+            "members": [],
+            "childrenIDs": [
+                "15"
+            ]
+        },
+        {
+            "_key": "17",
+            "label": "clothing",
+            "members": [
+                {
+                    "type": "note",
+                    "id": "1"
+                }
+            ],
+            "childrenIDs": []
+        },
+        {
+            "_key": "18",
+            "label": "tools",
+            "members": [],
+            "childrenIDs": []
+        }
+    ],
+    "categoryEdges": [
+        {
+            "_to": "categories/2",
+            "_from": "categories/1"
+        },
+        {
+            "_to": "categories/3",
+            "_from": "categories/1"
+        },
+        {
+            "_to": "categories/4",
+            "_from": "categories/2"
+        },
+        {
+            "_to": "categories/5",
+            "_from": "categories/2"
+        },
+        {
+            "_to": "categories/11",
+            "_from": "categories/2"
+        },
+        {
+            "_to": "categories/8",
+            "_from": "categories/4"
+        },
+        {
+            "_to": "categories/10",
+            "_from": "categories/4"
+        },
+        {
+            "_to": "categories/6",
+            "_from": "categories/5"
+        },
+        {
+            "_to": "categories/7",
+            "_from": "categories/5"
+        },
+        {
+            "_to": "categories/13",
+            "_from": "categories/12"
+        },
+        {
+            "_to": "categories/14",
+            "_from": "categories/12"
+        },
+        {
+            "_to": "categories/16",
+            "_from": "categories/13"
+        },
+        {
+            "_to": "categories/17",
+            "_from": "categories/13"
+        },
+        {
+            "_to": "categories/18",
+            "_from": "categories/13"
+        },
+        {
+            "_to": "categories/15",
+            "_from": "categories/16"
         }
     ]
 }

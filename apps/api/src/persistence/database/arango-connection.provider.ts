@@ -8,7 +8,10 @@ import ArangoDatabaseConfiguration from './ArangoDatabaseConfiguration';
 import DatabaseAlreadyInitializedError from './errors/DatabaseAlreadyInitializedError';
 import DatabaseCannotBeDroppedError from './errors/DatabaseCannotBeDroppedError';
 import DatabaseNotYetInitializedError from './errors/DatabaseNotYetInitializedError';
-import { arangoEdgeCollectionID, getAllArangoCollectionIDs } from './types/ArangoCollectionId';
+import {
+    getAllArangoCollectionIDs,
+    isArangoEdgeCollectionCollectionID,
+} from './types/ArangoCollectionId';
 import canDatabaseBeDropped from './utilities/canDatabaseBeDropped';
 
 // Alias for more clarity from the outside; TODO wrap `Database` with simpler API?
@@ -162,7 +165,7 @@ export class ArangoConnectionProvider {
         if (doesCollectionExist) return;
 
         // TODO Improve this once there is a second edge connection to add
-        if (collectionName === arangoEdgeCollectionID) {
+        if (isArangoEdgeCollectionCollectionID(collectionName)) {
             await this.#connection.createEdgeCollection(collectionName);
         } else {
             await this.#connection.createCollection(collectionName);

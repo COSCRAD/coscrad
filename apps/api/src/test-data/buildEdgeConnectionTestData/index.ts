@@ -5,6 +5,6 @@ import buildSelfConnectionTestData from './buildSelfConnectionTestData';
 const ID_OFFSET_FOR_DUAL_EDGES = 500;
 
 export default (): EdgeConnection[] => [
-    ...buildSelfConnectionTestData(0),
+    ...buildSelfConnectionTestData(1),
     ...buildDualEdgeConnectionTestData(ID_OFFSET_FOR_DUAL_EDGES),
 ];

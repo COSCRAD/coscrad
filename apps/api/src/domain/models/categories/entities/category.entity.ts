@@ -1,18 +1,21 @@
-import { isDeepStrictEqual } from 'util';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
 import { Valid } from '../../../domainModelValidators/Valid';
+import { HasEntityIdAndLabel } from '../../../interfaces/HasEntityIdAndLabel';
 import { ValidatesItsExternalState } from '../../../interfaces/ValidatesItsExternalState';
+import { EntityId } from '../../../types/ResourceId';
 import { InMemorySnapshot } from '../../../types/resourceTypes';
+import validateReferencesAgainstExternalState from '../../../utilities/validation/validateReferencesAgainstExternalState';
 import BaseDomainModel from '../../BaseDomainModel';
-import { EntityId } from '../../types/EntityId';
 import InvalidExternalReferenceInCategoryError from '../errors/InvalidExternalReferenceInCategoryError';
 import { ResourceOrNoteCompositeIdentifier } from '../types/ResourceOrNoteCompositeIdentifier';
-import { noteType } from '../types/ResourceTypeOrNoteType';
 
-export class Category extends BaseDomainModel implements ValidatesItsExternalState {
+export class Category
+    extends BaseDomainModel
+    implements ValidatesItsExternalState, HasEntityIdAndLabel
+{
     id: EntityId;
 
     label: string;
@@ -29,36 +32,12 @@ export class Category extends BaseDomainModel implements ValidatesItsExternalSta
         this.members = cloneToPlainObject(members);
     }
 
-    validateExternalState({
-        resources,
-        connections,
-    }: DeepPartial<InMemorySnapshot>): Valid | InternalError {
-        const connectionCompositeIdsInSnapshot = (connections || []).map(({ id }) => ({
-            type: noteType,
-            id,
-        }));
-
-        const resourceCompositeIdentifiersInSnapshot = Object.values(resources || []).flatMap(
-            (resourceInstances) =>
-                resourceInstances.map((instance) => instance.getCompositeIdentifier())
+    validateExternalState(externalState: DeepPartial<InMemorySnapshot>): Valid | InternalError {
+        return validateReferencesAgainstExternalState(
+            externalState,
+            this.members,
+            (missing: ResourceOrNoteCompositeIdentifier[]) =>
+                new InvalidExternalReferenceInCategoryError(this, missing)
         );
-
-        const compositeIdentifiersInSnapshot = [
-            ...resourceCompositeIdentifiersInSnapshot,
-            ...connectionCompositeIdsInSnapshot,
-        ];
-
-        // TODO [performance] Optimize this if performance becomes an issue
-        const missingCompositeIDs = this.members.filter(
-            (compositeID) =>
-                !compositeIdentifiersInSnapshot.some((snapshotID) =>
-                    isDeepStrictEqual(snapshotID, compositeID)
-                )
-        );
-
-        if (missingCompositeIDs.length > 0)
-            return new InvalidExternalReferenceInCategoryError(this, missingCompositeIDs);
-
-        return Valid;
     }
 }

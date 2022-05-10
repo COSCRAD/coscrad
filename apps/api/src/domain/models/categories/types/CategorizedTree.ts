@@ -4,7 +4,7 @@ import { Category } from '../entities/category.entity';
 
 export type CategorizedTreeNode = DTO<Category> & {
     // This refers to other `CategorizedTreeNodes` in the same tree
-    children: EntityId[];
+    childrenIDs: EntityId[];
 };
 
 export type CategorizedTree = CategorizedTreeNode[];

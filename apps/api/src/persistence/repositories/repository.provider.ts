@@ -12,7 +12,7 @@ import { IRepositoryProvider } from '../../domain/repositories/interfaces/reposi
 import { ResourceType } from '../../domain/types/resourceTypes';
 import { DatabaseProvider } from '../database/database.provider';
 import { getArangoCollectionIDFromResourceType } from '../database/getArangoCollectionIDFromResourceType';
-import { arangoEdgeCollectionID, tagCollectionID } from '../database/types/ArangoCollectionId';
+import { edgeConnectionCollectionID, tagCollectionID } from '../database/types/ArangoCollectionId';
 import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapArangoEdgeDocumentToEdgeConnectionDTO';
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
@@ -28,7 +28,7 @@ export class RepositoryProvider
     getEdgeConnectionRepository() {
         return new RepositoryForEntity<EdgeConnection>(
             this.databaseProvider,
-            arangoEdgeCollectionID,
+            edgeConnectionCollectionID,
             edgeConnectionFactory,
             mapArangoEdgeDocumentToEdgeConnectionDTO,
             mapEdgeConnectionDTOToArangoEdgeDocument

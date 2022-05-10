@@ -76,7 +76,6 @@ const generateComprehensiveDualEdgeConnectionTestData = (
             id: `${2000 + index}`,
             members: [toMember, fromMember],
             note: buildDummyNoteForDualConnection(toMember, fromMember),
-            tagIDs: [],
         };
     });
 
