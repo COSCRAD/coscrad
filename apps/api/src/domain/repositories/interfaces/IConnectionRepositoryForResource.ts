@@ -9,15 +9,4 @@ export interface IConnectionRepositoryForResource {
 
     // add specification-based filtering when needed
     count(): Promise<number>;
-
-    // Writes
-    // connect(
-    //     relatedEntityCompositeID: EntityCompositeIdentifier,
-    //     context: ConnectedEntityContext,
-    //     note: string,
-    //     // This will hold `tagIDs` as tags are stored by reference
-    //     tags: string[]
-    // ): Promise<void>;
-
-    // Add delete when it is needed
 }

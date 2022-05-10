@@ -353,7 +353,7 @@ Array [
         },
       },
     ],
-    "id": "vocabulary-list-id-1",
+    "id": "1",
     "name": "test VL 1 chil",
     "nameEnglish": "test VL 1 engl",
     "variables": Array [
@@ -387,7 +387,7 @@ Array [
         },
       },
     ],
-    "id": "vocabulary-list-id-2",
+    "id": "2",
     "name": "test VL 2 CHIL- no engl name",
     "variables": Array [],
   },
@@ -398,7 +398,7 @@ exports[`When fetching multiple resources GET /vocabularyLists when some of the 
 Array [
   Object {
     "entries": Array [],
-    "id": "vocabulary-list-id-1",
+    "id": "1",
     "name": "test VL 1 chil",
     "nameEnglish": "test VL 1 engl",
     "variables": Array [
@@ -420,7 +420,7 @@ Array [
   },
   Object {
     "entries": Array [],
-    "id": "vocabulary-list-id-2",
+    "id": "2",
     "name": "test VL 2 CHIL- no engl name",
     "variables": Array [],
   },

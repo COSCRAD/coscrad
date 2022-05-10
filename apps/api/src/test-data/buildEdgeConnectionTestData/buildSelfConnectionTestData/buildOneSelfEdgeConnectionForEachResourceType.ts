@@ -16,7 +16,6 @@ const role = EdgeConnectionMemberRole.self;
 
 const selfEdgeConnectionInstancesWithSpecificContext = [
     {
-        tagIDs: ['1'],
         note: 'This first 4 letters of this term form a syllable that indicates this is a plant ',
         members: [
             {
@@ -34,7 +33,6 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
         ],
     },
     {
-        tagIDs: ['2'],
         note: 'This page is about bears',
         members: [
             {
@@ -51,7 +49,6 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
         ],
     },
     {
-        tagIDs: [],
         note: 'This is the first letter of the list name',
         members: [
             {
@@ -69,7 +66,6 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
         ],
     },
     {
-        tagIDs: ['3'],
         note: 'there is a placename for this point at the base of the mountain',
         members: [
             {
@@ -83,30 +79,7 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
             },
         ],
     },
-    // {
-    //     tagIDs: ['3'],
-    //     note: 'this is the path they took through the woods',
-    //     members: [
-    //         {
-    //             role,
-    //             compositeIdentifier: {
-    //                 id: '300',
-    //                 type: resourceTypes.spatialFeature,
-    //             },
-    //             context: new FreeMultilineContext({
-    //                 lines: [
-    //                     [
-    //                         [1.2, 3.8],
-    //                         [1.3, 3.9],
-    //                         [1.4, 4.0],
-    //                     ],
-    //                 ],
-    //             }).toDTO(),
-    //         },
-    //     ],
-    // },
     {
-        tagIDs: ['4'],
         note: 'this clip talks about songs',
         members: [
             {
@@ -126,7 +99,6 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
         ],
     },
     {
-        tagIDs: ['1'],
         note: 'this is the stem of the flower',
         members: [
             {
@@ -150,7 +122,6 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
         ],
     },
     {
-        tagIDs: ['1'],
         note: 'this is the base of the flower',
         members: [
             {
@@ -167,7 +138,6 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
         ],
     },
     {
-        tagIDs: ['2'],
         note: 'this section is the best part of an illustrated book about birds',
         members: [
             {

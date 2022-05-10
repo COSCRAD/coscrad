@@ -35,16 +35,9 @@ export class EdgeConnection extends BaseDomainModel implements HasEntityID {
 
     readonly members: EdgeConnectionMember[];
 
-    /**
-     * Tags are optional, in which case this should be an empty array. Also keep
-     * in mind that tags are stored by reference (to allow renaming tags without
-     * needing cascading updates)
-     */
-    readonly tagIDs: string[];
-
     readonly note: string;
 
-    constructor({ id, members, tagIDs, note, type }: DTO<EdgeConnection>) {
+    constructor({ id, members, note, type }: DTO<EdgeConnection>) {
         super();
 
         this.type = type;
@@ -53,8 +46,6 @@ export class EdgeConnection extends BaseDomainModel implements HasEntityID {
 
         // avoid side effects
         this.members = cloneToPlainObject(members);
-
-        this.tagIDs = Array.isArray(tagIDs) && tagIDs.length > 0 ? cloneToPlainObject(tagIDs) : [];
 
         this.note = note;
     }

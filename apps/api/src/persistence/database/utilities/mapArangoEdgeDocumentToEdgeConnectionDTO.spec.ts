@@ -33,7 +33,6 @@ const selfDocument: ArangoEdgeDocument = {
     _to: 'transcribed_audio/55',
     _from: 'transcribed_audio/55',
     type: EdgeConnectionType.self,
-    tagIDs: ['1'],
     note: 'These pages are about deer',
     members: [
         {
@@ -46,7 +45,6 @@ const selfDocument: ArangoEdgeDocument = {
 const selfEdgeConnection = {
     id: '5',
     type: EdgeConnectionType.self,
-    tagIDs: ['1'],
     note: 'These pages are about deer',
     members: [
         {
@@ -65,7 +63,6 @@ const dualEdgeDocument: ArangoEdgeDocument = {
     _to: 'books/11',
     _from: 'transcribed_audio/55',
     type: EdgeConnectionType.dual,
-    tagIDs: [],
     note: 'the elder discusses this book in this part of the recording',
     members: [
         {
@@ -82,7 +79,6 @@ const dualEdgeDocument: ArangoEdgeDocument = {
 const dualEdgeConnection: DTO<EdgeConnection> = {
     type: EdgeConnectionType.dual,
     id: '234',
-    tagIDs: [],
     note: 'the elder discusses this book in this part of the recording',
     members: [
         {

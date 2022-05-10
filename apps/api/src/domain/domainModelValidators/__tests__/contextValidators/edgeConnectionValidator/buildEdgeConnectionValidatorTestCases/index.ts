@@ -60,7 +60,6 @@ const buildValidTranscribedAudioConnectionMember = (
 const validBookSelfConnection = new EdgeConnection({
     type: EdgeConnectionType.self,
     id: '12345',
-    tagIDs: ['44'],
     note: 'This is an awesome note',
     members: [buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.self)],
 });
@@ -72,7 +71,6 @@ const validBookToTranscribedAudioDualConnection = new EdgeConnection({
         buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
     ],
     id: '123',
-    tagIDs: ['55'],
     note: 'These are both about bears',
 }).toDTO();
 
@@ -129,7 +127,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 invalidDTO: {
                     type: EdgeConnectionType.self,
                     id: '123',
-                    tagIDs: ['55'],
+
                     members: [],
                     note: 'This is the note',
                 },
@@ -193,7 +191,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 invalidDTO: {
                     type: EdgeConnectionType.dual,
                     id: '123',
-                    tagIDs: ['55'],
+
                     members: [
                         buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.self),
                         buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.from),

@@ -1,3 +1,7 @@
+/**
+ * TODO [https://www.pivotaltracker.com/story/show/182132515]
+ * Refactor. Reorganize our collection name \ type management.
+ */
 const arangoResourceCollectionIDs = [
     'terms',
     'vocabulary_lists',
@@ -7,14 +11,24 @@ const arangoResourceCollectionIDs = [
     'spatial_features',
 ] as const;
 
-export const arangoEdgeCollectionID = 'resource_edge_connections';
+export const categoryEdgeCollectionID = 'category_edges';
+
+export const edgeConnectionCollectionID = 'resource_edge_connections';
+
+export const arangoEdgeCollectionIDs = [categoryEdgeCollectionID, edgeConnectionCollectionID];
+
+export const isArangoEdgeCollectionCollectionID = (input: unknown): boolean =>
+    arangoEdgeCollectionIDs.includes(input as string);
 
 export const tagCollectionID = 'tags';
 
+export const categoryCollectionID = 'categories';
+
 const arangoCollectionIDs = [
     ...arangoResourceCollectionIDs,
-    arangoEdgeCollectionID,
+    ...arangoEdgeCollectionIDs,
     tagCollectionID,
+    categoryCollectionID,
 ] as const;
 
 export type ArangoResourceCollectionID = typeof arangoResourceCollectionIDs[number];
