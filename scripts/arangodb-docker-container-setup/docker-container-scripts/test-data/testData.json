@@ -28,7 +28,7 @@
         "vocabulary_lists": [
             {
                 "type": "vocabularyList",
-                "_key": "vocabulary-list-id-1",
+                "_key": "1",
                 "published": false,
                 "name": "test VL 1 chil",
                 "nameEnglish": "test VL 1 engl",
@@ -65,7 +65,7 @@
             },
             {
                 "type": "vocabularyList",
-                "_key": "vocabulary-list-id-2",
+                "_key": "2",
                 "published": true,
                 "name": "test VL 2 CHIL- no engl name",
                 "entries": [
@@ -278,7 +278,7 @@
             "_to": "terms/2",
             "_from": "terms/2",
             "type": "self",
-            "_key": "1",
+            "_key": "0",
             "members": [
                 {
                     "role": "self",
@@ -301,7 +301,7 @@
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "2",
+            "_key": "1",
             "members": [
                 {
                     "role": "self",
@@ -319,10 +319,10 @@
             "note": "This page is about bears"
         },
         {
-            "_to": "vocabulary_lists/vocabulary-list-id-2",
-            "_from": "vocabulary_lists/vocabulary-list-id-2",
+            "_to": "vocabulary_lists/2",
+            "_from": "vocabulary_lists/2",
             "type": "self",
-            "_key": "3",
+            "_key": "2",
             "members": [
                 {
                     "role": "self",
@@ -343,7 +343,7 @@
             "_to": "spatial_features/300",
             "_from": "spatial_features/300",
             "type": "self",
-            "_key": "4",
+            "_key": "3",
             "members": [
                 {
                     "role": "self",
@@ -361,7 +361,7 @@
             "_to": "transcribed_audio/110",
             "_from": "transcribed_audio/110",
             "type": "self",
-            "_key": "5",
+            "_key": "4",
             "members": [
                 {
                     "role": "self",
@@ -383,7 +383,7 @@
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "6",
+            "_key": "5",
             "members": [
                 {
                     "role": "self",
@@ -421,7 +421,7 @@
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "7",
+            "_key": "6",
             "members": [
                 {
                     "role": "self",
@@ -443,7 +443,7 @@
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "8",
+            "_key": "7",
             "members": [
                 {
                     "role": "self",
@@ -464,7 +464,7 @@
             "_to": "terms/2",
             "_from": "terms/2",
             "type": "self",
-            "_key": "9",
+            "_key": "8",
             "members": [
                 {
                     "role": "self",
@@ -482,7 +482,7 @@
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "10",
+            "_key": "9",
             "members": [
                 {
                     "role": "self",
@@ -497,10 +497,10 @@
             "note": "This page is about bears"
         },
         {
-            "_to": "vocabulary_lists/vocabulary-list-id-2",
-            "_from": "vocabulary_lists/vocabulary-list-id-2",
+            "_to": "vocabulary_lists/2",
+            "_from": "vocabulary_lists/2",
             "type": "self",
-            "_key": "11",
+            "_key": "10",
             "members": [
                 {
                     "role": "self",
@@ -516,7 +516,7 @@
             "_to": "spatial_features/300",
             "_from": "spatial_features/300",
             "type": "self",
-            "_key": "12",
+            "_key": "11",
             "members": [
                 {
                     "role": "self",
@@ -534,7 +534,7 @@
             "_to": "transcribed_audio/110",
             "_from": "transcribed_audio/110",
             "type": "self",
-            "_key": "13",
+            "_key": "12",
             "members": [
                 {
                     "role": "self",
@@ -552,7 +552,7 @@
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "14",
+            "_key": "13",
             "members": [
                 {
                     "role": "self",
@@ -570,7 +570,7 @@
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "15",
+            "_key": "14",
             "members": [
                 {
                     "role": "self",
@@ -588,7 +588,7 @@
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "16",
+            "_key": "15",
             "members": [
                 {
                     "role": "self",
@@ -604,9 +604,9 @@
         },
         {
             "_to": "terms/2",
-            "_from": "vocabulary_lists/vocabulary-list-id-2",
+            "_from": "vocabulary_lists/2",
             "type": "dual",
-            "_key": "17",
+            "_key": "2000",
             "members": [
                 {
                     "role": "to",
@@ -632,13 +632,13 @@
                 }
             ],
             "tagIDs": [],
-            "note": "That is why term/2 is related to vocabularyList/vocabulary-list-id-2"
+            "note": "That is why term/2 is related to vocabularyList/2"
         },
         {
-            "_to": "vocabulary_lists/vocabulary-list-id-2",
+            "_to": "vocabulary_lists/2",
             "_from": "transcribed_audio/110",
             "type": "dual",
-            "_key": "18",
+            "_key": "2001",
             "members": [
                 {
                     "role": "to",
@@ -663,13 +663,13 @@
                 }
             ],
             "tagIDs": [],
-            "note": "That is why vocabularyList/vocabulary-list-id-2 is related to transcribedAudio/110"
+            "note": "That is why vocabularyList/2 is related to transcribedAudio/110"
         },
         {
             "_to": "transcribed_audio/110",
             "_from": "books/24",
             "type": "dual",
-            "_key": "19",
+            "_key": "2002",
             "members": [
                 {
                     "role": "to",
@@ -698,7 +698,7 @@
             "_to": "books/24",
             "_from": "photographs/2",
             "type": "dual",
-            "_key": "20",
+            "_key": "2003",
             "members": [
                 {
                     "role": "to",
@@ -743,7 +743,7 @@
             "_to": "photographs/2",
             "_from": "spatial_features/300",
             "type": "dual",
-            "_key": "21",
+            "_key": "2004",
             "members": [
                 {
                     "role": "to",
@@ -785,7 +785,7 @@
             "_to": "spatial_features/300",
             "_from": "terms/2",
             "type": "dual",
-            "_key": "22",
+            "_key": "2005",
             "members": [
                 {
                     "role": "to",

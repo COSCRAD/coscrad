@@ -11,7 +11,6 @@ import { TextFieldContext } from '../../../domain/models/context/text-field-cont
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
 import { resourceTypes } from '../../../domain/types/resourceTypes';
-import { DTO } from '../../../types/DTO';
 
 const role = EdgeConnectionMemberRole.self;
 
@@ -58,7 +57,7 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
             {
                 role,
                 compositeIdentifier: {
-                    id: 'vocabulary-list-id-2',
+                    id: '2',
                     type: resourceTypes.vocabularyList,
                 },
                 context: new TextFieldContext({
@@ -198,7 +197,10 @@ const selfEdgeConnectionsWithGeneralContext = selfEdgeConnectionInstancesWithSpe
     })
 );
 
-export default (): Omit<DTO<EdgeConnection>, 'id'>[] => [
-    ...selfEdgeConnectionInstancesWithSpecificContext,
-    ...selfEdgeConnectionsWithGeneralContext,
-];
+export default (uniqueIdOffset: number): EdgeConnection[] =>
+    [...selfEdgeConnectionInstancesWithSpecificContext, ...selfEdgeConnectionsWithGeneralContext]
+        .map((dto, index) => ({
+            ...dto,
+            id: `${index + uniqueIdOffset}`,
+        }))
+        .map((dto) => new EdgeConnection(dto));

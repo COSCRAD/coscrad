@@ -2,13 +2,9 @@ import { EdgeConnection } from '../../domain/models/context/edge-connection.enti
 import buildDualEdgeConnectionTestData from './buildDualEdgeConnectionTestData';
 import buildSelfConnectionTestData from './buildSelfConnectionTestData';
 
-export default (): EdgeConnection[] =>
-    [...buildSelfConnectionTestData(), ...buildDualEdgeConnectionTestData()]
-        // We generate IDs at the top level to guarantee uniqueness
-        .map(
-            (dto, index) =>
-                new EdgeConnection({
-                    ...dto,
-                    id: `${index + 1}`,
-                })
-        );
+const ID_OFFSET_FOR_DUAL_EDGES = 500;
+
+export default (): EdgeConnection[] => [
+    ...buildSelfConnectionTestData(0),
+    ...buildDualEdgeConnectionTestData(ID_OFFSET_FOR_DUAL_EDGES),
+];

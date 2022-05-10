@@ -1,7 +1,9 @@
 import { writeFileSync } from 'fs';
 import { getValidatorForEntity } from '../domain/domainModelValidators';
+import categoryValidator from '../domain/domainModelValidators/categoryValidator';
 import validateEdgeConnection from '../domain/domainModelValidators/contextValidators/validateEdgeConnection';
 import { isValid, Valid } from '../domain/domainModelValidators/Valid';
+import { Category } from '../domain/models/categories/entities/category.entity';
 import { EdgeConnectionMemberRole } from '../domain/models/context/edge-connection.entity';
 import { Resource } from '../domain/models/resource.entity';
 import {
@@ -25,7 +27,11 @@ type InMemorySnapshotOfResourceDTOs = {
 describe('buildTestData', () => {
     const testData = buildTestData();
 
-    const { connections: connectionTestData, resources: resourceTestData } = testData;
+    const {
+        categoryTree: categoryTestData,
+        connections: connectionTestData,
+        resources: resourceTestData,
+    } = testData;
 
     const resourceTestDataDTOs = Object.entries(resourceTestData).reduce(
         (accumulatedDataWithDtos: InMemorySnapshotOfResourceDTOs, [ResourceType, instances]) => ({
@@ -174,6 +180,36 @@ describe('buildTestData', () => {
                         });
                     }
                 );
+            });
+        });
+
+        describe('category test data', () => {
+            it('should contain categories that satisfy invariant validation rules', () => {
+                const categoriesThatFailInvariantValidation = categoryTestData.filter(
+                    (categoryNodeDTO) => !isValid(categoryValidator(categoryNodeDTO))
+                );
+
+                expect(categoriesThatFailInvariantValidation).toEqual([]);
+            });
+
+            it('should reference only entities that exist in the test data', () => {
+                const categoriesWithResourcesThatAreNotInSnapshot = categoryTestData
+                    .map((categoryNode) => new Category(categoryNode))
+                    .filter((category) => !isValid(category.validateExternalState(testData)));
+
+                expect(categoriesWithResourcesThatAreNotInSnapshot).toEqual([]);
+            });
+
+            it('should reference only other categories in the test data as child categories', () => {
+                const allChildCategoryIDs = categoryTestData.flatMap(({ children }) => children);
+
+                const allCategoryIDs = categoryTestData.map(({ id }) => id);
+
+                const childCategoriesThatDoNotExist = allChildCategoryIDs.filter(
+                    (childId) => !allCategoryIDs.includes(childId)
+                );
+
+                expect(childCategoriesThatDoNotExist).toEqual([]);
             });
         });
     });
