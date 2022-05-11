@@ -2,11 +2,17 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import buildTestData from '../../../../test-data/buildTestData';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { Valid } from '../../../domainModelValidators/Valid';
+import { HasEntityIdAndLabel } from '../../../interfaces/HasEntityIdAndLabel';
 import { InMemorySnapshot, resourceTypes } from '../../../types/resourceTypes';
 import { Term } from '../../term/entities/term.entity';
+import ChildCategoryDoesNotExistError from '../errors/ChildCategoryDoesNotExistError';
 import InvalidExternalReferenceInCategoryError from '../errors/InvalidExternalReferenceInCategoryError';
+import InvalidExternalStateForCategoryError from '../errors/InvalidExternalStateForCategoryError';
 import { noteType } from '../types/ResourceTypeOrNoteType';
 import { Category } from './category.entity';
+
+const buildTopLevelError = (idAndLabel: HasEntityIdAndLabel, innerErrors) =>
+    new InvalidExternalStateForCategoryError(idAndLabel, innerErrors);
 
 const missingTerm = buildTestData().resources.term[0].clone<Term>({
     id: 'id-of-missing-term-id',
@@ -25,6 +31,7 @@ const validCategory = new Category({
             id: '72',
         },
     ],
+    childrenIDs: [],
 });
 
 const missingNoteCompositeIdentifier = {
@@ -83,20 +90,34 @@ const invalidTestCases: InvalidTestCase[] = [
                 .concat(missingTerm.getCompositeIdentifier()),
         }),
         externalState: validSnapshot,
-        expectedError: new InvalidExternalReferenceInCategoryError(validCategory, [
-            missingTerm.getCompositeIdentifier(),
+        expectedError: buildTopLevelError(validCategory, [
+            new InvalidExternalReferenceInCategoryError(validCategory, [
+                missingTerm.getCompositeIdentifier(),
+            ]),
         ]),
     },
     {
-        description: 'the category refers to non-existant members',
+        description: 'the category refers to non-existent members',
         category: validCategory.clone<Category>({
             members: validSnapshot.connections
                 .map((connection) => connection.getCompositeIdentifier())
                 .concat(missingNoteCompositeIdentifier),
         }),
         externalState: validSnapshot,
-        expectedError: new InvalidExternalReferenceInCategoryError(validCategory, [
-            missingNoteCompositeIdentifier,
+        expectedError: buildTopLevelError(validCategory, [
+            new InvalidExternalReferenceInCategoryError(validCategory, [
+                missingTerm.getCompositeIdentifier(),
+            ]),
+        ]),
+    },
+    {
+        description: 'the category refers to non-existent children categories',
+        category: validCategory.clone<Category>({
+            childrenIDs: [...validCategory.childrenIDs, 'BOGUS-CHILD-CATEGOR-ID-BOO'],
+        }),
+        externalState: validSnapshot,
+        expectedError: buildTopLevelError(validCategory, [
+            new ChildCategoryDoesNotExistError('BOGUS-CHILD-CATEGOR-ID-BOO', validCategory),
         ]),
     },
 ];
