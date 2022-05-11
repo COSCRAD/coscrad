@@ -5,6 +5,12 @@ import { resourceTypes } from '../domain/types/resourceTypes';
 export default (): Category[] =>
     [
         {
+            id: '0',
+            label: 'tree of knowledge',
+            members: [],
+            childrenIDs: ['1', '12'],
+        },
+        {
             id: '1',
             label: 'animals',
             members: [

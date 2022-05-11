@@ -17,6 +17,7 @@ import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-und
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
 import { getArangoCollectionIDFromResourceType } from '../persistence/database/getArangoCollectionIDFromResourceType';
 import buildEdgeDocumentsFromCategoryNodeDTOs from '../persistence/database/utilities/category/buildEdgeDocumentsFromCategoryNodeDTOs';
+import mapCategoryDTOToArangoDocument from '../persistence/database/utilities/category/mapCategoryDTOToArangoDocument';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
 import { DTO } from '../types/DTO';
@@ -260,7 +261,9 @@ describe('buildTestData', () => {
 
         const tagTestDataInDatabaseFormat = tagTestData.map(mapEntityDTOToDatabaseDTO);
 
-        const categoryTestDataInDatabaseFormat = categoryTestData.map(mapEntityDTOToDatabaseDTO);
+        const categoryTestDataInDatabaseFormat = categoryTestData.map(
+            mapCategoryDTOToArangoDocument
+        );
 
         const categoryEdges = buildEdgeDocumentsFromCategoryNodeDTOs(categoryTestData);
 
