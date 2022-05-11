@@ -6,6 +6,7 @@ import { RepositoryProvider } from '../../../persistence/repositories/repository
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
+import { CategoryController } from '../category.controller';
 import { EdgeConnectionController } from '../edgeConnection.controller';
 import { ResourceViewModelController } from '../resourceViewModel.controller';
 import { TagController } from '../tag.controller';
@@ -43,5 +44,10 @@ export default async (testDatabaseName: string) =>
             },
         ],
 
-        controllers: [ResourceViewModelController, EdgeConnectionController, TagController],
+        controllers: [
+            ResourceViewModelController,
+            EdgeConnectionController,
+            TagController,
+            CategoryController,
+        ],
     }).compile();
