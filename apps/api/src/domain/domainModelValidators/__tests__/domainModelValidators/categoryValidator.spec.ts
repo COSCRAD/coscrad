@@ -1,6 +1,8 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { Category } from '../../../models/categories/entities/category.entity';
+import { noteType } from '../../../models/categories/types/ResourceTypeOrNoteType';
+import { resourceTypes } from '../../../types/resourceTypes';
 import categoryValidator from '../../categoryValidator';
 import InvalidCategoryDTOError from '../../errors/category/InvalidCategoryDTOError';
 import InvalidCategoryMemberReferenceError from '../../errors/category/InvalidCategoryMemberReferenceError';
@@ -20,7 +22,17 @@ type InvalidTestCase = {
 const validDTO: DTO<Category> = {
     id: '12',
     label: 'props',
-    members: [],
+    members: [
+        {
+            type: noteType,
+            id: '55',
+        },
+        {
+            type: resourceTypes.book,
+            id: '123',
+        },
+    ],
+    childrenIDs: ['33'],
 };
 
 const invalidTestCases: InvalidTestCase[] = [

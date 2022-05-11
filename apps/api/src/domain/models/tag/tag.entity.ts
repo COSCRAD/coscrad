@@ -4,7 +4,7 @@ import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 import { Valid } from '../../domainModelValidators/Valid';
 import { HasEntityIdAndLabel } from '../../interfaces/HasEntityIdAndLabel';
-import { ValidatesItsExternalState } from '../../interfaces/ValidatesItsExternalState';
+import { ValidatesExternalState } from '../../interfaces/ValidatesExternalState';
 import { EntityId } from '../../types/ResourceId';
 import { InMemorySnapshot } from '../../types/resourceTypes';
 import validateEntityReferencesAgainstExternalState from '../../utilities/validation/validateEntityReferencesAgainstExternalState';
@@ -12,7 +12,7 @@ import BaseDomainModel from '../BaseDomainModel';
 import InvalidExternalReferenceInCategoryError from '../categories/errors/InvalidExternalReferenceInCategoryError';
 import { ResourceOrNoteCompositeIdentifier } from '../categories/types/ResourceOrNoteCompositeIdentifier';
 
-export class Tag extends BaseDomainModel implements ValidatesItsExternalState, HasEntityIdAndLabel {
+export class Tag extends BaseDomainModel implements ValidatesExternalState, HasEntityIdAndLabel {
     id: EntityId;
 
     label: string;
