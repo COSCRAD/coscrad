@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`When fetching the category tree (/treeOfKnowledge) GET /treeOfKnowledge should return the expected result 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "children": Array [],
+                  "id": "8",
+                  "label": "wolves",
+                  "members": Array [
+                    Object {
+                      "id": "101",
+                      "type": "spatialFeature",
+                    },
+                  ],
+                },
+                Object {
+                  "children": Array [],
+                  "id": "10",
+                  "label": "domestic dogs",
+                  "members": Array [
+                    Object {
+                      "id": "1",
+                      "type": "photograph",
+                    },
+                  ],
+                },
+              ],
+              "id": "4",
+              "label": "canines",
+              "members": Array [
+                Object {
+                  "id": "2",
+                  "type": "term",
+                },
+              ],
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "children": Array [],
+                  "id": "6",
+                  "label": "big cats",
+                  "members": Array [],
+                },
+                Object {
+                  "children": Array [],
+                  "id": "7",
+                  "label": "domestic cats",
+                  "members": Array [
+                    Object {
+                      "id": "2",
+                      "type": "vocabularyList",
+                    },
+                    Object {
+                      "id": "0",
+                      "type": "photograph",
+                    },
+                  ],
+                },
+              ],
+              "id": "5",
+              "label": "felines",
+              "members": Array [],
+            },
+            Object {
+              "children": Array [],
+              "id": "11",
+              "label": "rodents",
+              "members": Array [
+                Object {
+                  "id": "24",
+                  "type": "book",
+                },
+              ],
+            },
+          ],
+          "id": "2",
+          "label": "mammals",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+          ],
+        },
+        Object {
+          "children": Array [],
+          "id": "3",
+          "label": "birds",
+          "members": Array [],
+        },
+      ],
+      "id": "1",
+      "label": "animals",
+      "members": Array [
+        Object {
+          "id": "1",
+          "type": "vocabularyList",
+        },
+      ],
+    },
+    Object {
+      "children": Array [
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "children": Array [],
+                  "id": "15",
+                  "label": "tools",
+                  "members": Array [
+                    Object {
+                      "id": "110",
+                      "type": "transcribedAudio",
+                    },
+                  ],
+                },
+              ],
+              "id": "16",
+              "label": "adornments",
+              "members": Array [],
+            },
+            Object {
+              "children": Array [],
+              "id": "17",
+              "label": "clothing",
+              "members": Array [
+                Object {
+                  "id": "1",
+                  "type": "note",
+                },
+              ],
+            },
+            Object {
+              "children": Array [],
+              "id": "18",
+              "label": "tools",
+              "members": Array [],
+            },
+          ],
+          "id": "13",
+          "label": "props",
+          "members": Array [],
+        },
+        Object {
+          "children": Array [],
+          "id": "14",
+          "label": "wardrobe",
+          "members": Array [],
+        },
+      ],
+      "id": "12",
+      "label": "film",
+      "members": Array [],
+    },
+  ],
+  "id": "0",
+  "label": "tree of knowledge",
+  "members": Array [],
+}
+`;

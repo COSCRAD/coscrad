@@ -183,7 +183,7 @@ describe('buildTestData', () => {
             });
         });
 
-        describe('category test data', () => {
+        describe('tag test data', () => {
             it('should contain tags that satisfy invariant validation rules', () => {
                 const tagsThatFailInvariantValidation = tagTestData.filter(
                     // Note it's ok to pass an instance to a DTO validator
