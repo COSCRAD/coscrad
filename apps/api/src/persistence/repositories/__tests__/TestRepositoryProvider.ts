@@ -1,3 +1,4 @@
+import { CategorizedTree } from '../../../domain/models/categories/types/CategorizedTree';
 import { Resource } from '../../../domain/models/resource.entity';
 import {
     InMemorySnapshotOfResources,
@@ -12,6 +13,8 @@ import {
     edgeConnectionCollectionID,
     tagCollectionID,
 } from '../../database/types/ArangoCollectionId';
+import buildEdgeDocumentFromCategoryNodeDTOs from '../../database/utilities/buildEdgeDocumentFromCategoryNodeDTOs';
+import mapEntityDTOToDatabaseDTO from '../../database/utilities/mapEntityDTOToDatabaseDTO';
 import { RepositoryProvider } from '../repository.provider';
 
 export default class TestRepositoryProvider extends RepositoryProvider {
@@ -37,6 +40,26 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         );
 
         await Promise.all(writePromises);
+    }
+
+    public async addCategories(categories: CategorizedTree): Promise<void> {
+        const categoryDocuments = categories
+            .map(({ id, label, members }) => ({
+                id,
+                label,
+                members,
+            }))
+            .map(mapEntityDTOToDatabaseDTO);
+
+        const edgeDocuments = buildEdgeDocumentFromCategoryNodeDTOs(categories);
+
+        await this.databaseProvider
+            .getDatabaseForCollection(categoryCollectionID)
+            .createMany(categoryDocuments);
+
+        await this.databaseProvider
+            .getDatabaseForCollection(categoryEdgeCollectionID)
+            .createMany(edgeDocuments);
     }
 
     public async deleteAllResourcesOfGivenType(ResourceType: ResourceType): Promise<void> {
