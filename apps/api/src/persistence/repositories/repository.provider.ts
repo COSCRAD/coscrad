@@ -6,6 +6,8 @@ import buildInstanceFactory from '../../domain/factories/utilities/buildInstance
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import { Resource } from '../../domain/models/resource.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
+import { ICategoryRepository } from '../../domain/repositories/interfaces/ICategoryRepository';
+import { ICategoryRepositoryProvider } from '../../domain/repositories/interfaces/ICategoryRepositoryProvider';
 import { IEdgeConnectionRepositoryProvider } from '../../domain/repositories/interfaces/IEdgeConnectionRepositoryProvider';
 import { ITagRepositoryProvider } from '../../domain/repositories/interfaces/ITagRepositoryProvider';
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider';
@@ -17,11 +19,16 @@ import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapA
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import ArangoCategoryRepository from './ArangoCategoryRepository';
 import { RepositoryForEntity } from './repository-for-entity';
 
 @Injectable()
 export class RepositoryProvider
-    implements IRepositoryProvider, IEdgeConnectionRepositoryProvider, ITagRepositoryProvider
+    implements
+        IRepositoryProvider,
+        IEdgeConnectionRepositoryProvider,
+        ITagRepositoryProvider,
+        ICategoryRepositoryProvider
 {
     constructor(protected databaseProvider: DatabaseProvider) {}
 
@@ -43,6 +50,10 @@ export class RepositoryProvider
             mapDatabaseDTOToEntityDTO,
             mapEntityDTOToDatabaseDTO
         );
+    }
+
+    getCategoryRepository(): ICategoryRepository {
+        return new ArangoCategoryRepository(this.databaseProvider);
     }
 
     forResource<TResource extends Resource>(resourceType: ResourceType) {

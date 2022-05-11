@@ -5,10 +5,8 @@ import validateEdgeConnection from '../domain/domainModelValidators/contextValid
 import tagValidator from '../domain/domainModelValidators/tagValidator';
 import { isValid, Valid } from '../domain/domainModelValidators/Valid';
 import { Category } from '../domain/models/categories/entities/category.entity';
-import { CategorizedTree } from '../domain/models/categories/types/CategorizedTree';
 import { EdgeConnectionMemberRole } from '../domain/models/context/edge-connection.entity';
 import { Resource } from '../domain/models/resource.entity';
-import { EntityId } from '../domain/models/types/EntityId';
 import {
     isResourceType,
     ResourceType,
@@ -18,8 +16,7 @@ import {
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
 import { getArangoCollectionIDFromResourceType } from '../persistence/database/getArangoCollectionIDFromResourceType';
-import { categoryCollectionID } from '../persistence/database/types/ArangoCollectionId';
-import { ArangoDocumentHandle } from '../persistence/database/types/ArangoDocumentHandle';
+import buildEdgeDocumentsFromCategoryNodeDTOs from '../persistence/database/utilities/category/buildEdgeDocumentsFromCategoryNodeDTOs';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
 import { DTO } from '../types/DTO';
@@ -34,23 +31,6 @@ import buildTestData from './buildTestData';
 type InMemorySnapshotOfResourceDTOs = {
     [K in keyof ResourceTypeToInstance]?: DTO<ResourceTypeToInstance>[K][];
 };
-
-const buildCategoryDocHandle = (id: EntityId): ArangoDocumentHandle =>
-    `${categoryCollectionID}/${id}`;
-
-const buildEdgeDocumentsFromCategoryNodeDTOs = (categoryNodes: CategorizedTree) =>
-    categoryNodes.reduce(
-        (acc, { childrenIDs, id: parentId }) =>
-            childrenIDs.length === 0
-                ? acc
-                : acc.concat(
-                      childrenIDs.map((childId) => ({
-                          _to: buildCategoryDocHandle(childId),
-                          _from: buildCategoryDocHandle(parentId),
-                      }))
-                  ),
-        []
-    );
 
 describe('buildTestData', () => {
     const testData = buildTestData();
@@ -280,7 +260,7 @@ describe('buildTestData', () => {
 
         const tagTestDataInDatabaseFormat = tagTestData.map(mapEntityDTOToDatabaseDTO);
 
-        const categoryTestDataInDatabsaeFormat = categoryTestData.map(mapEntityDTOToDatabaseDTO);
+        const categoryTestDataInDatabaseFormat = categoryTestData.map(mapEntityDTOToDatabaseDTO);
 
         const categoryEdges = buildEdgeDocumentsFromCategoryNodeDTOs(categoryTestData);
 
@@ -289,11 +269,10 @@ describe('buildTestData', () => {
             // note the change in this key ~~connections~~ -> edges
             resource_edge_connections: connectionTestDataInDatabaseFormat,
             tags: tagTestDataInDatabaseFormat,
-            categories: categoryTestDataInDatabsaeFormat,
+            categories: categoryTestDataInDatabaseFormat,
             categoryEdges,
         };
 
-        // TODO move this to a config- better yet avoid this whole write!
         const testDataFilePath = `${process.cwd()}/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.json`;
 
         const numberOfSpacesToIndent = 4;
