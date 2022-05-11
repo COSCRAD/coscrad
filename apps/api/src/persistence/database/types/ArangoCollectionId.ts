@@ -15,10 +15,17 @@ export const categoryEdgeCollectionID = 'category_edges';
 
 export const edgeConnectionCollectionID = 'resource_edge_connections';
 
-export const arangoEdgeCollectionIDs = [categoryEdgeCollectionID, edgeConnectionCollectionID];
+export const arangoEdgeCollectionIDs = [
+    categoryEdgeCollectionID,
+    edgeConnectionCollectionID,
+] as const;
 
-export const isArangoEdgeCollectionCollectionID = (input: unknown): boolean =>
-    arangoEdgeCollectionIDs.includes(input as string);
+export type ArangoEdgeCollectionID = typeof arangoEdgeCollectionIDs[number];
+
+export const isArangoEdgeCollectionCollectionID = (
+    input: unknown
+): input is ArangoEdgeCollectionID =>
+    arangoEdgeCollectionIDs.includes(input as ArangoEdgeCollectionID);
 
 export const tagCollectionID = 'tags';
 
@@ -43,3 +50,6 @@ export const getAllArangoResourceCollectionIDs = (): ArangoResourceCollectionID[
 export type ArangoCollectionID = typeof arangoCollectionIDs[number];
 
 export const getAllArangoCollectionIDs = (): ArangoCollectionID[] => [...arangoCollectionIDs];
+
+export const isArangoCollectionID = (input: unknown): input is ArangoCollectionID =>
+    arangoCollectionIDs.includes(input as ArangoCollectionID);

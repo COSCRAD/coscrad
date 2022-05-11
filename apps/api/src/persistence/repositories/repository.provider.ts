@@ -12,7 +12,6 @@ import { IEdgeConnectionRepositoryProvider } from '../../domain/repositories/int
 import { ITagRepositoryProvider } from '../../domain/repositories/interfaces/ITagRepositoryProvider';
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider';
 import { ResourceType } from '../../domain/types/resourceTypes';
-import { InternalError } from '../../lib/errors/InternalError';
 import { DatabaseProvider } from '../database/database.provider';
 import { getArangoCollectionIDFromResourceType } from '../database/getArangoCollectionIDFromResourceType';
 import { edgeConnectionCollectionID, tagCollectionID } from '../database/types/ArangoCollectionId';
@@ -20,6 +19,7 @@ import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapA
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import ArangoCategoryRepository from './ArangoCategoryRepository';
 import { RepositoryForEntity } from './repository-for-entity';
 
 @Injectable()
@@ -53,7 +53,7 @@ export class RepositoryProvider
     }
 
     getCategoryRepository(): ICategoryRepository {
-        throw new InternalError('Not Implemented');
+        return new ArangoCategoryRepository(this.databaseProvider);
     }
 
     forResource<TResource extends Resource>(resourceType: ResourceType) {
