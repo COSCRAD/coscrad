@@ -22,9 +22,13 @@ describe('When fetching multiple resources', () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
-    const testData = buildTestData().resources;
+    const testData = buildTestData();
 
-    const testDataWithAllResourcesPublished = Object.entries(testData).reduce(
+    const tagTestData = testData.tags;
+
+    const resourceTestData = testData.resources;
+
+    const testDataWithAllResourcesPublished = Object.entries(resourceTestData).reduce(
         (accumulatedData: InMemorySnapshotOfResources, [ResourceType, instances]) => ({
             ...accumulatedData,
             [ResourceType]: instances.map((instance) =>
@@ -70,6 +74,8 @@ describe('When fetching multiple resources', () => {
                     await testRepositoryProvider.addEntitiesOfManyTypes(
                         testDataWithAllResourcesPublished
                     );
+
+                    await testRepositoryProvider.getTagRepository().createMany(tagTestData);
                 });
 
                 it(`should fetch multiple resources of type ${ResourceType}`, async () => {
@@ -92,13 +98,14 @@ describe('When fetching multiple resources', () => {
                  * Note that there is no requirement that the test data have
                  * `published = true`
                  */
-                const publishedResourcesToAdd = testData[ResourceType].map((instance: Resource) =>
-                    instance.clone({
-                        published: true,
-                    })
+                const publishedResourcesToAdd = resourceTestData[ResourceType].map(
+                    (instance: Resource) =>
+                        instance.clone({
+                            published: true,
+                        })
                 );
 
-                const unpublishedResourcesToAdd = testData[ResourceType]
+                const unpublishedResourcesToAdd = resourceTestData[ResourceType]
                     // We want a different number of published \ unpublished terms
                     .slice(0, -1)
                     .map((instance, index) =>
@@ -113,6 +120,8 @@ describe('When fetching multiple resources', () => {
                         ...unpublishedResourcesToAdd,
                         ...publishedResourcesToAdd,
                     ]);
+
+                    await testRepositoryProvider.getTagRepository().createMany(tagTestData);
                 });
 
                 it('should return the expected number of results', async () => {

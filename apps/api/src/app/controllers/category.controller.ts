@@ -18,9 +18,6 @@ export class CategoryController {
         const invariantValidationErrors = result.filter(isInternalError);
 
         if (invariantValidationErrors.length > 0) {
-            console.log({
-                invalidDTOS: invariantValidationErrors.map((e) => e.toString()),
-            });
             return res
                 .status(httpStatusCodes.internalError)
                 .send(invariantValidationErrors.toString());

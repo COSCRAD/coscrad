@@ -24,7 +24,7 @@ describe('When querying for edge connections', () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
-    const { connections } = buildTestData();
+    const { connections, tags: tagTestData } = buildTestData();
 
     beforeAll(async () => {
         jest.resetModules();
@@ -59,6 +59,8 @@ describe('When querying for edge connections', () => {
 
             await testRepositoryProvider.getEdgeConnectionRepository().createMany(connections);
 
+            await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+
             const result = await request(app.getHttpServer()).get(`/connections`);
 
             expect(result.status).toBe(httpStatusCodes.ok);
@@ -70,6 +72,8 @@ describe('When querying for edge connections', () => {
     describe(`GET /connections/notes`, () => {
         it('should return the expected result', async () => {
             await testRepositoryProvider.getEdgeConnectionRepository().createMany(connections);
+
+            await testRepositoryProvider.getTagRepository().createMany(tagTestData);
 
             const result = await request(app.getHttpServer()).get('/connections/notes');
 
@@ -89,6 +93,8 @@ describe('When querying for edge connections', () => {
                         await testRepositoryProvider
                             .getEdgeConnectionRepository()
                             .createMany(connections);
+
+                        await testRepositoryProvider.getTagRepository().createMany(tagTestData);
 
                         const selfConnections = connections.filter(
                             ({ type }) => type === EdgeConnectionType.self
@@ -195,6 +201,8 @@ describe('When querying for edge connections', () => {
                         await testRepositoryProvider
                             .getEdgeConnectionRepository()
                             .createMany(connections);
+
+                        await testRepositoryProvider.getTagRepository().createMany(tagTestData);
 
                         const dualConnections = connections.filter(
                             ({ type }) => type === EdgeConnectionType.dual
