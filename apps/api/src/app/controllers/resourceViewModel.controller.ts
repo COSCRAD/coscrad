@@ -4,11 +4,12 @@ import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Book } from '../../domain/models/book/entities/book.entity';
 import { Photograph } from '../../domain/models/photograph/entities/photograph.entity';
 import { ISpatialFeature } from '../../domain/models/spatial-feature/ISpatialFeature';
+import { Tag } from '../../domain/models/tag/tag.entity';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { TranscribedAudio } from '../../domain/models/transcribed-audio/entities/transcribed-audio.entity';
 import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { isResourceId } from '../../domain/types/ResourceId';
-import { resourceTypes } from '../../domain/types/resourceTypes';
+import { ResourceType, resourceTypes } from '../../domain/types/resourceTypes';
 import { isInternalError } from '../../lib/errors/InternalError';
 import { isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
@@ -25,6 +26,7 @@ import {
     TermViewModel,
     VocabularyListViewModel,
 } from '../../view-models/buildViewModelForResource/viewModels';
+import { BaseViewModel } from '../../view-models/buildViewModelForResource/viewModels/base.view-model';
 import { BookViewModel } from '../../view-models/buildViewModelForResource/viewModels/book.view-model';
 import { PhotographViewModel } from '../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
 import { SpatialFeatureViewModel } from '../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
@@ -32,6 +34,7 @@ import { TranscribedAudioViewModel } from '../../view-models/buildViewModelForRe
 import { buildAllResourceDescriptions } from '../../view-models/resourceDescriptions/buildAllResourceDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from './utilities/buildViewModelPathForResourceType';
+import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';
 
 const buildByIdApiParamMetadata = () => ({
     name: 'id',
@@ -72,7 +75,7 @@ export class ResourceViewModelController {
                 error: JSON.stringify(allTermViewModels),
             });
 
-        return res.status(httpStatusCodes.ok).send(allTermViewModels.map(cloneToPlainObject));
+        return await this.mixinTheTagsAndSend(res, allTermViewModels, resourceTypes.term);
     }
 
     @ApiParam(buildByIdApiParamMetadata())
@@ -104,9 +107,7 @@ export class ResourceViewModelController {
             this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
         );
 
-        const dto = cloneToPlainObject(termViewModel);
-
-        return res.status(httpStatusCodes.ok).send(dto);
+        return this.mixinTheTagsAndSend(res, termViewModel, resourceTypes.term);
     }
 
     /* ********** VOCABULARY LISTS ********** */
@@ -123,7 +124,7 @@ export class ResourceViewModelController {
                 error: JSON.stringify(allViewModels),
             });
 
-        return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
+        return await this.mixinTheTagsAndSend(res, allViewModels, resourceTypes.vocabularyList);
     }
 
     @ApiParam(buildByIdApiParamMetadata())
@@ -169,12 +170,10 @@ export class ResourceViewModelController {
             this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
         );
 
-        const dto = cloneToPlainObject(viewModel);
-
-        return res.status(httpStatusCodes.ok).send(dto);
+        return this.mixinTheTagsAndSend(res, viewModel, resourceTypes.vocabularyList);
     }
 
-    /* ********** AUDIO WITH TRANSRIPT ********** */
+    /* ********** TRANSCRIBED AUDIO ********** */
     @ApiOkResponse({ type: TranscribedAudioViewModel, isArray: true })
     @Get(buildViewModelPathForResourceType(resourceTypes.transcribedAudio))
     async fetchAudioViewModelsWithTranscripts(@Res() res) {
@@ -188,7 +187,7 @@ export class ResourceViewModelController {
                 error: JSON.stringify(allViewModels),
             });
 
-        return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
+        return await this.mixinTheTagsAndSend(res, allViewModels, resourceTypes.transcribedAudio);
     }
 
     @ApiParam(buildByIdApiParamMetadata())
@@ -220,9 +219,7 @@ export class ResourceViewModelController {
             this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
         );
 
-        const dto = cloneToPlainObject(viewModel);
-
-        return res.status(httpStatusCodes.ok).send(dto);
+        return await this.mixinTheTagsAndSend(res, viewModel, resourceTypes.transcribedAudio);
     }
 
     /* ********** BOOKS ********** */
@@ -239,7 +236,7 @@ export class ResourceViewModelController {
                 error: JSON.stringify(allViewModels),
             });
 
-        return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
+        return await this.mixinTheTagsAndSend(res, allViewModels, resourceTypes.book);
     }
 
     @ApiParam(buildByIdApiParamMetadata())
@@ -268,9 +265,7 @@ export class ResourceViewModelController {
 
         const viewModel = new BookViewModel(searchResult);
 
-        const dto = cloneToPlainObject(viewModel);
-
-        return res.status(httpStatusCodes.ok).send(dto);
+        return await this.mixinTheTagsAndSend(res, viewModel, resourceTypes.book);
     }
 
     /* ********** PHOTOGRAPHS   ********** */
@@ -287,7 +282,7 @@ export class ResourceViewModelController {
                 error: JSON.stringify(allViewModels),
             });
 
-        return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
+        return await this.mixinTheTagsAndSend(res, allViewModels, resourceTypes.photograph);
     }
 
     @ApiParam(buildByIdApiParamMetadata())
@@ -319,9 +314,7 @@ export class ResourceViewModelController {
             this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
         );
 
-        const dto = cloneToPlainObject(viewModel);
-
-        return res.status(httpStatusCodes.ok).send(dto);
+        return await this.mixinTheTagsAndSend(res, viewModel, resourceTypes.photograph);
     }
 
     /* ********** SPATIAL FEATURE   ********** */
@@ -338,7 +331,7 @@ export class ResourceViewModelController {
                 error: JSON.stringify(allViewModels),
             });
 
-        return res.status(httpStatusCodes.ok).send(allViewModels.map(cloneToPlainObject));
+        return await this.mixinTheTagsAndSend(res, allViewModels, resourceTypes.spatialFeature);
     }
 
     @ApiParam(buildByIdApiParamMetadata())
@@ -367,8 +360,36 @@ export class ResourceViewModelController {
 
         const viewModel = new SpatialFeatureViewModel(searchResult);
 
-        const dto = cloneToPlainObject(viewModel);
+        return await this.mixinTheTagsAndSend(res, viewModel, resourceTypes.spatialFeature);
+    }
 
-        return res.status(httpStatusCodes.ok).send(dto);
+    /**
+     * TODO [DRY] This is the same as on
+     * the `ResourceViewModelController` in `resourceViewModel.controller.ts`
+     */
+    private async mixinTheTagsAndSend(res, viewModel: BaseViewModel, resourceType: ResourceType);
+    private async mixinTheTagsAndSend(res, viewModels: BaseViewModel[], resourceType: ResourceType);
+    private async mixinTheTagsAndSend(
+        @Res() res,
+        viewModelOrViewModels: BaseViewModel | BaseViewModel[],
+        resourceType: ResourceType
+    ) {
+        const result = await this.repositoryProvider.getTagRepository().fetchMany();
+
+        const invalidTagErrors = result.filter(isInternalError);
+
+        if (invalidTagErrors.length > 0)
+            res.status(httpStatusCodes.internalError).send(invalidTagErrors);
+
+        const allTags = result as Tag[];
+
+        const mixinTags = (viewModel: BaseViewModel) =>
+            mixTagsIntoViewModel(viewModel, allTags, resourceType);
+
+        const viewModelOrViewModelsWithTags = Array.isArray(viewModelOrViewModels)
+            ? viewModelOrViewModels.map(mixinTags)
+            : mixinTags(viewModelOrViewModels);
+
+        res.status(httpStatusCodes.ok).send(cloneToPlainObject(viewModelOrViewModelsWithTags));
     }
 }

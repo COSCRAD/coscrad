@@ -7,12 +7,24 @@ Array [
     "id": "23",
     "publicationDate": "2002",
     "subtitle": "The wolf's revenge",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
     "title": "Three Little Pigs",
   },
   Object {
     "author": "Jane Donnaldson",
     "id": "24",
     "publicationDate": "2011",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
     "title": "An Adventure Story",
   },
 ]
@@ -25,12 +37,24 @@ Array [
     "id": "23",
     "publicationDate": "2002",
     "subtitle": "The wolf's revenge",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
     "title": "Three Little Pigs",
   },
   Object {
     "author": "Jane Donnaldson",
     "id": "24",
     "publicationDate": "2011",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
     "title": "An Adventure Story",
   },
 ]
@@ -42,16 +66,29 @@ Array [
     "id": "0",
     "imageURL": "https://www.myaudio.com:5555/media?id=cat.png",
     "photographer": "Susie McRealart",
+    "tags": Array [
+      Object {
+        "id": "3",
+        "label": "placenames",
+      },
+    ],
   },
   Object {
     "id": "1",
     "imageURL": "https://www.myaudio.com:5555/media?id=dog.png",
     "photographer": "Robert McRealart",
+    "tags": Array [
+      Object {
+        "id": "4",
+        "label": "songs",
+      },
+    ],
   },
   Object {
     "id": "2",
     "imageURL": "https://www.myaudio.com:5555/media?id=wildflower.png",
     "photographer": "Kenny Tree-Huggens",
+    "tags": Array [],
   },
 ]
 `;
@@ -62,16 +99,29 @@ Array [
     "id": "0",
     "imageURL": "https://www.myaudio.com:5555/media?id=cat.png",
     "photographer": "Susie McRealart",
+    "tags": Array [
+      Object {
+        "id": "3",
+        "label": "placenames",
+      },
+    ],
   },
   Object {
     "id": "1",
     "imageURL": "https://www.myaudio.com:5555/media?id=dog.png",
     "photographer": "Robert McRealart",
+    "tags": Array [
+      Object {
+        "id": "4",
+        "label": "songs",
+      },
+    ],
   },
   Object {
     "id": "2",
     "imageURL": "https://www.myaudio.com:5555/media?id=wildflower.png",
     "photographer": "Kenny Tree-Huggens",
+    "tags": Array [],
   },
 ]
 `;
@@ -87,6 +137,12 @@ Array [
       "type": "Point",
     },
     "id": "100",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
   },
   Object {
     "geometry": Object {
@@ -97,6 +153,12 @@ Array [
       "type": "Point",
     },
     "id": "101",
+    "tags": Array [
+      Object {
+        "id": "5",
+        "label": "legends",
+      },
+    ],
   },
   Object {
     "geometry": Object {
@@ -107,6 +169,12 @@ Array [
       "type": "Point",
     },
     "id": "102",
+    "tags": Array [
+      Object {
+        "id": "2",
+        "label": "animals",
+      },
+    ],
   },
   Object {
     "geometry": Object {
@@ -131,6 +199,7 @@ Array [
       "type": "LineString",
     },
     "id": "1",
+    "tags": Array [],
   },
   Object {
     "geometry": Object {
@@ -161,6 +230,7 @@ Array [
       "type": "Polygon",
     },
     "id": "300",
+    "tags": Array [],
   },
 ]
 `;
@@ -176,6 +246,12 @@ Array [
       "type": "Point",
     },
     "id": "100",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
   },
   Object {
     "geometry": Object {
@@ -186,6 +262,12 @@ Array [
       "type": "Point",
     },
     "id": "101",
+    "tags": Array [
+      Object {
+        "id": "5",
+        "label": "legends",
+      },
+    ],
   },
   Object {
     "geometry": Object {
@@ -196,6 +278,12 @@ Array [
       "type": "Point",
     },
     "id": "102",
+    "tags": Array [
+      Object {
+        "id": "2",
+        "label": "animals",
+      },
+    ],
   },
   Object {
     "geometry": Object {
@@ -220,6 +308,7 @@ Array [
       "type": "LineString",
     },
     "id": "1",
+    "tags": Array [],
   },
   Object {
     "geometry": Object {
@@ -250,6 +339,7 @@ Array [
       "type": "Polygon",
     },
     "id": "300",
+    "tags": Array [],
   },
 ]
 `;
@@ -259,18 +349,36 @@ Array [
   Object {
     "contributor": "",
     "id": "1",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
     "term": "Chil-term-1",
     "termEnglish": "Engl-term-1",
   },
   Object {
     "contributor": "",
     "id": "2",
+    "tags": Array [
+      Object {
+        "id": "2",
+        "label": "animals",
+      },
+    ],
     "term": "Chil-term-2",
     "termEnglish": "Engl-term-2",
   },
   Object {
     "contributor": "",
     "id": "3",
+    "tags": Array [
+      Object {
+        "id": "2",
+        "label": "animals",
+      },
+    ],
     "term": "Chil-term-no-english",
   },
 ]
@@ -281,18 +389,36 @@ Array [
   Object {
     "contributor": "",
     "id": "1",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
     "term": "Chil-term-1",
     "termEnglish": "Engl-term-1",
   },
   Object {
     "contributor": "",
     "id": "2",
+    "tags": Array [
+      Object {
+        "id": "2",
+        "label": "animals",
+      },
+    ],
     "term": "Chil-term-2",
     "termEnglish": "Engl-term-2",
   },
   Object {
     "contributor": "",
     "id": "3",
+    "tags": Array [
+      Object {
+        "id": "2",
+        "label": "animals",
+      },
+    ],
     "term": "Chil-term-no-english",
   },
 ]
@@ -308,6 +434,12 @@ Array [
 [12000] There once was a little wooden boy. [15550]
 [18300] His name was Pinocchio. [19240]",
     "start": 0,
+    "tags": Array [
+      Object {
+        "id": "3",
+        "label": "placenames",
+      },
+    ],
   },
 ]
 `;
@@ -322,6 +454,12 @@ Array [
 [12000] There once was a little wooden boy. [15550]
 [18300] His name was Pinocchio. [19240]",
     "start": 0,
+    "tags": Array [
+      Object {
+        "id": "3",
+        "label": "placenames",
+      },
+    ],
   },
 ]
 `;
@@ -356,6 +494,12 @@ Array [
     "id": "1",
     "name": "test VL 1 chil",
     "nameEnglish": "test VL 1 engl",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
     "variables": Array [
       Object {
         "name": "person",
@@ -389,6 +533,12 @@ Array [
     ],
     "id": "2",
     "name": "test VL 2 CHIL- no engl name",
+    "tags": Array [
+      Object {
+        "id": "5",
+        "label": "legends",
+      },
+    ],
     "variables": Array [],
   },
 ]
@@ -401,6 +551,12 @@ Array [
     "id": "1",
     "name": "test VL 1 chil",
     "nameEnglish": "test VL 1 engl",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
     "variables": Array [
       Object {
         "name": "person",
@@ -422,6 +578,12 @@ Array [
     "entries": Array [],
     "id": "2",
     "name": "test VL 2 CHIL- no engl name",
+    "tags": Array [
+      Object {
+        "id": "5",
+        "label": "legends",
+      },
+    ],
     "variables": Array [],
   },
 ]

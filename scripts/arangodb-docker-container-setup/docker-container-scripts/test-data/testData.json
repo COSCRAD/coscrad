@@ -763,27 +763,128 @@
         {
             "_key": "1",
             "label": "plants",
-            "members": []
+            "members": [
+                {
+                    "type": "term",
+                    "id": "1"
+                },
+                {
+                    "type": "book",
+                    "id": "23"
+                },
+                {
+                    "type": "book",
+                    "id": "24"
+                },
+                {
+                    "type": "vocabularyList",
+                    "id": "1"
+                },
+                {
+                    "type": "spatialFeature",
+                    "id": "100"
+                },
+                {
+                    "type": "note",
+                    "id": "2005"
+                },
+                {
+                    "type": "note",
+                    "id": "9"
+                },
+                {
+                    "type": "note",
+                    "id": "11"
+                }
+            ]
         },
         {
             "_key": "2",
             "label": "animals",
-            "members": []
+            "members": [
+                {
+                    "type": "term",
+                    "id": "2"
+                },
+                {
+                    "type": "term",
+                    "id": "3"
+                },
+                {
+                    "type": "spatialFeature",
+                    "id": "102"
+                },
+                {
+                    "type": "note",
+                    "id": "2004"
+                },
+                {
+                    "type": "note",
+                    "id": "7"
+                }
+            ]
         },
         {
             "_key": "3",
             "label": "placenames",
-            "members": []
+            "members": [
+                {
+                    "type": "photograph",
+                    "id": "0"
+                },
+                {
+                    "type": "transcribedAudio",
+                    "id": "110"
+                },
+                {
+                    "type": "note",
+                    "id": "2003"
+                },
+                {
+                    "type": "note",
+                    "id": "5"
+                }
+            ]
         },
         {
             "_key": "4",
             "label": "songs",
-            "members": []
+            "members": [
+                {
+                    "type": "photograph",
+                    "id": "1"
+                },
+                {
+                    "type": "note",
+                    "id": "2002"
+                },
+                {
+                    "type": "note",
+                    "id": "3"
+                }
+            ]
         },
         {
             "_key": "5",
             "label": "legends",
-            "members": []
+            "members": [
+                {
+                    "type": "vocabularyList",
+                    "id": "2"
+                },
+                {
+                    "type": "spatialFeature",
+                    "id": "101"
+                },
+                {
+                    "type": "note",
+                    "id": "2001"
+                },
+                {
+                    "type": "note",
+                    "id": "1"
+                }
+            ]
         }
     ],
     "categories": [
