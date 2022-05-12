@@ -6,6 +6,12 @@ Object {
   "id": "23",
   "publicationDate": "2002",
   "subtitle": "The wolf's revenge",
+  "tags": Array [
+    Object {
+      "id": "1",
+      "label": "plants",
+    },
+  ],
   "title": "Three Little Pigs",
 }
 `;
@@ -15,6 +21,12 @@ Object {
   "id": "0",
   "imageURL": "https://www.myaudio.com:5555/media?id=cat.png",
   "photographer": "Susie McRealart",
+  "tags": Array [
+    Object {
+      "id": "3",
+      "label": "placenames",
+    },
+  ],
 }
 `;
 
@@ -28,6 +40,12 @@ Object {
     "type": "Point",
   },
   "id": "100",
+  "tags": Array [
+    Object {
+      "id": "1",
+      "label": "plants",
+    },
+  ],
 }
 `;
 
@@ -35,6 +53,12 @@ exports[`GET /resources (fetch view models) When querying for a single View Mode
 Object {
   "contributor": "",
   "id": "1",
+  "tags": Array [
+    Object {
+      "id": "1",
+      "label": "plants",
+    },
+  ],
   "term": "Chil-term-1",
   "termEnglish": "Engl-term-1",
 }
@@ -49,6 +73,12 @@ Object {
 [12000] There once was a little wooden boy. [15550]
 [18300] His name was Pinocchio. [19240]",
   "start": 0,
+  "tags": Array [
+    Object {
+      "id": "3",
+      "label": "placenames",
+    },
+  ],
 }
 `;
 
@@ -81,6 +111,12 @@ Object {
   "id": "1",
   "name": "test VL 1 chil",
   "nameEnglish": "test VL 1 engl",
+  "tags": Array [
+    Object {
+      "id": "1",
+      "label": "plants",
+    },
+  ],
   "variables": Array [
     Object {
       "name": "person",

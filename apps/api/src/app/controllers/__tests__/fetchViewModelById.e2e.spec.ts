@@ -23,9 +23,13 @@ describe('GET /resources (fetch view models)', () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
-    const testData = buildTestData().resources;
+    const testData = buildTestData();
 
-    const testDataWithAllResourcesPublished = Object.entries(testData).reduce(
+    const tagTestData = testData.tags;
+
+    const resourceTestData = testData.resources;
+
+    const testDataWithAllResourcesPublished = Object.entries(resourceTestData).reduce(
         (accumulatedData: InMemorySnapshotOfResources, [Re, instances]) => ({
             ...accumulatedData,
             [Re]: instances.map((instance) =>
@@ -74,6 +78,8 @@ describe('GET /resources (fetch view models)', () => {
                             await testRepositoryProvider.addEntitiesOfManyTypes(
                                 testDataWithAllResourcesPublished
                             );
+
+                            await testRepositoryProvider.getTagRepository().createMany(tagTestData);
                         });
 
                         it(`should return not found`, () => {
@@ -88,6 +94,8 @@ describe('GET /resources (fetch view models)', () => {
                             await testRepositoryProvider.addEntitiesOfManyTypes(
                                 testDataWithAllResourcesPublished
                             );
+
+                            await testRepositoryProvider.getTagRepository().createMany(tagTestData);
                         });
 
                         it('should return the expected response', async () => {
@@ -111,9 +119,9 @@ describe('GET /resources (fetch view models)', () => {
                     const unpublishedId = 'unpublished-01';
 
                     beforeEach(async () => {
-                        await testRepositoryProvider.addEntitiesOfManyTypes(testData);
+                        await testRepositoryProvider.addEntitiesOfManyTypes(resourceTestData);
 
-                        const unpublishedInstance = testData[resourceType][0].clone({
+                        const unpublishedInstance = resourceTestData[resourceType][0].clone({
                             published: false,
                             id: unpublishedId,
                         });
