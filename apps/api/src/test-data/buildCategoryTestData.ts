@@ -1,9 +1,8 @@
 import { Category } from '../domain/models/categories/entities/category.entity';
-import { CategorizedTree } from '../domain/models/categories/types/CategorizedTree';
 import { noteType } from '../domain/models/categories/types/ResourceTypeOrNoteType';
 import { resourceTypes } from '../domain/types/resourceTypes';
 
-export default (): CategorizedTree =>
+export default (): Category[] =>
     [
         {
             id: '1',

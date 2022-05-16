@@ -1,4 +1,4 @@
-import { CategorizedTree } from '../../../domain/models/categories/types/CategorizedTree';
+import { Category } from '../../../domain/models/categories/entities/category.entity';
 import { Resource } from '../../../domain/models/resource.entity';
 import {
     InMemorySnapshotOfResources,
@@ -13,7 +13,7 @@ import {
     edgeConnectionCollectionID,
     tagCollectionID,
 } from '../../database/types/ArangoCollectionId';
-import buildEdgeDocumentFromCategoryNodeDTOs from '../../database/utilities/buildEdgeDocumentFromCategoryNodeDTOs';
+import buildEdgeDocumentsFromCategoryNodeDTOs from '../../database/utilities/category/buildEdgeDocumentsFromCategoryNodeDTOs';
 import mapEntityDTOToDatabaseDTO from '../../database/utilities/mapEntityDTOToDatabaseDTO';
 import { RepositoryProvider } from '../repository.provider';
 
@@ -42,7 +42,11 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         await Promise.all(writePromises);
     }
 
-    public async addCategories(categories: CategorizedTree): Promise<void> {
+    /**
+     * TODO When implementing writes for the ArangoCategoryRepository,
+     * remove this helper and use the actual implementation of `createMany` \ `create`.
+     */
+    public async addCategories(categories: Category[]): Promise<void> {
         const categoryDocuments = categories
             .map(({ id, label, members }) => ({
                 id,
@@ -51,7 +55,7 @@ export default class TestRepositoryProvider extends RepositoryProvider {
             }))
             .map(mapEntityDTOToDatabaseDTO);
 
-        const edgeDocuments = buildEdgeDocumentFromCategoryNodeDTOs(categories);
+        const edgeDocuments = buildEdgeDocumentsFromCategoryNodeDTOs(categories);
 
         await this.databaseProvider
             .getDatabaseForCollection(categoryCollectionID)

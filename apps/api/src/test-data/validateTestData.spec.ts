@@ -16,7 +16,7 @@ import {
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
 import { getArangoCollectionIDFromResourceType } from '../persistence/database/getArangoCollectionIDFromResourceType';
-import buildEdgeDocumentFromCategoryNodeDTOs from '../persistence/database/utilities/buildEdgeDocumentFromCategoryNodeDTOs';
+import buildEdgeDocumentsFromCategoryNodeDTOs from '../persistence/database/utilities/category/buildEdgeDocumentsFromCategoryNodeDTOs';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
 import { DTO } from '../types/DTO';
@@ -260,20 +260,19 @@ describe('buildTestData', () => {
 
         const tagTestDataInDatabaseFormat = tagTestData.map(mapEntityDTOToDatabaseDTO);
 
-        const categoryTestDataInDatabsaeFormat = categoryTestData.map(mapEntityDTOToDatabaseDTO);
+        const categoryTestDataInDatabaseFormat = categoryTestData.map(mapEntityDTOToDatabaseDTO);
 
-        const categoryEdges = buildEdgeDocumentFromCategoryNodeDTOs(categoryTestData);
+        const categoryEdges = buildEdgeDocumentsFromCategoryNodeDTOs(categoryTestData);
 
         const fullSnapshotInDatabaseFormat = {
             resources: resourceTestDataInDatabaseFormat,
             // note the change in this key ~~connections~~ -> edges
             resource_edge_connections: connectionTestDataInDatabaseFormat,
             tags: tagTestDataInDatabaseFormat,
-            categories: categoryTestDataInDatabsaeFormat,
+            categories: categoryTestDataInDatabaseFormat,
             categoryEdges,
         };
 
-        // TODO move this to a config- better yet avoid this whole write!
         const testDataFilePath = `${process.cwd()}/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.json`;
 
         const numberOfSpacesToIndent = 4;

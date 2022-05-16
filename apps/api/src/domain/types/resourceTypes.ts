@@ -1,6 +1,6 @@
 import { ValueType } from '../../lib/types/valueType';
 import { Book } from '../models/book/entities/book.entity';
-import { CategorizedTree } from '../models/categories/types/CategorizedTree';
+import { Category } from '../models/categories/entities/category.entity';
 import { EdgeConnection } from '../models/context/edge-connection.entity';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { ISpatialFeature } from '../models/spatial-feature/ISpatialFeature';
@@ -49,5 +49,5 @@ export type InMemorySnapshot = {
      * represented in the database here. Defer this to (the db specific) document
      * mapping layer.
      */
-    categoryTree: CategorizedTree;
+    categoryTree: Category[];
 };

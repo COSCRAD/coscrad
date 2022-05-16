@@ -13,14 +13,12 @@ import {
     categoryCollectionID,
     categoryEdgeCollectionID,
 } from '../database/types/ArangoCollectionId';
+import { CategoryDocument } from '../database/types/CategoryDocument';
 import { HasArangoDocumentDirectionAttributes } from '../database/types/HasArangoDocumentDirectionAttributes';
+import buildCategoryDTOsFromDatabaseDocuments from '../database/utilities/category/buildCategoryDTOsFromDatabaseDocuments';
+import buildLookupTableForChildrenIDs from '../database/utilities/category/buildLookupTableForChildrenIDs';
 import convertArangoDocumentHandleToCompositeIdentifier from '../database/utilities/convertArangoDocumentHandleToCompositeIdentifier';
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
-import { DatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDTO';
-
-type CategoryDocument = Omit<DatabaseDocument<DTO<Category>>, 'childrenIDs'>;
-
-type LookupTableForChildrenIDs = Map<EntityId, EntityId[]>;
 
 export default class ArangoCategoryRepository implements ICategoryRepository {
     #instanceFactory = buildInstanceFactory(categoryValidator, Category);
@@ -38,7 +36,7 @@ export default class ArangoCategoryRepository implements ICategoryRepository {
             categoryEdgeCollectionID
         );
 
-        const categoryDTOs = this.#buildCategoryDTOs(categories, category_edges);
+        const categoryDTOs = buildCategoryDTOsFromDatabaseDocuments(categories, category_edges);
 
         return categoryDTOs.map((dto) => this.#instanceFactory(dto));
     }
@@ -59,9 +57,9 @@ export default class ArangoCategoryRepository implements ICategoryRepository {
                 )
             );
 
-        const childrenIDs = this.#buildLookupTableForChildrenIDs(
-            edgesWhereThisCategoryIsTheParent
-        ).get(id);
+        const childrenIDs = buildLookupTableForChildrenIDs(edgesWhereThisCategoryIsTheParent).get(
+            id
+        );
 
         const categoryDTO = mapDatabaseDTOToEntityDTO({
             ...categoryDocument,
@@ -74,47 +72,5 @@ export default class ArangoCategoryRepository implements ICategoryRepository {
 
     async count(): Promise<number> {
         return await this.#arangoDB.getCount(categoryCollectionID);
-    }
-
-    // Break this out. It doesn't use any state (this)
-    #buildCategoryDTOs(
-        categories: CategoryDocument[],
-        edges: HasArangoDocumentDirectionAttributes[]
-    ) {
-        const lookupTable = this.#buildLookupTableForChildrenIDs(edges);
-
-        return categories
-            .map((categoryDoc) => ({
-                ...categoryDoc,
-                childrenIDs: lookupTable.has(categoryDoc._key)
-                    ? lookupTable.get(categoryDoc._key)
-                    : [],
-            }))
-            .map(mapDatabaseDTOToEntityDTO);
-    }
-
-    // Break this out. It doesn't have any state.
-    #buildLookupTableForChildrenIDs(
-        edges: HasArangoDocumentDirectionAttributes[]
-    ): LookupTableForChildrenIDs {
-        return edges.reduce((parentToChildrenMap: LookupTableForChildrenIDs, { _from, _to }) => {
-            if (!_from) {
-                throw new InternalError('Missing _from attribute');
-            }
-
-            if (!_to) {
-                throw new InternalError('Missing _to attribute');
-            }
-
-            const parentId = convertArangoDocumentHandleToCompositeIdentifier(_from).id;
-
-            const childId = convertArangoDocumentHandleToCompositeIdentifier(_to).id;
-
-            if (!parentToChildrenMap.has(parentId)) parentToChildrenMap.set(parentId, []);
-
-            parentToChildrenMap.get(parentId).push(childId);
-
-            return parentToChildrenMap;
-        }, new Map());
     }
 }
