@@ -1,11 +1,14 @@
 import { Category } from '../../../../../../domain/models/categories/entities/category.entity';
-import { ICategoryTree } from '../../../interfaces/ICategoryTree';
+import { CateogryTreeViewModel } from '../../../category-tree.view-model';
 
-const joinInTheChildren = (node: Category, allNodes: Category[]): ICategoryTree => ({
+const joinInTheChildren = (node: Category, allNodes: Category[]): CateogryTreeViewModel => ({
     id: node.id,
     label: node.label,
     members: node.members,
-    // TODO [performance] Investigate efficiency (stress test?), consider optimizing
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/182201457]
+     * Investigate efficiency (stress test), consider optimizing
+     */
     children:
         node.childrenIDs.length === 0
             ? []

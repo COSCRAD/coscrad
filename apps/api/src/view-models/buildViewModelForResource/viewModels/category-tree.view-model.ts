@@ -3,10 +3,9 @@ import { ResourceOrNoteCompositeIdentifier } from '../../../domain/models/catego
 import { EntityId } from '../../../domain/types/ResourceId';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from './base.view-model';
-import { ICategoryTree } from './interfaces/ICategoryTree';
 import buildTreeFromNodes from './utilities/graph/buildTreeFromNodes';
 
-export class CateogryTreeViewModel extends BaseViewModel implements ICategoryTree {
+export class CateogryTreeViewModel extends BaseViewModel {
     // The ID of the root category, '0' for the entire category tree
     readonly id: EntityId;
 
@@ -14,7 +13,7 @@ export class CateogryTreeViewModel extends BaseViewModel implements ICategoryTre
 
     readonly members: ResourceOrNoteCompositeIdentifier[];
 
-    readonly children: ICategoryTree[];
+    readonly children: CateogryTreeViewModel[];
 
     constructor(categoryTree: Category[]) {
         const tree = buildTreeFromNodes(categoryTree);

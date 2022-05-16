@@ -6,7 +6,7 @@ export default (): Category[] =>
     [
         {
             id: '0',
-            label: '',
+            label: 'tree of knowledge',
             members: [],
             childrenIDs: ['1', '12'],
         },

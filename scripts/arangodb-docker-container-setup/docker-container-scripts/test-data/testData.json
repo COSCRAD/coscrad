@@ -788,6 +788,11 @@
     ],
     "categories": [
         {
+            "_key": "0",
+            "label": "tree of knowledge",
+            "members": []
+        },
+        {
             "_key": "1",
             "label": "animals",
             "members": [
@@ -795,10 +800,6 @@
                     "type": "vocabularyList",
                     "id": "1"
                 }
-            ],
-            "childrenIDs": [
-                "2",
-                "3"
             ]
         },
         {
@@ -813,18 +814,12 @@
                     "type": "book",
                     "id": "23"
                 }
-            ],
-            "childrenIDs": [
-                "4",
-                "5",
-                "11"
             ]
         },
         {
             "_key": "3",
             "label": "birds",
-            "members": [],
-            "childrenIDs": []
+            "members": []
         },
         {
             "_key": "4",
@@ -834,26 +829,17 @@
                     "type": "term",
                     "id": "2"
                 }
-            ],
-            "childrenIDs": [
-                "8",
-                "10"
             ]
         },
         {
             "_key": "5",
             "label": "felines",
-            "members": [],
-            "childrenIDs": [
-                "6",
-                "7"
-            ]
+            "members": []
         },
         {
             "_key": "6",
             "label": "big cats",
-            "members": [],
-            "childrenIDs": []
+            "members": []
         },
         {
             "_key": "7",
@@ -867,8 +853,7 @@
                     "type": "photograph",
                     "id": "0"
                 }
-            ],
-            "childrenIDs": []
+            ]
         },
         {
             "_key": "8",
@@ -878,8 +863,7 @@
                     "type": "spatialFeature",
                     "id": "101"
                 }
-            ],
-            "childrenIDs": []
+            ]
         },
         {
             "_key": "9",
@@ -893,8 +877,7 @@
                     "type": "spatialFeature",
                     "id": "102"
                 }
-            ],
-            "childrenIDs": []
+            ]
         },
         {
             "_key": "10",
@@ -904,8 +887,7 @@
                     "type": "photograph",
                     "id": "1"
                 }
-            ],
-            "childrenIDs": []
+            ]
         },
         {
             "_key": "11",
@@ -915,33 +897,22 @@
                     "type": "book",
                     "id": "24"
                 }
-            ],
-            "childrenIDs": []
+            ]
         },
         {
             "_key": "12",
             "label": "film",
-            "members": [],
-            "childrenIDs": [
-                "13",
-                "14"
-            ]
+            "members": []
         },
         {
             "_key": "13",
             "label": "props",
-            "members": [],
-            "childrenIDs": [
-                "16",
-                "17",
-                "18"
-            ]
+            "members": []
         },
         {
             "_key": "14",
             "label": "wardrobe",
-            "members": [],
-            "childrenIDs": []
+            "members": []
         },
         {
             "_key": "15",
@@ -951,16 +922,12 @@
                     "type": "transcribedAudio",
                     "id": "110"
                 }
-            ],
-            "childrenIDs": []
+            ]
         },
         {
             "_key": "16",
             "label": "adornments",
-            "members": [],
-            "childrenIDs": [
-                "15"
-            ]
+            "members": []
         },
         {
             "_key": "17",
@@ -970,17 +937,23 @@
                     "type": "note",
                     "id": "1"
                 }
-            ],
-            "childrenIDs": []
+            ]
         },
         {
             "_key": "18",
             "label": "tools",
-            "members": [],
-            "childrenIDs": []
+            "members": []
         }
     ],
     "categoryEdges": [
+        {
+            "_to": "categories/1",
+            "_from": "categories/0"
+        },
+        {
+            "_to": "categories/12",
+            "_from": "categories/0"
+        },
         {
             "_to": "categories/2",
             "_from": "categories/1"

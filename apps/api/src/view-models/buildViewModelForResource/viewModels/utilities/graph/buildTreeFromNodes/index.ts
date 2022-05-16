@@ -1,9 +1,9 @@
 import { Category } from '../../../../../../domain/models/categories/entities/category.entity';
-import { ICategoryTree } from '../../../interfaces/ICategoryTree';
+import { CateogryTreeViewModel } from '../../../category-tree.view-model';
 import findRoot from './findRoot';
 import joinInTheChildren from './joinInTheChildren';
 
-export default (allNodes: Category[]): ICategoryTree => {
+export default (allNodes: Category[]): CateogryTreeViewModel => {
     const rootNode = findRoot(allNodes);
 
     return joinInTheChildren(rootNode, allNodes);
