@@ -1,11 +1,12 @@
 {
-  "version": 2,
-  "projects": {
-    "api": "apps/api",
-    "api-interfaces": "libs/api-interfaces",
-    "coscrad-frontend": "apps/coscrad-frontend",
-    "coscrad-frontend-e2e": "apps/coscrad-frontend-e2e",
-    "tng-dictionary": "apps/tng-dictionary",
-    "tng-dictionary-e2e": "apps/tng-dictionary-e2e"
-  }
+    "version": 2,
+    "projects": {
+        "api": "apps/api",
+        "api-interfaces": "libs/api-interfaces",
+        "coscrad-frontend": "apps/coscrad-frontend",
+        "coscrad-frontend-e2e": "apps/coscrad-frontend-e2e",
+        "tng-dictionary": "apps/tng-dictionary",
+        "tng-dictionary-e2e": "apps/tng-dictionary-e2e",
+        "validation": "libs/validation"
+    }
 }

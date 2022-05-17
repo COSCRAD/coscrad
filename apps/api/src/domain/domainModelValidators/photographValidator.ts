@@ -1,5 +1,5 @@
+import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { InternalError } from '../../lib/errors/InternalError';
-import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLength';
 import { DTO } from '../../types/DTO';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { resourceTypes } from '../types/resourceTypes';
