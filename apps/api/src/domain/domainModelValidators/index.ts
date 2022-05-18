@@ -1,5 +1,6 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import { ResourceType, resourceTypes } from '../types/resourceTypes';
+import bibliographicReferenceValidator from './bibliographicReferenceValidator';
 import bookValidator from './bookValidator';
 import photographValidator from './photographValidator';
 import spatialFeatureValidator from './spatialFeatureValidator';
@@ -28,6 +29,9 @@ export const getValidatorForEntity = (resourceType: ResourceType): DomainModelVa
 
         case resourceTypes.spatialFeature:
             return spatialFeatureValidator;
+
+        case resourceTypes.bibliographicReference:
+            return bibliographicReferenceValidator;
 
         default:
             throw new InternalError(

@@ -29,7 +29,14 @@ const resourceTypeToAllowedContextTypes = {
         EdgeConnectionContextType.general,
         EdgeConnectionContextType.textField,
     ],
+    [resourceTypes.bibliographicReference]: [EdgeConnectionContextType.general],
 };
+
+export const getResourceTypesThatOnlySupportGeneralContext = (): ResourceType[] =>
+    Object.keys(resourceTypeToAllowedContextTypes).filter((key) => {
+        const value = resourceTypeToAllowedContextTypes[key];
+        return value.length === 1 && value[0] === EdgeConnectionContextType.general;
+    }) as ResourceType[];
 
 export const getAllowedContextsForModel = (
     resourceType: ResourceType

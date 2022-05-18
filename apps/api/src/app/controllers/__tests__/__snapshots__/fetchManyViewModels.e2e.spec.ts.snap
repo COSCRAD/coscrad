@@ -1,5 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`When fetching multiple resources GET /bibliographicReferences when all of the resources are published should fetch multiple resources of type bibliographicReference 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "title": "A Day in the Life",
+      "type": "book",
+    },
+    "id": "1",
+    "tags": Array [
+      Object {
+        "id": "2",
+        "label": "animals",
+      },
+    ],
+  },
+]
+`;
+
+exports[`When fetching multiple resources GET /bibliographicReferences when some of the resources are unpublished should return the expected number of results 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "title": "A Day in the Life",
+      "type": "book",
+    },
+    "id": "1",
+    "tags": Array [
+      Object {
+        "id": "2",
+        "label": "animals",
+      },
+    ],
+  },
+]
+`;
+
 exports[`When fetching multiple resources GET /books when all of the resources are published should fetch multiple resources of type book 1`] = `
 Array [
   Object {

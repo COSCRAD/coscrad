@@ -12,6 +12,7 @@ import { Term } from '../models/term/entities/term.entity';
 import { TranscribedAudio } from '../models/transcribed-audio/entities/transcribed-audio.entity';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
 import { ResourceType, resourceTypes } from '../types/resourceTypes';
+import buildBibliographicReferenceFactory from './complexFactories/buildBibliographicReferenceFactory';
 import buildSpatialFeatureFactory from './complexFactories/buildSpatialFeatureFactory';
 import buildInstanceFactory from './utilities/buildInstanceFactory';
 
@@ -50,6 +51,11 @@ export default <TResource extends Resource>(
         case resourceTypes.spatialFeature:
             // @ts-expect-error TODO fix this tricky type error
             return buildSpatialFeatureFactory();
+
+        case resourceTypes.bibliographicReference:
+            // @ts-expect-error TODO fix this tricky type error
+
+            return buildBibliographicReferenceFactory();
 
         default:
             throw new InternalError(

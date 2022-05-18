@@ -1,3 +1,4 @@
+import { getResourceTypesThatOnlySupportGeneralContext } from '../../../domain/models/allowedContexts/isContextAllowedForGivenResourceType';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -24,6 +25,9 @@ const buildDummyNoteForDualConnection = (
         formatResourceCompositeIdentifier(fromMember.compositeIdentifier),
     ].join(' ');
 
+const resourceTypesThatCurrentlyOnlySupportGeneralContext =
+    getResourceTypesThatOnlySupportGeneralContext();
+
 const generateComprehensiveDualEdgeConnectionTestData = (
     uniqueIdOffset: number
 ): EdgeConnection[] => {
@@ -34,10 +38,14 @@ const generateComprehensiveDualEdgeConnectionTestData = (
                 /**
                  * TODO [https://www.pivotaltracker.com/story/show/181978898]
                  * Remove this first condition when we support a non-trivial
-                 * context for a `SpatialFeature`
+                 * context for a `SpatialFeature`.
+                 *
+                 * TODO [https://www.pivotaltracker.com/story/show/182204403]
+                 * Determine context types for bibliographic reference models.
                  */
-                member.compositeIdentifier.type == resourceTypes.spatialFeature ||
-                member.context.type !== EdgeConnectionContextType.general
+                resourceTypesThatCurrentlyOnlySupportGeneralContext.includes(
+                    member.compositeIdentifier.type
+                ) || member.context.type !== EdgeConnectionContextType.general
         );
 
     const oneToMemberOfEachResourceType = Object.values(resourceTypes).reduce(

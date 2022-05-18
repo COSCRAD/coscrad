@@ -66,6 +66,10 @@ const allTagsDTOs: DTO<Tag>[] = [
                 type: noteType,
                 id: '7',
             },
+            {
+                type: resourceTypes.bibliographicReference,
+                id: '1',
+            },
         ],
     },
     {

@@ -40,6 +40,11 @@ const resourceDescriptions: ResourceDescription[] = [
         resourceType: resourceTypes.spatialFeature,
         description: 'A spatial feature may be a point, line, or polygon on the map',
     },
+    {
+        resourceType: resourceTypes.bibliographicReference,
+        description:
+            'A bibliographic reference is a reference to, but not a digital representation of, a research resource',
+    },
 ];
 
 export const buildAllResourceDescriptions = (

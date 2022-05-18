@@ -153,6 +153,19 @@ const selfEdgeConnectionInstancesWithSpecificContext = [
             },
         ],
     },
+    {
+        note: 'found this in the archives',
+        members: [
+            {
+                role,
+                compositeIdentifier: {
+                    id: '1',
+                    type: resourceTypes.bibliographicReference,
+                },
+                context: new GeneralContext(),
+            },
+        ],
+    },
 ].map((partialDTO) => ({ ...partialDTO, type: EdgeConnectionType.self }));
 
 const selfEdgeConnectionsWithGeneralContext = selfEdgeConnectionInstancesWithSpecificContext.map(

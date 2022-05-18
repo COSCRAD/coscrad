@@ -1,4 +1,5 @@
 import { InMemorySnapshot, resourceTypes } from '../domain/types/resourceTypes';
+import buildBibliographicReferenceTestData from './buildBibliographicReferenceTestData';
 import buildBookTestData from './buildBookTestData';
 import buildCategoryTestData from './buildCategoryTestData';
 import buildEdgeConnectionTestData from './buildEdgeConnectionTestData';
@@ -22,6 +23,7 @@ export default (): InMemorySnapshot => ({
         [resourceTypes.book]: buildBookTestData(),
         [resourceTypes.photograph]: buildPhotographTestData(),
         [resourceTypes.spatialFeature]: buildSpatialFeatureTestData(),
+        [resourceTypes.bibliographicReference]: buildBibliographicReferenceTestData(),
     },
     connections: buildEdgeConnectionTestData(),
     tags: buildTagTestData(),

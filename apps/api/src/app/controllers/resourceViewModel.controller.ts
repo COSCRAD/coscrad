@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/IBibliographicReference';
 import { Book } from '../../domain/models/book/entities/book.entity';
 import { Photograph } from '../../domain/models/photograph/entities/photograph.entity';
 import { ISpatialFeature } from '../../domain/models/spatial-feature/ISpatialFeature';
@@ -14,6 +15,7 @@ import { isInternalError } from '../../lib/errors/InternalError';
 import { isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
+import buildBibliographicReferenceViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildBibliographicReferenceViewModels';
 import buildBookViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildBookViewModels';
 import buildPhotographViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildPhotographViewModels';
 import buildSpatialFeatureViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildSpatialFeatureViewModels';
@@ -27,6 +29,7 @@ import {
     VocabularyListViewModel,
 } from '../../view-models/buildViewModelForResource/viewModels';
 import { BaseViewModel } from '../../view-models/buildViewModelForResource/viewModels/base.view-model';
+import { BibliographicReferenceViewModel } from '../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { BookViewModel } from '../../view-models/buildViewModelForResource/viewModels/book.view-model';
 import { PhotographViewModel } from '../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
 import { SpatialFeatureViewModel } from '../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
@@ -361,6 +364,56 @@ export class ResourceViewModelController {
         const viewModel = new SpatialFeatureViewModel(searchResult);
 
         return await this.mixinTheTagsAndSend(res, viewModel, resourceTypes.spatialFeature);
+    }
+
+    /* ********** BIBLIOGRAPHIC REFERENCE  ********** */
+    @ApiOkResponse({ type: BibliographicReferenceViewModel, isArray: true })
+    @Get(buildViewModelPathForResourceType(resourceTypes.bibliographicReference))
+    async fetchBibliographicReferences(@Res() res) {
+        const allViewModels = await buildBibliographicReferenceViewModels({
+            repositoryProvider: this.repositoryProvider,
+            configService: this.configService,
+        });
+
+        if (isInternalError(allViewModels))
+            return res.status(httpStatusCodes.internalError).send({
+                error: JSON.stringify(allViewModels),
+            });
+
+        return await this.mixinTheTagsAndSend(
+            res,
+            allViewModels,
+            resourceTypes.bibliographicReference
+        );
+    }
+
+    @ApiParam(buildByIdApiParamMetadata())
+    @ApiOkResponse({ type: BibliographicReferenceViewModel })
+    @Get(`${buildViewModelPathForResourceType(resourceTypes.bibliographicReference)}/:id`)
+    async fetchBibliographicReferenceById(@Res() res, @Param() params: unknown) {
+        const { id } = params as HasViewModelId;
+
+        if (!isResourceId(id))
+            return res.status(httpStatusCodes.badRequest).send({
+                error: `Invalid input for id: ${id}`,
+            });
+
+        const searchResult = await this.repositoryProvider
+            .forResource<IBibliographicReference>(resourceTypes.bibliographicReference)
+            .fetchById(id);
+
+        if (isInternalError(searchResult))
+            return res.status(httpStatusCodes.internalError).send({
+                error: JSON.stringify(searchResult),
+            });
+
+        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
+
+        if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
+
+        const viewModel = new BibliographicReferenceViewModel(searchResult);
+
+        return await this.mixinTheTagsAndSend(res, viewModel, resourceTypes.bibliographicReference);
     }
 
     /**

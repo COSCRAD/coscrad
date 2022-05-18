@@ -1,4 +1,5 @@
 import { ValueType } from '../../lib/types/valueType';
+import { IBibliographicReference } from '../models/bibliographic-reference/interfaces/IBibliographicReference';
 import { Book } from '../models/book/entities/book.entity';
 import { Category } from '../models/categories/entities/category.entity';
 import { EdgeConnection } from '../models/context/edge-connection.entity';
@@ -16,6 +17,7 @@ export const resourceTypes = {
     book: 'book',
     photograph: 'photograph',
     spatialFeature: 'spatialFeature',
+    bibliographicReference: 'bibliographicReference',
 } as const;
 
 export type ResourceType = ValueType<typeof resourceTypes>;
@@ -31,6 +33,7 @@ export type ResourceTypeToInstance = {
     book: Book;
     photograph: Photograph;
     spatialFeature: ISpatialFeature;
+    bibliographicReference: IBibliographicReference;
 };
 
 /**

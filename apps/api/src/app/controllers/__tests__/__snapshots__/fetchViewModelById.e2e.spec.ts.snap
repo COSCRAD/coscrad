@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /bibliographicReferences/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+Object {
+  "data": Object {
+    "title": "A Day in the Life",
+    "type": "book",
+  },
+  "id": "1",
+  "tags": Array [
+    Object {
+      "id": "2",
+      "label": "animals",
+    },
+  ],
+}
+`;
+
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /books/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "author": "John Doeburg",

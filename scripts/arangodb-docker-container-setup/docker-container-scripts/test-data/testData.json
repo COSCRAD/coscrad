@@ -271,6 +271,17 @@
                     ]
                 }
             }
+        ],
+        "bibliographic_references": [
+            {
+                "type": "bibliographicReference",
+                "_key": "1",
+                "published": true,
+                "data": {
+                    "type": "book",
+                    "title": "A Day in the Life"
+                }
+            }
         ]
     },
     "resource_edge_connections": [
@@ -439,10 +450,25 @@
             "note": "this section is the best part of an illustrated book about birds"
         },
         {
+            "_to": "bibliographic_references/1",
+            "_from": "bibliographic_references/1",
+            "type": "self",
+            "_key": "9",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "note": "found this in the archives"
+        },
+        {
             "_to": "terms/2",
             "_from": "terms/2",
             "type": "self",
-            "_key": "9",
+            "_key": "10",
             "members": [
                 {
                     "role": "self",
@@ -457,7 +483,7 @@
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "10",
+            "_key": "11",
             "members": [
                 {
                     "role": "self",
@@ -472,7 +498,7 @@
             "_to": "vocabulary_lists/2",
             "_from": "vocabulary_lists/2",
             "type": "self",
-            "_key": "11",
+            "_key": "12",
             "members": [
                 {
                     "role": "self",
@@ -487,7 +513,7 @@
             "_to": "spatial_features/300",
             "_from": "spatial_features/300",
             "type": "self",
-            "_key": "12",
+            "_key": "13",
             "members": [
                 {
                     "role": "self",
@@ -502,7 +528,7 @@
             "_to": "transcribed_audio/110",
             "_from": "transcribed_audio/110",
             "type": "self",
-            "_key": "13",
+            "_key": "14",
             "members": [
                 {
                     "role": "self",
@@ -517,7 +543,7 @@
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "14",
+            "_key": "15",
             "members": [
                 {
                     "role": "self",
@@ -532,7 +558,7 @@
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "15",
+            "_key": "16",
             "members": [
                 {
                     "role": "self",
@@ -547,7 +573,7 @@
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "16",
+            "_key": "17",
             "members": [
                 {
                     "role": "self",
@@ -557,6 +583,21 @@
                 }
             ],
             "note": "this section is the best part of an illustrated book about birds"
+        },
+        {
+            "_to": "bibliographic_references/1",
+            "_from": "bibliographic_references/1",
+            "type": "self",
+            "_key": "18",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "note": "found this in the archives"
         },
         {
             "_to": "terms/2",
@@ -734,9 +775,30 @@
         },
         {
             "_to": "spatial_features/300",
-            "_from": "terms/2",
+            "_from": "bibliographic_references/1",
             "type": "dual",
             "_key": "2005",
+            "members": [
+                {
+                    "role": "to",
+                    "context": {
+                        "type": "general"
+                    }
+                },
+                {
+                    "role": "from",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "note": "That is why spatialFeature/300 is related to bibliographicReference/1"
+        },
+        {
+            "_to": "bibliographic_references/1",
+            "_from": "terms/2",
+            "type": "dual",
+            "_key": "2006",
             "members": [
                 {
                     "role": "to",
@@ -756,7 +818,7 @@
                     }
                 }
             ],
-            "note": "That is why spatialFeature/300 is related to term/2"
+            "note": "That is why bibliographicReference/1 is related to term/2"
         }
     ],
     "tags": [
@@ -821,6 +883,10 @@
                 {
                     "type": "note",
                     "id": "7"
+                },
+                {
+                    "type": "bibliographicReference",
+                    "id": "1"
                 }
             ]
         },
@@ -977,6 +1043,10 @@
                 {
                     "type": "spatialFeature",
                     "id": "102"
+                },
+                {
+                    "type": "bibliographicReference",
+                    "id": "1"
                 }
             ]
         },

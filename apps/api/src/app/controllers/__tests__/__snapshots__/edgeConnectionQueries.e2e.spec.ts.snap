@@ -1,5 +1,74 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: bibliographicReference should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "2005",
+    "note": "That is why spatialFeature/300 is related to bibliographicReference/1",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "300",
+          "type": "spatialFeature",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "from",
+      },
+    ],
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
+  },
+  Object {
+    "id": "2006",
+    "note": "That is why bibliographicReference/1 is related to term/2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            3,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+    "tags": Array [],
+  },
+]
+`;
+
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: book should return the expected result 1`] = `
 Array [
   Object {
@@ -1160,6 +1229,50 @@ Array [
         "label": "plants",
       },
     ],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: bibliographicReference should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "9",
+    "note": "found this in the archives",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
+  },
+  Object {
+    "id": "18",
+    "note": "found this in the archives",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+    "tags": Array [],
   },
 ]
 `;

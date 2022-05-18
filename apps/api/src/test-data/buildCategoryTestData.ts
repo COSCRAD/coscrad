@@ -103,6 +103,10 @@ export default (): Category[] =>
                     type: resourceTypes.spatialFeature,
                     id: '102',
                 },
+                {
+                    type: resourceTypes.bibliographicReference,
+                    id: '1',
+                },
             ],
             childrenIDs: [],
         },
