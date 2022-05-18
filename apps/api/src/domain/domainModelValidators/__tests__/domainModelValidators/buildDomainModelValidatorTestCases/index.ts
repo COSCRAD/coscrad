@@ -1,3 +1,4 @@
+import { buildBibliographicReferenceTestCase } from './bibliographic-reference.domainModelValidatorTestCase';
 import { buildBookTestCase } from './book.domainModelValidatorTestCase';
 import { buildPhotographTestCase } from './photograph.domainModelValidatorTestCase';
 import { buildSpatialFeatureTestCase } from './spatial-feature.domainModelValidatorTestCase';
@@ -6,6 +7,7 @@ import { buildTranscribedAudioTestCase } from './transcribedAudio.domainModelVal
 import { buildVocabularyListTestCase } from './vocabularyList.domainModelValidatorTestCase';
 
 export default () => [
+    buildBibliographicReferenceTestCase(),
     buildTranscribedAudioTestCase(),
     buildBookTestCase(),
     buildPhotographTestCase(),
