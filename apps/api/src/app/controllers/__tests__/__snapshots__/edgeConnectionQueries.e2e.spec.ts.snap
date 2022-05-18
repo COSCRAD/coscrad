@@ -409,13 +409,13 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "2005",
-    "note": "That is why spatialFeature/300 is related to term/2",
+    "id": "2006",
+    "note": "That is why bibliographicReference/1 is related to term/2",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
-          "id": "300",
-          "type": "spatialFeature",
+          "id": "1",
+          "type": "bibliographicReference",
         },
         "context": Object {
           "type": "general",
@@ -438,12 +438,7 @@ Array [
         "role": "from",
       },
     ],
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-      },
-    ],
+    "tags": Array [],
   },
 ]
 `;
