@@ -1,16 +1,13 @@
 import { plainToInstance } from 'class-transformer';
-import { validateSync, ValidationError } from 'class-validator';
+import { validateSync } from 'class-validator';
+import { SimpleValidationFunction } from './interfaces/SimpleValidationFunction';
 
 interface Ctor<T> {
     new (...args): T;
 }
 
-interface SimpleValidator {
-    (input: unknown): ValidationError[];
-}
-
 /* eslint-disable @typescript-eslint/ban-types */
-export default (ModelCtor: Ctor<Object>): SimpleValidator =>
+export default (ModelCtor: Ctor<Object>): SimpleValidationFunction =>
     (input: unknown) => {
         const instanceToValidate = plainToInstance(ModelCtor, input, {
             enableImplicitConversion: false,

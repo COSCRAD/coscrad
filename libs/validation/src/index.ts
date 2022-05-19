@@ -1,4 +1,4 @@
-import buildSimpleValidator from './lib/buildSimpleValidator';
+import buildSimpleValidator from './lib/buildSimpleValidationFunction';
 
 export { IsOptional } from 'class-validator';
 export * from './lib/decorators';
