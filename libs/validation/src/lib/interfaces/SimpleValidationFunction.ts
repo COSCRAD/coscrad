@@ -1,5 +1,5 @@
-import { ValidationError } from 'class-validator';
+import { SimpleValidationError } from './SimpleValidationError';
 
 export interface SimpleValidationFunction {
-    (input: unknown): ValidationError[];
+    (input: unknown): SimpleValidationError[];
 }

@@ -140,10 +140,6 @@ describe(`DescriminatedUnionValidator`, () => {
                     const validationResult = discriminatedUnionValidator.validate(invalidValue);
 
                     expect(validationResult.length).toBeGreaterThan(0);
-
-                    validationResult.forEach((error) =>
-                        expect(error).toBeInstanceOf(ValidationError)
-                    );
                 });
             });
 
@@ -153,10 +149,6 @@ describe(`DescriminatedUnionValidator`, () => {
 
                     it(`should return an error`, () => {
                         expect(validationResult.length).toBeGreaterThan(0);
-
-                        validationResult.forEach((error) =>
-                            expect(error).toBeInstanceOf(ValidationError)
-                        );
                     });
                 });
 
@@ -165,10 +157,6 @@ describe(`DescriminatedUnionValidator`, () => {
 
                     it(`should return an error`, () => {
                         expect(validationResult.length).toBeGreaterThan(0);
-
-                        validationResult.forEach((error) =>
-                            expect(error).toBeInstanceOf(ValidationError)
-                        );
                     });
                 });
 
@@ -178,14 +166,10 @@ describe(`DescriminatedUnionValidator`, () => {
                         length: 22,
                     };
 
-                    it('should return an error', () => {
+                    it('should throw', () => {
                         const validationResult = discriminatedUnionValidator.validate(badInput);
 
                         expect(validationResult.length).toBeGreaterThan(0);
-
-                        validationResult.forEach((error) =>
-                            expect(error).toBeInstanceOf(ValidationError)
-                        );
                     });
                 });
 
@@ -198,10 +182,6 @@ describe(`DescriminatedUnionValidator`, () => {
                         const validationResult = discriminatedUnionValidator.validate(badInput);
 
                         expect(validationResult.length).toBeGreaterThan(0);
-
-                        validationResult.forEach((error) =>
-                            expect(error).toBeInstanceOf(ValidationError)
-                        );
                     });
                 });
             });

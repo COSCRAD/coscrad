@@ -1,5 +1,9 @@
-import { ValidationError } from 'class-validator';
+import { SimpleValidationError } from './interfaces/SimpleValidationError';
 import { SimpleValidationFunction } from './interfaces/SimpleValidationFunction';
+
+const buildValidationError = (message: string): SimpleValidationError => ({
+    toString: () => message,
+});
 
 export default class DiscriminatedUnionValidator {
     #discriminantToValidationFunction: Map<string, SimpleValidationFunction> = new Map();
@@ -47,17 +51,39 @@ export default class DiscriminatedUnionValidator {
         return this;
     }
 
-    validate(input: unknown): ValidationError[] {
-        if (input === null || typeof input === 'undefined') return [new ValidationError()];
+    validate(input: unknown): SimpleValidationError[] {
+        if (input === null || typeof input === 'undefined')
+            return [buildValidationError(`The input must not be null or undefined`)];
 
         const discriminantForInput = input[this.#discriminatorPropertyName];
 
         if (discriminantForInput === null || typeof discriminantForInput === 'undefined')
-            return [new ValidationError()];
+            return [
+                buildValidationError(
+                    `The input is missing the discriminator property: ${
+                        this.#discriminatorPropertyName
+                    }`
+                ),
+            ];
+
+        if (!this.#isAllowedDiscriminant(discriminantForInput)) {
+            return [
+                buildValidationError(
+                    [
+                        `Encountered an invalid discriminant: ${discriminantForInput}.`,
+                        `The allowed values are: ${this.#allDiscriminants}`,
+                    ].join(' ')
+                ),
+            ];
+        }
 
         const executeValidation = this.#discriminantToValidationFunction.get(discriminantForInput);
 
-        if (!executeValidation) return [new ValidationError()];
+        if (!executeValidation) {
+            throw new Error(
+                `Failed to find a validation function for discriminant: ${discriminantForInput}`
+            );
+        }
 
         return executeValidation(input);
     }
@@ -87,5 +113,9 @@ export default class DiscriminatedUnionValidator {
         return this.#allDiscriminants.filter(
             (discriminant) => !this.#discriminantToValidationFunction.has(discriminant)
         );
+    }
+
+    #isAllowedDiscriminant(input: string): boolean {
+        return this.#allDiscriminants.includes(input);
     }
 }
