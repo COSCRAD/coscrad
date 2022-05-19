@@ -5,20 +5,17 @@ import buildDomainModelValidatorTestCases from './buildDomainModelValidatorTestC
 const testCases = buildDomainModelValidatorTestCases();
 
 describe('Domain Model Validators', () => {
-    Object.values(resourceTypes)
-        .filter((resourceType) => resourceType === resourceTypes.bibliographicReference)
-        .forEach((resourceType) => {
-            describe(`An entity of type ${resourceType}`, () => {
-                it('should have a domain model validator test case', () => {
-                    const testCaseSearchResult = testCases.find(
-                        ({ resourceType: testCaseEntityType }) =>
-                            testCaseEntityType === resourceType
-                    );
+    Object.values(resourceTypes).forEach((resourceType) => {
+        describe(`An entity of type ${resourceType}`, () => {
+            it('should have a domain model validator test case', () => {
+                const testCaseSearchResult = testCases.find(
+                    ({ resourceType: testCaseEntityType }) => testCaseEntityType === resourceType
+                );
 
-                    expect(testCaseSearchResult).toBeTruthy();
-                });
+                expect(testCaseSearchResult).toBeTruthy();
             });
         });
+    });
 
     testCases.forEach(({ resourceType, validCases, invalidCases, validator }) => {
         describe(`${resourceType} validator`, () => {

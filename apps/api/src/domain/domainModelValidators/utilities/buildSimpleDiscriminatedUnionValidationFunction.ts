@@ -28,16 +28,12 @@ export default (typeAndCtorPairs: [string, DomainModelCtor][]) => {
             .validate(input)
             /**
              * This is a bit of a hack. We have to package the validation results
-             * that were internal to the validaiton library in our own `InternalError`
+             * that were internal to the validation library in our own `InternalError`
              * classes on this end.
              */
             .map((error) =>
                 error instanceof InternalError ? error : new InternalError(error.toString())
             );
-
-        console.log({
-            resultOfDUValidation: result,
-        });
 
         return result;
     };
