@@ -166,7 +166,7 @@ describe(`DescriminatedUnionValidator`, () => {
                         length: 22,
                     };
 
-                    it('should throw', () => {
+                    it('should return an error', () => {
                         const validationResult = discriminatedUnionValidator.validate(badInput);
 
                         expect(validationResult.length).toBeGreaterThan(0);
