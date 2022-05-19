@@ -10,12 +10,12 @@ import validateSimpleInvariants from '../utilities/validateSimpleInvariants';
 import { Valid } from '../Valid';
 
 const buildTopLevelError = (innerErrors: InternalError[]): InternalError =>
-    new InvalidEntityDTOError(resourceTypes.book, undefined, innerErrors);
+    new InvalidEntityDTOError(resourceTypes.bibliographicReference, undefined, innerErrors);
 
 const bibliographicReferenceValidator: DomainModelValidator = (
     dto: unknown
 ): Valid | InternalError => {
-    if (isNullOrUndefined(dto)) return new InvalidEntityDTOError(resourceTypes.book);
+    if (isNullOrUndefined(dto)) return new InvalidEntityDTOError(resourceTypes.bibliographicReference);
 
     const allErrors: InternalError[] = [];
 

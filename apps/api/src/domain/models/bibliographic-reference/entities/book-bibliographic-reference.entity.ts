@@ -14,10 +14,12 @@ export class BookBibliographicReference
     readonly data: BookBibliographicReferenceData;
 
     constructor(dto: DTO<BookBibliographicReference>) {
-        super(dto);
+        super({ ...dto, type: resourceTypes.bibliographicReference });
 
         if (isNullOrUndefined(dto)) return;
 
+        this.type = dto.type;
+        
         this.data = new BookBibliographicReferenceData(dto.data);
     }
 }
