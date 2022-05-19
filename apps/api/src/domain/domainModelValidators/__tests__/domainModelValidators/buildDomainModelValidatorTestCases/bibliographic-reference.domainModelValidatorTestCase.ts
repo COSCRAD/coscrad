@@ -23,12 +23,12 @@ export const buildBibliographicReferenceTestCase =
             {
                 description: 'the dto is undefined',
                 invalidDTO: undefined,
-                expectedError: new InvalidEntityDTOError(resourceTypes.book),
+                expectedError: new InvalidEntityDTOError(resourceTypes.bibliographicReference),
             },
             {
                 description: 'the dto is null',
                 invalidDTO: null,
-                expectedError: new InvalidEntityDTOError(resourceTypes.book),
+                expectedError: new InvalidEntityDTOError(resourceTypes.bibliographicReference),
             },
             {
                 description: 'the dto has an invalid bibliographic reference type',
@@ -39,7 +39,7 @@ export const buildBibliographicReferenceTestCase =
                         type: 'BOGUS-BIBLIOGRAPHIC-REFERENCE-TYPE' as BibliographicReferenceType,
                     },
                 },
-                expectedError: new InvalidEntityDTOError(resourceTypes.book),
+                expectedError: new InvalidEntityDTOError(resourceTypes.bibliographicReference),
             },
             ...modelSpecificTestCases,
         ],

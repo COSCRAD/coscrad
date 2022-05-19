@@ -4,7 +4,7 @@ import buildDomainModelValidatorTestCases from './buildDomainModelValidatorTestC
 
 const testCases = buildDomainModelValidatorTestCases();
 
-describe('Domain Model Vallidators', () => {
+describe('Domain Model Validators', () => {
     Object.values(resourceTypes).forEach((resourceType) => {
         describe(`An entity of type ${resourceType}`, () => {
             it('should have a domain model validator test case', () => {
