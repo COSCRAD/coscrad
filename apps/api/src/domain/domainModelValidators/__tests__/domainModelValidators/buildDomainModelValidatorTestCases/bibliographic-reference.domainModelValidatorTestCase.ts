@@ -39,7 +39,10 @@ export const buildBibliographicReferenceTestCase =
                         type: 'BOGUS-BIBLIOGRAPHIC-REFERENCE-TYPE' as BibliographicReferenceType,
                     },
                 },
-                expectedError: new InvalidEntityDTOError(resourceTypes.bibliographicReference),
+                expectedError: new InvalidEntityDTOError(
+                    resourceTypes.bibliographicReference,
+                    validCase.dto.id
+                ),
             },
             ...modelSpecificTestCases,
         ],

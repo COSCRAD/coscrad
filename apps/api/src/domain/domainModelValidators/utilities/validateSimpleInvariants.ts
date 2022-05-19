@@ -7,5 +7,9 @@ export default (ResourceCtor: DomainModelCtor, dto: unknown): InternalError[] =>
 
     const validationErrors = simpleValidator(dto);
 
+    console.log({
+        validationErrors,
+    });
+
     return validationErrors.map((error) => new InternalError(error.toString()));
 };
