@@ -1,7 +1,7 @@
 import { validateSync, ValidationError, ValidationOptions } from 'class-validator';
 import { IsStringWithNonzeroLength } from './IsStringWithNonzeroLength';
 
-type HasTestProperty = {
+export type HasTestProperty = {
     testProperty: unknown;
 };
 
@@ -59,7 +59,7 @@ describe('IsStringWithNonzeroLength', () => {
     const invalidValues = ['', 700, [], { foo: 'wah' }];
 
     describe('when the input is valid', () => {
-        it('should return no validation erors', () => {
+        it('should return no validation errors', () => {
             return checkValidValues(new TestClass(), validValues);
         });
     });
