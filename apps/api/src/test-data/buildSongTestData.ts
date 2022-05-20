@@ -10,6 +10,8 @@ export default (): Song[] =>
             lyrics: 'Mary had a little lamb, little lamb.',
             audioURL: 'songs/lamb.mp3',
             published: true,
+            startMilliseconds: 0,
+            lengthMilliseconds: 3500,
             contributorAndRoles: [
                 {
                     contributorId: '1',

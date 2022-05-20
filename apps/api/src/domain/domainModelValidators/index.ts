@@ -3,6 +3,7 @@ import { ResourceType, resourceTypes } from '../types/resourceTypes';
 import bibliographicReferenceValidator from './bibliographicReferenceValidator';
 import bookValidator from './bookValidator';
 import photographValidator from './photographValidator';
+import songValidator from './songValidator';
 import spatialFeatureValidator from './spatialFeatureValidator';
 import termValidator from './termValidator';
 import transcribedAudioValidator from './transcribedAudioValidator';
@@ -32,6 +33,9 @@ export const getValidatorForEntity = (resourceType: ResourceType): DomainModelVa
 
         case resourceTypes.bibliographicReference:
             return bibliographicReferenceValidator;
+
+        case resourceTypes.song:
+            return songValidator;
 
         default:
             throw new InternalError(

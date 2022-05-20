@@ -1,6 +1,7 @@
 import buildBibliographicReferenceResourceModelContextStateValidatorTestCase from './buildBibliographicReferenceResourceModelContextStateValidatorTestCase';
 import buildBookResourceModelContextStateValidatorTestCase from './buildBookResourceModelContextStateValidatorTestCase';
 import buildPhotographResourceModelContextStateValidatorTestCase from './buildPhotographResourceModelContextStateValidatorTestCase';
+import buildSongResourceModelContextStateValidatorTestCase from './buildSongResourceModelContextStateValidatorTestCase';
 import buildSpatialFeatureResourceModelContextStateValidatorTestCase from './buildSpatialFeatureResourceModelContextStateValidatorTestCase';
 import buildTermResourceModelContextStateValidatorTestCase from './buildTermResourceModelContextStateValidatorTestCase';
 import buildTranscribedAudioResourceModelContextStateValidatorTestCase from './buildTranscribedAudioResourceModelContextStateValidatorTestCase';
@@ -14,4 +15,5 @@ export default () => [
     buildTermResourceModelContextStateValidatorTestCase(),
     buildTranscribedAudioResourceModelContextStateValidatorTestCase(),
     buildVocabularyListResourceModelContextStateValidatorTestCase(),
+    buildSongResourceModelContextStateValidatorTestCase(),
 ];
