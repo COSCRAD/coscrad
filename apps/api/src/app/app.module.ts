@@ -10,6 +10,7 @@ import { AppService } from './app.service';
 import buildConfigFilePath from './config/buildConfigFilePath';
 import { validate } from './config/env.validation';
 import { CommandController } from './controllers/command/commands.controller';
+import { TestCommandModule } from './controllers/command/TestCommand.module';
 import { EdgeConnectionController } from './controllers/edgeConnection.controller';
 import { ResourceViewModelController } from './controllers/resourceViewModel.controller';
 import { TagController } from './controllers/tag.controller';
@@ -25,6 +26,7 @@ import { TagController } from './controllers/tag.controller';
         AuthorizationModule,
         DomainServicesModule,
         PersistenceModule.forRootAsync(),
+        TestCommandModule,
     ],
     controllers: [
         AppController,

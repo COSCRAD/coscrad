@@ -1,10 +1,7 @@
-import { ResultOrError } from '../../../types/ResultOrError';
 import { ICommand } from './ICommand';
 
-export const Ok = Symbol('ok');
-
-export type Ok = typeof Ok;
+export const Ack = 'acknowledgement';
 
 export interface ICommandHandler {
-    execute(command: ICommand): Promise<ResultOrError<Ok>>;
+    execute(command: ICommand): Promise<string>;
 }
