@@ -23,7 +23,19 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     title: '',
-                }as DTO<BookBibliographicReferenceData>,
+                } as DTO<BookBibliographicReferenceData>,
+            },
+            expectedError: buildTopLevelError(validDto.id, []),
+        },
+        {
+            description: 'The creators array is empty',
+            invalidDTO: {
+                ...validDto,
+                data: {
+                    ...validDto.data,
+                    creators: [],
+                    // TODO remove cast
+                } as unknown as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -34,8 +46,8 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     abstract: '',
-                // TODO remove cast
-                } as DTO<BookBibliographicReferenceData>
+                    // TODO remove cast
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -46,8 +58,8 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     year: 2100,
-                // TODO remove cast
-                } as DTO<BookBibliographicReferenceData>
+                    // TODO remove cast
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -58,8 +70,8 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     publisher: '',
-                // TODO remove cast
-                } as DTO<BookBibliographicReferenceData>
+                    // TODO remove cast
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -70,8 +82,8 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     place: '',
-                // TODO remove cast
-                } as DTO<BookBibliographicReferenceData>
+                    // TODO remove cast
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -82,8 +94,8 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     url: '',
-                // TODO remove cast
-                } as DTO<BookBibliographicReferenceData>
+                    // TODO remove cast
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -94,8 +106,8 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     isbn: '',
-                // TODO remove cast
-                } as DTO<BookBibliographicReferenceData>
+                    // TODO remove cast
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -106,8 +118,8 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     numberOfPages: -34,
-                // TODO remove cast
-                } as DTO<BookBibliographicReferenceData>
+                    // TODO remove cast
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -118,8 +130,8 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     numberOfPages: '347',
-                // TODO remove cast
-                } as unknown as DTO<BookBibliographicReferenceData>
+                    // TODO remove cast
+                } as unknown as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },

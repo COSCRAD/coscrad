@@ -1,4 +1,5 @@
 import {
+    ArrayNotEmpty,
     IsInt,
     IsISBN,
     IsOptional,
@@ -12,7 +13,7 @@ import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-unde
 import BaseDomainModel from '../../BaseDomainModel';
 import { IBibliographicReferenceData } from '../interfaces/IBibliographicReferenceData';
 import { BibliographicReferenceType } from '../types/BibliographicReferenceType';
-import { ZoteroCreator } from '../types/ZoteroCreator';
+import Creator from '../types/Creator';
 
 export default class BookBibliographicReferenceData
     extends BaseDomainModel
@@ -23,7 +24,8 @@ export default class BookBibliographicReferenceData
     @IsStringWithNonzeroLength()
     readonly title: string;
 
-    readonly creators: ZoteroCreator[];
+    @ArrayNotEmpty()
+    readonly creators: Creator[];
 
     @IsOptional()
     @IsStringWithNonzeroLength()
@@ -62,7 +64,7 @@ export default class BookBibliographicReferenceData
 
         this.title = dto.title;
 
-        this.creators = dto.creators;
+        this.creators = dto.creators as Creator[];
 
         this.abstract = dto.abstract;
 
