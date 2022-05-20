@@ -1,4 +1,3 @@
-import { DTO } from 'apps/api/src/types/DTO';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -12,6 +11,7 @@ import { TextFieldContext } from '../../../domain/models/context/text-field-cont
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
 import { resourceTypes } from '../../../domain/types/resourceTypes';
+import { DTO } from '../../../types/DTO';
 
 const role = EdgeConnectionMemberRole.self;
 

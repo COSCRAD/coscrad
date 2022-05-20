@@ -282,6 +282,25 @@
                     "title": "A Day in the Life"
                 }
             }
+        ],
+        "songs": [
+            {
+                "type": "song",
+                "_key": "1",
+                "published": true,
+                "title": "Song title in language",
+                "titleEnglish": "Mary had a little lamb",
+                "contributorAndRoles": [
+                    {
+                        "contributorId": "1",
+                        "role": "performer"
+                    }
+                ],
+                "lyrics": "Mary had a little lamb, little lamb.",
+                "audioURL": "songs/lamb.mp3",
+                "lengthMilliseconds": 3500,
+                "startMilliseconds": 0
+            }
         ]
     },
     "resource_edge_connections": [
@@ -465,10 +484,29 @@
             "note": "found this in the archives"
         },
         {
+            "_to": "songs/1",
+            "_from": "songs/1",
+            "type": "self",
+            "_key": "10",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "timeRange",
+                        "timeRange": {
+                            "inPoint": 300,
+                            "outPoint": 500
+                        }
+                    }
+                }
+            ],
+            "note": "this is a song"
+        },
+        {
             "_to": "terms/2",
             "_from": "terms/2",
             "type": "self",
-            "_key": "10",
+            "_key": "11",
             "members": [
                 {
                     "role": "self",
@@ -483,7 +521,7 @@
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "11",
+            "_key": "12",
             "members": [
                 {
                     "role": "self",
@@ -498,7 +536,7 @@
             "_to": "vocabulary_lists/2",
             "_from": "vocabulary_lists/2",
             "type": "self",
-            "_key": "12",
+            "_key": "13",
             "members": [
                 {
                     "role": "self",
@@ -513,7 +551,7 @@
             "_to": "spatial_features/300",
             "_from": "spatial_features/300",
             "type": "self",
-            "_key": "13",
+            "_key": "14",
             "members": [
                 {
                     "role": "self",
@@ -528,7 +566,7 @@
             "_to": "transcribed_audio/110",
             "_from": "transcribed_audio/110",
             "type": "self",
-            "_key": "14",
+            "_key": "15",
             "members": [
                 {
                     "role": "self",
@@ -543,7 +581,7 @@
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "15",
+            "_key": "16",
             "members": [
                 {
                     "role": "self",
@@ -558,7 +596,7 @@
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "16",
+            "_key": "17",
             "members": [
                 {
                     "role": "self",
@@ -573,7 +611,7 @@
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "17",
+            "_key": "18",
             "members": [
                 {
                     "role": "self",
@@ -588,7 +626,7 @@
             "_to": "bibliographic_references/1",
             "_from": "bibliographic_references/1",
             "type": "self",
-            "_key": "18",
+            "_key": "19",
             "members": [
                 {
                     "role": "self",
@@ -598,6 +636,21 @@
                 }
             ],
             "note": "found this in the archives"
+        },
+        {
+            "_to": "songs/1",
+            "_from": "songs/1",
+            "type": "self",
+            "_key": "20",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "note": "this is a song"
         },
         {
             "_to": "terms/2",
@@ -796,7 +849,7 @@
         },
         {
             "_to": "bibliographic_references/1",
-            "_from": "terms/2",
+            "_from": "songs/1",
             "type": "dual",
             "_key": "2006",
             "members": [
@@ -804,6 +857,35 @@
                     "role": "to",
                     "context": {
                         "type": "general"
+                    }
+                },
+                {
+                    "role": "from",
+                    "context": {
+                        "type": "timeRange",
+                        "timeRange": {
+                            "inPoint": 300,
+                            "outPoint": 500
+                        }
+                    }
+                }
+            ],
+            "note": "That is why bibliographicReference/1 is related to song/1"
+        },
+        {
+            "_to": "songs/1",
+            "_from": "terms/2",
+            "type": "dual",
+            "_key": "2007",
+            "members": [
+                {
+                    "role": "to",
+                    "context": {
+                        "type": "timeRange",
+                        "timeRange": {
+                            "inPoint": 300,
+                            "outPoint": 500
+                        }
                     }
                 },
                 {
@@ -818,7 +900,7 @@
                     }
                 }
             ],
-            "note": "That is why bibliographicReference/1 is related to term/2"
+            "note": "That is why song/1 is related to term/2"
         }
     ],
     "tags": [

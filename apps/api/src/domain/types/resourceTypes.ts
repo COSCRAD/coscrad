@@ -4,6 +4,7 @@ import { Book } from '../models/book/entities/book.entity';
 import { Category } from '../models/categories/entities/category.entity';
 import { EdgeConnection } from '../models/context/edge-connection.entity';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
+import { Song } from '../models/song/song.entity';
 import { ISpatialFeature } from '../models/spatial-feature/ISpatialFeature';
 import { Tag } from '../models/tag/tag.entity';
 import { Term } from '../models/term/entities/term.entity';

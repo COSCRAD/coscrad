@@ -2,12 +2,14 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { ResultOrError } from '../../types/ResultOrError';
 import bookValidator from '../domainModelValidators/bookValidator';
 import photographValidator from '../domainModelValidators/photographValidator';
+import songValidator from '../domainModelValidators/songValidator';
 import termValidator from '../domainModelValidators/termValidator';
 import transcribedAudioValidator from '../domainModelValidators/transcribedAudioValidator';
 import vocabularyListValidator from '../domainModelValidators/vocabularyListValidator';
 import { Book } from '../models/book/entities/book.entity';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { Resource } from '../models/resource.entity';
+import { Song } from '../models/song/song.entity';
 import { Term } from '../models/term/entities/term.entity';
 import { TranscribedAudio } from '../models/transcribed-audio/entities/transcribed-audio.entity';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
@@ -56,6 +58,10 @@ export default <TResource extends Resource>(
             // @ts-expect-error TODO fix this tricky type error
 
             return buildBibliographicReferenceFactory();
+
+        case resourceTypes.song:
+            // @ts-expect-error TODO fix this tricky type error
+            return buildInstanceFactory<Song>(songValidator, Song);
 
         default:
             throw new InternalError(
