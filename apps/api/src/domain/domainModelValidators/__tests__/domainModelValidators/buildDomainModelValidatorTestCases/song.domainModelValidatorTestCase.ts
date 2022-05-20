@@ -62,5 +62,29 @@ export const buildSongTestCase = (): DomainModelValidatorTestCase<Song> => ({
             },
             expectedError: buildTopLevelError(validDTO.id, []),
         },
+        {
+            description: 'lyrics property is an empty string',
+            invalidDTO: {
+                ...validDTO,
+                lyrics: '',
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
+        },
+        {
+            description: 'the song has a negative length',
+            invalidDTO: {
+                ...validDTO,
+                lengthMilliseconds: -100,
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
+        },
+        {
+            description: 'the song has a negative start point',
+            invalidDTO: {
+                ...validDTO,
+                startMilliseconds: -100,
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
+        },
     ],
 });

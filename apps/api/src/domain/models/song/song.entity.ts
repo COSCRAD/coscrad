@@ -1,4 +1,8 @@
-import { IsOptional, IsStringWithNonzeroLength } from '@coscrad/validation';
+import {
+    IsNonNegativeFiniteNumber,
+    IsOptional,
+    IsStringWithNonzeroLength,
+} from '@coscrad/validation';
 import { InternalError } from '../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import isNumberWithinRange from '../../../lib/validation/geometry/isNumberWithinRange';
@@ -25,15 +29,20 @@ export class Song extends Resource {
     @IsStringWithNonzeroLength()
     readonly titleEnglish?: string;
 
+    // TODO Validate type
     readonly contributorAndRoles: ContributorAndRole[];
 
+    @IsOptional()
+    @IsStringWithNonzeroLength()
     readonly lyrics?: string; // lyric type - should allow three way translation in future
 
     @IsStringWithNonzeroLength()
     readonly audioURL: string;
 
+    @IsNonNegativeFiniteNumber()
     readonly lengthMilliseconds: number;
 
+    @IsNonNegativeFiniteNumber()
     readonly startMilliseconds: number;
 
     constructor(dto: DTO<Song>) {
