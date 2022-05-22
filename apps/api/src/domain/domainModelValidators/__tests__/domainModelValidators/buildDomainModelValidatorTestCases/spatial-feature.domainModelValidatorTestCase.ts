@@ -12,7 +12,7 @@ import { getValidSpatialFeatureInstanceForTest } from './utils/getValidSpatialFe
 
 // Build one valid case per `GeometricFeatureType`
 const validCases = Object.values(GeometricFeatureType).map((geometryType) => ({
-    description: `When the geometry is of type ${geometryType}`,
+    description: `When the geometry is of type: ${geometryType}`,
     dto: getValidSpatialFeatureInstanceForTest(geometryType).toDTO(),
 }));
 

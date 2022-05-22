@@ -1,5 +1,6 @@
 import { InternalError } from '../../../lib/errors/InternalError';
 import BookBibliographicReferenceData from '../../models/bibliographic-reference/entities/BookBibliographicReferenceData';
+import JournalArticleBibliographicReferenceData from '../../models/bibliographic-reference/entities/JournalArticleBibliographicReferenceData';
 import { IBibliographicReference } from '../../models/bibliographic-reference/interfaces/IBibliographicReference';
 import { BibliographicReferenceType } from '../../models/bibliographic-reference/types/BibliographicReferenceType';
 import { EntityId } from '../../types/ResourceId';
@@ -25,6 +26,7 @@ const bibliographicReferenceValidator: DomainModelValidator = (
 
     const dataValidationFunction = buildSimpleDiscriminatedUnionValidationFunction([
         [BibliographicReferenceType.book, BookBibliographicReferenceData],
+        [BibliographicReferenceType.journalArticle, JournalArticleBibliographicReferenceData],
     ]);
 
     allErrors.push(...dataValidationFunction(data));
