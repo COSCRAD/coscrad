@@ -5,20 +5,24 @@ import bibliographicReferenceValidator from '../../../bibliographicReferenceVali
 import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
 import { buildBookBibliographicReferenceTestCases } from './bibliographicReferenceInvalidTestCases/bookBibliographicReference.domainModelValidatorTestCases';
+import { buildJournalArticleBibliographicReferenceTestCases } from './bibliographicReferenceInvalidTestCases/journalArticleBibliographicReference.domainModelValidatorTestCases';
 import getValidBibliographicReferenceInstanceForTest from './utils/getValidBibliographicReferenceInstanceForTest';
 
-const validCase = {
-    description: 'When given a valid book bibliographic reference DTO',
-    dto: getValidBibliographicReferenceInstanceForTest(BibliographicReferenceType.book),
-};
+const validCases = Object.values(BibliographicReferenceType).map((bibliographicReferenceType) => ({
+    description: `When bibliographic reference is of type: ${bibliographicReferenceType}`,
+    dto: getValidBibliographicReferenceInstanceForTest(bibliographicReferenceType).toDTO(),
+}));
 
-const modelSpecificTestCases = [...buildBookBibliographicReferenceTestCases()];
+const modelSpecificTestCases = [
+    ...buildBookBibliographicReferenceTestCases(),
+    ...buildJournalArticleBibliographicReferenceTestCases(),
+];
 
 export const buildBibliographicReferenceTestCase =
     (): DomainModelValidatorTestCase<IBibliographicReference> => ({
         resourceType: resourceTypes.bibliographicReference,
         validator: bibliographicReferenceValidator,
-        validCases: [validCase],
+        validCases,
         invalidCases: [
             {
                 description: 'the dto is undefined',
@@ -33,15 +37,15 @@ export const buildBibliographicReferenceTestCase =
             {
                 description: 'the dto has an invalid bibliographic reference type',
                 invalidDTO: {
-                    ...validCase.dto,
+                    ...validCases[0].dto,
                     data: {
-                        ...validCase.dto.data,
+                        ...validCases[0].dto.data,
                         type: 'BOGUS-BIBLIOGRAPHIC-REFERENCE-TYPE' as BibliographicReferenceType,
                     },
                 },
                 expectedError: new InvalidEntityDTOError(
                     resourceTypes.bibliographicReference,
-                    validCase.dto.id
+                    validCases[0].dto.id
                 ),
             },
             ...modelSpecificTestCases,

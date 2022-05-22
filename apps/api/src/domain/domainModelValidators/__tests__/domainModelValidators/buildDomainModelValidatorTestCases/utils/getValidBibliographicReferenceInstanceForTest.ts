@@ -6,9 +6,14 @@ import { BibliographicReferenceType } from '../../../../../models/bibliographic-
 export default (
     bibliographicReferenceType: BibliographicReferenceType
 ): IBibliographicReference => {
-    if (bibliographicReferenceType !== BibliographicReferenceType.book) {
-        throw new InternalError('Not implemented');
-    }
+    const searchResult = buildTestData().resources.bibliographicReference.find(
+        ({ data: { type } }) => type === bibliographicReferenceType
+    );
 
-    return buildTestData().resources.bibliographicReference[0];
+    if (!searchResult)
+        throw new InternalError(
+            `Test data missing for bibliographic reference with type: ${bibliographicReferenceType}`
+        );
+
+    return searchResult;
 };
