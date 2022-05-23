@@ -9,6 +9,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import buildConfigFilePath from './config/buildConfigFilePath';
 import { validate } from './config/env.validation';
+import { CommandModule } from './controllers/command/command.module';
 import { CommandController } from './controllers/command/commands.controller';
 import { TestCommandModule } from './controllers/command/TestCommand.module';
 import { EdgeConnectionController } from './controllers/edgeConnection.controller';
@@ -26,6 +27,7 @@ import { TagController } from './controllers/tag.controller';
         AuthorizationModule,
         DomainServicesModule,
         PersistenceModule.forRootAsync(),
+        CommandModule,
         TestCommandModule,
     ],
     controllers: [

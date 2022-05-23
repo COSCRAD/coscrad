@@ -14,7 +14,7 @@
                 "tsPlugins": [{
                     "name": "@nestjs/swagger/plugin",
                     "options": {
-                        "dtoFilenameSuffix": [".entity.ts",".view-model.ts"]
+                        "dtoFilenameSuffix": [".entity.ts",".view-model.ts",".command.ts"]
                     }
                 }]
             },

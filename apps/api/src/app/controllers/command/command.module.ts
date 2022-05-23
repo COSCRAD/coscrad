@@ -1,9 +1,11 @@
+import { DiscoveryModule } from '@golevelup/nestjs-discovery';
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { CommandFinderService } from './CommandFinder.service';
 import CommandHandlerService from './CommandHandler.service';
 
 @Module({
     providers: [CommandHandlerService, CommandFinderService],
+    imports: [DiscoveryModule],
     exports: [CommandHandlerService],
 })
 export class CommandModule implements OnApplicationBootstrap {
@@ -12,13 +14,20 @@ export class CommandModule implements OnApplicationBootstrap {
         private readonly commandHanlderService: CommandHandlerService
     ) {}
 
-    onApplicationBootstrap() {
-        const commandHandlers = this.finderService.explore();
-
-        commandHandlers.forEach((handler) => this.commandHanlderService.registerHandler(handler));
+    async onApplicationBootstrap() {
+        const commandHandlers = await this.finderService.explore();
 
         console.log({
-            commandHandlerService: JSON.stringify(this.commandHanlderService),
+            commandHandlers,
+        });
+
+        commandHandlers.forEach(([Command, CommandHandler]) => {
+            console.log(`
+            should register command: ${Command} as handled by command handler: ${CommandHandler}`);
+
+            const type = (Command as any).name;
+
+            this.commandHanlderService.registerHandler(type, CommandHandler);
         });
     }
 }

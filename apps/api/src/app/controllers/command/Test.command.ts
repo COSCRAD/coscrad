@@ -1,7 +1,12 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { ICommand } from './ICommand';
 
 export class TestCommand implements ICommand {
-    type: 'RUN_TEST';
+    type = 'TestCommand';
 
-    constructor(public readonly runNumber: number) {}
+    @ApiProperty()
+    foo: number;
+
+    @ApiProperty()
+    bar: string;
 }

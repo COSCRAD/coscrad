@@ -1,30 +1,40 @@
+import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { Injectable } from '@nestjs/common';
-import { ModulesContainer } from '@nestjs/core';
 import { COMMAND_HANDLER_METADATA } from './decorators/CommandHandler.decorator';
+import { ICommand } from './ICommand';
 import { ICommandHandler } from './ICommandHandler';
+
+type CommandAndHandlerPair = [ICommand, ICommandHandler];
 
 @Injectable()
 export class CommandFinderService {
-    constructor(private readonly modulesContainer: ModulesContainer) {}
+    constructor(private readonly discoveryService: DiscoveryService) {}
 
-    explore(): ICommandHandler[] {
-        const modules = [...this.modulesContainer.values()];
+    async explore(): Promise<CommandAndHandlerPair[]> {
+        const allProviders = await this.discoveryService.providers(
+            (x) => x.name === 'TestCommandHandler'
+        );
 
-        const result = modules
-            .map((module) => [...module.providers.values()])
-            .reduce((a, b) => a.concat(b), [])
-            .filter((element) => !!element)
-            .map(({ instance }) => instance)
-            .filter((instance) => !!instance)
-            .filter((instance) => !!instance.constructor)
-            .map((instance) => instance.constructor)
-            .map((constructor) => Reflect.getMetadata(COMMAND_HANDLER_METADATA, constructor))
-            .filter((meta) => !!meta);
+        allProviders.forEach((provider) => {
+            console.log({
+                aProvider: provider,
+                class: provider.injectType,
+            });
 
-        console.log({
-            foundCommandHandlers: result,
+            if (provider.name === 'TestCommandHandler')
+                console.log({
+                    commandMeta: Reflect.getMetadata(COMMAND_HANDLER_METADATA, provider.injectType),
+                    command: Reflect.getMetadata(COMMAND_HANDLER_METADATA, provider.injectType)
+                        .command,
+                    handler: provider.injectType,
+                });
         });
 
-        return result;
+        const commandAndHandlerPairs = allProviders.map((provider) => [
+            Reflect.getMetadata(COMMAND_HANDLER_METADATA, provider.injectType).command,
+            provider.injectType,
+        ]);
+        // hoo
+        return commandAndHandlerPairs as CommandAndHandlerPair[];
     }
 }

@@ -1,16 +1,16 @@
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../types/ResultOrError';
-import { COMMAND_HANDLER_METADATA } from './decorators/CommandHandler.decorator';
 import { ICommand } from './ICommand';
 import { ICommandHandler } from './ICommandHandler';
 
 export default class CommandHandlerService {
-    #handlers: Map<string, ICommandHandler>;
+    #handlers: Map<string, ICommandHandler> = new Map();
 
-    registerHandler(handler: ICommandHandler) {
-        const type = this.#getCommandType(handler);
+    registerHandler(type, handler: ICommandHandler) {
+        console.log(`Registering command handler with type:${type}, handler: ${handler}`);
 
-        this.#handlers.set(type, handler);
+        // @ts-expect-error fix types soon
+        this.#handlers.set(type, new handler());
     }
 
     async execute(command: ICommand): Promise<ResultOrError<string>> {
@@ -22,37 +22,5 @@ export default class CommandHandlerService {
             throw new InternalError(`There is no handler registered for the command: ${type}`);
 
         return handler.execute(command);
-    }
-
-    #getCommandType(commandHandler: ICommandHandler): string {
-        const { constructor: commandHandlerConstructor } = Object.getPrototypeOf(commandHandler);
-
-        console.log({
-            commandHandler,
-            commandHandlerConstructor,
-        });
-
-        const commandHandlerMetadata = Reflect.getMetadata(
-            COMMAND_HANDLER_METADATA,
-            commandHandlerConstructor
-        );
-
-        if (!commandHandlerMetadata) {
-            throw new InternalError(`Command Handler not found`);
-        }
-
-        const command = commandHandlerMetadata.command;
-
-        if (!command) {
-            throw new InternalError(`Command not found`);
-        }
-
-        const { type } = command;
-
-        if (!type) {
-            throw new InternalError(`Command type not defined`);
-        }
-
-        return type;
     }
 }
