@@ -30,15 +30,15 @@ describe('Domain Model Validators', () => {
                     });
                 });
             });
-        });
 
-        describe('When the DTO is invalid', () => {
-            invalidCases.forEach(({ description, invalidDTO, expectedError }, index) => {
-                describe(description || `invalid case ${index + 1}`, () => {
-                    it('should return the appropriate errors', () => {
-                        const result = validator(invalidDTO);
+            describe('When the DTO is invalid', () => {
+                invalidCases.forEach(({ description, invalidDTO, expectedError }, index) => {
+                    describe(description || `invalid case ${index + 1}`, () => {
+                        it('should return the appropriate errors', () => {
+                            const result = validator(invalidDTO);
 
-                        expect(result).toEqual(expectedError);
+                            expect(result).toEqual(expectedError);
+                        });
                     });
                 });
             });

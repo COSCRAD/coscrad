@@ -13,7 +13,7 @@ import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-unde
 import BaseDomainModel from '../../BaseDomainModel';
 import { IBibliographicReferenceData } from '../interfaces/IBibliographicReferenceData';
 import { BibliographicReferenceType } from '../types/BibliographicReferenceType';
-import Creator from '../types/Creator';
+import BibliographicReferenceCreator from './BibliographicReferenceCreator';
 
 export default class BookBibliographicReferenceData
     extends BaseDomainModel
@@ -25,7 +25,7 @@ export default class BookBibliographicReferenceData
     readonly title: string;
 
     @ArrayNotEmpty()
-    readonly creators: Creator[];
+    readonly creators: BibliographicReferenceCreator[];
 
     @IsOptional()
     @IsStringWithNonzeroLength()
@@ -64,7 +64,7 @@ export default class BookBibliographicReferenceData
 
         this.title = dto.title;
 
-        this.creators = dto.creators as Creator[];
+        this.creators = dto.creators as BibliographicReferenceCreator[];
 
         this.abstract = dto.abstract;
 

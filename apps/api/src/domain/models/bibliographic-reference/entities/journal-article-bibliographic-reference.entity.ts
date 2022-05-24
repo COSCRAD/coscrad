@@ -18,8 +18,6 @@ export class JournalArticleBibliographicReference
 
         if (isNullOrUndefined(dto)) return;
 
-        this.type = dto.type;
-
         this.data = new JournalArticleBibliographicReferenceData(dto.data);
     }
 }

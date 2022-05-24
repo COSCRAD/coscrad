@@ -18,7 +18,7 @@ const dtos: DTO<JournalArticleBibliographicReference>[] = [
                 },
             ],
             abstract: 'An analysis of the Cariboo Chilcotin Justice inquiry.',
-            date: 'Spring 2013',
+            issueDate: 'Spring 2013',
             publicationTitle: 'Journal of History',
             url: 'https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1',
             pages: '109-113,115-136,240',
