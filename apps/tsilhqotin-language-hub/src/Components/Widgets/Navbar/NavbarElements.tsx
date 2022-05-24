@@ -1,6 +1,6 @@
+import styled from '@emotion/styled';
 import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink as Link } from 'react-router-dom';
-import styled from 'styled-components';
 
 export const Nav = styled.nav`
     background-image: repeating-linear-gradient(
