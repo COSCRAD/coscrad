@@ -38,24 +38,24 @@ export default class BookBibliographicReferenceData
 
     @IsOptional()
     @IsStringWithNonzeroLength()
-    readonly publisher: string;
+    readonly publisher?: string;
 
     @IsOptional()
     @IsStringWithNonzeroLength()
-    readonly place: string;
+    readonly place?: string;
 
     @IsOptional()
     @IsUrl()
-    readonly url: string;
+    readonly url?: string;
 
     @IsOptional()
     @IsInt()
     @IsPositive()
-    readonly numberOfPages: number;
+    readonly numberOfPages?: number;
 
     @IsOptional()
     @IsISBN()
-    readonly isbn: string;
+    readonly isbn?: string;
 
     constructor(dto: DTO<BookBibliographicReferenceData>) {
         super();
