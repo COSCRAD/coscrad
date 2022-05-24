@@ -28,7 +28,9 @@ describe('Repository provider > getCategoryRepository', () => {
     beforeAll(async () => {
         jest.resetModules();
 
-        const moduleRef = await createTestModule(testDatabaseName);
+        const moduleRef = await createTestModule({
+            ARANGO_DB_NAME: testDatabaseName,
+        });
 
         arangoConnectionProvider =
             moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);

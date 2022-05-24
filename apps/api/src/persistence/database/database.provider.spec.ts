@@ -9,9 +9,12 @@ import { DatabaseProvider } from './database.provider';
 describe('Database Provider', () => {
     let databaseProvider: DatabaseProvider;
     let configService: ConfigService;
+    const testDatabaseName = generateRandomTestDatabaseName();
 
     beforeAll(async () => {
-        const moduleRef = await createTestModule(generateRandomTestDatabaseName());
+        const moduleRef = await createTestModule({
+            ARANGO_DB_NAME: testDatabaseName,
+        });
 
         configService = moduleRef.get<ConfigService>(ConfigService);
         if (!configService) throw new Error('Config service not injected.');

@@ -14,7 +14,10 @@ describe('GET /resources', () => {
     let arangoConnectionProvider: ArangoConnectionProvider;
 
     beforeAll(async () => {
-        const moduleRef = await createTestModule(testDatabaseName);
+        const moduleRef = await createTestModule({
+            ARANGO_DB_NAME: testDatabaseName,
+            GLOBAL_PREFIX: 'testApiPrefix',
+        });
 
         arangoConnectionProvider =
             moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
