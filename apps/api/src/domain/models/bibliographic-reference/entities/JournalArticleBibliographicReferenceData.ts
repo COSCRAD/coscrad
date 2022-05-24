@@ -25,30 +25,30 @@ export default class JournalArticleBibliographicReferenceData
 
     @IsOptional()
     @IsStringWithNonzeroLength()
-    readonly abstract: string;
+    readonly abstract?: string;
 
     @IsStringWithNonzeroLength()
     readonly date: string;
 
     @IsOptional()
     @IsStringWithNonzeroLength()
-    readonly publicationTitle: string;
+    readonly publicationTitle?: string;
 
     @IsOptional()
     @IsUrl()
-    readonly url: string;
+    readonly url?: string;
 
     @IsOptional()
     @IsStringWithNonzeroLength()
-    readonly pages: string;
+    readonly pages?: string;
 
     @IsOptional()
     @IsStringWithNonzeroLength()
-    readonly issn: string;
+    readonly issn?: string;
 
     @IsOptional()
     @IsStringWithNonzeroLength()
-    readonly doi: string;
+    readonly doi?: string;
 
     constructor(dto: DTO<JournalArticleBibliographicReferenceData>) {
         super();
