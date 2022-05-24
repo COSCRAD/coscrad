@@ -33,6 +33,11 @@ Array [
     "resourceType": "spatialFeature",
   },
   Object {
+    "description": "A bibliographic reference is a reference to, but not a digital representation of, a research resource",
+    "link": "/api/resources/bibliographicReferences",
+    "resourceType": "bibliographicReference",
+  },
+  Object {
     "description": "A song includes lyrics and url link to audio recording.",
     "link": "/api/resources/songs",
     "resourceType": "song",
