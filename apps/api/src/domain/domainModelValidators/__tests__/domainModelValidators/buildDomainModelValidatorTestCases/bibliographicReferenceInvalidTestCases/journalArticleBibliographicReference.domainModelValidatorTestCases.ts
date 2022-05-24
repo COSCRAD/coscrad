@@ -59,7 +59,7 @@ export const buildJournalArticleBibliographicReferenceTestCases =
                 ...validDto,
                 data: {
                     ...validDto.data,
-                    date: '',
+                    issueDate: '',
                     // TODO remove cast
                 } as DTO<JournalArticleBibliographicReferenceData>,
             },

@@ -5,7 +5,6 @@ import { CreatorType } from '../../domain/models/bibliographic-reference/types/C
 import { resourceTypes } from '../../domain/types/resourceTypes';
 import { DTO } from '../../types/DTO';
 
-// TODO Break out separate test data builder for each sub-type
 const dtos: DTO<BookBibliographicReference>[] = [
     {
         type: resourceTypes.bibliographicReference,

@@ -1,6 +1,6 @@
 export enum BibliographicReferenceType {
-    book = 'Book',
-    journalArticle = 'JournalArticle',
+    book = 'book',
+    journalArticle = 'journalArticle',
 }
 
 export const isBibliographicReferenceType = (input: unknown): input is BibliographicReferenceType =>
