@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import About from '../Components/Pages/About/About';
 import Apps from '../Components/Pages/Apps/Apps';
 import Funders from '../Components/Pages/Funders/Funders';
@@ -14,7 +14,7 @@ import Navbar from '../Components/Widgets/Navbar/Navbar';
 export function App() {
     return (
         <Typography component={'span'} variant={'body2'}>
-            <BrowserRouter>
+            <HashRouter>
                 <Navbar />
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -26,8 +26,17 @@ export function App() {
                     <Route path="/Teachers" element={<Teachers />} />
                     <Route path="/Funders" element={<Funders />} />
                     <Route path="/Greetings" element={<Greetings />} />
+                    <Route
+                        path="*"
+                        element={
+                            <div style={{ minHeight: '100vh', textAlign: 'center' }}>
+                                <h1>404</h1>
+                                <p>Nothing to see here!</p>
+                            </div>
+                        }
+                    ></Route>
                 </Routes>
-            </BrowserRouter>
+            </HashRouter>
         </Typography>
     );
 }
