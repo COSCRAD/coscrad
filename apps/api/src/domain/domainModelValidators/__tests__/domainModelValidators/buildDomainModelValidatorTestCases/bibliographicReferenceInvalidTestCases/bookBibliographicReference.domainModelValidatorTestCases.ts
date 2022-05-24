@@ -17,7 +17,7 @@ const buildTopLevelError = (id: EntityId, innerErrors: InternalError[]): Interna
 export const buildBookBibliographicReferenceTestCases =
     (): DomainModelValidatorInvalidTestCase<BookBibliographicReference>[] => [
         {
-            description: 'The title is an empty string',
+            description: 'The Book Bibliographic Reference title is an empty string',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -28,7 +28,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The creators array is empty',
+            description: 'The Book Bibliographic Reference creators array is empty',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -40,7 +40,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The abstract is an empty string',
+            description: 'The Book Bibliographic Reference abstract is an empty string',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -52,7 +52,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The year is too big',
+            description: 'The Book Bibliographic Reference year is too big',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -64,7 +64,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The publisher is an empty string',
+            description: 'The Book Bibliographic Reference publisher is an empty string',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -76,7 +76,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The place is an empty string',
+            description: 'The Book Bibliographic Reference place is an empty string',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -88,7 +88,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The url is an invalid URL',
+            description: 'The Book Bibliographic Reference url is an invalid URL',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -100,7 +100,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The ISBN is an invalid ISBN',
+            description: 'The Book Bibliographic Reference ISBN is an invalid ISBN',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -112,7 +112,8 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The number of pages is not a positive integer',
+            description:
+                'The Book Bibliographic Reference number of pages is not a positive integer',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -124,7 +125,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The number of pages is not a number',
+            description: 'The Book Bibliographic Reference number of pages is not a number',
             invalidDTO: {
                 ...validDto,
                 data: {
