@@ -29,4 +29,100 @@ export const buildJournalArticleBibliographicReferenceTestCases =
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
+        {
+            description: 'The Journal Article creators array is empty',
+            invalidDTO: {
+                ...validDto,
+                data: {
+                    ...validDto.data,
+                    creators: [],
+                    // TODO remove cast
+                } as unknown as DTO<JournalArticleBibliographicReferenceData>,
+            },
+            expectedError: buildTopLevelError(validDto.id, []),
+        },
+        {
+            description: 'The Journal Article abstract is an empty string',
+            invalidDTO: {
+                ...validDto,
+                data: {
+                    ...validDto.data,
+                    abstract: '',
+                    // TODO remove cast
+                } as DTO<JournalArticleBibliographicReferenceData>,
+            },
+            expectedError: buildTopLevelError(validDto.id, []),
+        },
+        {
+            description: 'The Journal Article date is an empty string',
+            invalidDTO: {
+                ...validDto,
+                data: {
+                    ...validDto.data,
+                    date: '',
+                    // TODO remove cast
+                } as DTO<JournalArticleBibliographicReferenceData>,
+            },
+            expectedError: buildTopLevelError(validDto.id, []),
+        },
+        {
+            description: 'The Journal Article publication title is an empty string',
+            invalidDTO: {
+                ...validDto,
+                data: {
+                    ...validDto.data,
+                    publicationTitle: '',
+                    // TODO remove cast
+                } as DTO<JournalArticleBibliographicReferenceData>,
+            },
+            expectedError: buildTopLevelError(validDto.id, []),
+        },
+        {
+            description: 'The Journal Article url is an empty string',
+            invalidDTO: {
+                ...validDto,
+                data: {
+                    ...validDto.data,
+                    url: '',
+                    // TODO remove cast
+                } as DTO<JournalArticleBibliographicReferenceData>,
+            },
+            expectedError: buildTopLevelError(validDto.id, []),
+        },
+        {
+            description: 'The Journal Article pages is an empty string',
+            invalidDTO: {
+                ...validDto,
+                data: {
+                    ...validDto.data,
+                    pages: '',
+                    // TODO remove cast
+                } as DTO<JournalArticleBibliographicReferenceData>,
+            },
+            expectedError: buildTopLevelError(validDto.id, []),
+        },
+        {
+            description: 'The Journal Article issn is an empty string',
+            invalidDTO: {
+                ...validDto,
+                data: {
+                    ...validDto.data,
+                    issn: '',
+                    // TODO remove cast
+                } as DTO<JournalArticleBibliographicReferenceData>,
+            },
+            expectedError: buildTopLevelError(validDto.id, []),
+        },
+        {
+            description: 'The Journal Article doi is an empty string',
+            invalidDTO: {
+                ...validDto,
+                data: {
+                    ...validDto.data,
+                    doi: '',
+                    // TODO remove cast
+                } as DTO<JournalArticleBibliographicReferenceData>,
+            },
+            expectedError: buildTopLevelError(validDto.id, []),
+        },
     ];
