@@ -34,7 +34,8 @@ export class Song extends Resource {
 
     @IsOptional()
     @IsStringWithNonzeroLength()
-    readonly lyrics?: string; // lyric type - should allow three way translation in future
+    // the type of `lyrics` should allow three way translation in future
+    readonly lyrics?: string;
 
     @IsStringWithNonzeroLength()
     readonly audioURL: string;

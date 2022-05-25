@@ -1533,12 +1533,7 @@ Array [
         "role": "self",
       },
     ],
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-      },
-    ],
+    "tags": Array [],
   },
   Object {
     "id": "18",
@@ -1788,7 +1783,12 @@ Array [
         "role": "self",
       },
     ],
-    "tags": Array [],
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
   },
 ]
 `;
