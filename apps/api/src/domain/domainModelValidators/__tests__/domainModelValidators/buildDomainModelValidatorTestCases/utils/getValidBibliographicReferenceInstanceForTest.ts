@@ -1,11 +1,11 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import buildTestData from '../../../../../../test-data/buildTestData';
-import { IBibliographicReference } from '../../../../../models/bibliographic-reference/interfaces/IBibliographicReference';
+import { BibliographicReferenceTypeToInstance } from '../../../../../factories/complexFactories/buildBibliographicReferenceFactory/getCtorFromBibliographicReferenceType';
 import { BibliographicReferenceType } from '../../../../../models/bibliographic-reference/types/BibliographicReferenceType';
 
-export default (
-    bibliographicReferenceType: BibliographicReferenceType
-): IBibliographicReference => {
+export default <TBibliographicReferenceType extends BibliographicReferenceType>(
+    bibliographicReferenceType: TBibliographicReferenceType
+): BibliographicReferenceTypeToInstance[TBibliographicReferenceType] => {
     const searchResult = buildTestData().resources.bibliographicReference.find(
         ({ data: { type } }) => type === bibliographicReferenceType
     );
@@ -15,5 +15,5 @@ export default (
             `Test data missing for bibliographic reference with type: ${bibliographicReferenceType}`
         );
 
-    return searchResult;
+    return searchResult as unknown as BibliographicReferenceTypeToInstance[TBibliographicReferenceType];
 };

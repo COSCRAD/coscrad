@@ -1,3 +1,2 @@
-export * from './number/IsYear';
-export * from './string/IsStringWithNonzeroLength';
-
+export * from './number';
+export * from './string';

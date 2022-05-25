@@ -1,4 +1,10 @@
-import { IsNonEmptyArray, IsOptional, IsStringWithNonzeroLength, IsUrl } from '@coscrad/validation';
+import {
+    IsNonEmptyArray,
+    IsOptional,
+    IsStringWithNonzeroLength,
+    IsUrl,
+    ValidateNested,
+} from '@coscrad/validation';
 import { DTO } from '../../../../types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
@@ -16,6 +22,7 @@ export default class JournalArticleBibliographicReferenceData
     readonly title: string;
 
     @IsNonEmptyArray()
+    @ValidateNested()
     readonly creators: BibliographicReferenceCreator[];
 
     @IsOptional()

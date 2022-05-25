@@ -11,7 +11,8 @@ export function IsYear(validationOptions?: ValidationOptions) {
         validator: {
             validate: (value, _): boolean => isYear(value),
             defaultMessage: buildMessage(
-                (eachPrefix) => eachPrefix + '$property must a year between 0 and the current year',
+                (eachPrefix) =>
+                    eachPrefix + '$property must be a year between 0 and the current year',
                 validationOptions
             ),
         },

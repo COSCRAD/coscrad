@@ -9,6 +9,11 @@ const bibliographicReferenceTypeToModel = {
     [BibliographicReferenceType.journalArticle]: JournalArticleBibliographicReference,
 };
 
+export type BibliographicReferenceTypeToInstance = {
+    [BibliographicReferenceType.book]: BookBibliographicReference;
+    [BibliographicReferenceType.journalArticle]: JournalArticleBibliographicReference;
+};
+
 export type BibliographicReferenceTypeToCtor = {
     [BibliographicReferenceType.book]: DomainModelCtor<BookBibliographicReference>;
     [BibliographicReferenceType.journalArticle]: DomainModelCtor<JournalArticleBibliographicReference>;
