@@ -3,8 +3,21 @@
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /bibliographicReferences/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "data": Object {
+    "abstract": "This is the abstract, NOT a general note!",
+    "creators": Array [
+      Object {
+        "name": "Alana Duvernay",
+        "type": "author",
+      },
+    ],
+    "isbn": "978-1-895811-34-6",
+    "numberOfPages": 455,
+    "place": "Kennebunk Port, Maine",
+    "publisher": "Atlantic Publishing",
     "title": "A Day in the Life",
     "type": "book",
+    "url": "https://atlanticpublishing.com",
+    "year": 1999,
   },
   "id": "1",
   "tags": Array [

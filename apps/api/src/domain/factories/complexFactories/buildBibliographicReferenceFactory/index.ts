@@ -1,7 +1,6 @@
 import { DTO } from '../../../../types/DTO';
 import bibliographicReferenceValidator from '../../../domainModelValidators/bibliographicReferenceValidator';
 import { isValid } from '../../../domainModelValidators/Valid';
-import { BookBibliographicReference } from '../../../models/bibliographic-reference/entities/book-bibliographic-reference.entity';
 import { IBibliographicReference } from '../../../models/bibliographic-reference/interfaces/IBibliographicReference';
 import { InstanceFactory } from '../../getInstanceFactoryForEntity';
 import getCtorFromBibliographicReferenceType from './getCtorFromBibliographicReferenceType';
@@ -18,8 +17,8 @@ const bibliographicReferenceFactory: InstanceFactory<IBibliographicReference> = 
 
     const ctor = getCtorFromBibliographicReferenceType(dto.data.type);
 
-    // TODO remove cast when adding next model, correlate types
-    return new ctor(dto as DTO<BookBibliographicReference>);
+    // @ts-expect-error The alternative is to program to the union
+    return new ctor(dto);
 };
 
 export default () => bibliographicReferenceFactory;

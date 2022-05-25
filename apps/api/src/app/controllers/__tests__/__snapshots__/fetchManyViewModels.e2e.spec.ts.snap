@@ -4,8 +4,21 @@ exports[`When fetching multiple resources GET /bibliographicReferences when all 
 Array [
   Object {
     "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
       "title": "A Day in the Life",
       "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
     },
     "id": "1",
     "tags": Array [
@@ -15,6 +28,27 @@ Array [
       },
     ],
   },
+  Object {
+    "data": Object {
+      "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
+      "creators": Array [
+        Object {
+          "name": "Sigurd Purcell",
+          "type": "author",
+        },
+      ],
+      "doi": "10.14288/bcs.v0i19.784",
+      "issn": "00052949",
+      "issueDate": "Spring 2013",
+      "pages": "109-113,115-136,240",
+      "publicationTitle": "Journal of History",
+      "title": "Report on the Cariboo Chilcotin Justice inquiry",
+      "type": "journalArticle",
+      "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+    },
+    "id": "23",
+    "tags": Array [],
+  },
 ]
 `;
 
@@ -22,8 +56,21 @@ exports[`When fetching multiple resources GET /bibliographicReferences when some
 Array [
   Object {
     "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
       "title": "A Day in the Life",
       "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
     },
     "id": "1",
     "tags": Array [
@@ -32,6 +79,27 @@ Array [
         "label": "animals",
       },
     ],
+  },
+  Object {
+    "data": Object {
+      "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
+      "creators": Array [
+        Object {
+          "name": "Sigurd Purcell",
+          "type": "author",
+        },
+      ],
+      "doi": "10.14288/bcs.v0i19.784",
+      "issn": "00052949",
+      "issueDate": "Spring 2013",
+      "pages": "109-113,115-136,240",
+      "publicationTitle": "Journal of History",
+      "title": "Report on the Cariboo Chilcotin Justice inquiry",
+      "type": "journalArticle",
+      "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+    },
+    "id": "23",
+    "tags": Array [],
   },
 ]
 `;

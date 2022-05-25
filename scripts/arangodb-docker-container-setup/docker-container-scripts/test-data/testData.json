@@ -279,7 +279,42 @@
                 "published": true,
                 "data": {
                     "type": "book",
-                    "title": "A Day in the Life"
+                    "title": "A Day in the Life",
+                    "creators": [
+                        {
+                            "name": "Alana Duvernay",
+                            "type": "author"
+                        }
+                    ],
+                    "abstract": "This is the abstract, NOT a general note!",
+                    "year": 1999,
+                    "publisher": "Atlantic Publishing",
+                    "place": "Kennebunk Port, Maine",
+                    "url": "https://atlanticpublishing.com",
+                    "isbn": "978-1-895811-34-6",
+                    "numberOfPages": 455
+                }
+            },
+            {
+                "type": "bibliographicReference",
+                "_key": "23",
+                "published": true,
+                "data": {
+                    "type": "journalArticle",
+                    "title": "Report on the Cariboo Chilcotin Justice inquiry",
+                    "creators": [
+                        {
+                            "name": "Sigurd Purcell",
+                            "type": "author"
+                        }
+                    ],
+                    "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
+                    "issueDate": "Spring 2013",
+                    "publicationTitle": "Journal of History",
+                    "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+                    "pages": "109-113,115-136,240",
+                    "issn": "00052949",
+                    "doi": "10.14288/bcs.v0i19.784"
                 }
             }
         ]

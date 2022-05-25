@@ -1,8 +1,8 @@
-import BookBibliographicReferenceData from 'apps/api/src/domain/models/bibliographic-reference/entities/BookBibliographicReferenceData';
-import { DTO } from 'apps/api/src/types/DTO';
+import BookBibliographicReferenceData from '../../../../../../domain/models/bibliographic-reference/entities/BookBibliographicReferenceData';
 import { EntityId } from '../../../../../../domain/types/ResourceId';
 import { resourceTypes } from '../../../../../../domain/types/resourceTypes';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
+import { DTO } from '../../../../../../types/DTO';
 import { BookBibliographicReference } from '../../../../../models/bibliographic-reference/entities/book-bibliographic-reference.entity';
 import { BibliographicReferenceType } from '../../../../../models/bibliographic-reference/types/BibliographicReferenceType';
 import InvalidEntityDTOError from '../../../../errors/InvalidEntityDTOError';
