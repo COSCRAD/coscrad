@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import createTestModule from '../../app/controllers/__tests__/createTestModule';
+import setupIntegrationTest from '../../app/controllers/__tests__/setupIntegrationTest';
 import { InternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
 import buildTestData from '../../test-data/buildTestData';
@@ -26,20 +26,10 @@ describe('Repository provider > getCategoryRepository', () => {
     const { categoryTree } = testData;
 
     beforeAll(async () => {
-        jest.resetModules();
-
-        const moduleRef = await createTestModule(testDatabaseName);
-
-        arangoConnectionProvider =
-            moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
-
-        databaseProvider = new DatabaseProvider(arangoConnectionProvider);
-
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
-
-        app = moduleRef.createNestApplication();
-
-        await app.init();
+        ({ app, arangoConnectionProvider, databaseProvider, testRepositoryProvider } =
+            await setupIntegrationTest({
+                ARANGO_DB_NAME: testDatabaseName,
+            }));
     });
 
     afterAll(async () => {

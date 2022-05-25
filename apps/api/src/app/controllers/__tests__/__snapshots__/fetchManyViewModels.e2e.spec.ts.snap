@@ -168,7 +168,7 @@ exports[`When fetching multiple resources GET /photographs when all of the resou
 Array [
   Object {
     "id": "0",
-    "imageURL": "https://www.myaudio.com:5555/media?id=cat.png",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
     "photographer": "Susie McRealart",
     "tags": Array [
       Object {
@@ -179,7 +179,7 @@ Array [
   },
   Object {
     "id": "1",
-    "imageURL": "https://www.myaudio.com:5555/media?id=dog.png",
+    "imageURL": "https://www.mysound.org/downloads/dog.png",
     "photographer": "Robert McRealart",
     "tags": Array [
       Object {
@@ -190,7 +190,7 @@ Array [
   },
   Object {
     "id": "2",
-    "imageURL": "https://www.myaudio.com:5555/media?id=wildflower.png",
+    "imageURL": "https://www.mysound.org/downloads/wildflower.png",
     "photographer": "Kenny Tree-Huggens",
     "tags": Array [],
   },
@@ -201,7 +201,7 @@ exports[`When fetching multiple resources GET /photographs when some of the reso
 Array [
   Object {
     "id": "0",
-    "imageURL": "https://www.myaudio.com:5555/media?id=cat.png",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
     "photographer": "Susie McRealart",
     "tags": Array [
       Object {
@@ -212,7 +212,7 @@ Array [
   },
   Object {
     "id": "1",
-    "imageURL": "https://www.myaudio.com:5555/media?id=dog.png",
+    "imageURL": "https://www.mysound.org/downloads/dog.png",
     "photographer": "Robert McRealart",
     "tags": Array [
       Object {
@@ -223,7 +223,7 @@ Array [
   },
   Object {
     "id": "2",
-    "imageURL": "https://www.myaudio.com:5555/media?id=wildflower.png",
+    "imageURL": "https://www.mysound.org/downloads/wildflower.png",
     "photographer": "Kenny Tree-Huggens",
     "tags": Array [],
   },
@@ -567,7 +567,7 @@ Array [
 exports[`When fetching multiple resources GET /transcribedAudioItems when all of the resources are published should fetch multiple resources of type transcribedAudio 1`] = `
 Array [
   Object {
-    "audioURL": "https://www.myaudio.com:5555/media?id=123.mp3.mp3",
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
     "id": "110",
     "length": 20000,
     "plainText": "
@@ -587,7 +587,7 @@ Array [
 exports[`When fetching multiple resources GET /transcribedAudioItems when some of the resources are unpublished should return the expected number of results 1`] = `
 Array [
   Object {
-    "audioURL": "https://www.myaudio.com:5555/media?id=123.mp3.mp3",
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
     "id": "110",
     "length": 20000,
     "plainText": "

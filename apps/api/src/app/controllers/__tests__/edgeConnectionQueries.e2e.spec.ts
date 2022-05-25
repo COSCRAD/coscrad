@@ -5,42 +5,25 @@ import { EdgeConnectionType } from '../../../domain/models/context/edge-connecti
 import { isResourceCompositeIdentifier } from '../../../domain/models/types/ResourceCompositeIdentifier';
 import { resourceTypes } from '../../../domain/types/resourceTypes';
 import { InternalError } from '../../../lib/errors/InternalError';
-import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
-import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatResourceCompositeIdentifier';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import createTestModule from './createTestModule';
+import setupIntegrationTest from './setupIntegrationTest';
 describe('When querying for edge connections', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
     let app: INestApplication;
-
-    let arangoConnectionProvider: ArangoConnectionProvider;
-
-    let databaseProvider: DatabaseProvider;
 
     let testRepositoryProvider: TestRepositoryProvider;
 
     const { connections, tags: tagTestData } = buildTestData();
 
     beforeAll(async () => {
-        jest.resetModules();
-
-        const moduleRef = await createTestModule(testDatabaseName);
-
-        arangoConnectionProvider =
-            moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
-
-        databaseProvider = new DatabaseProvider(arangoConnectionProvider);
-
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
-
-        app = moduleRef.createNestApplication();
-
-        await app.init();
+        ({ app, testRepositoryProvider } = await setupIntegrationTest({
+            ARANGO_DB_NAME: testDatabaseName,
+        }));
     });
 
     beforeEach(async () => {

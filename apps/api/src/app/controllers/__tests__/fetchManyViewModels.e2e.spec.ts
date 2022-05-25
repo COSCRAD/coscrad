@@ -3,13 +3,12 @@ import * as request from 'supertest';
 import { Resource } from '../../../domain/models/resource.entity';
 import { InMemorySnapshotOfResources, resourceTypes } from '../../../domain/types/resourceTypes';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
-import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
-import createTestModule from './createTestModule';
+import setupIntegrationTest from './setupIntegrationTest';
 
 describe('When fetching multiple resources', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
@@ -17,8 +16,6 @@ describe('When fetching multiple resources', () => {
     let app: INestApplication;
 
     let arangoConnectionProvider: ArangoConnectionProvider;
-
-    let databaseProvider: DatabaseProvider;
 
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -41,20 +38,10 @@ describe('When fetching multiple resources', () => {
     );
 
     beforeAll(async () => {
-        jest.resetModules();
-
-        const moduleRef = await createTestModule(testDatabaseName);
-
-        arangoConnectionProvider =
-            moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
-
-        databaseProvider = new DatabaseProvider(arangoConnectionProvider);
-
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
-
-        app = moduleRef.createNestApplication();
-
-        await app.init();
+        ({ app, arangoConnectionProvider, testRepositoryProvider } = await setupIntegrationTest({
+            ARANGO_DB_NAME: testDatabaseName,
+            BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
+        }));
     });
 
     Object.values(resourceTypes).forEach((ResourceType) => {

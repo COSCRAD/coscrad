@@ -1,11 +1,9 @@
 import { INestApplication } from '@nestjs/common';
-import createTestModule from '../../app/controllers/__tests__/createTestModule';
+import setupIntegrationTest from '../../app/controllers/__tests__/setupIntegrationTest';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import TermEnglishEquals from '../../domain/repositories/specifications/TermEnglishEquals';
 import { resourceTypes } from '../../domain/types/resourceTypes';
 import buildTestData from '../../test-data/buildTestData';
-import { ArangoConnectionProvider } from '../database/arango-connection.provider';
-import { DatabaseProvider } from '../database/database.provider';
 import generateRandomTestDatabaseName from './__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 
@@ -14,29 +12,14 @@ describe('Repository for entity (with filters)', () => {
 
     const testData = buildTestData().resources;
 
-    let arangoConnectionProvider: ArangoConnectionProvider;
-
-    let databaseProvider: DatabaseProvider;
-
     let testRepositoryProvider: TestRepositoryProvider;
 
     let app: INestApplication;
 
     beforeAll(async () => {
-        jest.resetModules();
-
-        const moduleRef = await createTestModule(testDatabaseName);
-
-        arangoConnectionProvider =
-            moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
-
-        databaseProvider = new DatabaseProvider(arangoConnectionProvider);
-
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
-
-        app = moduleRef.createNestApplication();
-
-        await app.init();
+        ({ app, testRepositoryProvider } = await setupIntegrationTest({
+            ARANGO_DB_NAME: testDatabaseName,
+        }));
     });
 
     afterAll(async () => {
