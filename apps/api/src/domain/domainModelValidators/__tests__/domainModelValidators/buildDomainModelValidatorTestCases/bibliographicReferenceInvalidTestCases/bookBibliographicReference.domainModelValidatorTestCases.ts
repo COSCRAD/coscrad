@@ -17,7 +17,7 @@ const buildTopLevelError = (id: EntityId, innerErrors: InternalError[]): Interna
 export const buildBookBibliographicReferenceTestCases =
     (): DomainModelValidatorInvalidTestCase<BookBibliographicReference>[] => [
         {
-            description: 'The title is an empty string',
+            description: 'The Book title is an empty string',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -28,7 +28,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The creators array is empty',
+            description: 'The Book creators array is empty',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -40,7 +40,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The abstract is an empty string',
+            description: 'The Book abstract is an empty string',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -52,7 +52,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The year is too big',
+            description: 'The Book year is too big',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -64,7 +64,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The publisher is an empty string',
+            description: 'The Book publisher is an empty string',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -76,7 +76,7 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The place is an empty string',
+            description: 'The Book place is an empty string',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -88,31 +88,31 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The url is an invalid URL',
+            description: 'The Book url has an invalid protocol',
             invalidDTO: {
                 ...validDto,
                 data: {
                     ...validDto.data,
-                    url: '',
+                    url: 'qttps://www.sample.com',
                     // TODO remove cast
                 } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The ISBN is an invalid ISBN',
+            description: 'The Book ISBN includes a letter in place of a numeric character',
             invalidDTO: {
                 ...validDto,
                 data: {
                     ...validDto.data,
-                    isbn: '',
+                    isbn: '978-1-8k5811-34-6',
                     // TODO remove cast
                 } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The number of pages is not a positive integer',
+            description: 'The Book number of pages is not a positive integer',
             invalidDTO: {
                 ...validDto,
                 data: {
@@ -124,12 +124,24 @@ export const buildBookBibliographicReferenceTestCases =
             expectedError: buildTopLevelError(validDto.id, []),
         },
         {
-            description: 'The number of pages is not a number',
+            description: 'The Book number of pages is not a number',
             invalidDTO: {
                 ...validDto,
                 data: {
                     ...validDto.data,
                     numberOfPages: '347',
+                    // TODO remove cast
+                } as unknown as DTO<BookBibliographicReferenceData>,
+            },
+            expectedError: buildTopLevelError(validDto.id, []),
+        },
+        {
+            description: 'The Book number of pages is infinite',
+            invalidDTO: {
+                ...validDto,
+                data: {
+                    ...validDto.data,
+                    numberOfPages: Infinity,
                     // TODO remove cast
                 } as unknown as DTO<BookBibliographicReferenceData>,
             },

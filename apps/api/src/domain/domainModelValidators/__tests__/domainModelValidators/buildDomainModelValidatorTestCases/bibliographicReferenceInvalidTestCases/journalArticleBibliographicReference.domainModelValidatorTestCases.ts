@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../../types/DTO';
-import { JournalArticleBibliographicReference } from '../../../../../models/bibliographic-reference/entities/journalArticle-bibliographic-reference.entity';
+import { JournalArticleBibliographicReference } from '../../../../../models/bibliographic-reference/entities/journal-article-bibliographic-reference.entity';
 import JournalArticleBibliographicReferenceData from '../../../../../models/bibliographic-reference/entities/JournalArticleBibliographicReferenceData';
 import { BibliographicReferenceType } from '../../../../../models/bibliographic-reference/types/BibliographicReferenceType';
 import { EntityId } from '../../../../../types/ResourceId';

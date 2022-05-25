@@ -1,5 +1,5 @@
 import {
-    ArrayNotEmpty,
+    IsNonEmptyArray,
     IsOptional,
     IsStringWithNonzeroLength,
     IsUrl,
@@ -20,7 +20,7 @@ export default class JournalArticleBibliographicReferenceData
     @IsStringWithNonzeroLength()
     readonly title: string;
 
-    @ArrayNotEmpty()
+    @IsNonEmptyArray()
     readonly creators: BibliographicReferenceCreator[];
 
     @IsOptional()

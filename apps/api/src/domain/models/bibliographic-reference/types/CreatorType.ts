@@ -1,5 +1,5 @@
 export enum CreatorType {
-    author = 'Author',
-    director = 'Director',
-    artist = 'Artist',
+    author = 'author',
+    director = 'director',
+    artist = 'artist',
 }

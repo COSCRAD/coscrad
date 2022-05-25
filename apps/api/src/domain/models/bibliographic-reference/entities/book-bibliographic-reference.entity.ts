@@ -18,8 +18,6 @@ export class BookBibliographicReference
 
         if (isNullOrUndefined(dto)) return;
 
-        this.type = dto.type;
-        
         this.data = new BookBibliographicReferenceData(dto.data);
     }
 }

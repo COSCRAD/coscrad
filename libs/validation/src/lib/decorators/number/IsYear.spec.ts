@@ -7,9 +7,9 @@ describe('IsYear', () => {
         testProperty: number;
     }
 
-    const validValues = [ 2021, 1344, 1844, 1923 ];
+    const validValues = [2021, 1344, 1844, 1923];
 
-    const invalidValues = [ '3887', 560000, '2021', [1988] ];
+    const invalidValues = ['3887', 560000, '2021', [1988]];
 
     describe('when the input is valid', () => {
         it('should return no validation errors', () => {

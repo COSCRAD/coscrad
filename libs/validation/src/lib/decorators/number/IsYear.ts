@@ -1,8 +1,9 @@
 import { buildMessage, isInt, ValidateBy, ValidationOptions } from 'class-validator';
 
-export const isYear = (test: unknown): test is number => 
-    // TODO generate current year
-    typeof test === 'number' && test > 0 && test < 2022 && isInt(test);
+const currentYear = new Date().getFullYear();
+
+export const isYear = (test: unknown): test is number =>
+    typeof test === 'number' && test > 0 && test < currentYear && isInt(test);
 
 export function IsYear(validationOptions?: ValidationOptions) {
     return ValidateBy({
@@ -14,5 +15,5 @@ export function IsYear(validationOptions?: ValidationOptions) {
                 validationOptions
             ),
         },
-    })
+    });
 }

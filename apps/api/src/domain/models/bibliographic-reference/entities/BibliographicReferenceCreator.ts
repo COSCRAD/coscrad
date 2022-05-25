@@ -3,15 +3,7 @@ import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-unde
 import BaseDomainModel from '../../BaseDomainModel';
 import { CreatorType } from '../types/CreatorType';
 
-interface IBibliographicReferenceDataCreator {
-    name: string;
-    type: CreatorType;
-}
-
-export default class BibliographicReferenceCreator
-    extends BaseDomainModel
-    implements IBibliographicReferenceDataCreator
-{
+export default class BibliographicReferenceCreator extends BaseDomainModel {
     readonly name: string;
 
     readonly type: CreatorType;

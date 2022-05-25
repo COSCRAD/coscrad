@@ -1,13 +1,14 @@
 import {
-    ArrayNotEmpty,
     IsInt,
     IsISBN,
+    IsNonEmptyArray,
     IsOptional,
     IsPositive,
     IsStringWithNonzeroLength,
     IsUrl,
     IsYear,
 } from '@coscrad/validation';
+import { IsNumber } from 'class-validator';
 import { DTO } from '../../../../types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
@@ -24,7 +25,7 @@ export default class BookBibliographicReferenceData
     @IsStringWithNonzeroLength()
     readonly title: string;
 
-    @ArrayNotEmpty()
+    @IsNonEmptyArray()
     readonly creators: BibliographicReferenceCreator[];
 
     @IsOptional()
@@ -49,6 +50,7 @@ export default class BookBibliographicReferenceData
     readonly url?: string;
 
     @IsOptional()
+    @IsNumber({ allowInfinity: false })
     @IsInt()
     @IsPositive()
     readonly numberOfPages?: number;
