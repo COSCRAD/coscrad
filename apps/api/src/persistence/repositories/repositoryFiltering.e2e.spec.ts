@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import setupIntegrationTest from '../../app/controllers/__tests__/setupIntegrationTest';
+import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import TermEnglishEquals from '../../domain/repositories/specifications/TermEnglishEquals';
 import { resourceTypes } from '../../domain/types/resourceTypes';
@@ -17,7 +17,7 @@ describe('Repository for entity (with filters)', () => {
     let app: INestApplication;
 
     beforeAll(async () => {
-        ({ app, testRepositoryProvider } = await setupIntegrationTest({
+        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
     });

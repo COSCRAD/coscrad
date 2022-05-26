@@ -9,7 +9,7 @@ import TestRepositoryProvider from '../../../persistence/repositories/__tests__/
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForRe from '../utilities/buildViewModelPathForResourceType';
-import setupIntegrationTest from './setupIntegrationTest';
+import setUpIntegrationTest from './setUpIntegrationTest';
 
 describe('GET /resources (fetch view models)', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
@@ -39,7 +39,7 @@ describe('GET /resources (fetch view models)', () => {
     );
 
     beforeAll(async () => {
-        ({ app, arangoConnectionProvider, testRepositoryProvider } = await setupIntegrationTest({
+        ({ app, arangoConnectionProvider, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
             BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
         }));

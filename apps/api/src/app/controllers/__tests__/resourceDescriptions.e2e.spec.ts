@@ -5,7 +5,7 @@ import { ArangoConnectionProvider } from '../../../persistence/database/arango-c
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import { ResourceDescriptionAndLink } from '../../../view-models/resourceDescriptions/buildAllResourceDescriptions';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import setupIntegrationTest from './setupIntegrationTest';
+import setUpIntegrationTest from './setUpIntegrationTest';
 describe('GET /resources', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
@@ -14,7 +14,7 @@ describe('GET /resources', () => {
     let arangoConnectionProvider: ArangoConnectionProvider;
 
     beforeAll(async () => {
-        ({ app, arangoConnectionProvider } = await setupIntegrationTest({
+        ({ app, arangoConnectionProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
             GLOBAL_PREFIX: 'testApiPrefix',
         }));

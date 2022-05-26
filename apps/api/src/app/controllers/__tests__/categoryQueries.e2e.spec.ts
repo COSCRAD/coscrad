@@ -5,7 +5,7 @@ import generateRandomTestDatabaseName from '../../../persistence/repositories/__
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import setupIntegrationTest from './setupIntegrationTest';
+import setUpIntegrationTest from './setUpIntegrationTest';
 
 describe('When fetching the category tree (/treeOfKnowledge)', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
@@ -19,7 +19,7 @@ describe('When fetching the category tree (/treeOfKnowledge)', () => {
     const testData = buildTestData().categoryTree;
 
     beforeAll(async () => {
-        ({ app, arangoConnectionProvider, testRepositoryProvider } = await setupIntegrationTest({
+        ({ app, arangoConnectionProvider, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
     });

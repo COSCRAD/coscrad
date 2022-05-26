@@ -8,7 +8,7 @@ import TestRepositoryProvider from '../../../persistence/repositories/__tests__/
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
-import setupIntegrationTest from './setupIntegrationTest';
+import setUpIntegrationTest from './setUpIntegrationTest';
 
 describe('When fetching multiple resources', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
@@ -38,7 +38,7 @@ describe('When fetching multiple resources', () => {
     );
 
     beforeAll(async () => {
-        ({ app, arangoConnectionProvider, testRepositoryProvider } = await setupIntegrationTest({
+        ({ app, arangoConnectionProvider, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
             BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
         }));

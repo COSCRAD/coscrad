@@ -10,7 +10,7 @@ import TestRepositoryProvider from '../../../persistence/repositories/__tests__/
 import buildTestData from '../../../test-data/buildTestData';
 import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatResourceCompositeIdentifier';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import setupIntegrationTest from './setupIntegrationTest';
+import setUpIntegrationTest from './setUpIntegrationTest';
 describe('When querying for edge connections', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
@@ -21,7 +21,7 @@ describe('When querying for edge connections', () => {
     const { connections, tags: tagTestData } = buildTestData();
 
     beforeAll(async () => {
-        ({ app, testRepositoryProvider } = await setupIntegrationTest({
+        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
     });

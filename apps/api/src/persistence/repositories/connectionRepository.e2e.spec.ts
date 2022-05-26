@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import setupIntegrationTest from '../../app/controllers/__tests__/setupIntegrationTest';
+import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
@@ -17,7 +17,7 @@ describe('Repository provider > getEdgeConnectionRepository', () => {
     let app: INestApplication;
 
     beforeAll(async () => {
-        ({ app, testRepositoryProvider } = await setupIntegrationTest({
+        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
     });

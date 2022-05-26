@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import setupIntegrationTest from '../../app/controllers/__tests__/setupIntegrationTest';
+import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
 import buildTestData from '../../test-data/buildTestData';
@@ -27,7 +27,7 @@ describe('Repository provider > getCategoryRepository', () => {
 
     beforeAll(async () => {
         ({ app, arangoConnectionProvider, databaseProvider, testRepositoryProvider } =
-            await setupIntegrationTest({
+            await setUpIntegrationTest({
                 ARANGO_DB_NAME: testDatabaseName,
             }));
     });

@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import setupIntegrationTest from '../../app/controllers/__tests__/setupIntegrationTest';
+import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForEntity';
 import { Resource } from '../../domain/models/resource.entity';
 import { resourceTypes } from '../../domain/types/resourceTypes';
@@ -19,7 +19,7 @@ describe('Repository provider > repositoryForEntity', () => {
     let app: INestApplication;
 
     beforeAll(async () => {
-        ({ app, testRepositoryProvider } = await setupIntegrationTest({
+        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
     });
