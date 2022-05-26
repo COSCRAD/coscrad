@@ -8,7 +8,7 @@ export default (): Song[] =>
             title: 'Song title in language',
             titleEnglish: 'Mary had a little lamb',
             lyrics: 'Mary had a little lamb, little lamb.',
-            audioURL: 'songs/lamb.mp3',
+            audioURL: 'https://www.myaudio.com/lamb.mp3',
             published: true,
             startMilliseconds: 0,
             lengthMilliseconds: 3500,

@@ -2,9 +2,10 @@ import {
     IsNonNegativeFiniteNumber,
     IsOptional,
     IsStringWithNonzeroLength,
+    IsUrl,
+    ValidateNested,
 } from '@coscrad/validation';
 import { InternalError } from '../../../lib/errors/InternalError';
-import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import isNumberWithinRange from '../../../lib/validation/geometry/isNumberWithinRange';
 import { DTO } from '../../../types/DTO';
 import InconsistentTimeRangeError from '../../domainModelValidators/errors/context/invalidContextStateErrors/timeRangeContext/InconsistentTimeRangeError';
@@ -12,11 +13,7 @@ import { Valid } from '../../domainModelValidators/Valid';
 import { resourceTypes } from '../../types/resourceTypes';
 import { TimeRangeContext } from '../context/time-range-context/time-range-context.entity';
 import { Resource } from '../resource.entity';
-
-type ContributorAndRole = {
-    contributorId: string;
-    role: string;
-};
+import { ContributorAndRole } from './ContributorAndRole';
 
 export class Song extends Resource {
     readonly type = resourceTypes.song;
@@ -29,7 +26,7 @@ export class Song extends Resource {
     @IsStringWithNonzeroLength()
     readonly titleEnglish?: string;
 
-    // TODO Validate type
+    @ValidateNested()
     readonly contributorAndRoles: ContributorAndRole[];
 
     @IsOptional()
@@ -37,7 +34,7 @@ export class Song extends Resource {
     // the type of `lyrics` should allow three way translation in future
     readonly lyrics?: string;
 
-    @IsStringWithNonzeroLength()
+    @IsUrl()
     readonly audioURL: string;
 
     @IsNonNegativeFiniteNumber()
@@ -65,7 +62,9 @@ export class Song extends Resource {
 
         this.titleEnglish = titleEnglish;
 
-        this.contributorAndRoles = cloneToPlainObject(contributorAndRoles);
+        this.contributorAndRoles = contributorAndRoles.map(
+            (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
+        );
 
         this.lyrics = lyrics;
 

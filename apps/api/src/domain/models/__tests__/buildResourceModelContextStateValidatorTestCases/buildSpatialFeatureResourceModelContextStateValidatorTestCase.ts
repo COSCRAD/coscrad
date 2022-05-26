@@ -1,5 +1,5 @@
 import { resourceTypes } from '../../../types/resourceTypes';
-import buildAllInvalidTestCasesForResource from '../utilities/buildAllInvalidTestCasesForResource';
+import buildAllInvalidTestCasesForResource from '../utilities/buildAllInconsistentContextTypeTestCases';
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
 
 const validCases = buildAllValidTestCasesForResource(resourceTypes.spatialFeature);

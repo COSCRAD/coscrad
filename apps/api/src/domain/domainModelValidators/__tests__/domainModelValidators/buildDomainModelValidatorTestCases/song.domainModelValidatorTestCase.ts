@@ -1,4 +1,5 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
+import { ContributorAndRole } from '../../../../models/song/ContributorAndRole';
 import { Song } from '../../../../models/song/song.entity';
 import { EntityId } from '../../../../types/ResourceId';
 import { resourceTypes } from '../../../../types/resourceTypes';
@@ -30,6 +31,14 @@ export const buildSongTestCase = (): DomainModelValidatorTestCase<Song> => ({
             expectedError: buildTopLevelError(validDTO.id, [new InternalError('bad')]),
         },
         {
+            description: 'the audioURL has an invalid protocol',
+            invalidDTO: {
+                ...validDTO,
+                audioURL: 'myprotocol:wwww.soundcloud.com',
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
+        },
+        {
             description: 'the start comes after the length',
             invalidDTO: {
                 ...validDTO,
@@ -59,6 +68,17 @@ export const buildSongTestCase = (): DomainModelValidatorTestCase<Song> => ({
             invalidDTO: {
                 ...validDTO,
                 titleEnglish: '',
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
+        },
+        {
+            description: 'one of the contributors is a plain string',
+            invalidDTO: {
+                ...validDTO,
+                contributorAndRoles: [
+                    ...validDTO.contributorAndRoles,
+                    'John Doe',
+                ] as ContributorAndRole[],
             },
             expectedError: buildTopLevelError(validDTO.id, []),
         },

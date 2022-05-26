@@ -15,7 +15,7 @@ import { DTO } from '../../../types/DTO';
 
 const role = EdgeConnectionMemberRole.self;
 
-const foo: Partial<DTO<EdgeConnection>>[] = [
+const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id'>[] = [
     {
         note: 'This first 4 letters of this term form a syllable that indicates this is a plant ',
         members: [
@@ -187,7 +187,7 @@ const foo: Partial<DTO<EdgeConnection>>[] = [
         ],
     },
 ];
-const selfEdgeConnectionInstancesWithSpecificContext = foo.map((partialDTO) => ({
+const selfEdgeConnectionInstancesWithSpecificContext = edgeConnectionDTOs.map((partialDTO) => ({
     ...partialDTO,
     type: EdgeConnectionType.self,
 }));
@@ -210,4 +210,4 @@ export default (uniqueIdOffset: number): EdgeConnection[] =>
             ...dto,
             id: `${index + uniqueIdOffset}`,
         }))
-        .map((dto) => new EdgeConnection(dto as DTO<EdgeConnection>));
+        .map((dto) => new EdgeConnection(dto));

@@ -1,4 +1,5 @@
 import { Song } from '../../../domain/models/song/song.entity';
+import formatContributorAndRole from '../../presentation/formatContributorAndRole';
 import { BaseViewModel } from './base.view-model';
 
 export class SongViewModel extends BaseViewModel {
@@ -32,9 +33,7 @@ export class SongViewModel extends BaseViewModel {
 
         this.titleEnglish = titleEnglish;
 
-        this.contributions = contributorAndRoles.map(
-            ({ contributorId, role }) => `${contributorId} (${role})`
-        );
+        this.contributions = contributorAndRoles.map(formatContributorAndRole);
 
         this.lyrics = lyrics;
 

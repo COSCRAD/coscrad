@@ -5,7 +5,7 @@ import {
     TimeRangeWithoutData,
 } from '../../context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
-import buildAllInvalidTestCasesForResource from '../utilities/buildAllInvalidTestCasesForResource';
+import buildAllInvalidTestCasesForResource from '../utilities/buildAllInconsistentContextTypeTestCases';
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
 
 const validCases = buildAllValidTestCasesForResource(resourceTypes.song);

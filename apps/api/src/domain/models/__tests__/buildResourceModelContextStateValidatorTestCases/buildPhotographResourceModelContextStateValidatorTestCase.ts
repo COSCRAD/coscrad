@@ -5,7 +5,7 @@ import { FreeMultilineContext } from '../../context/free-multiline-context/free-
 import { PointContext } from '../../context/point-context/point-context.entity';
 import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { ResourceModelContextStateValidatorInvalidTestCase } from '../resourceModelContextStateValidators.spec';
-import buildAllInvalidTestCasesForResource from '../utilities/buildAllInvalidTestCasesForResource';
+import buildAllInvalidTestCasesForResource from '../utilities/buildAllInconsistentContextTypeTestCases';
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
 
 const validCases = buildAllValidTestCasesForResource(resourceTypes.photograph);
