@@ -332,7 +332,7 @@
                     }
                 ],
                 "lyrics": "Mary had a little lamb, little lamb.",
-                "audioURL": "songs/lamb.mp3",
+                "audioURL": "https://www.myaudio.com/lamb.mp3",
                 "lengthMilliseconds": 3500,
                 "startMilliseconds": 0
             }

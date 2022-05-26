@@ -1,11 +1,11 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import formatTimeRange from '../../../../../../view-models/presentation/formatTimeRange';
 import { TimeRangeWithoutData } from '../../../../../models/context/time-range-context/time-range-context.entity';
-import { TimeBoundable } from '../../../../../models/interfaces/TimeBoundable';
+import { ITimeBoundable } from '../../../../../models/interfaces/ITimeBoundable';
 import { Resource } from '../../../../../models/resource.entity';
 
 export default class InconsistentTimeRangeError extends InternalError {
-    constructor(timeRange: TimeRangeWithoutData, resource: TimeBoundable & Resource) {
+    constructor(timeRange: TimeRangeWithoutData, resource: ITimeBoundable & Resource) {
         const [inPoint, outPoint] = resource.getTimeBounds();
 
         const resourceTimeBounds: TimeRangeWithoutData = {

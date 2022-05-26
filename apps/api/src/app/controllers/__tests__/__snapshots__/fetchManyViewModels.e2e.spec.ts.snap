@@ -233,7 +233,7 @@ Array [
 exports[`When fetching multiple resources GET /songs when all of the resources are published should fetch multiple resources of type song 1`] = `
 Array [
   Object {
-    "audioURL": "songs/lamb.mp3",
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
     "contributions": Array [
       "1 (performer)",
     ],
@@ -251,7 +251,7 @@ Array [
 exports[`When fetching multiple resources GET /songs when some of the resources are unpublished should return the expected number of results 1`] = `
 Array [
   Object {
-    "audioURL": "songs/lamb.mp3",
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
     "contributions": Array [
       "1 (performer)",
     ],

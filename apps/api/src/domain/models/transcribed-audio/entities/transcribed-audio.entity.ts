@@ -1,11 +1,10 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import isNumberWithinRange from '../../../../lib/validation/geometry/isNumberWithinRange';
 import { DTO } from '../../../../types/DTO';
-import InconsistentTimeRangeError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/timeRangeContext/InconsistentTimeRangeError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { resourceTypes } from '../../../types/resourceTypes';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
 import { Resource } from '../../resource.entity';
+import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import { Transcript } from './Transcript';
 
 export class TranscribedAudio extends Resource {
@@ -39,20 +38,8 @@ export class TranscribedAudio extends Resource {
         this.transcript = new Transcript(transcriptDto);
     }
 
-    validateTimeRangeContext({ timeRange }: TimeRangeContext): Valid | InternalError {
-        const { inPoint, outPoint } = timeRange;
-
-        const isNumberOutOfRange = (n: number): boolean =>
-            !isNumberWithinRange(n, this.getTimeBounds());
-
-        /**
-         * Note that the `startMilliseconds` doesn't have to be 0, so we need to
-         * confirm here that `inPoint` isn't too low.
-         */
-        if ([inPoint, outPoint].some(isNumberOutOfRange))
-            return new InconsistentTimeRangeError(timeRange, this);
-
-        return Valid;
+    validateTimeRangeContext(timeRangeContext: TimeRangeContext): Valid | InternalError {
+        return validateTimeRangeContextForModel(this, timeRangeContext);
     }
 
     getTimeBounds(): [number, number] {

@@ -61,7 +61,7 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /songs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "audioURL": "songs/lamb.mp3",
+  "audioURL": "https://www.myaudio.com/lamb.mp3",
   "contributions": Array [
     "1 (performer)",
   ],
