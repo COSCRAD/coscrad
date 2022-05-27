@@ -186,6 +186,23 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id'>[] = [
             },
         ],
     },
+    {
+        note: 'this is a awesome show',
+        members: [
+            {
+                role,
+                compositeIdentifier: {
+                    id: '1',
+                    type: resourceTypes.mediaItem,
+                },
+                context: new TextFieldContext({
+                    target: 'title',
+                    charRange: [0, 2],
+                    type: EdgeConnectionContextType.textField,
+                }),
+            },
+        ],
+    },
 ];
 const selfEdgeConnectionInstancesWithSpecificContext = edgeConnectionDTOs.map((partialDTO) => ({
     ...partialDTO,

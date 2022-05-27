@@ -31,6 +31,10 @@ const resourceTypeToAllowedContextTypes = {
     ],
     [resourceTypes.bibliographicReference]: [EdgeConnectionContextType.general],
     [resourceTypes.song]: [EdgeConnectionContextType.general, EdgeConnectionContextType.timeRange],
+    [resourceTypes.mediaItem]: [
+        EdgeConnectionContextType.general,
+        EdgeConnectionContextType.textField,
+    ],
 };
 
 export const getResourceTypesThatOnlySupportGeneralContext = (): ResourceType[] =>

@@ -11,6 +11,7 @@ const arangoResourceCollectionIDs = [
     'spatial_features',
     'bibliographic_references',
     'songs',
+    'media_items',
 ] as const;
 
 export const categoryEdgeCollectionID = 'category_edges';
