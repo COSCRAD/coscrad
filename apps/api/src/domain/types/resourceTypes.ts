@@ -3,6 +3,7 @@ import { IBibliographicReference } from '../models/bibliographic-reference/inter
 import { Book } from '../models/book/entities/book.entity';
 import { Category } from '../models/categories/entities/category.entity';
 import { EdgeConnection } from '../models/context/edge-connection.entity';
+import { MediaItem } from '../models/media-item/entities/media-item.entity';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { Song } from '../models/song/song.entity';
 import { ISpatialFeature } from '../models/spatial-feature/ISpatialFeature';
@@ -20,6 +21,7 @@ export const resourceTypes = {
     spatialFeature: 'spatialFeature',
     bibliographicReference: 'bibliographicReference',
     song: 'song',
+    mediaItem: 'mediaItem',
 } as const;
 
 export type ResourceType = ValueType<typeof resourceTypes>;
@@ -37,6 +39,7 @@ export type ResourceTypeToInstance = {
     spatialFeature: ISpatialFeature;
     bibliographicReference: IBibliographicReference;
     song: Song;
+    mediaItem: MediaItem;
 };
 
 /**
