@@ -336,6 +336,23 @@
                 "lengthMilliseconds": 3500,
                 "startMilliseconds": 0
             }
+        ],
+        "media_items": [
+            {
+                "type": "mediaItem",
+                "_key": "1",
+                "published": true,
+                "title": "episode title (in language)",
+                "titleEnglish": "Metal Mondays episode 1",
+                "contributorAndRoles": [
+                    {
+                        "contributorId": "2",
+                        "role": "host"
+                    }
+                ],
+                "url": "https://www.metalmondays.com/1.mp3",
+                "mimeType": "audio/mpeg"
+            }
         ]
     },
     "resource_edge_connections": [
@@ -538,10 +555,30 @@
             "note": "this is a song"
         },
         {
+            "_to": "media_items/1",
+            "_from": "media_items/1",
+            "type": "self",
+            "_key": "11",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "textField",
+                        "target": "title",
+                        "charRange": [
+                            0,
+                            2
+                        ]
+                    }
+                }
+            ],
+            "note": "this is a awesome show"
+        },
+        {
             "_to": "terms/2",
             "_from": "terms/2",
             "type": "self",
-            "_key": "11",
+            "_key": "12",
             "members": [
                 {
                     "role": "self",
@@ -556,7 +593,7 @@
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "12",
+            "_key": "13",
             "members": [
                 {
                     "role": "self",
@@ -571,7 +608,7 @@
             "_to": "vocabulary_lists/2",
             "_from": "vocabulary_lists/2",
             "type": "self",
-            "_key": "13",
+            "_key": "14",
             "members": [
                 {
                     "role": "self",
@@ -586,7 +623,7 @@
             "_to": "spatial_features/300",
             "_from": "spatial_features/300",
             "type": "self",
-            "_key": "14",
+            "_key": "15",
             "members": [
                 {
                     "role": "self",
@@ -601,7 +638,7 @@
             "_to": "transcribed_audio/110",
             "_from": "transcribed_audio/110",
             "type": "self",
-            "_key": "15",
+            "_key": "16",
             "members": [
                 {
                     "role": "self",
@@ -616,7 +653,7 @@
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "16",
+            "_key": "17",
             "members": [
                 {
                     "role": "self",
@@ -631,7 +668,7 @@
             "_to": "photographs/2",
             "_from": "photographs/2",
             "type": "self",
-            "_key": "17",
+            "_key": "18",
             "members": [
                 {
                     "role": "self",
@@ -646,7 +683,7 @@
             "_to": "books/24",
             "_from": "books/24",
             "type": "self",
-            "_key": "18",
+            "_key": "19",
             "members": [
                 {
                     "role": "self",
@@ -661,7 +698,7 @@
             "_to": "bibliographic_references/1",
             "_from": "bibliographic_references/1",
             "type": "self",
-            "_key": "19",
+            "_key": "20",
             "members": [
                 {
                     "role": "self",
@@ -676,7 +713,7 @@
             "_to": "songs/1",
             "_from": "songs/1",
             "type": "self",
-            "_key": "20",
+            "_key": "21",
             "members": [
                 {
                     "role": "self",
@@ -686,6 +723,21 @@
                 }
             ],
             "note": "this is a song"
+        },
+        {
+            "_to": "media_items/1",
+            "_from": "media_items/1",
+            "type": "self",
+            "_key": "22",
+            "members": [
+                {
+                    "role": "self",
+                    "context": {
+                        "type": "general"
+                    }
+                }
+            ],
+            "note": "this is a awesome show"
         },
         {
             "_to": "terms/2",
@@ -909,7 +961,7 @@
         },
         {
             "_to": "songs/1",
-            "_from": "terms/2",
+            "_from": "media_items/1",
             "type": "dual",
             "_key": "2007",
             "members": [
@@ -927,6 +979,37 @@
                     "role": "from",
                     "context": {
                         "type": "textField",
+                        "target": "title",
+                        "charRange": [
+                            0,
+                            2
+                        ]
+                    }
+                }
+            ],
+            "note": "That is why song/1 is related to mediaItem/1"
+        },
+        {
+            "_to": "media_items/1",
+            "_from": "terms/2",
+            "type": "dual",
+            "_key": "2008",
+            "members": [
+                {
+                    "role": "to",
+                    "context": {
+                        "type": "textField",
+                        "target": "title",
+                        "charRange": [
+                            0,
+                            2
+                        ]
+                    }
+                },
+                {
+                    "role": "from",
+                    "context": {
+                        "type": "textField",
                         "target": "term",
                         "charRange": [
                             0,
@@ -935,7 +1018,7 @@
                     }
                 }
             ],
-            "note": "That is why song/1 is related to term/2"
+            "note": "That is why mediaItem/1 is related to term/2"
         }
     ],
     "tags": [

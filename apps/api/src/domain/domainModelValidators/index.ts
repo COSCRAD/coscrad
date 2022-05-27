@@ -2,6 +2,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { ResourceType, resourceTypes } from '../types/resourceTypes';
 import bibliographicReferenceValidator from './bibliographicReferenceValidator';
 import bookValidator from './bookValidator';
+import mediaItemValidator from './mediaItemValidator';
 import photographValidator from './photographValidator';
 import songValidator from './songValidator';
 import spatialFeatureValidator from './spatialFeatureValidator';
@@ -36,6 +37,9 @@ export const getValidatorForEntity = (resourceType: ResourceType): DomainModelVa
 
         case resourceTypes.song:
             return songValidator;
+
+        case resourceTypes.mediaItem:
+            return mediaItemValidator;
 
         default:
             throw new InternalError(
