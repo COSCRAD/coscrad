@@ -30,12 +30,13 @@ export type ResourceModelContextStateValidatorInvalidTestCase<
     expectedError: InternalError;
 };
 
-type TestCase = {
+export type ContextStateValidatorTestCase = {
     validCases: ResourceModelContextStateValidatorValidTestCase[];
     invalidCases: ResourceModelContextStateValidatorInvalidTestCase[];
 };
 
-const testCases: TestCase[] = buildResourceModelContextStateValidatorTestCases();
+const testCases: ContextStateValidatorTestCase[] =
+    buildResourceModelContextStateValidatorTestCases();
 describe(`resource model context state validators`, () => {
     const isThereATestCaseForResourceTypeContextTypeCombo = (
         resourceType: ResourceType,
