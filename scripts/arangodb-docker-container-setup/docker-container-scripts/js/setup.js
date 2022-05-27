@@ -28,18 +28,42 @@ else {
 
 const testData = require(process.env.ARANGODB_DESTINATION_CONTAINER_DOCKER_SHARED_VOLUME_SCRIPTS_PATH + '/test-data/testData.json');
 
-print(typeof testData.resources);
+// Could we validate these collection names (or retrieve them) from ArangoCollectionId.ts?
+const reformatedTestData = {
+  document: {
+    ...testData.resources,
+    categories: testData.categories,
+    tags: testData.tags,
+  },
+  edge: {
+    resource_edge_connections: testData.resource_edge_connections,
+    category_edges: testData.categoryEdges,
+  }
+}
 
-// const collectionNames = Object.keys(testData);
-print('Document Collections')
-for (collectionName in testData.resources) {
-  print(`Attempting to add collection "${collectionName}" to ${process.env.ARANGO_DB_NAME}`);
-  // TODO: need to pass in collection type document or edge
-  if (db._create(collectionName)) {
-    print(`Created Collection ${collectionName}`);
+for (collectionType in reformatedTestData) {
+  for (collectionName in reformatedTestData[collectionType]) {
+    addCollectionAndData(collectionName, collectionType, reformatedTestData[collectionType][collectionName]);
+  }
+}
+
+function addCollectionAndData(collectionName, collectionType, data) {
+  print(`Attempting to add ${collectionType} collection "${collectionName}" to ${process.env.ARANGO_DB_NAME}`);
+  let success = false;
+  if (collectionType == 'document') {
+    if (db._create(collectionName)) {
+      success = true;
+    }
+  }
+  else if (collectionType == 'edge') {
+    if (db._createEdgeCollection(collectionName)) {
+      success = true;
+    }
+  }
+
+  if (success) {
     if (testDataFlag) {
       print(`Attempting to add data to collection "${collectionName}"`);
-      const data = testData.resources[collectionName];
       data.forEach(document => {
         if (db._collection(collectionName).save(document)) {
           print(`Added document to Collection ${collectionName}`);
@@ -50,29 +74,4 @@ for (collectionName in testData.resources) {
       });
     }
   }
-  else {
-    print(`Collection "${collectionName}" could not be created`);
-  }
-}
-
-print('Edge Collections')
-const edgeCollectionName = 'resource_edge_connections';
-print(`Attempting to add collection "${edgeCollectionName}" to ${process.env.ARANGO_DB_NAME}`);
-// TODO: need to pass in collection type document or edge
-if (db._createEdgeCollection(edgeCollectionName)) {
-  print(`Created Edge Collection ${edgeCollectionName}`);
-  if (testDataFlag) {
-     testData.resource_edge_connections.forEach(edge => {
-        print(`Attempting to add data to collection "${edgeCollectionName}"`);
-        if (db._collection(edgeCollectionName).save(edge)) {
-          print(`Added document to Collection ${edgeCollectionName}`);
-        }
-        else {
-          print(`Document could not be added to "${edgeCollectionName}"`);
-        }
-      });
-  }
-}
-else {
-  print(`Collection "${edgeCollectionName}" could not be created`);
 }
