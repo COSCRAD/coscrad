@@ -34,6 +34,7 @@ const resourceTypeToAllowedContextTypes = {
     [resourceTypes.mediaItem]: [
         EdgeConnectionContextType.general,
         EdgeConnectionContextType.textField,
+        EdgeConnectionContextType.timeRange,
     ],
 };
 

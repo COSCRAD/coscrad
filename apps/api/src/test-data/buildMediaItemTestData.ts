@@ -15,6 +15,7 @@ const dtos: DTO<MediaItem>[] = [
             },
         ],
         url: 'https://www.metalmondays.com/1.mp3',
+        lengthMilliseconds: 2500,
         mimeType: MIMEType.mp3,
         published: true,
         type: resourceTypes.mediaItem,
