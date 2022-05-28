@@ -28,7 +28,7 @@ else {
 
 const testData = require(process.env.ARANGODB_DESTINATION_CONTAINER_DOCKER_SHARED_VOLUME_SCRIPTS_PATH + '/test-data/testData.json');
 
-// Could we validate these collection names (or retrieve them) from ArangoCollectionId.ts?
+// TODO [https://www.pivotaltracker.com/story/show/182132515]
 const reformatedTestData = {
   document: {
     ...testData.resources,
