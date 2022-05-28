@@ -1,12 +1,14 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import { ResultOrError } from '../../types/ResultOrError';
 import bookValidator from '../domainModelValidators/bookValidator';
+import mediaItemValidator from '../domainModelValidators/mediaItemValidator';
 import photographValidator from '../domainModelValidators/photographValidator';
 import songValidator from '../domainModelValidators/songValidator';
 import termValidator from '../domainModelValidators/termValidator';
 import transcribedAudioValidator from '../domainModelValidators/transcribedAudioValidator';
 import vocabularyListValidator from '../domainModelValidators/vocabularyListValidator';
 import { Book } from '../models/book/entities/book.entity';
+import { MediaItem } from '../models/media-item/entities/media-item.entity';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { Resource } from '../models/resource.entity';
 import { Song } from '../models/song/song.entity';
@@ -62,6 +64,10 @@ export default <TResource extends Resource>(
         case resourceTypes.song:
             // @ts-expect-error TODO fix this tricky type error
             return buildInstanceFactory<Song>(songValidator, Song);
+
+        case resourceTypes.mediaItem:
+            // @ts-expect-error TODO fix this tricky type error
+            return buildInstanceFactory<MediaItem>(mediaItemValidator, MediaItem);
 
         default:
             throw new InternalError(

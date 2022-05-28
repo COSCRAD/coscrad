@@ -167,6 +167,84 @@ Array [
 ]
 `;
 
+exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: mediaItem should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "2007",
+    "note": "That is why song/1 is related to mediaItem/1",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "song",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 300,
+            "outPoint": 500,
+          },
+          "type": "timeRange",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            2,
+          ],
+          "target": "title",
+          "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "2008",
+    "note": "That is why mediaItem/1 is related to term/2",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            2,
+          ],
+          "target": "title",
+          "type": "textField",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            3,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+    "tags": Array [],
+  },
+]
+`;
+
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: photograph should return the expected result 1`] = `
 Array [
   Object {
@@ -1543,6 +1621,93 @@ Array [
         "compositeIdentifier": Object {
           "id": "24",
           "type": "book",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: mediaItem should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "11",
+    "note": "this is an awesome show",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        "context": Object {
+          "charRange": Array [
+            0,
+            2,
+          ],
+          "target": "title",
+          "type": "textField",
+        },
+        "role": "self",
+      },
+    ],
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
+  },
+  Object {
+    "id": "12",
+    "note": "important clip from the show",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 650,
+            "outPoint": 1230,
+          },
+          "type": "timeRange",
+        },
+        "role": "self",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "23",
+    "note": "this is an awesome show",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "24",
+    "note": "important clip from the show",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
         },
         "context": Object {
           "type": "general",

@@ -42,5 +42,10 @@ Array [
     "link": "/testApiPrefix/resources/songs",
     "resourceType": "song",
   },
+  Object {
+    "description": "A media item includes a link to and data for an audio or video recording",
+    "link": "/testApiPrefix/resources/mediaItems",
+    "resourceType": "mediaItem",
+  },
 ]
 `;
