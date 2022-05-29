@@ -1,5 +1,7 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { MediaItem } from '../../../../models/media-item/entities/media-item.entity';
+import { MIMEType } from '../../../../models/media-item/types/MIMETypes';
+import { ContributorAndRole } from '../../../../models/song/ContributorAndRole';
 import { EntityId } from '../../../../types/ResourceId';
 import { resourceTypes } from '../../../../types/resourceTypes';
 import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
@@ -34,7 +36,7 @@ export const buildmediaItemTestCase = (): DomainModelValidatorTestCase<MediaItem
             expectedError: new NullOrUndefinedResourceDTOError(resourceTypes.mediaItem),
         },
         {
-            description: 'the media item has no song in either language',
+            description: 'the media item has no title in either language',
             invalidDTO: {
                 ...validDTO,
                 title: undefined,
@@ -43,6 +45,68 @@ export const buildmediaItemTestCase = (): DomainModelValidatorTestCase<MediaItem
             expectedError: buildTopLevelError(validDTO.id, [
                 new MediaItemHasNoTitleInAnyLanguageError(validDTO.id),
             ]),
+        },
+        {
+            description: 'the MIME type is not in the allowed MIME types list',
+            invalidDTO: {
+                ...validDTO,
+                mimeType: 'audio/BOGUS' as MIMEType,
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
+        },
+        {
+            description: 'the title is an empty string',
+            invalidDTO: {
+                ...validDTO,
+                title: '',
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
+        },
+        {
+            description: "the title's English translation is an empty string",
+            invalidDTO: {
+                ...validDTO,
+                titleEnglish: '',
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
+        },
+        {
+            description: 'One of the contributors is a plain number',
+            invalidDTO: {
+                ...validDTO,
+                contributorAndRoles: [
+                    {
+                        contributorId: '22',
+                        role: 'performer',
+                    },
+                    23 as unknown as ContributorAndRole,
+                ],
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
+        },
+        {
+            description: 'the url has an extra . before the TLD',
+            invalidDTO: {
+                ...validDTO,
+                url: 'https://www.songs..org',
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
+        },
+        {
+            description: 'the length is Infinity',
+            invalidDTO: {
+                ...validDTO,
+                lengthMilliseconds: Infinity,
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
+        },
+        {
+            description: 'the media item resource type is "book"',
+            invalidDTO: {
+                ...validDTO,
+                type: resourceTypes.book as unknown as typeof resourceTypes.mediaItem,
+            },
+            expectedError: buildTopLevelError(validDTO.id, []),
         },
     ],
 });

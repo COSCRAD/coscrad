@@ -1,3 +1,10 @@
+import {
+    IsEnum,
+    IsNonNegativeFiniteNumber,
+    IsStringWithNonzeroLength,
+    IsUrl,
+    ValidateNested,
+} from '@coscrad/validation';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { Valid } from '../../../domainModelValidators/Valid';
@@ -14,20 +21,29 @@ import { MIMEType } from '../types/MIMETypes';
 export class MediaItem extends Resource implements ITimeBoundable {
     readonly type = resourceTypes.mediaItem;
 
+    @IsStringWithNonzeroLength()
     readonly title?: string;
 
+    @IsStringWithNonzeroLength()
     readonly titleEnglish?: string;
 
+    @ValidateNested()
     readonly contributorAndRoles: ContributorAndRole[];
 
+    @IsUrl()
     readonly url: string;
 
+    @IsEnum(MIMEType)
     readonly mimeType: MIMEType;
 
+    @IsNonNegativeFiniteNumber()
     readonly lengthMilliseconds: number;
 
     constructor(dto: DTO<MediaItem>) {
         super(dto);
+
+        // This should only happen within the validation flow
+        if (!dto) return;
 
         const { title, titleEnglish, contributorAndRoles, url, mimeType, lengthMilliseconds } = dto;
 

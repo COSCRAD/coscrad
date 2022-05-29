@@ -8,6 +8,7 @@ import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
 import MediaItemHasNoTitleInAnyLanguageError from './errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import NullOrUndefinedResourceDTOError from './errors/NullOrUndefinedResourceDTOError';
 import { DomainModelValidator } from './types/DomainModelValidator';
+import validateSimpleInvariants from './utilities/validateSimpleInvariants';
 import { Valid } from './Valid';
 
 const buildTopLevelError = (id: EntityId, innerErrors: InternalError[]): InternalError =>
@@ -18,7 +19,9 @@ const mediaItemValidator: DomainModelValidator = (dto: unknown) => {
 
     const { id, title, titleEnglish } = dto as MediaItem;
 
-    const allErrors: InternalError[] = [];
+    // Initialize `allErrors` with simple invariant validation errors
+
+    const allErrors: InternalError[] = validateSimpleInvariants(MediaItem, dto);
 
     if (!isStringWithNonzeroLength(title) && !isStringWithNonzeroLength(titleEnglish))
         allErrors.push(new MediaItemHasNoTitleInAnyLanguageError(id));

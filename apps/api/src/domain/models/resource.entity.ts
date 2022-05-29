@@ -23,6 +23,9 @@ export abstract class Resource extends BaseDomainModel implements HasEntityID {
     constructor(dto: DTO<Resource>) {
         super();
 
+        // This should only happen in the validation flow
+        if (!dto) return;
+
         this.type = dto.type;
 
         this.id = dto.id;
