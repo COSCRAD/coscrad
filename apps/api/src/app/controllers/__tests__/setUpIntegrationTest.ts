@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common';
+import { InternalError } from '../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -30,6 +31,10 @@ export default async (
     const app = moduleRef.createNestApplication();
 
     await app.init();
+
+    if (!arangoConnectionProvider || !databaseProvider || !testRepositoryProvider || !app) {
+        throw new InternalError(`Failed to initialize a testing module.`);
+    }
 
     return {
         arangoConnectionProvider,

@@ -42,7 +42,7 @@ import httpStatusCodes from '../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from './utilities/buildViewModelPathForResourceType';
 import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';
 
-const buildByIdApiParamMetadata = () => ({
+export const buildByIdApiParamMetadata = () => ({
     name: 'id',
     required: true,
     example: '2',

@@ -4,11 +4,11 @@ import { Tag } from '../../../domain/models/tag/tag.entity';
 import { TagViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
 
-export default (
+export default <TViewModel extends BaseViewModel = BaseViewModel>(
     viewModel: BaseViewModel,
     allTags: Tag[],
     type: ResourceTypeOrNoteType
-): BaseViewModel & { tags: TagViewModel[] } => {
+): TViewModel & { tags: TagViewModel[] } => {
     const tagsForThisModel = allTags
         .filter(({ members }) =>
             members.some((member) =>
@@ -23,5 +23,5 @@ export default (
     return {
         ...viewModel,
         tags: tagsForThisModel,
-    };
+    } as TViewModel & { tags: TagViewModel[] };
 };

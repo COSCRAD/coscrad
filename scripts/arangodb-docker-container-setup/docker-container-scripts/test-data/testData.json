@@ -1184,6 +1184,10 @@
                 {
                     "type": "note",
                     "id": "1"
+                },
+                {
+                    "type": "mediaItem",
+                    "id": "1"
                 }
             ]
         }
