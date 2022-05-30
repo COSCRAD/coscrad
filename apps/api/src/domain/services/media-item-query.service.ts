@@ -23,10 +23,6 @@ export class MediaItemQueryService {
             .forResource<MediaItem>(resourceTypes.mediaItem)
             .fetchById(id);
 
-        console.log({
-            searchResult,
-        });
-
         if (isInternalError(searchResult)) {
             // One of the DTOs failed invariant validation
             throw searchResult;
@@ -34,7 +30,11 @@ export class MediaItemQueryService {
 
         if (isNotFound(searchResult)) return NotFound;
 
-        return new MediaItemViewModel(searchResult);
+        const viewModel = new MediaItemViewModel(searchResult);
+
+        const viewModelWithTags = await this.mixinTheTags(viewModel);
+
+        return cloneToPlainObject(viewModelWithTags);
     }
 
     async fetchMany(): Promise<MediaItemViewModel[]> {
@@ -57,8 +57,9 @@ export class MediaItemQueryService {
     }
 
     /**
-     * TODO [DRY] This is the same as on
-     * the `ResourceViewModelController` in `resourceViewModel.controller.ts`
+     * TODO [DRY] Find a way to share this with all view model query services
+     *
+     * TODO [Performance] Find a way to parallelize the query for models & tags
      */
     private async mixinTheTags(viewModel: MediaItemViewModel): Promise<MediaItemViewModel>;
     private async mixinTheTags(viewModels: MediaItemViewModel[]): Promise<MediaItemViewModel[]>;

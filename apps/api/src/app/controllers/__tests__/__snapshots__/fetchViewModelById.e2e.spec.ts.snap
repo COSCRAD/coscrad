@@ -45,6 +45,30 @@ Object {
 }
 `;
 
+exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /mediaItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+Object {
+  "contributorAndRoles": Array [
+    Object {
+      "contributorId": "2",
+      "role": "host",
+    },
+  ],
+  "id": "1",
+  "lengthMilliseconds": 2500,
+  "mimeType": "audio/mpeg",
+  "published": true,
+  "tags": Array [
+    Object {
+      "id": "5",
+      "label": "legends",
+    },
+  ],
+  "title": "episode title (in language)",
+  "titleEnglish": "Metal Mondays episode 1",
+  "url": "https://www.metalmondays.com/1.mp3",
+}
+`;
+
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /photographs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "id": "0",

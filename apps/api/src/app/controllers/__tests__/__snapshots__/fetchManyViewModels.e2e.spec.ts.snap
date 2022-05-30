@@ -164,6 +164,58 @@ Array [
 ]
 `;
 
+exports[`When fetching multiple resources GET /mediaItems when all of the resources are published should fetch multiple resources of type mediaItem 1`] = `
+Array [
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "1",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [
+      Object {
+        "id": "5",
+        "label": "legends",
+      },
+    ],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+]
+`;
+
+exports[`When fetching multiple resources GET /mediaItems when some of the resources are unpublished should return the expected number of results 1`] = `
+Array [
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "1",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [
+      Object {
+        "id": "5",
+        "label": "legends",
+      },
+    ],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+]
+`;
+
 exports[`When fetching multiple resources GET /photographs when all of the resources are published should fetch multiple resources of type photograph 1`] = `
 Array [
   Object {

@@ -1,8 +1,11 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { MediaItemQueryService } from '../../../domain/services/media-item-query.service';
 import { resourceTypes } from '../../../domain/types/resourceTypes';
+import { isInternalError } from '../../../lib/errors/InternalError';
+import { isNotFound } from '../../../lib/types/not-found';
 import { MediaItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
+import httpStatusCodes from '../../constants/httpStatusCodes';
 import { buildByIdApiParamMetadata, RESOURCES_ROUTE_PREFIX } from '../resourceViewModel.controller';
 import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
 
@@ -15,12 +18,20 @@ export class MediaItemController {
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: MediaItemViewModel })
     @Get('/:id')
-    fetchById(@Param('id') id: unknown) {
-        return this.mediaItemQueryService.fetchById(id);
+    async fetchById(@Res() res, @Param('id') id: unknown) {
+        const searchResult = await this.mediaItemQueryService.fetchById(id);
+
+        if (isInternalError(searchResult))
+            return res.status(httpStatusCodes.badRequest).send(searchResult.toString());
+
+        if (isNotFound(searchResult) || !searchResult.published)
+            return res.status(httpStatusCodes.notFound).send();
+
+        return res.status(httpStatusCodes.ok).send(searchResult);
     }
 
     @Get('')
-    fetchMany() {
+    async fetchMany() {
         return this.mediaItemQueryService.fetchMany();
     }
 }

@@ -4,6 +4,8 @@ import { ContributorAndRole } from '../../../domain/models/song/ContributorAndRo
 import { BaseViewModel } from './base.view-model';
 
 export class MediaItemViewModel extends BaseViewModel {
+    readonly published: boolean;
+
     readonly title: string;
 
     readonly titleEnglish: string;
@@ -17,8 +19,16 @@ export class MediaItemViewModel extends BaseViewModel {
     readonly lengthMilliseconds: number;
 
     constructor(mediaItem: MediaItem) {
-        const { id, title, titleEnglish, contributorAndRoles, url, mimeType, lengthMilliseconds } =
-            mediaItem;
+        const {
+            id,
+            title,
+            titleEnglish,
+            contributorAndRoles,
+            url,
+            mimeType,
+            lengthMilliseconds,
+            published,
+        } = mediaItem;
 
         super({ id });
 
@@ -35,5 +45,7 @@ export class MediaItemViewModel extends BaseViewModel {
         this.mimeType = mimeType;
 
         this.lengthMilliseconds = lengthMilliseconds;
+
+        this.published = published;
     }
 }
