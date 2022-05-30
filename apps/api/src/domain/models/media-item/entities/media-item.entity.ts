@@ -1,6 +1,7 @@
 import {
     IsEnum,
     IsNonNegativeFiniteNumber,
+    IsStrictlyEqualTo,
     IsStringWithNonzeroLength,
     IsUrl,
     ValidateNested,
@@ -19,6 +20,7 @@ import { ContributorAndRole } from '../../song/ContributorAndRole';
 import { MIMEType } from '../types/MIMETypes';
 
 export class MediaItem extends Resource implements ITimeBoundable {
+    @IsStrictlyEqualTo(resourceTypes.mediaItem)
     readonly type = resourceTypes.mediaItem;
 
     @IsStringWithNonzeroLength()

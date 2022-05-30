@@ -3,6 +3,10 @@ import DiscriminatedUnionValidator from './lib/DiscriminatedUnionValidator';
 
 export {
     ArrayNotEmpty as IsNonEmptyArray,
+    /**
+     * **Warning**: This uses `===` and will compare references not values for reference types.
+     */
+    Equals as IsStrictlyEqualTo,
     IsEnum,
     IsInt,
     IsISBN,
