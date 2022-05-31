@@ -2,7 +2,7 @@ import categoryValidator from '../../domain/domainModelValidators/categoryValida
 import buildInstanceFactory from '../../domain/factories/utilities/buildInstanceFactory';
 import { Category } from '../../domain/models/categories/entities/category.entity';
 import { ICategoryRepository } from '../../domain/repositories/interfaces/ICategoryRepository';
-import { EntityId } from '../../domain/types/ResourceId';
+import { AggregateId } from '../../domain/types/AggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
@@ -41,7 +41,7 @@ export default class ArangoCategoryRepository implements ICategoryRepository {
         return categoryDTOs.map((dto) => this.#instanceFactory(dto));
     }
 
-    async fetchById(id: EntityId): Promise<Maybe<Category | InternalError>> {
+    async fetchById(id: AggregateId): Promise<Maybe<Category | InternalError>> {
         const categoryDocument = await this.#arangoDB.fetchById<CategoryDocument>(
             id,
             categoryCollectionID

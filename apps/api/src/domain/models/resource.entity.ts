@@ -3,19 +3,19 @@ import capitalizeFirstLetter from '../../lib/utilities/strings/capitalizeFirstLe
 import { DTO } from '../../types/DTO';
 import DisallowedContextTypeForResourceError from '../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';
 import { Valid } from '../domainModelValidators/Valid';
-import { EntityId } from '../types/ResourceId';
+import { AggregateId } from '../types/AggregateId';
+import { HasAggregateId } from '../types/HasAggregateId';
+import { ResourceCompositeIdentifier } from '../types/ResourceCompositeIdentifier';
 import { ResourceType } from '../types/ResourceType';
 import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedForGivenResourceType';
 import BaseDomainModel from './BaseDomainModel';
 import { EdgeConnectionContext } from './context/context.entity';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
-import { HasEntityID } from './types/HasEntityId';
-import { ResourceCompositeIdentifier } from './types/ResourceCompositeIdentifier';
 
-export abstract class Resource extends BaseDomainModel implements HasEntityID {
+export abstract class Resource extends BaseDomainModel implements HasAggregateId {
     readonly type: ResourceType;
 
-    readonly id: EntityId;
+    readonly id: AggregateId;
 
     // TODO: Rename this 'isPublished' - db migration
     readonly published: boolean;

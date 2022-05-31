@@ -3,9 +3,9 @@ import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
 import { Valid } from '../../../domainModelValidators/Valid';
-import { HasEntityIdAndLabel } from '../../../interfaces/HasEntityIdAndLabel';
+import { HasAggregateIdAndLabel } from '../../../interfaces/HasAggregateIdAndLabel';
 import { ValidatesExternalState } from '../../../interfaces/ValidatesExternalState';
-import { EntityId } from '../../../types/ResourceId';
+import { AggregateId } from '../../../types/AggregateId';
 import { InMemorySnapshot } from '../../../types/ResourceType';
 import validateEntityReferencesAgainstExternalState from '../../../utilities/validation/validateEntityReferencesAgainstExternalState';
 import BaseDomainModel from '../../BaseDomainModel';
@@ -16,16 +16,16 @@ import { CategorizableCompositeIdentifier } from '../types/ResourceOrNoteComposi
 
 export class Category
     extends BaseDomainModel
-    implements ValidatesExternalState, HasEntityIdAndLabel
+    implements ValidatesExternalState, HasAggregateIdAndLabel
 {
-    id: EntityId;
+    id: AggregateId;
 
     label: string;
 
     members: CategorizableCompositeIdentifier[];
 
     // These are `Category` IDs for the children categories of this category
-    childrenIDs: EntityId[];
+    childrenIDs: AggregateId[];
 
     constructor({ id, label, members, childrenIDs }: DTO<Category>) {
         super();

@@ -2,7 +2,7 @@ import {
     EdgeConnectionMember,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
-import { ResourceCompositeIdentifier } from '../../../domain/models/types/ResourceCompositeIdentifier';
+import { ResourceCompositeIdentifier } from '../../../domain/types/ResourceCompositeIdentifier';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DTO } from '../../../types/DTO';
 import { HasArangoDocumentDirectionAttributes } from '../types/HasArangoDocumentDirectionAttributes';

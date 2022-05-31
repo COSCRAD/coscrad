@@ -6,7 +6,7 @@ import {
     EdgeConnectionType,
     isEdgeConnectionType,
 } from '../../../models/context/edge-connection.entity';
-import { isResourceId } from '../../../types/ResourceId';
+import { isAggregateId } from '../../../types/AggregateId';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BothMembersInEdgeConnectionHaveSameRoleError from '../../errors/context/edgeConnections/BothMembersInEdgeConnectionHaveSameRoleError';
 import ContextTypeIsNotAllowedForGivenResourceTypeError from '../../errors/context/edgeConnections/ContextTypeIsNotAllowedForGivenResourceTypeError';
@@ -44,8 +44,7 @@ export default (input: unknown): Valid | InternalError => {
     if (!isEdgeConnectionType(edgeConnectionType))
         allErrors.push(new InvalidEdgeConnectionTypeError(edgeConnectionType));
 
-    // TODO Rename this to `isEntityId`
-    if (!isResourceId(id)) allErrors.push(new InvalidEdgeConnectionIDError(id));
+    if (!isAggregateId(id)) allErrors.push(new InvalidEdgeConnectionIDError(id));
 
     // TODO Validate members array is not null or undefined (part of type checks)
     const numberOfMembers = members.length;

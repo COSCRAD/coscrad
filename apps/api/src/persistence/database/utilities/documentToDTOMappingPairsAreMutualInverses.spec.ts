@@ -5,7 +5,7 @@ import {
 } from '../../../domain/models/context/edge-connection.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
-import { HasEntityID } from '../../../domain/models/types/HasEntityId';
+import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildTestData from '../../../test-data/buildTestData';
 import { DTO } from '../../../types/DTO';
@@ -68,7 +68,7 @@ const edgeDocumentToDTOTestCase: TestCase<ArangoEdgeDocument, DTO<EdgeConnection
     outputs: edgeConnections,
 };
 
-const resourceDocumentToDTOTestCase: TestCase<DatabaseDTO, DTO<HasEntityID>> = {
+const resourceDocumentToDTOTestCase: TestCase<DatabaseDTO, DTO<HasAggregateId>> = {
     description: 'when mapping an Arango resource document to a Resource DTO',
     forwardLabel: 'document => DTO',
     reverseLabel: 'DTO => document',

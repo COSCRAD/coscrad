@@ -1,11 +1,11 @@
-import { EntityId, isResourceId } from '../../../domain/types/ResourceId';
+import { AggregateId, isAggregateId } from '../../../domain/types/AggregateId';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ArangoCollectionID, isArangoCollectionID } from '../types/ArangoCollectionId';
 import { ArangoDocumentHandle } from '../types/ArangoDocumentHandle';
 
 type ArangoCompositeIdentifier = {
     collection: ArangoCollectionID;
-    id: EntityId;
+    id: AggregateId;
 };
 
 export default (handle: ArangoDocumentHandle): ArangoCompositeIdentifier => {
@@ -15,7 +15,7 @@ export default (handle: ArangoDocumentHandle): ArangoCompositeIdentifier => {
         throw new InternalError(`Failed to parse an invalid Arango document handle: ${handle}`);
     }
 
-    const [collectionID, entityID] = splitOnSlash;
+    const [collectionID, aggregateId] = splitOnSlash;
 
     if (!isArangoCollectionID(collectionID)) {
         throw new InternalError(
@@ -23,15 +23,15 @@ export default (handle: ArangoDocumentHandle): ArangoCompositeIdentifier => {
         );
     }
 
-    if (!isResourceId(entityID)) {
+    if (!isAggregateId(aggregateId)) {
         throw new InternalError(
-            `Invalid entity ID: ${entityID} in Arango document handle: ${handle}`
+            `Invalid entity ID: ${aggregateId} in Arango document handle: ${handle}`
         );
     }
 
     // If we made it this far, we are parsing a valid Arango document handle
     return {
         collection: collectionID,
-        id: entityID,
+        id: aggregateId,
     };
 };

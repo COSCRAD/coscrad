@@ -1,7 +1,7 @@
 import { Maybe } from '../../../lib/types/maybe';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
-import { EntityId } from '../../types/ResourceId';
+import { AggregateId } from '../../types/AggregateId';
 import { ISpecification } from './ISpecification';
 
 export interface IEdgeConnectionRepository {
@@ -10,7 +10,7 @@ export interface IEdgeConnectionRepository {
      *
      * @returns EdgeConnection or symbol(NotFound)
      */
-    fetchById: (id: EntityId) => Promise<ResultOrError<Maybe<EdgeConnection>>>;
+    fetchById: (id: AggregateId) => Promise<ResultOrError<Maybe<EdgeConnection>>>;
 
     // Returns an empty array if none found
     fetchMany: (

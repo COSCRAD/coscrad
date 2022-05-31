@@ -1,12 +1,12 @@
+import { AggregateId, isAggregateId } from '../../../types/AggregateId';
 import { CategorizableType, isCategorizableType } from '../../../types/CategorizableType';
-import { EntityId, isResourceId } from '../../../types/ResourceId';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 
 // TODO build this and ResourceCompositeIdentifier from a common, more generic type
 export type CategorizableCompositeIdentifier = {
     type: CategorizableType;
 
-    id: EntityId;
+    id: AggregateId;
 };
 
 export const isResourceOrNoteCompositeIdentifier = (
@@ -16,5 +16,5 @@ export const isResourceOrNoteCompositeIdentifier = (
 
     const { id, type } = input as CategorizableCompositeIdentifier;
 
-    return isResourceId(id) && isCategorizableType(type);
+    return isAggregateId(id) && isCategorizableType(type);
 };

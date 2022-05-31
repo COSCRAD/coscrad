@@ -1,10 +1,10 @@
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
+import { AggregateId } from '../../types/AggregateId';
 import { CategorizableType } from '../../types/CategorizableType';
-import { EntityId } from '../../types/ResourceId';
+import { HasAggregateId } from '../../types/HasAggregateId';
+import { ResourceCompositeIdentifier } from '../../types/ResourceCompositeIdentifier';
 import BaseDomainModel from '../BaseDomainModel';
-import { HasEntityID } from '../types/HasEntityId';
-import { ResourceCompositeIdentifier } from '../types/ResourceCompositeIdentifier';
 import { ContextModelUnion } from './types/ContextModelUnion';
 
 export enum EdgeConnectionType {
@@ -28,10 +28,10 @@ export type EdgeConnectionMember<TContextModel extends ContextModelUnion = Conte
     role: EdgeConnectionMemberRole;
 };
 
-export class EdgeConnection extends BaseDomainModel implements HasEntityID {
+export class EdgeConnection extends BaseDomainModel implements HasAggregateId {
     type: EdgeConnectionType;
 
-    id: EntityId;
+    id: AggregateId;
 
     readonly members: EdgeConnectionMember[];
 

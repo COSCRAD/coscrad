@@ -5,8 +5,8 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
-import { ResourceCompositeIdentifier } from '../../../domain/models/types/ResourceCompositeIdentifier';
-import { isResourceId } from '../../../domain/types/ResourceId';
+import { isAggregateId } from '../../../domain/types/AggregateId';
+import { ResourceCompositeIdentifier } from '../../../domain/types/ResourceCompositeIdentifier';
 import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DTO } from '../../../types/DTO';
@@ -34,7 +34,7 @@ const parseResourceCompositeID = (docHandle: ArangoDocumentHandle): ResourceComp
         );
     }
 
-    if (!isResourceId(id)) {
+    if (!isAggregateId(id)) {
         throw new InternalError(`Edge document handle refers to an invalid document id: ${id}`);
     }
 

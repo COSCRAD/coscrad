@@ -2,7 +2,7 @@ import { IsOptional, IsStringWithNonzeroLength } from '@coscrad/validation';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { Valid } from '../../../domainModelValidators/Valid';
-import { EntityId } from '../../../types/ResourceId';
+import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
@@ -21,7 +21,7 @@ export class Term extends Resource {
     readonly termEnglish?: string;
 
     @IsStringWithNonzeroLength()
-    readonly contributorId: EntityId;
+    readonly contributorId: AggregateId;
 
     // TODO Create separate media item model
     @IsOptional()

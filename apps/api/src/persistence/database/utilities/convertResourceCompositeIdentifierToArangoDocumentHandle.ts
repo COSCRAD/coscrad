@@ -1,4 +1,4 @@
-import { ResourceCompositeIdentifier } from '../../../domain/models/types/ResourceCompositeIdentifier';
+import { ResourceCompositeIdentifier } from '../../../domain/types/ResourceCompositeIdentifier';
 import { getArangoCollectionIDFromResourceType } from '../getArangoCollectionIDFromResourceType';
 import { ArangoDocumentHandle } from '../types/ArangoDocumentHandle';
 

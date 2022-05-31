@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { EdgeConnectionContextType } from '../../../../models/context/types/EdgeConnectionContextType';
-import { ResourceCompositeIdentifier } from '../../../../models/types/ResourceCompositeIdentifier';
+import { ResourceCompositeIdentifier } from '../../../../types/ResourceCompositeIdentifier';
 
 export default class DisallowedContextTypeForResourceError extends InternalError {
     constructor(

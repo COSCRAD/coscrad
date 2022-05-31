@@ -1,7 +1,7 @@
 import { isArangoDatabase } from 'arangojs/database';
-import { HasEntityID } from '../../domain/models/types/HasEntityId';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
-import { EntityId } from '../../domain/types/ResourceId';
+import { AggregateId } from '../../domain/types/AggregateId';
+import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { Maybe } from '../../lib/types/maybe';
 import { ArangoDatabase } from './arango-database';
 import { ArangoCollectionID } from './types/ArangoCollectionId';
@@ -12,7 +12,7 @@ import { DatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
  * and _id), not an `EntityDTO`. The mapping is taken care of in the
  * repositories layer.
  */
-export class ArangoDatabaseForCollection<TEntity extends HasEntityID> {
+export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     #collectionID: ArangoCollectionID;
 
     #arangoDatabase: ArangoDatabase;
@@ -29,7 +29,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasEntityID> {
     }
 
     // Queries (return information)
-    fetchById(id: EntityId): Promise<Maybe<DatabaseDocument<TEntity>>> {
+    fetchById(id: AggregateId): Promise<Maybe<DatabaseDocument<TEntity>>> {
         return this.#arangoDatabase.fetchById<DatabaseDocument<TEntity>>(id, this.#collectionID);
     }
 
@@ -55,7 +55,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasEntityID> {
         return this.#arangoDatabase.createMany(DatabaseDocuments, this.#collectionID);
     }
 
-    update(id: EntityId, updateDTO: DatabaseDocument<TEntity>) {
+    update(id: AggregateId, updateDTO: DatabaseDocument<TEntity>) {
         return this.#arangoDatabase.update(id, updateDTO, this.#collectionID);
     }
 }

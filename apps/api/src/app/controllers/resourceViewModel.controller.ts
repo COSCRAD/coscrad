@@ -10,7 +10,7 @@ import { Tag } from '../../domain/models/tag/tag.entity';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { TranscribedAudio } from '../../domain/models/transcribed-audio/entities/transcribed-audio.entity';
 import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
-import { isResourceId } from '../../domain/types/ResourceId';
+import { isAggregateId } from '../../domain/types/AggregateId';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { isInternalError } from '../../lib/errors/InternalError';
 import { isNotFound } from '../../lib/types/not-found';
@@ -90,7 +90,7 @@ export class ResourceViewModelController {
     async fetchTermById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isResourceId(id))
+        if (!isAggregateId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
@@ -139,7 +139,7 @@ export class ResourceViewModelController {
     async fetchVocabularyListById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isResourceId(id))
+        if (!isAggregateId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
@@ -202,7 +202,7 @@ export class ResourceViewModelController {
     async fetchTranscribedAudioById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isResourceId(id))
+        if (!isAggregateId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
@@ -251,7 +251,7 @@ export class ResourceViewModelController {
     async fetchBookById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isResourceId(id))
+        if (!isAggregateId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
@@ -297,7 +297,7 @@ export class ResourceViewModelController {
     async fetchPhotographById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isResourceId(id))
+        if (!isAggregateId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
@@ -346,7 +346,7 @@ export class ResourceViewModelController {
     async fetchSpatialFeatureById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isResourceId(id))
+        if (!isAggregateId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
@@ -396,7 +396,7 @@ export class ResourceViewModelController {
     async fetchBibliographicReferenceById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isResourceId(id))
+        if (!isAggregateId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });
@@ -437,7 +437,7 @@ export class ResourceViewModelController {
     async fetchSongById(@Res() res, @Param() params: unknown) {
         const { id } = params as HasViewModelId;
 
-        if (!isResourceId(id))
+        if (!isAggregateId(id))
             return res.status(httpStatusCodes.badRequest).send({
                 error: `Invalid input for id: ${id}`,
             });

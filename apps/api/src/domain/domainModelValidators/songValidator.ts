@@ -2,7 +2,7 @@ import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { InternalError } from '../../lib/errors/InternalError';
 import { DTO } from '../../types/DTO';
 import { Song } from '../models/song/song.entity';
-import { EntityId } from '../types/ResourceId';
+import { AggregateId } from '../types/AggregateId';
 import { ResourceType } from '../types/ResourceType';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
@@ -11,7 +11,7 @@ import { DomainModelValidator } from './types/DomainModelValidator';
 import validateSimpleInvariants from './utilities/validateSimpleInvariants';
 import { Valid } from './Valid';
 
-const buildTopLevelError = (id: EntityId, innerErrors: InternalError[]) =>
+const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]) =>
     new InvalidEntityDTOError(ResourceType.song, id, innerErrors);
 
 const songValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {

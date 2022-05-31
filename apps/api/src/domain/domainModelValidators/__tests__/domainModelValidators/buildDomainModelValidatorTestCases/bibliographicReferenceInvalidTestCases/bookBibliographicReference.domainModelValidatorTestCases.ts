@@ -1,10 +1,10 @@
 import BookBibliographicReferenceData from '../../../../../../domain/models/bibliographic-reference/entities/BookBibliographicReferenceData';
-import { EntityId } from '../../../../../../domain/types/ResourceId';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../../types/DTO';
 import BibliographicReferenceCreator from '../../../../../models/bibliographic-reference/entities/BibliographicReferenceCreator';
 import { BookBibliographicReference } from '../../../../../models/bibliographic-reference/entities/book-bibliographic-reference.entity';
 import { BibliographicReferenceType } from '../../../../../models/bibliographic-reference/types/BibliographicReferenceType';
+import { AggregateId } from '../../../../../types/AggregateId';
 import { ResourceType } from '../../../../../types/ResourceType';
 import InvalidEntityDTOError from '../../../../errors/InvalidEntityDTOError';
 import { DomainModelValidatorInvalidTestCase } from '../../../types/DomainModelValidatorTestCase';
@@ -14,7 +14,7 @@ const validDto = getValidBibliographicReferenceInstanceForTest(
     BibliographicReferenceType.book
 ).toDTO();
 
-const buildTopLevelError = (id: EntityId, innerErrors: InternalError[]): InternalError =>
+const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]): InternalError =>
     new InvalidEntityDTOError(ResourceType.bibliographicReference, id, innerErrors);
 
 export const buildBookBibliographicReferenceTestCases =

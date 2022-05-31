@@ -6,8 +6,8 @@ import {
     EdgeConnectionType,
 } from '../../domain/models/context/edge-connection.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
+import { isAggregateId } from '../../domain/types/AggregateId';
 import { CategorizableType } from '../../domain/types/CategorizableType';
-import { isResourceId } from '../../domain/types/ResourceId';
 import { isResourceType, ResourceType } from '../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
@@ -61,7 +61,7 @@ export class EdgeConnectionController {
         @Query('id') id: string,
         @Query('type') type: ResourceType
     ) {
-        if (!isResourceId(id))
+        if (!isAggregateId(id))
             return res
                 .status(httpStatusCodes.badRequest)
                 .send(new InternalError(`Invalid resource id: ${id}`));
@@ -103,7 +103,7 @@ export class EdgeConnectionController {
         @Query('id') id: string,
         @Query('type') type: string
     ) {
-        if (!isResourceId(id))
+        if (!isAggregateId(id))
             return res
                 .status(httpStatusCodes.badRequest)
                 .send(new InternalError(`Invalid resource id: ${id}`));
