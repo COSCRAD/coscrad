@@ -1,9 +1,9 @@
 import { Database } from 'arangojs';
 import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
-import { HasEntityID } from '../../domain/models/types/HasEntityId';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { QueryOperator } from '../../domain/repositories/interfaces/QueryOperator';
+import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
@@ -39,7 +39,7 @@ export class ArangoDatabase {
         this.#db = database;
     }
 
-    fetchById = async <TDatabaseDTO extends DatabaseDTO<HasEntityID>>(
+    fetchById = async <TDatabaseDTO extends DatabaseDTO<HasAggregateId>>(
         id: string,
         collectionName: string
     ): Promise<Maybe<TDatabaseDTO>> => {

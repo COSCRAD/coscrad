@@ -1,6 +1,6 @@
-import { EntityId, isResourceId } from '../../types/ResourceId';
-import { isResourceType, ResourceType } from '../../types/ResourceType';
-import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
+import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
+import { AggregateId, isAggregateId } from './AggregateId';
+import { isResourceType, ResourceType } from './ResourceType';
 
 /**
  * A `CompositeIdentifier` includes
@@ -11,7 +11,7 @@ import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefin
  */
 export type ResourceCompositeIdentifier<TResourceType = ResourceType> = {
     type: TResourceType;
-    id: EntityId;
+    id: AggregateId;
 };
 
 export const isResourceCompositeIdentifier = (
@@ -21,5 +21,5 @@ export const isResourceCompositeIdentifier = (
 
     const { type, id } = input as ResourceCompositeIdentifier;
 
-    return isResourceType(type) && isResourceId(id);
+    return isResourceType(type) && isAggregateId(id);
 };

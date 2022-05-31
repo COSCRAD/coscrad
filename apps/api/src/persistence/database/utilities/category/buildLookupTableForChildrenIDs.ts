@@ -1,9 +1,9 @@
-import { EntityId } from '../../../../domain/types/ResourceId';
+import { AggregateId } from '../../../../domain/types/AggregateId';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { HasArangoDocumentDirectionAttributes } from '../../../database/types/HasArangoDocumentDirectionAttributes';
 import convertArangoDocumentHandleToCompositeIdentifier from '../../../database/utilities/convertArangoDocumentHandleToCompositeIdentifier';
 
-type LookupTableForChildrenIDs = Map<EntityId, EntityId[]>;
+type LookupTableForChildrenIDs = Map<AggregateId, AggregateId[]>;
 
 export default (edges: HasArangoDocumentDirectionAttributes[]): LookupTableForChildrenIDs =>
     edges.reduce((parentToChildrenMap: LookupTableForChildrenIDs, { _from, _to }) => {

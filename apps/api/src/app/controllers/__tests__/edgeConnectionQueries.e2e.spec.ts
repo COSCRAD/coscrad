@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { isDeepStrictEqual } from 'util';
 import { EdgeConnectionType } from '../../../domain/models/context/edge-connection.entity';
-import { isResourceCompositeIdentifier } from '../../../domain/models/types/ResourceCompositeIdentifier';
+import { isResourceCompositeIdentifier } from '../../../domain/types/ResourceCompositeIdentifier';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';

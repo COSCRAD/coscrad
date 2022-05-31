@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { Tag } from '../../domain/models/tag/tag.entity';
-import { isResourceId } from '../../domain/types/ResourceId';
+import { isAggregateId } from '../../domain/types/AggregateId';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
@@ -14,7 +14,7 @@ export class TagController {
 
     @Get('/:id')
     async fetchById(@Res() res, @Param('id') id: string) {
-        if (!isResourceId(id))
+        if (!isAggregateId(id))
             return res
                 .status(httpStatusCodes.badRequest)
                 .send(new InternalError(`Invalid tag ID: ${id}`));

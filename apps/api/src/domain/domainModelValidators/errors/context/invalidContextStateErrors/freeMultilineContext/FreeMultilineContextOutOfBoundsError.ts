@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import formatResourceCompositeIdentifier from '../../../../../../view-models/presentation/formatResourceCompositeIdentifier';
-import { ResourceCompositeIdentifier } from '../../../../../models/types/ResourceCompositeIdentifier';
+import { ResourceCompositeIdentifier } from '../../../../../types/ResourceCompositeIdentifier';
 
 export default class FreeMultilineContextOutOfBoundsError extends InternalError {
     constructor(

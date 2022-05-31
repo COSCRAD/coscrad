@@ -1,9 +1,9 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import { HasEntityIdAndLabel } from '../../../interfaces/HasEntityIdAndLabel';
-import { EntityId } from '../../../types/ResourceId';
+import { HasAggregateIdAndLabel } from '../../../interfaces/HasAggregateIdAndLabel';
+import { AggregateId } from '../../../types/AggregateId';
 
 export default class ChildCategoryDoesNotExistError extends InternalError {
-    constructor(missingChildCategoryId: EntityId, parentCategory: HasEntityIdAndLabel) {
+    constructor(missingChildCategoryId: AggregateId, parentCategory: HasAggregateIdAndLabel) {
         const { id, label } = parentCategory;
 
         const msg = [

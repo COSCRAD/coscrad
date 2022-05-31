@@ -1,13 +1,13 @@
 import { Category } from '../../../domain/models/categories/entities/category.entity';
 import { CategorizableCompositeIdentifier } from '../../../domain/models/categories/types/ResourceOrNoteCompositeIdentifier';
-import { EntityId } from '../../../domain/types/ResourceId';
+import { AggregateId } from '../../../domain/types/AggregateId';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from './base.view-model';
 import buildTreeFromNodes from './utilities/graph/buildTreeFromNodes';
 
 export class CateogryTreeViewModel extends BaseViewModel {
     // The ID of the root category, '0' for the entire category tree
-    readonly id: EntityId;
+    readonly id: AggregateId;
 
     readonly label: string;
 

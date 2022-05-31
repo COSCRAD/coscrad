@@ -14,7 +14,7 @@ import { MediaItem } from '../models/media-item/entities/media-item.entity';
 import { Tag } from '../models/tag/tag.entity';
 import { ISpecification } from '../repositories/interfaces/ISpecification';
 import IsPublished from '../repositories/specifications/isPublished';
-import { isResourceId } from '../types/ResourceId';
+import { isAggregateId } from '../types/AggregateId';
 import { ResourceType } from '../types/ResourceType';
 
 type GeneralQueryOptions = ViewModelBuilderOptions;
@@ -29,7 +29,7 @@ export class MediaItemQueryService {
         id: unknown,
         options: Partial<GeneralQueryOptions> = {}
     ): Promise<InternalError | Maybe<MediaItemViewModel>> {
-        if (!isResourceId(id)) return new InternalError(`Invalid entity ID: ${id}`);
+        if (!isAggregateId(id)) return new InternalError(`Invalid entity ID: ${id}`);
 
         const { shouldReturnUnpublishedEntities } = {
             ...defaultOptions,

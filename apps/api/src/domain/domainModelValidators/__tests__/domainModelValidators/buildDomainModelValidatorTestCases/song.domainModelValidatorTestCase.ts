@@ -1,7 +1,7 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ContributorAndRole } from '../../../../models/song/ContributorAndRole';
 import { Song } from '../../../../models/song/song.entity';
-import { EntityId } from '../../../../types/ResourceId';
+import { AggregateId } from '../../../../types/AggregateId';
 import { ResourceType } from '../../../../types/ResourceType';
 import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
 import songValidator from '../../../songValidator';
@@ -10,7 +10,7 @@ import getValidEntityInstaceForTest from '../utilities/getValidEntityInstaceForT
 
 const validDTO = getValidEntityInstaceForTest(ResourceType.song).toDTO();
 
-const buildTopLevelError = (id: EntityId, innerErrors: InternalError[]) =>
+const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]) =>
     new InvalidEntityDTOError(ResourceType.song, id, innerErrors);
 
 export const buildSongTestCase = (): DomainModelValidatorTestCase<Song> => ({

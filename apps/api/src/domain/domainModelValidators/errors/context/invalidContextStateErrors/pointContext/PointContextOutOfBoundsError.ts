@@ -3,7 +3,7 @@ import formatBounds2D from '../../../../../../view-models/presentation/formatBou
 import formatPosition2D from '../../../../../../view-models/presentation/formatPosition2D';
 import formatResourceCompositeIdentifier from '../../../../../../view-models/presentation/formatResourceCompositeIdentifier';
 import { Position2D } from '../../../../../models/spatial-feature/types/Coordinates/Position2D';
-import { ResourceCompositeIdentifier } from '../../../../../models/types/ResourceCompositeIdentifier';
+import { ResourceCompositeIdentifier } from '../../../../../types/ResourceCompositeIdentifier';
 
 export default class PointContextOutOfBoundsError extends InternalError {
     constructor(

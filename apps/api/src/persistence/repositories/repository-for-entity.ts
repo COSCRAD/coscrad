@@ -1,9 +1,9 @@
 import { InstanceFactory } from '../../domain/factories/getInstanceFactoryForEntity';
 import BaseDomainModel from '../../domain/models/BaseDomainModel';
-import { HasEntityID } from '../../domain/models/types/HasEntityId';
 import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { IRepositoryForEntity } from '../../domain/repositories/interfaces/repository-for-entity';
-import { EntityId } from '../../domain/types/ResourceId';
+import { AggregateId } from '../../domain/types/AggregateId';
+import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { DTO } from '../../types/DTO';
@@ -20,7 +20,7 @@ import { DatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDT
  *
  * TODO Use a mixin for cloneable behaviour.
  */
-export class RepositoryForEntity<TEntity extends HasEntityID & BaseDomainModel>
+export class RepositoryForEntity<TEntity extends HasAggregateId & BaseDomainModel>
     implements IRepositoryForEntity<TEntity>
 {
     #arangoDatabaseForEntitysCollection: ArangoDatabaseForCollection<TEntity>;
@@ -49,7 +49,7 @@ export class RepositoryForEntity<TEntity extends HasEntityID & BaseDomainModel>
         this.#mapEntityDTOToDocument = entityToDocument;
     }
 
-    async fetchById(id: EntityId): Promise<ResultOrError<Maybe<TEntity>>> {
+    async fetchById(id: AggregateId): Promise<ResultOrError<Maybe<TEntity>>> {
         const searchResultForDTO = await this.#arangoDatabaseForEntitysCollection.fetchById(id);
 
         return isNotFound(searchResultForDTO)

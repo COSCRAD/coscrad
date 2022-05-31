@@ -1,7 +1,7 @@
-import { EntityId } from '../../../../../domain/types/ResourceId';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../types/DTO';
 import { Term } from '../../../../models/term/entities/term.entity';
+import { AggregateId } from '../../../../types/AggregateId';
 import { ResourceType } from '../../../../types/ResourceType';
 import InvalidTermDTOError from '../../../errors/term/InvalidTermDTOError';
 import TermHasNoTextInAnyLanguageError from '../../../errors/term/TermHasNoTextInAnyLanguageError';
@@ -17,7 +17,7 @@ const validDTO: DTO<Term> = {
     contributorId: '123',
 };
 
-const buildTopLevelError = (termID: EntityId, innerErrors: InternalError[]): InternalError =>
+const buildTopLevelError = (termID: AggregateId, innerErrors: InternalError[]): InternalError =>
     new InvalidTermDTOError(termID, innerErrors);
 
 export const buildTermTestCase = (): DomainModelValidatorTestCase<Term> => ({

@@ -2,7 +2,7 @@ import { InternalError } from '../../../../../lib/errors/InternalError';
 import { MediaItem } from '../../../../models/media-item/entities/media-item.entity';
 import { MIMEType } from '../../../../models/media-item/types/MIMEType';
 import { ContributorAndRole } from '../../../../models/song/ContributorAndRole';
-import { EntityId } from '../../../../types/ResourceId';
+import { AggregateId } from '../../../../types/AggregateId';
 import { ResourceType } from '../../../../types/ResourceType';
 import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
 import MediaItemHasNoTitleInAnyLanguageError from '../../../errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
@@ -13,7 +13,7 @@ import getValidEntityInstaceForTest from '../utilities/getValidEntityInstaceForT
 
 const validDTO = getValidEntityInstaceForTest(ResourceType.mediaItem).toDTO();
 
-const buildTopLevelError = (id: EntityId, innerErrors: InternalError[]): InternalError =>
+const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]): InternalError =>
     new InvalidEntityDTOError(ResourceType.mediaItem, id, innerErrors);
 
 export const buildmediaItemTestCase = (): DomainModelValidatorTestCase<MediaItem> => ({

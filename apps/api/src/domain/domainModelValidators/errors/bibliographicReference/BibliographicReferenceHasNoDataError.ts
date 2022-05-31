@@ -1,8 +1,8 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import { EntityId } from '../../../types/ResourceId';
+import { AggregateId } from '../../../types/AggregateId';
 
 export default class BibliographicReferenceHasNoDataError extends InternalError {
-    constructor(id?: EntityId) {
+    constructor(id?: AggregateId) {
         const msg = [
             `Bibliographic reference`,
             id ? `: ${id}` : ``,
