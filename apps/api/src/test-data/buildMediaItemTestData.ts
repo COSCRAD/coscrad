@@ -1,5 +1,5 @@
 import { MediaItem } from '../domain/models/media-item/entities/media-item.entity';
-import { MIMEType } from '../domain/models/media-item/types/MIMETypes';
+import { MIMEType } from '../domain/models/media-item/types/MIMEType';
 import { resourceTypes } from '../domain/types/resourceTypes';
 import { DTO } from '../types/DTO';
 

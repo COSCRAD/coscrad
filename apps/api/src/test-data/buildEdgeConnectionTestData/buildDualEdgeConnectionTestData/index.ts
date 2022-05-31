@@ -6,7 +6,7 @@ import {
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
-import { resourceTypes } from '../../../domain/types/resourceTypes';
+import { ResourceType, resourceTypes } from '../../../domain/types/resourceTypes';
 import { InternalError } from '../../../lib/errors/InternalError';
 import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatResourceCompositeIdentifier';
 import buildOneSelfEdgeConnectionForEachResourceType from '../buildSelfConnectionTestData/buildOneSelfEdgeConnectionForEachResourceType';
@@ -29,7 +29,8 @@ const resourceTypesThatCurrentlyOnlySupportGeneralContext =
     getResourceTypesThatOnlySupportGeneralContext();
 
 const generateComprehensiveDualEdgeConnectionTestData = (
-    uniqueIdOffset: number
+    uniqueIdOffset: number,
+    resourceTypesThatHaveBeenManuallyGenerated: ResourceType[]
 ): EdgeConnection[] => {
     const validSelfMembers = buildOneSelfEdgeConnectionForEachResourceType(uniqueIdOffset)
         .flatMap(({ members }) => members)
@@ -48,7 +49,11 @@ const generateComprehensiveDualEdgeConnectionTestData = (
                 ) || member.context.type !== EdgeConnectionContextType.general
         );
 
-    const oneToMemberOfEachResourceType = Object.values(resourceTypes).reduce(
+    const resourceTypesRequiringDataGeneration = Object.values(resourceTypes).filter(
+        (resourceType) => !resourceTypesThatHaveBeenManuallyGenerated.includes(resourceType)
+    );
+
+    const oneToMemberOfEachResourceType = resourceTypesRequiringDataGeneration.reduce(
         (allToMembers: EdgeConnectionMember[], resourceType) => {
             const firstSelfMemberOfGivenType = validSelfMembers.find(
                 ({ compositeIdentifier: { type } }) => type === resourceType
@@ -91,7 +96,11 @@ const generateComprehensiveDualEdgeConnectionTestData = (
 };
 
 export default (uniqueIdOffset: number): EdgeConnection[] => [
-    ...generateComprehensiveDualEdgeConnectionTestData(uniqueIdOffset),
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/182302542]
+     * "Strangle out" auto generation of test data.
+     */
+    ...generateComprehensiveDualEdgeConnectionTestData(uniqueIdOffset, [resourceTypes.mediaItem]),
     ...buildOneDualEdgeConnectionForEveryContextType(),
     ...buildOneFromConnectionForInstanceOfEachResourceType(),
     ...buildOneToConnectionForInstanceOfEachResourceType(),

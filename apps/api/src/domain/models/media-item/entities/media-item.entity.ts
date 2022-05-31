@@ -17,7 +17,7 @@ import { Resource } from '../../resource.entity';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import { ContributorAndRole } from '../../song/ContributorAndRole';
-import { MIMEType } from '../types/MIMETypes';
+import { MIMEType } from '../types/MIMEType';
 
 export class MediaItem extends Resource implements ITimeBoundable {
     @IsStrictlyEqualTo(resourceTypes.mediaItem)

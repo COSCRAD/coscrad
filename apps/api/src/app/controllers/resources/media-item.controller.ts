@@ -24,8 +24,7 @@ export class MediaItemController {
         if (isInternalError(searchResult))
             return res.status(httpStatusCodes.badRequest).send(searchResult.toString());
 
-        if (isNotFound(searchResult) || !searchResult.published)
-            return res.status(httpStatusCodes.notFound).send();
+        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
 
         return res.status(httpStatusCodes.ok).send(searchResult);
     }

@@ -996,7 +996,7 @@
         },
         {
             "_to": "songs/1",
-            "_from": "media_items/1",
+            "_from": "terms/2",
             "type": "dual",
             "_key": "2007",
             "members": [
@@ -1014,37 +1014,6 @@
                     "role": "from",
                     "context": {
                         "type": "textField",
-                        "target": "title",
-                        "charRange": [
-                            0,
-                            2
-                        ]
-                    }
-                }
-            ],
-            "note": "That is why song/1 is related to mediaItem/1"
-        },
-        {
-            "_to": "media_items/1",
-            "_from": "terms/2",
-            "type": "dual",
-            "_key": "2008",
-            "members": [
-                {
-                    "role": "to",
-                    "context": {
-                        "type": "textField",
-                        "target": "title",
-                        "charRange": [
-                            0,
-                            2
-                        ]
-                    }
-                },
-                {
-                    "role": "from",
-                    "context": {
-                        "type": "textField",
                         "target": "term",
                         "charRange": [
                             0,
@@ -1053,7 +1022,65 @@
                     }
                 }
             ],
-            "note": "That is why mediaItem/1 is related to term/2"
+            "note": "That is why song/1 is related to term/2"
+        },
+        {
+            "_from": "media_items/1",
+            "_to": "terms/2",
+            "type": "dual",
+            "_key": "3001",
+            "members": [
+                {
+                    "role": "from",
+                    "context": {
+                        "type": "timeRange",
+                        "timeRange": {
+                            "inPoint": 100,
+                            "outPoint": 1200
+                        }
+                    }
+                },
+                {
+                    "role": "to",
+                    "context": {
+                        "type": "textField",
+                        "target": "term",
+                        "charRange": [
+                            1,
+                            4
+                        ]
+                    }
+                }
+            ],
+            "note": "this media item mentions a word in the term"
+        },
+        {
+            "_to": "media_items/1",
+            "_from": "books/24",
+            "type": "dual",
+            "_key": "3101",
+            "members": [
+                {
+                    "role": "to",
+                    "context": {
+                        "type": "timeRange",
+                        "timeRange": {
+                            "inPoint": 300,
+                            "outPoint": 1800
+                        }
+                    }
+                },
+                {
+                    "role": "from",
+                    "context": {
+                        "type": "pageRange",
+                        "pageIdentifiers": [
+                            "ix"
+                        ]
+                    }
+                }
+            ],
+            "note": "this selection from the media item portrays the events in the book"
         }
     ],
     "tags": [

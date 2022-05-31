@@ -2,7 +2,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import buildTestData from '../../../../test-data/buildTestData';
 import formatResourceCompositeIdentifier from '../../../../view-models/presentation/formatResourceCompositeIdentifier';
 import { ContextTypeToInstance } from '../../../models/context/types/ContextTypeToInstance';
-import { ResourceType, ResourceTypeToInstance } from '../../../types/resourceTypes';
+import { ResourceType, ResourceTypeToResourceModel } from '../../../types/resourceTypes';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { Resource } from '../../resource.entity';
@@ -13,7 +13,10 @@ export default <
 >(
     targetResourceType: TResourceType,
     targetContextType: UEdgeConnectionContextType
-): [ResourceTypeToInstance[TResourceType], ContextTypeToInstance[UEdgeConnectionContextType]] => {
+): [
+    ResourceTypeToResourceModel[TResourceType],
+    ContextTypeToInstance[UEdgeConnectionContextType]
+] => {
     const { resources, connections } = buildTestData();
 
     const allMembers = connections.flatMap(({ members }) => members);
@@ -54,7 +57,7 @@ export default <
     }
 
     return [targetResource, targetContext] as [
-        ResourceTypeToInstance[TResourceType],
+        ResourceTypeToResourceModel[TResourceType],
         ContextTypeToInstance[UEdgeConnectionContextType]
     ];
 };

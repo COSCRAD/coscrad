@@ -11,7 +11,7 @@ import {
     isResourceType,
     ResourceType,
     resourceTypes,
-    ResourceTypeToInstance,
+    ResourceTypeToResourceModel,
 } from '../domain/types/resourceTypes';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
@@ -30,7 +30,7 @@ import buildTestData from './buildTestData';
  * utilities.
  */
 type InMemorySnapshotOfResourceDTOs = {
-    [K in keyof ResourceTypeToInstance]?: DTO<ResourceTypeToInstance>[K][];
+    [K in keyof ResourceTypeToResourceModel]?: DTO<ResourceTypeToResourceModel>[K][];
 };
 
 describe('buildTestData', () => {

@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { MediaItem } from '../../../../models/media-item/entities/media-item.entity';
-import { MIMEType } from '../../../../models/media-item/types/MIMETypes';
+import { MIMEType } from '../../../../models/media-item/types/MIMEType';
 import { ContributorAndRole } from '../../../../models/song/ContributorAndRole';
 import { EntityId } from '../../../../types/ResourceId';
 import { resourceTypes } from '../../../../types/resourceTypes';

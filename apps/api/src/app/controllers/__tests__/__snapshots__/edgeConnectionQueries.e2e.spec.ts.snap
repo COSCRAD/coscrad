@@ -164,24 +164,19 @@ Array [
       },
     ],
   },
-]
-`;
-
-exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: mediaItem should return the expected result 1`] = `
-Array [
   Object {
-    "id": "2007",
-    "note": "That is why song/1 is related to mediaItem/1",
+    "id": "3101",
+    "note": "this selection from the media item portrays the events in the book",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
-          "type": "song",
+          "type": "mediaItem",
         },
         "context": Object {
           "timeRange": Object {
             "inPoint": 300,
-            "outPoint": 500,
+            "outPoint": 1800,
           },
           "type": "timeRange",
         },
@@ -189,25 +184,28 @@ Array [
       },
       Object {
         "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
+          "id": "24",
+          "type": "book",
         },
         "context": Object {
-          "charRange": Array [
-            0,
-            2,
+          "pageIdentifiers": Array [
+            "ix",
           ],
-          "target": "title",
-          "type": "textField",
+          "type": "pageRange",
         },
         "role": "from",
       },
     ],
     "tags": Array [],
   },
+]
+`;
+
+exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: mediaItem should return the expected result 1`] = `
+Array [
   Object {
-    "id": "2008",
-    "note": "That is why mediaItem/1 is related to term/2",
+    "id": "3001",
+    "note": "this media item mentions a word in the term",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
@@ -215,14 +213,13 @@ Array [
           "type": "mediaItem",
         },
         "context": Object {
-          "charRange": Array [
-            0,
-            2,
-          ],
-          "target": "title",
-          "type": "textField",
+          "timeRange": Object {
+            "inPoint": 100,
+            "outPoint": 1200,
+          },
+          "type": "timeRange",
         },
-        "role": "to",
+        "role": "from",
       },
       Object {
         "compositeIdentifier": Object {
@@ -231,11 +228,45 @@ Array [
         },
         "context": Object {
           "charRange": Array [
-            0,
-            3,
+            1,
+            4,
           ],
           "target": "term",
           "type": "textField",
+        },
+        "role": "to",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "3101",
+    "note": "this selection from the media item portrays the events in the book",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 300,
+            "outPoint": 1800,
+          },
+          "type": "timeRange",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
         },
         "role": "from",
       },
@@ -392,7 +423,7 @@ Array [
   },
   Object {
     "id": "2007",
-    "note": "That is why song/1 is related to mediaItem/1",
+    "note": "That is why song/1 is related to term/2",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
@@ -410,15 +441,15 @@ Array [
       },
       Object {
         "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
+          "id": "2",
+          "type": "term",
         },
         "context": Object {
           "charRange": Array [
             0,
-            2,
+            3,
           ],
-          "target": "title",
+          "target": "term",
           "type": "textField",
         },
         "role": "from",
@@ -558,21 +589,20 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "2008",
-    "note": "That is why mediaItem/1 is related to term/2",
+    "id": "2007",
+    "note": "That is why song/1 is related to term/2",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
-          "type": "mediaItem",
+          "type": "song",
         },
         "context": Object {
-          "charRange": Array [
-            0,
-            2,
-          ],
-          "target": "title",
-          "type": "textField",
+          "timeRange": Object {
+            "inPoint": 300,
+            "outPoint": 500,
+          },
+          "type": "timeRange",
         },
         "role": "to",
       },
@@ -590,6 +620,42 @@ Array [
           "type": "textField",
         },
         "role": "from",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "3001",
+    "note": "this media item mentions a word in the term",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 100,
+            "outPoint": 1200,
+          },
+          "type": "timeRange",
+        },
+        "role": "from",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            1,
+            4,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "to",
       },
     ],
     "tags": Array [],
@@ -1551,7 +1617,7 @@ Array [
   },
   Object {
     "id": "2007",
-    "note": "That is why song/1 is related to mediaItem/1",
+    "note": "That is why song/1 is related to term/2",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
@@ -1569,43 +1635,6 @@ Array [
       },
       Object {
         "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
-        },
-        "context": Object {
-          "charRange": Array [
-            0,
-            2,
-          ],
-          "target": "title",
-          "type": "textField",
-        },
-        "role": "from",
-      },
-    ],
-    "tags": Array [],
-  },
-  Object {
-    "id": "2008",
-    "note": "That is why mediaItem/1 is related to term/2",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
-        },
-        "context": Object {
-          "charRange": Array [
-            0,
-            2,
-          ],
-          "target": "title",
-          "type": "textField",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
           "id": "2",
           "type": "term",
         },
@@ -1616,6 +1645,76 @@ Array [
           ],
           "target": "term",
           "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "3001",
+    "note": "this media item mentions a word in the term",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 100,
+            "outPoint": 1200,
+          },
+          "type": "timeRange",
+        },
+        "role": "from",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "term",
+        },
+        "context": Object {
+          "charRange": Array [
+            1,
+            4,
+          ],
+          "target": "term",
+          "type": "textField",
+        },
+        "role": "to",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "3101",
+    "note": "this selection from the media item portrays the events in the book",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 300,
+            "outPoint": 1800,
+          },
+          "type": "timeRange",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
         },
         "role": "from",
       },

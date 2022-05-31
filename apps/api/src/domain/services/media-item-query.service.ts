@@ -5,19 +5,36 @@ import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
+import {
+    getDefaultViewModelBuilderOptions,
+    ViewModelBuilderOptions,
+} from '../../view-models/buildViewModelForResource/viewModelBuilders/types/ViewModelBuilderOptions';
 import { MediaItemViewModel } from '../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
 import { MediaItem } from '../models/media-item/entities/media-item.entity';
 import { Tag } from '../models/tag/tag.entity';
+import { ISpecification } from '../repositories/interfaces/ISpecification';
 import IsPublished from '../repositories/specifications/isPublished';
 import { isResourceId } from '../types/ResourceId';
 import { resourceTypes } from '../types/resourceTypes';
+
+type GeneralQueryOptions = ViewModelBuilderOptions;
+
+const defaultOptions = getDefaultViewModelBuilderOptions();
 
 @Injectable()
 export class MediaItemQueryService {
     constructor(private readonly repositoryProvider: RepositoryProvider) {}
 
-    async fetchById(id: unknown): Promise<InternalError | Maybe<MediaItemViewModel>> {
+    async fetchById(
+        id: unknown,
+        options: Partial<GeneralQueryOptions> = {}
+    ): Promise<InternalError | Maybe<MediaItemViewModel>> {
         if (!isResourceId(id)) return new InternalError(`Invalid entity ID: ${id}`);
+
+        const { shouldReturnUnpublishedEntities } = {
+            ...defaultOptions,
+            ...options,
+        };
 
         const searchResult = await this.repositoryProvider
             .forResource<MediaItem>(resourceTypes.mediaItem)
@@ -30,6 +47,8 @@ export class MediaItemQueryService {
 
         if (isNotFound(searchResult)) return NotFound;
 
+        if (!shouldReturnUnpublishedEntities && !searchResult.published) return NotFound;
+
         const viewModel = new MediaItemViewModel(searchResult);
 
         const viewModelWithTags = await this.mixinTheTags(viewModel);
@@ -37,13 +56,13 @@ export class MediaItemQueryService {
         return cloneToPlainObject(viewModelWithTags);
     }
 
-    async fetchMany(): Promise<MediaItemViewModel[]> {
+    async fetchMany(
+        // TODO Should there be a translation layer from view model to model specification?
+        specification: ISpecification<MediaItem> = new IsPublished(true)
+    ): Promise<MediaItemViewModel[]> {
         const searchResult = await this.repositoryProvider
             .forResource<MediaItem>(resourceTypes.mediaItem)
-            .fetchMany(
-                // TODO support returning unpublished results for admin users
-                new IsPublished(true)
-            );
+            .fetchMany(specification);
 
         const validModels = searchResult.filter(
             (model): model is MediaItem => !isInternalError(model)

@@ -30,7 +30,7 @@ export const isResourceType = (input: unknown): input is ResourceType =>
     Object.values(resourceTypes).includes(input as ResourceType);
 
 // We should use this for type inference a few places.
-export type ResourceTypeToInstance = {
+export type ResourceTypeToResourceModel = {
     term: Term;
     vocabularyList: VocabularyList;
     transcribedAudio: TranscribedAudio;
@@ -46,7 +46,7 @@ export type ResourceTypeToInstance = {
  * This represents the state of all domain models, excluding their `Connections`
  */
 export type InMemorySnapshotOfResources = {
-    [K in ResourceType]?: ResourceTypeToInstance[K][];
+    [K in ResourceType]?: ResourceTypeToResourceModel[K][];
 };
 
 export type InMemorySnapshot = {
