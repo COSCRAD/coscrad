@@ -33,7 +33,7 @@ describe('Repository provider > repositoryForEntity', () => {
     Object.values(ResourceType).forEach((resourceType) => {
         describe(`Repository for entity of type ${resourceType}`, () => {
             beforeEach(async () => {
-                await testRepositoryProvider.addEntitiesOfManyTypes(testData);
+                await testRepositoryProvider.addResourcesOfManyTypes(testData);
             });
 
             afterEach(async () => {

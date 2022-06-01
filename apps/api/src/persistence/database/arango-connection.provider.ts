@@ -5,13 +5,11 @@ import { Scheme } from '../../app/config/constants/Scheme';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { DTO } from '../../types/DTO';
 import ArangoDatabaseConfiguration from './ArangoDatabaseConfiguration';
+import { getAllArangoCollectionIDs } from './collection-references/ArangoCollectionId';
+import { isArangoEdgeCollectionCollectionID } from './collection-references/ArangoEdgeCollectionId';
 import DatabaseAlreadyInitializedError from './errors/DatabaseAlreadyInitializedError';
 import DatabaseCannotBeDroppedError from './errors/DatabaseCannotBeDroppedError';
 import DatabaseNotYetInitializedError from './errors/DatabaseNotYetInitializedError';
-import {
-    getAllArangoCollectionIDs,
-    isArangoEdgeCollectionCollectionID,
-} from './types/ArangoCollectionId';
 import canDatabaseBeDropped from './utilities/canDatabaseBeDropped';
 
 // Alias for more clarity from the outside; TODO wrap `Database` with simpler API?

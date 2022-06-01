@@ -4,7 +4,7 @@ import { AggregateId } from '../../domain/types/AggregateId';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { Maybe } from '../../lib/types/maybe';
 import { ArangoDatabase } from './arango-database';
-import { ArangoCollectionID } from './types/ArangoCollectionId';
+import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
 import { DatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
 
 /**
@@ -13,11 +13,11 @@ import { DatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
  * repositories layer.
  */
 export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
-    #collectionID: ArangoCollectionID;
+    #collectionID: ArangoCollectionId;
 
     #arangoDatabase: ArangoDatabase;
 
-    constructor(arangoDatabase: ArangoDatabase, collectionName: ArangoCollectionID) {
+    constructor(arangoDatabase: ArangoDatabase, collectionName: ArangoCollectionId) {
         this.#collectionID = collectionName;
 
         this.#arangoDatabase = arangoDatabase;

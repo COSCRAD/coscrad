@@ -33,7 +33,7 @@ describe('Repository provider > getEdgeConnectionRepository', () => {
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
 
-        await testRepositoryProvider.addEntitiesOfManyTypes(resources);
+        await testRepositoryProvider.addResourcesOfManyTypes(resources);
 
         await testRepositoryProvider.getEdgeConnectionRepository().createMany(connections);
     });

@@ -12,9 +12,9 @@ import { IEdgeConnectionRepositoryProvider } from '../../domain/repositories/int
 import { ITagRepositoryProvider } from '../../domain/repositories/interfaces/ITagRepositoryProvider';
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider';
 import { ResourceType } from '../../domain/types/ResourceType';
+import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
+import { getArangoCollectionIDFromResourceType } from '../database/collection-references/getArangoCollectionIDFromResourceType';
 import { DatabaseProvider } from '../database/database.provider';
-import { getArangoCollectionIDFromResourceType } from '../database/getArangoCollectionIDFromResourceType';
-import { edgeConnectionCollectionID, tagCollectionID } from '../database/types/ArangoCollectionId';
 import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapArangoEdgeDocumentToEdgeConnectionDTO';
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
@@ -35,7 +35,7 @@ export class RepositoryProvider
     getEdgeConnectionRepository() {
         return new RepositoryForEntity<EdgeConnection>(
             this.databaseProvider,
-            edgeConnectionCollectionID,
+            ArangoCollectionId.edgeConnectionCollectionID,
             edgeConnectionFactory,
             mapArangoEdgeDocumentToEdgeConnectionDTO,
             mapEdgeConnectionDTOToArangoEdgeDocument
@@ -45,7 +45,7 @@ export class RepositoryProvider
     getTagRepository() {
         return new RepositoryForEntity<Tag>(
             this.databaseProvider,
-            tagCollectionID,
+            ArangoCollectionId.tags,
             buildInstanceFactory(tagValidator, Tag),
             mapDatabaseDTOToEntityDTO,
             mapEntityDTOToDatabaseDTO

@@ -61,7 +61,7 @@ describe('Repository for entity (with filters)', () => {
 
                 const allTerms = [...matchingTerms, ...nonMatchingTerms];
 
-                await testRepositoryProvider.addEntitiesOfSingleType(ResourceType.term, allTerms);
+                await testRepositoryProvider.addResourcesOfSingleType(ResourceType.term, allTerms);
 
                 const specification = new TermEnglishEquals(textToMatch);
 
@@ -83,7 +83,7 @@ describe('Repository for entity (with filters)', () => {
 
                 const specification = new TermEnglishEquals(unmatchedSearchTerm);
 
-                await testRepositoryProvider.addEntitiesOfSingleType(ResourceType.term, terms);
+                await testRepositoryProvider.addResourcesOfSingleType(ResourceType.term, terms);
 
                 const searchResult = await testRepositoryProvider
                     .forResource<Term>(ResourceType.term)

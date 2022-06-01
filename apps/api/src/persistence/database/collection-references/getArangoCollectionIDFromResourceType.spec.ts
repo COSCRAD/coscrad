@@ -1,6 +1,6 @@
-import { ResourceType } from '../../domain/types/ResourceType';
+import { ResourceType } from '../../../domain/types/ResourceType';
+import { getAllArangoResourceCollectionIDs } from './ArangoResourceCollectionId';
 import { getArangoCollectionIDFromResourceType } from './getArangoCollectionIDFromResourceType';
-import { getAllArangoResourceCollectionIDs } from './types/ArangoCollectionId';
 
 describe('getArangoCollectionIDFromResourceType', () => {
     const allCollectionIDs = getAllArangoResourceCollectionIDs();

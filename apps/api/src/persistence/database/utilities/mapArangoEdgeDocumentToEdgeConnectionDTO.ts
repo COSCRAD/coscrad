@@ -11,8 +11,8 @@ import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DTO } from '../../../types/DTO';
 import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatResourceCompositeIdentifier';
-import { getResourceTypeFromArangoCollectionID } from '../getArangoCollectionIDFromResourceType';
-import { isArangoResourceCollectionID } from '../types/ArangoCollectionId';
+import { isArangoResourceCollectionId } from '../collection-references/ArangoResourceCollectionId';
+import { getResourceTypeFromArangoCollectionID } from '../collection-references/getArangoCollectionIDFromResourceType';
 import { ArangoDocumentHandle } from '../types/ArangoDocumentHandle';
 import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
 import { HasArangoDocumentDirectionAttributes } from '../types/HasArangoDocumentDirectionAttributes';
@@ -28,7 +28,7 @@ const parseResourceCompositeID = (docHandle: ArangoDocumentHandle): ResourceComp
 
     const [collectionName, id] = splitOnSlash;
 
-    if (!isArangoResourceCollectionID(collectionName)) {
+    if (!isArangoResourceCollectionId(collectionName)) {
         throw new InternalError(
             `Edge document handle refers to an invalid collection name: : ${collectionName}`
         );

@@ -1,3 +1,3 @@
-import { ArangoCollectionID } from './ArangoCollectionId';
+import { ArangoCollectionId } from '../collection-references/ArangoCollectionId';
 
-export type ArangoDocumentHandle = `${ArangoCollectionID}/${string}`;
+export type ArangoDocumentHandle = `${ArangoCollectionId}/${string}`;

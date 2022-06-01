@@ -62,7 +62,7 @@ describe('GET /resources (fetch view models)', () => {
                 describe('when the resource is published', () => {
                     describe('when no resource with the id exists', () => {
                         beforeEach(async () => {
-                            await testRepositoryProvider.addEntitiesOfManyTypes(
+                            await testRepositoryProvider.addResourcesOfManyTypes(
                                 testDataWithAllResourcesPublished
                             );
 
@@ -78,7 +78,7 @@ describe('GET /resources (fetch view models)', () => {
 
                     describe('when an resource with the id is found', () => {
                         beforeEach(async () => {
-                            await testRepositoryProvider.addEntitiesOfManyTypes(
+                            await testRepositoryProvider.addResourcesOfManyTypes(
                                 testDataWithAllResourcesPublished
                             );
 
@@ -106,14 +106,14 @@ describe('GET /resources (fetch view models)', () => {
                     const unpublishedId = 'unpublished-01';
 
                     beforeEach(async () => {
-                        await testRepositoryProvider.addEntitiesOfManyTypes(resourceTestData);
+                        await testRepositoryProvider.addResourcesOfManyTypes(resourceTestData);
 
                         const unpublishedInstance = resourceTestData[resourceType][0].clone({
                             published: false,
                             id: unpublishedId,
                         });
 
-                        await testRepositoryProvider.addEntitiesOfSingleType(resourceType, [
+                        await testRepositoryProvider.addResourcesOfSingleType(resourceType, [
                             unpublishedInstance,
                         ]);
                     });

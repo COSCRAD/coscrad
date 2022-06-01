@@ -8,11 +8,8 @@ import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { DTO } from '../../types/DTO';
 import { ArangoDatabase } from '../database/arango-database';
+import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { DatabaseProvider } from '../database/database.provider';
-import {
-    categoryCollectionID,
-    categoryEdgeCollectionID,
-} from '../database/types/ArangoCollectionId';
 import { CategoryDocument } from '../database/types/CategoryDocument';
 import { HasArangoDocumentDirectionAttributes } from '../database/types/HasArangoDocumentDirectionAttributes';
 import buildCategoryDTOsFromDatabaseDocuments from '../database/utilities/category/buildCategoryDTOsFromDatabaseDocuments';
@@ -30,10 +27,12 @@ export default class ArangoCategoryRepository implements ICategoryRepository {
     }
 
     async fetchTree(): Promise<(Category | InternalError)[]> {
-        const categories = await this.#arangoDB.fetchMany<CategoryDocument>(categoryCollectionID);
+        const categories = await this.#arangoDB.fetchMany<CategoryDocument>(
+            ArangoCollectionId.categories
+        );
 
         const category_edges = await this.#arangoDB.fetchMany<HasArangoDocumentDirectionAttributes>(
-            categoryEdgeCollectionID
+            ArangoCollectionId.categoryEdgeCollectionID
         );
 
         const categoryDTOs = buildCategoryDTOsFromDatabaseDocuments(categories, category_edges);
@@ -44,13 +43,15 @@ export default class ArangoCategoryRepository implements ICategoryRepository {
     async fetchById(id: AggregateId): Promise<Maybe<Category | InternalError>> {
         const categoryDocument = await this.#arangoDB.fetchById<CategoryDocument>(
             id,
-            categoryCollectionID
+            ArangoCollectionId.categories
         );
 
         if (isNotFound(categoryDocument)) return NotFound;
 
         const edgesWhereThisCategoryIsTheParent = await this.#arangoDB
-            .fetchMany<HasArangoDocumentDirectionAttributes>(categoryEdgeCollectionID)
+            .fetchMany<HasArangoDocumentDirectionAttributes>(
+                ArangoCollectionId.categoryEdgeCollectionID
+            )
             .then((edges) =>
                 edges.filter(
                     ({ _from }) => convertArangoDocumentHandleToCompositeIdentifier(_from).id === id
@@ -71,6 +72,6 @@ export default class ArangoCategoryRepository implements ICategoryRepository {
     }
 
     async count(): Promise<number> {
-        return await this.#arangoDB.getCount(categoryCollectionID);
+        return await this.#arangoDB.getCount(ArangoCollectionId.categories);
     }
 }

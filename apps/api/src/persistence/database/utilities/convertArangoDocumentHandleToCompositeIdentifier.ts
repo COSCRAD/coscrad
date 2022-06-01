@@ -1,10 +1,13 @@
 import { AggregateId, isAggregateId } from '../../../domain/types/AggregateId';
 import { InternalError } from '../../../lib/errors/InternalError';
-import { ArangoCollectionID, isArangoCollectionID } from '../types/ArangoCollectionId';
+import {
+    ArangoCollectionId,
+    isArangoCollectionId,
+} from '../collection-references/ArangoCollectionId';
 import { ArangoDocumentHandle } from '../types/ArangoDocumentHandle';
 
 type ArangoCompositeIdentifier = {
-    collection: ArangoCollectionID;
+    collection: ArangoCollectionId;
     id: AggregateId;
 };
 
@@ -17,7 +20,7 @@ export default (handle: ArangoDocumentHandle): ArangoCompositeIdentifier => {
 
     const [collectionID, aggregateId] = splitOnSlash;
 
-    if (!isArangoCollectionID(collectionID)) {
+    if (!isArangoCollectionId(collectionID)) {
         throw new InternalError(
             `Invalid arango collection ID: ${collectionID} in Arango document handle: ${handle}`
         );

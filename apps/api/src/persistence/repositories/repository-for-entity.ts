@@ -9,8 +9,8 @@ import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
 import { ArangoDatabaseForCollection } from '../database/arango-database-for-collection';
+import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { DatabaseProvider } from '../database/database.provider';
-import { ArangoCollectionID } from '../database/types/ArangoCollectionId';
 import { DatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDTO';
 
 /**
@@ -34,7 +34,7 @@ export class RepositoryForEntity<TEntity extends HasAggregateId & BaseDomainMode
 
     constructor(
         arangoDatabaseProvider: DatabaseProvider,
-        collectionName: ArangoCollectionID,
+        collectionName: ArangoCollectionId,
         instanceFactory: InstanceFactory<TEntity>,
         documentToEntity,
         entityToDocument

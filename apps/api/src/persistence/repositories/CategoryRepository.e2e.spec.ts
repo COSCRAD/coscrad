@@ -4,8 +4,8 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
 import buildTestData from '../../test-data/buildTestData';
 import { ArangoConnectionProvider } from '../database/arango-connection.provider';
+import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { DatabaseProvider } from '../database/database.provider';
-import { categoryCollectionID } from '../database/types/ArangoCollectionId';
 import { DatabaseDTO } from '../database/utilities/mapEntityDTOToDatabaseDTO';
 import generateRandomTestDatabaseName from './__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
@@ -90,7 +90,7 @@ describe('Repository provider > getCategoryRepository', () => {
         describe('when there is a document with the given ID that fails invariant validation', () => {
             it('should return an Internal Error', async () => {
                 await databaseProvider
-                    .getDatabaseForCollection(categoryCollectionID)
+                    .getDatabaseForCollection(ArangoCollectionId.categories)
                     .create({ _key: 'BAD-CAT', members: ['foo'] } as DatabaseDTO);
 
                 const result = await testRepositoryProvider

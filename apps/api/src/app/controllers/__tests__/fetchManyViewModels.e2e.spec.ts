@@ -58,7 +58,7 @@ describe('When fetching multiple resources', () => {
 
             describe('when all of the resources are published', () => {
                 beforeEach(async () => {
-                    await testRepositoryProvider.addEntitiesOfManyTypes(
+                    await testRepositoryProvider.addResourcesOfManyTypes(
                         testDataWithAllResourcesPublished
                     );
 
@@ -103,7 +103,7 @@ describe('When fetching multiple resources', () => {
                     );
 
                 beforeEach(async () => {
-                    await testRepositoryProvider.addEntitiesOfSingleType(ResourceType, [
+                    await testRepositoryProvider.addResourcesOfSingleType(ResourceType, [
                         ...unpublishedResourcesToAdd,
                         ...publishedResourcesToAdd,
                     ]);

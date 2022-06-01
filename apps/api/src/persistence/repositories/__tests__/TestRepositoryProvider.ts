@@ -1,14 +1,11 @@
 import { Category } from '../../../domain/models/categories/entities/category.entity';
 import { Resource } from '../../../domain/models/resource.entity';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
+import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
+import { getAllArangoDocumentCollectionIDs } from '../../database/collection-references/ArangoDocumentCollectionId';
+import { getAllArangoEdgeCollectionIDs } from '../../database/collection-references/ArangoEdgeCollectionId';
+import { getArangoCollectionIDFromResourceType } from '../../database/collection-references/getArangoCollectionIDFromResourceType';
 import { DatabaseProvider } from '../../database/database.provider';
-import { getArangoCollectionIDFromResourceType } from '../../database/getArangoCollectionIDFromResourceType';
-import {
-    categoryCollectionID,
-    categoryEdgeCollectionID,
-    edgeConnectionCollectionID,
-    tagCollectionID,
-} from '../../database/types/ArangoCollectionId';
 import buildEdgeDocumentsFromCategoryNodeDTOs from '../../database/utilities/category/buildEdgeDocumentsFromCategoryNodeDTOs';
 import mapEntityDTOToDatabaseDTO from '../../database/utilities/mapEntityDTOToDatabaseDTO';
 import { RepositoryProvider } from '../repository.provider';
@@ -19,7 +16,7 @@ export default class TestRepositoryProvider extends RepositoryProvider {
     }
 
     // TODO We should correlate entity type with TEntity here
-    public async addEntitiesOfSingleType<TResource extends Resource>(
+    public async addResourcesOfSingleType<TResource extends Resource>(
         resourceType: ResourceType,
         entities: TResource[]
     ): Promise<void> {
@@ -27,9 +24,9 @@ export default class TestRepositoryProvider extends RepositoryProvider {
     }
 
     // TODO fix types
-    public async addEntitiesOfManyTypes(snapshot: InMemorySnapshotOfResources): Promise<void> {
+    public async addResourcesOfManyTypes(snapshot: InMemorySnapshotOfResources): Promise<void> {
         const writePromises = Object.entries(snapshot).map(([ResourceType, entityInstances]) =>
-            this.addEntitiesOfSingleType(
+            this.addResourcesOfSingleType(
                 ResourceType as ResourceType,
                 entityInstances as Resource[]
             )
@@ -54,11 +51,11 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         const edgeDocuments = buildEdgeDocumentsFromCategoryNodeDTOs(categories);
 
         await this.databaseProvider
-            .getDatabaseForCollection(categoryCollectionID)
+            .getDatabaseForCollection(ArangoCollectionId.categories)
             .createMany(categoryDocuments);
 
         await this.databaseProvider
-            .getDatabaseForCollection(categoryEdgeCollectionID)
+            .getDatabaseForCollection(ArangoCollectionId.categoryEdgeCollectionID)
             .createMany(edgeDocuments);
     }
 
@@ -68,40 +65,35 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         ).deleteAll(getArangoCollectionIDFromResourceType(ResourceType));
     }
 
-    public async deleteAllTags(): Promise<void> {
-        await this.databaseProvider.getDBInstance().deleteAll(tagCollectionID);
-    }
-
-    public async deleteAllEdges(): Promise<void> {
-        await this.databaseProvider.getDBInstance().deleteAll(edgeConnectionCollectionID);
-
-        await this.databaseProvider.getDBInstance().deleteAll(categoryEdgeCollectionID);
+    private async deleteAllEdgeDocumentData(): Promise<void> {
+        await Promise.all(
+            getAllArangoEdgeCollectionIDs().map((collectionId) =>
+                this.databaseProvider.getDBInstance().deleteAll(collectionId)
+            )
+        );
     }
 
     /**
-     * Deletes all entity data (i.e. empties every entity collection);
+     * Deletes all documents from every ordinary document collection;
      */
-    private async deleteAllEntityData(): Promise<void> {
-        const deleteAllDataPromises = Object.values(ResourceType)
-            .map((ResourceType: ResourceType) => this.deleteAllResourcesOfGivenType(ResourceType))
-            .concat(this.databaseProvider.getDBInstance().deleteAll(tagCollectionID))
-            .concat(this.databaseProvider.getDBInstance().deleteAll(categoryCollectionID));
-
-        await Promise.all(deleteAllDataPromises);
+    private async deleteAllDocumentData(): Promise<void> {
+        await Promise.all(
+            getAllArangoDocumentCollectionIDs().map((collectionId) =>
+                this.databaseProvider.getDBInstance().deleteAll(collectionId)
+            )
+        );
     }
 
     public async testSetup(): Promise<void> {
         // In case the last test didn't clean up
-        await this.deleteAllEntityData();
+        await this.deleteAllDocumentData();
 
-        await this.deleteAllEdges();
+        await this.deleteAllEdgeDocumentData();
     }
 
     public async testTeardown(): Promise<void> {
-        await this.deleteAllEntityData();
+        await this.deleteAllDocumentData();
 
-        await this.deleteAllEdges();
-
-        await this.deleteAllTags();
+        await this.deleteAllEdgeDocumentData();
     }
 }
