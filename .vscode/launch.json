@@ -17,6 +17,21 @@
             "internalConsoleOptions": "neverOpen"
         },
         {
+            "type": "node",
+            "request": "launch",
+            "name": "Jest test Commands lib",
+            "program": "${workspaceFolder}/node_modules/nx/bin/nx.js",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "test",
+                "commands",
+                "--testFile=${file}",
+                "--runInBand",
+            ],
+            "console": "internalConsole",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
             "name": "Debug API build",
             "port": 3131,
             "request": "attach",

@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "commands": {
+      "type": "library",
+      "root": "libs/commands",
+      "entryFile": "index",
+      "sourceRoot": "libs/commands/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/commands/tsconfig.lib.json"
+      }
+    }
+  },
+  "compilerOptions": {
+    "webpack": true
+  }
+}
