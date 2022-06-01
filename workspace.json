@@ -7,6 +7,8 @@
         "coscrad-frontend-e2e": "apps/coscrad-frontend-e2e",
         "tng-dictionary": "apps/tng-dictionary",
         "tng-dictionary-e2e": "apps/tng-dictionary-e2e",
-        "validation": "libs/validation"
+        "validation": "libs/validation",
+
+        "commands": "libs/commands"
     }
 }
