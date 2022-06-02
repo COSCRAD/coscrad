@@ -5,22 +5,22 @@ import { ICommandHandler } from '../interfaces/command-handler.interface';
 import { ICommand } from '../interfaces/command.interface';
 import getCommandFromHandlerMetadata from './utilities/getCommandFromHandlerMetadata';
 
-type CommandAndHandlerPair = [Type<ICommand>, Type<ICommandHandler>];
+type CommandAndHandlerPair = [Type<ICommand>, ICommandHandler];
 
 @Injectable()
 export class CommandFinderService {
     constructor(private readonly discoveryService: DiscoveryService) {}
 
     async find(): Promise<CommandAndHandlerPair[]> {
-        const allProviders = await this.discoveryService.providers(
+        const commandHandlerProviders = await this.discoveryService.providers(
             (provider) =>
                 !!provider.injectType &&
                 Reflect.hasMetadata(COMMAND_HANDLER_METADATA, provider.injectType)
         );
 
-        const commandAndHandlerPairs = allProviders.map((provider) => [
+        const commandAndHandlerPairs = commandHandlerProviders.map((provider) => [
             getCommandFromHandlerMetadata(provider.injectType as Type<ICommandHandler>),
-            provider.injectType,
+            provider.instance,
         ]) as CommandAndHandlerPair[];
 
         return commandAndHandlerPairs;

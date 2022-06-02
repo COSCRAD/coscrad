@@ -62,7 +62,7 @@ export class Song extends Resource implements ITimeBoundable {
 
         this.titleEnglish = titleEnglish;
 
-        this.contributorAndRoles = contributorAndRoles.map(
+        this.contributorAndRoles = (contributorAndRoles || []).map(
             (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
         );
 

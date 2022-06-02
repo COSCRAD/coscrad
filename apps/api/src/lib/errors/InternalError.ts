@@ -22,6 +22,15 @@ export class InternalError extends Error {
     }
 
     toString(): string {
+        return [
+            this.message,
+            this.innerErrors.length > 0
+                ? `Inner Errors: ${this.#buildMessageForInnerErrors()}`
+                : '',
+        ].join('\n');
+    }
+
+    #buildMessageForInnerErrors(): string {
         return this.innerErrors.reduce(
             (message, innerError) =>
                 message + innerError.innerErrors

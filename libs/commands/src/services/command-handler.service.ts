@@ -1,3 +1,5 @@
+import { Type } from '@nestjs/common';
+import { plainToInstance } from 'class-transformer';
 import { Ack } from '../constants';
 import { NoCommandHandlerRegisteredForCommandException } from '../exceptions';
 import { CommandWithGivenTypeNotFoundException } from '../exceptions/command-with-given-type-not-found-exception';
@@ -10,21 +12,29 @@ import getCommandTypeFromMetadata from './utilities/getCommandTypeFromMetadata';
 export class CommandHandlerService {
     #handlers: Map<string, ICommandHandler> = new Map();
 
-    registerHandler(type: string, handler: new () => ICommandHandler) {
-        this.#handlers.set(type, new handler());
+    registerHandler(type: string, handler: ICommandHandler) {
+        this.#handlers.set(type, handler);
     }
 
     async execute({ type, payload }: FluxStandardAction): Promise<Error | Ack> {
-        const command = this.#buildCommand({ type, payload });
-
         const handler = this.#handlers.get(type);
 
         if (!handler) throw new NoCommandHandlerRegisteredForCommandException(type);
 
-        return handler.execute(command);
+        const commandInstance = this.#buildCommand({ type, payload });
+
+        return handler.execute(commandInstance);
     }
 
-    #buildCommand({ type, payload: commandDTO }: FluxStandardAction): ICommand {
+    #buildCommand({ type, payload }: FluxStandardAction): ICommand {
+        const commandCtor = this.#getCommandCtorFromCommandType(type);
+
+        const instanceToValidate = plainToInstance(commandCtor, payload);
+
+        return instanceToValidate;
+    }
+
+    #getCommandCtorFromCommandType(type: string): Type<ICommand> {
         const allCommandHandlerCtors = [...this.#handlers.values()].map(
             (handler) => Object.getPrototypeOf(handler).constructor
         );
@@ -37,12 +47,6 @@ export class CommandHandlerService {
             (commandCtor) => getCommandTypeFromMetadata(commandCtor) === type
         );
 
-        console.log({
-            allCommandCtors,
-            allCommandHandlerCtors,
-            handlers: this.#handlers,
-        });
-
         if (!CommandCtor) {
             // Actually, we need this to be a 400 bad request
             throw new CommandWithGivenTypeNotFoundException(type);
@@ -50,6 +54,6 @@ export class CommandHandlerService {
 
         // TODO Validate command payload
 
-        return new CommandCtor(commandDTO);
+        return CommandCtor;
     }
 }
