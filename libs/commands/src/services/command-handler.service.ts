@@ -48,7 +48,10 @@ export class CommandHandlerService {
         );
 
         if (!CommandCtor) {
-            // Actually, we need this to be a 400 bad request
+            /**
+             * TODO [https://www.pivotaltracker.com/story/show/182365491]
+             * This should be bubbled up to the end-user
+             */
             throw new CommandWithGivenTypeNotFoundException(type);
         }
 

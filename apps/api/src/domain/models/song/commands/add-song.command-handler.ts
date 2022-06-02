@@ -1,5 +1,5 @@
 import { Ack, CommandHandler, ICommandHandler } from '@coscrad/commands';
-import { buildSimpleValidator } from '@coscrad/validation';
+import { buildSimpleValidationFunction } from '@coscrad/validation';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../lib/types/not-found';
 import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
@@ -13,11 +13,11 @@ import { AddSong } from './add-song.command';
 export class AddSongHandler implements ICommandHandler {
     constructor(private readonly repositoryProvider: RepositoryProvider) {}
 
-    async execute(command: AddSong): Promise<Ack | Error> {
+    async execute(command: AddSong): Promise<Ack | InternalError> {
         // Validate command type
-        const payloadTypeErrors = buildSimpleValidator(Object.getPrototypeOf(command).constructor)(
-            command
-        ).map(
+        const payloadTypeErrors = buildSimpleValidationFunction(
+            Object.getPrototypeOf(command).constructor
+        )(command).map(
             (simpleError) => new InternalError(`invalid payload type: ${simpleError.toString()}`)
         );
 

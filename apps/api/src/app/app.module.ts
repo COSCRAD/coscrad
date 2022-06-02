@@ -11,7 +11,7 @@ import { AppService } from './app.service';
 import buildConfigFilePath from './config/buildConfigFilePath';
 import { validate } from './config/env.validation';
 import { CategoryController } from './controllers/category.controller';
-import { CommandController } from './controllers/command.controller';
+import { CommandController } from './controllers/command/command.controller';
 import { EdgeConnectionController } from './controllers/edgeConnection.controller';
 import { ResourceViewModelController } from './controllers/resourceViewModel.controller';
 import { TagController } from './controllers/tag.controller';
