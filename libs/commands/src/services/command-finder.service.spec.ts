@@ -45,7 +45,7 @@ describe('CommandFinderService', () => {
         it('should find the expected command and handler pair', async () => {
             const result = await service.find();
 
-            const expectedResult = [[AddWidget, HandleAddWidget]];
+            const expectedResult = [[AddWidget, new HandleAddWidget()]];
 
             expect(result).toEqual(expectedResult);
         });

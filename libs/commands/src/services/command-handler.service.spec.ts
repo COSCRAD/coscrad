@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { plainToInstance } from 'class-transformer';
 import { Ack } from '../constants';
 import { Command, CommandHandler } from '../decorators';
 import { ICommandHandler } from '../interfaces/command-handler.interface';
@@ -29,7 +28,7 @@ describe('CommandsService', () => {
         service = module.get<CommandHandlerService>(CommandHandlerService);
 
         // This is normally done by the finder service, but there's a separate test for that
-        service.registerHandler('ADD_WIDGET', HandleAddWidget);
+        service.registerHandler('ADD_WIDGET', new HandleAddWidget());
     });
 
     it('should be defined', () => {
@@ -39,11 +38,23 @@ describe('CommandsService', () => {
     describe('CommandHandler.execute', () => {
         describe('when the command it receives is valid', () => {
             it('should return Ack', async () => {
-                const result = await service.execute(
-                    plainToInstance(AddWidget, { widgetName: 'ok name' })
-                );
+                const result = await service.execute({
+                    type: 'ADD_WIDGET',
+                    payload: { widgetName: 'ok name' },
+                });
 
                 expect(result).toBe(Ack);
+            });
+        });
+
+        describe('when the command it receives is invalid', () => {
+            it('should return an error', async () => {
+                const result = await service.execute({
+                    type: 'ADD_WIDGET',
+                    payload: { widgetName: 'fail' },
+                });
+
+                expect(result).toBeInstanceOf(Error);
             });
         });
     });
