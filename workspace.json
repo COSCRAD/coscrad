@@ -8,7 +8,6 @@
         "tng-dictionary": "apps/tng-dictionary",
         "tng-dictionary-e2e": "apps/tng-dictionary-e2e",
         "validation": "libs/validation",
-
         "commands": "libs/commands"
     }
 }
