@@ -14,6 +14,7 @@ export {
     IsOptional,
     IsPositive,
     IsUrl,
+    IsUUID,
     ValidateNested,
 } from 'class-validator';
 export * from './lib/decorators';
