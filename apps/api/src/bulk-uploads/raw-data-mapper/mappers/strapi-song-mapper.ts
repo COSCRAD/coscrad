@@ -46,9 +46,40 @@ const strapiToCommandFieldCalculationRules: FieldCalculationRules<StrapiSong, DT
     id: ({ id }: StrapiSong) => id.toString(),
     title: ({ name }: StrapiSong) => name,
     titleEnglish: ({ name_english }: StrapiSong) => name_english,
-    contributorAndRoles: (_: StrapiSong) => [], // TODO complete this,
+    contributorAndRoles: ({ performer, author, transcriber }: StrapiSong) =>
+        []
+            .concat(
+                performer
+                    ? {
+                          contributorId: performer.toString(),
+                          role: 'performer',
+                      }
+                    : null
+            )
+            .concat(
+                author
+                    ? {
+                          contributorId: author.toString(),
+                          role: 'author',
+                      }
+                    : null
+            )
+            .concat(
+                transcriber
+                    ? {
+                          contributorId: transcriber.toString(),
+                          role: 'transcriber',
+                      }
+                    : null
+            )
+            .concat({
+                // Aaron!
+                contributorId: '31',
+                role: 'recorded and edited audio',
+            })
+            .filter((c) => c !== null),
     lyrics: ({ lyrics }: StrapiSong) => lyrics,
-    audioURL: ({ media: { url } }: StrapiSong) => url,
+    audioURL: ({ media: { url } }: StrapiSong) => `https://api.tsilhqotinlanguage.ca${url}`,
     rawData: (raw: StrapiSong) => raw,
     lengthMilliseconds: ({ media: { length } }: StrapiSong) => length,
 };
