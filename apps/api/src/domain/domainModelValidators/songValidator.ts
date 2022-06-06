@@ -7,6 +7,7 @@ import { ResourceType } from '../types/ResourceType';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
 import NullOrUndefinedResourceDTOError from './errors/NullOrUndefinedResourceDTOError';
+import MissingSongTitleError from './errors/song/MissingSongTitleError';
 import { DomainModelValidator } from './types/DomainModelValidator';
 import validateSimpleInvariants from './utilities/validateSimpleInvariants';
 import { Valid } from './Valid';
@@ -31,7 +32,7 @@ const songValidator: DomainModelValidator = (dto: unknown): Valid | InternalErro
         );
 
     if (!isStringWithNonzeroLength(title) && !isStringWithNonzeroLength(titleEnglish))
-        allErrors.push(new InternalError('a song must have a title in at least one language'));
+        allErrors.push(new MissingSongTitleError());
 
     if (allErrors.length > 0) return buildTopLevelError(id, allErrors);
 

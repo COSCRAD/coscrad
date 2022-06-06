@@ -1,3 +1,4 @@
+import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
@@ -11,6 +12,7 @@ type TestModuleInstances = {
     arangoConnectionProvider: ArangoConnectionProvider;
     databaseProvider: DatabaseProvider;
     testRepositoryProvider: TestRepositoryProvider;
+    commandHandlerService: CommandHandlerService;
     app: INestApplication;
 };
 
@@ -32,6 +34,8 @@ export default async (
 
     await app.init();
 
+    const commandHandlerService = moduleRef.get<CommandHandlerService>(CommandHandlerService);
+
     if (!arangoConnectionProvider || !databaseProvider || !testRepositoryProvider || !app) {
         throw new InternalError(`Failed to initialize a testing module.`);
     }
@@ -40,6 +44,7 @@ export default async (
         arangoConnectionProvider,
         databaseProvider,
         testRepositoryProvider,
+        commandHandlerService,
         app,
     };
 };

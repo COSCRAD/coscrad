@@ -1,6 +1,10 @@
 import { Category } from '../../../domain/models/categories/entities/category.entity';
 import { Resource } from '../../../domain/models/resource.entity';
-import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
+import {
+    InMemorySnapshot,
+    InMemorySnapshotOfResources,
+    ResourceType,
+} from '../../../domain/types/ResourceType';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
 import { getAllArangoDocumentCollectionIDs } from '../../database/collection-references/ArangoDocumentCollectionId';
 import { getAllArangoEdgeCollectionIDs } from '../../database/collection-references/ArangoEdgeCollectionId';
@@ -21,6 +25,21 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         entities: TResource[]
     ): Promise<void> {
         await this.forResource<TResource>(resourceType).createMany(entities);
+    }
+
+    public async addFullSnapshot({
+        resources,
+        categoryTree,
+        tags,
+        connections,
+    }: InMemorySnapshot): Promise<void> {
+        await this.addResourcesOfManyTypes(resources);
+
+        await this.addCategories(categoryTree);
+
+        await this.getTagRepository().createMany(tags);
+
+        await this.getEdgeConnectionRepository().createMany(connections);
     }
 
     // TODO fix types

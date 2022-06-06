@@ -6,6 +6,7 @@ import { RepositoryProvider } from '../../../../persistence/repositories/reposit
 import { DTO } from '../../../../types/DTO';
 import getInstanceFactoryForEntity from '../../../factories/getInstanceFactoryForEntity';
 import { ResourceType } from '../../../types/ResourceType';
+import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
 import { Song } from '../song.entity';
 import { AddSong } from './add-song.command';
 
@@ -22,10 +23,7 @@ export class AddSongHandler implements ICommandHandler {
         );
 
         if (payloadTypeErrors.length > 0) {
-            return new InternalError(
-                `Invalid command payload type. See inner errors for more details.`,
-                payloadTypeErrors
-            );
+            return new InvalidCommandPayloadTypeError('ADD_SONG', payloadTypeErrors);
         }
 
         // Validate external state
@@ -34,6 +32,10 @@ export class AddSongHandler implements ICommandHandler {
         const existingSongWithTheId = await this.repositoryProvider
             .forResource<Song>(ResourceType.song)
             .fetchById(id);
+
+        if (isInternalError(existingSongWithTheId)) {
+            throw new InternalError(`Encountered an error when fetching song: ${id}`);
+        }
 
         if (existingSongWithTheId !== NotFound) {
             return new InternalError(`There is already a song with ID: ${id}`);

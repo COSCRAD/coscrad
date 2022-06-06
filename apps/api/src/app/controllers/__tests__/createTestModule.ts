@@ -1,5 +1,8 @@
+import { CommandModule } from '@coscrad/commands';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import { AddSong } from '../../../domain/models/song/commands/add-song.command';
+import { AddSongHandler } from '../../../domain/models/song/commands/add-song.command-handler';
 import { MediaItemQueryService } from '../../../domain/services/media-item-query.service';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
@@ -10,6 +13,7 @@ import { Environment } from '../../config/constants/Environment';
 import { EnvironmentVariables } from '../../config/env.validation';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import { CategoryController } from '../category.controller';
+import { CommandController } from '../command/command.controller';
 import { EdgeConnectionController } from '../edgeConnection.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { ResourceViewModelController } from '../resourceViewModel.controller';
@@ -17,6 +21,7 @@ import { TagController } from '../tag.controller';
 
 export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
     Test.createTestingModule({
+        imports: [CommandModule],
         providers: [
             {
                 provide: ConfigService,
@@ -50,6 +55,16 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                     new MediaItemQueryService(repositoryProvider),
                 inject: [RepositoryProvider],
             },
+            {
+                provide: AddSongHandler,
+                useFactory: (repositoryProvider: RepositoryProvider) =>
+                    new AddSongHandler(repositoryProvider),
+                inject: [RepositoryProvider],
+            },
+            {
+                provide: AddSong,
+                useClass: AddSong,
+            },
         ],
 
         controllers: [
@@ -58,5 +73,6 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             TagController,
             MediaItemController,
             CategoryController,
+            CommandController,
         ],
     }).compile();
