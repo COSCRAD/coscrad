@@ -3,9 +3,9 @@ import { ResourceType } from '../../../../types/ResourceType';
 import NullOrUndefinedResourceDTOError from '../../../errors/NullOrUndefinedResourceDTOError';
 import transcribedAudioValidator from '../../../transcribedAudioValidator';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
-import getValidEntityInstaceForTest from '../utilities/getValidEntityInstaceForTest';
+import getValidResourceInstanceForTest from '../utilities/getValidResourceInstanceForTest';
 
-const validDTO = getValidEntityInstaceForTest(ResourceType.transcribedAudio).toDTO();
+const validDTO = getValidResourceInstanceForTest(ResourceType.transcribedAudio).toDTO();
 
 export const buildTranscribedAudioTestCase =
     (): DomainModelValidatorTestCase<TranscribedAudio> => ({

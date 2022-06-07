@@ -9,9 +9,9 @@ import MediaItemHasNoTitleInAnyLanguageError from '../../../errors/mediaItem/Med
 import NullOrUndefinedResourceDTOError from '../../../errors/NullOrUndefinedResourceDTOError';
 import mediaItemValidator from '../../../mediaItemValidator';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
-import getValidEntityInstaceForTest from '../utilities/getValidEntityInstaceForTest';
+import getValidResourceInstanceForTest from '../utilities/getValidResourceInstanceForTest';
 
-const validDTO = getValidEntityInstaceForTest(ResourceType.mediaItem).toDTO();
+const validDTO = getValidResourceInstanceForTest(ResourceType.mediaItem).toDTO();
 
 const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]): InternalError =>
     new InvalidEntityDTOError(ResourceType.mediaItem, id, innerErrors);

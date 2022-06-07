@@ -5,9 +5,9 @@ import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
 import NullOrUndefinedResourceDTOError from '../../../errors/NullOrUndefinedResourceDTOError';
 import photographValidator from '../../../photographValidator';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
-import getValidEntityInstaceForTest from '../utilities/getValidEntityInstaceForTest';
+import getValidResourceInstanceForTest from '../utilities/getValidResourceInstanceForTest';
 
-const validDTO = getValidEntityInstaceForTest(ResourceType.photograph).toDTO();
+const validDTO = getValidResourceInstanceForTest(ResourceType.photograph).toDTO();
 
 export const buildPhotographTestCase = (): DomainModelValidatorTestCase<Photograph> => ({
     resourceType: ResourceType.photograph,

@@ -7,7 +7,7 @@ import TestRepositoryProvider from '../../../../persistence/repositories/__tests
 import { DTO } from '../../../../types/DTO';
 import InvalidEntityDTOError from '../../../domainModelValidators/errors/InvalidEntityDTOError';
 import MissingSongTitleError from '../../../domainModelValidators/errors/song/MissingSongTitleError';
-import getValidEntityInstaceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidEntityInstaceForTest';
+import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
@@ -64,16 +64,7 @@ describe('AddSong', () => {
     });
 
     describe('when the payload is valid', () => {
-        it('should return ok', async () => {
-            await testRepositoryProvider.addFullSnapshot({
-                resources: {
-                    song: [],
-                },
-                tags: [],
-                connections: [],
-                categoryTree: [],
-            });
-
+        it('should succeed', async () => {
             const result = await commandHandlerService.execute(validCommandFSA);
 
             expect(result).toBe(Ack);
@@ -81,26 +72,20 @@ describe('AddSong', () => {
     });
 
     describe('when the payload has an invalid type', () => {
-        it('should return an error', async () => {
-            await testRepositoryProvider.addFullSnapshot(
-                buildInMemorySnapshot({
-                    resources: {
-                        song: [],
+        describe('when the id property has an invalid type (number[])', () => {
+            it('should return an error', async () => {
+                const result = await commandHandlerService.execute({
+                    ...validCommandFSA,
+                    payload: {
+                        ...validPayload,
+                        id: [99],
                     },
-                })
-            );
+                });
 
-            const result = await commandHandlerService.execute({
-                ...validCommandFSA,
-                payload: {
-                    ...validPayload,
-                    id: [99],
-                },
+                expect(result).toEqual(
+                    new InvalidCommandPayloadTypeError(addSongCommandType, [new InternalError('')])
+                );
             });
-
-            expect(result).toEqual(
-                new InvalidCommandPayloadTypeError(addSongCommandType, [new InternalError('')])
-            );
         });
     });
 
@@ -111,7 +96,7 @@ describe('AddSong', () => {
                     buildInMemorySnapshot({
                         resources: {
                             [ResourceType.song]: [
-                                getValidEntityInstaceForTest(ResourceType.song).clone({
+                                getValidResourceInstanceForTest(ResourceType.song).clone({
                                     id: dummyUuid,
                                 }),
                             ],
