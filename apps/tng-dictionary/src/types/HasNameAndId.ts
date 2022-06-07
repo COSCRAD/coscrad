@@ -1,4 +1,5 @@
 export type HasIdAndName = {
-  id: string;
-  name: string;
+    id: string;
+    name: string;
+    nameEnglish: string;
 };
