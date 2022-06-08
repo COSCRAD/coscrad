@@ -1,8 +1,6 @@
 import { CommandModule } from '@coscrad/commands';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import { AddSong } from '../../../domain/models/song/commands/add-song.command';
-import { AddSongHandler } from '../../../domain/models/song/commands/add-song.command-handler';
 import { MediaItemQueryService } from '../../../domain/services/media-item-query.service';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
@@ -55,16 +53,16 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                     new MediaItemQueryService(repositoryProvider),
                 inject: [RepositoryProvider],
             },
-            {
-                provide: AddSongHandler,
-                useFactory: (repositoryProvider: RepositoryProvider) =>
-                    new AddSongHandler(repositoryProvider),
-                inject: [RepositoryProvider],
-            },
-            {
-                provide: AddSong,
-                useClass: AddSong,
-            },
+            // {
+            //     provide: AddSongHandler,
+            //     useFactory: (repositoryProvider: RepositoryProvider) =>
+            //         new AddSongHandler(repositoryProvider, ),
+            //     inject: [RepositoryProvider],
+            // },
+            // {
+            //     provide: AddSong,
+            //     useClass: AddSong,
+            // },
         ],
 
         controllers: [

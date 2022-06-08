@@ -5,6 +5,7 @@
                 "type": "term",
                 "_key": "1",
                 "published": true,
+                "events": [],
                 "term": "Chil-term-1",
                 "termEnglish": "Engl-term-1",
                 "contributorId": "John Doe"
@@ -13,6 +14,7 @@
                 "type": "term",
                 "_key": "2",
                 "published": true,
+                "events": [],
                 "term": "Chil-term-2",
                 "termEnglish": "Engl-term-2",
                 "contributorId": "John Doe"
@@ -21,6 +23,7 @@
                 "type": "term",
                 "_key": "3",
                 "published": false,
+                "events": [],
                 "term": "Chil-term-no-english",
                 "contributorId": "Jane Deer"
             }
@@ -30,6 +33,7 @@
                 "type": "vocabularyList",
                 "_key": "1",
                 "published": false,
+                "events": [],
                 "name": "test VL 1 chil",
                 "nameEnglish": "test VL 1 engl",
                 "entries": [
@@ -67,6 +71,7 @@
                 "type": "vocabularyList",
                 "_key": "2",
                 "published": true,
+                "events": [],
                 "name": "test VL 2 CHIL- no engl name",
                 "entries": [
                     {
@@ -84,6 +89,7 @@
                 "type": "transcribedAudio",
                 "_key": "110",
                 "published": true,
+                "events": [],
                 "audioFilename": "123.mp3",
                 "lengthMilliseconds": 20000,
                 "startMilliseconds": 0,
@@ -108,6 +114,7 @@
                 "type": "book",
                 "_key": "23",
                 "published": true,
+                "events": [],
                 "title": "Three Little Pigs",
                 "subtitle": "The wolf's revenge",
                 "author": "John Doeburg",
@@ -129,6 +136,7 @@
                 "type": "book",
                 "_key": "24",
                 "published": false,
+                "events": [],
                 "title": "An Adventure Story",
                 "author": "Jane Donnaldson",
                 "publicationDate": "2011",
@@ -146,6 +154,7 @@
                 "type": "photograph",
                 "_key": "0",
                 "published": true,
+                "events": [],
                 "filename": "cat",
                 "photographer": "Susie McRealart",
                 "dimensions": {
@@ -157,6 +166,7 @@
                 "type": "photograph",
                 "_key": "1",
                 "published": true,
+                "events": [],
                 "filename": "dog",
                 "photographer": "Robert McRealart",
                 "dimensions": {
@@ -168,6 +178,7 @@
                 "type": "photograph",
                 "_key": "2",
                 "published": true,
+                "events": [],
                 "filename": "wildflower",
                 "photographer": "Kenny Tree-Huggens",
                 "dimensions": {
@@ -181,6 +192,7 @@
                 "type": "spatialFeature",
                 "_key": "100",
                 "published": true,
+                "events": [],
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
@@ -193,6 +205,7 @@
                 "type": "spatialFeature",
                 "_key": "101",
                 "published": true,
+                "events": [],
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
@@ -205,6 +218,7 @@
                 "type": "spatialFeature",
                 "_key": "102",
                 "published": true,
+                "events": [],
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
@@ -217,6 +231,7 @@
                 "type": "spatialFeature",
                 "_key": "1",
                 "published": true,
+                "events": [],
                 "geometry": {
                     "type": "LineString",
                     "coordinates": [
@@ -243,6 +258,7 @@
                 "type": "spatialFeature",
                 "_key": "300",
                 "published": true,
+                "events": [],
                 "geometry": {
                     "type": "Polygon",
                     "coordinates": [
@@ -277,6 +293,7 @@
                 "type": "bibliographicReference",
                 "_key": "1",
                 "published": true,
+                "events": [],
                 "data": {
                     "type": "book",
                     "title": "A Day in the Life",
@@ -299,6 +316,7 @@
                 "type": "bibliographicReference",
                 "_key": "23",
                 "published": true,
+                "events": [],
                 "data": {
                     "type": "journalArticle",
                     "title": "Report on the Cariboo Chilcotin Justice inquiry",
@@ -323,6 +341,7 @@
                 "type": "song",
                 "_key": "1",
                 "published": true,
+                "events": [],
                 "title": "Song title in language",
                 "titleEnglish": "Mary had a little lamb",
                 "contributorAndRoles": [
@@ -342,6 +361,7 @@
                 "type": "mediaItem",
                 "_key": "1",
                 "published": true,
+                "events": [],
                 "title": "episode title (in language)",
                 "titleEnglish": "Metal Mondays episode 1",
                 "contributorAndRoles": [

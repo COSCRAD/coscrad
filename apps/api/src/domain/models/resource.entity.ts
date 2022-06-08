@@ -1,5 +1,7 @@
 import { InternalError } from '../../lib/errors/InternalError';
+import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import capitalizeFirstLetter from '../../lib/utilities/strings/capitalizeFirstLetter';
+import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
 import DisallowedContextTypeForResourceError from '../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';
 import { Valid } from '../domainModelValidators/Valid';
@@ -12,7 +14,15 @@ import BaseDomainModel from './BaseDomainModel';
 import { EdgeConnectionContext } from './context/context.entity';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
 
+type Event = Record<string, unknown>;
+
 export abstract class Resource extends BaseDomainModel implements HasAggregateId {
+    /**
+     * We make this property optional so we don't need to specify it on existing data
+     * or test data. If it is not on a DTO, it will be set to [] in the constructor.
+     */
+    readonly events?: Event[];
+
     readonly type: ResourceType;
 
     readonly id: AggregateId;
@@ -31,6 +41,8 @@ export abstract class Resource extends BaseDomainModel implements HasAggregateId
         this.id = dto.id;
 
         this.published = typeof dto.published === 'boolean' ? dto.published : false;
+
+        this.events = Array.isArray(dto.events) ? cloneToPlainObject(dto.events) : [];
     }
 
     getAllowedContextTypes() {
@@ -41,6 +53,25 @@ export abstract class Resource extends BaseDomainModel implements HasAggregateId
         type: this.type,
         id: this.id,
     });
+
+    /**
+     * The name of this method is a bit misleading. It merely adds an event
+     * to the list of historical events without updating the state.
+     *
+     * At present, we are not doing
+     * event sourcing. Rather, the event is created after successfully mutating
+     * a model's state and immediately before persisting the result to the database.
+     * The event is at present simply a record of a command that has succeeded
+     * historically for troubleshooting or migrations (e.g. opt-in to additional
+     * raw data from import event).
+     */
+    applyEvent<T extends Resource = Resource>(this: T, event: BaseDomainModel) {
+        const overrides: DeepPartial<DTO<Resource>> = {
+            events: [...cloneToPlainObject(this.events), event.toDTO()],
+        };
+
+        return this.clone<Resource>(overrides) as T;
+    }
 
     /**
      * We choose to put the invariant validation in the factory so not to

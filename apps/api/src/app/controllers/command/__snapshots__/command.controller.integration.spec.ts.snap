@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The Command Controller when the payload is valid should persist the result 1`] = `
+Array [
+  Object {
+    "audioURL": "https://www.mysound.org/song.mp3",
+    "contributorAndRoles": Array [],
+    "dateCreated": 1586044800000,
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+    "lengthMilliseconds": 15340,
+    "lyrics": "la la la",
+    "title": "test-song-name (language)",
+    "titleEnglish": "test-song-name (English)",
+    "type": "SONG_CREATED",
+  },
+]
+`;

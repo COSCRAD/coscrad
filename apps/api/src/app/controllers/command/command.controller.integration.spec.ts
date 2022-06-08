@@ -5,6 +5,7 @@ import getValidResourceInstanceForTest from '../../../domain/domainModelValidato
 import { AddSong } from '../../../domain/models/song/commands/add-song.command';
 import { AddSongHandler } from '../../../domain/models/song/commands/add-song.command-handler';
 import { dummyUuid } from '../../../domain/models/song/commands/add-song.command.integration.spec';
+import { Song } from '../../../domain/models/song/song.entity';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
@@ -12,6 +13,7 @@ import TestRepositoryProvider from '../../../persistence/repositories/__tests__/
 import { DTO } from '../../../types/DTO';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
+import buildMockUuidGenerator from './__tests__/buildMockUuidGenerator';
 
 const commandEndpoint = `/commands`;
 
@@ -37,7 +39,7 @@ const validPayload = validCommandFSA.payload;
  * the command controller returns the correct Http status codes in its response
  * depending on the result \ exception that occurs.
  */
-describe('AddSong', () => {
+describe('The Command Controller', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
     let app: INestApplication;
@@ -51,8 +53,10 @@ describe('AddSong', () => {
 
         commandHandlerService.registerHandler(
             'ADD_SONG',
-            new AddSongHandler(testRepositoryProvider)
+            new AddSongHandler(testRepositoryProvider, buildMockUuidGenerator())
         );
+
+        jest.useFakeTimers().setSystemTime(new Date('2020-04-05'));
     });
 
     describe('when the command type is invalid', () => {
@@ -68,33 +72,33 @@ describe('AddSong', () => {
 
     describe('when the payload is valid', () => {
         it('should return a 200', async () => {
-            await testRepositoryProvider.addFullSnapshot({
-                resources: {
-                    song: [],
-                },
-                tags: [],
-                connections: [],
-                categoryTree: [],
-            });
-
             const result = await request(app.getHttpServer())
                 .post(commandEndpoint)
                 .send(validCommandFSA);
 
             expect(result.status).toBe(httpStatusCodes.ok);
         });
+
+        it('should persist the result', async () => {
+            await request(app.getHttpServer()).post(commandEndpoint).send(validCommandFSA);
+
+            const result = await testRepositoryProvider
+                .forResource<Song>(ResourceType.song)
+                .fetchById(validPayload.id);
+
+            const test = result as Song;
+
+            expect(test.id).toBe(validCommandFSA.payload.id);
+
+            // A create event should be the only one in the song's history
+            expect(test.events).toHaveLength(1);
+
+            expect(test.events).toMatchSnapshot();
+        });
     });
 
     describe('when the payload has an invalid type', () => {
         it('should return a 400', async () => {
-            await testRepositoryProvider.addFullSnapshot(
-                buildInMemorySnapshot({
-                    resources: {
-                        song: [],
-                    },
-                })
-            );
-
             const result = await request(app.getHttpServer())
                 .post(commandEndpoint)
                 .send({

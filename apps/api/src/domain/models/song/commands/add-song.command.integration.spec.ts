@@ -1,4 +1,5 @@
 import { Ack, CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
+import buildMockUuidGenerator from '../../../../app/controllers/command/__tests__/buildMockUuidGenerator';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -47,7 +48,7 @@ describe('AddSong', () => {
 
         commandHandlerService.registerHandler(
             addSongCommandType,
-            new AddSongHandler(testRepositoryProvider)
+            new AddSongHandler(testRepositoryProvider, buildMockUuidGenerator())
         );
     });
 

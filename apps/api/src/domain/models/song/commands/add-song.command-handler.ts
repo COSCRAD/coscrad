@@ -1,18 +1,24 @@
 import { Ack, CommandHandler, ICommandHandler } from '@coscrad/commands';
 import { buildSimpleValidationFunction } from '@coscrad/validation';
+import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../lib/types/not-found';
 import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
 import { DTO } from '../../../../types/DTO';
 import getInstanceFactoryForEntity from '../../../factories/getInstanceFactoryForEntity';
+import { IIdGenerator } from '../../../interfaces/id-generator.interface';
 import { ResourceType } from '../../../types/ResourceType';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
 import { Song } from '../song.entity';
 import { AddSong } from './add-song.command';
+import { SongCreated } from './song-created.event';
 
 @CommandHandler(AddSong)
 export class AddSongHandler implements ICommandHandler {
-    constructor(private readonly repositoryProvider: RepositoryProvider) {}
+    constructor(
+        private readonly repositoryProvider: RepositoryProvider,
+        @Inject('ID_GENERATOR') private readonly idGenerator: IIdGenerator
+    ) {}
 
     async execute(command: AddSong): Promise<Ack | InternalError> {
         // Validate command type
@@ -46,6 +52,7 @@ export class AddSongHandler implements ICommandHandler {
             published: false,
             startMilliseconds: 0,
             type: ResourceType.song,
+            events: [],
         };
 
         // Attempt state mutation - Result or Error (Invariant violation in our case- could also be invalid state transition in other cases)
@@ -56,8 +63,12 @@ export class AddSongHandler implements ICommandHandler {
             return instanceToCreate;
         }
 
+        const newId = await this.idGenerator.generate();
+
         // Persist the valid instance
-        await this.repositoryProvider.forResource<Song>(ResourceType.song).create(instanceToCreate);
+        await this.repositoryProvider
+            .forResource<Song>(ResourceType.song)
+            .create(instanceToCreate.applyEvent(new SongCreated(command, newId)));
 
         return Ack;
     }
