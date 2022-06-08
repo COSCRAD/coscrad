@@ -91,9 +91,9 @@ describe('The Command Controller', () => {
             expect(test.id).toBe(validCommandFSA.payload.id);
 
             // A create event should be the only one in the song's history
-            expect(test.events).toHaveLength(1);
+            expect(test.eventHistory).toHaveLength(1);
 
-            expect(test.events).toMatchSnapshot();
+            expect(test.eventHistory).toMatchSnapshot();
         });
     });
 

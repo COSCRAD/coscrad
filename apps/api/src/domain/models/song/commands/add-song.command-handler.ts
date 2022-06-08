@@ -52,23 +52,28 @@ export class AddSongHandler implements ICommandHandler {
             published: false,
             startMilliseconds: 0,
             type: ResourceType.song,
-            events: [],
+            eventHistory: [],
         };
 
         // Attempt state mutation - Result or Error (Invariant violation in our case- could also be invalid state transition in other cases)
-        const instanceToCreate = getInstanceFactoryForEntity<Song>(ResourceType.song)(songDTO);
+        const instanceToPersist = getInstanceFactoryForEntity<Song>(ResourceType.song)(songDTO);
 
         // Does this violate invariants?
-        if (isInternalError(instanceToCreate)) {
-            return instanceToCreate;
+        if (isInternalError(instanceToPersist)) {
+            return instanceToPersist;
         }
 
-        const newId = await this.idGenerator.generate();
+        // generate a unique ID for the event
+        const eventId = await this.idGenerator.generate();
+
+        const instanceToPersistWithUpdatedEventHistory = instanceToPersist.addEventToHistory(
+            new SongCreated(command, eventId)
+        );
 
         // Persist the valid instance
         await this.repositoryProvider
             .forResource<Song>(ResourceType.song)
-            .create(instanceToCreate.applyEvent(new SongCreated(command, newId)));
+            .create(instanceToPersistWithUpdatedEventHistory);
 
         return Ack;
     }

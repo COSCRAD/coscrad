@@ -2,6 +2,12 @@ import { AggregateId } from '../../../types/AggregateId';
 import BaseDomainModel from '../../BaseDomainModel';
 import { AddSong } from './add-song.command';
 
+export type EventRecordMetadata = {
+    dateCreated: number;
+
+    id: string;
+};
+
 /**
  * For now, we are just mirroring our command payload onto our events. We can update
  * this if and when we decide to use the events (e.g. for event sourcing).
@@ -9,17 +15,16 @@ import { AddSong } from './add-song.command';
 export class SongCreated extends BaseDomainModel {
     type = 'SONG_CREATED';
 
-    dateCreated: number;
-
-    id: string;
+    meta: EventRecordMetadata;
 
     constructor(command: AddSong, eventId: AggregateId) {
         super();
 
         Object.assign(this, command);
 
-        this.dateCreated = Date.now();
-
-        this.id = eventId;
+        this.meta = {
+            dateCreated: Date.now(),
+            id: eventId,
+        };
     }
 }
