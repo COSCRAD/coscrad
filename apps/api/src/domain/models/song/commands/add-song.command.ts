@@ -1,4 +1,5 @@
 import { Command, ICommand } from '@coscrad/commands';
+import { NonEmptyString } from '@coscrad/data-types';
 import {
     IsNonNegativeFiniteNumber,
     IsOptional,
@@ -14,10 +15,12 @@ export class AddSong implements ICommand {
     @IsUUID()
     readonly id: string;
 
+    @NonEmptyString({ isOptional: true })
     @IsOptional()
     @IsStringWithNonzeroLength()
     readonly title?: string;
 
+    @NonEmptyString({ isOptional: true })
     @IsOptional()
     @IsStringWithNonzeroLength()
     readonly titleEnglish?: string;
