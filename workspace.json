@@ -3,11 +3,12 @@
     "projects": {
         "api": "apps/api",
         "api-interfaces": "libs/api-interfaces",
+        "commands": "libs/commands",
         "coscrad-frontend": "apps/coscrad-frontend",
         "coscrad-frontend-e2e": "apps/coscrad-frontend-e2e",
+        "data-types": "libs/data-types",
         "tng-dictionary": "apps/tng-dictionary",
         "tng-dictionary-e2e": "apps/tng-dictionary-e2e",
-        "validation": "libs/validation",
-        "commands": "libs/commands"
+        "validation": "libs/validation"
     }
 }
