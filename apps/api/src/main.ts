@@ -20,6 +20,7 @@ async function bootstrap() {
         .setDescription('Powering a Web of Knowledge')
         .setVersion('0.0')
         .addTag('coscrad')
+        .addBearerAuth()
         .build();
 
     const documentation = SwaggerModule.createDocument(app, swaggerConfig);

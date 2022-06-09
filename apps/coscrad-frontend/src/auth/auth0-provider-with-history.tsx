@@ -1,14 +1,11 @@
 import { Auth0Provider } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
+import { getConfig } from '../config';
 
-// @ts-expect-error
+// @ts-expect-error fix later
 const Auth0ProviderWithHistory = ({ children }) => {
-    const domain = process.env['REACT_APP_AUTH0_DOMAIN'];
-    const clientId = process.env['REACT_APP_AUTH0_CLIENT_ID'];
 
-    console.log({
-        process: process.env,
-    });
+    const {domain, clientId, audience} = getConfig()
 
     if (domain === null || typeof domain === 'undefined') {
         throw new Error(
@@ -22,7 +19,7 @@ const Auth0ProviderWithHistory = ({ children }) => {
 
     const navigate = useNavigate();
 
-    // @ts-expect-error
+    // @ts-expect-error fix later
     const onRedirectCallback = (appState) => {
         navigate(appState?.returnTo || window.location.pathname);
     };
@@ -33,6 +30,7 @@ const Auth0ProviderWithHistory = ({ children }) => {
             clientId={clientId}
             redirectUri={window.location.origin}
             onRedirectCallback={onRedirectCallback}
+            audience={audience}
         >
             {children}
         </Auth0Provider>
