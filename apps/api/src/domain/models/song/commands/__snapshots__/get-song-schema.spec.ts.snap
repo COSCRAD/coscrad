@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when getting the schema for ADD_SONG command should return the correct value 1`] = `
+Object {
+  "title": Object {
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "titleEnglish": Object {
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;

@@ -1,0 +1,34 @@
+{
+    "root": "libs/data-types",
+    "sourceRoot": "libs/data-types/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/node:package",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/libs/data-types",
+                "main": "libs/data-types/src/index.ts",
+                "tsConfig": "libs/data-types/tsconfig.lib.json",
+                "packageJson": "libs/data-types/package.json",
+                "assets": ["libs/data-types/*.md"]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["libs/data-types/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/libs/data-types"],
+            "options": {
+                "jestConfig": "libs/data-types/jest.config.js",
+                "passWithNoTests": true
+            }
+        }
+    },
+    "tags": []
+}
