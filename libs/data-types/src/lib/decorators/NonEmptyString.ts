@@ -1,8 +1,6 @@
 import 'reflect-metadata';
-
-export const COSCRAD_DATA_TYPE_METADATA = '__coscrad-data-types__';
-
-export const NON_EMPTY_STRING = 'NON_EMPTY_STRING';
+import CoscradDataType from '../types/CoscradDataType';
+import appendMetadata from '../utilities/appendMetadata';
 
 type TypeDecoratorOptions = {
     isOptional: boolean;
@@ -17,14 +15,9 @@ export function NonEmptyString(
 ): PropertyDecorator {
     const { isOptional } = options;
 
+    // Object is ok as a type in this case
     // eslint-disable-next-line
     return (target: Object, propertyKey: string | symbol) => {
-        const existingMeta = Reflect.getMetadata(COSCRAD_DATA_TYPE_METADATA, target);
-
-        Reflect.defineMetadata(
-            '__coscrad-data-types__',
-            { ...existingMeta, [propertyKey]: { type: 'NON_EMPTY_STRING', isOptional } },
-            target
-        );
+        appendMetadata(target, propertyKey, CoscradDataType.NonEmptyString, { isOptional });
     };
 }

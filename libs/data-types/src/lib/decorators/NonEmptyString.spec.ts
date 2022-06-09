@@ -1,5 +1,6 @@
 import 'reflect-metadata';
-import { NonEmptyString, NON_EMPTY_STRING } from './NonEmptyString';
+import CoscradDataType from '../types/CoscradDataType';
+import { NonEmptyString } from './NonEmptyString';
 
 describe('NonEmptyString', () => {
     class Widget {
@@ -14,8 +15,8 @@ describe('NonEmptyString', () => {
         const actualMetadata = Reflect.getMetadata('__coscrad-data-types__', Widget.prototype);
 
         expect(actualMetadata).toEqual({
-            widgetName: { type: NON_EMPTY_STRING, isOptional: false },
-            locationName: { type: NON_EMPTY_STRING, isOptional: true },
+            widgetName: { type: CoscradDataType.NonEmptyString, isOptional: false },
+            locationName: { type: CoscradDataType.NonEmptyString, isOptional: true },
         });
     });
 });
