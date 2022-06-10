@@ -1,3 +1,4 @@
+import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { AddSong } from '../../../domain/models/song/commands/add-song.command';
 import { DTO } from '../../../types/DTO';
 import { FieldCalculationRules, RawDataMapping } from '../raw-data-mapping';
@@ -12,8 +13,6 @@ type StrapiMedia = {
     url: string;
     created_at: string;
     updated_at: string;
-    // we must add this- it's not in Strapi!
-    length: number;
 };
 
 type SongMetadata = {
@@ -24,7 +23,7 @@ type SongMetadata = {
     processing: string;
 };
 
-export type StrapiSong = {
+export type StrapiWebMediaItem = {
     id: number;
     name: string;
     name_english: string;
@@ -42,12 +41,26 @@ export type StrapiSong = {
     media: StrapiMedia;
 };
 
-const strapiToCommandFieldCalculationRules: FieldCalculationRules<StrapiSong, DTO<AddSong>> = {
-    id: ({ id }: StrapiSong) => id.toString(),
-    title: ({ name }: StrapiSong) => name,
-    titleEnglish: ({ name_english }: StrapiSong) => name_english,
-    contributorAndRoles: ({ performer, author, transcriber }: StrapiSong) =>
-        []
+const strapiToCommandFieldCalculationRules: FieldCalculationRules<
+    StrapiWebMediaItem,
+    DTO<AddSong>
+> = (raw: StrapiWebMediaItem) => {
+    const {
+        id,
+        lyrics,
+        name,
+        media: { url },
+        name_english,
+        performer,
+        author,
+        transcriber,
+    } = raw;
+
+    return {
+        id: id.toString(),
+        title: isStringWithNonzeroLength(name) ? name : null,
+        titleEnglish: isStringWithNonzeroLength(name_english) ? name_english : null,
+        contributorAndRoles: []
             .concat(
                 performer
                     ? {
@@ -78,12 +91,16 @@ const strapiToCommandFieldCalculationRules: FieldCalculationRules<StrapiSong, DT
                 role: 'recorded and edited audio',
             })
             .filter((c) => c !== null),
-    lyrics: ({ lyrics }: StrapiSong) => lyrics,
-    audioURL: ({ media: { url } }: StrapiSong) => `https://api.tsilhqotinlanguage.ca${url}`,
-    rawData: (raw: StrapiSong) => raw,
-    lengthMilliseconds: ({ media: { length } }: StrapiSong) => length,
+        lyrics: lyrics,
+        audioURL: `https://be.tsilhqotinlanguage.ca:3003/download?id=${url.replace(
+            '/uploads/',
+            ''
+        )}`,
+        rawData: raw,
+        lengthMilliseconds: 0,
+    };
 };
 
-export const strapiSongMapping = new RawDataMapping<StrapiSong, DTO<AddSong>>(
+export const strapiSongMapping = new RawDataMapping<StrapiWebMediaItem, DTO<AddSong>>(
     strapiToCommandFieldCalculationRules
 );

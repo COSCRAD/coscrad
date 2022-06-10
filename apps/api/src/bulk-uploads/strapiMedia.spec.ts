@@ -3,7 +3,7 @@ import { rawStrapiSongs } from './strapiSongs.data';
 
 // const numberOfSpacesToIndent = 4;
 
-describe.skip('testing strapi song mapper', () => {
+describe('testing strapi song mapper', () => {
     const result = rawStrapiSongs.map((strapiSong) => strapiSongMapping.apply(strapiSong));
 
     console.log({
@@ -11,7 +11,7 @@ describe.skip('testing strapi song mapper', () => {
     });
 
     // writeFileSync(
-    //     'add-songs-from-strapi_FSAs_20220605.out.data.json',
+    //     'add-songs-from-strapi_FSAs_20220610.out.data.json',
     //     JSON.stringify(result, null, numberOfSpacesToIndent).concat('\n')
     // );
 

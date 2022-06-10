@@ -5,9 +5,7 @@
 export type FieldCalculationRules<
     TInput extends Record<string, unknown>,
     UTarget extends Record<string, unknown>
-> = {
-    [K in keyof UTarget]: (input: TInput) => UTarget[K];
-};
+> = (input: TInput) => UTarget;
 
 export class RawDataMapping<
     TInput extends Record<string, unknown>,
@@ -16,12 +14,6 @@ export class RawDataMapping<
     constructor(private readonly fieldCalculators: FieldCalculationRules<TInput, UTarget>) {}
 
     public apply(rawData: TInput): UTarget {
-        return Object.entries(this.fieldCalculators).reduce(
-            (accumulatedOutput: Partial<UTarget>, [key, calculateValue]) => ({
-                ...accumulatedOutput,
-                [key]: calculateValue(rawData),
-            }),
-            {}
-        ) as UTarget;
+        return this.fieldCalculators(rawData);
     }
 }
