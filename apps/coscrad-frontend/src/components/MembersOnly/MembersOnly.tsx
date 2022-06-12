@@ -4,41 +4,36 @@ import { getConfig } from '../../config';
 
 type ComponentState = {
     message: string;
-}
+};
 
-function MembersOnly(){
-    const [appState,setAppState] = useState<ComponentState>({
-        message: 'Loading'
-    })
+function MembersOnly() {
+    const [appState, setAppState] = useState<ComponentState>({
+        message: 'Loading',
+    });
 
-    useEffect(() =>{
-        setAppState({message: 'Loading'});
+    useEffect(() => {
+        setAppState({ message: 'Loading' });
 
         const endpoint = `${getConfig().apiUrl}/hello`;
 
-        fetch(endpoint, {mode: 'cors'})
-        .then((res) => {
-            const result = res.json();
+        fetch(endpoint, { mode: 'cors' })
+            .then((res) => {
+                const result = res.json();
 
-            return result;
-        })
-        .then(
-            message => {
-                console.log({message});
-
-            setAppState({
-                message
+                return result;
             })
-            }
-        )
-    },[setAppState,appState])
+            .then((message) => {
+                console.log({ message });
 
+                setAppState({
+                    message,
+                });
+            });
+    }, [setAppState, appState]);
 
-    return (<div>
-    MESSAGE FROM COSCRAD: {appState.message}
-</div>)
+    return <div>MESSAGE FROM COSCRAD: {appState.message}</div>;
 }
-    
 
-
-export default withAuthenticationRequired(MembersOnly,{onRedirecting: () => (<div>Loading ...</div>)}) 
+export default withAuthenticationRequired(MembersOnly, {
+    onRedirecting: () => <div>Loading ...</div>,
+});
