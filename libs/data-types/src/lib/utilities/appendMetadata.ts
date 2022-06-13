@@ -1,15 +1,16 @@
 import { COSCRAD_DATA_TYPE_METADATA } from '../constants';
+import { ClassDataTypeMetadata } from '../types';
 import CoscradDataType from '../types/CoscradDataType';
-import getCoscradDataSchemea, { Ctor } from './getCoscradDataSchemeaFromPrototype';
+import getCoscradDataSchemaFromPrototype from './getCoscradDataSchemaFromPrototype';
 
 export default (
-    // eslint-disable-next-line
     target: Object,
     propertyKey: string | symbol,
-    propertyType: CoscradDataType,
+    // The union type here is to support nested data types
+    propertyType: CoscradDataType | ClassDataTypeMetadata,
     { isOptional }: { isOptional: boolean }
 ): void => {
-    const existingMeta = getCoscradDataSchemea(target as unknown as Ctor<Record<string, unknown>>);
+    const existingMeta = getCoscradDataSchemaFromPrototype(target);
 
     Reflect.defineMetadata(
         COSCRAD_DATA_TYPE_METADATA,
