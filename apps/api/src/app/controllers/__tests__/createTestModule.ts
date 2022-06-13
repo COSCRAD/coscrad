@@ -53,16 +53,6 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                     new MediaItemQueryService(repositoryProvider),
                 inject: [RepositoryProvider],
             },
-            // {
-            //     provide: AddSongHandler,
-            //     useFactory: (repositoryProvider: RepositoryProvider) =>
-            //         new AddSongHandler(repositoryProvider, ),
-            //     inject: [RepositoryProvider],
-            // },
-            // {
-            //     provide: AddSong,
-            //     useClass: AddSong,
-            // },
         ],
 
         controllers: [

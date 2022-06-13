@@ -8,8 +8,8 @@ import {
 } from '@coscrad/data-types';
 import { ContributorAndRole } from '../ContributorAndRole';
 
-@Command('ADD_SONG')
-export class AddSong implements ICommand {
+@Command('CREATE_SONG')
+export class CreateSong implements ICommand {
     @UUID()
     readonly id: string;
 

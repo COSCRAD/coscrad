@@ -1,6 +1,6 @@
 import { AggregateId } from '../../../types/AggregateId';
 import BaseDomainModel from '../../BaseDomainModel';
-import { AddSong } from './add-song.command';
+import { CreateSong } from './create-song.command';
 
 export type EventRecordMetadata = {
     dateCreated: number;
@@ -17,7 +17,7 @@ export class SongCreated extends BaseDomainModel {
 
     meta: EventRecordMetadata;
 
-    constructor(command: AddSong, eventId: AggregateId) {
+    constructor(command: CreateSong, eventId: AggregateId) {
         super();
 
         Object.assign(this, command);

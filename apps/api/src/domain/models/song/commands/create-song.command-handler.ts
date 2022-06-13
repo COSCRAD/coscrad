@@ -10,17 +10,17 @@ import { IIdGenerator } from '../../../interfaces/id-generator.interface';
 import { ResourceType } from '../../../types/ResourceType';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
 import { Song } from '../song.entity';
-import { AddSong } from './add-song.command';
+import { CreateSong } from './create-song.command';
 import { SongCreated } from './song-created.event';
 
-@CommandHandler(AddSong)
-export class AddSongHandler implements ICommandHandler {
+@CommandHandler(CreateSong)
+export class CreateSongCommandHandler implements ICommandHandler {
     constructor(
         private readonly repositoryProvider: RepositoryProvider,
         @Inject('ID_GENERATOR') private readonly idGenerator: IIdGenerator
     ) {}
 
-    async execute(command: AddSong): Promise<Ack | InternalError> {
+    async execute(command: CreateSong): Promise<Ack | InternalError> {
         // Validate command type
         const payloadTypeErrors = buildSimpleValidationFunction(
             Object.getPrototypeOf(command).constructor
@@ -29,7 +29,7 @@ export class AddSongHandler implements ICommandHandler {
         );
 
         if (payloadTypeErrors.length > 0) {
-            return new InvalidCommandPayloadTypeError('ADD_SONG', payloadTypeErrors);
+            return new InvalidCommandPayloadTypeError('CREATE_SONG', payloadTypeErrors);
         }
 
         // Validate external state

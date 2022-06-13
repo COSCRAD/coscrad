@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`command payload schemas The schema for command ADD_SONG should have the expected value 1`] = `
+exports[`command payload schemas The schema for command CREATE_SONG should have the expected value 1`] = `
 Object {
   "audioURL": Object {
     "isArray": false,
