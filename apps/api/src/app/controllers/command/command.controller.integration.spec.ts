@@ -2,9 +2,9 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import getValidResourceInstanceForTest from '../../../domain/domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
-import { AddSong } from '../../../domain/models/song/commands/add-song.command';
-import { AddSongHandler } from '../../../domain/models/song/commands/add-song.command-handler';
-import { dummyUuid } from '../../../domain/models/song/commands/add-song.command.integration.spec';
+import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
+import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
+import { dummyUuid } from '../../../domain/models/song/commands/create-song.command.integration.spec';
 import { Song } from '../../../domain/models/song/song.entity';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
@@ -17,8 +17,8 @@ import buildMockUuidGenerator from './__tests__/buildMockUuidGenerator';
 
 const commandEndpoint = `/commands`;
 
-const validCommandFSA: FluxStandardAction<DTO<AddSong>> = {
-    type: 'ADD_SONG',
+const validCommandFSA: FluxStandardAction<DTO<CreateSong>> = {
+    type: 'CREATE_SONG',
     payload: {
         id: dummyUuid,
         title: 'test-song-name (language)',
@@ -52,8 +52,8 @@ describe('The Command Controller', () => {
         }));
 
         commandHandlerService.registerHandler(
-            'ADD_SONG',
-            new AddSongHandler(testRepositoryProvider, buildMockUuidGenerator())
+            'CREATE_SONG',
+            new CreateSongCommandHandler(testRepositoryProvider, buildMockUuidGenerator())
         );
 
         jest.useFakeTimers().setSystemTime(new Date('2020-04-05'));

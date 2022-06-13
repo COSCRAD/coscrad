@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { AddSong } from './commands/add-song.command';
-import { AddSongHandler } from './commands/add-song.command-handler';
+import { CreateSong } from './commands/create-song.command';
+import { CreateSongCommandHandler } from './commands/create-song.command-handler';
 
 @Module({
     providers: [
-        AddSong,
-        AddSongHandler,
+        CreateSong,
+        CreateSongCommandHandler,
         {
             provide: 'ID_GENERATOR',
             useFactory: () => ({

@@ -12,15 +12,15 @@ import getValidResourceInstanceForTest from '../../../domainModelValidators/__te
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
-import { AddSong } from './add-song.command';
-import { AddSongHandler } from './add-song.command-handler';
+import { CreateSong } from './create-song.command';
+import { CreateSongCommandHandler } from './create-song.command-handler';
 
 export const dummyUuid = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d';
 
-const addSongCommandType = 'ADD_SONG';
+const createSongCommandType = 'CREATE_SONG';
 
-const validCommandFSA: FluxStandardAction<DTO<AddSong>> = {
-    type: addSongCommandType,
+const validCommandFSA: FluxStandardAction<DTO<CreateSong>> = {
+    type: createSongCommandType,
     payload: {
         id: dummyUuid,
         title: 'test-song-name (language)',
@@ -33,7 +33,7 @@ const validCommandFSA: FluxStandardAction<DTO<AddSong>> = {
 };
 
 const validPayload = validCommandFSA.payload;
-describe('AddSong', () => {
+describe('CreateSong', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
     let commandHandlerService: CommandHandlerService;
@@ -47,8 +47,8 @@ describe('AddSong', () => {
             }));
 
         commandHandlerService.registerHandler(
-            addSongCommandType,
-            new AddSongHandler(testRepositoryProvider, buildMockUuidGenerator())
+            createSongCommandType,
+            new CreateSongCommandHandler(testRepositoryProvider, buildMockUuidGenerator())
         );
     });
 
@@ -84,7 +84,9 @@ describe('AddSong', () => {
                 });
 
                 expect(result).toEqual(
-                    new InvalidCommandPayloadTypeError(addSongCommandType, [new InternalError('')])
+                    new InvalidCommandPayloadTypeError(createSongCommandType, [
+                        new InternalError(''),
+                    ])
                 );
             });
         });
@@ -115,7 +117,7 @@ describe('AddSong', () => {
     describe('when the song to create does not satisfy invariant validation rules', () => {
         describe('when creating a song with no title in any language', () => {
             it('should return the expected error', async () => {
-                const fsa: FluxStandardAction<DTO<AddSong>> = {
+                const fsa: FluxStandardAction<DTO<CreateSong>> = {
                     ...validCommandFSA,
                     payload: {
                         ...validPayload,
