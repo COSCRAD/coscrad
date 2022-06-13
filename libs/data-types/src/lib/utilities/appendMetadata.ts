@@ -1,6 +1,6 @@
 import { COSCRAD_DATA_TYPE_METADATA } from '../constants';
 import CoscradDataType from '../types/CoscradDataType';
-import getCoscradDataSchemea, { Ctor } from './getCoscradDataSchemea';
+import getCoscradDataSchemea, { Ctor } from './getCoscradDataSchemeaFromPrototype';
 
 export default (
     // eslint-disable-next-line

@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import CoscradDataType from '../types/CoscradDataType';
+import getCoscradDataSchema from '../utilities/getCoscradDataSchema';
 import { NonEmptyString } from './NonEmptyString';
 
 describe('NonEmptyString', () => {
@@ -12,7 +13,7 @@ describe('NonEmptyString', () => {
     }
 
     it('should populate the appropriate metadata', () => {
-        const actualMetadata = Reflect.getMetadata('__coscrad-data-types__', Widget.prototype);
+        const actualMetadata = getCoscradDataSchema(Widget); //Reflect.getMetadata('__coscrad-data-types__', Widget.prototype);
 
         expect(actualMetadata).toEqual({
             widgetName: { type: CoscradDataType.NonEmptyString, isOptional: false },

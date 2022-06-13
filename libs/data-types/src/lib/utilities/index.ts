@@ -1,1 +1,3 @@
-export * from './getCoscradDataSchemea';
+import getCoscradDataSchema from './getCoscradDataSchema';
+
+export { getCoscradDataSchema };
