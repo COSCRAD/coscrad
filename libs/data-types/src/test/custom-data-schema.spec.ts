@@ -19,6 +19,9 @@ describe('NonEmptyString', () => {
         @NonEmptyString({ isOptional: true })
         locationName = 'Back Red Room 12';
 
+        @NonEmptyString({ isArray: true })
+        aliases: ['super machine', 'widget king'];
+
         @UUID()
         id = '25c5824f-6b4b-4341-bb60-3145d8109568';
 
