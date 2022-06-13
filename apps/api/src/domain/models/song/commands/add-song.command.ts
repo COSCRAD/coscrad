@@ -1,5 +1,11 @@
 import { Command, ICommand } from '@coscrad/commands';
-import { NonEmptyString } from '@coscrad/data-types';
+import {
+    NestedDataType,
+    NonEmptyString,
+    NonNegativeFiniteNumber,
+    URL,
+    UUID,
+} from '@coscrad/data-types';
 import {
     IsNonNegativeFiniteNumber,
     IsOptional,
@@ -12,6 +18,7 @@ import { ContributorAndRole } from '../ContributorAndRole';
 
 @Command('ADD_SONG')
 export class AddSong implements ICommand {
+    @UUID()
     @IsUUID()
     readonly id: string;
 
@@ -25,16 +32,20 @@ export class AddSong implements ICommand {
     @IsStringWithNonzeroLength()
     readonly titleEnglish?: string;
 
+    @NestedDataType(ContributorAndRole)
     @ValidateNested()
     readonly contributorAndRoles: ContributorAndRole[];
 
+    @NonEmptyString()
     @IsOptional()
     @IsStringWithNonzeroLength()
     readonly lyrics?: string;
 
+    @URL()
     @IsUrl()
     readonly audioURL: string;
 
+    @NonNegativeFiniteNumber()
     @IsNonNegativeFiniteNumber()
     readonly lengthMilliseconds: number;
 }

@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NonEmptyString should populate the appropriate metadata 1`] = `
+Object {
+  "averageRating": Object {
+    "isOptional": true,
+    "type": "NonNegativeFiniteNumber",
+  },
+  "iconUrl": Object {
+    "isOptional": false,
+    "type": "URL",
+  },
+  "id": Object {
+    "isOptional": false,
+    "type": "UUID",
+  },
+  "locationId": Object {
+    "isOptional": true,
+    "type": "UUID",
+  },
+  "locationName": Object {
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "primaryWhatsit": Object {
+    "isOptional": false,
+    "type": Object {
+      "whatsitId": Object {
+        "isOptional": false,
+        "type": "UUID",
+      },
+      "whatsitName": Object {
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+    },
+  },
+  "secondaryWhatsit": Object {
+    "isOptional": true,
+    "type": Object {
+      "whatsitId": Object {
+        "isOptional": false,
+        "type": "UUID",
+      },
+      "whatsitName": Object {
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+    },
+  },
+  "specSheetUrl": Object {
+    "isOptional": true,
+    "type": "URL",
+  },
+  "widgetName": Object {
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "width": Object {
+    "isOptional": false,
+    "type": "NonNegativeFiniteNumber",
+  },
+}
+`;

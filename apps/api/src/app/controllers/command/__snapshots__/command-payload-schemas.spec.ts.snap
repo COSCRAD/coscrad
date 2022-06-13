@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`command payload schemas The schema for command ADD_SONG should have the expected value 1`] = `
+Object {
+  "audioURL": Object {
+    "isOptional": false,
+    "type": "URL",
+  },
+  "contributorAndRoles": Object {
+    "isOptional": false,
+    "type": Object {
+      "contributorId": Object {
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+      "role": Object {
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+    },
+  },
+  "id": Object {
+    "isOptional": false,
+    "type": "UUID",
+  },
+  "lengthMilliseconds": Object {
+    "isOptional": false,
+    "type": "NonNegativeFiniteNumber",
+  },
+  "lyrics": Object {
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "title": Object {
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "titleEnglish": Object {
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
