@@ -10,7 +10,7 @@ Object {
   "averageRating": Object {
     "isArray": false,
     "isOptional": true,
-    "type": "NonNegativeFiniteNumber",
+    "type": "NON_NEGATIVE_FINITE_NUMBER",
   },
   "iconUrl": Object {
     "isArray": false,
@@ -77,7 +77,7 @@ Object {
   "width": Object {
     "isArray": false,
     "isOptional": false,
-    "type": "NonNegativeFiniteNumber",
+    "type": "NON_NEGATIVE_FINITE_NUMBER",
   },
 }
 `;
