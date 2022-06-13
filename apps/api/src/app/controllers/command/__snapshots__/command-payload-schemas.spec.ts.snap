@@ -3,39 +3,48 @@
 exports[`command payload schemas The schema for command ADD_SONG should have the expected value 1`] = `
 Object {
   "audioURL": Object {
+    "isArray": false,
     "isOptional": false,
     "type": "URL",
   },
   "contributorAndRoles": Object {
+    "isArray": true,
     "isOptional": false,
     "type": Object {
       "contributorId": Object {
+        "isArray": false,
         "isOptional": false,
         "type": "NON_EMPTY_STRING",
       },
       "role": Object {
+        "isArray": false,
         "isOptional": false,
         "type": "NON_EMPTY_STRING",
       },
     },
   },
   "id": Object {
+    "isArray": false,
     "isOptional": false,
     "type": "UUID",
   },
   "lengthMilliseconds": Object {
+    "isArray": false,
     "isOptional": false,
-    "type": "NonNegativeFiniteNumber",
+    "type": "NON_NEGATIVE_FINITE_NUMBER",
   },
   "lyrics": Object {
-    "isOptional": false,
+    "isArray": false,
+    "isOptional": true,
     "type": "NON_EMPTY_STRING",
   },
   "title": Object {
+    "isArray": false,
     "isOptional": true,
     "type": "NON_EMPTY_STRING",
   },
   "titleEnglish": Object {
+    "isArray": false,
     "isOptional": true,
     "type": "NON_EMPTY_STRING",
   },

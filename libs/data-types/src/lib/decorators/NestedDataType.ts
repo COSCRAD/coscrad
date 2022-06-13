@@ -1,13 +1,21 @@
+import { ValidateNested } from '@coscrad/validation';
 import { getCoscradDataSchema } from '../utilities';
 import appendMetadata from '../utilities/appendMetadata';
-import buildDefaultTypeDecoratorOptions from './common/buildDefaultTypeDecoratorOptions';
+import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
 import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
 
 export function NestedDataType(
     nestedDataClass: Object,
-    options: TypeDecoratorOptions = buildDefaultTypeDecoratorOptions()
+    options: Partial<TypeDecoratorOptions> = {}
 ): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol) => {
-        appendMetadata(target, propertyKey, getCoscradDataSchema(nestedDataClass), options);
+        ValidateNested()(target, propertyKey);
+
+        appendMetadata(
+            target,
+            propertyKey,
+            getCoscradDataSchema(nestedDataClass),
+            mixinDefaultTypeDecoratorOptions(options)
+        );
     };
 }

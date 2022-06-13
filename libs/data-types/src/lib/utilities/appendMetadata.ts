@@ -8,7 +8,7 @@ export default (
     propertyKey: string | symbol,
     // The union type here is to support nested data types
     propertyType: CoscradDataType | ClassDataTypeMetadata,
-    { isOptional }: { isOptional: boolean }
+    { isOptional, isArray }: { isOptional: boolean; isArray: boolean }
 ): void => {
     const existingMeta = getCoscradDataSchemaFromPrototype(target);
 
@@ -16,7 +16,7 @@ export default (
         COSCRAD_DATA_TYPE_METADATA,
         {
             ...existingMeta,
-            [propertyKey]: { type: propertyType, isOptional },
+            [propertyKey]: { type: propertyType, isOptional, isArray },
         },
         target
     );

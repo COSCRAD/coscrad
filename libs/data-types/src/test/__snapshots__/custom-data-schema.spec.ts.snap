@@ -2,61 +2,80 @@
 
 exports[`NonEmptyString should populate the appropriate metadata 1`] = `
 Object {
+  "aliases": Object {
+    "isArray": true,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
   "averageRating": Object {
+    "isArray": false,
     "isOptional": true,
     "type": "NonNegativeFiniteNumber",
   },
   "iconUrl": Object {
+    "isArray": false,
     "isOptional": false,
     "type": "URL",
   },
   "id": Object {
+    "isArray": false,
     "isOptional": false,
     "type": "UUID",
   },
   "locationId": Object {
+    "isArray": false,
     "isOptional": true,
     "type": "UUID",
   },
   "locationName": Object {
+    "isArray": false,
     "isOptional": true,
     "type": "NON_EMPTY_STRING",
   },
   "primaryWhatsit": Object {
+    "isArray": false,
     "isOptional": false,
     "type": Object {
       "whatsitId": Object {
+        "isArray": false,
         "isOptional": false,
         "type": "UUID",
       },
       "whatsitName": Object {
+        "isArray": false,
         "isOptional": true,
         "type": "NON_EMPTY_STRING",
       },
     },
   },
   "secondaryWhatsit": Object {
+    "isArray": false,
     "isOptional": true,
     "type": Object {
       "whatsitId": Object {
+        "isArray": false,
         "isOptional": false,
         "type": "UUID",
       },
       "whatsitName": Object {
+        "isArray": false,
         "isOptional": true,
         "type": "NON_EMPTY_STRING",
       },
     },
   },
   "specSheetUrl": Object {
+    "isArray": false,
     "isOptional": true,
     "type": "URL",
   },
   "widgetName": Object {
+    "isArray": false,
     "isOptional": false,
     "type": "NON_EMPTY_STRING",
   },
   "width": Object {
+    "isArray": false,
     "isOptional": false,
     "type": "NonNegativeFiniteNumber",
   },
