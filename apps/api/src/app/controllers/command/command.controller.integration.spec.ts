@@ -4,8 +4,8 @@ import * as request from 'supertest';
 import getValidResourceInstanceForTest from '../../../domain/domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
-import { dummyUuid } from '../../../domain/models/song/commands/create-song.command.integration.spec';
 import { Song } from '../../../domain/models/song/song.entity';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
@@ -20,7 +20,7 @@ const commandEndpoint = `/commands`;
 const validCommandFSA: FluxStandardAction<DTO<CreateSong>> = {
     type: 'CREATE_SONG',
     payload: {
-        id: dummyUuid,
+        id: buildDummyUuid(),
         title: 'test-song-name (language)',
         titleEnglish: 'test-song-name (English)',
         contributorAndRoles: [],

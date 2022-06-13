@@ -179,7 +179,7 @@ export class ArangoDatabase {
 
     update = async <TUpdateEntityDTO>(
         id: string,
-        _: TUpdateEntityDTO,
+        updatedDto: TUpdateEntityDTO,
         collectionName: string
     ): Promise<void> => {
         const documentToUpdate = await this.fetchById(id, collectionName);
@@ -195,10 +195,20 @@ export class ArangoDatabase {
         if (isNotFound(key))
             throw new Error(`No property '_key' was found on document: ${documentToUpdate}`);
 
-        throw new InternalError('ArangoDatabase.update Not Implemented!');
-    };
+        const query = `
+            UPDATE @updatedDto IN @@collectionName
+        `;
 
-    // TODO Add Replace
+        const bindVars = {
+            updatedDto,
+            '@collectionName': collectionName,
+        };
+
+        await this.#db.query({
+            query,
+            bindVars,
+        });
+    };
 
     // TODO Add Soft Delete
 
