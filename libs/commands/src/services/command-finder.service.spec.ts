@@ -11,7 +11,7 @@ describe('CommandFinderService', () => {
     let service: CommandFinderService;
 
     @Injectable()
-    @Command('ADD_WIDGET')
+    @Command({ type: 'ADD_WIDGET' })
     class AddWidget implements ICommand {
         widgetName: string;
     }

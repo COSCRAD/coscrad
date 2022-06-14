@@ -1,13 +1,20 @@
 import { Type } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Ack } from '../constants';
+import { CommandMetadataBase } from '../decorators/types/CommandMetadataBase';
 import { NoCommandHandlerRegisteredForCommandException } from '../exceptions';
 import { CommandWithGivenTypeNotFoundException } from '../exceptions/command-with-given-type-not-found-exception';
 import { ICommandHandler } from '../interfaces/command-handler.interface';
 import { ICommand } from '../interfaces/command.interface';
 import { FluxStandardAction } from '../interfaces/flux-standard-action.interface';
 import getCommandFromHandlerMetadata from './utilities/getCommandFromHandlerMetadata';
+import getCommandMetadata from './utilities/getCommandMetadata';
 import getCommandTypeFromMetadata from './utilities/getCommandTypeFromMetadata';
+
+export type CommandConstructorAndMeta<TCommandMeta extends CommandMetadataBase> = {
+    constructor: Type<ICommand>;
+    meta: TCommandMeta;
+};
 
 export class CommandHandlerService {
     #handlers: Map<string, ICommandHandler> = new Map();
@@ -34,14 +41,25 @@ export class CommandHandlerService {
         return instanceToValidate;
     }
 
-    #getCommandCtorFromCommandType(type: string): Type<ICommand> {
-        const allCommandHandlerCtors = [...this.#handlers.values()].map(
-            (handler) => Object.getPrototypeOf(handler).constructor
-        );
+    getAllCommandCtorsAndMetadata<
+        TCommandMeta extends CommandMetadataBase
+    >(): CommandConstructorAndMeta<TCommandMeta>[] {
+        const allCtors = this.#getAllCommandCtors();
 
-        const allCommandCtors = allCommandHandlerCtors.map((handlerCtor) =>
-            getCommandFromHandlerMetadata(handlerCtor)
-        );
+        return allCtors.map((ctor) => ({
+            meta: getCommandMetadata(ctor),
+            constructor: ctor,
+        }));
+    }
+
+    #getAllCommandCtors() {
+        return [...this.#handlers.values()]
+            .map((handler) => Object.getPrototypeOf(handler).constructor)
+            .map((handlerCtor) => getCommandFromHandlerMetadata(handlerCtor));
+    }
+
+    #getCommandCtorFromCommandType(type: string): Type<ICommand> {
+        const allCommandCtors = this.#getAllCommandCtors();
 
         const CommandCtor = allCommandCtors.find(
             (commandCtor) => getCommandTypeFromMetadata(commandCtor) === type

@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CommandsService CommandHandlerService.getAllCommandCtorsAndMetadata should return the expected meta 1`] = `
+Array [
+  AddWidget {
+    "constructor": [Function],
+    "meta": Object {
+      "type": "ADD_WIDGET",
+    },
+  },
+]
+`;

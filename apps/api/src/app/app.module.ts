@@ -12,6 +12,7 @@ import buildConfigFilePath from './config/buildConfigFilePath';
 import { validate } from './config/env.validation';
 import { CategoryController } from './controllers/category.controller';
 import { CommandController } from './controllers/command/command.controller';
+import { CommandInfoService } from './controllers/command/services/command-info-service';
 import { EdgeConnectionController } from './controllers/edgeConnection.controller';
 import { ResourceViewModelController } from './controllers/resourceViewModel.controller';
 import { TagController } from './controllers/tag.controller';
@@ -39,6 +40,6 @@ import { MediaItemModule } from './domain-modules/media-item.module';
         TagController,
         CommandController,
     ],
-    providers: [AppService, DatabaseProvider, RepositoryProvider],
+    providers: [AppService, DatabaseProvider, RepositoryProvider, CommandInfoService],
 })
 export class AppModule {}
