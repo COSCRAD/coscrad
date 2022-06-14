@@ -2,9 +2,8 @@ import { Ack, CommandHandler, ICommandHandler } from '@coscrad/commands';
 import { buildSimpleValidationFunction } from '@coscrad/validation';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
-import { isNotFound, NotFound } from '../../../../lib/types/not-found';
+import { isNotFound } from '../../../../lib/types/not-found';
 import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
-import getInstanceFactoryForEntity from '../../../factories/getInstanceFactoryForEntity';
 import { IIdGenerator } from '../../../interfaces/id-generator.interface';
 import { ResourceType } from '../../../types/ResourceType';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
@@ -33,15 +32,9 @@ export class PublishSongCommandHandler implements ICommandHandler {
         // validate external state
         const { id } = command;
 
-        const allSongs = await this.repositoryProvider
+        const searchResult = await this.repositoryProvider
             .forResource<Song>(ResourceType.song)
-            .fetchMany();
-
-        // TODO We need a way to include `unpublished` results in `fetchById`
-        const searchResult =
-            allSongs
-                .filter((result): result is Song => !isInternalError(result))
-                .find((song) => song.id === id) || NotFound;
+            .fetchById(id);
 
         if (isInternalError(searchResult)) {
             throw new InternalError(`Encountered an error when fetching song: ${id}`, [
@@ -53,19 +46,9 @@ export class PublishSongCommandHandler implements ICommandHandler {
             return new InternalError(`There is no song with id: ${id}`);
         }
 
-        if (searchResult.published) {
-            return new InternalError(`Song: ${id} is already published`);
-        }
+        const updatedInstance = searchResult.publish();
 
-        const updatedDto = searchResult
-            .clone<Song>({
-                published: true,
-            })
-            .toDTO();
-
-        const updatedInstance = getInstanceFactoryForEntity<Song>(ResourceType.song)(updatedDto);
-
-        // does the new model satisfy invariants?
+        // the model checks if the state transition is allowed and if invariants are still satisfied
         if (isInternalError(updatedInstance)) {
             return updatedInstance;
         }

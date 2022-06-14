@@ -1,5 +1,7 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import transcribedAudioValidator from '../../../domainModelValidators/transcribedAudioValidator';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { ResourceType } from '../../../types/ResourceType';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
@@ -36,6 +38,10 @@ export class TranscribedAudio extends Resource {
         this.startMilliseconds = startMilliseconds;
 
         this.transcript = new Transcript(transcriptDto);
+    }
+
+    validateInvariants(): ResultOrError<typeof Valid> {
+        return transcribedAudioValidator(this);
     }
 
     validateTimeRangeContext(timeRangeContext: TimeRangeContext): Valid | InternalError {

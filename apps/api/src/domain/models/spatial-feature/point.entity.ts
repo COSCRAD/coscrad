@@ -1,4 +1,7 @@
 import { DTO } from '../../../types/DTO';
+import { ResultOrError } from '../../../types/ResultOrError';
+import geometricFeatureValidator from '../../domainModelValidators/spatialFeatureValidator/geometricFeatureValidator';
+import { Valid } from '../../domainModelValidators/Valid';
 import { ResourceType } from '../../types/ResourceType';
 import { Resource } from '../resource.entity';
 import { IGeometricFeature } from './GeometricFeature';
@@ -24,5 +27,10 @@ export class Point extends Resource implements ISpatialFeature {
             typeof GeometricFeatureType.point,
             PointCoordinates
         >;
+    }
+
+    validateInvariants(): ResultOrError<Valid> {
+        // TODO breakout the individual type validators into each class
+        return geometricFeatureValidator(this);
     }
 }

@@ -2,9 +2,11 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import findAllPointsInLineNotWithinBounds from '../../../../lib/validation/geometry/findAllPointsInLineNotWithinBounds';
 import isPointWithinBounds from '../../../../lib/validation/geometry/isPointWithinBounds';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import formatPosition2D from '../../../../view-models/presentation/formatPosition2D';
 import FreeMultilineContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/freeMultilineContext/FreeMultilineContextOutOfBoundsError';
 import PointContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pointContext/PointContextOutOfBoundsError';
+import photographValidator from '../../../domainModelValidators/photographValidator';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { ResourceType } from '../../../types/ResourceType';
 import { FreeMultilineContext } from '../../context/free-multiline-context/free-multiline-context.entity';
@@ -42,6 +44,10 @@ export class Photograph extends Resource implements Boundable2D {
         return this.clone<Photograph>({
             dimensions: this.dimensions.rescale(scaleFactor).toDTO(),
         });
+    }
+
+    validateInvariants(): ResultOrError<typeof Valid> {
+        return photographValidator(this);
     }
 
     // TODO break out the validate point logic into a validation library instead

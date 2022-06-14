@@ -1,8 +1,10 @@
-import { InternalError } from '../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import capitalizeFirstLetter from '../../lib/utilities/strings/capitalizeFirstLetter';
 import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
+import { ResultOrError } from '../../types/ResultOrError';
+import formatResourceCompositeIdentifier from '../../view-models/presentation/formatResourceCompositeIdentifier';
 import DisallowedContextTypeForResourceError from '../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';
 import { Valid } from '../domainModelValidators/Valid';
 import { AggregateId } from '../types/AggregateId';
@@ -55,6 +57,34 @@ export abstract class Resource extends BaseDomainModel implements HasAggregateId
         type: this.type,
         id: this.id,
     });
+
+    protected safeClone<T extends Resource>(
+        this: T,
+        updateDto: DeepPartial<DTO<T>>
+    ): ResultOrError<T> {
+        const updatedInstance = this.clone<T>(updateDto);
+
+        const validationResult = updatedInstance.validateInvariants();
+
+        if (isInternalError(validationResult)) return validationResult;
+
+        return updatedInstance;
+    }
+
+    abstract validateInvariants(): ResultOrError<Valid>;
+
+    publish<T extends Resource>(this: T): ResultOrError<T> {
+        if (this.published)
+            return new InternalError(
+                `You cannot publish ${formatResourceCompositeIdentifier(
+                    this.getCompositeIdentifier()
+                )} as it is already published`
+            );
+
+        return this.safeClone<T>({
+            published: true,
+        } as unknown as DeepPartial<DTO<T>>);
+    }
 
     /**
      * The name of this method is a bit misleading. It merely adds an event

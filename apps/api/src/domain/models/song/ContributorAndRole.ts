@@ -16,8 +16,13 @@ export class ContributorAndRole extends BaseDomainModel {
     @IsStringWithNonzeroLength()
     readonly role: string;
 
-    constructor({ contributorId, role }: DTO<ContributorAndRole>) {
+    constructor(dto: DTO<ContributorAndRole>) {
         super();
+
+        // this should only happen in the validation flow
+        if (!dto) return;
+
+        const { contributorId, role } = dto;
 
         this.contributorId = contributorId;
 
