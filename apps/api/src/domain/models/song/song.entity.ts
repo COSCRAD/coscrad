@@ -5,6 +5,7 @@ import {
     IsUrl,
     ValidateNested,
 } from '@coscrad/validation';
+import { CommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
@@ -17,7 +18,7 @@ import { Resource } from '../resource.entity';
 import validateTimeRangeContextForModel from '../shared/contextValidators/validateTimeRangeContextForModel';
 import { ContributorAndRole } from './ContributorAndRole';
 
-export class Song extends Resource implements ITimeBoundable {
+export class Song extends Resource implements ITimeBoundable, CommandWriteContext {
     readonly type = ResourceType.song;
 
     @IsOptional()
@@ -75,6 +76,15 @@ export class Song extends Resource implements ITimeBoundable {
         this.lengthMilliseconds = lengthMilliseconds;
 
         this.startMilliseconds = startMilliseconds;
+    }
+
+    getAvailableCommands(): string[] {
+        const allCommands = ['CREATE_SONG', 'PUBLISH_SONG'];
+
+        // There's no reason to publish a Song that is already published.
+        if (this.published) return ['CREATE_SONG'];
+
+        return allCommands;
     }
 
     validateInvariants(): ResultOrError<typeof Valid> {

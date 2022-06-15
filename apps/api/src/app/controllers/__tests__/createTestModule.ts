@@ -12,6 +12,7 @@ import { EnvironmentVariables } from '../../config/env.validation';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import { CategoryController } from '../category.controller';
 import { CommandController } from '../command/command.controller';
+import { CommandInfoService } from '../command/services/command-info-service';
 import { EdgeConnectionController } from '../edgeConnection.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { ResourceViewModelController } from '../resourceViewModel.controller';
@@ -21,6 +22,7 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
     Test.createTestingModule({
         imports: [CommandModule],
         providers: [
+            CommandInfoService,
             {
                 provide: ConfigService,
                 useFactory: () =>

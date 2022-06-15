@@ -39,6 +39,7 @@ import { SpatialFeatureViewModel } from '../../view-models/buildViewModelForReso
 import { TranscribedAudioViewModel } from '../../view-models/buildViewModelForResource/viewModels/transcribed-audio/transcribed-audio.view-model';
 import { buildAllResourceDescriptions } from '../../view-models/resourceDescriptions/buildAllResourceDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
+import { CommandInfoService } from './command/services/command-info-service';
 import buildViewModelPathForResourceType from './utilities/buildViewModelPathForResourceType';
 import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';
 
@@ -55,7 +56,8 @@ export const RESOURCES_ROUTE_PREFIX = 'resources';
 export class ResourceViewModelController {
     constructor(
         private readonly repositoryProvider: RepositoryProvider,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly commandInfoService: CommandInfoService
     ) {}
 
     @Get('')
@@ -457,7 +459,13 @@ export class ResourceViewModelController {
 
         const viewModel = new SongViewModel(searchResult);
 
-        await this.mixinTheTagsAndSend(res, viewModel, ResourceType.song);
+        const actions = this.commandInfoService.getCommandInfo(searchResult);
+
+        await this.mixinTheTagsAndSend(
+            res,
+            { ...viewModel, actions } as BaseViewModel,
+            ResourceType.song
+        );
     }
 
     /**
