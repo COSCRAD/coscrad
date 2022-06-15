@@ -1,7 +1,8 @@
 import { CommandModule } from '@coscrad/commands';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import { MediaItemQueryService } from '../../../domain/services/media-item-query.service';
+import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
+import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
@@ -15,6 +16,7 @@ import { CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
 import { EdgeConnectionController } from '../edgeConnection.controller';
 import { MediaItemController } from '../resources/media-item.controller';
+import { SongController } from '../resources/song.controller';
 import { ResourceViewModelController } from '../resourceViewModel.controller';
 import { TagController } from '../tag.controller';
 
@@ -55,6 +57,14 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                     new MediaItemQueryService(repositoryProvider),
                 inject: [RepositoryProvider],
             },
+            {
+                provide: SongQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new SongQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService],
+            },
         ],
 
         controllers: [
@@ -62,6 +72,7 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             EdgeConnectionController,
             TagController,
             MediaItemController,
+            SongController,
             CategoryController,
             CommandController,
         ],

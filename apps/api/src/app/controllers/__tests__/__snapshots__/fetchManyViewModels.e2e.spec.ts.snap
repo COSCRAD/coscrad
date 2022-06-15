@@ -282,42 +282,6 @@ Array [
 ]
 `;
 
-exports[`When fetching multiple resources GET /songs when all of the resources are published should fetch multiple resources of type song 1`] = `
-Array [
-  Object {
-    "audioURL": "https://www.myaudio.com/lamb.mp3",
-    "contributions": Array [
-      "1 (performer)",
-    ],
-    "id": "1",
-    "lengthMilliseconds": 3500,
-    "lyrics": "Mary had a little lamb, little lamb.",
-    "startMilliseconds": 0,
-    "tags": Array [],
-    "title": "Song title in language",
-    "titleEnglish": "Mary had a little lamb",
-  },
-]
-`;
-
-exports[`When fetching multiple resources GET /songs when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "audioURL": "https://www.myaudio.com/lamb.mp3",
-    "contributions": Array [
-      "1 (performer)",
-    ],
-    "id": "1",
-    "lengthMilliseconds": 3500,
-    "lyrics": "Mary had a little lamb, little lamb.",
-    "startMilliseconds": 0,
-    "tags": Array [],
-    "title": "Song title in language",
-    "titleEnglish": "Mary had a little lamb",
-  },
-]
-`;
-
 exports[`When fetching multiple resources GET /spatialFeatures when all of the resources are published should fetch multiple resources of type spatialFeature 1`] = `
 Array [
   Object {

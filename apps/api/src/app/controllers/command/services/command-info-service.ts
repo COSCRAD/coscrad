@@ -3,6 +3,7 @@ import { getCoscradDataSchema } from '@coscrad/data-types';
 import { Injectable } from '@nestjs/common';
 import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
+import { INDEX_SCOPED_COMMANDS } from '../command-info/constants';
 
 type CommandTypeFilter = (commandType: string) => boolean;
 
@@ -14,7 +15,8 @@ const buildCommandTypeFilter = (
     if (isCommandWriteContext(context))
         return (commandType: string) => context.getAvailableCommands().includes(commandType);
 
-    return Reflect.getMetadata('__index-scoped-commands__', context);
+    return (commandType: string) =>
+        Reflect.getMetadata(INDEX_SCOPED_COMMANDS, context).includes(commandType);
 };
 
 export type CommandInfo = CommandMetadataBase & {
@@ -34,6 +36,7 @@ const isCommandWriteContext = (input: unknown): input is CommandWriteContext =>
 export class CommandInfoService {
     constructor(private readonly commandHandlerService: CommandHandlerService) {}
 
+    // TODO Unit test the filtering logic
     getCommandInfo(): CommandInfo[];
     getCommandInfo(context: DomainModelCtor): CommandInfo[];
     getCommandInfo(context: CommandWriteContext): CommandInfo[];

@@ -1,25 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import mixTagsIntoViewModel from '../../app/controllers/utilities/mixTagsIntoViewModel';
-import { InternalError, isInternalError } from '../../lib/errors/InternalError';
-import { Maybe } from '../../lib/types/maybe';
-import { isNotFound, NotFound } from '../../lib/types/not-found';
-import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
-import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
-import {
-    getDefaultViewModelBuilderOptions,
-    ViewModelBuilderOptions,
-} from '../../view-models/buildViewModelForResource/viewModelBuilders/types/ViewModelBuilderOptions';
-import { MediaItemViewModel } from '../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
-import { MediaItem } from '../models/media-item/entities/media-item.entity';
-import { Tag } from '../models/tag/tag.entity';
-import { ISpecification } from '../repositories/interfaces/ISpecification';
-import IsPublished from '../repositories/specifications/isPublished';
-import { isAggregateId } from '../types/AggregateId';
-import { ResourceType } from '../types/ResourceType';
+import mixTagsIntoViewModel from '../../../app/controllers/utilities/mixTagsIntoViewModel';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
+import { Maybe } from '../../../lib/types/maybe';
+import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
+import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
+import { MediaItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
+import { MediaItem } from '../../models/media-item/entities/media-item.entity';
+import { Tag } from '../../models/tag/tag.entity';
+import { ISpecification } from '../../repositories/interfaces/ISpecification';
+import IsPublished from '../../repositories/specifications/isPublished';
+import { isAggregateId } from '../../types/AggregateId';
+import { ResourceType } from '../../types/ResourceType';
+import { GeneralQueryOptions } from './types/GeneralQueryOptions';
+import getDefaultQueryOptions from './utilities/getDefaultQueryOptions';
 
-type GeneralQueryOptions = ViewModelBuilderOptions;
-
-const defaultOptions = getDefaultViewModelBuilderOptions();
+const defaultOptions = getDefaultQueryOptions();
 
 @Injectable()
 export class MediaItemQueryService {
@@ -29,7 +25,7 @@ export class MediaItemQueryService {
         id: unknown,
         options: Partial<GeneralQueryOptions> = {}
     ): Promise<InternalError | Maybe<MediaItemViewModel>> {
-        if (!isAggregateId(id)) return new InternalError(`Invalid entity ID: ${id}`);
+        if (!isAggregateId(id)) return new InternalError(`Invalid media item ID: ${id}`);
 
         const { shouldReturnUnpublishedEntities } = {
             ...defaultOptions,

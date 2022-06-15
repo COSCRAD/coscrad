@@ -354,6 +354,24 @@
                 "audioURL": "https://www.myaudio.com/lamb.mp3",
                 "lengthMilliseconds": 3500,
                 "startMilliseconds": 0
+            },
+            {
+                "type": "song",
+                "_key": "2",
+                "published": false,
+                "eventHistory": [],
+                "title": "Unpublished Song Title (lang)",
+                "titleEnglish": "Unpublished Song Title (Engl)",
+                "contributorAndRoles": [
+                    {
+                        "contributorId": "33",
+                        "role": "author"
+                    }
+                ],
+                "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+                "audioURL": "https://www.myaudio.com/badsong.wav",
+                "lengthMilliseconds": 33000,
+                "startMilliseconds": 0
             }
         ],
         "media_items": [

@@ -19,6 +19,7 @@ import { TagController } from './controllers/tag.controller';
 import { MediaItemModule } from './domain-modules/media-item.module';
 
 @Module({
+    providers: [AppService, DatabaseProvider, RepositoryProvider, CommandInfoService],
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
@@ -29,8 +30,8 @@ import { MediaItemModule } from './domain-modules/media-item.module';
         AuthorizationModule,
         PersistenceModule.forRootAsync(),
         MediaItemModule,
-        CommandModule,
         SongModule,
+        CommandModule,
     ],
     controllers: [
         AppController,
@@ -40,6 +41,5 @@ import { MediaItemModule } from './domain-modules/media-item.module';
         TagController,
         CommandController,
     ],
-    providers: [AppService, DatabaseProvider, RepositoryProvider, CommandInfoService],
 })
 export class AppModule {}

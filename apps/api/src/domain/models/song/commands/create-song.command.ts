@@ -1,4 +1,4 @@
-import { Command, ICommand } from '@coscrad/commands';
+import { Command, CommandMetadataBase, ICommand } from '@coscrad/commands';
 import {
     NestedDataType,
     NonEmptyString,
@@ -8,7 +8,11 @@ import {
 } from '@coscrad/data-types';
 import { ContributorAndRole } from '../ContributorAndRole';
 
-@Command({ type: 'CREATE_SONG', label: 'Create Song', description: 'Create a new song' })
+@Command<CommandMetadataBase & { label: string; description: string }>({
+    type: 'CREATE_SONG',
+    label: 'Create Song',
+    description: 'Creates a new song',
+})
 export class CreateSong implements ICommand {
     @UUID()
     readonly id: string;

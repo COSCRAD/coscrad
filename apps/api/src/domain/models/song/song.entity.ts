@@ -5,6 +5,7 @@ import {
     IsUrl,
     ValidateNested,
 } from '@coscrad/validation';
+import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { CommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DTO } from '../../../types/DTO';
@@ -18,6 +19,7 @@ import { Resource } from '../resource.entity';
 import validateTimeRangeContextForModel from '../shared/contextValidators/validateTimeRangeContextForModel';
 import { ContributorAndRole } from './ContributorAndRole';
 
+@RegisterIndexScopedCommands(['CREATE_SONG'])
 export class Song extends Resource implements ITimeBoundable, CommandWriteContext {
     readonly type = ResourceType.song;
 
@@ -79,10 +81,10 @@ export class Song extends Resource implements ITimeBoundable, CommandWriteContex
     }
 
     getAvailableCommands(): string[] {
-        const allCommands = ['CREATE_SONG', 'PUBLISH_SONG'];
+        const allCommands = ['PUBLISH_SONG'];
 
         // There's no reason to publish a Song that is already published.
-        if (this.published) return ['CREATE_SONG'];
+        if (this.published) return [];
 
         return allCommands;
     }

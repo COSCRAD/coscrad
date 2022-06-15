@@ -85,17 +85,20 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /songs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "audioURL": "https://www.myaudio.com/lamb.mp3",
-  "contributions": Array [
-    "1 (performer)",
-  ],
-  "id": "1",
-  "lengthMilliseconds": 3500,
-  "lyrics": "Mary had a little lamb, little lamb.",
-  "startMilliseconds": 0,
-  "tags": Array [],
-  "title": "Song title in language",
-  "titleEnglish": "Mary had a little lamb",
+  "actions": Array [],
+  "data": Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "1",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
 }
 `;
 

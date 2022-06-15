@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Res, UseFilters } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { MediaItemQueryService } from '../../../domain/services/media-item-query.service';
+import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { isNotFound } from '../../../lib/types/not-found';
@@ -16,7 +16,8 @@ import buildViewModelPathForResourceType from '../utilities/buildViewModelPathFo
 )
 @UseFilters(new InternalErrorFilter())
 export class MediaItemController {
-    constructor(private mediaItemQueryService: MediaItemQueryService) {}
+    constructor(private readonly mediaItemQueryService: MediaItemQueryService) {}
+
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: MediaItemViewModel })
     @Get('/:id')
