@@ -9,6 +9,10 @@ import {
 } from './controllers/command/services/command-info-service';
 import { Message } from './message.entity';
 
+/**
+ * These endpoints are strictly for experimentation.
+ */
+
 @Controller()
 export class AppController {
     constructor(
@@ -28,7 +32,7 @@ export class AppController {
         return { message: 'Welcome to the COSCRAD API!' };
     }
 
-    @Get('avcoms')
+    @Get('availableCommands')
     getAvailableCommands(): CommandInfo[] {
         return this.commandInfoService.getCommandInfo();
     }

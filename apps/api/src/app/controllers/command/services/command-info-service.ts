@@ -1,6 +1,6 @@
 import { CommandHandlerService, CommandMetadataBase } from '@coscrad/commands';
+import { getCoscradDataSchema } from '@coscrad/data-types';
 import { Injectable } from '@nestjs/common';
-import { getCoscradDataSchema } from '../../../../../../../libs/data-types/src';
 
 export type CommandInfo = CommandMetadataBase & {
     label: string;

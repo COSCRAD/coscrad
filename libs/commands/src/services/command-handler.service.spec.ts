@@ -9,9 +9,10 @@ describe('CommandsService', () => {
     let service: CommandHandlerService;
 
     /**
-     * Note that only the `type` property is required for our API. However
-     * additional metadata can be added as needed by the client, and this will
-     * be returned from our `CommandHandlerService` on request.
+     * Note that only the `type` property is required from the point of view of
+     * the `@coscrads/commands` lib. However additional metadata can be added as
+     * needed by the client, and this will be returned from our
+     * `CommandHandlerService` on request.
      */
     @Command({ type: 'ADD_WIDGET', label: 'Add Widget', info: 'Adds a Widget' })
     class AddWidget implements ICommand {
@@ -45,6 +46,8 @@ describe('CommandsService', () => {
             const result = service.getAllCommandCtorsAndMetadata();
 
             expect(result).toMatchSnapshot();
+
+            expect(result[0].constructor).toBe(AddWidget);
         });
     });
 

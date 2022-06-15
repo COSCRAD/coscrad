@@ -5,6 +5,8 @@ Array [
   AddWidget {
     "constructor": [Function],
     "meta": Object {
+      "info": "Adds a Widget",
+      "label": "Add Widget",
       "type": "ADD_WIDGET",
     },
   },
