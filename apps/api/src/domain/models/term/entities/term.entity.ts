@@ -1,4 +1,6 @@
 import { IsOptional, IsStringWithNonzeroLength } from '@coscrad/validation';
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { CommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import termValidator from '../../../domainModelValidators/termValidator';
@@ -10,7 +12,8 @@ import { TextFieldContext } from '../../context/text-field-context/text-field-co
 import { Resource } from '../../resource.entity';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 
-export class Term extends Resource {
+@RegisterIndexScopedCommands([])
+export class Term extends Resource implements CommandWriteContext {
     readonly type: ResourceType = ResourceType.term;
 
     @IsOptional()
@@ -69,6 +72,10 @@ export class Term extends Resource {
         this.audioFilename = dto.audioFilename;
 
         this.sourceProject = dto.sourceProject;
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
     }
 
     validateInvariants() {

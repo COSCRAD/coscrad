@@ -44,8 +44,7 @@ describe('When fetching multiple resources', () => {
         }));
     });
 
-    Object.values(ResourceType)
-    .forEach((resourceType) => {
+    Object.values(ResourceType).forEach((resourceType) => {
         const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
 
         describe(`GET ${endpointUnderTest}`, () => {
@@ -74,13 +73,15 @@ describe('When fetching multiple resources', () => {
                     expect(res.status).toBe(httpStatusCodes.ok);
 
                     // TODO Support new API for all resources
-                    const data = resourceType === ResourceType.song ? res.body.data : res.body;
+                    const data = [ResourceType.song, ResourceType.term].includes(resourceType)
+                        ? res.body.data
+                        : res.body;
 
                     expect(data.length).toBe(
                         testDataWithAllResourcesPublished[resourceType].length
                     );
 
-                    expect(data).toMatchSnapshot();
+                    expect(res.body).toMatchSnapshot();
                 });
             });
 
@@ -121,7 +122,9 @@ describe('When fetching multiple resources', () => {
                     );
 
                     // TODO Support new API for all resources
-                    const data = resourceType === ResourceType.song ? res.body.data : res.body;
+                    const data = [ResourceType.song, ResourceType.term].includes(resourceType)
+                        ? res.body.data
+                        : res.body;
 
                     expect(data.length).toBe(publishedResourcesToAdd.length);
 
@@ -130,7 +133,7 @@ describe('When fetching multiple resources', () => {
                         unpublishedResourcesToAdd.length
                     );
 
-                    expect(data).toMatchSnapshot();
+                    expect(res.body).toMatchSnapshot();
                 });
             });
         });

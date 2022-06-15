@@ -123,16 +123,19 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /terms/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "contributor": "",
-  "id": "1",
-  "tags": Array [
-    Object {
-      "id": "1",
-      "label": "plants",
-    },
-  ],
-  "term": "Chil-term-1",
-  "termEnglish": "Engl-term-1",
+  "actions": Array [],
+  "data": Object {
+    "contributor": "",
+    "id": "1",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
 }
 `;
 
