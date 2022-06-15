@@ -17,6 +17,7 @@ import { EdgeConnectionController } from './controllers/edgeConnection.controlle
 import { ResourceViewModelController } from './controllers/resourceViewModel.controller';
 import { TagController } from './controllers/tag.controller';
 import { MediaItemModule } from './domain-modules/media-item.module';
+import { TermModule } from './domain-modules/term.module';
 
 @Module({
     providers: [AppService, DatabaseProvider, RepositoryProvider, CommandInfoService],
@@ -31,6 +32,7 @@ import { MediaItemModule } from './domain-modules/media-item.module';
         PersistenceModule.forRootAsync(),
         MediaItemModule,
         SongModule,
+        TermModule,
         CommandModule,
     ],
     controllers: [

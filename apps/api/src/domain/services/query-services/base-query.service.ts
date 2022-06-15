@@ -121,7 +121,7 @@ export abstract class BaseQueryService<
         return {
             data,
             // TODO Get the Ctor here dynamically!
-            actions: this.commandInfoService.getCommandInfo(Song),
+            actions: this.commandInfoService.getCommandInfo(Song) || [],
         } as unknown as ResourceIndexQueryResult<ViewModelWithTags<UViewModel>>;
     }
 }

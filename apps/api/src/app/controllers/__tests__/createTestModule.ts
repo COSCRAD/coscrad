@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
+import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
@@ -17,8 +18,16 @@ import { CommandInfoService } from '../command/services/command-info-service';
 import { EdgeConnectionController } from '../edgeConnection.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { SongController } from '../resources/song.controller';
+import { TermController } from '../resources/term.controller';
 import { ResourceViewModelController } from '../resourceViewModel.controller';
 import { TagController } from '../tag.controller';
+
+// const provideWithRepositories = (depCtor: new (...args: unknown[]) => unknown) => ({
+//     provide: depCtor,
+//     useFactory: (repositoryProvider: RepositoryProvider, commandInfoService: CommandInfoService) =>
+//         new depCtor(repositoryProvider, commandInfoService),
+//     inject: [RepositoryProvider, CommandInfoService],
+// });
 
 export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
     Test.createTestingModule({
@@ -65,6 +74,15 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                 ) => new SongQueryService(repositoryProvider, commandInfoService),
                 inject: [RepositoryProvider, CommandInfoService],
             },
+            {
+                provide: TermQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) => new TermQueryService(repositoryProvider, commandInfoService, configService),
+                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+            },
         ],
 
         controllers: [
@@ -73,6 +91,7 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             TagController,
             MediaItemController,
             SongController,
+            TermController,
             CategoryController,
             CommandController,
         ],

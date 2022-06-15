@@ -283,77 +283,83 @@ Array [
 `;
 
 exports[`When fetching multiple resources GET /songs when all of the resources are published should fetch multiple resources of type song 1`] = `
-Array [
-  Object {
-    "actions": Array [],
-    "data": Object {
-      "audioURL": "https://www.myaudio.com/lamb.mp3",
-      "contributions": Array [
-        "1 (performer)",
-      ],
-      "id": "1",
-      "lengthMilliseconds": 3500,
-      "lyrics": "Mary had a little lamb, little lamb.",
-      "startMilliseconds": 0,
-      "tags": Array [],
-      "title": "Song title in language",
-      "titleEnglish": "Mary had a little lamb",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.myaudio.com/lamb.mp3",
+        "contributions": Array [
+          "1 (performer)",
+        ],
+        "id": "1",
+        "lengthMilliseconds": 3500,
+        "lyrics": "Mary had a little lamb, little lamb.",
+        "startMilliseconds": 0,
+        "tags": Array [],
+        "title": "Song title in language",
+        "titleEnglish": "Mary had a little lamb",
+      },
     },
-  },
-  Object {
-    "actions": Array [],
-    "data": Object {
-      "audioURL": "https://www.myaudio.com/badsong.wav",
-      "contributions": Array [
-        "33 (author)",
-      ],
-      "id": "2",
-      "lengthMilliseconds": 33000,
-      "lyrics": "Ain't gonna see the light of day, light of day, light of day",
-      "startMilliseconds": 0,
-      "tags": Array [],
-      "title": "Unpublished Song Title (lang)",
-      "titleEnglish": "Unpublished Song Title (Engl)",
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.myaudio.com/badsong.wav",
+        "contributions": Array [
+          "33 (author)",
+        ],
+        "id": "2",
+        "lengthMilliseconds": 33000,
+        "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+        "startMilliseconds": 0,
+        "tags": Array [],
+        "title": "Unpublished Song Title (lang)",
+        "titleEnglish": "Unpublished Song Title (Engl)",
+      },
     },
-  },
-]
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /songs when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "actions": Array [],
-    "data": Object {
-      "audioURL": "https://www.myaudio.com/lamb.mp3",
-      "contributions": Array [
-        "1 (performer)",
-      ],
-      "id": "1",
-      "lengthMilliseconds": 3500,
-      "lyrics": "Mary had a little lamb, little lamb.",
-      "startMilliseconds": 0,
-      "tags": Array [],
-      "title": "Song title in language",
-      "titleEnglish": "Mary had a little lamb",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.myaudio.com/lamb.mp3",
+        "contributions": Array [
+          "1 (performer)",
+        ],
+        "id": "1",
+        "lengthMilliseconds": 3500,
+        "lyrics": "Mary had a little lamb, little lamb.",
+        "startMilliseconds": 0,
+        "tags": Array [],
+        "title": "Song title in language",
+        "titleEnglish": "Mary had a little lamb",
+      },
     },
-  },
-  Object {
-    "actions": Array [],
-    "data": Object {
-      "audioURL": "https://www.myaudio.com/badsong.wav",
-      "contributions": Array [
-        "33 (author)",
-      ],
-      "id": "2",
-      "lengthMilliseconds": 33000,
-      "lyrics": "Ain't gonna see the light of day, light of day, light of day",
-      "startMilliseconds": 0,
-      "tags": Array [],
-      "title": "Unpublished Song Title (lang)",
-      "titleEnglish": "Unpublished Song Title (Engl)",
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.myaudio.com/badsong.wav",
+        "contributions": Array [
+          "33 (author)",
+        ],
+        "id": "2",
+        "lengthMilliseconds": 33000,
+        "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+        "startMilliseconds": 0,
+        "tags": Array [],
+        "title": "Unpublished Song Title (lang)",
+        "titleEnglish": "Unpublished Song Title (Engl)",
+      },
     },
-  },
-]
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /spatialFeatures when all of the resources are published should fetch multiple resources of type spatialFeature 1`] = `
@@ -575,83 +581,107 @@ Array [
 `;
 
 exports[`When fetching multiple resources GET /terms when all of the resources are published should fetch multiple resources of type term 1`] = `
-Array [
-  Object {
-    "contributor": "",
-    "id": "1",
-    "tags": Array [
-      Object {
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
         "id": "1",
-        "label": "plants",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+        "term": "Chil-term-1",
+        "termEnglish": "Engl-term-1",
       },
-    ],
-    "term": "Chil-term-1",
-    "termEnglish": "Engl-term-1",
-  },
-  Object {
-    "contributor": "",
-    "id": "2",
-    "tags": Array [
-      Object {
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
         "id": "2",
-        "label": "animals",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+        "term": "Chil-term-2",
+        "termEnglish": "Engl-term-2",
       },
-    ],
-    "term": "Chil-term-2",
-    "termEnglish": "Engl-term-2",
-  },
-  Object {
-    "contributor": "",
-    "id": "3",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
+        "id": "3",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+        "term": "Chil-term-no-english",
       },
-    ],
-    "term": "Chil-term-no-english",
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /terms when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "contributor": "",
-    "id": "1",
-    "tags": Array [
-      Object {
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
         "id": "1",
-        "label": "plants",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+        "term": "Chil-term-1",
+        "termEnglish": "Engl-term-1",
       },
-    ],
-    "term": "Chil-term-1",
-    "termEnglish": "Engl-term-1",
-  },
-  Object {
-    "contributor": "",
-    "id": "2",
-    "tags": Array [
-      Object {
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
         "id": "2",
-        "label": "animals",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+        "term": "Chil-term-2",
+        "termEnglish": "Engl-term-2",
       },
-    ],
-    "term": "Chil-term-2",
-    "termEnglish": "Engl-term-2",
-  },
-  Object {
-    "contributor": "",
-    "id": "3",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
+        "id": "3",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+        "term": "Chil-term-no-english",
       },
-    ],
-    "term": "Chil-term-no-english",
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /transcribedAudioItems when all of the resources are published should fetch multiple resources of type transcribedAudio 1`] = `

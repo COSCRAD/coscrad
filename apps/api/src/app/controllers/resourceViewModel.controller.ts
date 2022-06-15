@@ -19,13 +19,11 @@ import buildBibliographicReferenceViewModels from '../../view-models/buildViewMo
 import buildBookViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildBookViewModels';
 import buildPhotographViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildPhotographViewModels';
 import buildSpatialFeatureViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildSpatialFeatureViewModels';
-import buildTermViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildTermViewModels';
 import buildTranscribedAudioViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildTranscribedAudioViewModels';
 import buildVocabularyListViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildVocabularyListViewModels';
 import {
     HasViewModelId,
     TagViewModel,
-    TermViewModel,
     VocabularyListViewModel,
 } from '../../view-models/buildViewModelForResource/viewModels';
 import { BaseViewModel } from '../../view-models/buildViewModelForResource/viewModels/base.view-model';
@@ -36,7 +34,6 @@ import { SpatialFeatureViewModel } from '../../view-models/buildViewModelForReso
 import { TranscribedAudioViewModel } from '../../view-models/buildViewModelForResource/viewModels/transcribed-audio/transcribed-audio.view-model';
 import { buildAllResourceDescriptions } from '../../view-models/resourceDescriptions/buildAllResourceDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
-import { CommandInfoService } from './command/services/command-info-service';
 import buildViewModelPathForResourceType from './utilities/buildViewModelPathForResourceType';
 import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';
 
@@ -53,8 +50,7 @@ export const RESOURCES_ROUTE_PREFIX = 'resources';
 export class ResourceViewModelController {
     constructor(
         private readonly repositoryProvider: RepositoryProvider,
-        private readonly configService: ConfigService,
-        private readonly commandInfoService: CommandInfoService
+        private readonly configService: ConfigService
     ) {}
 
     @Get('')
@@ -64,55 +60,6 @@ export class ResourceViewModelController {
         const fullResourcesBasePath = `/${appGlobalPrefix}/${RESOURCES_ROUTE_PREFIX}`;
 
         return buildAllResourceDescriptions(fullResourcesBasePath);
-    }
-
-    /* ********** TERMS ********** */
-    @ApiOkResponse({ type: TermViewModel, isArray: true })
-    @Get(buildViewModelPathForResourceType(ResourceType.term))
-    async fetchTerms(@Res() res) {
-        const allTermViewModels = await buildTermViewModels({
-            repositoryProvider: this.repositoryProvider,
-            configService: this.configService,
-        });
-
-        if (isInternalError(allTermViewModels))
-            return res.status(httpStatusCodes.internalError).send({
-                error: JSON.stringify(allTermViewModels),
-            });
-
-        return await this.mixinTheTagsAndSend(res, allTermViewModels, ResourceType.term);
-    }
-
-    @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: TermViewModel })
-    @Get(`${buildViewModelPathForResourceType(ResourceType.term)}/:id`)
-    async fetchTermById(@Res() res, @Param() params: unknown) {
-        const { id } = params as HasViewModelId;
-
-        if (!isAggregateId(id))
-            return res.status(httpStatusCodes.badRequest).send({
-                error: `Invalid input for id: ${id}`,
-            });
-
-        const searchResult = await this.repositoryProvider
-            .forResource<Term>(ResourceType.term)
-            .fetchById(id);
-
-        if (isInternalError(searchResult))
-            return res.status(httpStatusCodes.internalError).send({
-                error: JSON.stringify(searchResult),
-            });
-
-        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
-
-        if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
-
-        const termViewModel = new TermViewModel(
-            searchResult,
-            this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
-        );
-
-        return this.mixinTheTagsAndSend(res, termViewModel, ResourceType.term);
     }
 
     /* ********** VOCABULARY LISTS ********** */
