@@ -1,6 +1,7 @@
 import { IsOptional, IsStringWithNonzeroLength } from '@coscrad/validation';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
+import termValidator from '../../../domainModelValidators/termValidator';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
@@ -68,6 +69,10 @@ export class Term extends Resource {
         this.audioFilename = dto.audioFilename;
 
         this.sourceProject = dto.sourceProject;
+    }
+
+    validateInvariants() {
+        return termValidator(this);
     }
 
     // TODO We should 'goodlist' properties that can be targets for this context as well

@@ -7,6 +7,8 @@ import {
 } from '@coscrad/validation';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DTO } from '../../../types/DTO';
+import { ResultOrError } from '../../../types/ResultOrError';
+import songValidator from '../../domainModelValidators/songValidator';
 import { Valid } from '../../domainModelValidators/Valid';
 import { ResourceType } from '../../types/ResourceType';
 import { TimeRangeContext } from '../context/time-range-context/time-range-context.entity';
@@ -73,6 +75,10 @@ export class Song extends Resource implements ITimeBoundable {
         this.lengthMilliseconds = lengthMilliseconds;
 
         this.startMilliseconds = startMilliseconds;
+    }
+
+    validateInvariants(): ResultOrError<typeof Valid> {
+        return songValidator(this);
     }
 
     validateTimeRangeContext(timeRangeContext: TimeRangeContext): Valid | InternalError {

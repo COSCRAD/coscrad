@@ -4,6 +4,7 @@ import { ISpecification } from '../../domain/repositories/interfaces/ISpecificat
 import { IRepositoryForEntity } from '../../domain/repositories/interfaces/repository-for-entity';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
+import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { DTO } from '../../types/DTO';
@@ -69,9 +70,15 @@ export class RepositoryForEntity<TEntity extends HasAggregateId & BaseDomainMode
     }
 
     async create(entity: TEntity) {
-        return this.#arangoDatabaseForEntitysCollection.create(
-            this.#mapEntityDTOToDocument(entity.toDTO())
-        );
+        return this.#arangoDatabaseForEntitysCollection
+            .create(this.#mapEntityDTOToDocument(entity.toDTO()))
+            .catch((err) => {
+                throw new InternalError(
+                    `Failed to create entity: ${JSON.stringify(
+                        entity.toDTO()
+                    )}. \n Arango Error: ${err}`
+                );
+            });
     }
 
     async createMany(entities: TEntity[]) {
@@ -79,12 +86,20 @@ export class RepositoryForEntity<TEntity extends HasAggregateId & BaseDomainMode
             .map((entity) => entity.toDTO())
             .map((dto) => this.#mapEntityDTOToDocument(dto));
 
-        return this.#arangoDatabaseForEntitysCollection.createMany(
-            createDTOs as DatabaseDocument<TEntity>[]
-        );
+        return this.#arangoDatabaseForEntitysCollection
+            .createMany(createDTOs as DatabaseDocument<TEntity>[])
+            .catch((err) => {
+                throw new InternalError(
+                    `Failed to create many entities: ${JSON.stringify(
+                        entities
+                    )}. \n Arango error: ${err}`
+                );
+            });
     }
 
-    async update() {
-        throw new Error(`Method not implemented: RepositoryForEntity.update`);
+    async update(updatedEntity: TEntity) {
+        const updatedDTO = this.#mapEntityDTOToDocument(updatedEntity.toDTO());
+
+        return this.#arangoDatabaseForEntitysCollection.update(updatedEntity.id, updatedDTO);
     }
 }

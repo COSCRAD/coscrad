@@ -8,6 +8,8 @@ import {
 } from '@coscrad/validation';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import mediaItemValidator from '../../../domainModelValidators/mediaItemValidator';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { ResourceType } from '../../../types/ResourceType';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
@@ -62,6 +64,10 @@ export class MediaItem extends Resource implements ITimeBoundable {
         this.mimeType = mimeType;
 
         this.lengthMilliseconds = lengthMilliseconds;
+    }
+
+    validateInvariants(): ResultOrError<typeof Valid> {
+        return mediaItemValidator(this);
     }
 
     validateTextFieldContext(context: TextFieldContext): Valid | InternalError {

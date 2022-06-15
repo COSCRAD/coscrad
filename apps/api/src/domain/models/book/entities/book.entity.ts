@@ -1,5 +1,7 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import bookValidator from '../../../domainModelValidators/bookValidator';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { ResourceType } from '../../../types/ResourceType';
@@ -38,6 +40,10 @@ export class Book extends Resource {
 
         // TODO remove all casts like this
         this.pages = pageDTOs.map((pageDTO) => new BookPage(pageDTO));
+    }
+
+    validateInvariants(): ResultOrError<typeof Valid> {
+        return bookValidator(this);
     }
 
     protected validatePageRangeContext(context: PageRangeContext): Valid | InternalError {
