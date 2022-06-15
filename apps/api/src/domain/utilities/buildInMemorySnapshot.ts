@@ -13,7 +13,7 @@ export default ({
     categoryTree,
 }: DeepPartial<InMemorySnapshot>): InMemorySnapshot =>
     ({
-        resources: Object.entries(resources).reduce(
+        resources: Object.entries(resources || {}).reduce(
             (snapshotOfResources: InMemorySnapshotOfResources, [key, models]) => ({
                 ...snapshotOfResources,
                 [key]: models,
