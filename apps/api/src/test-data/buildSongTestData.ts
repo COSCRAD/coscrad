@@ -19,6 +19,22 @@ export default (): Song[] =>
                 },
             ],
         },
+        {
+            type: ResourceType.song,
+            title: 'Unpublished Song Title (lang)',
+            titleEnglish: 'Unpublished Song Title (Engl)',
+            lyrics: "Ain't gonna see the light of day, light of day, light of day",
+            audioURL: 'https://www.myaudio.com/badsong.wav',
+            published: false,
+            startMilliseconds: 0,
+            lengthMilliseconds: 33000,
+            contributorAndRoles: [
+                {
+                    contributorId: '33',
+                    role: 'author',
+                },
+            ],
+        },
     ].map(
         (partialDTO, index) =>
             new Song({

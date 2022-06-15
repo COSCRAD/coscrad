@@ -4,7 +4,6 @@ import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/IBibliographicReference';
 import { Book } from '../../domain/models/book/entities/book.entity';
 import { Photograph } from '../../domain/models/photograph/entities/photograph.entity';
-import { Song } from '../../domain/models/song/song.entity';
 import { ISpatialFeature } from '../../domain/models/spatial-feature/ISpatialFeature';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { Term } from '../../domain/models/term/entities/term.entity';
@@ -19,7 +18,6 @@ import { RepositoryProvider } from '../../persistence/repositories/repository.pr
 import buildBibliographicReferenceViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildBibliographicReferenceViewModels';
 import buildBookViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildBookViewModels';
 import buildPhotographViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildPhotographViewModels';
-import buildSongViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildSongViewModels';
 import buildSpatialFeatureViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildSpatialFeatureViewModels';
 import buildTermViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildTermViewModels';
 import buildTranscribedAudioViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildTranscribedAudioViewModels';
@@ -34,11 +32,11 @@ import { BaseViewModel } from '../../view-models/buildViewModelForResource/viewM
 import { BibliographicReferenceViewModel } from '../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { BookViewModel } from '../../view-models/buildViewModelForResource/viewModels/book.view-model';
 import { PhotographViewModel } from '../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
-import { SongViewModel } from '../../view-models/buildViewModelForResource/viewModels/song.view-model';
 import { SpatialFeatureViewModel } from '../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import { TranscribedAudioViewModel } from '../../view-models/buildViewModelForResource/viewModels/transcribed-audio/transcribed-audio.view-model';
 import { buildAllResourceDescriptions } from '../../view-models/resourceDescriptions/buildAllResourceDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
+import { CommandInfoService } from './command/services/command-info-service';
 import buildViewModelPathForResourceType from './utilities/buildViewModelPathForResourceType';
 import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';
 
@@ -55,7 +53,8 @@ export const RESOURCES_ROUTE_PREFIX = 'resources';
 export class ResourceViewModelController {
     constructor(
         private readonly repositoryProvider: RepositoryProvider,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly commandInfoService: CommandInfoService
     ) {}
 
     @Get('')
@@ -417,47 +416,6 @@ export class ResourceViewModelController {
         const viewModel = new BibliographicReferenceViewModel(searchResult);
 
         return await this.mixinTheTagsAndSend(res, viewModel, ResourceType.bibliographicReference);
-    }
-
-    /* ********** SONGS ********** */
-    @ApiOkResponse({ type: SongViewModel, isArray: true })
-    @Get(buildViewModelPathForResourceType(ResourceType.song))
-    async fetchSongs(@Res() res) {
-        const allViewModels = await buildSongViewModels({
-            repositoryProvider: this.repositoryProvider,
-            configService: this.configService,
-        });
-
-        await this.mixinTheTagsAndSend(res, allViewModels, ResourceType.song);
-    }
-
-    @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: SongViewModel })
-    @Get(`${buildViewModelPathForResourceType(ResourceType.song)}/:id`)
-    async fetchSongById(@Res() res, @Param() params: unknown) {
-        const { id } = params as HasViewModelId;
-
-        if (!isAggregateId(id))
-            return res.status(httpStatusCodes.badRequest).send({
-                error: `Invalid input for id: ${id}`,
-            });
-
-        const searchResult = await this.repositoryProvider
-            .forResource<Song>(ResourceType.song)
-            .fetchById(id);
-
-        if (isInternalError(searchResult))
-            return res.status(httpStatusCodes.internalError).send({
-                error: searchResult.toString(),
-            });
-
-        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
-
-        if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
-
-        const viewModel = new SongViewModel(searchResult);
-
-        await this.mixinTheTagsAndSend(res, viewModel, ResourceType.song);
     }
 
     /**

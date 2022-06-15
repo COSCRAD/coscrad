@@ -1,6 +1,9 @@
+import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { Resource } from '../../../domain/models/resource.entity';
+import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
+import { PublishSongCommandHandler } from '../../../domain/models/song/commands/publish-song.command-handler';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
@@ -8,6 +11,7 @@ import generateRandomTestDatabaseName from '../../../persistence/repositories/__
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
+import buildMockUuidGenerator from '../command/__tests__/buildMockUuidGenerator';
 import buildViewModelPathForRe from '../utilities/buildViewModelPathForResourceType';
 import setUpIntegrationTest from './setUpIntegrationTest';
 
@@ -19,6 +23,8 @@ describe('GET /resources (fetch view models)', () => {
     let arangoConnectionProvider: ArangoConnectionProvider;
 
     let testRepositoryProvider: TestRepositoryProvider;
+
+    let commandHandlerService: CommandHandlerService;
 
     const testData = buildTestData();
 
@@ -39,10 +45,21 @@ describe('GET /resources (fetch view models)', () => {
     );
 
     beforeAll(async () => {
-        ({ app, arangoConnectionProvider, testRepositoryProvider } = await setUpIntegrationTest({
-            ARANGO_DB_NAME: testDatabaseName,
-            BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
-        }));
+        ({ app, arangoConnectionProvider, testRepositoryProvider, commandHandlerService } =
+            await setUpIntegrationTest({
+                ARANGO_DB_NAME: testDatabaseName,
+                BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
+            }));
+
+        commandHandlerService.registerHandler(
+            'CREATE_SONG',
+            new CreateSongCommandHandler(testRepositoryProvider, buildMockUuidGenerator())
+        );
+
+        commandHandlerService.registerHandler(
+            'PUBLISH_SONG',
+            new PublishSongCommandHandler(testRepositoryProvider, buildMockUuidGenerator())
+        );
     });
 
     Object.values(ResourceType).forEach((resourceType) => {
@@ -95,7 +112,11 @@ describe('GET /resources (fetch view models)', () => {
 
                             expect(res.status).toBe(httpStatusCodes.ok);
 
-                            expect(res.body.id).toBe(resourceToFind.id);
+                            // TODO Convert all Resource queries to the new API
+                            const id =
+                                resourceType === ResourceType.song ? res.body.data.id : res.body.id;
+
+                            expect(id).toBe(resourceToFind.id);
 
                             expect(res.body).toMatchSnapshot();
                         });

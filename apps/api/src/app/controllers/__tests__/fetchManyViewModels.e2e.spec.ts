@@ -44,90 +44,93 @@ describe('When fetching multiple resources', () => {
         }));
     });
 
-    Object.values(ResourceType).forEach((ResourceType) => {
-        const endpointUnderTest = `/${buildViewModelPathForResourceType(ResourceType)}`;
+    Object.values(ResourceType)
+        // TODO Remove filter and support new API for all `ResourceTypes`
+        .filter((resourceType) => resourceType !== ResourceType.song)
+        .forEach((ResourceType) => {
+            const endpointUnderTest = `/${buildViewModelPathForResourceType(ResourceType)}`;
 
-        describe(`GET ${endpointUnderTest}`, () => {
-            beforeEach(async () => {
-                await testRepositoryProvider.testSetup();
-            });
-
-            afterEach(async () => {
-                await testRepositoryProvider.testTeardown();
-            });
-
-            describe('when all of the resources are published', () => {
+            describe(`GET ${endpointUnderTest}`, () => {
                 beforeEach(async () => {
-                    await testRepositoryProvider.addResourcesOfManyTypes(
-                        testDataWithAllResourcesPublished
-                    );
-
-                    await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+                    await testRepositoryProvider.testSetup();
                 });
 
-                it(`should fetch multiple resources of type ${ResourceType}`, async () => {
-                    const res = await request(app.getHttpServer()).get(
-                        `/resources${endpointUnderTest}`
-                    );
-
-                    expect(res.status).toBe(httpStatusCodes.ok);
-
-                    expect(res.body.length).toBe(
-                        testDataWithAllResourcesPublished[ResourceType].length
-                    );
-
-                    expect(res.body).toMatchSnapshot();
-                });
-            });
-
-            describe(`when some of the resources are unpublished`, () => {
-                /**
-                 * Note that there is no requirement that the test data have
-                 * `published = true`
-                 */
-                const publishedResourcesToAdd = resourceTestData[ResourceType].map(
-                    (instance: Resource) =>
-                        instance.clone({
-                            published: true,
-                        })
-                );
-
-                const unpublishedResourcesToAdd = resourceTestData[ResourceType]
-                    // We want a different number of published \ unpublished terms
-                    .slice(0, -1)
-                    .map((instance, index) =>
-                        instance.clone({
-                            id: `UNPUBLISHED-00${index + 1}`,
-                            published: false,
-                        })
-                    );
-
-                beforeEach(async () => {
-                    await testRepositoryProvider.addResourcesOfSingleType(ResourceType, [
-                        ...unpublishedResourcesToAdd,
-                        ...publishedResourcesToAdd,
-                    ]);
-
-                    await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+                afterEach(async () => {
+                    await testRepositoryProvider.testTeardown();
                 });
 
-                it('should return the expected number of results', async () => {
-                    const res = await request(app.getHttpServer()).get(
-                        `/resources${endpointUnderTest}`
+                describe('when all of the resources are published', () => {
+                    beforeEach(async () => {
+                        await testRepositoryProvider.addResourcesOfManyTypes(
+                            testDataWithAllResourcesPublished
+                        );
+
+                        await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+                    });
+
+                    it(`should fetch multiple resources of type ${ResourceType}`, async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            `/resources${endpointUnderTest}`
+                        );
+
+                        expect(res.status).toBe(httpStatusCodes.ok);
+
+                        expect(res.body.length).toBe(
+                            testDataWithAllResourcesPublished[ResourceType].length
+                        );
+
+                        expect(res.body).toMatchSnapshot();
+                    });
+                });
+
+                describe(`when some of the resources are unpublished`, () => {
+                    /**
+                     * Note that there is no requirement that the test data have
+                     * `published = true`
+                     */
+                    const publishedResourcesToAdd = resourceTestData[ResourceType].map(
+                        (instance: Resource) =>
+                            instance.clone({
+                                published: true,
+                            })
                     );
 
-                    expect(res.body.length).toBe(publishedResourcesToAdd.length);
+                    const unpublishedResourcesToAdd = resourceTestData[ResourceType]
+                        // We want a different number of published \ unpublished terms
+                        .slice(0, -1)
+                        .map((instance, index) =>
+                            instance.clone({
+                                id: `UNPUBLISHED-00${index + 1}`,
+                                published: false,
+                            })
+                        );
 
-                    // Sanity check
-                    expect(publishedResourcesToAdd.length).not.toEqual(
-                        unpublishedResourcesToAdd.length
-                    );
+                    beforeEach(async () => {
+                        await testRepositoryProvider.addResourcesOfSingleType(ResourceType, [
+                            ...unpublishedResourcesToAdd,
+                            ...publishedResourcesToAdd,
+                        ]);
 
-                    expect(res.body).toMatchSnapshot();
+                        await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+                    });
+
+                    it('should return the expected number of results', async () => {
+                        const res = await request(app.getHttpServer()).get(
+                            `/resources${endpointUnderTest}`
+                        );
+
+                        expect(res.body.length).toBe(publishedResourcesToAdd.length);
+
+                        // Sanity check
+                        expect(publishedResourcesToAdd.length).not.toEqual(
+                            unpublishedResourcesToAdd.length
+                        );
+
+                        expect(res.body).toMatchSnapshot();
+                    });
                 });
             });
         });
-    });
 
     afterAll(async () => {
         await arangoConnectionProvider.dropDatabaseIfExists();

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MediaItemQueryService } from '../../domain/services/media-item-query.service';
+import { MediaItemQueryService } from '../../domain/services/query-services/media-item-query.service';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { MediaItemController } from '../controllers/resources/media-item.controller';
 
