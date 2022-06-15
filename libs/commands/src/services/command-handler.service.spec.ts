@@ -8,7 +8,13 @@ import { CommandHandlerService } from './command-handler.service';
 describe('CommandsService', () => {
     let service: CommandHandlerService;
 
-    @Command('ADD_WIDGET')
+    /**
+     * Note that only the `type` property is required from the point of view of
+     * the `@coscrads/commands` lib. However additional metadata can be added as
+     * needed by the client, and this will be returned from our
+     * `CommandHandlerService` on request.
+     */
+    @Command({ type: 'ADD_WIDGET', label: 'Add Widget', info: 'Adds a Widget' })
     class AddWidget implements ICommand {
         public readonly widgetName: string;
     }
@@ -35,7 +41,17 @@ describe('CommandsService', () => {
         expect(service).toBeDefined();
     });
 
-    describe('CommandHandler.execute', () => {
+    describe('CommandHandlerService.getAllCommandCtorsAndMetadata', () => {
+        it('should return the expected meta', () => {
+            const result = service.getAllCommandCtorsAndMetadata();
+
+            expect(result).toMatchSnapshot();
+
+            expect(result[0].constructor).toBe(AddWidget);
+        });
+    });
+
+    describe('CommandHandlerService.execute', () => {
         describe('when the command it receives is valid', () => {
             it('should return Ack', async () => {
                 const result = await service.execute({

@@ -8,7 +8,7 @@ import {
 } from '@coscrad/data-types';
 import { ContributorAndRole } from '../ContributorAndRole';
 
-@Command('CREATE_SONG')
+@Command({ type: 'CREATE_SONG', label: 'Create Song', description: 'Create a new song' })
 export class CreateSong implements ICommand {
     @UUID()
     readonly id: string;
