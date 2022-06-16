@@ -1,5 +1,8 @@
 import { ConfigService } from '@nestjs/config';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import {
+    CommandInfo,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { TranscribedAudioViewModel } from '../../../view-models/buildViewModelForResource/viewModels/transcribed-audio/transcribed-audio.view-model';
 import { TranscribedAudio } from '../../models/transcribed-audio/entities/transcribed-audio.entity';
@@ -26,5 +29,9 @@ export class TranscribedAudioQueryService extends BaseQueryService<
             transcribedAudioInstance,
             this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
         );
+    }
+
+    getInfoForIndexScopedCommands(): CommandInfo[] {
+        return this.commandInfoService.getCommandInfo(TranscribedAudio);
     }
 }
