@@ -6,6 +6,8 @@ import {
     IsUrl,
     ValidateNested,
 } from '@coscrad/validation';
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { CommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -21,7 +23,8 @@ import validateTimeRangeContextForModel from '../../shared/contextValidators/val
 import { ContributorAndRole } from '../../song/ContributorAndRole';
 import { MIMEType } from '../types/MIMEType';
 
-export class MediaItem extends Resource implements ITimeBoundable {
+@RegisterIndexScopedCommands([])
+export class MediaItem extends Resource implements ITimeBoundable, CommandWriteContext {
     @IsStrictlyEqualTo(ResourceType.mediaItem)
     readonly type = ResourceType.mediaItem;
 
@@ -80,5 +83,9 @@ export class MediaItem extends Resource implements ITimeBoundable {
 
     getTimeBounds(): [number, number] {
         return [0, this.lengthMilliseconds];
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
     }
 }
