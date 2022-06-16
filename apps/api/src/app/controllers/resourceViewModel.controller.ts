@@ -2,7 +2,6 @@ import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/IBibliographicReference';
-import { Book } from '../../domain/models/book/entities/book.entity';
 import { Photograph } from '../../domain/models/photograph/entities/photograph.entity';
 import { ISpatialFeature } from '../../domain/models/spatial-feature/ISpatialFeature';
 import { Tag } from '../../domain/models/tag/tag.entity';
@@ -13,13 +12,11 @@ import { isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
 import buildBibliographicReferenceViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildBibliographicReferenceViewModels';
-import buildBookViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildBookViewModels';
 import buildPhotographViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildPhotographViewModels';
 import buildSpatialFeatureViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildSpatialFeatureViewModels';
 import { HasViewModelId } from '../../view-models/buildViewModelForResource/viewModels';
 import { BaseViewModel } from '../../view-models/buildViewModelForResource/viewModels/base.view-model';
 import { BibliographicReferenceViewModel } from '../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
-import { BookViewModel } from '../../view-models/buildViewModelForResource/viewModels/book.view-model';
 import { PhotographViewModel } from '../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
 import { SpatialFeatureViewModel } from '../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import { buildAllResourceDescriptions } from '../../view-models/resourceDescriptions/buildAllResourceDescriptions';
@@ -50,54 +47,6 @@ export class ResourceViewModelController {
         const fullResourcesBasePath = `/${appGlobalPrefix}/${RESOURCES_ROUTE_PREFIX}`;
 
         return buildAllResourceDescriptions(fullResourcesBasePath);
-    }
-
-    /* ********** TRANSCRIBED AUDIO ********** */
-
-    /* ********** BOOKS ********** */
-    @ApiOkResponse({ type: BookViewModel, isArray: true })
-    @Get(buildViewModelPathForResourceType(ResourceType.book))
-    async fetchBooks(@Res() res) {
-        const allViewModels = await buildBookViewModels({
-            repositoryProvider: this.repositoryProvider,
-            configService: this.configService,
-        });
-
-        if (isInternalError(allViewModels))
-            return res.status(httpStatusCodes.internalError).send({
-                error: JSON.stringify(allViewModels),
-            });
-
-        return await this.mixinTheTagsAndSend(res, allViewModels, ResourceType.book);
-    }
-
-    @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: BookViewModel })
-    @Get(`${buildViewModelPathForResourceType(ResourceType.book)}/:id`)
-    async fetchBookById(@Res() res, @Param() params: unknown) {
-        const { id } = params as HasViewModelId;
-
-        if (!isAggregateId(id))
-            return res.status(httpStatusCodes.badRequest).send({
-                error: `Invalid input for id: ${id}`,
-            });
-
-        const searchResult = await this.repositoryProvider
-            .forResource<Book>(ResourceType.book)
-            .fetchById(id);
-
-        if (isInternalError(searchResult))
-            return res.status(httpStatusCodes.internalError).send({
-                error: JSON.stringify(searchResult),
-            });
-
-        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
-
-        if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
-
-        const viewModel = new BookViewModel(searchResult);
-
-        return await this.mixinTheTagsAndSend(res, viewModel, ResourceType.book);
     }
 
     /* ********** PHOTOGRAPHS   ********** */

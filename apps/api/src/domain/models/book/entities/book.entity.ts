@@ -1,3 +1,5 @@
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { CommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -10,7 +12,8 @@ import { PageRangeContext } from '../../context/page-range-context/page-range.co
 import { Resource } from '../../resource.entity';
 import BookPage from './BookPage';
 
-export class Book extends Resource {
+@RegisterIndexScopedCommands([])
+export class Book extends Resource implements CommandWriteContext {
     readonly type = ResourceType.book;
 
     readonly title: string;
@@ -69,5 +72,9 @@ export class Book extends Resource {
             );
 
         return Valid;
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
     }
 }

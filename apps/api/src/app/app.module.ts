@@ -16,6 +16,7 @@ import { CommandInfoService } from './controllers/command/services/command-info-
 import { EdgeConnectionController } from './controllers/edgeConnection.controller';
 import { ResourceViewModelController } from './controllers/resourceViewModel.controller';
 import { TagController } from './controllers/tag.controller';
+import { BookModule } from './domain-modules/book.module';
 import { MediaItemModule } from './domain-modules/media-item.module';
 import { TermModule } from './domain-modules/term.module';
 import { TranscribedAudioModule } from './domain-modules/transcribed-audio.module';
@@ -36,6 +37,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         SongModule,
         TermModule,
         VocabularyListModule,
+        BookModule,
         TranscribedAudioModule,
         CommandModule,
     ],
