@@ -31,17 +31,20 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /books/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "author": "John Doeburg",
-  "id": "23",
-  "publicationDate": "2002",
-  "subtitle": "The wolf's revenge",
-  "tags": Array [
-    Object {
-      "id": "1",
-      "label": "plants",
-    },
-  ],
-  "title": "Three Little Pigs",
+  "actions": Array [],
+  "data": Object {
+    "author": "John Doeburg",
+    "id": "23",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
+    "title": "Three Little Pigs",
+  },
 }
 `;
 
