@@ -36,7 +36,7 @@ export class VocabularyListQueryService extends BaseQueryService<
         );
     }
 
-    async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
+    override async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
         const [allTags, allTerms] = await Promise.all([
             this.repositoryProvider
                 .getTagRepository()
