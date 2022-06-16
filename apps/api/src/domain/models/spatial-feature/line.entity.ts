@@ -1,3 +1,5 @@
+import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { CommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import geometricFeatureValidator from '../../domainModelValidators/spatialFeatureValidator/geometricFeatureValidator';
@@ -9,7 +11,8 @@ import { ISpatialFeature } from './ISpatialFeature';
 import { LineCoordinates } from './types/Coordinates/LineCoordinates';
 import { GeometricFeatureType } from './types/GeometricFeatureType';
 
-export class Line extends Resource implements ISpatialFeature {
+@RegisterIndexScopedCommands([])
+export class Line extends Resource implements ISpatialFeature, CommandWriteContext {
     readonly type = ResourceType.spatialFeature;
 
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.line, LineCoordinates>;
@@ -32,5 +35,9 @@ export class Line extends Resource implements ISpatialFeature {
     validateInvariants(): ResultOrError<Valid> {
         // TODO breakout the individual type validators into each class
         return geometricFeatureValidator(this);
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
     }
 }

@@ -113,20 +113,23 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /spatialFeatures/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "geometry": Object {
-    "coordinates": Array [
-      100,
-      0,
-    ],
-    "type": "Point",
-  },
-  "id": "100",
-  "tags": Array [
-    Object {
-      "id": "1",
-      "label": "plants",
+  "actions": Array [],
+  "data": Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
     },
-  ],
+    "id": "100",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
+  },
 }
 `;
 

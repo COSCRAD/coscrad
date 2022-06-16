@@ -1,5 +1,8 @@
 import { ConfigService } from '@nestjs/config';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import {
+    CommandInfo,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { PhotographViewModel } from '../../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
 import { Photograph } from '../../models/photograph/entities/photograph.entity';
@@ -20,5 +23,9 @@ export class PhotographQueryService extends BaseQueryService<Photograph, Photogr
             photo,
             this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
         );
+    }
+
+    getInfoForIndexScopedCommands(): CommandInfo[] {
+        return this.commandInfoService.getCommandInfo(Photograph);
     }
 }

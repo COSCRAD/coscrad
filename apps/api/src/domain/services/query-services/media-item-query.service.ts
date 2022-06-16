@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import {
+    CommandInfo,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { MediaItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
@@ -14,5 +17,9 @@ export class MediaItemQueryService extends BaseQueryService<MediaItem, MediaItem
 
     buildViewModel(mediaItem: MediaItem): MediaItemViewModel {
         return new MediaItemViewModel(mediaItem);
+    }
+
+    getInfoForIndexScopedCommands(): CommandInfo[] {
+        return this.commandInfoService.getCommandInfo(MediaItem);
     }
 }
