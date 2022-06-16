@@ -81,6 +81,7 @@ describe('When fetching multiple resources', () => {
                         ResourceType.book,
                         ResourceType.photograph,
                         ResourceType.mediaItem,
+                        ResourceType.spatialFeature,
                     ].includes(resourceType)
                         ? res.body.data
                         : res.body;
@@ -138,6 +139,7 @@ describe('When fetching multiple resources', () => {
                         ResourceType.book,
                         ResourceType.photograph,
                         ResourceType.mediaItem,
+                        ResourceType.spatialFeature,
                     ].includes(resourceType)
                         ? res.body.data
                         : res.body;

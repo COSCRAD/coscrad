@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import {
+    CommandInfo,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { VocabularyListViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
@@ -58,5 +61,9 @@ export class VocabularyListQueryService extends BaseQueryService<
                 term: allTerms,
             },
         });
+    }
+
+    getInfoForIndexScopedCommands(): CommandInfo[] {
+        return this.commandInfoService.getCommandInfo(VocabularyList);
     }
 }

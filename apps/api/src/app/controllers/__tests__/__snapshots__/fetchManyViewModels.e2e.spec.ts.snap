@@ -417,221 +417,257 @@ Object {
 `;
 
 exports[`When fetching multiple resources GET /spatialFeatures when all of the resources are published should fetch multiple resources of type spatialFeature 1`] = `
-Array [
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        100,
-        0,
-      ],
-      "type": "Point",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            100,
+            0,
+          ],
+          "type": "Point",
+        },
+        "id": "100",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+      },
     },
-    "id": "100",
-    "tags": Array [
-      Object {
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            20,
+            10,
+          ],
+          "type": "Point",
+        },
+        "id": "101",
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
+      },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            70.5,
+            23.5,
+          ],
+          "type": "Point",
+        },
+        "id": "102",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+      },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            Array [
+              1,
+              2,
+            ],
+            Array [
+              1,
+              3,
+            ],
+            Array [
+              1.5,
+              3.5,
+            ],
+            Array [
+              3,
+              4.2,
+            ],
+          ],
+          "type": "LineString",
+        },
         "id": "1",
-        "label": "plants",
+        "tags": Array [],
       },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        20,
-        10,
-      ],
-      "type": "Point",
     },
-    "id": "101",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            Array [
+              Array [
+                1,
+                3,
+              ],
+              Array [
+                2,
+                5,
+              ],
+              Array [
+                1.5,
+                3.7,
+              ],
+              Array [
+                1.2,
+                3.3,
+              ],
+              Array [
+                1,
+                3,
+              ],
+            ],
+          ],
+          "type": "Polygon",
+        },
+        "id": "300",
+        "tags": Array [],
       },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        70.5,
-        23.5,
-      ],
-      "type": "Point",
     },
-    "id": "102",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
-      },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        Array [
-          1,
-          2,
-        ],
-        Array [
-          1,
-          3,
-        ],
-        Array [
-          1.5,
-          3.5,
-        ],
-        Array [
-          3,
-          4.2,
-        ],
-      ],
-      "type": "LineString",
-    },
-    "id": "1",
-    "tags": Array [],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        Array [
-          Array [
-            1,
-            3,
-          ],
-          Array [
-            2,
-            5,
-          ],
-          Array [
-            1.5,
-            3.7,
-          ],
-          Array [
-            1.2,
-            3.3,
-          ],
-          Array [
-            1,
-            3,
-          ],
-        ],
-      ],
-      "type": "Polygon",
-    },
-    "id": "300",
-    "tags": Array [],
-  },
-]
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /spatialFeatures when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        100,
-        0,
-      ],
-      "type": "Point",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            100,
+            0,
+          ],
+          "type": "Point",
+        },
+        "id": "100",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+      },
     },
-    "id": "100",
-    "tags": Array [
-      Object {
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            20,
+            10,
+          ],
+          "type": "Point",
+        },
+        "id": "101",
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
+      },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            70.5,
+            23.5,
+          ],
+          "type": "Point",
+        },
+        "id": "102",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+      },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            Array [
+              1,
+              2,
+            ],
+            Array [
+              1,
+              3,
+            ],
+            Array [
+              1.5,
+              3.5,
+            ],
+            Array [
+              3,
+              4.2,
+            ],
+          ],
+          "type": "LineString",
+        },
         "id": "1",
-        "label": "plants",
+        "tags": Array [],
       },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        20,
-        10,
-      ],
-      "type": "Point",
     },
-    "id": "101",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            Array [
+              Array [
+                1,
+                3,
+              ],
+              Array [
+                2,
+                5,
+              ],
+              Array [
+                1.5,
+                3.7,
+              ],
+              Array [
+                1.2,
+                3.3,
+              ],
+              Array [
+                1,
+                3,
+              ],
+            ],
+          ],
+          "type": "Polygon",
+        },
+        "id": "300",
+        "tags": Array [],
       },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        70.5,
-        23.5,
-      ],
-      "type": "Point",
     },
-    "id": "102",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
-      },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        Array [
-          1,
-          2,
-        ],
-        Array [
-          1,
-          3,
-        ],
-        Array [
-          1.5,
-          3.5,
-        ],
-        Array [
-          3,
-          4.2,
-        ],
-      ],
-      "type": "LineString",
-    },
-    "id": "1",
-    "tags": Array [],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        Array [
-          Array [
-            1,
-            3,
-          ],
-          Array [
-            2,
-            5,
-          ],
-          Array [
-            1.5,
-            3.7,
-          ],
-          Array [
-            1.2,
-            3.3,
-          ],
-          Array [
-            1,
-            3,
-          ],
-        ],
-      ],
-      "type": "Polygon",
-    },
-    "id": "300",
-    "tags": Array [],
-  },
-]
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /terms when all of the resources are published should fetch multiple resources of type term 1`] = `

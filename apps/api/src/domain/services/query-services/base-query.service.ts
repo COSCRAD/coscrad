@@ -12,7 +12,6 @@ import { ResultOrError } from '../../../types/ResultOrError';
 import { TagViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
 import { Resource } from '../../models/resource.entity';
-import { Song } from '../../models/song/song.entity';
 import { Tag } from '../../models/tag/tag.entity';
 import { ISpecification } from '../../repositories/interfaces/ISpecification';
 import { AggregateId, isAggregateId } from '../../types/AggregateId';
@@ -75,6 +74,8 @@ export abstract class BaseQueryService<
         domainInstance: TDomainModel,
         externalState: InMemorySnapshot
     ): UViewModel;
+
+    abstract getInfoForIndexScopedCommands(): CommandInfo[];
 
     public async fetchById(
         id: unknown,
@@ -144,8 +145,7 @@ export abstract class BaseQueryService<
 
         return {
             data,
-            // TODO Get the Ctor here dynamically!
-            actions: this.commandInfoService.getCommandInfo(Song) || [],
+            actions: this.getInfoForIndexScopedCommands(),
         } as unknown as ResourceIndexQueryResult<ViewModelWithTags<UViewModel>>;
     }
 }

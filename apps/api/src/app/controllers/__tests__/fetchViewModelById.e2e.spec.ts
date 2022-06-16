@@ -121,6 +121,7 @@ describe('GET /resources (fetch view models)', () => {
                                 ResourceType.book,
                                 ResourceType.photograph,
                                 ResourceType.mediaItem,
+                                ResourceType.spatialFeature,
                             ].includes(resourceType)
                                 ? res.body.data.id
                                 : res.body.id;
