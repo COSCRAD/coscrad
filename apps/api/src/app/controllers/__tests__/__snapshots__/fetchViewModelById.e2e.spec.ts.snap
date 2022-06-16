@@ -159,54 +159,57 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /vocabularyLists/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "entries": Array [
-    Object {
-      "term": Object {
-        "contributor": "",
+  "actions": Array [],
+  "data": Object {
+    "entries": Array [
+      Object {
+        "term": Object {
+          "contributor": "",
+          "id": "1",
+          "term": "Chil-term-1",
+          "termEnglish": "Engl-term-1",
+        },
+        "variableValues": Object {
+          "person": "11",
+        },
+      },
+      Object {
+        "term": Object {
+          "contributor": "",
+          "id": "2",
+          "term": "Chil-term-2",
+          "termEnglish": "Engl-term-2",
+        },
+        "variableValues": Object {
+          "person": "21",
+        },
+      },
+    ],
+    "id": "1",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [
+      Object {
         "id": "1",
-        "term": "Chil-term-1",
-        "termEnglish": "Engl-term-1",
+        "label": "plants",
       },
-      "variableValues": Object {
-        "person": "11",
+    ],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
       },
-    },
-    Object {
-      "term": Object {
-        "contributor": "",
-        "id": "2",
-        "term": "Chil-term-2",
-        "termEnglish": "Engl-term-2",
-      },
-      "variableValues": Object {
-        "person": "21",
-      },
-    },
-  ],
-  "id": "1",
-  "name": "test VL 1 chil",
-  "nameEnglish": "test VL 1 engl",
-  "tags": Array [
-    Object {
-      "id": "1",
-      "label": "plants",
-    },
-  ],
-  "variables": Array [
-    Object {
-      "name": "person",
-      "type": "dropbox",
-      "validValues": Array [
-        Object {
-          "display": "I",
-          "value": "11",
-        },
-        Object {
-          "display": "We",
-          "value": "21",
-        },
-      ],
-    },
-  ],
+    ],
+  },
 }
 `;

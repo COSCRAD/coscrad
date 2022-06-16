@@ -113,7 +113,11 @@ describe('GET /resources (fetch view models)', () => {
                             expect(res.status).toBe(httpStatusCodes.ok);
 
                             // TODO Convert all Resource queries to the new API
-                            const id = [ResourceType.song, ResourceType.term].includes(resourceType)
+                            const id = [
+                                ResourceType.song,
+                                ResourceType.term,
+                                ResourceType.vocabularyList,
+                            ].includes(resourceType)
                                 ? res.body.data.id
                                 : res.body.id;
 

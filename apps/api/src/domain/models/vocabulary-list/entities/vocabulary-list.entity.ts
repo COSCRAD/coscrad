@@ -1,3 +1,5 @@
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { CommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -10,7 +12,8 @@ import validateTextFieldContextForModel from '../../shared/contextValidators/val
 import { VocabularyListEntry } from '../vocabulary-list-entry';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
-export class VocabularyList extends Resource {
+@RegisterIndexScopedCommands([])
+export class VocabularyList extends Resource implements CommandWriteContext {
     readonly type = ResourceType.vocabularyList;
 
     readonly name?: string;
@@ -33,6 +36,10 @@ export class VocabularyList extends Resource {
         this.entries = [...entries];
 
         this.variables = [...variables];
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
     }
 
     validateInvariants(): ResultOrError<typeof Valid> {
