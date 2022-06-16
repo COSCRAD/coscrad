@@ -1,3 +1,5 @@
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { CommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -9,7 +11,8 @@ import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import { Transcript } from './Transcript';
 
-export class TranscribedAudio extends Resource {
+@RegisterIndexScopedCommands([])
+export class TranscribedAudio extends Resource implements CommandWriteContext {
     readonly type = ResourceType.transcribedAudio;
 
     readonly audioFilename: string;
@@ -54,5 +57,9 @@ export class TranscribedAudio extends Resource {
 
     getEndMilliseconds(): number {
         return this.startMilliseconds + this.lengthMilliseconds;
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
     }
 }

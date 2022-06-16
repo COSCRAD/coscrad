@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
+import { TranscribedAudioQueryService } from '../../../domain/services/query-services/transribed-audio-query.service';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
@@ -20,6 +21,7 @@ import { EdgeConnectionController } from '../edgeConnection.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { SongController } from '../resources/song.controller';
 import { TermController } from '../resources/term.controller';
+import { TranscribedAudioController } from '../resources/transcribed-audio.controller';
 import { VocabularyListController } from '../resources/vocabulary-list.controller';
 import { ResourceViewModelController } from '../resourceViewModel.controller';
 import { TagController } from '../tag.controller';
@@ -92,6 +94,20 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                     ),
                 inject: [RepositoryProvider, CommandInfoService, ConfigService],
             },
+            {
+                provide: TranscribedAudioQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) =>
+                    new TranscribedAudioQueryService(
+                        repositoryProvider,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+            },
         ],
 
         controllers: [
@@ -102,6 +118,7 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             SongController,
             TermController,
             VocabularyListController,
+            TranscribedAudioController,
             CategoryController,
             CommandController,
         ],
