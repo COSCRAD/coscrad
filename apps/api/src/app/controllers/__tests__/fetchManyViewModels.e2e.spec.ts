@@ -79,6 +79,7 @@ describe('When fetching multiple resources', () => {
                         ResourceType.vocabularyList,
                         ResourceType.transcribedAudio,
                         ResourceType.book,
+                        ResourceType.photograph,
                     ].includes(resourceType)
                         ? res.body.data
                         : res.body;
@@ -134,6 +135,7 @@ describe('When fetching multiple resources', () => {
                         ResourceType.vocabularyList,
                         ResourceType.transcribedAudio,
                         ResourceType.book,
+                        ResourceType.photograph,
                     ].includes(resourceType)
                         ? res.body.data
                         : res.body;
