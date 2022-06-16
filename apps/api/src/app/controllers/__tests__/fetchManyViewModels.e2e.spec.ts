@@ -73,7 +73,11 @@ describe('When fetching multiple resources', () => {
                     expect(res.status).toBe(httpStatusCodes.ok);
 
                     // TODO Support new API for all resources
-                    const data = [ResourceType.song, ResourceType.term].includes(resourceType)
+                    const data = [
+                        ResourceType.song,
+                        ResourceType.term,
+                        ResourceType.vocabularyList,
+                    ].includes(resourceType)
                         ? res.body.data
                         : res.body;
 
@@ -122,7 +126,11 @@ describe('When fetching multiple resources', () => {
                     );
 
                     // TODO Support new API for all resources
-                    const data = [ResourceType.song, ResourceType.term].includes(resourceType)
+                    const data = [
+                        ResourceType.song,
+                        ResourceType.term,
+                        ResourceType.vocabularyList,
+                    ].includes(resourceType)
                         ? res.body.data
                         : res.body;
 
