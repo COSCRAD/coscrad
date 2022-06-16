@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import {
+    CommandInfo,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { SongViewModel } from '../../../view-models/buildViewModelForResource/viewModels/song.view-model';
 import { Song } from '../../models/song/song.entity';
@@ -14,5 +17,9 @@ export class SongQueryService extends BaseQueryService<Song, SongViewModel> {
 
     buildViewModel(song: Song, _: InMemorySnapshot) {
         return new SongViewModel(song);
+    }
+
+    getInfoForIndexScopedCommands(): CommandInfo[] {
+        return this.commandInfoService.getCommandInfo(Song);
     }
 }

@@ -2,7 +2,6 @@ import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/IBibliographicReference';
-import { ISpatialFeature } from '../../domain/models/spatial-feature/ISpatialFeature';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { isAggregateId } from '../../domain/types/AggregateId';
 import { ResourceType } from '../../domain/types/ResourceType';
@@ -11,11 +10,9 @@ import { isNotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
 import buildBibliographicReferenceViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildBibliographicReferenceViewModels';
-import buildSpatialFeatureViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildSpatialFeatureViewModels';
 import { HasViewModelId } from '../../view-models/buildViewModelForResource/viewModels';
 import { BaseViewModel } from '../../view-models/buildViewModelForResource/viewModels/base.view-model';
 import { BibliographicReferenceViewModel } from '../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
-import { SpatialFeatureViewModel } from '../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import { buildAllResourceDescriptions } from '../../view-models/resourceDescriptions/buildAllResourceDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from './utilities/buildViewModelPathForResourceType';
@@ -44,52 +41,6 @@ export class ResourceViewModelController {
         const fullResourcesBasePath = `/${appGlobalPrefix}/${RESOURCES_ROUTE_PREFIX}`;
 
         return buildAllResourceDescriptions(fullResourcesBasePath);
-    }
-
-    /* ********** SPATIAL FEATURE   ********** */
-    @ApiOkResponse({ type: SpatialFeatureViewModel, isArray: true })
-    @Get(buildViewModelPathForResourceType(ResourceType.spatialFeature))
-    async fetchSpatialFeatures(@Res() res) {
-        const allViewModels = await buildSpatialFeatureViewModels({
-            repositoryProvider: this.repositoryProvider,
-            configService: this.configService,
-        });
-
-        if (isInternalError(allViewModels))
-            return res.status(httpStatusCodes.internalError).send({
-                error: JSON.stringify(allViewModels),
-            });
-
-        return await this.mixinTheTagsAndSend(res, allViewModels, ResourceType.spatialFeature);
-    }
-
-    @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: SpatialFeatureViewModel })
-    @Get(`${buildViewModelPathForResourceType(ResourceType.spatialFeature)}/:id`)
-    async fetchSpatialFeatureById(@Res() res, @Param() params: unknown) {
-        const { id } = params as HasViewModelId;
-
-        if (!isAggregateId(id))
-            return res.status(httpStatusCodes.badRequest).send({
-                error: `Invalid input for id: ${id}`,
-            });
-
-        const searchResult = await this.repositoryProvider
-            .forResource<ISpatialFeature>(ResourceType.spatialFeature)
-            .fetchById(id);
-
-        if (isInternalError(searchResult))
-            return res.status(httpStatusCodes.internalError).send({
-                error: JSON.stringify(searchResult),
-            });
-
-        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
-
-        if (!searchResult.published) return res.status(httpStatusCodes.notFound).send();
-
-        const viewModel = new SpatialFeatureViewModel(searchResult);
-
-        return await this.mixinTheTagsAndSend(res, viewModel, ResourceType.spatialFeature);
     }
 
     /* ********** BIBLIOGRAPHIC REFERENCE  ********** */
