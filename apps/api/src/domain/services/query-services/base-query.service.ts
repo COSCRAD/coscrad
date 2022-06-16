@@ -13,9 +13,11 @@ import { TagViewModel } from '../../../view-models/buildViewModelForResource/vie
 import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
 import { Resource } from '../../models/resource.entity';
 import { Song } from '../../models/song/song.entity';
+import { Tag } from '../../models/tag/tag.entity';
 import { ISpecification } from '../../repositories/interfaces/ISpecification';
 import { AggregateId, isAggregateId } from '../../types/AggregateId';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
+import buildInMemorySnapshot from '../../utilities/buildInMemorySnapshot';
 import { GeneralQueryOptions } from './types/GeneralQueryOptions';
 import getDefaultQueryOptions from './utilities/getDefaultQueryOptions';
 
@@ -41,7 +43,21 @@ export abstract class BaseQueryService<
         protected readonly commandInfoService: CommandInfoService
     ) {}
 
-    abstract fetchRequiredExternalState(): Promise<InMemorySnapshot>;
+    /**
+     * All Resource Query Services will need to mixin the `Tags`. Some view models
+     * require additional external state (e.g. a Vocabulary List requires all Terms)
+     * to do joins. Override this method in the child class if you need more than
+     * just the tags to build your view model.
+     */
+    protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
+        const tags = (await this.repositoryProvider.getTagRepository().fetchMany()).filter(
+            (result): result is Tag => !isInternalError(result)
+        );
+
+        return buildInMemorySnapshot({
+            tags,
+        });
+    }
 
     protected fetchDomainModelById(id: AggregateId): Promise<ResultOrError<Maybe<TDomainModel>>> {
         return this.repositoryProvider.forResource<TDomainModel>(this.type).fetchById(id);

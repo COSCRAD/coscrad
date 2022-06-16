@@ -685,43 +685,55 @@ Object {
 `;
 
 exports[`When fetching multiple resources GET /transcribedAudioItems when all of the resources are published should fetch multiple resources of type transcribedAudio 1`] = `
-Array [
-  Object {
-    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
-    "id": "110",
-    "length": 20000,
-    "plainText": "
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+        "id": "110",
+        "length": 20000,
+        "plainText": "
 [12000] There once was a little wooden boy. [15550]
 [18300] His name was Pinocchio. [19240]",
-    "start": 0,
-    "tags": Array [
-      Object {
-        "id": "3",
-        "label": "placenames",
+        "start": 0,
+        "tags": Array [
+          Object {
+            "id": "3",
+            "label": "placenames",
+          },
+        ],
       },
-    ],
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /transcribedAudioItems when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
-    "id": "110",
-    "length": 20000,
-    "plainText": "
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+        "id": "110",
+        "length": 20000,
+        "plainText": "
 [12000] There once was a little wooden boy. [15550]
 [18300] His name was Pinocchio. [19240]",
-    "start": 0,
-    "tags": Array [
-      Object {
-        "id": "3",
-        "label": "placenames",
+        "start": 0,
+        "tags": Array [
+          Object {
+            "id": "3",
+            "label": "placenames",
+          },
+        ],
       },
-    ],
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /vocabularyLists when all of the resources are published should fetch multiple resources of type vocabularyList 1`] = `
