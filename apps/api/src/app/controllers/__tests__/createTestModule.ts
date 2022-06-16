@@ -5,6 +5,7 @@ import { BookQueryService } from '../../../domain/services/query-services/book-q
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
+import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { TranscribedAudioQueryService } from '../../../domain/services/query-services/transribed-audio-query.service';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
@@ -24,6 +25,7 @@ import { BookController } from '../resources/book.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { PhotographController } from '../resources/photograph.controller';
 import { SongController } from '../resources/song.controller';
+import { SpatialFeatureController } from '../resources/spatial-feature.controller';
 import { TermController } from '../resources/term.controller';
 import { TranscribedAudioController } from '../resources/transcribed-audio.controller';
 import { VocabularyListController } from '../resources/vocabulary-list.controller';
@@ -136,6 +138,14 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                     ),
                 inject: [RepositoryProvider, CommandInfoService, ConfigService],
             },
+            {
+                provide: SpatialFeatureQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new SpatialFeatureQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService],
+            },
         ],
 
         controllers: [
@@ -149,6 +159,7 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             TranscribedAudioController,
             BookController,
             PhotographController,
+            SpatialFeatureController,
             CategoryController,
             CommandController,
         ],

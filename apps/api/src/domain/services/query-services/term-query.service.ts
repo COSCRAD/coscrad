@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import {
+    CommandInfo,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { TermViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { Term } from '../../models/term/entities/term.entity';
@@ -21,5 +24,9 @@ export class TermQueryService extends BaseQueryService<Term, TermViewModel> {
         const baseAudioURL = this.configService.get<string>('BASE_DIGITAL_ASSET_URL');
 
         return new TermViewModel(term, baseAudioURL);
+    }
+
+    getInfoForIndexScopedCommands(): CommandInfo[] {
+        return this.commandInfoService.getCommandInfo(Term);
     }
 }
