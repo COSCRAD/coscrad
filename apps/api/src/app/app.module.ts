@@ -18,6 +18,7 @@ import { ResourceViewModelController } from './controllers/resourceViewModel.con
 import { TagController } from './controllers/tag.controller';
 import { MediaItemModule } from './domain-modules/media-item.module';
 import { TermModule } from './domain-modules/term.module';
+import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
 
 @Module({
     providers: [AppService, DatabaseProvider, RepositoryProvider, CommandInfoService],
@@ -33,6 +34,7 @@ import { TermModule } from './domain-modules/term.module';
         MediaItemModule,
         SongModule,
         TermModule,
+        VocabularyListModule,
         CommandModule,
     ],
     controllers: [

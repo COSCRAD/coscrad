@@ -7,6 +7,7 @@ import mixTagsIntoViewModel from '../../../app/controllers/utilities/mixTagsInto
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { TagViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
@@ -36,16 +37,23 @@ export abstract class BaseQueryService<
 > {
     constructor(
         private readonly type: ResourceType,
+        protected readonly repositoryProvider: RepositoryProvider,
         protected readonly commandInfoService: CommandInfoService
     ) {}
 
     abstract fetchRequiredExternalState(): Promise<InMemorySnapshot>;
 
-    abstract fetchDomainModelById(id: AggregateId): Promise<ResultOrError<Maybe<TDomainModel>>>;
+    protected fetchDomainModelById(id: AggregateId): Promise<ResultOrError<Maybe<TDomainModel>>> {
+        return this.repositoryProvider.forResource<TDomainModel>(this.type).fetchById(id);
+    }
 
-    abstract fetchManyDomainModels(
+    protected fetchManyDomainModels(
         specification: ISpecification<TDomainModel>
-    ): Promise<ResultOrError<TDomainModel>[]>;
+    ): Promise<ResultOrError<TDomainModel>[]> {
+        return this.repositoryProvider
+            .forResource<TDomainModel>(this.type)
+            .fetchMany(specification);
+    }
 
     abstract buildViewModel(
         domainInstance: TDomainModel,

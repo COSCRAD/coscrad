@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
+import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
@@ -19,15 +20,9 @@ import { EdgeConnectionController } from '../edgeConnection.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { SongController } from '../resources/song.controller';
 import { TermController } from '../resources/term.controller';
+import { VocabularyListController } from '../resources/vocabulary-list.controller';
 import { ResourceViewModelController } from '../resourceViewModel.controller';
 import { TagController } from '../tag.controller';
-
-// const provideWithRepositories = (depCtor: new (...args: unknown[]) => unknown) => ({
-//     provide: depCtor,
-//     useFactory: (repositoryProvider: RepositoryProvider, commandInfoService: CommandInfoService) =>
-//         new depCtor(repositoryProvider, commandInfoService),
-//     inject: [RepositoryProvider, CommandInfoService],
-// });
 
 export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
     Test.createTestingModule({
@@ -83,6 +78,20 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                 ) => new TermQueryService(repositoryProvider, commandInfoService, configService),
                 inject: [RepositoryProvider, CommandInfoService, ConfigService],
             },
+            {
+                provide: VocabularyListQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) =>
+                    new VocabularyListQueryService(
+                        repositoryProvider,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+            },
         ],
 
         controllers: [
@@ -92,6 +101,7 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             MediaItemController,
             SongController,
             TermController,
+            VocabularyListController,
             CategoryController,
             CommandController,
         ],

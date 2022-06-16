@@ -725,126 +725,144 @@ Array [
 `;
 
 exports[`When fetching multiple resources GET /vocabularyLists when all of the resources are published should fetch multiple resources of type vocabularyList 1`] = `
-Array [
-  Object {
-    "entries": Array [
-      Object {
-        "term": Object {
-          "contributor": "",
-          "id": "1",
-          "term": "Chil-term-1",
-          "termEnglish": "Engl-term-1",
-        },
-        "variableValues": Object {
-          "person": "11",
-        },
-      },
-      Object {
-        "term": Object {
-          "contributor": "",
-          "id": "2",
-          "term": "Chil-term-2",
-          "termEnglish": "Engl-term-2",
-        },
-        "variableValues": Object {
-          "person": "21",
-        },
-      },
-    ],
-    "id": "1",
-    "name": "test VL 1 chil",
-    "nameEnglish": "test VL 1 engl",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-      },
-    ],
-    "variables": Array [
-      Object {
-        "name": "person",
-        "type": "dropbox",
-        "validValues": Array [
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "entries": Array [
           Object {
-            "display": "I",
-            "value": "11",
+            "term": Object {
+              "contributor": "",
+              "id": "1",
+              "term": "Chil-term-1",
+              "termEnglish": "Engl-term-1",
+            },
+            "variableValues": Object {
+              "person": "11",
+            },
           },
           Object {
-            "display": "We",
-            "value": "21",
+            "term": Object {
+              "contributor": "",
+              "id": "2",
+              "term": "Chil-term-2",
+              "termEnglish": "Engl-term-2",
+            },
+            "variableValues": Object {
+              "person": "21",
+            },
+          },
+        ],
+        "id": "1",
+        "name": "test VL 1 chil",
+        "nameEnglish": "test VL 1 engl",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+        "variables": Array [
+          Object {
+            "name": "person",
+            "type": "dropbox",
+            "validValues": Array [
+              Object {
+                "display": "I",
+                "value": "11",
+              },
+              Object {
+                "display": "We",
+                "value": "21",
+              },
+            ],
           },
         ],
       },
-    ],
-  },
-  Object {
-    "entries": Array [
-      Object {
-        "term": Object {
-          "contributor": "",
-          "id": "2",
-          "term": "Chil-term-2",
-          "termEnglish": "Engl-term-2",
-        },
-        "variableValues": Object {
-          "person": "23",
-        },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "entries": Array [
+          Object {
+            "term": Object {
+              "contributor": "",
+              "id": "2",
+              "term": "Chil-term-2",
+              "termEnglish": "Engl-term-2",
+            },
+            "variableValues": Object {
+              "person": "23",
+            },
+          },
+        ],
+        "id": "2",
+        "name": "test VL 2 CHIL- no engl name",
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
+        "variables": Array [],
       },
-    ],
-    "id": "2",
-    "name": "test VL 2 CHIL- no engl name",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
-      },
-    ],
-    "variables": Array [],
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /vocabularyLists when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "entries": Array [],
-    "id": "1",
-    "name": "test VL 1 chil",
-    "nameEnglish": "test VL 1 engl",
-    "tags": Array [
-      Object {
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "entries": Array [],
         "id": "1",
-        "label": "plants",
-      },
-    ],
-    "variables": Array [
-      Object {
-        "name": "person",
-        "type": "dropbox",
-        "validValues": Array [
+        "name": "test VL 1 chil",
+        "nameEnglish": "test VL 1 engl",
+        "tags": Array [
           Object {
-            "display": "I",
-            "value": "11",
+            "id": "1",
+            "label": "plants",
           },
+        ],
+        "variables": Array [
           Object {
-            "display": "We",
-            "value": "21",
+            "name": "person",
+            "type": "dropbox",
+            "validValues": Array [
+              Object {
+                "display": "I",
+                "value": "11",
+              },
+              Object {
+                "display": "We",
+                "value": "21",
+              },
+            ],
           },
         ],
       },
-    ],
-  },
-  Object {
-    "entries": Array [],
-    "id": "2",
-    "name": "test VL 2 CHIL- no engl name",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "entries": Array [],
+        "id": "2",
+        "name": "test VL 2 CHIL- no engl name",
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
+        "variables": Array [],
       },
-    ],
-    "variables": Array [],
-  },
-]
+    },
+  ],
+}
 `;

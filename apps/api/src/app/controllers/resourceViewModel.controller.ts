@@ -6,9 +6,7 @@ import { Book } from '../../domain/models/book/entities/book.entity';
 import { Photograph } from '../../domain/models/photograph/entities/photograph.entity';
 import { ISpatialFeature } from '../../domain/models/spatial-feature/ISpatialFeature';
 import { Tag } from '../../domain/models/tag/tag.entity';
-import { Term } from '../../domain/models/term/entities/term.entity';
 import { TranscribedAudio } from '../../domain/models/transcribed-audio/entities/transcribed-audio.entity';
-import { VocabularyList } from '../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { isAggregateId } from '../../domain/types/AggregateId';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { isInternalError } from '../../lib/errors/InternalError';
@@ -20,11 +18,9 @@ import buildBookViewModels from '../../view-models/buildViewModelForResource/vie
 import buildPhotographViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildPhotographViewModels';
 import buildSpatialFeatureViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildSpatialFeatureViewModels';
 import buildTranscribedAudioViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildTranscribedAudioViewModels';
-import buildVocabularyListViewModels from '../../view-models/buildViewModelForResource/viewModelBuilders/buildVocabularyListViewModels';
 import {
     HasViewModelId,
     TagViewModel,
-    VocabularyListViewModel,
 } from '../../view-models/buildViewModelForResource/viewModels';
 import { BaseViewModel } from '../../view-models/buildViewModelForResource/viewModels/base.view-model';
 import { BibliographicReferenceViewModel } from '../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
@@ -60,69 +56,6 @@ export class ResourceViewModelController {
         const fullResourcesBasePath = `/${appGlobalPrefix}/${RESOURCES_ROUTE_PREFIX}`;
 
         return buildAllResourceDescriptions(fullResourcesBasePath);
-    }
-
-    /* ********** VOCABULARY LISTS ********** */
-    @ApiOkResponse({ type: VocabularyListViewModel, isArray: true })
-    @Get(buildViewModelPathForResourceType(ResourceType.vocabularyList))
-    async fetchVocabularyLists(@Res() res) {
-        const allViewModels = await buildVocabularyListViewModels({
-            repositoryProvider: this.repositoryProvider,
-            configService: this.configService,
-        });
-
-        if (isInternalError(allViewModels))
-            return res.status(httpStatusCodes.internalError).send({
-                error: JSON.stringify(allViewModels),
-            });
-
-        return await this.mixinTheTagsAndSend(res, allViewModels, ResourceType.vocabularyList);
-    }
-
-    @ApiParam(buildByIdApiParamMetadata())
-    @ApiOkResponse({ type: VocabularyListViewModel })
-    @Get(`${buildViewModelPathForResourceType(ResourceType.vocabularyList)}/:id`)
-    async fetchVocabularyListById(@Res() res, @Param() params: unknown) {
-        const { id } = params as HasViewModelId;
-
-        if (!isAggregateId(id))
-            return res.status(httpStatusCodes.badRequest).send({
-                error: `Invalid input for id: ${id}`,
-            });
-
-        // TODO break this out to a separate helper, it doesn't belong in the controller
-
-        const [vocabularyListSearchResult, allTerms] = await Promise.all([
-            this.repositoryProvider
-                .forResource<VocabularyList>(ResourceType.vocabularyList)
-                .fetchById(id),
-            this.repositoryProvider
-                .forResource<Term>(ResourceType.term)
-                .fetchMany()
-                .then((allResults) =>
-                    allResults.filter((result): result is Term => !isInternalError(result))
-                ),
-        ]);
-
-        if (isInternalError(vocabularyListSearchResult)) {
-            return res.status(httpStatusCodes.internalError).send({
-                error: JSON.stringify(vocabularyListSearchResult),
-            });
-        }
-
-        if (isNotFound(vocabularyListSearchResult))
-            return res.status(httpStatusCodes.notFound).send();
-
-        if (!vocabularyListSearchResult.published)
-            return res.status(httpStatusCodes.notFound).send();
-
-        const viewModel = new VocabularyListViewModel(
-            vocabularyListSearchResult,
-            allTerms,
-            this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
-        );
-
-        return this.mixinTheTagsAndSend(res, viewModel, ResourceType.vocabularyList);
     }
 
     /* ********** TRANSCRIBED AUDIO ********** */
