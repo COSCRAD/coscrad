@@ -29,7 +29,6 @@ export class MediaItemController {
     @Get('')
     async fetchMany() {
         // TODO Eventually, we'll want to build the filter spec based on the user's role \ context
-
         return this.mediaItemQueryService.fetchMany(new IsPublished(true));
     }
 }
