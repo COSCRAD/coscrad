@@ -118,6 +118,7 @@ describe('GET /resources (fetch view models)', () => {
                                 ResourceType.term,
                                 ResourceType.vocabularyList,
                                 ResourceType.transcribedAudio,
+                                ResourceType.book,
                             ].includes(resourceType)
                                 ? res.body.data.id
                                 : res.body.id;

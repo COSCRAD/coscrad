@@ -1,6 +1,7 @@
 import { CommandModule } from '@coscrad/commands';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
@@ -18,6 +19,7 @@ import { CategoryController } from '../category.controller';
 import { CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
 import { EdgeConnectionController } from '../edgeConnection.controller';
+import { BookController } from '../resources/book.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { SongController } from '../resources/song.controller';
 import { TermController } from '../resources/term.controller';
@@ -108,6 +110,14 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                     ),
                 inject: [RepositoryProvider, CommandInfoService, ConfigService],
             },
+            {
+                provide: BookQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new BookQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+            },
         ],
 
         controllers: [
@@ -119,6 +129,7 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             TermController,
             VocabularyListController,
             TranscribedAudioController,
+            BookController,
             CategoryController,
             CommandController,
         ],
