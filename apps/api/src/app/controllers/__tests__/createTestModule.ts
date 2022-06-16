@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
+import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { TranscribedAudioQueryService } from '../../../domain/services/query-services/transribed-audio-query.service';
@@ -21,6 +22,7 @@ import { CommandInfoService } from '../command/services/command-info-service';
 import { EdgeConnectionController } from '../edgeConnection.controller';
 import { BookController } from '../resources/book.controller';
 import { MediaItemController } from '../resources/media-item.controller';
+import { PhotographController } from '../resources/photograph.controller';
 import { SongController } from '../resources/song.controller';
 import { TermController } from '../resources/term.controller';
 import { TranscribedAudioController } from '../resources/transcribed-audio.controller';
@@ -118,6 +120,20 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                 ) => new BookQueryService(repositoryProvider, commandInfoService),
                 inject: [RepositoryProvider, CommandInfoService, ConfigService],
             },
+            {
+                provide: PhotographQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) =>
+                    new PhotographQueryService(
+                        repositoryProvider,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+            },
         ],
 
         controllers: [
@@ -130,6 +146,7 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             VocabularyListController,
             TranscribedAudioController,
             BookController,
+            PhotographController,
             CategoryController,
             CommandController,
         ],
