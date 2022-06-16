@@ -2,7 +2,6 @@ import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthorizationModule } from '../authorization/authorization.module';
-import { SongModule } from '../domain/models/song/song.module';
 import { DatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { RepositoryProvider } from '../persistence/repositories/repository.provider';
@@ -18,6 +17,7 @@ import { ResourceViewModelController } from './controllers/resourceViewModel.con
 import { TagController } from './controllers/tag.controller';
 import { BookModule } from './domain-modules/book.module';
 import { MediaItemModule } from './domain-modules/media-item.module';
+import { SongModule } from './domain-modules/song.module';
 import { TermModule } from './domain-modules/term.module';
 import { TranscribedAudioModule } from './domain-modules/transcribed-audio.module';
 import { VocabularyListModule } from './domain-modules/vocabulary-list.module';

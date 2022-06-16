@@ -63,9 +63,11 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             },
             {
                 provide: MediaItemQueryService,
-                useFactory: (repositoryProvider: RepositoryProvider) =>
-                    new MediaItemQueryService(repositoryProvider),
-                inject: [RepositoryProvider],
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new MediaItemQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService],
             },
             {
                 provide: SongQueryService,
