@@ -1,5 +1,5 @@
+import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
-import { CommandModule } from '../../../../../libs/commands/src';
 import { PhotographQueryService } from '../../domain/services/query-services/photograph-query.service';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
