@@ -26,7 +26,7 @@ export type CommandInfo = CommandMetadataBase & {
     schema: Record<string, unknown>;
 };
 
-export interface CommandWriteContext {
+interface CommandWriteContext {
     getAvailableCommands(): string[];
 }
 

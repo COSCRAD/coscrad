@@ -1,3 +1,4 @@
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import InvalidEntityDTOError from '../../../domainModelValidators/errors/InvalidEntityDTOError';
@@ -9,6 +10,7 @@ import { Resource } from '../../resource.entity';
 import { IBibliographicReference } from '../interfaces/IBibliographicReference';
 import BookBibliographicReferenceData from './BookBibliographicReferenceData';
 
+@RegisterIndexScopedCommands([])
 export class BookBibliographicReference
     extends Resource
     implements IBibliographicReference<BookBibliographicReferenceData>
@@ -31,5 +33,9 @@ export class BookBibliographicReference
         if (typeErrors.length > 0) return new InvalidEntityDTOError(this.type, this.id, typeErrors);
 
         return Valid;
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
     }
 }
