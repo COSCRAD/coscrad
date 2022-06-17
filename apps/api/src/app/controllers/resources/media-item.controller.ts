@@ -5,9 +5,10 @@ import { MediaItemQueryService } from '../../../domain/services/query-services/m
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { MediaItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
 import { InternalErrorFilter } from '../exception-handling/exception-filters/internal-error.filter';
-import { buildByIdApiParamMetadata, RESOURCES_ROUTE_PREFIX } from '../resourceViewModel.controller';
 import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
-import sendInternalResultAsHttpResponse from './sendInternalResultAsHttpResponse';
+import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
+import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
+import { RESOURCES_ROUTE_PREFIX } from './constants';
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
 @Controller(

@@ -1,5 +1,4 @@
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { CommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -13,7 +12,7 @@ import { VocabularyListEntry } from '../vocabulary-list-entry';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
 @RegisterIndexScopedCommands([])
-export class VocabularyList extends Resource implements CommandWriteContext {
+export class VocabularyList extends Resource {
     readonly type = ResourceType.vocabularyList;
 
     readonly name?: string;

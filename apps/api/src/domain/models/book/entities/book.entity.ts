@@ -1,5 +1,4 @@
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { CommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -13,7 +12,7 @@ import { Resource } from '../../resource.entity';
 import BookPage from './BookPage';
 
 @RegisterIndexScopedCommands([])
-export class Book extends Resource implements CommandWriteContext {
+export class Book extends Resource {
     readonly type = ResourceType.book;
 
     readonly title: string;

@@ -1,8 +1,8 @@
-import { isInternalError } from '../../../lib/errors/InternalError';
-import { Maybe } from '../../../lib/types/maybe';
-import { isNotFound } from '../../../lib/types/not-found';
-import { ResultOrError } from '../../../types/ResultOrError';
-import httpStatusCodes, { HttpStatusCode } from '../../constants/httpStatusCodes';
+import { isInternalError } from '../../../../lib/errors/InternalError';
+import { Maybe } from '../../../../lib/types/maybe';
+import { isNotFound } from '../../../../lib/types/not-found';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import httpStatusCodes, { HttpStatusCode } from '../../../constants/httpStatusCodes';
 
 const getStatusCodeForResult = <T>(result: ResultOrError<Maybe<T>>): HttpStatusCode => {
     if (isNotFound(result)) return httpStatusCodes.notFound;
