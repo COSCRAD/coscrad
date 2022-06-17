@@ -124,7 +124,7 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                     repositoryProvider: RepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new BookQueryService(repositoryProvider, commandInfoService),
-                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+                inject: [RepositoryProvider, CommandInfoService],
             },
             {
                 provide: PhotographQueryService,

@@ -10,6 +10,7 @@ import { RepositoryProvider } from '../../../persistence/repositories/repository
 import { ResultOrError } from '../../../types/ResultOrError';
 import { TagViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
+import formatResourceType from '../../../view-models/presentation/formatResourceType';
 import { Resource } from '../../models/resource.entity';
 import { Tag } from '../../models/tag/tag.entity';
 import { ISpecification } from '../../repositories/interfaces/ISpecification';
@@ -80,7 +81,10 @@ export abstract class BaseQueryService<
         id: unknown,
         userOptions: Partial<GeneralQueryOptions> = {}
     ): Promise<ResultOrError<Maybe<ResourceByIdQueryResult<ViewModelWithTags<UViewModel>>>>> {
-        if (!isAggregateId(id)) return new InternalError(`Invalid id: ${id} for a ${this.type}`);
+        if (!isAggregateId(id))
+            return new InternalError(
+                `Invalid id: ${id} for resource of type: ${formatResourceType(this.type)}`
+            );
 
         const { shouldReturnUnpublishedEntities } = {
             ...getDefaultQueryOptions(),
