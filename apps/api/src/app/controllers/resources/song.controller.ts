@@ -4,9 +4,10 @@ import IsPublished from '../../../domain/repositories/specifications/isPublished
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { SongViewModel } from '../../../view-models/buildViewModelForResource/viewModels/song.view-model';
-import { buildByIdApiParamMetadata, RESOURCES_ROUTE_PREFIX } from '../resourceViewModel.controller';
 import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
-import sendInternalResultAsHttpResponse from './sendInternalResultAsHttpResponse';
+import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
+import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
+import { RESOURCES_ROUTE_PREFIX } from './constants';
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
 @Controller(`${RESOURCES_ROUTE_PREFIX}/${buildViewModelPathForResourceType(ResourceType.song)}`)

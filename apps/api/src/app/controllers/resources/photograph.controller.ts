@@ -4,9 +4,10 @@ import IsPublished from '../../../domain/repositories/specifications/isPublished
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { PhotographViewModel } from '../../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
-import { buildByIdApiParamMetadata, RESOURCES_ROUTE_PREFIX } from '../resourceViewModel.controller';
 import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
-import sendInternalResultAsHttpResponse from './sendInternalResultAsHttpResponse';
+import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
+import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
+import { RESOURCES_ROUTE_PREFIX } from './constants';
 
 @Injectable()
 @Controller(

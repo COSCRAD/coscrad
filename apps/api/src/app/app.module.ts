@@ -13,7 +13,7 @@ import { CategoryController } from './controllers/category.controller';
 import { CommandController } from './controllers/command/command.controller';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
 import { EdgeConnectionController } from './controllers/edgeConnection.controller';
-import { ResourceViewModelController } from './controllers/resourceViewModel.controller';
+import { ResourceDescriptionController } from './controllers/resources/resource-description.controller';
 import { TagController } from './controllers/tag.controller';
 import { BookModule } from './domain-modules/book.module';
 import { MediaItemModule } from './domain-modules/media-item.module';
@@ -46,7 +46,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
     controllers: [
         AppController,
         CategoryController,
-        ResourceViewModelController,
+        ResourceDescriptionController,
         EdgeConnectionController,
         TagController,
         CommandController,

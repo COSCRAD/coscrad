@@ -1,5 +1,4 @@
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { CommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import findAllPointsInLineNotWithinBounds from '../../../../lib/validation/geometry/findAllPointsInLineNotWithinBounds';
 import isPointWithinBounds from '../../../../lib/validation/geometry/isPointWithinBounds';
@@ -19,7 +18,7 @@ import { Position2D } from '../../spatial-feature/types/Coordinates/Position2D';
 import PhotographDimensions from './PhotographDimensions';
 
 @RegisterIndexScopedCommands([])
-export class Photograph extends Resource implements Boundable2D, CommandWriteContext {
+export class Photograph extends Resource implements Boundable2D {
     readonly type = ResourceType.photograph;
 
     readonly filename: string;
