@@ -4,9 +4,10 @@ import IsPublished from '../../../domain/repositories/specifications/isPublished
 import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { SpatialFeatureViewModel } from '../../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
-import { buildByIdApiParamMetadata, RESOURCES_ROUTE_PREFIX } from '../resourceViewModel.controller';
 import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
-import sendInternalResultAsHttpResponse from './sendInternalResultAsHttpResponse';
+import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
+import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
+import { RESOURCES_ROUTE_PREFIX } from './constants';
 
 @Injectable()
 @Controller(
