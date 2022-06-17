@@ -4,9 +4,10 @@ import IsPublished from '../../../domain/repositories/specifications/isPublished
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { TermViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
-import { buildByIdApiParamMetadata, RESOURCES_ROUTE_PREFIX } from '../resourceViewModel.controller';
 import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
-import sendInternalResultAsHttpResponse from './sendInternalResultAsHttpResponse';
+import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
+import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
+import { RESOURCES_ROUTE_PREFIX } from './constants';
 
 @Injectable()
 @Controller(`${RESOURCES_ROUTE_PREFIX}/${buildViewModelPathForResourceType(ResourceType.term)}`)

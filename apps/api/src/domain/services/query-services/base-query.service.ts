@@ -1,7 +1,6 @@
 import {
     CommandInfo,
     CommandInfoService,
-    CommandWriteContext,
 } from '../../../app/controllers/command/services/command-info-service';
 import mixTagsIntoViewModel from '../../../app/controllers/utilities/mixTagsIntoViewModel';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
@@ -113,10 +112,7 @@ export abstract class BaseQueryService<
 
         return {
             data: viewModelWithTags,
-            actions: this.commandInfoService.getCommandInfo(
-                // TODO Implement CommandWriteContext on all Resource sub-classes
-                domainModelSearchResult as unknown as CommandWriteContext
-            ),
+            actions: this.commandInfoService.getCommandInfo(domainModelSearchResult),
         };
     }
 
@@ -137,10 +133,7 @@ export abstract class BaseQueryService<
                 requiredExternalState.tags,
                 this.type
             ),
-            actions: this.commandInfoService.getCommandInfo(
-                // TODO Implement CommandWriteContext on all Resource sub-classes
-                instance as unknown as CommandWriteContext
-            ),
+            actions: this.commandInfoService.getCommandInfo(instance),
         }));
 
         return {
