@@ -72,21 +72,7 @@ describe('When fetching multiple resources', () => {
 
                     expect(res.status).toBe(httpStatusCodes.ok);
 
-                    // TODO Support new API for all resources
-                    const data = [
-                        ResourceType.song,
-                        ResourceType.term,
-                        ResourceType.vocabularyList,
-                        ResourceType.transcribedAudio,
-                        ResourceType.book,
-                        ResourceType.photograph,
-                        ResourceType.mediaItem,
-                        ResourceType.spatialFeature,
-                    ].includes(resourceType)
-                        ? res.body.data
-                        : res.body;
-
-                    expect(data.length).toBe(
+                    expect(res.body.data.length).toBe(
                         testDataWithAllResourcesPublished[resourceType].length
                     );
 
@@ -130,21 +116,7 @@ describe('When fetching multiple resources', () => {
                         `/resources${endpointUnderTest}`
                     );
 
-                    // TODO Support new API for all resources
-                    const data = [
-                        ResourceType.song,
-                        ResourceType.term,
-                        ResourceType.vocabularyList,
-                        ResourceType.transcribedAudio,
-                        ResourceType.book,
-                        ResourceType.photograph,
-                        ResourceType.mediaItem,
-                        ResourceType.spatialFeature,
-                    ].includes(resourceType)
-                        ? res.body.data
-                        : res.body;
-
-                    expect(data.length).toBe(publishedResourcesToAdd.length);
+                    expect(res.body.data.length).toBe(publishedResourcesToAdd.length);
 
                     // Sanity check
                     expect(publishedResourcesToAdd.length).not.toEqual(

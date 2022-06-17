@@ -1,6 +1,5 @@
 import { IsOptional, IsStringWithNonzeroLength } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { CommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import termValidator from '../../../domainModelValidators/termValidator';
@@ -13,7 +12,7 @@ import { Resource } from '../../resource.entity';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 
 @RegisterIndexScopedCommands([])
-export class Term extends Resource implements CommandWriteContext {
+export class Term extends Resource {
     readonly type: ResourceType = ResourceType.term;
 
     @IsOptional()
