@@ -1,6 +1,7 @@
 import { CommandModule } from '@coscrad/commands';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
@@ -21,15 +22,16 @@ import { CategoryController } from '../category.controller';
 import { CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
 import { EdgeConnectionController } from '../edgeConnection.controller';
+import { BibliographicReferenceController } from '../resources/bibliographic-reference.controller';
 import { BookController } from '../resources/book.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { PhotographController } from '../resources/photograph.controller';
+import { ResourceDescriptionController } from '../resources/resource-description.controller';
 import { SongController } from '../resources/song.controller';
 import { SpatialFeatureController } from '../resources/spatial-feature.controller';
 import { TermController } from '../resources/term.controller';
 import { TranscribedAudioController } from '../resources/transcribed-audio.controller';
 import { VocabularyListController } from '../resources/vocabulary-list.controller';
-import { ResourceViewModelController } from '../resourceViewModel.controller';
 import { TagController } from '../tag.controller';
 
 export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
@@ -122,7 +124,7 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                     repositoryProvider: RepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new BookQueryService(repositoryProvider, commandInfoService),
-                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+                inject: [RepositoryProvider, CommandInfoService],
             },
             {
                 provide: PhotographQueryService,
@@ -146,10 +148,18 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                 ) => new SpatialFeatureQueryService(repositoryProvider, commandInfoService),
                 inject: [RepositoryProvider, CommandInfoService],
             },
+            {
+                provide: BibliographicReferenceQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new BibliographicReferenceQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService],
+            },
         ],
 
         controllers: [
-            ResourceViewModelController,
+            ResourceDescriptionController,
             EdgeConnectionController,
             TagController,
             MediaItemController,
@@ -160,6 +170,7 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             BookController,
             PhotographController,
             SpatialFeatureController,
+            BibliographicReferenceController,
             CategoryController,
             CommandController,
         ],
