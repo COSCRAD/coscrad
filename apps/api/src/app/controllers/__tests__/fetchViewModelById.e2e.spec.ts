@@ -112,11 +112,7 @@ describe('GET /resources (fetch view models)', () => {
 
                             expect(res.status).toBe(httpStatusCodes.ok);
 
-                            // TODO Convert all Resource queries to the new API
-                            const id =
-                                resourceType === ResourceType.song ? res.body.data.id : res.body.id;
-
-                            expect(id).toBe(resourceToFind.id);
+                            expect(res.body.data.id).toBe(resourceToFind.id);
 
                             expect(res.body).toMatchSnapshot();
                         });

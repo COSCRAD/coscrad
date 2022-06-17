@@ -1,3 +1,4 @@
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -10,6 +11,7 @@ import { PageRangeContext } from '../../context/page-range-context/page-range.co
 import { Resource } from '../../resource.entity';
 import BookPage from './BookPage';
 
+@RegisterIndexScopedCommands([])
 export class Book extends Resource {
     readonly type = ResourceType.book;
 
@@ -69,5 +71,9 @@ export class Book extends Resource {
             );
 
         return Valid;
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
     }
 }

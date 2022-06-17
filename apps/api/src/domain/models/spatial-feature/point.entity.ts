@@ -1,3 +1,4 @@
+import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import geometricFeatureValidator from '../../domainModelValidators/spatialFeatureValidator/geometricFeatureValidator';
@@ -9,6 +10,7 @@ import { ISpatialFeature } from './ISpatialFeature';
 import { PointCoordinates } from './types/Coordinates/PointCoordinates';
 import { GeometricFeatureType } from './types/GeometricFeatureType';
 
+@RegisterIndexScopedCommands([])
 export class Point extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
 
@@ -32,5 +34,9 @@ export class Point extends Resource implements ISpatialFeature {
     validateInvariants(): ResultOrError<Valid> {
         // TODO breakout the individual type validators into each class
         return geometricFeatureValidator(this);
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
     }
 }

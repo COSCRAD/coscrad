@@ -1,8 +1,15 @@
 import { CommandModule } from '@coscrad/commands';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
+import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
+import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
+import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';
+import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
+import { TranscribedAudioQueryService } from '../../../domain/services/query-services/transribed-audio-query.service';
+import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
@@ -15,9 +22,16 @@ import { CategoryController } from '../category.controller';
 import { CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
 import { EdgeConnectionController } from '../edgeConnection.controller';
+import { BibliographicReferenceController } from '../resources/bibliographic-reference.controller';
+import { BookController } from '../resources/book.controller';
 import { MediaItemController } from '../resources/media-item.controller';
+import { PhotographController } from '../resources/photograph.controller';
+import { ResourceDescriptionController } from '../resources/resource-description.controller';
 import { SongController } from '../resources/song.controller';
-import { ResourceViewModelController } from '../resourceViewModel.controller';
+import { SpatialFeatureController } from '../resources/spatial-feature.controller';
+import { TermController } from '../resources/term.controller';
+import { TranscribedAudioController } from '../resources/transcribed-audio.controller';
+import { VocabularyListController } from '../resources/vocabulary-list.controller';
 import { TagController } from '../tag.controller';
 
 export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
@@ -53,9 +67,11 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             },
             {
                 provide: MediaItemQueryService,
-                useFactory: (repositoryProvider: RepositoryProvider) =>
-                    new MediaItemQueryService(repositoryProvider),
-                inject: [RepositoryProvider],
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new MediaItemQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService],
             },
             {
                 provide: SongQueryService,
@@ -65,14 +81,96 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                 ) => new SongQueryService(repositoryProvider, commandInfoService),
                 inject: [RepositoryProvider, CommandInfoService],
             },
+            {
+                provide: TermQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) => new TermQueryService(repositoryProvider, commandInfoService, configService),
+                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+            },
+            {
+                provide: VocabularyListQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) =>
+                    new VocabularyListQueryService(
+                        repositoryProvider,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+            },
+            {
+                provide: TranscribedAudioQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) =>
+                    new TranscribedAudioQueryService(
+                        repositoryProvider,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+            },
+            {
+                provide: BookQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new BookQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService],
+            },
+            {
+                provide: PhotographQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) =>
+                    new PhotographQueryService(
+                        repositoryProvider,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+            },
+            {
+                provide: SpatialFeatureQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new SpatialFeatureQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService],
+            },
+            {
+                provide: BibliographicReferenceQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new BibliographicReferenceQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService],
+            },
         ],
 
         controllers: [
-            ResourceViewModelController,
+            ResourceDescriptionController,
             EdgeConnectionController,
             TagController,
             MediaItemController,
             SongController,
+            TermController,
+            VocabularyListController,
+            TranscribedAudioController,
+            BookController,
+            PhotographController,
+            SpatialFeatureController,
+            BibliographicReferenceController,
             CategoryController,
             CommandController,
         ],

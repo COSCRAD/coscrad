@@ -1,3 +1,4 @@
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import findAllPointsInLineNotWithinBounds from '../../../../lib/validation/geometry/findAllPointsInLineNotWithinBounds';
 import isPointWithinBounds from '../../../../lib/validation/geometry/isPointWithinBounds';
@@ -16,6 +17,7 @@ import { Resource } from '../../resource.entity';
 import { Position2D } from '../../spatial-feature/types/Coordinates/Position2D';
 import PhotographDimensions from './PhotographDimensions';
 
+@RegisterIndexScopedCommands([])
 export class Photograph extends Resource implements Boundable2D {
     readonly type = ResourceType.photograph;
 
@@ -111,5 +113,9 @@ export class Photograph extends Resource implements Boundable2D {
             [0, this.dimensions.heightPX],
             [0, this.dimensions.widthPX],
         ];
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
     }
 }

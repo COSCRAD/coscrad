@@ -1,14 +1,14 @@
 import { Controller, Get, Param, Res, UseFilters } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import IsPublished from '../../../domain/repositories/specifications/isPublished';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
-import { isInternalError } from '../../../lib/errors/InternalError';
-import { isNotFound } from '../../../lib/types/not-found';
 import { MediaItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
-import httpStatusCodes from '../../constants/httpStatusCodes';
 import { InternalErrorFilter } from '../exception-handling/exception-filters/internal-error.filter';
-import { buildByIdApiParamMetadata, RESOURCES_ROUTE_PREFIX } from '../resourceViewModel.controller';
 import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
+import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
+import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
+import { RESOURCES_ROUTE_PREFIX } from './constants';
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
 @Controller(
@@ -24,16 +24,12 @@ export class MediaItemController {
     async fetchById(@Res() res, @Param('id') id: unknown) {
         const searchResult = await this.mediaItemQueryService.fetchById(id);
 
-        if (isInternalError(searchResult))
-            return res.status(httpStatusCodes.badRequest).send(searchResult.toString());
-
-        if (isNotFound(searchResult)) return res.status(httpStatusCodes.notFound).send();
-
-        return res.status(httpStatusCodes.ok).send(searchResult);
+        return sendInternalResultAsHttpResponse(res, searchResult);
     }
 
     @Get('')
     async fetchMany() {
-        return this.mediaItemQueryService.fetchMany();
+        // TODO Eventually, we'll want to build the filter spec based on the user's role \ context
+        return this.mediaItemQueryService.fetchMany(new IsPublished(true));
     }
 }

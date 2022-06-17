@@ -2,84 +2,96 @@
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /bibliographicReferences/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
+  "actions": Array [],
   "data": Object {
-    "abstract": "This is the abstract, NOT a general note!",
-    "creators": Array [
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "1",
+    "tags": Array [
       Object {
-        "name": "Alana Duvernay",
-        "type": "author",
+        "id": "2",
+        "label": "animals",
       },
     ],
-    "isbn": "978-1-895811-34-6",
-    "numberOfPages": 455,
-    "place": "Kennebunk Port, Maine",
-    "publisher": "Atlantic Publishing",
-    "title": "A Day in the Life",
-    "type": "book",
-    "url": "https://atlanticpublishing.com",
-    "year": 1999,
   },
-  "id": "1",
-  "tags": Array [
-    Object {
-      "id": "2",
-      "label": "animals",
-    },
-  ],
 }
 `;
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /books/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "author": "John Doeburg",
-  "id": "23",
-  "publicationDate": "2002",
-  "subtitle": "The wolf's revenge",
-  "tags": Array [
-    Object {
-      "id": "1",
-      "label": "plants",
-    },
-  ],
-  "title": "Three Little Pigs",
+  "actions": Array [],
+  "data": Object {
+    "author": "John Doeburg",
+    "id": "23",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
+    "title": "Three Little Pigs",
+  },
 }
 `;
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /mediaItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "contributorAndRoles": Array [
-    Object {
-      "contributorId": "2",
-      "role": "host",
-    },
-  ],
-  "id": "1",
-  "lengthMilliseconds": 2500,
-  "mimeType": "audio/mpeg",
-  "published": true,
-  "tags": Array [
-    Object {
-      "id": "5",
-      "label": "legends",
-    },
-  ],
-  "title": "episode title (in language)",
-  "titleEnglish": "Metal Mondays episode 1",
-  "url": "https://www.metalmondays.com/1.mp3",
+  "actions": Array [],
+  "data": Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "1",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [
+      Object {
+        "id": "5",
+        "label": "legends",
+      },
+    ],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
 }
 `;
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /photographs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "id": "0",
-  "imageURL": "https://www.mysound.org/downloads/cat.png",
-  "photographer": "Susie McRealart",
-  "tags": Array [
-    Object {
-      "id": "3",
-      "label": "placenames",
-    },
-  ],
+  "actions": Array [],
+  "data": Object {
+    "id": "0",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [
+      Object {
+        "id": "3",
+        "label": "placenames",
+      },
+    ],
+  },
 }
 `;
 
@@ -104,106 +116,118 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /spatialFeatures/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "geometry": Object {
-    "coordinates": Array [
-      100,
-      0,
-    ],
-    "type": "Point",
-  },
-  "id": "100",
-  "tags": Array [
-    Object {
-      "id": "1",
-      "label": "plants",
+  "actions": Array [],
+  "data": Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
     },
-  ],
+    "id": "100",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
+  },
 }
 `;
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /terms/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "contributor": "",
-  "id": "1",
-  "tags": Array [
-    Object {
-      "id": "1",
-      "label": "plants",
-    },
-  ],
-  "term": "Chil-term-1",
-  "termEnglish": "Engl-term-1",
+  "actions": Array [],
+  "data": Object {
+    "contributor": "",
+    "id": "1",
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
 }
 `;
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /transcribedAudioItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
-  "id": "110",
-  "length": 20000,
-  "plainText": "
+  "actions": Array [],
+  "data": Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "110",
+    "length": 20000,
+    "plainText": "
 [12000] There once was a little wooden boy. [15550]
 [18300] His name was Pinocchio. [19240]",
-  "start": 0,
-  "tags": Array [
-    Object {
-      "id": "3",
-      "label": "placenames",
-    },
-  ],
+    "start": 0,
+    "tags": Array [
+      Object {
+        "id": "3",
+        "label": "placenames",
+      },
+    ],
+  },
 }
 `;
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /vocabularyLists/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "entries": Array [
-    Object {
-      "term": Object {
-        "contributor": "",
+  "actions": Array [],
+  "data": Object {
+    "entries": Array [
+      Object {
+        "term": Object {
+          "contributor": "",
+          "id": "1",
+          "term": "Chil-term-1",
+          "termEnglish": "Engl-term-1",
+        },
+        "variableValues": Object {
+          "person": "11",
+        },
+      },
+      Object {
+        "term": Object {
+          "contributor": "",
+          "id": "2",
+          "term": "Chil-term-2",
+          "termEnglish": "Engl-term-2",
+        },
+        "variableValues": Object {
+          "person": "21",
+        },
+      },
+    ],
+    "id": "1",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [
+      Object {
         "id": "1",
-        "term": "Chil-term-1",
-        "termEnglish": "Engl-term-1",
+        "label": "plants",
       },
-      "variableValues": Object {
-        "person": "11",
+    ],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
       },
-    },
-    Object {
-      "term": Object {
-        "contributor": "",
-        "id": "2",
-        "term": "Chil-term-2",
-        "termEnglish": "Engl-term-2",
-      },
-      "variableValues": Object {
-        "person": "21",
-      },
-    },
-  ],
-  "id": "1",
-  "name": "test VL 1 chil",
-  "nameEnglish": "test VL 1 engl",
-  "tags": Array [
-    Object {
-      "id": "1",
-      "label": "plants",
-    },
-  ],
-  "variables": Array [
-    Object {
-      "name": "person",
-      "type": "dropbox",
-      "validValues": Array [
-        Object {
-          "display": "I",
-          "value": "11",
-        },
-        Object {
-          "display": "We",
-          "value": "21",
-        },
-      ],
-    },
-  ],
+    ],
+  },
 }
 `;

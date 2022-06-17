@@ -1,746 +1,988 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`When fetching multiple resources GET /bibliographicReferences when all of the resources are published should fetch multiple resources of type bibliographicReference 1`] = `
-Array [
-  Object {
-    "data": Object {
-      "abstract": "This is the abstract, NOT a general note!",
-      "creators": Array [
-        Object {
-          "name": "Alana Duvernay",
-          "type": "author",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "data": Object {
+          "abstract": "This is the abstract, NOT a general note!",
+          "creators": Array [
+            Object {
+              "name": "Alana Duvernay",
+              "type": "author",
+            },
+          ],
+          "isbn": "978-1-895811-34-6",
+          "numberOfPages": 455,
+          "place": "Kennebunk Port, Maine",
+          "publisher": "Atlantic Publishing",
+          "title": "A Day in the Life",
+          "type": "book",
+          "url": "https://atlanticpublishing.com",
+          "year": 1999,
         },
-      ],
-      "isbn": "978-1-895811-34-6",
-      "numberOfPages": 455,
-      "place": "Kennebunk Port, Maine",
-      "publisher": "Atlantic Publishing",
-      "title": "A Day in the Life",
-      "type": "book",
-      "url": "https://atlanticpublishing.com",
-      "year": 1999,
-    },
-    "id": "1",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
+        "id": "1",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
       },
-    ],
-  },
-  Object {
-    "data": Object {
-      "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
-      "creators": Array [
-        Object {
-          "name": "Sigurd Purcell",
-          "type": "author",
-        },
-      ],
-      "doi": "10.14288/bcs.v0i19.784",
-      "issn": "00052949",
-      "issueDate": "Spring 2013",
-      "pages": "109-113,115-136,240",
-      "publicationTitle": "Journal of History",
-      "title": "Report on the Cariboo Chilcotin Justice inquiry",
-      "type": "journalArticle",
-      "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
     },
-    "id": "23",
-    "tags": Array [],
-  },
-]
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "data": Object {
+          "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
+          "creators": Array [
+            Object {
+              "name": "Sigurd Purcell",
+              "type": "author",
+            },
+          ],
+          "doi": "10.14288/bcs.v0i19.784",
+          "issn": "00052949",
+          "issueDate": "Spring 2013",
+          "pages": "109-113,115-136,240",
+          "publicationTitle": "Journal of History",
+          "title": "Report on the Cariboo Chilcotin Justice inquiry",
+          "type": "journalArticle",
+          "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+        },
+        "id": "23",
+        "tags": Array [],
+      },
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /bibliographicReferences when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "data": Object {
-      "abstract": "This is the abstract, NOT a general note!",
-      "creators": Array [
-        Object {
-          "name": "Alana Duvernay",
-          "type": "author",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "data": Object {
+          "abstract": "This is the abstract, NOT a general note!",
+          "creators": Array [
+            Object {
+              "name": "Alana Duvernay",
+              "type": "author",
+            },
+          ],
+          "isbn": "978-1-895811-34-6",
+          "numberOfPages": 455,
+          "place": "Kennebunk Port, Maine",
+          "publisher": "Atlantic Publishing",
+          "title": "A Day in the Life",
+          "type": "book",
+          "url": "https://atlanticpublishing.com",
+          "year": 1999,
         },
-      ],
-      "isbn": "978-1-895811-34-6",
-      "numberOfPages": 455,
-      "place": "Kennebunk Port, Maine",
-      "publisher": "Atlantic Publishing",
-      "title": "A Day in the Life",
-      "type": "book",
-      "url": "https://atlanticpublishing.com",
-      "year": 1999,
-    },
-    "id": "1",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
+        "id": "1",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
       },
-    ],
-  },
-  Object {
-    "data": Object {
-      "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
-      "creators": Array [
-        Object {
-          "name": "Sigurd Purcell",
-          "type": "author",
-        },
-      ],
-      "doi": "10.14288/bcs.v0i19.784",
-      "issn": "00052949",
-      "issueDate": "Spring 2013",
-      "pages": "109-113,115-136,240",
-      "publicationTitle": "Journal of History",
-      "title": "Report on the Cariboo Chilcotin Justice inquiry",
-      "type": "journalArticle",
-      "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
     },
-    "id": "23",
-    "tags": Array [],
-  },
-]
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "data": Object {
+          "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
+          "creators": Array [
+            Object {
+              "name": "Sigurd Purcell",
+              "type": "author",
+            },
+          ],
+          "doi": "10.14288/bcs.v0i19.784",
+          "issn": "00052949",
+          "issueDate": "Spring 2013",
+          "pages": "109-113,115-136,240",
+          "publicationTitle": "Journal of History",
+          "title": "Report on the Cariboo Chilcotin Justice inquiry",
+          "type": "journalArticle",
+          "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+        },
+        "id": "23",
+        "tags": Array [],
+      },
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /books when all of the resources are published should fetch multiple resources of type book 1`] = `
-Array [
-  Object {
-    "author": "John Doeburg",
-    "id": "23",
-    "publicationDate": "2002",
-    "subtitle": "The wolf's revenge",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "author": "John Doeburg",
+        "id": "23",
+        "publicationDate": "2002",
+        "subtitle": "The wolf's revenge",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+        "title": "Three Little Pigs",
       },
-    ],
-    "title": "Three Little Pigs",
-  },
-  Object {
-    "author": "Jane Donnaldson",
-    "id": "24",
-    "publicationDate": "2011",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "author": "Jane Donnaldson",
+        "id": "24",
+        "publicationDate": "2011",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+        "title": "An Adventure Story",
       },
-    ],
-    "title": "An Adventure Story",
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /books when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "author": "John Doeburg",
-    "id": "23",
-    "publicationDate": "2002",
-    "subtitle": "The wolf's revenge",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "author": "John Doeburg",
+        "id": "23",
+        "publicationDate": "2002",
+        "subtitle": "The wolf's revenge",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+        "title": "Three Little Pigs",
       },
-    ],
-    "title": "Three Little Pigs",
-  },
-  Object {
-    "author": "Jane Donnaldson",
-    "id": "24",
-    "publicationDate": "2011",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "author": "Jane Donnaldson",
+        "id": "24",
+        "publicationDate": "2011",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+        "title": "An Adventure Story",
       },
-    ],
-    "title": "An Adventure Story",
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /mediaItems when all of the resources are published should fetch multiple resources of type mediaItem 1`] = `
-Array [
-  Object {
-    "contributorAndRoles": Array [
-      Object {
-        "contributorId": "2",
-        "role": "host",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributorAndRoles": Array [
+          Object {
+            "contributorId": "2",
+            "role": "host",
+          },
+        ],
+        "id": "1",
+        "lengthMilliseconds": 2500,
+        "mimeType": "audio/mpeg",
+        "published": true,
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
+        "title": "episode title (in language)",
+        "titleEnglish": "Metal Mondays episode 1",
+        "url": "https://www.metalmondays.com/1.mp3",
       },
-    ],
-    "id": "1",
-    "lengthMilliseconds": 2500,
-    "mimeType": "audio/mpeg",
-    "published": true,
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
-      },
-    ],
-    "title": "episode title (in language)",
-    "titleEnglish": "Metal Mondays episode 1",
-    "url": "https://www.metalmondays.com/1.mp3",
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /mediaItems when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "contributorAndRoles": Array [
-      Object {
-        "contributorId": "2",
-        "role": "host",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributorAndRoles": Array [
+          Object {
+            "contributorId": "2",
+            "role": "host",
+          },
+        ],
+        "id": "1",
+        "lengthMilliseconds": 2500,
+        "mimeType": "audio/mpeg",
+        "published": true,
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
+        "title": "episode title (in language)",
+        "titleEnglish": "Metal Mondays episode 1",
+        "url": "https://www.metalmondays.com/1.mp3",
       },
-    ],
-    "id": "1",
-    "lengthMilliseconds": 2500,
-    "mimeType": "audio/mpeg",
-    "published": true,
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
-      },
-    ],
-    "title": "episode title (in language)",
-    "titleEnglish": "Metal Mondays episode 1",
-    "url": "https://www.metalmondays.com/1.mp3",
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /photographs when all of the resources are published should fetch multiple resources of type photograph 1`] = `
-Array [
-  Object {
-    "id": "0",
-    "imageURL": "https://www.mysound.org/downloads/cat.png",
-    "photographer": "Susie McRealart",
-    "tags": Array [
-      Object {
-        "id": "3",
-        "label": "placenames",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "id": "0",
+        "imageURL": "https://www.mysound.org/downloads/cat.png",
+        "photographer": "Susie McRealart",
+        "tags": Array [
+          Object {
+            "id": "3",
+            "label": "placenames",
+          },
+        ],
       },
-    ],
-  },
-  Object {
-    "id": "1",
-    "imageURL": "https://www.mysound.org/downloads/dog.png",
-    "photographer": "Robert McRealart",
-    "tags": Array [
-      Object {
-        "id": "4",
-        "label": "songs",
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "id": "1",
+        "imageURL": "https://www.mysound.org/downloads/dog.png",
+        "photographer": "Robert McRealart",
+        "tags": Array [
+          Object {
+            "id": "4",
+            "label": "songs",
+          },
+        ],
       },
-    ],
-  },
-  Object {
-    "id": "2",
-    "imageURL": "https://www.mysound.org/downloads/wildflower.png",
-    "photographer": "Kenny Tree-Huggens",
-    "tags": Array [],
-  },
-]
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "id": "2",
+        "imageURL": "https://www.mysound.org/downloads/wildflower.png",
+        "photographer": "Kenny Tree-Huggens",
+        "tags": Array [],
+      },
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /photographs when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "id": "0",
-    "imageURL": "https://www.mysound.org/downloads/cat.png",
-    "photographer": "Susie McRealart",
-    "tags": Array [
-      Object {
-        "id": "3",
-        "label": "placenames",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "id": "0",
+        "imageURL": "https://www.mysound.org/downloads/cat.png",
+        "photographer": "Susie McRealart",
+        "tags": Array [
+          Object {
+            "id": "3",
+            "label": "placenames",
+          },
+        ],
       },
-    ],
-  },
-  Object {
-    "id": "1",
-    "imageURL": "https://www.mysound.org/downloads/dog.png",
-    "photographer": "Robert McRealart",
-    "tags": Array [
-      Object {
-        "id": "4",
-        "label": "songs",
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "id": "1",
+        "imageURL": "https://www.mysound.org/downloads/dog.png",
+        "photographer": "Robert McRealart",
+        "tags": Array [
+          Object {
+            "id": "4",
+            "label": "songs",
+          },
+        ],
       },
-    ],
-  },
-  Object {
-    "id": "2",
-    "imageURL": "https://www.mysound.org/downloads/wildflower.png",
-    "photographer": "Kenny Tree-Huggens",
-    "tags": Array [],
-  },
-]
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "id": "2",
+        "imageURL": "https://www.mysound.org/downloads/wildflower.png",
+        "photographer": "Kenny Tree-Huggens",
+        "tags": Array [],
+      },
+    },
+  ],
+}
+`;
+
+exports[`When fetching multiple resources GET /songs when all of the resources are published should fetch multiple resources of type song 1`] = `
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.myaudio.com/lamb.mp3",
+        "contributions": Array [
+          "1 (performer)",
+        ],
+        "id": "1",
+        "lengthMilliseconds": 3500,
+        "lyrics": "Mary had a little lamb, little lamb.",
+        "startMilliseconds": 0,
+        "tags": Array [],
+        "title": "Song title in language",
+        "titleEnglish": "Mary had a little lamb",
+      },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.myaudio.com/badsong.wav",
+        "contributions": Array [
+          "33 (author)",
+        ],
+        "id": "2",
+        "lengthMilliseconds": 33000,
+        "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+        "startMilliseconds": 0,
+        "tags": Array [],
+        "title": "Unpublished Song Title (lang)",
+        "titleEnglish": "Unpublished Song Title (Engl)",
+      },
+    },
+  ],
+}
+`;
+
+exports[`When fetching multiple resources GET /songs when some of the resources are unpublished should return the expected number of results 1`] = `
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.myaudio.com/lamb.mp3",
+        "contributions": Array [
+          "1 (performer)",
+        ],
+        "id": "1",
+        "lengthMilliseconds": 3500,
+        "lyrics": "Mary had a little lamb, little lamb.",
+        "startMilliseconds": 0,
+        "tags": Array [],
+        "title": "Song title in language",
+        "titleEnglish": "Mary had a little lamb",
+      },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.myaudio.com/badsong.wav",
+        "contributions": Array [
+          "33 (author)",
+        ],
+        "id": "2",
+        "lengthMilliseconds": 33000,
+        "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+        "startMilliseconds": 0,
+        "tags": Array [],
+        "title": "Unpublished Song Title (lang)",
+        "titleEnglish": "Unpublished Song Title (Engl)",
+      },
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /spatialFeatures when all of the resources are published should fetch multiple resources of type spatialFeature 1`] = `
-Array [
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        100,
-        0,
-      ],
-      "type": "Point",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            100,
+            0,
+          ],
+          "type": "Point",
+        },
+        "id": "100",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+      },
     },
-    "id": "100",
-    "tags": Array [
-      Object {
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            20,
+            10,
+          ],
+          "type": "Point",
+        },
+        "id": "101",
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
+      },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            70.5,
+            23.5,
+          ],
+          "type": "Point",
+        },
+        "id": "102",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+      },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            Array [
+              1,
+              2,
+            ],
+            Array [
+              1,
+              3,
+            ],
+            Array [
+              1.5,
+              3.5,
+            ],
+            Array [
+              3,
+              4.2,
+            ],
+          ],
+          "type": "LineString",
+        },
         "id": "1",
-        "label": "plants",
+        "tags": Array [],
       },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        20,
-        10,
-      ],
-      "type": "Point",
     },
-    "id": "101",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            Array [
+              Array [
+                1,
+                3,
+              ],
+              Array [
+                2,
+                5,
+              ],
+              Array [
+                1.5,
+                3.7,
+              ],
+              Array [
+                1.2,
+                3.3,
+              ],
+              Array [
+                1,
+                3,
+              ],
+            ],
+          ],
+          "type": "Polygon",
+        },
+        "id": "300",
+        "tags": Array [],
       },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        70.5,
-        23.5,
-      ],
-      "type": "Point",
     },
-    "id": "102",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
-      },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        Array [
-          1,
-          2,
-        ],
-        Array [
-          1,
-          3,
-        ],
-        Array [
-          1.5,
-          3.5,
-        ],
-        Array [
-          3,
-          4.2,
-        ],
-      ],
-      "type": "LineString",
-    },
-    "id": "1",
-    "tags": Array [],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        Array [
-          Array [
-            1,
-            3,
-          ],
-          Array [
-            2,
-            5,
-          ],
-          Array [
-            1.5,
-            3.7,
-          ],
-          Array [
-            1.2,
-            3.3,
-          ],
-          Array [
-            1,
-            3,
-          ],
-        ],
-      ],
-      "type": "Polygon",
-    },
-    "id": "300",
-    "tags": Array [],
-  },
-]
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /spatialFeatures when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        100,
-        0,
-      ],
-      "type": "Point",
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            100,
+            0,
+          ],
+          "type": "Point",
+        },
+        "id": "100",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+      },
     },
-    "id": "100",
-    "tags": Array [
-      Object {
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            20,
+            10,
+          ],
+          "type": "Point",
+        },
+        "id": "101",
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
+      },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            70.5,
+            23.5,
+          ],
+          "type": "Point",
+        },
+        "id": "102",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+      },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            Array [
+              1,
+              2,
+            ],
+            Array [
+              1,
+              3,
+            ],
+            Array [
+              1.5,
+              3.5,
+            ],
+            Array [
+              3,
+              4.2,
+            ],
+          ],
+          "type": "LineString",
+        },
         "id": "1",
-        "label": "plants",
+        "tags": Array [],
       },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        20,
-        10,
-      ],
-      "type": "Point",
     },
-    "id": "101",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            Array [
+              Array [
+                1,
+                3,
+              ],
+              Array [
+                2,
+                5,
+              ],
+              Array [
+                1.5,
+                3.7,
+              ],
+              Array [
+                1.2,
+                3.3,
+              ],
+              Array [
+                1,
+                3,
+              ],
+            ],
+          ],
+          "type": "Polygon",
+        },
+        "id": "300",
+        "tags": Array [],
       },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        70.5,
-        23.5,
-      ],
-      "type": "Point",
     },
-    "id": "102",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
-      },
-    ],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        Array [
-          1,
-          2,
-        ],
-        Array [
-          1,
-          3,
-        ],
-        Array [
-          1.5,
-          3.5,
-        ],
-        Array [
-          3,
-          4.2,
-        ],
-      ],
-      "type": "LineString",
-    },
-    "id": "1",
-    "tags": Array [],
-  },
-  Object {
-    "geometry": Object {
-      "coordinates": Array [
-        Array [
-          Array [
-            1,
-            3,
-          ],
-          Array [
-            2,
-            5,
-          ],
-          Array [
-            1.5,
-            3.7,
-          ],
-          Array [
-            1.2,
-            3.3,
-          ],
-          Array [
-            1,
-            3,
-          ],
-        ],
-      ],
-      "type": "Polygon",
-    },
-    "id": "300",
-    "tags": Array [],
-  },
-]
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /terms when all of the resources are published should fetch multiple resources of type term 1`] = `
-Array [
-  Object {
-    "contributor": "",
-    "id": "1",
-    "tags": Array [
-      Object {
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
         "id": "1",
-        "label": "plants",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+        "term": "Chil-term-1",
+        "termEnglish": "Engl-term-1",
       },
-    ],
-    "term": "Chil-term-1",
-    "termEnglish": "Engl-term-1",
-  },
-  Object {
-    "contributor": "",
-    "id": "2",
-    "tags": Array [
-      Object {
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
         "id": "2",
-        "label": "animals",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+        "term": "Chil-term-2",
+        "termEnglish": "Engl-term-2",
       },
-    ],
-    "term": "Chil-term-2",
-    "termEnglish": "Engl-term-2",
-  },
-  Object {
-    "contributor": "",
-    "id": "3",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
+        "id": "3",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+        "term": "Chil-term-no-english",
       },
-    ],
-    "term": "Chil-term-no-english",
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /terms when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "contributor": "",
-    "id": "1",
-    "tags": Array [
-      Object {
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
         "id": "1",
-        "label": "plants",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+        "term": "Chil-term-1",
+        "termEnglish": "Engl-term-1",
       },
-    ],
-    "term": "Chil-term-1",
-    "termEnglish": "Engl-term-1",
-  },
-  Object {
-    "contributor": "",
-    "id": "2",
-    "tags": Array [
-      Object {
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
         "id": "2",
-        "label": "animals",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+        "term": "Chil-term-2",
+        "termEnglish": "Engl-term-2",
       },
-    ],
-    "term": "Chil-term-2",
-    "termEnglish": "Engl-term-2",
-  },
-  Object {
-    "contributor": "",
-    "id": "3",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "contributor": "",
+        "id": "3",
+        "tags": Array [
+          Object {
+            "id": "2",
+            "label": "animals",
+          },
+        ],
+        "term": "Chil-term-no-english",
       },
-    ],
-    "term": "Chil-term-no-english",
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /transcribedAudioItems when all of the resources are published should fetch multiple resources of type transcribedAudio 1`] = `
-Array [
-  Object {
-    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
-    "id": "110",
-    "length": 20000,
-    "plainText": "
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+        "id": "110",
+        "length": 20000,
+        "plainText": "
 [12000] There once was a little wooden boy. [15550]
 [18300] His name was Pinocchio. [19240]",
-    "start": 0,
-    "tags": Array [
-      Object {
-        "id": "3",
-        "label": "placenames",
+        "start": 0,
+        "tags": Array [
+          Object {
+            "id": "3",
+            "label": "placenames",
+          },
+        ],
       },
-    ],
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /transcribedAudioItems when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
-    "id": "110",
-    "length": 20000,
-    "plainText": "
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+        "id": "110",
+        "length": 20000,
+        "plainText": "
 [12000] There once was a little wooden boy. [15550]
 [18300] His name was Pinocchio. [19240]",
-    "start": 0,
-    "tags": Array [
-      Object {
-        "id": "3",
-        "label": "placenames",
+        "start": 0,
+        "tags": Array [
+          Object {
+            "id": "3",
+            "label": "placenames",
+          },
+        ],
       },
-    ],
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /vocabularyLists when all of the resources are published should fetch multiple resources of type vocabularyList 1`] = `
-Array [
-  Object {
-    "entries": Array [
-      Object {
-        "term": Object {
-          "contributor": "",
-          "id": "1",
-          "term": "Chil-term-1",
-          "termEnglish": "Engl-term-1",
-        },
-        "variableValues": Object {
-          "person": "11",
-        },
-      },
-      Object {
-        "term": Object {
-          "contributor": "",
-          "id": "2",
-          "term": "Chil-term-2",
-          "termEnglish": "Engl-term-2",
-        },
-        "variableValues": Object {
-          "person": "21",
-        },
-      },
-    ],
-    "id": "1",
-    "name": "test VL 1 chil",
-    "nameEnglish": "test VL 1 engl",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-      },
-    ],
-    "variables": Array [
-      Object {
-        "name": "person",
-        "type": "dropbox",
-        "validValues": Array [
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "entries": Array [
           Object {
-            "display": "I",
-            "value": "11",
+            "term": Object {
+              "contributor": "",
+              "id": "1",
+              "term": "Chil-term-1",
+              "termEnglish": "Engl-term-1",
+            },
+            "variableValues": Object {
+              "person": "11",
+            },
           },
           Object {
-            "display": "We",
-            "value": "21",
+            "term": Object {
+              "contributor": "",
+              "id": "2",
+              "term": "Chil-term-2",
+              "termEnglish": "Engl-term-2",
+            },
+            "variableValues": Object {
+              "person": "21",
+            },
+          },
+        ],
+        "id": "1",
+        "name": "test VL 1 chil",
+        "nameEnglish": "test VL 1 engl",
+        "tags": Array [
+          Object {
+            "id": "1",
+            "label": "plants",
+          },
+        ],
+        "variables": Array [
+          Object {
+            "name": "person",
+            "type": "dropbox",
+            "validValues": Array [
+              Object {
+                "display": "I",
+                "value": "11",
+              },
+              Object {
+                "display": "We",
+                "value": "21",
+              },
+            ],
           },
         ],
       },
-    ],
-  },
-  Object {
-    "entries": Array [
-      Object {
-        "term": Object {
-          "contributor": "",
-          "id": "2",
-          "term": "Chil-term-2",
-          "termEnglish": "Engl-term-2",
-        },
-        "variableValues": Object {
-          "person": "23",
-        },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "entries": Array [
+          Object {
+            "term": Object {
+              "contributor": "",
+              "id": "2",
+              "term": "Chil-term-2",
+              "termEnglish": "Engl-term-2",
+            },
+            "variableValues": Object {
+              "person": "23",
+            },
+          },
+        ],
+        "id": "2",
+        "name": "test VL 2 CHIL- no engl name",
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
+        "variables": Array [],
       },
-    ],
-    "id": "2",
-    "name": "test VL 2 CHIL- no engl name",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
-      },
-    ],
-    "variables": Array [],
-  },
-]
+    },
+  ],
+}
 `;
 
 exports[`When fetching multiple resources GET /vocabularyLists when some of the resources are unpublished should return the expected number of results 1`] = `
-Array [
-  Object {
-    "entries": Array [],
-    "id": "1",
-    "name": "test VL 1 chil",
-    "nameEnglish": "test VL 1 engl",
-    "tags": Array [
-      Object {
+Object {
+  "actions": Array [],
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "entries": Array [],
         "id": "1",
-        "label": "plants",
-      },
-    ],
-    "variables": Array [
-      Object {
-        "name": "person",
-        "type": "dropbox",
-        "validValues": Array [
+        "name": "test VL 1 chil",
+        "nameEnglish": "test VL 1 engl",
+        "tags": Array [
           Object {
-            "display": "I",
-            "value": "11",
+            "id": "1",
+            "label": "plants",
           },
+        ],
+        "variables": Array [
           Object {
-            "display": "We",
-            "value": "21",
+            "name": "person",
+            "type": "dropbox",
+            "validValues": Array [
+              Object {
+                "display": "I",
+                "value": "11",
+              },
+              Object {
+                "display": "We",
+                "value": "21",
+              },
+            ],
           },
         ],
       },
-    ],
-  },
-  Object {
-    "entries": Array [],
-    "id": "2",
-    "name": "test VL 2 CHIL- no engl name",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "entries": Array [],
+        "id": "2",
+        "name": "test VL 2 CHIL- no engl name",
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
+        "variables": Array [],
       },
-    ],
-    "variables": Array [],
-  },
-]
+    },
+  ],
+}
 `;

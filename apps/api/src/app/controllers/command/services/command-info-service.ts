@@ -16,6 +16,7 @@ const buildCommandTypeFilter = (
         return (commandType: string) => context.getAvailableCommands().includes(commandType);
 
     return (commandType: string) =>
+        // DO NOT DEFAULT TO [] here. Failing to decorate the Resource class should break things!
         Reflect.getMetadata(INDEX_SCOPED_COMMANDS, context).includes(commandType);
 };
 
@@ -25,7 +26,7 @@ export type CommandInfo = CommandMetadataBase & {
     schema: Record<string, unknown>;
 };
 
-export interface CommandWriteContext {
+interface CommandWriteContext {
     getAvailableCommands(): string[];
 }
 
