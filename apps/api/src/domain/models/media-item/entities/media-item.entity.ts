@@ -7,7 +7,6 @@ import {
     ValidateNested,
 } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { CommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -24,7 +23,7 @@ import { ContributorAndRole } from '../../song/ContributorAndRole';
 import { MIMEType } from '../types/MIMEType';
 
 @RegisterIndexScopedCommands([])
-export class MediaItem extends Resource implements ITimeBoundable, CommandWriteContext {
+export class MediaItem extends Resource implements ITimeBoundable {
     @IsStrictlyEqualTo(ResourceType.mediaItem)
     readonly type = ResourceType.mediaItem;
 

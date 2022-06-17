@@ -86,6 +86,8 @@ export abstract class Resource extends BaseDomainModel implements HasAggregateId
         } as unknown as DeepPartial<DTO<T>>);
     }
 
+    abstract getAvailableCommands(): string[];
+
     /**
      * The name of this method is a bit misleading. It merely adds an event
      * to the list of historical events without updating the state.
