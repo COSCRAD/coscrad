@@ -1,5 +1,4 @@
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { CommandWriteContext } from '../../../app/controllers/command/services/command-info-service';
 import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import geometricFeatureValidator from '../../domainModelValidators/spatialFeatureValidator/geometricFeatureValidator';
@@ -12,7 +11,7 @@ import { PolygonCoordinates } from './types/Coordinates/PolygonCoordinates';
 import { GeometricFeatureType } from './types/GeometricFeatureType';
 
 @RegisterIndexScopedCommands([])
-export class Polygon extends Resource implements ISpatialFeature, CommandWriteContext {
+export class Polygon extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
 
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.polygon, PolygonCoordinates>;
