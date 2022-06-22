@@ -5,6 +5,7 @@ import { ISpecification } from '../../domain/repositories/interfaces/specificati
 import { AggregateId } from '../../domain/types/AggregateId';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
+import { IdManagementService } from '../../lib/id-generation/id-management.service';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { DeepPartial } from '../../types/DeepPartial';
@@ -33,6 +34,8 @@ export class RepositoryForEntity<TEntity extends HasAggregateId & BaseDomainMode
     #mapDocumentToEntityDTO: (doc: DatabaseDocument<TEntity>) => DTO<TEntity>;
 
     #mapEntityDTOToDocument: (dto: DTO<TEntity>) => DatabaseDocument<TEntity>;
+
+    #idManager: IdManagementService;
 
     constructor(
         arangoDatabaseProvider: DatabaseProvider,

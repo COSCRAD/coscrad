@@ -1,68 +1,55 @@
-import { Ack, CommandHandler, ICommandHandler } from '@coscrad/commands';
-import { buildSimpleValidationFunction } from '@coscrad/validation';
-import { Inject } from '@nestjs/common';
+import { CommandHandler } from '@coscrad/commands';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../lib/types/not-found';
-import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
-import { IIdGenerator } from '../../../interfaces/id-generator.interface';
-import { ResourceType } from '../../../types/ResourceType';
-import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import { Valid } from '../../../domainModelValidators/Valid';
+import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
+import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
+import { CommandHandlerBase } from '../../shared/command-handlers/command-handler-base';
 import { Song } from '../song.entity';
 import { PublishSong } from './publish-song.command';
 import { SongPublished } from './song-published.event';
 
 @CommandHandler(PublishSong)
-export class PublishSongCommandHandler implements ICommandHandler {
-    constructor(
-        private readonly repositoryProvider: RepositoryProvider,
-        @Inject('ID_MANAGER') private readonly idGenerator: IIdGenerator
-    ) {}
-
-    async execute(command: PublishSong): Promise<Ack | InternalError> {
-        const payloadTypeErrors = buildSimpleValidationFunction(
-            Object.getPrototypeOf(command).constructor
-        )(command).map(
-            (simpleError) => new InternalError(`invalid payload type: ${simpleError.toString()}`)
-        );
-
-        if (payloadTypeErrors.length > 0) {
-            return new InvalidCommandPayloadTypeError('PUBLISH_SONG', payloadTypeErrors);
-        }
-
-        // validate external state
-        const { id } = command;
-
-        const searchResult = await this.repositoryProvider
+export class PublishSongCommandHandler extends CommandHandlerBase<Song> {
+    async createOrFetchWriteContext({ id }: PublishSong): Promise<ResultOrError<Song>> {
+        const existingSongSearchResult = await this.repositoryProvider
             .forResource<Song>(ResourceType.song)
             .fetchById(id);
 
-        if (isInternalError(searchResult)) {
-            throw new InternalError(`Encountered an error when fetching song: ${id}`, [
-                searchResult,
-            ]);
+        if (isNotFound(existingSongSearchResult))
+            return new InternalError(`There is no song with the id: ${id}`);
+
+        if (isInternalError(existingSongSearchResult)) {
+            throw existingSongSearchResult;
         }
 
-        if (isNotFound(searchResult)) {
-            return new InternalError(`There is no song with id: ${id}`);
-        }
+        return existingSongSearchResult;
+    }
 
-        const updatedInstance = searchResult.publish();
+    actOnInstance(song: Song): ResultOrError<Song> {
+        return song.publish();
+    }
 
-        // the model checks if the state transition is allowed and if invariants are still satisfied
-        if (isInternalError(updatedInstance)) {
-            return updatedInstance;
-        }
+    async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
+        return buildInMemorySnapshot({});
+    }
 
-        const eventId = await this.idGenerator.generate();
+    validateExternalState(_: InMemorySnapshot, __: Song): Valid | InternalError {
+        return Valid;
+    }
 
-        const instanceToCreateWithEventHistory = updatedInstance.addEventToHistory(
+    async persist(song: Song, command: PublishSong): Promise<void> {
+        const eventId = await this.idManager.generate();
+
+        await this.idManager.use(eventId);
+
+        const instanceToCreateWithEventHistory = song.addEventToHistory(
             new SongPublished(command, eventId)
         );
 
         await this.repositoryProvider
             .forResource<Song>(ResourceType.song)
             .update(instanceToCreateWithEventHistory);
-
-        return Ack;
     }
 }

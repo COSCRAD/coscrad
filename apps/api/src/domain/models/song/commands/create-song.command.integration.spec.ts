@@ -124,6 +124,18 @@ describe('CreateSong', () => {
         });
     });
 
+    describe('when the id has not been generated via our system', () => {
+        it('should return the expected error', async () => {
+            const bogusId = '4604b265-3fbd-4e1c-9603-66c43773aec0';
+
+            const commandFSA = buildValidCommandFSA(bogusId);
+
+            const result = await commandHandlerService.execute(commandFSA);
+
+            expect(result).toBeInstanceOf(InternalError);
+        });
+    });
+
     describe('when the song to create does not satisfy invariant validation rules', () => {
         describe('when creating a song with no title in any language', () => {
             it('should return the expected error', async () => {

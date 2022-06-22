@@ -30,7 +30,7 @@ export class CommandHandlerService {
 
         const commandInstance = this.#buildCommand({ type, payload });
 
-        return handler.execute(commandInstance);
+        return handler.execute(commandInstance, type);
     }
 
     #buildCommand({ type, payload }: FluxStandardAction): ICommand {
