@@ -1,6 +1,7 @@
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { Resource } from '../../../domain/models/resource.entity';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import { PublishSongCommandHandler } from '../../../domain/models/song/commands/publish-song.command-handler';
@@ -11,7 +12,6 @@ import generateRandomTestDatabaseName from '../../../persistence/repositories/__
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import buildMockUuidGenerator from '../command/__tests__/buildMockUuidGenerator';
 import buildViewModelPathForRe from '../utilities/buildViewModelPathForResourceType';
 import setUpIntegrationTest from './setUpIntegrationTest';
 
@@ -25,6 +25,8 @@ describe('GET /resources (fetch view models)', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
     let commandHandlerService: CommandHandlerService;
+
+    let idManager: IIdManager;
 
     const testData = buildTestData();
 
@@ -45,20 +47,25 @@ describe('GET /resources (fetch view models)', () => {
     );
 
     beforeAll(async () => {
-        ({ app, arangoConnectionProvider, testRepositoryProvider, commandHandlerService } =
-            await setUpIntegrationTest({
-                ARANGO_DB_NAME: testDatabaseName,
-                BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
-            }));
+        ({
+            app,
+            arangoConnectionProvider,
+            testRepositoryProvider,
+            idManager,
+            commandHandlerService,
+        } = await setUpIntegrationTest({
+            ARANGO_DB_NAME: testDatabaseName,
+            BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
+        }));
 
         commandHandlerService.registerHandler(
             'CREATE_SONG',
-            new CreateSongCommandHandler(testRepositoryProvider, buildMockUuidGenerator())
+            new CreateSongCommandHandler(testRepositoryProvider, idManager)
         );
 
         commandHandlerService.registerHandler(
             'PUBLISH_SONG',
-            new PublishSongCommandHandler(testRepositoryProvider, buildMockUuidGenerator())
+            new PublishSongCommandHandler(testRepositoryProvider, idManager)
         );
     });
 

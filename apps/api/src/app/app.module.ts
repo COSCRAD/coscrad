@@ -2,6 +2,7 @@ import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthorizationModule } from '../authorization/authorization.module';
+import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
 import { DatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { RepositoryProvider } from '../persistence/repositories/repository.provider';
@@ -46,6 +47,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         BibliographicReferenceModule,
         SpatialFeatureModule,
         CommandModule,
+        IdGenerationModule,
     ],
     controllers: [
         AppController,

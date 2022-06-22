@@ -5,12 +5,12 @@ Array [
   Object {
     "audioURL": "https://www.mysound.org/song.mp3",
     "contributorAndRoles": Array [],
-    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+    "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0004",
     "lengthMilliseconds": 15340,
     "lyrics": "la la la",
     "meta": Object {
       "dateCreated": 1586044800000,
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb7f",
+      "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0005",
     },
     "title": "test-song-name (language)",
     "titleEnglish": "test-song-name (English)",

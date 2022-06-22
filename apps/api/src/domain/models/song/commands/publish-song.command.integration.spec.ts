@@ -1,5 +1,4 @@
 import { Ack, CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
-import buildMockUuidGenerator from '../../../../app/controllers/command/__tests__/buildMockUuidGenerator';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -7,6 +6,7 @@ import generateRandomTestDatabaseName from '../../../../persistence/repositories
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../types/DTO';
 import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
@@ -33,15 +33,17 @@ describe('PublishSong', () => {
 
     let arangoConnectionProvider: ArangoConnectionProvider;
 
+    let idManager: IIdManager;
+
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, arangoConnectionProvider } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, arangoConnectionProvider } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateRandomTestDatabaseName(),
             }));
 
         commandHandlerService.registerHandler(
             publishSongCommandType,
-            new PublishSongCommandHandler(testRepositoryProvider, buildMockUuidGenerator())
+            new PublishSongCommandHandler(testRepositoryProvider, idManager)
         );
     });
 

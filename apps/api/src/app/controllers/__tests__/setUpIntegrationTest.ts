@@ -1,5 +1,6 @@
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
+import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
@@ -14,14 +15,16 @@ type TestModuleInstances = {
     testRepositoryProvider: TestRepositoryProvider;
     commandHandlerService: CommandHandlerService;
     app: INestApplication;
+    idManager: IIdManager;
 };
 
 export default async (
-    configOverrides: Partial<DTO<EnvironmentVariables>>
+    configOverrides: Partial<DTO<EnvironmentVariables>>,
+    { shouldMockIdGenerator }: { shouldMockIdGenerator: boolean } = { shouldMockIdGenerator: false }
 ): Promise<TestModuleInstances> => {
     jest.resetModules();
 
-    const moduleRef = await createTestModule(configOverrides);
+    const moduleRef = await createTestModule(configOverrides, { shouldMockIdGenerator });
 
     const arangoConnectionProvider =
         moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
@@ -36,7 +39,15 @@ export default async (
 
     const commandHandlerService = moduleRef.get<CommandHandlerService>(CommandHandlerService);
 
-    if (!arangoConnectionProvider || !databaseProvider || !testRepositoryProvider || !app) {
+    const idManager = moduleRef.get<IIdManager>('ID_MANAGER');
+
+    if (
+        !arangoConnectionProvider ||
+        !databaseProvider ||
+        !testRepositoryProvider ||
+        !app ||
+        !idManager
+    ) {
         throw new InternalError(`Failed to initialize a testing module.`);
     }
 
@@ -46,5 +57,6 @@ export default async (
         testRepositoryProvider,
         commandHandlerService,
         app,
+        idManager,
     };
 };

@@ -3,25 +3,35 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { IIdRepository } from '../../lib/id-generation/interfaces/id-repository.interface';
 import { UuidDocument } from '../../lib/id-generation/types/UuidDocument';
 import { Maybe } from '../../lib/types/maybe';
-import { isNotFound } from '../../lib/types/not-found';
-import { ArangoDatabase } from './arango-database';
-import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
-import mapDatabaseDTOToEntityDTO from './utilities/mapDatabaseDTOToEntityDTO';
-import mapEntityDTOToDatabaseDTO, { DatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
+import { isNotFound, NotFound } from '../../lib/types/not-found';
+import { ArangoDatabase } from '../database/arango-database';
+import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
+import { DatabaseProvider } from '../database/database.provider';
+import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
+import mapEntityDTOToDatabaseDTO, {
+    DatabaseDocument,
+} from '../database/utilities/mapEntityDTOToDatabaseDTO';
 
 type IdDocument = DatabaseDocument<{ id: AggregateId; isAvailable: boolean }>;
 
 export class ArangoIdRepository implements IIdRepository<AggregateId> {
-    constructor(private readonly arangoDatabase: ArangoDatabase) {}
+    private readonly arangoDatabase: ArangoDatabase;
+
+    constructor(private readonly databaseProvider: DatabaseProvider) {
+        this.arangoDatabase = databaseProvider.getDBInstance();
+    }
 
     async fetchById(id: AggregateId): Promise<Maybe<UuidDocument<string>>> {
         const result = await this.arangoDatabase.fetchById<
             DatabaseDocument<UuidDocument<AggregateId>>
         >(id, ArangoCollectionId.uuid);
 
-        return isNotFound(result)
-            ? result
-            : mapDatabaseDTOToEntityDTO<UuidDocument<AggregateId>>(result);
+        if (isNotFound(result)) return NotFound;
+
+        const { id: docId, isAvailable } =
+            mapDatabaseDTOToEntityDTO<UuidDocument<AggregateId>>(result);
+
+        return { id: docId, isAvailable };
     }
 
     async create(id: AggregateId): Promise<void> {

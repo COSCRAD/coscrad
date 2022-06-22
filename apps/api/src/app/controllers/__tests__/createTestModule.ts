@@ -10,6 +10,7 @@ import { SpatialFeatureQueryService } from '../../../domain/services/query-servi
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { TranscribedAudioQueryService } from '../../../domain/services/query-services/transribed-audio-query.service';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
+import { IdManagementService } from '../../../lib/id-generation/id-management.service';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
@@ -21,7 +22,9 @@ import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMo
 import { CategoryController } from '../category.controller';
 import { CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
+import { MockIdManager } from '../command/__tests__/MockIdManager';
 import { EdgeConnectionController } from '../edgeConnection.controller';
+import { IdGenerationController } from '../id-generation/id-generation.controller';
 import { BibliographicReferenceController } from '../resources/bibliographic-reference.controller';
 import { BookController } from '../resources/book.controller';
 import { MediaItemController } from '../resources/media-item.controller';
@@ -34,7 +37,12 @@ import { TranscribedAudioController } from '../resources/transcribed-audio.contr
 import { VocabularyListController } from '../resources/vocabulary-list.controller';
 import { TagController } from '../tag.controller';
 
-export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
+const mockIdManager = new MockIdManager();
+
+export default async (
+    configOverrides: Partial<DTO<EnvironmentVariables>>,
+    { shouldMockIdGenerator }: { shouldMockIdGenerator: boolean } = { shouldMockIdGenerator: false }
+) =>
     Test.createTestingModule({
         imports: [CommandModule],
         providers: [
@@ -156,6 +164,14 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
                 ) => new BibliographicReferenceQueryService(repositoryProvider, commandInfoService),
                 inject: [RepositoryProvider, CommandInfoService],
             },
+            {
+                provide: 'ID_MANAGER',
+                useFactory: (repositoryProvider: RepositoryProvider) =>
+                    shouldMockIdGenerator
+                        ? mockIdManager
+                        : new IdManagementService(repositoryProvider.getIdRepository()),
+                inject: [RepositoryProvider],
+            },
         ],
 
         controllers: [
@@ -173,5 +189,6 @@ export default async (configOverrides: Partial<DTO<EnvironmentVariables>>) =>
             BibliographicReferenceController,
             CategoryController,
             CommandController,
+            IdGenerationController,
         ],
     }).compile();

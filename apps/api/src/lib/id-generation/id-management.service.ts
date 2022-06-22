@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { IIdManager } from '../../domain/interfaces/id-manager.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
@@ -10,7 +10,9 @@ import { IIdRepository } from './interfaces/id-repository.interface';
 
 @Injectable()
 export class IdManagementService implements IIdManager {
-    constructor(private readonly idRepository: IIdRepository<AggregateId>) {}
+    constructor(
+        @Inject('ID_REPOSITORY') private readonly idRepository: IIdRepository<AggregateId>
+    ) {}
 
     async generate(): Promise<string> {
         const id = await uuidv4();
@@ -39,15 +41,15 @@ export class IdManagementService implements IIdManager {
          * The requested id exists (has been generated with our system) and is
          * available for use.
          */
-        return OK;
+        return Promise.resolve(OK);
     }
 
     async use(id: AggregateId): Promise<void> {
         const status = await this.status(id);
 
-        const statusMessage = isNotFound(status) ? 'Not Found' : 'Not Available';
-
         if (!isOK(status)) {
+            const statusMessage = isNotFound(status) ? 'Not Found' : 'Not Available';
+
             throw new InternalError(
                 `The system-generated ID: ${id} cannot be used because its status is: ${statusMessage}`
             );

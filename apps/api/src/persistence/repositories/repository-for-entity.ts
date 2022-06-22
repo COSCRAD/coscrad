@@ -7,6 +7,7 @@ import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
+import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
 import { ArangoDatabaseForCollection } from '../database/arango-database-for-collection';
@@ -100,6 +101,9 @@ export class RepositoryForEntity<TEntity extends HasAggregateId & BaseDomainMode
     async update(updatedEntity: TEntity) {
         const updatedDTO = this.#mapEntityDTOToDocument(updatedEntity.toDTO());
 
-        return this.#arangoDatabaseForEntitysCollection.update(updatedEntity.id, updatedDTO);
+        return this.#arangoDatabaseForEntitysCollection.update(
+            updatedEntity.id,
+            updatedDTO as DeepPartial<DatabaseDocument<TEntity>>
+        );
     }
 }

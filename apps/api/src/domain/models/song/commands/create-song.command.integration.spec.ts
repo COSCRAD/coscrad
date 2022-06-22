@@ -1,5 +1,4 @@
 import { Ack, CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
-import buildMockUuidGenerator from '../../../../app/controllers/command/__tests__/buildMockUuidGenerator';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -9,20 +8,20 @@ import { DTO } from '../../../../types/DTO';
 import InvalidEntityDTOError from '../../../domainModelValidators/errors/InvalidEntityDTOError';
 import MissingSongTitleError from '../../../domainModelValidators/errors/song/MissingSongTitleError';
 import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import { IIdManager } from '../../../interfaces/id-manager.interface';
+import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
 import { CreateSong } from './create-song.command';
 import { CreateSongCommandHandler } from './create-song.command-handler';
 
-const dummyUuid = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d';
-
 const createSongCommandType = 'CREATE_SONG';
 
-const validCommandFSA: FluxStandardAction<DTO<CreateSong>> = {
+const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateSong>> => ({
     type: createSongCommandType,
     payload: {
-        id: dummyUuid,
+        id,
         title: 'test-song-name (language)',
         titleEnglish: 'test-song-name (English)',
         contributorAndRoles: [],
@@ -30,9 +29,8 @@ const validCommandFSA: FluxStandardAction<DTO<CreateSong>> = {
         audioURL: 'https://www.mysound.org/song.mp3',
         lengthMilliseconds: 15340,
     },
-};
+});
 
-const validPayload = validCommandFSA.payload;
 describe('CreateSong', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -40,15 +38,17 @@ describe('CreateSong', () => {
 
     let arangoConnectionProvider: ArangoConnectionProvider;
 
+    let idManager: IIdManager;
+
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, arangoConnectionProvider } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, arangoConnectionProvider } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateRandomTestDatabaseName(),
             }));
 
         commandHandlerService.registerHandler(
             createSongCommandType,
-            new CreateSongCommandHandler(testRepositoryProvider, buildMockUuidGenerator())
+            new CreateSongCommandHandler(testRepositoryProvider, idManager)
         );
     });
 
@@ -66,7 +66,9 @@ describe('CreateSong', () => {
 
     describe('when the payload is valid', () => {
         it('should succeed', async () => {
-            const result = await commandHandlerService.execute(validCommandFSA);
+            const newId = await idManager.generate();
+
+            const result = await commandHandlerService.execute(buildValidCommandFSA(newId));
 
             expect(result).toBe(Ack);
         });
@@ -75,10 +77,14 @@ describe('CreateSong', () => {
     describe('when the payload has an invalid type', () => {
         describe('when the id property has an invalid type (number[])', () => {
             it('should return an error', async () => {
+                const newId = await idManager.generate();
+
+                const validCommandFSA = buildValidCommandFSA(newId);
+
                 const result = await commandHandlerService.execute({
                     ...validCommandFSA,
                     payload: {
-                        ...validPayload,
+                        ...validCommandFSA.payload,
                         id: [99],
                     },
                 });
@@ -95,12 +101,16 @@ describe('CreateSong', () => {
     describe('when the external state is invalid', () => {
         describe('when there is already a song with the given ID', () => {
             it('should return the expected error', async () => {
+                const newId = await idManager.generate();
+
+                const validCommandFSA = buildValidCommandFSA(newId);
+
                 await testRepositoryProvider.addFullSnapshot(
                     buildInMemorySnapshot({
                         resources: {
                             [ResourceType.song]: [
                                 getValidResourceInstanceForTest(ResourceType.song).clone({
-                                    id: dummyUuid,
+                                    id: newId,
                                 }),
                             ],
                         },
@@ -117,10 +127,14 @@ describe('CreateSong', () => {
     describe('when the song to create does not satisfy invariant validation rules', () => {
         describe('when creating a song with no title in any language', () => {
             it('should return the expected error', async () => {
+                const newId = await idManager.generate();
+
+                const validCommandFSA = buildValidCommandFSA(newId);
+
                 const fsa: FluxStandardAction<DTO<CreateSong>> = {
                     ...validCommandFSA,
                     payload: {
-                        ...validPayload,
+                        ...validCommandFSA.payload,
                         title: undefined,
                         titleEnglish: undefined,
                     },
@@ -129,7 +143,7 @@ describe('CreateSong', () => {
                 const result = await commandHandlerService.execute(fsa);
 
                 expect(result).toEqual(
-                    new InvalidEntityDTOError(ResourceType.song, validPayload.id, [
+                    new InvalidEntityDTOError(ResourceType.song, validCommandFSA.payload.id, [
                         new MissingSongTitleError(),
                     ])
                 );

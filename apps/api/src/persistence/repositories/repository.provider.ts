@@ -11,7 +11,9 @@ import { ICategoryRepositoryProvider } from '../../domain/repositories/interface
 import { IEdgeConnectionRepositoryProvider } from '../../domain/repositories/interfaces/IEdgeConnectionRepositoryProvider';
 import { ITagRepositoryProvider } from '../../domain/repositories/interfaces/ITagRepositoryProvider';
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider';
+import { AggregateId } from '../../domain/types/AggregateId';
 import { ResourceType } from '../../domain/types/ResourceType';
+import { IIdRepository } from '../../lib/id-generation/interfaces/id-repository.interface';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { getArangoCollectionIDFromResourceType } from '../database/collection-references/getArangoCollectionIDFromResourceType';
 import { DatabaseProvider } from '../database/database.provider';
@@ -19,6 +21,7 @@ import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapA
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoIdRepository } from './arango-id-repository';
 import ArangoCategoryRepository from './ArangoCategoryRepository';
 import { RepositoryForEntity } from './repository-for-entity';
 
@@ -54,6 +57,10 @@ export class RepositoryProvider
 
     getCategoryRepository(): ICategoryRepository {
         return new ArangoCategoryRepository(this.databaseProvider);
+    }
+
+    getIdRepository(): IIdRepository<AggregateId> {
+        return new ArangoIdRepository(this.databaseProvider);
     }
 
     forResource<TResource extends Resource>(resourceType: ResourceType) {

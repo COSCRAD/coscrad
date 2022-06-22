@@ -200,14 +200,23 @@ export class ArangoDatabase {
         `;
 
         const bindVars = {
-            updatedDto,
+            updatedDto: {
+                _key: key,
+                ...updatedDto,
+            },
             '@collectionName': collectionName,
         };
 
-        await this.#db.query({
-            query,
-            bindVars,
-        });
+        await this.#db
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((err) => {
+                throw new InternalError(
+                    `Failed to update dto: ${updatedDto} in ${collectionName}. \n Arango errors: ${err}`
+                );
+            });
     };
 
     // TODO Add Soft Delete

@@ -2,10 +2,10 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import getValidResourceInstanceForTest from '../../../domain/domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import { Song } from '../../../domain/models/song/song.entity';
-import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
@@ -13,14 +13,13 @@ import TestRepositoryProvider from '../../../persistence/repositories/__tests__/
 import { DTO } from '../../../types/DTO';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
-import buildMockUuidGenerator from './__tests__/buildMockUuidGenerator';
 
 const commandEndpoint = `/commands`;
 
-const validCommandFSA: FluxStandardAction<DTO<CreateSong>> = {
+const buildValidCommandFSA = (id: string): FluxStandardAction<DTO<CreateSong>> => ({
     type: 'CREATE_SONG',
     payload: {
-        id: buildDummyUuid(),
+        id,
         title: 'test-song-name (language)',
         titleEnglish: 'test-song-name (English)',
         contributorAndRoles: [],
@@ -28,11 +27,9 @@ const validCommandFSA: FluxStandardAction<DTO<CreateSong>> = {
         audioURL: 'https://www.mysound.org/song.mp3',
         lengthMilliseconds: 15340,
     },
-};
+});
 
 const existingSong = getValidResourceInstanceForTest(ResourceType.song);
-
-const validPayload = validCommandFSA.payload;
 
 /**
  * This is a high level integration test. It's purpose is to check that
@@ -46,14 +43,20 @@ describe('The Command Controller', () => {
 
     let commandHandlerService: CommandHandlerService;
 
+    let idManager: IIdManager;
+
     beforeAll(async () => {
-        ({ testRepositoryProvider, app, commandHandlerService } = await setUpIntegrationTest({
-            ARANGO_DB_NAME: generateRandomTestDatabaseName(),
-        }));
+        ({ testRepositoryProvider, app, commandHandlerService, idManager } =
+            await setUpIntegrationTest(
+                {
+                    ARANGO_DB_NAME: generateRandomTestDatabaseName(),
+                },
+                { shouldMockIdGenerator: true }
+            ));
 
         commandHandlerService.registerHandler(
             'CREATE_SONG',
-            new CreateSongCommandHandler(testRepositoryProvider, buildMockUuidGenerator())
+            new CreateSongCommandHandler(testRepositoryProvider, idManager)
         );
 
         jest.useFakeTimers().setSystemTime(new Date('2020-04-05'));
@@ -61,6 +64,12 @@ describe('The Command Controller', () => {
 
     describe('when the command type is invalid', () => {
         it('should return a 400', async () => {
+            const idResponse = await request(app.getHttpServer()).post(`/ids`);
+
+            const id = idResponse.text;
+
+            const validPayload = buildValidCommandFSA(id).payload;
+
             const result = await request(app.getHttpServer()).post(commandEndpoint).send({
                 type: 'DO_BAD_THINGS',
                 payload: validPayload,
@@ -72,6 +81,12 @@ describe('The Command Controller', () => {
 
     describe('when the payload is valid', () => {
         it('should return a 200', async () => {
+            const idResponse = await request(app.getHttpServer()).post(`/ids`);
+
+            const id = idResponse.text;
+
+            const validCommandFSA = buildValidCommandFSA(id);
+
             const result = await request(app.getHttpServer())
                 .post(commandEndpoint)
                 .send(validCommandFSA);
@@ -80,6 +95,14 @@ describe('The Command Controller', () => {
         });
 
         it('should persist the result', async () => {
+            const idResponse = await request(app.getHttpServer()).post(`/ids`);
+
+            const id = idResponse.text;
+
+            const validCommandFSA = buildValidCommandFSA(id);
+
+            const { payload: validPayload } = validCommandFSA;
+
             await request(app.getHttpServer()).post(commandEndpoint).send(validCommandFSA);
 
             const result = await testRepositoryProvider
@@ -88,7 +111,7 @@ describe('The Command Controller', () => {
 
             const test = result as Song;
 
-            expect(test.id).toBe(validCommandFSA.payload.id);
+            expect(test.id).toBe(validPayload.id);
 
             // A create event should be the only one in the song's history
             expect(test.eventHistory).toHaveLength(1);
@@ -99,6 +122,14 @@ describe('The Command Controller', () => {
 
     describe('when the payload has an invalid type', () => {
         it('should return a 400', async () => {
+            const idResponse = await request(app.getHttpServer()).post(`/ids`);
+
+            const id = idResponse.text;
+
+            const validCommandFSA = buildValidCommandFSA(id);
+
+            const { payload: validPayload } = validCommandFSA;
+
             const result = await request(app.getHttpServer())
                 .post(commandEndpoint)
                 .send({
@@ -112,6 +143,14 @@ describe('The Command Controller', () => {
 
     describe('when the command violates invariants through the model update', () => {
         it('should return a 400', async () => {
+            const idResponse = await request(app.getHttpServer()).post(`/ids`);
+
+            const id = idResponse.text;
+
+            const validCommandFSA = buildValidCommandFSA(id);
+
+            const { payload: validPayload } = validCommandFSA;
+
             const result = await request(app.getHttpServer())
                 .post(commandEndpoint)
                 .send({
@@ -129,6 +168,14 @@ describe('The Command Controller', () => {
 
     describe('when there is an invalid external state', () => {
         it('should return a 400', async () => {
+            const idResponse = await request(app.getHttpServer()).post(`/ids`);
+
+            const id = idResponse.text;
+
+            const validCommandFSA = buildValidCommandFSA(id);
+
+            const { payload: validPayload } = validCommandFSA;
+
             await testRepositoryProvider.addFullSnapshot(
                 buildInMemorySnapshot({
                     resources: {

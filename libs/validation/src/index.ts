@@ -14,6 +14,7 @@ export {
     IsOptional,
     IsPositive,
     IsUrl,
+    isUUID,
     IsUUID,
     ValidateNested,
 } from 'class-validator';

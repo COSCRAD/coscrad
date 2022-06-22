@@ -67,6 +67,8 @@ export class CreateSongCommandHandler implements ICommandHandler {
             throw new InternalError(`Unrecognized status for id: ${String(idStatus)}`);
         }
 
+        await this.idManager.use(id);
+
         const songDTO: DTO<Song> = {
             ...command,
             published: false,
@@ -85,6 +87,8 @@ export class CreateSongCommandHandler implements ICommandHandler {
 
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
+
+        await this.idManager.use(eventId);
 
         const instanceToPersistWithUpdatedEventHistory = instanceToPersist.addEventToHistory(
             new SongCreated(command, eventId)
