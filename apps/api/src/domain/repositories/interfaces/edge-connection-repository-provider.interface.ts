@@ -1,4 +1,4 @@
-import { IEdgeConnectionRepository } from './IEdgeConnectionRepository';
+import { IEdgeConnectionRepository } from './edge-connection-repository.interface';
 
 export interface IEdgeConnectionRepositoryProvider {
     getEdgeConnectionRepository: () => IEdgeConnectionRepository;

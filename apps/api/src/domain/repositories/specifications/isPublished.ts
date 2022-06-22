@@ -1,6 +1,6 @@
 import { Criterion } from '../interfaces/Criterion';
-import { ISpecification } from '../interfaces/ISpecification';
 import { QueryOperator } from '../interfaces/QueryOperator';
+import { ISpecification } from '../interfaces/specification.interface';
 
 interface Publishable {
     published: boolean;

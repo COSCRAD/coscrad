@@ -2,7 +2,7 @@ import { Maybe } from '../../../lib/types/maybe';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
 import { AggregateId } from '../../types/AggregateId';
-import { ISpecification } from './ISpecification';
+import { ISpecification } from './specification.interface';
 
 export interface IEdgeConnectionRepository {
     /**

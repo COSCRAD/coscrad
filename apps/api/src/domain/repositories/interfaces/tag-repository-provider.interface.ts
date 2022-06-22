@@ -1,4 +1,4 @@
-import { TagRepository } from './TagRepository';
+import { TagRepository } from './tag-repository.interface';
 
 export interface ITagRepositoryProvider {
     getTagRepository: () => TagRepository;

@@ -1,4 +1,4 @@
-import { isNonNegativeFiniteNumber } from '@coscrad/validation';
+import { isPositiveInteger } from '@coscrad/validation';
 import { IIdManager } from '../../../../domain/interfaces/id-manager.interface';
 import { AggregateId } from '../../../../domain/types/AggregateId';
 import { InternalError } from '../../../../lib/errors/InternalError';
@@ -8,14 +8,19 @@ import { isOK, OK } from '../../../../lib/types/ok';
 
 const numberOfReservedDigits = 4;
 
-const maxIdIndex = 999;
+/**
+ * Incrementing the index brings this to 10**n - 1, which will have n chars when
+ * converted to string. Anything beyond this will have too many characters to
+ * fit the pattern.
+ */
+const maxIdIndex = 10 ** numberOfReservedDigits - 2;
 
 const hardwiredUuidPrefix = '41fb2d7f-c483-4e09-a1f0-e9909a6b';
 
 const fillerChar = '0';
 
 const buildId = (sequentialId: number) => {
-    if (!Number.isInteger(sequentialId) || !isNonNegativeFiniteNumber(sequentialId)) {
+    if (!isPositiveInteger(sequentialId)) {
         throw new InternalError(`Invalid sequential id: ${sequentialId}`);
     }
 

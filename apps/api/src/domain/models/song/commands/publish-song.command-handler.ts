@@ -15,7 +15,7 @@ import { SongPublished } from './song-published.event';
 export class PublishSongCommandHandler implements ICommandHandler {
     constructor(
         private readonly repositoryProvider: RepositoryProvider,
-        @Inject('ID_GENERATOR') private readonly idGenerator: IIdGenerator
+        @Inject('ID_MANAGER') private readonly idGenerator: IIdGenerator
     ) {}
 
     async execute(command: PublishSong): Promise<Ack | InternalError> {

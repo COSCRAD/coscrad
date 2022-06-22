@@ -6,11 +6,8 @@ import buildInstanceFactory from '../../domain/factories/utilities/buildInstance
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import { Resource } from '../../domain/models/resource.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
-import { ICategoryRepository } from '../../domain/repositories/interfaces/ICategoryRepository';
-import { ICategoryRepositoryProvider } from '../../domain/repositories/interfaces/ICategoryRepositoryProvider';
-import { IEdgeConnectionRepositoryProvider } from '../../domain/repositories/interfaces/IEdgeConnectionRepositoryProvider';
-import { ITagRepositoryProvider } from '../../domain/repositories/interfaces/ITagRepositoryProvider';
-import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider';
+import { ICategoryRepository } from '../../domain/repositories/interfaces/category-repository.interface';
+import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { IIdRepository } from '../../lib/id-generation/interfaces/id-repository.interface';
@@ -26,13 +23,7 @@ import ArangoCategoryRepository from './ArangoCategoryRepository';
 import { RepositoryForEntity } from './repository-for-entity';
 
 @Injectable()
-export class RepositoryProvider
-    implements
-        IRepositoryProvider,
-        IEdgeConnectionRepositoryProvider,
-        ITagRepositoryProvider,
-        ICategoryRepositoryProvider
-{
+export class RepositoryProvider implements IRepositoryProvider {
     constructor(protected databaseProvider: DatabaseProvider) {}
 
     getEdgeConnectionRepository() {

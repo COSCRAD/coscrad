@@ -1,7 +1,7 @@
 import categoryValidator from '../../domain/domainModelValidators/categoryValidator';
 import buildInstanceFactory from '../../domain/factories/utilities/buildInstanceFactory';
 import { Category } from '../../domain/models/categories/entities/category.entity';
-import { ICategoryRepository } from '../../domain/repositories/interfaces/ICategoryRepository';
+import { ICategoryRepository } from '../../domain/repositories/interfaces/category-repository.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';

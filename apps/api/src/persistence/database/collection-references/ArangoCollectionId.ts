@@ -5,7 +5,7 @@ import { ArangoEdgeCollectionId } from './ArangoEdgeCollectionId';
 export const ArangoCollectionId = {
     ...ArangoDocumentCollectionId,
     ...ArangoEdgeCollectionId,
-    uuid: 'uuid',
+    uuids: 'uuids',
 };
 
 /**

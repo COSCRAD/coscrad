@@ -24,7 +24,7 @@ export class ArangoIdRepository implements IIdRepository<AggregateId> {
     async fetchById(id: AggregateId): Promise<Maybe<UuidDocument<string>>> {
         const result = await this.arangoDatabase.fetchById<
             DatabaseDocument<UuidDocument<AggregateId>>
-        >(id, ArangoCollectionId.uuid);
+        >(id, ArangoCollectionId.uuids);
 
         if (isNotFound(result)) return NotFound;
 
@@ -40,7 +40,7 @@ export class ArangoIdRepository implements IIdRepository<AggregateId> {
                 id,
                 isAvailable: true,
             }),
-            ArangoCollectionId.uuid
+            ArangoCollectionId.uuids
         );
     }
 
@@ -64,7 +64,7 @@ export class ArangoIdRepository implements IIdRepository<AggregateId> {
             {
                 isAvailable: false,
             },
-            ArangoCollectionId.uuid
+            ArangoCollectionId.uuids
         );
     }
 }

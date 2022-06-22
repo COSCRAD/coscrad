@@ -1,7 +1,7 @@
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import { Book } from '../../domain/models/book/entities/book.entity';
-import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
 import { QueryOperator } from '../../domain/repositories/interfaces/QueryOperator';
+import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import generateRandomTestDatabaseName from '../repositories/__tests__/generateRandomTestDatabaseName';
 import { ArangoDatabase } from './arango-database';
 import { ArangoCollectionId } from './collection-references/ArangoCollectionId';

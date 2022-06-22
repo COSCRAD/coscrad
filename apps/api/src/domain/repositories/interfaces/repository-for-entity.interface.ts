@@ -2,7 +2,7 @@ import { Maybe } from '../../../lib/types/maybe';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { AggregateId } from '../../types/AggregateId';
 import { HasAggregateId } from '../../types/HasAggregateId';
-import { ISpecification } from './ISpecification';
+import { ISpecification } from './specification.interface';
 
 /**
  * This interface is similar to `DatabaseForCollection` except that the methods

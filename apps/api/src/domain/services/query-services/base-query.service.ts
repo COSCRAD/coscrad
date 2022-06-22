@@ -13,7 +13,7 @@ import { BaseViewModel } from '../../../view-models/buildViewModelForResource/vi
 import formatResourceType from '../../../view-models/presentation/formatResourceType';
 import { Resource } from '../../models/resource.entity';
 import { Tag } from '../../models/tag/tag.entity';
-import { ISpecification } from '../../repositories/interfaces/ISpecification';
+import { ISpecification } from '../../repositories/interfaces/specification.interface';
 import { AggregateId, isAggregateId } from '../../types/AggregateId';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import buildInMemorySnapshot from '../../utilities/buildInMemorySnapshot';

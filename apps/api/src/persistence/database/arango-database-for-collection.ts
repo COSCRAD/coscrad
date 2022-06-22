@@ -1,5 +1,5 @@
 import { isArangoDatabase } from 'arangojs/database';
-import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
+import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { Maybe } from '../../lib/types/maybe';
