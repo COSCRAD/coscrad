@@ -90,6 +90,12 @@ export class CreateSongCommandHandler extends CommandHandlerBase<Song> {
 
         await this.idManager.use(eventId);
 
+        /**
+         * This doesn't feel like the right place to do this. Consider tying
+         * this in with the `create` method on the repositories.
+         */
+        await this.idManager.use(command.id);
+
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(
             new SongCreated(command, eventId)
         );

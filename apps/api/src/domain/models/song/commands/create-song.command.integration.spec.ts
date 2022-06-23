@@ -1,6 +1,8 @@
 import { Ack, CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../../../lib/errors/InternalError';
+import { NotAvailable } from '../../../../lib/types/not-available';
+import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import generateRandomTestDatabaseName from '../../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -13,6 +15,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
+import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 import { CreateSongCommandHandler } from './create-song.command-handler';
 
@@ -71,6 +74,32 @@ describe('CreateSong', () => {
             const result = await commandHandlerService.execute(buildValidCommandFSA(newId));
 
             expect(result).toBe(Ack);
+        });
+
+        it('should persist the new instance', async () => {
+            const newId = await idManager.generate();
+
+            await commandHandlerService.execute(buildValidCommandFSA(newId));
+
+            const songSearchResult = await testRepositoryProvider
+                .forResource<Song>(ResourceType.song)
+                .fetchById(newId);
+
+            expect(songSearchResult).not.toBe(NotFound);
+
+            expect(songSearchResult).not.toBeInstanceOf(InternalError);
+
+            expect((songSearchResult as Song).id).toBe(newId);
+        });
+
+        it('should mark the id as used', async () => {
+            const newId = await idManager.generate();
+
+            await commandHandlerService.execute(buildValidCommandFSA(newId));
+
+            const idStatus = await idManager.status(newId);
+
+            expect(idStatus).toBe(NotAvailable);
         });
     });
 
