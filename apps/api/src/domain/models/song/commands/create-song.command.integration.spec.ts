@@ -1,4 +1,4 @@
-import { Ack, CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
+import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../lib/types/not-available';
@@ -15,6 +15,9 @@ import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
+import { assertCommandError } from '../../__tests__/command-helpers/assert-command-error';
+import { assertCommandSuccess } from '../../__tests__/command-helpers/assert-command-success';
+import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 import { CreateSongCommandHandler } from './create-song.command-handler';
@@ -34,6 +37,19 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateSon
     },
 });
 
+const buildInvalidFSA = (
+    id: AggregateId,
+    payloadOverrides: Partial<Record<keyof CreateSong, unknown>> = {}
+): FluxStandardAction<DTO<CreateSong>> => ({
+    type: createSongCommandType,
+    payload: {
+        ...buildValidCommandFSA(id).payload,
+        ...(payloadOverrides as Partial<CreateSong>),
+    },
+});
+
+const initialState = buildInMemorySnapshot({});
+
 describe('CreateSong', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -43,11 +59,19 @@ describe('CreateSong', () => {
 
     let idManager: IIdManager;
 
+    let assertionHelperDependencies: CommandAssertionDependencies;
+
     beforeAll(async () => {
         ({ testRepositoryProvider, commandHandlerService, idManager, arangoConnectionProvider } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateRandomTestDatabaseName(),
             }));
+
+        assertionHelperDependencies = {
+            testRepositoryProvider,
+            commandHandlerService,
+            idManager,
+        };
 
         commandHandlerService.registerHandler(
             createSongCommandType,
@@ -69,64 +93,47 @@ describe('CreateSong', () => {
 
     describe('when the payload is valid', () => {
         it('should succeed', async () => {
-            const newId = await idManager.generate();
+            await assertCommandSuccess(assertionHelperDependencies, {
+                buildValidCommandFSA,
+                initialState,
+                checkStateOnSuccess: async ({ id }: CreateSong) => {
+                    const idStatus = await idManager.status(id);
 
-            const result = await commandHandlerService.execute(buildValidCommandFSA(newId));
+                    expect(idStatus).toBe(NotAvailable);
 
-            expect(result).toBe(Ack);
-        });
+                    const songSearchResult = await testRepositoryProvider
+                        .forResource<Song>(ResourceType.song)
+                        .fetchById(id);
 
-        it('should persist the new instance', async () => {
-            const newId = await idManager.generate();
+                    expect(songSearchResult).not.toBe(NotFound);
 
-            await commandHandlerService.execute(buildValidCommandFSA(newId));
+                    expect(songSearchResult).not.toBeInstanceOf(InternalError);
 
-            const songSearchResult = await testRepositoryProvider
-                .forResource<Song>(ResourceType.song)
-                .fetchById(newId);
-
-            expect(songSearchResult).not.toBe(NotFound);
-
-            expect(songSearchResult).not.toBeInstanceOf(InternalError);
-
-            expect((songSearchResult as Song).id).toBe(newId);
-        });
-
-        it('should mark the id as used', async () => {
-            const newId = await idManager.generate();
-
-            await commandHandlerService.execute(buildValidCommandFSA(newId));
-
-            const idStatus = await idManager.status(newId);
-
-            expect(idStatus).toBe(NotAvailable);
+                    expect((songSearchResult as Song).id).toBe(id);
+                },
+            });
         });
     });
 
     describe('when the payload has an invalid type', () => {
         describe('when the id property has an invalid type (number[])', () => {
             it('should return an error', async () => {
-                const newId = await idManager.generate();
-
-                const validCommandFSA = buildValidCommandFSA(newId);
-
-                const result = await commandHandlerService.execute({
-                    ...validCommandFSA,
-                    payload: {
-                        ...validCommandFSA.payload,
-                        id: [99],
+                await assertCommandError(assertionHelperDependencies, {
+                    buildCommandFSA: (id: AggregateId) => buildInvalidFSA(id, { id: [99] }),
+                    initialState,
+                    checkError: (error) => {
+                        // TODO Check inner errors
+                        expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
                     },
                 });
-
-                expect(result).toEqual(
-                    new InvalidCommandPayloadTypeError(createSongCommandType, [
-                        new InternalError(''),
-                    ])
-                );
             });
         });
     });
 
+    /**
+     * We build this test case without the helpers because of the complication
+     * of using the generated ID as part of the initial state.
+     */
     describe('when the external state is invalid', () => {
         describe('when there is already a song with the given ID', () => {
             it('should return the expected error', async () => {
@@ -157,44 +164,35 @@ describe('CreateSong', () => {
         it('should return the expected error', async () => {
             const bogusId = '4604b265-3fbd-4e1c-9603-66c43773aec0';
 
-            const commandFSA = buildValidCommandFSA(bogusId);
-
-            const result = await commandHandlerService.execute(commandFSA);
-
-            expect(result).toBeInstanceOf(InternalError);
+            await assertCommandError(assertionHelperDependencies, {
+                buildCommandFSA: (_: AggregateId) => buildInvalidFSA(bogusId),
+                initialState,
+                // TODO Tighten up the error check
+            });
         });
     });
 
     describe('when the song to create does not satisfy invariant validation rules', () => {
         describe('when creating a song with no title in any language', () => {
             it('should return the expected error', async () => {
-                const newId = await idManager.generate();
+                await assertCommandError(assertionHelperDependencies, {
+                    buildCommandFSA: (id: AggregateId) =>
+                        buildInvalidFSA(id, {
+                            title: undefined,
+                            titleEnglish: undefined,
+                        }),
+                    initialState,
+                    checkError: (error: InternalError, id) => {
+                        const expectedError = new InvalidEntityDTOError(ResourceType.song, id, [
+                            new MissingSongTitleError(),
+                        ]);
 
-                const validCommandFSA = buildValidCommandFSA(newId);
+                        expect(error).toEqual(expectedError);
 
-                const fsa: FluxStandardAction<DTO<CreateSong>> = {
-                    ...validCommandFSA,
-                    payload: {
-                        ...validCommandFSA.payload,
-                        title: undefined,
-                        titleEnglish: undefined,
+                        expect(error.innerErrors).toEqual(expectedError.innerErrors);
                     },
-                };
-
-                const result = await commandHandlerService.execute(fsa);
-
-                expect(result).toEqual(
-                    new InvalidEntityDTOError(ResourceType.song, validCommandFSA.payload.id, [
-                        new MissingSongTitleError(),
-                    ])
-                );
-
-                expect((result as InternalError).innerErrors).toEqual([
-                    new MissingSongTitleError(),
-                ]);
+                });
             });
         });
     });
-
-    // There are currently no 'invalid state transitions' for Song
 });

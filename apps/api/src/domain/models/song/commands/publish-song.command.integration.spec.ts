@@ -1,4 +1,4 @@
-import { Ack, CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
+import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -10,7 +10,11 @@ import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
+import { assertCommandError } from '../../__tests__/command-helpers/assert-command-error';
+import { assertCommandSuccess } from '../../__tests__/command-helpers/assert-command-success';
+import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { Song } from '../song.entity';
 import { PublishSong } from './publish-song.command';
 import { PublishSongCommandHandler } from './publish-song.command-handler';
 
@@ -18,14 +22,25 @@ const publishSongCommandType = 'PUBLISH_SONG';
 
 const dummyUuid = buildDummyUuid();
 
-const validCommandFSA: FluxStandardAction<DTO<PublishSong>> = {
+const unpublishedSong = getValidResourceInstanceForTest(ResourceType.song).clone({
+    id: dummyUuid,
+    published: false,
+});
+
+const buildCommandFSA = (_): FluxStandardAction<DTO<PublishSong>> => ({
     type: publishSongCommandType,
     payload: {
-        id: dummyUuid,
+        id: unpublishedSong.id,
     },
-};
+});
 
-const validPayload = validCommandFSA.payload;
+const buildFullState = (song: Song) =>
+    buildInMemorySnapshot({
+        resources: {
+            song: [song],
+        },
+    });
+
 describe('PublishSong', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -34,6 +49,8 @@ describe('PublishSong', () => {
     let arangoConnectionProvider: ArangoConnectionProvider;
 
     let idManager: IIdManager;
+
+    let commandAssertionDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
         ({ testRepositoryProvider, commandHandlerService, idManager, arangoConnectionProvider } =
@@ -45,6 +62,12 @@ describe('PublishSong', () => {
             publishSongCommandType,
             new PublishSongCommandHandler(testRepositoryProvider, idManager)
         );
+
+        commandAssertionDependencies = {
+            testRepositoryProvider,
+            idManager,
+            commandHandlerService,
+        };
     });
 
     afterAll(async () => {
@@ -61,41 +84,33 @@ describe('PublishSong', () => {
 
     describe('when the payload is valid', () => {
         it('should succeed', async () => {
-            await testRepositoryProvider.addFullSnapshot(
-                buildInMemorySnapshot({
-                    resources: {
-                        [ResourceType.song]: [
-                            getValidResourceInstanceForTest(ResourceType.song).clone({
-                                id: dummyUuid,
-                                published: false,
-                            }),
-                        ],
-                    },
-                })
-            );
-
-            const result = await commandHandlerService.execute(validCommandFSA);
-
-            expect(result).toBe(Ack);
+            await assertCommandSuccess(commandAssertionDependencies, {
+                buildValidCommandFSA: buildCommandFSA,
+                initialState: buildFullState(unpublishedSong),
+            });
         });
     });
 
     describe('when the payload has an invalid type', () => {
         describe('when the id property has an invalid type (number[])', () => {
             it('should return an error', async () => {
-                const result = await commandHandlerService.execute({
-                    ...validCommandFSA,
-                    payload: {
-                        ...validPayload,
-                        id: [99],
+                await assertCommandError(commandAssertionDependencies, {
+                    buildCommandFSA: (_) => ({
+                        type: publishSongCommandType,
+                        payload: {
+                            id: [333],
+                        },
+                    }),
+                    initialState: buildFullState(unpublishedSong),
+                    checkError: (error: InternalError) => {
+                        const expectedError = new InvalidCommandPayloadTypeError(
+                            publishSongCommandType,
+                            [new InternalError('')]
+                        );
+
+                        expect(error).toEqual(expectedError);
                     },
                 });
-
-                expect(result).toEqual(
-                    new InvalidCommandPayloadTypeError(publishSongCommandType, [
-                        new InternalError(''),
-                    ])
-                );
             });
         });
     });
@@ -103,36 +118,22 @@ describe('PublishSong', () => {
     describe('when the external state is invalid', () => {
         describe('when there is no song with the given ID', () => {
             it('should return the expected error', async () => {
-                // Note the absence of a setup step adding existing songs here
-
-                const result = await commandHandlerService.execute(validCommandFSA);
-
-                expect(result).toBeInstanceOf(InternalError);
+                await assertCommandError(commandAssertionDependencies, {
+                    buildCommandFSA,
+                    // Note the absence of any existing songs here
+                    initialState: buildInMemorySnapshot({}),
+                });
             });
         });
     });
 
-    // There is no way to invalidate invariants with this command
-
     describe('when the state transition is not allowed', () => {
         describe('when the song is already published', () => {
             it('should return the expected error', async () => {
-                await testRepositoryProvider.addFullSnapshot(
-                    buildInMemorySnapshot({
-                        resources: {
-                            [ResourceType.song]: [
-                                getValidResourceInstanceForTest(ResourceType.song).clone({
-                                    id: dummyUuid,
-                                    published: true,
-                                }),
-                            ],
-                        },
-                    })
-                );
-
-                const result = await commandHandlerService.execute(validCommandFSA);
-
-                expect(result).toBeInstanceOf(InternalError);
+                await assertCommandError(commandAssertionDependencies, {
+                    buildCommandFSA,
+                    initialState: buildFullState(unpublishedSong.clone({ published: true })),
+                });
             });
         });
     });
