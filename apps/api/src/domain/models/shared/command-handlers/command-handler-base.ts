@@ -35,7 +35,7 @@ export abstract class CommandHandlerBase<TAggregate> implements ICommandHandler 
 
     abstract fetchRequiredExternalState(): Promise<InMemorySnapshot>;
 
-    // TODO Consider putting this on the instanc (e.g. an `applyCommand(type,payload)` method)
+    // TODO Consider putting this on the instance (e.g. an `applyCommand(type,payload)` method)
     abstract actOnInstance(instance: TAggregate): ResultOrError<TAggregate>;
 
     // TODO Put this on the Aggregate classes
@@ -46,6 +46,10 @@ export abstract class CommandHandlerBase<TAggregate> implements ICommandHandler 
 
     abstract persist(instance: TAggregate, command: ICommand): Promise<void>;
 
+    /**
+     * This is a catch-all in case there's some presently unforeseen validation
+     * that needs to be done.
+     */
     protected async validateAdditionalConstraints(_: ICommand): Promise<Valid | InternalError> {
         return Valid;
     }

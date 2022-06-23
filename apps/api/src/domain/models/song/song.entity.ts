@@ -7,11 +7,12 @@ import {
 } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
+import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import songValidator from '../../domainModelValidators/songValidator';
 import { Valid } from '../../domainModelValidators/Valid';
-import { ResourceType } from '../../types/ResourceType';
+import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { TimeRangeContext } from '../context/time-range-context/time-range-context.entity';
 import { ITimeBoundable } from '../interfaces/ITimeBoundable';
 import { Resource } from '../resource.entity';
@@ -92,7 +93,19 @@ export class Song extends Resource implements ITimeBoundable {
         return songValidator(this);
     }
 
-    validateTimeRangeContext(timeRangeContext: TimeRangeContext): Valid | InternalError {
+    /**
+     * The state here is the state of the system **prior** to creating or updating
+     * this instance.
+     */
+    validateExternalState({ resources: { song: allSongs } }: InMemorySnapshot): ValidationResult {
+        if (allSongs.map(({ id }) => id).includes(this.id)) {
+            return new InternalError(`There is already a Song with id: ${this.id}}`);
+        }
+
+        return Valid;
+    }
+
+    validateTimeRangeContext(timeRangeContext: TimeRangeContext): ValidationResult {
         return validateTimeRangeContextForModel(this, timeRangeContext);
     }
 
