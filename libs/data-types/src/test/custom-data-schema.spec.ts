@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { NonEmptyString, URL, UUID } from '../index';
-import { NestedDataType, NonNegativeFiniteNumber } from '../lib/decorators';
+import { NestedDataType, NonNegativeFiniteNumber, RawData } from '../lib/decorators';
 import getCoscradDataSchema from '../lib/utilities/getCoscradDataSchema';
 
 describe('NonEmptyString', () => {
@@ -45,6 +45,12 @@ describe('NonEmptyString', () => {
 
         @NestedDataType(Whatsit, { isOptional: true })
         secondaryWhatsit = {};
+
+        @RawData()
+        rawData = { foo: 72 };
+
+        @RawData({ isOptional: true })
+        optionalRawData = undefined;
     }
 
     it('should populate the appropriate metadata', () => {

@@ -3,6 +3,7 @@ import {
     NestedDataType,
     NonEmptyString,
     NonNegativeFiniteNumber,
+    RawData,
     URL,
     UUID,
 } from '@coscrad/data-types';
@@ -34,4 +35,7 @@ export class CreateSong implements ICommand {
 
     @NonNegativeFiniteNumber()
     readonly lengthMilliseconds: number;
+
+    @RawData()
+    readonly rawData?: Record<string, unknown>;
 }

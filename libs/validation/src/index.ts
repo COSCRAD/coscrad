@@ -10,6 +10,7 @@ export {
     IsEnum,
     IsInt,
     IsISBN,
+    IsNotEmptyObject as IsNonEmptyObject,
     IsNumber,
     IsOptional,
     IsPositive,

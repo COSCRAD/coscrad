@@ -38,6 +38,11 @@ Object {
     "isOptional": true,
     "type": "NON_EMPTY_STRING",
   },
+  "rawData": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "RAW_DATA",
+  },
   "title": Object {
     "isArray": false,
     "isOptional": true,
