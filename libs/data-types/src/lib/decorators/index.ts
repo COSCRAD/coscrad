@@ -1,3 +1,4 @@
+export * from './Enum';
 export * from './NestedDataType';
 export * from './NonEmptyString';
 export * from './NonNegativeFiniteNumber';

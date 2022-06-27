@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { NonEmptyString, URL, UUID } from '../index';
-import { NestedDataType, NonNegativeFiniteNumber, RawData } from '../lib/decorators';
+import { Enum, NestedDataType, NonNegativeFiniteNumber, RawDataObject } from '../lib/decorators';
+import { CoscradEnum, MIMEType } from '../lib/enums';
 import getCoscradDataSchema from '../lib/utilities/getCoscradDataSchema';
 
 describe('NonEmptyString', () => {
@@ -46,11 +47,14 @@ describe('NonEmptyString', () => {
         @NestedDataType(Whatsit, { isOptional: true })
         secondaryWhatsit = {};
 
-        @RawData()
-        rawData = { foo: 72 };
+        @RawDataObject()
+        rawDataObject = { foo: 72 };
 
-        @RawData({ isOptional: true })
+        @RawDataObject({ isOptional: true })
         optionalRawData = undefined;
+
+        @Enum(CoscradEnum.MIMEType)
+        mimeType = MIMEType.mp3;
     }
 
     it('should populate the appropriate metadata', () => {

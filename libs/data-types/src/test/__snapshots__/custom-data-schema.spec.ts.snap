@@ -32,6 +32,24 @@ Object {
     "isOptional": true,
     "type": "NON_EMPTY_STRING",
   },
+  "mimeType": Object {
+    "enumLabel": "MIME Type",
+    "enumName": "MIME_TYPE",
+    "isArray": false,
+    "isOptional": false,
+    "labelsAndValues": Array [
+      Object {
+        "label": "mp3",
+        "value": "audio/mpeg",
+      },
+    ],
+    "type": "Enum",
+  },
+  "optionalRawData": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "RAW_DATA",
+  },
   "primaryWhatsit": Object {
     "isArray": false,
     "isOptional": false,
@@ -47,6 +65,11 @@ Object {
         "type": "NON_EMPTY_STRING",
       },
     },
+  },
+  "rawDataObject": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "RAW_DATA",
   },
   "secondaryWhatsit": Object {
     "isArray": false,

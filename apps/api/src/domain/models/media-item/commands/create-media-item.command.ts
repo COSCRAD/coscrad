@@ -1,22 +1,24 @@
 import { Command } from '@coscrad/commands';
 import {
+    CoscradEnum,
+    Enum,
+    MIMEType,
     NestedDataType,
     NonEmptyString,
-    NonNegativeFiniteNumber,
     RawDataObject,
     URL,
     UUID,
 } from '@coscrad/data-types';
 import { AggregateId } from '../../../types/AggregateId';
 import { ICreateCommand } from '../../shared/command-handlers/interfaces/create-command.interface';
-import { ContributorAndRole } from '../ContributorAndRole';
+import { ContributorAndRole } from '../../song/ContributorAndRole';
 
 @Command({
-    type: 'CREATE_SONG',
-    label: 'Create Song',
-    description: 'Creates a new song',
+    type: 'CREATE_MEDIA_ITEM',
+    label: 'Create Media Item',
+    description: 'Creates a new media item',
 })
-export class CreateSong implements ICreateCommand {
+export class CreateMediaItem implements ICreateCommand {
     @UUID()
     readonly id: AggregateId;
 
@@ -27,17 +29,16 @@ export class CreateSong implements ICreateCommand {
     readonly titleEnglish?: string;
 
     @NestedDataType(ContributorAndRole, { isArray: true })
-    readonly contributorAndRoles: ContributorAndRole[];
-
-    @NonEmptyString({ isOptional: true })
-    readonly lyrics?: string;
+    readonly contributions: ContributorAndRole[];
 
     @URL()
-    readonly audioURL: string;
+    readonly url: string;
 
-    @NonNegativeFiniteNumber()
-    readonly lengthMilliseconds: number;
+    @Enum(CoscradEnum.MIMEType)
+    readonly mimeType: MIMEType;
 
     @RawDataObject()
     readonly rawData?: Record<string, unknown>;
+
+    // The length will be registered later
 }

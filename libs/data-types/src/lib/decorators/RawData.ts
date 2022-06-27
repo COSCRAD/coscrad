@@ -1,4 +1,4 @@
-import { IsNonEmptyObject } from '../../../../validation/src';
+import { IsNonEmptyObject } from '@coscrad/validation';
 import CoscradDataType from '../types/CoscradDataType';
 import appendMetadata from '../utilities/appendMetadata';
 import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
@@ -12,7 +12,7 @@ import WithValidation from './validation/WithValidation';
  * `Raw Data` is not meant to be used in the schema for an object that is returned to
  * the user.
  */
-export function RawData(userOptions: Partial<TypeDecoratorOptions> = {}): PropertyDecorator {
+export function RawDataObject(userOptions: Partial<TypeDecoratorOptions> = {}): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol) => {
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 

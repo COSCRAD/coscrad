@@ -31,20 +31,22 @@ export abstract class CommandHandlerBase<TAggregate> implements ICommandHandler 
         return Valid;
     }
 
-    abstract createOrFetchWriteContext(command: ICommand): Promise<ResultOrError<TAggregate>>;
+    protected abstract createOrFetchWriteContext(
+        command: ICommand
+    ): Promise<ResultOrError<TAggregate>>;
 
-    abstract fetchRequiredExternalState(): Promise<InMemorySnapshot>;
+    protected abstract fetchRequiredExternalState(): Promise<InMemorySnapshot>;
 
     // TODO Consider putting this on the instance (e.g. an `applyCommand(type,payload)` method)
-    abstract actOnInstance(instance: TAggregate): ResultOrError<TAggregate>;
+    protected abstract actOnInstance(instance: TAggregate): ResultOrError<TAggregate>;
 
     // TODO Put this on the Aggregate classes
-    abstract validateExternalState(
+    protected abstract validateExternalState(
         state: InMemorySnapshot,
         instance: TAggregate
     ): Valid | InternalError;
 
-    abstract persist(instance: TAggregate, command: ICommand): Promise<void>;
+    protected abstract persist(instance: TAggregate, command: ICommand): Promise<void>;
 
     /**
      * This is a catch-all in case there's some presently unforeseen validation

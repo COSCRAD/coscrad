@@ -15,6 +15,7 @@ import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedFo
 import BaseDomainModel from './BaseDomainModel';
 import { EdgeConnectionContext } from './context/context.entity';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
+import { IEvent } from './shared/events/interfaces/event.interface';
 
 type DomainEventRecord = Record<string, unknown>;
 
@@ -99,7 +100,7 @@ export abstract class Resource extends BaseDomainModel implements HasAggregateId
      * historically for troubleshooting or migrations (e.g. opt-in to additional
      * raw data from import event).
      */
-    addEventToHistory<T extends Resource = Resource>(this: T, event: BaseDomainModel) {
+    addEventToHistory<T extends Resource = Resource>(this: T, event: IEvent) {
         const overrides: DeepPartial<DTO<Resource>> = {
             eventHistory: [...cloneToPlainObject(this.eventHistory), event.toDTO()],
         };

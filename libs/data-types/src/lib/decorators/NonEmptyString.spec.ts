@@ -16,8 +16,12 @@ describe('NonEmptyString', () => {
         const actualMetadata = getCoscradDataSchema(Widget); //Reflect.getMetadata('__coscrad-data-types__', Widget.prototype);
 
         expect(actualMetadata).toEqual({
-            widgetName: { type: CoscradDataType.NonEmptyString, isOptional: false },
-            locationName: { type: CoscradDataType.NonEmptyString, isOptional: true },
+            widgetName: { type: CoscradDataType.NonEmptyString, isOptional: false, isArray: false },
+            locationName: {
+                type: CoscradDataType.NonEmptyString,
+                isOptional: true,
+                isArray: false,
+            },
         });
     });
 });
