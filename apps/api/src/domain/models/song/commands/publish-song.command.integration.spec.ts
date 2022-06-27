@@ -27,7 +27,7 @@ const unpublishedSong = getValidResourceInstanceForTest(ResourceType.song).clone
     published: false,
 });
 
-const buildCommandFSA = (_): FluxStandardAction<DTO<PublishSong>> => ({
+const buildCommandFSA = (): FluxStandardAction<DTO<PublishSong>> => ({
     type: publishSongCommandType,
     payload: {
         id: unpublishedSong.id,
@@ -95,7 +95,7 @@ describe('PublishSong', () => {
         describe('when the id property has an invalid type (number[])', () => {
             it('should return an error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
-                    buildCommandFSA: (_) => ({
+                    buildCommandFSA: () => ({
                         type: publishSongCommandType,
                         payload: {
                             id: [333],

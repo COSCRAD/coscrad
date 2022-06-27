@@ -15,8 +15,8 @@ import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
-import { assertCommandError } from '../../__tests__/command-helpers/assert-command-error';
-import { assertCommandSuccess } from '../../__tests__/command-helpers/assert-command-success';
+import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
+import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
@@ -93,7 +93,7 @@ describe('CreateSong', () => {
 
     describe('when the payload is valid', () => {
         it('should succeed', async () => {
-            await assertCommandSuccess(assertionHelperDependencies, {
+            await assertCreateCommandSuccess(assertionHelperDependencies, {
                 buildValidCommandFSA,
                 initialState,
                 checkStateOnSuccess: async ({ id }: CreateSong) => {
@@ -118,7 +118,7 @@ describe('CreateSong', () => {
     describe('when the payload has an invalid type', () => {
         describe('when the id property has an invalid type (number[])', () => {
             it('should return an error', async () => {
-                await assertCommandError(assertionHelperDependencies, {
+                await assertCreateCommandError(assertionHelperDependencies, {
                     buildCommandFSA: (id: AggregateId) => buildInvalidFSA(id, { id: [99] }),
                     initialState,
                     checkError: (error) => {
@@ -164,7 +164,7 @@ describe('CreateSong', () => {
         it('should return the expected error', async () => {
             const bogusId = '4604b265-3fbd-4e1c-9603-66c43773aec0';
 
-            await assertCommandError(assertionHelperDependencies, {
+            await assertCreateCommandError(assertionHelperDependencies, {
                 buildCommandFSA: (_: AggregateId) => buildInvalidFSA(bogusId),
                 initialState,
                 // TODO Tighten up the error check
@@ -175,7 +175,7 @@ describe('CreateSong', () => {
     describe('when the song to create does not satisfy invariant validation rules', () => {
         describe('when creating a song with no title in any language', () => {
             it('should return the expected error', async () => {
-                await assertCommandError(assertionHelperDependencies, {
+                await assertCreateCommandError(assertionHelperDependencies, {
                     buildCommandFSA: (id: AggregateId) =>
                         buildInvalidFSA(id, {
                             title: undefined,

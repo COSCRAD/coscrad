@@ -1,27 +1,28 @@
+import { CommandFSA } from '../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import { InMemorySnapshot } from '../../../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
-import { AggregateId } from '../../../types/AggregateId';
 import { CommandAssertionDependencies } from '../command-helpers/types/CommandAssertionDependencies';
-import { FSAFactoryFunction } from '../command-helpers/types/FSAFactoryFunction';
 
 type TestCase = {
-    buildCommandFSA: FSAFactoryFunction;
+    buildCommandFSA: () => CommandFSA;
     initialState: InMemorySnapshot;
-    checkError?: (error: InternalError, id?: AggregateId) => void;
+    checkError?: (error: InternalError) => void;
 };
 
+/**
+ * This helper is not to be used with `CREATE_X` commands. Use `assertCreateCommandError`,
+ * which allows for ID generation.
+ */
 export const assertCommandError = async (
-    dependencies: CommandAssertionDependencies,
+    dependencies: Omit<CommandAssertionDependencies, 'idGenerator'>,
     { buildCommandFSA: buildCommandFSA, initialState: state, checkError }: TestCase
 ) => {
-    const { testRepositoryProvider, commandHandlerService, idManager } = dependencies;
+    const { testRepositoryProvider, commandHandlerService } = dependencies;
 
     // Arrange
     await testRepositoryProvider.addFullSnapshot(state);
 
-    const newId = await idManager.generate();
-
-    const commandFSA = await buildCommandFSA(newId);
+    const commandFSA = await buildCommandFSA();
 
     // Act
     const result = await commandHandlerService.execute(commandFSA);
@@ -33,5 +34,5 @@ export const assertCommandError = async (
         throw new InternalError(`Expected the result of command execution to be an Internal Error`);
     }
 
-    if (checkError) checkError(result, newId);
+    if (checkError) checkError(result);
 };

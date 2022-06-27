@@ -1,10 +1,10 @@
 import { Ack, ICommand } from '@coscrad/commands';
-import { CommandFSA } from '../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import { InMemorySnapshot } from '../../../../domain/types/ResourceType';
 import { CommandAssertionDependencies } from '../command-helpers/types/CommandAssertionDependencies';
+import { FSAFactoryFunction } from '../command-helpers/types/FSAFactoryFunction';
 
 type TestCase = {
-    buildValidCommandFSA: () => CommandFSA;
+    buildValidCommandFSA: FSAFactoryFunction;
     initialState: InMemorySnapshot;
     /**
      * This allows us to run additional checks after the command succeeds. E.g.
@@ -14,20 +14,18 @@ type TestCase = {
     checkStateOnSuccess?: (command: ICommand) => Promise<void>;
 };
 
-/**
- * This helper is not to be used with `CREATE_X` commands. Use `assertCreateCommandError`,
- * which allows for ID generation.
- */
-export const assertCommandSuccess = async (
-    dependencies: Omit<CommandAssertionDependencies, 'idGenerator'>,
+export const assertCreateCommandSuccess = async (
+    dependencies: CommandAssertionDependencies,
     { buildValidCommandFSA: buildCommandFSA, initialState: state, checkStateOnSuccess }: TestCase
 ) => {
-    const { testRepositoryProvider, commandHandlerService } = dependencies;
+    const { testRepositoryProvider, commandHandlerService, idManager } = dependencies;
 
     // Arrange
     await testRepositoryProvider.addFullSnapshot(state);
 
-    const commandFSA = buildCommandFSA();
+    const newId = await idManager.generate();
+
+    const commandFSA = buildCommandFSA(newId);
 
     // Act
     const result = await commandHandlerService.execute(commandFSA);
