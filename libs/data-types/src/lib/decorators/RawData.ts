@@ -16,7 +16,7 @@ export function RawDataObject(userOptions: Partial<TypeDecoratorOptions> = {}): 
     return (target: Object, propertyKey: string | symbol) => {
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
-        WithValidation(IsNonEmptyObject(), options);
+        WithValidation(IsNonEmptyObject(), options)(target, propertyKey);
 
         appendMetadata(target, propertyKey, CoscradDataType.RawData, options);
     };

@@ -13,6 +13,10 @@ const enumNameToMetadata: Record<string, EnumMetadata> = {
                 label: 'mp3',
                 value: MIMEType.mp3,
             },
+            {
+                label: 'mp4',
+                value: MIMEType.mp4,
+            },
         ],
     },
 };

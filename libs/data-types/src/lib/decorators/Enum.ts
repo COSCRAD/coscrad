@@ -1,5 +1,6 @@
 import { IsEnum } from 'class-validator';
 import { CoscradEnum } from '../enums';
+import getCoscradEnumFromName from '../enums/getCoscradEnumFromName';
 import getEnumMetadata from '../enums/getEnumMetadata';
 import appendMetadata from '../utilities/appendMetadata';
 import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
@@ -18,9 +19,7 @@ export function Enum(
     return (target: Object, propertyKey: string | symbol) => {
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
-        const enumMeta = getEnumMetadata(enumName);
-
-        WithValidation(IsEnum(enumMeta.labelsAndValues), options);
+        WithValidation(IsEnum(getCoscradEnumFromName(enumName)), options)(target, propertyKey);
 
         appendMetadata(target, propertyKey, getEnumMetadata(enumName), options);
     };

@@ -1,5 +1,4 @@
 import { NonEmptyString } from '@coscrad/data-types';
-import { IsStringWithNonzeroLength } from '@coscrad/validation';
 import { DTO } from '../../../types/DTO';
 import BaseDomainModel from '../BaseDomainModel';
 
@@ -9,11 +8,9 @@ export class ContributorAndRole extends BaseDomainModel {
      * Make this a `UUID` instead when creating a proper Contributors model.
      */
     @NonEmptyString()
-    @IsStringWithNonzeroLength()
     readonly contributorId: string;
 
     @NonEmptyString()
-    @IsStringWithNonzeroLength()
     readonly role: string;
 
     constructor(dto: DTO<ContributorAndRole>) {

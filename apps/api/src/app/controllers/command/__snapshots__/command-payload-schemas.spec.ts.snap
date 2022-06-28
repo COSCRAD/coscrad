@@ -1,5 +1,68 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`command payload schemas The schema for command CREATE_MEDIA_ITEM should have the expected value 1`] = `
+Object {
+  "contributions": Object {
+    "isArray": true,
+    "isOptional": false,
+    "type": Object {
+      "contributorId": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+      "role": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+    },
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "UUID",
+  },
+  "mimeType": Object {
+    "enumLabel": "MIME Type",
+    "enumName": "MIME_TYPE",
+    "isArray": false,
+    "isOptional": false,
+    "labelsAndValues": Array [
+      Object {
+        "label": "mp3",
+        "value": "audio/mpeg",
+      },
+      Object {
+        "label": "mp4",
+        "value": "video/mp4",
+      },
+    ],
+    "type": "Enum",
+  },
+  "rawData": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "RAW_DATA",
+  },
+  "title": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "titleEnglish": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "url": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "URL",
+  },
+}
+`;
+
 exports[`command payload schemas The schema for command CREATE_SONG should have the expected value 1`] = `
 Object {
   "audioURL": Object {
@@ -40,7 +103,7 @@ Object {
   },
   "rawData": Object {
     "isArray": false,
-    "isOptional": false,
+    "isOptional": true,
     "type": "RAW_DATA",
   },
   "title": Object {
@@ -52,6 +115,16 @@ Object {
     "isArray": false,
     "isOptional": true,
     "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`command payload schemas The schema for command PUBLISH_SONG should have the expected value 1`] = `
+Object {
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "UUID",
   },
 }
 `;

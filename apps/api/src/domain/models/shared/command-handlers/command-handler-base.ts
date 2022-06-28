@@ -7,7 +7,10 @@ import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { InMemorySnapshot } from '../../../types/ResourceType';
+import CommandExecutionError from '../common-command-errors/CommandExecutionError';
 import InvalidCommandPayloadTypeError from '../common-command-errors/InvalidCommandPayloadTypeError';
+
+const buildExecutionError = (allErrors: InternalError[]) => new CommandExecutionError(allErrors);
 
 export abstract class CommandHandlerBase<TAggregate> implements ICommandHandler {
     constructor(
@@ -63,11 +66,12 @@ export abstract class CommandHandlerBase<TAggregate> implements ICommandHandler 
 
         const writeContextInstance = await this.createOrFetchWriteContext(command);
 
-        if (isInternalError(writeContextInstance)) return writeContextInstance;
+        if (isInternalError(writeContextInstance))
+            return buildExecutionError([writeContextInstance]);
 
         const updatedInstance = this.actOnInstance(writeContextInstance);
 
-        if (isInternalError(updatedInstance)) return updatedInstance;
+        if (isInternalError(updatedInstance)) return buildExecutionError([updatedInstance]);
 
         // Can we combine this with fetching the write context for performance?
         const externalState = await this.fetchRequiredExternalState();
@@ -77,11 +81,13 @@ export abstract class CommandHandlerBase<TAggregate> implements ICommandHandler 
             updatedInstance
         );
 
-        if (isInternalError(externalStateValidationResult)) return externalStateValidationResult;
+        if (isInternalError(externalStateValidationResult))
+            return buildExecutionError([externalStateValidationResult]);
 
         const additionalValidationResult = await this.validateAdditionalConstraints(command);
 
-        if (isInternalError(additionalValidationResult)) return additionalValidationResult;
+        if (isInternalError(additionalValidationResult))
+            return buildExecutionError([additionalValidationResult]);
 
         await this.persist(updatedInstance, command);
 

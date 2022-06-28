@@ -1,4 +1,4 @@
-import { ICommand } from '../../../../../../../../libs/commands/src';
+import { ICommand } from '@coscrad/commands';
 import { AggregateId } from '../../../../types/AggregateId';
 
 /**

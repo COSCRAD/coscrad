@@ -2,6 +2,7 @@ import { Inject } from '@nestjs/common';
 import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
+import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import { Resource } from '../../resource.entity';
 import { IEvent } from '../events/interfaces/event.interface';
@@ -21,7 +22,7 @@ export abstract class BaseCreateCommandHandler<
 
     protected abstract createNewInstance(command: ICreateCommand): ResultOrError<TAggregate>;
 
-    protected abstract eventFactory(command: ICreateCommand): Promise<IEvent>;
+    protected abstract eventFactory(command: ICreateCommand, eventId: AggregateId): IEvent;
 
     protected createOrFetchWriteContext(
         command: ICreateCommand
@@ -38,23 +39,20 @@ export abstract class BaseCreateCommandHandler<
     }
 
     protected async persist(instance: TAggregate, command: ICreateCommand): Promise<void> {
-        // generate a unique ID for the event
-        // const eventId = await this.idManager.generate();
-
-        // await this.idManager.use(eventId);
-
         /**
          * This doesn't feel like the right place to do this. Consider tying
          * this in with the `create` method on the repositories.
          */
         await this.idManager.use(command.id);
 
-        const event = await this.eventFactory(command);
+        // generate a unique ID for the event
+        const eventId = await this.idManager.generate();
 
-        const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(
-            event
-            // new SongCreated(command, eventId)
-        );
+        await this.idManager.use(eventId);
+
+        const event = this.eventFactory(command, eventId);
+
+        const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 
         // Persist the valid instance
         await this.repositoryProvider

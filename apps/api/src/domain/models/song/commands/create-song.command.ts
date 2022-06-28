@@ -38,6 +38,6 @@ export class CreateSong implements ICreateCommand {
     @NonNegativeFiniteNumber()
     readonly lengthMilliseconds: number;
 
-    @RawDataObject()
+    @RawDataObject({ isOptional: true })
     readonly rawData?: Record<string, unknown>;
 }

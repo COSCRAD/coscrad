@@ -1,5 +1,5 @@
+import { MIMEType } from '@coscrad/data-types';
 import { MediaItem } from '../domain/models/media-item/entities/media-item.entity';
-import { MIMEType } from '../domain/models/media-item/types/MIMEType';
 import { ResourceType } from '../domain/types/ResourceType';
 import { DTO } from '../types/DTO';
 

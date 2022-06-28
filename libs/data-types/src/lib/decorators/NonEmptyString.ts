@@ -10,7 +10,7 @@ export function NonEmptyString(userOptions: Partial<TypeDecoratorOptions> = {}):
     return (target: Object, propertyKey: string | symbol) => {
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
-        WithValidation(IsStringWithNonzeroLength(), options);
+        WithValidation(IsStringWithNonzeroLength(), options)(target, propertyKey);
 
         appendMetadata(target, propertyKey, CoscradDataType.NonEmptyString, options);
     };

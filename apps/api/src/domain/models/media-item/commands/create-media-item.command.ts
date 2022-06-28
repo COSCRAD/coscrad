@@ -37,7 +37,7 @@ export class CreateMediaItem implements ICreateCommand {
     @Enum(CoscradEnum.MIMEType)
     readonly mimeType: MIMEType;
 
-    @RawDataObject()
+    @RawDataObject({ isOptional: true })
     readonly rawData?: Record<string, unknown>;
 
     // The length will be registered later

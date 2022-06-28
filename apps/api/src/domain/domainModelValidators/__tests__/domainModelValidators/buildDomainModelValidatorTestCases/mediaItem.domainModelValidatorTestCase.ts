@@ -1,6 +1,6 @@
+import { MIMEType } from '@coscrad/data-types';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { MediaItem } from '../../../../models/media-item/entities/media-item.entity';
-import { MIMEType } from '../../../../models/media-item/types/MIMEType';
 import { ContributorAndRole } from '../../../../models/song/ContributorAndRole';
 import { AggregateId } from '../../../../types/AggregateId';
 import { ResourceType } from '../../../../types/ResourceType';

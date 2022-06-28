@@ -1,11 +1,12 @@
 import {
-    IsEnum,
-    IsNonNegativeFiniteNumber,
-    IsStrictlyEqualTo,
-    IsStringWithNonzeroLength,
-    IsUrl,
-    ValidateNested,
-} from '@coscrad/validation';
+    CoscradEnum,
+    Enum,
+    MIMEType,
+    NestedDataType,
+    NonEmptyString,
+    URL,
+} from '@coscrad/data-types';
+import { IsNonNegativeFiniteNumber, IsStrictlyEqualTo } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
@@ -20,26 +21,25 @@ import { Resource } from '../../resource.entity';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import { ContributorAndRole } from '../../song/ContributorAndRole';
-import { MIMEType } from '../types/MIMEType';
 
-@RegisterIndexScopedCommands([])
+@RegisterIndexScopedCommands(['CREATE_MEDIA_ITEM'])
 export class MediaItem extends Resource implements ITimeBoundable {
     @IsStrictlyEqualTo(ResourceType.mediaItem)
     readonly type = ResourceType.mediaItem;
 
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional: true })
     readonly title?: string;
 
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional: true })
     readonly titleEnglish?: string;
 
-    @ValidateNested()
+    @NestedDataType(ContributorAndRole)
     readonly contributorAndRoles: ContributorAndRole[];
 
-    @IsUrl()
+    @URL()
     readonly url: string;
 
-    @IsEnum(MIMEType)
+    @Enum(CoscradEnum.MIMEType)
     readonly mimeType: MIMEType;
 
     @IsNonNegativeFiniteNumber()

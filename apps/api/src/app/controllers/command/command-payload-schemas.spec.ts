@@ -1,5 +1,7 @@
 import { getCoscradDataSchema } from '@coscrad/data-types';
+import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
+import { PublishSong } from '../../../domain/models/song/commands/publish-song.command';
 
 /**
  *
@@ -9,10 +11,11 @@ import { CreateSong } from '../../../domain/models/song/commands/create-song.com
  * That will make this test completely dynamic.
  */
 const getAllCommandSchemas = () =>
-    [['CREATE_SONG', CreateSong]].map(([commandType, Ctor]) => [
-        commandType,
-        getCoscradDataSchema(Ctor),
-    ]);
+    [
+        ['CREATE_SONG', CreateSong],
+        ['PUBLISH_SONG', PublishSong],
+        ['CREATE_MEDIA_ITEM', CreateMediaItem],
+    ].map(([commandType, Ctor]) => [commandType, getCoscradDataSchema(Ctor)]);
 
 describe('command payload schemas', () => {
     getAllCommandSchemas().forEach(([commandType, schema]) => {

@@ -14,6 +14,7 @@ import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
+import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
 import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
 import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
@@ -187,9 +188,16 @@ describe('CreateSong', () => {
                             new MissingSongTitleError(),
                         ]);
 
-                        expect(error).toEqual(expectedError);
+                        const wrappedError = new CommandExecutionError([expectedError]);
 
-                        expect(error.innerErrors).toEqual(expectedError.innerErrors);
+                        // We probably want a `checkInerErrors` helper
+                        expect(error).toEqual(wrappedError);
+
+                        expect(error.innerErrors).toEqual(wrappedError.innerErrors);
+
+                        expect(error.innerErrors[0].innerErrors).toEqual(
+                            wrappedError.innerErrors[0].innerErrors
+                        );
                     },
                 });
             });
