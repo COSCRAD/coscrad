@@ -65,7 +65,7 @@ describe('GET /resources (fetch view models)', () => {
 
         commandHandlerService.registerHandler(
             'PUBLISH_SONG',
-            new PublishSongCommandHandler(testRepositoryProvider, idManager)
+            new PublishSongCommandHandler(testRepositoryProvider, idManager, ResourceType.song)
         );
     });
 

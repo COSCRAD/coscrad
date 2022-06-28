@@ -9,6 +9,13 @@ import { IEvent } from '../events/interfaces/event.interface';
 import { CommandHandlerBase } from './command-handler-base';
 import { ICreateCommand } from './interfaces/create-command.interface';
 
+/**
+ * Extend this class if you'd like some guidance when implementing a new `CREATE_X`
+ * command. This class specialize the `CommandHandlerBase` to the `Crete` case.
+ *
+ * Note that if this class overgeneralizes your use case, just implement
+ * `ICommandHandler` (i.e. an async `execute` method) in 'free form'.
+ */
 export abstract class BaseCreateCommandHandler<
     TAggregate extends Resource
 > extends CommandHandlerBase<TAggregate> {

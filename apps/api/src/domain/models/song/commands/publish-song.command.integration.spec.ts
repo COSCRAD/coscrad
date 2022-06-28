@@ -60,7 +60,7 @@ describe('PublishSong', () => {
 
         commandHandlerService.registerHandler(
             publishSongCommandType,
-            new PublishSongCommandHandler(testRepositoryProvider, idManager)
+            new PublishSongCommandHandler(testRepositoryProvider, idManager, ResourceType.song)
         );
 
         commandAssertionDependencies = {
