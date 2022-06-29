@@ -160,6 +160,8 @@ export class ArangoDatabase {
 
         if (!collectionExists) throw new Error(`Collection ${collectionName} not found!`);
 
+        if (dtos.length === 0) return;
+
         const query = `
     FOR dto IN @dtos
         INSERT dto
@@ -170,6 +172,10 @@ export class ArangoDatabase {
             dtos,
             '@collectionName': collectionName,
         };
+
+        const name = this.#db.name;
+
+        name;
 
         await this.#db.query({
             query,
@@ -185,7 +191,9 @@ export class ArangoDatabase {
         const documentToUpdate = await this.fetchById(id, collectionName);
 
         if (isNotFound(documentToUpdate))
-            throw new Error(`Cannot update document: ${id}, as no document with that id was found`);
+            throw new Error(
+                `Cannot update document: ${id} in collection: ${collectionName}, as no document with that id was found`
+            );
 
         // TODO remove cast
         const key = this.#getKeyOfDocument(
