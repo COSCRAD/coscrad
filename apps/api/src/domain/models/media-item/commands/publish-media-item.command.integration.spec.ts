@@ -6,10 +6,10 @@ import TestRepositoryProvider from '../../../../persistence/repositories/__tests
 import { DTO } from '../../../../types/DTO';
 import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
+import { assertCommandPayloadTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
-import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
 import ResourceNotFoundError from '../../shared/common-command-errors/ResourceNotFoundError';
 import { assertCommandError } from '../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../__tests__/command-helpers/assert-command-success';
@@ -132,9 +132,7 @@ describe('PublishMediaItem', () => {
                     }),
                     initialState,
                     checkError: (error: InternalError) => {
-                        expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
-
-                        expect(error.innerErrors[0].toString().includes('id')).toBe(true);
+                        assertCommandPayloadTypeError(error, 'id');
                     },
                 });
             });
@@ -146,9 +144,7 @@ describe('PublishMediaItem', () => {
                     buildCommandFSA: () => buildInvalidCommandFSA(767),
                     initialState,
                     checkError: (error: InternalError) => {
-                        expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
-
-                        expect(error.innerErrors[0].toString().includes('id')).toBe(true);
+                        assertCommandPayloadTypeError(error, 'id');
                     },
                 });
             });
@@ -160,9 +156,7 @@ describe('PublishMediaItem', () => {
                     buildCommandFSA: () => buildInvalidCommandFSA(['12', '123']),
                     initialState,
                     checkError: (error: InternalError) => {
-                        expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
-
-                        expect(error.innerErrors[0].toString().includes('id')).toBe(true);
+                        assertCommandPayloadTypeError(error, 'id');
                     },
                 });
             });

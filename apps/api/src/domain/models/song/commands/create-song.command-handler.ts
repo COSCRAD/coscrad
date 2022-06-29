@@ -15,6 +15,10 @@ import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 import { SongCreated } from './song-created.event';
 
+/**
+ * TODO[https://www.pivotaltracker.com/story/show/182597512]
+ * This should leverage the `BaseCreateCommandHandler`
+ */
 @CommandHandler(CreateSong)
 export class CreateSongCommandHandler extends CommandHandlerBase<Song> {
     async createOrFetchWriteContext(command: CreateSong): Promise<ResultOrError<Song>> {

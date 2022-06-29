@@ -47,6 +47,8 @@ export abstract class BaseCreateCommandHandler<
 
     protected async persist(instance: TAggregate, command: ICreateCommand): Promise<void> {
         /**
+         * TODO [https://www.pivotaltracker.com/story/show/182597855]
+         *
          * This doesn't feel like the right place to do this. Consider tying
          * this in with the `create` method on the repositories.
          */

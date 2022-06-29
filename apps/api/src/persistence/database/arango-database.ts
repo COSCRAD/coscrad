@@ -173,10 +173,6 @@ export class ArangoDatabase {
             '@collectionName': collectionName,
         };
 
-        const name = this.#db.name;
-
-        name;
-
         await this.#db.query({
             query,
             bindVars,
