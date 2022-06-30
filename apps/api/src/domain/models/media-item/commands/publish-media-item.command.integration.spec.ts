@@ -67,11 +67,7 @@ describe('PublishMediaItem', () => {
 
         commandHandlerService.registerHandler(
             commandType,
-            new PublishMediaItemCommandHandler(
-                testRepositoryProvider,
-                idManager,
-                ResourceType.mediaItem
-            )
+            new PublishMediaItemCommandHandler(testRepositoryProvider, idManager)
         );
 
         assertionHelperDependencies = {

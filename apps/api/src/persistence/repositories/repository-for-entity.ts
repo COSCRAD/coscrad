@@ -84,7 +84,6 @@ export class RepositoryForEntity<TEntity extends HasAggregateId & BaseDomainMode
 
     async createMany(entities: TEntity[]) {
         if (entities.length === 0) return;
-
         const createDTOs = entities
             .map((entity) => entity.toDTO())
             .map((dto) => this.#mapEntityDTOToDocument(dto));

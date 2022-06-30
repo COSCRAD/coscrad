@@ -88,11 +88,7 @@ describe('CreateMediaItem', () => {
 
         commandHandlerService.registerHandler(
             commandType,
-            new CreateMediaItemCommandHandler(
-                testRepositoryProvider,
-                idManager,
-                ResourceType.mediaItem
-            )
+            new CreateMediaItemCommandHandler(testRepositoryProvider, idManager)
         );
     });
 

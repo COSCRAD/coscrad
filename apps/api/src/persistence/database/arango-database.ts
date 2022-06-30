@@ -160,8 +160,6 @@ export class ArangoDatabase {
 
         if (!collectionExists) throw new Error(`Collection ${collectionName} not found!`);
 
-        if (dtos.length === 0) return;
-
         const query = `
     FOR dto IN @dtos
         INSERT dto

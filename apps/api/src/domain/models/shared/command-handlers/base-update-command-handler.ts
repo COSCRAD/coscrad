@@ -1,35 +1,49 @@
 import { ICommand } from '@coscrad/commands';
-import { Inject } from '@nestjs/common';
-import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
+import { isNotFound } from '../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import { Resource } from '../../resource.entity';
-import { IEvent } from '../events/interfaces/event.interface';
-import { CommandHandlerBase } from './command-handler-base';
+import ResourceNotFoundError from '../common-command-errors/ResourceNotFoundError';
+import { BaseEvent } from '../events/base-event.entity';
+import { BaseCommandHandler } from './base-command-handler';
+import { IUpdateCommand } from './interfaces/update-command.interface';
 
+/**
+ * Extend this class if you'd like some guidance when implementing a new update
+ * command. This class specialize the `CommandHandlerBase` to the `Update` case.
+ *
+ * Note that if this class overgeneralizes your use case, just implement
+ * `ICommandHandler` (i.e. an async `execute` method) in 'free form'.
+ */
 export abstract class BaseUpdateCommandHandler<
     TAggregate extends Resource
-> extends CommandHandlerBase<TAggregate> {
-    constructor(
-        protected readonly repositoryProvider: RepositoryProvider,
-        @Inject('ID_MANAGER') protected readonly idManager: IIdManager,
-        protected readonly resourceType: ResourceType
-    ) {
-        super(repositoryProvider, idManager);
+> extends BaseCommandHandler<TAggregate> {
+    protected abstract resourceType: ResourceType;
+
+    protected abstract eventFactory(command: ICommand, eventId: AggregateId): BaseEvent;
+
+    protected async fetchInstanceToUpdate({
+        id,
+    }: IUpdateCommand): Promise<ResultOrError<TAggregate>> {
+        const searchResult = await this.repositoryProvider
+            .forResource<TAggregate>(this.resourceType)
+            .fetchById(id);
+
+        if (isNotFound(searchResult))
+            return new ResourceNotFoundError({ type: this.resourceType, id });
+
+        return searchResult;
     }
 
-    protected abstract eventFactory(command: ICommand, eventId: AggregateId): IEvent;
-
-    protected abstract fetchInstanceToUpdate(command: ICommand): Promise<ResultOrError<TAggregate>>;
-
-    protected createOrFetchWriteContext(command: ICommand): Promise<ResultOrError<TAggregate>> {
+    protected createOrFetchWriteContext(
+        command: IUpdateCommand
+    ): Promise<ResultOrError<TAggregate>> {
         return this.fetchInstanceToUpdate(command);
     }
 
     // TODO There's still lots of overlap with the `create` command handler base- move to base class
-    protected async persist(instance: TAggregate, command: ICommand): Promise<void> {
+    protected async persist(instance: TAggregate, command: IUpdateCommand): Promise<void> {
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
 
