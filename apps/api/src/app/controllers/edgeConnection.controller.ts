@@ -16,7 +16,7 @@ import { NoteViewModel } from '../../view-models/edgeConnectionViewModels/note.v
 import httpStatusCodes from '../constants/httpStatusCodes';
 import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';
 
-@ApiTags('connections')
+@ApiTags('web of knowledge (edge connections)')
 @Controller('connections')
 export class EdgeConnectionController {
     constructor(private readonly repositoryProvider: RepositoryProvider) {}

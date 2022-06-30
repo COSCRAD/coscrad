@@ -4,7 +4,7 @@ import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import sendInternalResultAsHttpResponse from '../resources/common/sendInternalResultAsHttpResponse';
 
-@ApiTags('Generate ID')
+@ApiTags('id generation')
 @Controller()
 export class IdGenerationController {
     constructor(@Inject('ID_MANAGER') private readonly idManager: IIdManager) {}

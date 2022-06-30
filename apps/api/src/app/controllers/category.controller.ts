@@ -1,4 +1,5 @@
 import { Controller, Get, Res } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Category } from '../../domain/models/categories/entities/category.entity';
 import { isInternalError } from '../../lib/errors/InternalError';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
@@ -6,6 +7,7 @@ import { RepositoryProvider } from '../../persistence/repositories/repository.pr
 import { CateogryTreeViewModel } from '../../view-models/buildViewModelForResource/viewModels/category-tree.view-model';
 import httpStatusCodes from '../constants/httpStatusCodes';
 
+@ApiTags('tree of knowledge (categories)')
 @Controller('treeOfKnowledge')
 export class CategoryController {
     constructor(private readonly repositoryProvider: RepositoryProvider) {}

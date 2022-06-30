@@ -12,12 +12,14 @@ import { BaseQueryService } from './base-query.service';
 
 @Injectable()
 export class TermQueryService extends BaseQueryService<Term, TermViewModel> {
+    protected readonly type = ResourceType.term;
+
     constructor(
         @Inject(RepositoryProvider) repositoryProvider: RepositoryProvider,
         @Inject(CommandInfoService) commandInfoService: CommandInfoService,
         private readonly configService: ConfigService
     ) {
-        super(ResourceType.term, repositoryProvider, commandInfoService);
+        super(repositoryProvider, commandInfoService);
     }
 
     buildViewModel(term: Term) {

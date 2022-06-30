@@ -1,3 +1,4 @@
+import { Inject } from '@nestjs/common';
 import {
     CommandInfo,
     CommandInfoService,
@@ -36,10 +37,11 @@ export abstract class BaseQueryService<
     TDomainModel extends Resource,
     UViewModel extends BaseViewModel
 > {
+    protected abstract readonly type: ResourceType;
+
     constructor(
-        private readonly type: ResourceType,
-        protected readonly repositoryProvider: RepositoryProvider,
-        protected readonly commandInfoService: CommandInfoService
+        @Inject(RepositoryProvider) protected readonly repositoryProvider: RepositoryProvider,
+        @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
     ) {}
 
     /**

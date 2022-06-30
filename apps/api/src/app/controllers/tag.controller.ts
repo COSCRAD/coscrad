@@ -1,4 +1,5 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { isAggregateId } from '../../domain/types/AggregateId';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
@@ -8,6 +9,7 @@ import { RepositoryProvider } from '../../persistence/repositories/repository.pr
 import { TagViewModel } from '../../view-models/buildViewModelForResource/viewModels';
 import httpStatusCodes from '../constants/httpStatusCodes';
 
+@ApiTags('tags')
 @Controller('tags')
 export class TagController {
     constructor(private readonly repositoryProvider: RepositoryProvider) {}

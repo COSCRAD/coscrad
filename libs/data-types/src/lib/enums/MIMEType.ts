@@ -5,4 +5,4 @@ export enum MIMEType {
     mp4 = 'video/mp4',
 }
 
-export const isMIMEType = (input: unknown) => isEnum(input, MIMEType);
+export const isMIMEType = (input: unknown): input is MIMEType => isEnum(input, MIMEType);

@@ -11,12 +11,14 @@ import { ResourceType } from '../../types/ResourceType';
 import { BaseQueryService } from './base-query.service';
 
 export class PhotographQueryService extends BaseQueryService<Photograph, PhotographViewModel> {
+    protected readonly type = ResourceType.photograph;
+
     constructor(
         @Inject(RepositoryProvider) repositoryProvider: RepositoryProvider,
         @Inject(CommandInfoService) commandInfoService: CommandInfoService,
         private readonly configService: ConfigService
     ) {
-        super(ResourceType.photograph, repositoryProvider, commandInfoService);
+        super(repositoryProvider, commandInfoService);
     }
 
     buildViewModel(photo: Photograph): PhotographViewModel {

@@ -20,12 +20,14 @@ export class VocabularyListQueryService extends BaseQueryService<
     VocabularyList,
     VocabularyListViewModel
 > {
+    protected readonly type = ResourceType.vocabularyList;
+
     constructor(
         @Inject(RepositoryProvider) repositoryProvider: RepositoryProvider,
         @Inject(CommandInfoService) commandInfoService: CommandInfoService,
         private readonly configService: ConfigService
     ) {
-        super(ResourceType.vocabularyList, repositoryProvider, commandInfoService);
+        super(repositoryProvider, commandInfoService);
     }
 
     buildViewModel(

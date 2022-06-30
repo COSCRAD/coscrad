@@ -1,5 +1,5 @@
-import { Controller, Get, Injectable, Param, Res } from '@nestjs/common';
-import { ApiOkResponse, ApiParam } from '@nestjs/swagger';
+import { Controller, Get, Param, Res } from '@nestjs/common';
+import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import IsPublished from '../../../domain/repositories/specifications/isPublished';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
@@ -9,7 +9,7 @@ import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
 import { RESOURCES_ROUTE_PREFIX } from './constants';
 
-@Injectable()
+@ApiTags(RESOURCES_ROUTE_PREFIX)
 @Controller(`${RESOURCES_ROUTE_PREFIX}/${buildViewModelPathForResourceType(ResourceType.term)}`)
 export class TermController {
     constructor(private readonly termQueryService: TermQueryService) {}

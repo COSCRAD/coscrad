@@ -1,9 +1,4 @@
-import { Inject } from '@nestjs/common';
-import {
-    CommandInfo,
-    CommandInfoService,
-} from '../../../app/controllers/command/services/command-info-service';
-import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
+import { CommandInfo } from '../../../app/controllers/command/services/command-info-service';
 import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { IBibliographicReference } from '../../models/bibliographic-reference/interfaces/IBibliographicReference';
 import { IBibliographicReferenceData } from '../../models/bibliographic-reference/interfaces/IBibliographicReferenceData';
@@ -14,12 +9,7 @@ export class BibliographicReferenceQueryService extends BaseQueryService<
     IBibliographicReference,
     BibliographicReferenceViewModel
 > {
-    constructor(
-        @Inject(RepositoryProvider) repositoryProvider: RepositoryProvider,
-        @Inject(CommandInfoService) commandInfoService: CommandInfoService
-    ) {
-        super(ResourceType.bibliographicReference, repositoryProvider, commandInfoService);
-    }
+    protected readonly type = ResourceType.bibliographicReference;
 
     buildViewModel(
         bibliographicReferenceInstance: IBibliographicReference<IBibliographicReferenceData>

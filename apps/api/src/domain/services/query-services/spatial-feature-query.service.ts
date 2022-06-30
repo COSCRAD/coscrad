@@ -1,9 +1,4 @@
-import { Inject } from '@nestjs/common';
-import {
-    CommandInfo,
-    CommandInfoService,
-} from '../../../app/controllers/command/services/command-info-service';
-import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
+import { CommandInfo } from '../../../app/controllers/command/services/command-info-service';
 import { SpatialFeatureViewModel } from '../../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import { ISpatialFeature } from '../../models/spatial-feature/ISpatialFeature';
 import { Line } from '../../models/spatial-feature/line.entity';
@@ -16,12 +11,7 @@ export class SpatialFeatureQueryService extends BaseQueryService<
     ISpatialFeature,
     SpatialFeatureViewModel
 > {
-    constructor(
-        @Inject(RepositoryProvider) repositoryProvider: RepositoryProvider,
-        @Inject(CommandInfoService) commandInfoService: CommandInfoService
-    ) {
-        super(ResourceType.spatialFeature, repositoryProvider, commandInfoService);
-    }
+    protected readonly type = ResourceType.spatialFeature;
 
     buildViewModel(spatialFeatureInstance: ISpatialFeature): SpatialFeatureViewModel {
         return new SpatialFeatureViewModel(spatialFeatureInstance);

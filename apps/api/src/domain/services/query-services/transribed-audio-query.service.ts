@@ -14,12 +14,14 @@ export class TranscribedAudioQueryService extends BaseQueryService<
     TranscribedAudio,
     TranscribedAudioViewModel
 > {
+    protected readonly type = ResourceType.transcribedAudio;
+
     constructor(
         @Inject(RepositoryProvider) repositoryProvider: RepositoryProvider,
         @Inject(CommandInfoService) commandInfoService: CommandInfoService,
         private readonly configService: ConfigService
     ) {
-        super(ResourceType.transcribedAudio, repositoryProvider, commandInfoService);
+        super(repositoryProvider, commandInfoService);
     }
 
     buildViewModel(
