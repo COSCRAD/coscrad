@@ -12,11 +12,11 @@ import InvalidEntityDTOError from '../../../domainModelValidators/errors/Invalid
 import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
+import { assertCommandPayloadTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
-import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
 import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
@@ -63,12 +63,6 @@ const buildInvalidFSA = (
 
 const emptyInitialState = buildInMemorySnapshot({});
 
-const assertCommandPayloadTypeError = (error: InternalError, propertyKey: string) => {
-    expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
-
-    expect(error.toString().includes(propertyKey)).toBe(true);
-};
-
 describe('CreateMediaItem', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -94,11 +88,7 @@ describe('CreateMediaItem', () => {
 
         commandHandlerService.registerHandler(
             commandType,
-            new CreateMediaItemCommandHandler(
-                testRepositoryProvider,
-                idManager,
-                ResourceType.mediaItem
-            )
+            new CreateMediaItemCommandHandler(testRepositoryProvider, idManager)
         );
     });
 
@@ -274,33 +264,35 @@ describe('CreateMediaItem', () => {
     });
 
     describe('when the external state is invalid', () => {
-        it('should fail', async () => {
-            await assertCreateCommandError(assertionHelperDependencies, {
-                buildCommandFSA: (_: AggregateId) => buildValidCommandFSA(existingMediaItemId),
-                initialState: buildInMemorySnapshot({
-                    resources: {
-                        mediaItem: [
-                            getValidResourceInstanceForTest(ResourceType.mediaItem).clone({
+        describe('when there is already a media item with the given id', () => {
+            it('should fail', async () => {
+                await assertCreateCommandError(assertionHelperDependencies, {
+                    buildCommandFSA: (_: AggregateId) => buildValidCommandFSA(existingMediaItemId),
+                    initialState: buildInMemorySnapshot({
+                        resources: {
+                            mediaItem: [
+                                getValidResourceInstanceForTest(ResourceType.mediaItem).clone({
+                                    id: existingMediaItemId,
+                                }),
+                            ],
+                        },
+                    }),
+
+                    checkError: (error) => {
+                        expect(error).toBeInstanceOf(CommandExecutionError);
+
+                        expect(error.innerErrors.length).toBe(1);
+
+                        const innerError = error.innerErrors[0];
+
+                        expect(innerError).toEqual(
+                            new ResourceIdAlreadyInUseError({
                                 id: existingMediaItemId,
-                            }),
-                        ],
+                                resourceType: ResourceType.mediaItem,
+                            })
+                        );
                     },
-                }),
-
-                checkError: (error) => {
-                    expect(error).toBeInstanceOf(CommandExecutionError);
-
-                    expect(error.innerErrors.length).toBe(1);
-
-                    const innerError = error.innerErrors[0];
-
-                    expect(innerError).toEqual(
-                        new ResourceIdAlreadyInUseError({
-                            id: existingMediaItemId,
-                            resourceType: ResourceType.mediaItem,
-                        })
-                    );
-                },
+                });
             });
         });
     });

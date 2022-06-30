@@ -185,7 +185,9 @@ export class ArangoDatabase {
         const documentToUpdate = await this.fetchById(id, collectionName);
 
         if (isNotFound(documentToUpdate))
-            throw new Error(`Cannot update document: ${id}, as no document with that id was found`);
+            throw new Error(
+                `Cannot update document: ${id} in collection: ${collectionName}, as no document with that id was found`
+            );
 
         // TODO remove cast
         const key = this.#getKeyOfDocument(

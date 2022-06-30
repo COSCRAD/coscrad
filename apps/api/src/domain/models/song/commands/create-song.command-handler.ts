@@ -10,13 +10,17 @@ import { Valid } from '../../../domainModelValidators/Valid';
 import getInstanceFactoryForEntity from '../../../factories/getInstanceFactoryForEntity';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
-import { CommandHandlerBase } from '../../shared/command-handlers/command-handler-base';
+import { BaseCommandHandler } from '../../shared/command-handlers/base-command-handler';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 import { SongCreated } from './song-created.event';
 
+/**
+ * TODO[https://www.pivotaltracker.com/story/show/182597512]
+ * This should leverage the `BaseCreateCommandHandler`
+ */
 @CommandHandler(CreateSong)
-export class CreateSongCommandHandler extends CommandHandlerBase<Song> {
+export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
     async createOrFetchWriteContext(command: CreateSong): Promise<ResultOrError<Song>> {
         const songDTO: DTO<Song> = {
             ...command,

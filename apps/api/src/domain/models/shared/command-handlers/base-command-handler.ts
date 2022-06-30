@@ -12,7 +12,7 @@ import InvalidCommandPayloadTypeError from '../common-command-errors/InvalidComm
 
 const buildExecutionError = (allErrors: InternalError[]) => new CommandExecutionError(allErrors);
 
-export abstract class CommandHandlerBase<TAggregate> implements ICommandHandler {
+export abstract class BaseCommandHandler<TAggregate> implements ICommandHandler {
     constructor(
         protected readonly repositoryProvider: RepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager

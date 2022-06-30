@@ -19,7 +19,7 @@ type TestCase = {
  * which allows for ID generation.
  */
 export const assertCommandSuccess = async (
-    dependencies: Omit<CommandAssertionDependencies, 'idGenerator'>,
+    dependencies: Omit<CommandAssertionDependencies, 'idManager'>,
     { buildValidCommandFSA: buildCommandFSA, initialState: state, checkStateOnSuccess }: TestCase
 ) => {
     const { testRepositoryProvider, commandHandlerService } = dependencies;

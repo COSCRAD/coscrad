@@ -16,6 +16,8 @@ import { MediaItemCreated } from './media-item-created.event';
 
 @CommandHandler(CreateMediaItem)
 export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<MediaItem> {
+    protected resourceType = ResourceType.mediaItem;
+
     protected createNewInstance(command: CreateMediaItem): ResultOrError<MediaItem> {
         const { id, title, titleEnglish, url, contributions, mimeType } = command;
 

@@ -1,14 +1,14 @@
 import { AggregateId } from '../../../types/AggregateId';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../song/commands/song-created.event';
-import { CreateMediaItem } from './create-media-item.command';
+import { PublishMediaItem } from './publish-media-item.command';
 
-export class MediaItemCreated extends BaseEvent {
-    type = 'MEDIA_ITEM_CREATED';
+export class MediaItemPublished extends BaseEvent {
+    type = 'MEDIA_ITEM_PUBLISHED';
 
     meta: EventRecordMetadata;
 
-    constructor(command: CreateMediaItem, eventId: AggregateId) {
+    constructor(command: PublishMediaItem, eventId: AggregateId) {
         super(command, eventId);
     }
 }
