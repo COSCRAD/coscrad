@@ -3,7 +3,7 @@ import * as request from 'supertest';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
-import { ResourceDescriptionAndLink } from '../../../view-models/resourceDescriptions/buildAllResourceDescriptions';
+import { ResourceDescription } from '../../../view-models/resourceDescriptions/buildAllResourceDescriptions';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
 describe('GET /resources', () => {
@@ -29,7 +29,7 @@ describe('GET /resources', () => {
     it('should return one description for each resource type', async () => {
         const result = await request(app.getHttpServer()).get('/resources');
 
-        const body = result.body as ResourceDescriptionAndLink[];
+        const body = result.body as ResourceDescription[];
 
         // TODO [optimization]: avoid loop within loop here
         const isThereAnEntryForEveryResourceType = Object.values(ResourceType).every(

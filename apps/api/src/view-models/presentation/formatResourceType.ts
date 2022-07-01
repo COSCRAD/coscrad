@@ -14,7 +14,7 @@ const resourceTypeAndLabel: ResourceTypeAndLabel = {
     [ResourceType.song]: 'Song',
     [ResourceType.spatialFeature]: 'Spatial Feature',
     [ResourceType.term]: 'Term',
-    [ResourceType.transcribedAudio]: 'Transcribed Audio Model',
+    [ResourceType.transcribedAudio]: 'Transcribed Audio Item',
     [ResourceType.vocabularyList]: 'Vocabulary List',
 };
 
