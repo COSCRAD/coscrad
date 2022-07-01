@@ -10,10 +10,13 @@ import { isAggregateId } from '../../domain/types/AggregateId';
 import { CategorizableType } from '../../domain/types/CategorizableType';
 import { isResourceType, ResourceType } from '../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
+import { isNotFound, NotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
 import { NoteViewModel } from '../../view-models/edgeConnectionViewModels/note.view-model';
+import formatResourceCompositeIdentifier from '../../view-models/presentation/formatResourceCompositeIdentifier';
 import httpStatusCodes from '../constants/httpStatusCodes';
+import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
 import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';
 
 @ApiTags('web of knowledge (edge connections)')
@@ -104,14 +107,30 @@ export class EdgeConnectionController {
         @Query('type') type: string
     ) {
         if (!isAggregateId(id))
-            return res
-                .status(httpStatusCodes.badRequest)
-                .send(new InternalError(`Invalid resource id: ${id}`));
+            return sendInternalResultAsHttpResponse(
+                res,
+                new InternalError(`Invalid resource id: ${id}`)
+            );
 
         if (!isResourceType(type))
-            return res
-                .status(httpStatusCodes.badRequest)
-                .send(new InternalError(`Invalid resource type: ${type}`));
+            return sendInternalResultAsHttpResponse(
+                res,
+                new InternalError(`Invalid resource type: ${type}`)
+            );
+
+        const resourceSearchResult = await this.repositoryProvider.forResource(type).fetchById(id);
+
+        if (isInternalError(resourceSearchResult)) {
+            throw new InternalError(
+                `Encountered an error when fetching resources related to ${formatResourceCompositeIdentifier(
+                    { id, type }
+                )}`,
+                [resourceSearchResult]
+            );
+        }
+
+        if (isNotFound(resourceSearchResult) || !resourceSearchResult.published)
+            return sendInternalResultAsHttpResponse(res, NotFound);
 
         const result = await this.repositoryProvider.getEdgeConnectionRepository().fetchMany();
 
