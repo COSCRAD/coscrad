@@ -1,5 +1,5 @@
 import { FluxStandardAction } from '@coscrad/commands';
-import { IsStringWithNonzeroLength } from '@coscrad/validation';
+import { IsNonEmptyObject, IsStringWithNonzeroLength } from '@coscrad/validation';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CommandFSA implements FluxStandardAction {
@@ -8,5 +8,6 @@ export class CommandFSA implements FluxStandardAction {
     readonly type: string;
 
     @ApiProperty()
+    @IsNonEmptyObject()
     readonly payload: Record<string, unknown>;
 }
