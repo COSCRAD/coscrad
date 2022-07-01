@@ -65,14 +65,30 @@ export class EdgeConnectionController {
         @Query('type') type: ResourceType
     ) {
         if (!isAggregateId(id))
-            return res
-                .status(httpStatusCodes.badRequest)
-                .send(new InternalError(`Invalid resource id: ${id}`));
+            return sendInternalResultAsHttpResponse(
+                res,
+                new InternalError(`Invalid resource id: ${id}`)
+            );
 
         if (!isResourceType(type))
-            return res
-                .status(httpStatusCodes.badRequest)
-                .send(new InternalError(`Invalid resource type: ${type}`));
+            return sendInternalResultAsHttpResponse(
+                res,
+                new InternalError(`Invalid resource type: ${type}`)
+            );
+
+        const resourceSearchResult = await this.repositoryProvider.forResource(type).fetchById(id);
+
+        if (isInternalError(resourceSearchResult)) {
+            throw new InternalError(
+                `Encountered an error when fetching resources related to ${formatResourceCompositeIdentifier(
+                    { id, type }
+                )}`,
+                [resourceSearchResult]
+            );
+        }
+
+        if (isNotFound(resourceSearchResult) || !resourceSearchResult.published)
+            return sendInternalResultAsHttpResponse(res, NotFound);
 
         const result = await this.repositoryProvider.getEdgeConnectionRepository().fetchMany();
 
