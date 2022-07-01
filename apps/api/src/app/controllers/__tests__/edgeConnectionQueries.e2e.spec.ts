@@ -2,8 +2,9 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { isDeepStrictEqual } from 'util';
 import { EdgeConnectionType } from '../../../domain/models/context/edge-connection.entity';
+import { Resource } from '../../../domain/models/resource.entity';
 import { isResourceCompositeIdentifier } from '../../../domain/types/ResourceCompositeIdentifier';
-import { ResourceType } from '../../../domain/types/ResourceType';
+import { InMemorySnapshot, ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -11,6 +12,7 @@ import buildTestData from '../../../test-data/buildTestData';
 import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatResourceCompositeIdentifier';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
+
 describe('When querying for edge connections', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
@@ -18,7 +20,28 @@ describe('When querying for edge connections', () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
-    const { connections, tags: tagTestData } = buildTestData();
+    const rawSnapshot = buildTestData();
+
+    /**
+     * It's important to make sure all resources are published. If a resource
+     * is not published, it is treated as not existing, in which case a
+     * query for `selfNotes` or `relatedResources` will return `notFound`.
+     */
+    const fullSnapshot: InMemorySnapshot = {
+        ...rawSnapshot,
+        resources: Object.entries(rawSnapshot.resources).reduce(
+            (acc, [resourceType, instances]): InMemorySnapshot =>
+                ({
+                    ...acc,
+                    [resourceType]: instances.map((instance: Resource) =>
+                        instance.clone({ published: true })
+                    ),
+                } as InMemorySnapshot),
+            {}
+        ),
+    };
+
+    const { connections } = buildTestData();
 
     beforeAll(async () => {
         ({ app, testRepositoryProvider } = await setUpIntegrationTest({
@@ -40,9 +63,7 @@ describe('When querying for edge connections', () => {
                 count: connections.length,
             };
 
-            await testRepositoryProvider.getEdgeConnectionRepository().createMany(connections);
-
-            await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+            await testRepositoryProvider.addFullSnapshot(fullSnapshot);
 
             const result = await request(app.getHttpServer()).get(`/connections`);
 
@@ -54,9 +75,7 @@ describe('When querying for edge connections', () => {
 
     describe(`GET /connections/notes`, () => {
         it('should return the expected result', async () => {
-            await testRepositoryProvider.getEdgeConnectionRepository().createMany(connections);
-
-            await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+            await testRepositoryProvider.addFullSnapshot(fullSnapshot);
 
             const result = await request(app.getHttpServer()).get('/connections/notes');
 
@@ -73,11 +92,7 @@ describe('When querying for edge connections', () => {
             Object.values(ResourceType).forEach((resourceType) =>
                 describe(`for a resource of type: ${resourceType}`, () => {
                     it(`should return the expected result`, async () => {
-                        await testRepositoryProvider
-                            .getEdgeConnectionRepository()
-                            .createMany(connections);
-
-                        await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+                        await testRepositoryProvider.addFullSnapshot(fullSnapshot);
 
                         const selfConnections = connections.filter(
                             ({ type }) => type === EdgeConnectionType.self
@@ -181,11 +196,7 @@ describe('When querying for edge connections', () => {
             Object.values(ResourceType).forEach((resourceType) =>
                 describe(`for a resource of type: ${resourceType}`, () => {
                     it(`should return the expected result`, async () => {
-                        await testRepositoryProvider
-                            .getEdgeConnectionRepository()
-                            .createMany(connections);
-
-                        await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+                        await testRepositoryProvider.addFullSnapshot(fullSnapshot);
 
                         const dualConnections = connections.filter(
                             ({ type }) => type === EdgeConnectionType.dual
