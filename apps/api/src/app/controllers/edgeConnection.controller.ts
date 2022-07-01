@@ -5,14 +5,17 @@ import {
     EdgeConnection,
     EdgeConnectionType,
 } from '../../domain/models/context/edge-connection.entity';
+import { Resource } from '../../domain/models/resource.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { isAggregateId } from '../../domain/types/AggregateId';
 import { CategorizableType } from '../../domain/types/CategorizableType';
 import { isResourceType, ResourceType } from '../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
+import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
+import { ResultOrError } from '../../types/ResultOrError';
 import { NoteViewModel } from '../../view-models/edgeConnectionViewModels/note.view-model';
 import formatResourceCompositeIdentifier from '../../view-models/presentation/formatResourceCompositeIdentifier';
 import httpStatusCodes from '../constants/httpStatusCodes';
@@ -64,31 +67,10 @@ export class EdgeConnectionController {
         @Query('id') id: string,
         @Query('type') type: ResourceType
     ) {
-        if (!isAggregateId(id))
-            return sendInternalResultAsHttpResponse(
-                res,
-                new InternalError(`Invalid resource id: ${id}`)
-            );
+        const resourceInstance = await this.fetchResourceContextInstance(id, type);
 
-        if (!isResourceType(type))
-            return sendInternalResultAsHttpResponse(
-                res,
-                new InternalError(`Invalid resource type: ${type}`)
-            );
-
-        const resourceSearchResult = await this.repositoryProvider.forResource(type).fetchById(id);
-
-        if (isInternalError(resourceSearchResult)) {
-            throw new InternalError(
-                `Encountered an error when fetching resources related to ${formatResourceCompositeIdentifier(
-                    { id, type }
-                )}`,
-                [resourceSearchResult]
-            );
-        }
-
-        if (isNotFound(resourceSearchResult) || !resourceSearchResult.published)
-            return sendInternalResultAsHttpResponse(res, NotFound);
+        if (isNotFound(resourceInstance) || isInternalError(resourceInstance))
+            return sendInternalResultAsHttpResponse(res, resourceInstance);
 
         const result = await this.repositoryProvider.getEdgeConnectionRepository().fetchMany();
 
@@ -122,31 +104,10 @@ export class EdgeConnectionController {
         @Query('id') id: string,
         @Query('type') type: string
     ) {
-        if (!isAggregateId(id))
-            return sendInternalResultAsHttpResponse(
-                res,
-                new InternalError(`Invalid resource id: ${id}`)
-            );
+        const resourceInstance = await this.fetchResourceContextInstance(id, type);
 
-        if (!isResourceType(type))
-            return sendInternalResultAsHttpResponse(
-                res,
-                new InternalError(`Invalid resource type: ${type}`)
-            );
-
-        const resourceSearchResult = await this.repositoryProvider.forResource(type).fetchById(id);
-
-        if (isInternalError(resourceSearchResult)) {
-            throw new InternalError(
-                `Encountered an error when fetching resources related to ${formatResourceCompositeIdentifier(
-                    { id, type }
-                )}`,
-                [resourceSearchResult]
-            );
-        }
-
-        if (isNotFound(resourceSearchResult) || !resourceSearchResult.published)
-            return sendInternalResultAsHttpResponse(res, NotFound);
+        if (isNotFound(resourceInstance) || isInternalError(resourceInstance))
+            return sendInternalResultAsHttpResponse(res, resourceInstance);
 
         const result = await this.repositoryProvider.getEdgeConnectionRepository().fetchMany();
 
@@ -169,6 +130,34 @@ export class EdgeConnectionController {
         );
 
         return await this.mixinTheTagsAndSend(res, viewModels);
+    }
+
+    /**
+     * The resource context instance is the resource (e.g. Book 123) whose notes
+     * or connections we are querying.
+     */
+    private async fetchResourceContextInstance(
+        id: string,
+        type: string
+    ): Promise<Maybe<ResultOrError<Resource>>> {
+        if (!isAggregateId(id)) return new InternalError(`Invalid resource id: ${id}`);
+
+        if (!isResourceType(type)) return new InternalError(`Invalid resource type: ${type}`);
+
+        const resourceSearchResult = await this.repositoryProvider.forResource(type).fetchById(id);
+
+        if (isInternalError(resourceSearchResult)) {
+            throw new InternalError(
+                `Encountered an error when fetching resources related to ${formatResourceCompositeIdentifier(
+                    { id, type }
+                )}`,
+                [resourceSearchResult]
+            );
+        }
+
+        if (isNotFound(resourceSearchResult) || !resourceSearchResult.published) return NotFound;
+
+        return resourceSearchResult;
     }
 
     /**
