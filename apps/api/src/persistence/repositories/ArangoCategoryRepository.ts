@@ -15,7 +15,7 @@ import { HasArangoDocumentDirectionAttributes } from '../database/types/HasArang
 import buildCategoryDTOsFromDatabaseDocuments from '../database/utilities/category/buildCategoryDTOsFromDatabaseDocuments';
 import buildLookupTableForChildrenIDs from '../database/utilities/category/buildLookupTableForChildrenIDs';
 import convertArangoDocumentHandleToCompositeIdentifier from '../database/utilities/convertArangoDocumentHandleToCompositeIdentifier';
-import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
+import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 
 export default class ArangoCategoryRepository implements ICategoryRepository {
     #instanceFactory = buildInstanceFactory(categoryValidator, Category);

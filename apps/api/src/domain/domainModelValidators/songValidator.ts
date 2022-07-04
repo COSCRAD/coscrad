@@ -5,7 +5,7 @@ import { Song } from '../models/song/song.entity';
 import { AggregateId } from '../types/AggregateId';
 import { ResourceType } from '../types/ResourceType';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
-import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from './errors/InvalidResourceDTOError';
 import NullOrUndefinedResourceDTOError from './errors/NullOrUndefinedResourceDTOError';
 import MissingSongTitleError from './errors/song/MissingSongTitleError';
 import { DomainModelValidator } from './types/DomainModelValidator';
@@ -13,7 +13,7 @@ import validateSimpleInvariants from './utilities/validateSimpleInvariants';
 import { Valid } from './Valid';
 
 const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]) =>
-    new InvalidEntityDTOError(ResourceType.song, id, innerErrors);
+    new InvalidResourceDTOError(ResourceType.song, id, innerErrors);
 
 const songValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
     if (isNullOrUndefined(dto)) return new NullOrUndefinedResourceDTOError(ResourceType.song);

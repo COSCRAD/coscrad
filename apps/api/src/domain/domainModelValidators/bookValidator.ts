@@ -3,7 +3,7 @@ import isStringWithNonzeroLength from '../../lib/utilities/isStringWithNonzeroLe
 import { DTO } from '../../types/DTO';
 import { Book } from '../models/book/entities/book.entity';
 import { ResourceType } from '../types/ResourceType';
-import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from './errors/InvalidResourceDTOError';
 import { DomainModelValidator } from './types/DomainModelValidator';
 import { Valid } from './Valid';
 
@@ -19,7 +19,7 @@ const bookValidator: DomainModelValidator = (dto: unknown): Valid | InternalErro
     if (published && pages.length === 0)
         allErrors.push(new InternalError('You cannot publish a book that has no pages'));
 
-    if (allErrors.length > 0) return new InvalidEntityDTOError(ResourceType.book, id, allErrors);
+    if (allErrors.length > 0) return new InvalidResourceDTOError(ResourceType.book, id, allErrors);
 
     return Valid;
 };

@@ -1,4 +1,4 @@
-import { InstanceFactory } from '../../domain/factories/getInstanceFactoryForEntity';
+import { InstanceFactory } from '../../domain/factories/getInstanceFactoryForResource';
 import BaseDomainModel from '../../domain/models/BaseDomainModel';
 import { IRepositoryForEntity } from '../../domain/repositories/interfaces/repository-for-entity.interface';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';

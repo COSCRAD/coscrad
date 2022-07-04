@@ -2,7 +2,7 @@ import { IBibliographicReference } from '../../../../models/bibliographic-refere
 import { BibliographicReferenceType } from '../../../../models/bibliographic-reference/types/BibliographicReferenceType';
 import { ResourceType } from '../../../../types/ResourceType';
 import bibliographicReferenceValidator from '../../../bibliographicReferenceValidator';
-import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from '../../../errors/InvalidResourceDTOError';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
 import { buildBookBibliographicReferenceTestCases } from './bibliographicReferenceInvalidTestCases/bookBibliographicReference.domainModelValidatorTestCases';
 import { buildJournalArticleBibliographicReferenceTestCases } from './bibliographicReferenceInvalidTestCases/journalArticleBibliographicReference.domainModelValidatorTestCases';
@@ -27,12 +27,12 @@ export const buildBibliographicReferenceTestCase =
             {
                 description: 'the dto is undefined',
                 invalidDTO: undefined,
-                expectedError: new InvalidEntityDTOError(ResourceType.bibliographicReference),
+                expectedError: new InvalidResourceDTOError(ResourceType.bibliographicReference),
             },
             {
                 description: 'the dto is null',
                 invalidDTO: null,
-                expectedError: new InvalidEntityDTOError(ResourceType.bibliographicReference),
+                expectedError: new InvalidResourceDTOError(ResourceType.bibliographicReference),
             },
             {
                 description: 'the dto has an invalid bibliographic reference type',
@@ -43,7 +43,7 @@ export const buildBibliographicReferenceTestCase =
                         type: 'BOGUS-BIBLIOGRAPHIC-REFERENCE-TYPE' as BibliographicReferenceType,
                     },
                 },
-                expectedError: new InvalidEntityDTOError(
+                expectedError: new InvalidResourceDTOError(
                     ResourceType.bibliographicReference,
                     validCases[0].dto.id
                 ),

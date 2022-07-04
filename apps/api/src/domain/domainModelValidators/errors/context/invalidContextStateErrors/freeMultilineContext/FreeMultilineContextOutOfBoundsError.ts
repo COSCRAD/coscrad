@@ -1,10 +1,10 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import formatResourceCompositeIdentifier from '../../../../../../view-models/presentation/formatResourceCompositeIdentifier';
-import { ResourceCompositeIdentifier } from '../../../../../types/ResourceCompositeIdentifier';
+import formatResourceCompositeIdentifier from '../../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 
 export default class FreeMultilineContextOutOfBoundsError extends InternalError {
     constructor(
-        resourceCompositeIdentifier: ResourceCompositeIdentifier,
+        resourceCompositeIdentifier: AggregateCompositeIdentifier,
         innerErrors: InternalError[]
     ) {
         const msg = [

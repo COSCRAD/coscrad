@@ -11,7 +11,7 @@ import buildTestData from '../../../test-data/buildTestData';
 import { DTO } from '../../../types/DTO';
 import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
 import mapArangoEdgeDocumentToEdgeConnectionDTO from './mapArangoEdgeDocumentToEdgeConnectionDTO';
-import mapDatabaseDTOToEntityDTO from './mapDatabaseDTOToEntityDTO';
+import mapDatabaseDTOToEntityDTO from './mapDatabaseDocumentToAggregateDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from './mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO, { DatabaseDTO } from './mapEntityDTOToDatabaseDTO';
 

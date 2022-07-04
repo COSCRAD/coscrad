@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import tagValidator from '../../domain/domainModelValidators/tagValidator';
 import edgeConnectionFactory from '../../domain/factories/edgeConnectionFactory';
-import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForEntity';
+import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForResource';
 import buildInstanceFactory from '../../domain/factories/utilities/buildInstanceFactory';
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import { Resource } from '../../domain/models/resource.entity';
@@ -15,7 +15,7 @@ import { ArangoCollectionId } from '../database/collection-references/ArangoColl
 import { getArangoCollectionIDFromResourceType } from '../database/collection-references/getArangoCollectionIDFromResourceType';
 import { DatabaseProvider } from '../database/database.provider';
 import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapArangoEdgeDocumentToEdgeConnectionDTO';
-import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
+import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
 import { ArangoIdRepository } from './arango-id-repository';

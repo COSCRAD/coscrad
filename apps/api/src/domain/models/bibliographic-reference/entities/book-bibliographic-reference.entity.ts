@@ -1,7 +1,7 @@
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import InvalidEntityDTOError from '../../../domainModelValidators/errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from '../../../domainModelValidators/errors/InvalidResourceDTOError';
 import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { ResourceType } from '../../../types/ResourceType';
@@ -30,7 +30,8 @@ export class BookBibliographicReference
     validateInvariants(): ResultOrError<Valid> {
         const typeErrors = validateSimpleInvariants(BookBibliographicReference, this);
 
-        if (typeErrors.length > 0) return new InvalidEntityDTOError(this.type, this.id, typeErrors);
+        if (typeErrors.length > 0)
+            return new InvalidResourceDTOError(this.type, this.id, typeErrors);
 
         return Valid;
     }

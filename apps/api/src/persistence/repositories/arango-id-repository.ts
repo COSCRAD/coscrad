@@ -7,7 +7,7 @@ import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { ArangoDatabase } from '../database/arango-database';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { DatabaseProvider } from '../database/database.provider';
-import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
+import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDTO, {
     DatabaseDocument,
 } from '../database/utilities/mapEntityDTOToDatabaseDTO';

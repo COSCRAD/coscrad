@@ -4,7 +4,7 @@ import { MediaItem } from '../../../../models/media-item/entities/media-item.ent
 import { ContributorAndRole } from '../../../../models/song/ContributorAndRole';
 import { AggregateId } from '../../../../types/AggregateId';
 import { ResourceType } from '../../../../types/ResourceType';
-import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from '../../../errors/InvalidResourceDTOError';
 import MediaItemHasNoTitleInAnyLanguageError from '../../../errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import NullOrUndefinedResourceDTOError from '../../../errors/NullOrUndefinedResourceDTOError';
 import mediaItemValidator from '../../../mediaItemValidator';
@@ -14,7 +14,7 @@ import getValidResourceInstanceForTest from '../utilities/getValidResourceInstan
 const validDTO = getValidResourceInstanceForTest(ResourceType.mediaItem).toDTO();
 
 const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]): InternalError =>
-    new InvalidEntityDTOError(ResourceType.mediaItem, id, innerErrors);
+    new InvalidResourceDTOError(ResourceType.mediaItem, id, innerErrors);
 
 export const buildmediaItemTestCase = (): DomainModelValidatorTestCase<MediaItem> => ({
     resourceType: ResourceType.mediaItem,
