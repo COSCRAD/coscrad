@@ -11,6 +11,7 @@ import InvalidEntityDTOError from '../../../domainModelValidators/errors/Invalid
 import MissingSongTitleError from '../../../domainModelValidators/errors/song/MissingSongTitleError';
 import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
+import { assertCommandPayloadTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
@@ -126,6 +127,27 @@ describe('CreateSong', () => {
                         // TODO Check inner errors
                         expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
                     },
+                });
+            });
+        });
+
+        describe('when the required property contributorAndRoles is missing', () => {
+            it('should return an error', async () => {
+                await assertCreateCommandError(assertionHelperDependencies, {
+                    buildCommandFSA: (id: AggregateId) => ({
+                        type: createSongCommandType,
+                        payload: {
+                            id,
+                            title: 'test-song-name (language)',
+                            titleEnglish: 'test-song-name (English)',
+                            lyrics: 'la la la',
+                            audioURL: 'https://www.mysound.org/song.mp3',
+                            lengthMilliseconds: 15340,
+                        },
+                    }),
+                    initialState,
+                    checkError: (error) =>
+                        assertCommandPayloadTypeError(error, 'contributorAndRoles'),
                 });
             });
         });
