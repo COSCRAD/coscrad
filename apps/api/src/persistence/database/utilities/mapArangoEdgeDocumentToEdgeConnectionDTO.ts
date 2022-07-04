@@ -5,12 +5,13 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
+import { AggregateCompositeIdentifier } from '../../../domain/types/AggregateCompositeIdentifier';
 import { isAggregateId } from '../../../domain/types/AggregateId';
-import { ResourceCompositeIdentifier } from '../../../domain/types/ResourceCompositeIdentifier';
+import { isResourceCompositeIdentifier } from '../../../domain/types/ResourceCompositeIdentifier';
 import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DTO } from '../../../types/DTO';
-import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatResourceCompositeIdentifier';
+import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { isArangoResourceCollectionId } from '../collection-references/ArangoResourceCollectionId';
 import { getResourceTypeFromArangoCollectionID } from '../collection-references/getArangoCollectionIDFromResourceType';
 import { ArangoDocumentHandle } from '../types/ArangoDocumentHandle';
@@ -19,7 +20,9 @@ import { HasArangoDocumentDirectionAttributes } from '../types/HasArangoDocument
 
 const arangoDocumentHandleDelimiter = '/';
 
-const parseResourceCompositeID = (docHandle: ArangoDocumentHandle): ResourceCompositeIdentifier => {
+const parseResourceCompositeID = (
+    docHandle: ArangoDocumentHandle
+): AggregateCompositeIdentifier => {
     const splitOnSlash = docHandle.split(arangoDocumentHandleDelimiter);
 
     if (splitOnSlash.length !== 2) {
@@ -47,7 +50,7 @@ const parseResourceCompositeID = (docHandle: ArangoDocumentHandle): ResourceComp
 // Is this useful?
 const _determineRoleFromCompositeID = (
     { _to, _from }: HasArangoDocumentDirectionAttributes,
-    compositeIdentifier: ResourceCompositeIdentifier
+    compositeIdentifier: AggregateCompositeIdentifier
 ): EdgeConnectionMemberRole => {
     const isTo = isDeepStrictEqual(parseResourceCompositeID(_to), compositeIdentifier);
 
@@ -77,7 +80,7 @@ const determineEdgeConnectionTypeFromDocument = ({
 const getCompositeIdentifierForMemberWithRole = (
     role: EdgeConnectionMemberRole,
     { _to, _from }: HasArangoDocumentDirectionAttributes
-): ResourceCompositeIdentifier =>
+): AggregateCompositeIdentifier =>
     role === EdgeConnectionMemberRole.from
         ? parseResourceCompositeID(_from)
         : parseResourceCompositeID(_to);
@@ -89,10 +92,20 @@ export default (document: ArangoEdgeDocument): DTO<EdgeConnection> => {
         throw new InternalError(`invalid edge document: ${JSON.stringify(document)}`);
     }
 
-    const membersForEdgeConnectionDTO: DTO<EdgeConnectionMember>[] = members.map((member) => ({
-        ...member,
-        compositeIdentifier: getCompositeIdentifierForMemberWithRole(member.role, document),
-    }));
+    const membersForEdgeConnectionDTO: DTO<EdgeConnectionMember>[] = members.map((member) => {
+        const compositeIdentifier = getCompositeIdentifierForMemberWithRole(member.role, document);
+
+        if (!isResourceCompositeIdentifier(compositeIdentifier)) {
+            throw new InternalError(
+                `The aggregate identifier for an edge connection must be for a resource. Found: ${compositeIdentifier}`
+            );
+        }
+
+        return {
+            ...member,
+            compositeIdentifier,
+        };
+    });
 
     return {
         type: determineEdgeConnectionTypeFromDocument(document),

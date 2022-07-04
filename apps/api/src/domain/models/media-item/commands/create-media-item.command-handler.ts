@@ -7,7 +7,7 @@ import { isOK } from '../../../../lib/types/ok';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForEntity from '../../../factories/getInstanceFactoryForEntity';
+import getInstanceFactoryForEntity from '../../../factories/getInstanceFactoryForResource';
 import { AggregateId } from '../../../types/AggregateId';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';

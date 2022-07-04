@@ -1,7 +1,7 @@
 import { Line } from '../../../../../models/spatial-feature/line.entity';
 import { GeometricFeatureType } from '../../../../../models/spatial-feature/types/GeometricFeatureType';
 import { ResourceType } from '../../../../../types/ResourceType';
-import InvalidEntityDTOError from '../../../../errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from '../../../../errors/InvalidResourceDTOError';
 import { DomainModelValidatorInvalidTestCase } from '../../../types/DomainModelValidatorTestCase';
 import { getValidSpatialFeatureInstanceForTest } from '../utils/getValidSpatialFeatureInstanceForTest';
 
@@ -22,6 +22,6 @@ export const buildLineInvalidTestCases = (): DomainModelValidatorInvalidTestCase
                 ],
             },
         },
-        expectedError: new InvalidEntityDTOError(ResourceType.spatialFeature, validLineDTO.id),
+        expectedError: new InvalidResourceDTOError(ResourceType.spatialFeature, validLineDTO.id),
     },
 ];

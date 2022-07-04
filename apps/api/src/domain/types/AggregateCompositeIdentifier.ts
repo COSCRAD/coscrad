@@ -1,6 +1,6 @@
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import { AggregateId, isAggregateId } from './AggregateId';
-import { isResourceType, ResourceType } from './ResourceType';
+import { AggregateType, isAggregateType } from './AggregateType';
 
 /**
  * A `CompositeIdentifier` includes
@@ -9,17 +9,17 @@ import { isResourceType, ResourceType } from './ResourceType';
  * We avoid calling this a `Composite Key`, as in Arango db, the convention
  * is to call the `document id` `_key` and the `CompositeIdentifier` `_id`.
  */
-export type ResourceCompositeIdentifier<TResourceType = ResourceType> = {
-    type: TResourceType;
+export type AggregateCompositeIdentifier<TAggregateType = AggregateType> = {
+    type: TAggregateType;
     id: AggregateId;
 };
 
-export const isResourceCompositeIdentifier = (
+export const isAggregateCompositeIdentifier = (
     input: unknown
-): input is ResourceCompositeIdentifier => {
+): input is AggregateCompositeIdentifier => {
     if (isNullOrUndefined(input)) return false;
 
-    const { type, id } = input as ResourceCompositeIdentifier;
+    const { type, id } = input as AggregateCompositeIdentifier;
 
-    return isResourceType(type) && isAggregateId(id);
+    return isAggregateType(type) && isAggregateId(id);
 };

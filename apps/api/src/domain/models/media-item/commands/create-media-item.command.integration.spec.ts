@@ -8,7 +8,7 @@ import { ArangoConnectionProvider } from '../../../../persistence/database/arang
 import generateRandomTestDatabaseName from '../../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../types/DTO';
-import InvalidEntityDTOError from '../../../domainModelValidators/errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from '../../../domainModelValidators/errors/InvalidResourceDTOError';
 import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
@@ -353,7 +353,7 @@ describe('CreateMediaItem', () => {
 
                         const innerErrors = error.innerErrors;
 
-                        expect(innerErrors[0]).toBeInstanceOf(InvalidEntityDTOError);
+                        expect(innerErrors[0]).toBeInstanceOf(InvalidResourceDTOError);
 
                         const innermostErrors = innerErrors[0].innerErrors[0];
 

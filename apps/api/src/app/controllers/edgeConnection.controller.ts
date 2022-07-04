@@ -17,7 +17,7 @@ import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
 import { ResultOrError } from '../../types/ResultOrError';
 import { NoteViewModel } from '../../view-models/edgeConnectionViewModels/note.view-model';
-import formatResourceCompositeIdentifier from '../../view-models/presentation/formatResourceCompositeIdentifier';
+import formatResourceCompositeIdentifier from '../../view-models/presentation/formatAggregateCompositeIdentifier';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
 import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';

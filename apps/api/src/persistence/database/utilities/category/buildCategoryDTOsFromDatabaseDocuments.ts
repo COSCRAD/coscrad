@@ -1,6 +1,6 @@
 import { CategoryDocument } from '../../types/CategoryDocument';
 import { HasArangoDocumentDirectionAttributes } from '../../types/HasArangoDocumentDirectionAttributes';
-import mapDatabaseDTOToEntityDTO from '../mapDatabaseDTOToEntityDTO';
+import mapDatabaseDTOToEntityDTO from '../mapDatabaseDocumentToAggregateDTO';
 import buildLookupTableForChildrenIDs from './buildLookupTableForChildrenIDs';
 
 export default (categories: CategoryDocument[], edges: HasArangoDocumentDirectionAttributes[]) => {

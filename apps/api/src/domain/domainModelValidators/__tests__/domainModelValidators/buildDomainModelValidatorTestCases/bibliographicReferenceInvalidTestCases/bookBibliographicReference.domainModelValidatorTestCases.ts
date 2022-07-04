@@ -6,7 +6,7 @@ import { BookBibliographicReference } from '../../../../../models/bibliographic-
 import { BibliographicReferenceType } from '../../../../../models/bibliographic-reference/types/BibliographicReferenceType';
 import { AggregateId } from '../../../../../types/AggregateId';
 import { ResourceType } from '../../../../../types/ResourceType';
-import InvalidEntityDTOError from '../../../../errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from '../../../../errors/InvalidResourceDTOError';
 import { DomainModelValidatorInvalidTestCase } from '../../../types/DomainModelValidatorTestCase';
 import getValidBibliographicReferenceInstanceForTest from '../utils/getValidBibliographicReferenceInstanceForTest';
 
@@ -15,7 +15,7 @@ const validDto = getValidBibliographicReferenceInstanceForTest(
 ).toDTO();
 
 const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]): InternalError =>
-    new InvalidEntityDTOError(ResourceType.bibliographicReference, id, innerErrors);
+    new InvalidResourceDTOError(ResourceType.bibliographicReference, id, innerErrors);
 
 export const buildBookBibliographicReferenceTestCases =
     (): DomainModelValidatorInvalidTestCase<BookBibliographicReference>[] => [

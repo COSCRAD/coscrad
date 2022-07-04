@@ -1,7 +1,7 @@
 import { ISpatialFeature } from '../../../../models/spatial-feature/ISpatialFeature';
 import { GeometricFeatureType } from '../../../../models/spatial-feature/types/GeometricFeatureType';
 import { ResourceType } from '../../../../types/ResourceType';
-import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from '../../../errors/InvalidResourceDTOError';
 import NullOrUndefinedResourceDTOError from '../../../errors/NullOrUndefinedResourceDTOError';
 import spatialFeatureValidator from '../../../spatialFeatureValidator';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
@@ -41,7 +41,7 @@ export const buildSpatialFeatureTestCase = (): DomainModelValidatorTestCase<ISpa
                     type: 'BOGUS-GEOMETRIC-FEATURE-TYPE' as GeometricFeatureType,
                 },
             },
-            expectedError: new InvalidEntityDTOError(
+            expectedError: new InvalidResourceDTOError(
                 ResourceType.spatialFeature,
                 validCases[0].dto.id
             ),

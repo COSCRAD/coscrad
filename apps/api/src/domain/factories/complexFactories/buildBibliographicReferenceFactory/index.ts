@@ -2,7 +2,7 @@ import { DTO } from '../../../../types/DTO';
 import bibliographicReferenceValidator from '../../../domainModelValidators/bibliographicReferenceValidator';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { IBibliographicReference } from '../../../models/bibliographic-reference/interfaces/IBibliographicReference';
-import { InstanceFactory } from '../../getInstanceFactoryForEntity';
+import { InstanceFactory } from '../../getInstanceFactoryForResource';
 import getCtorFromBibliographicReferenceType from './getCtorFromBibliographicReferenceType';
 
 const bibliographicReferenceFactory: InstanceFactory<IBibliographicReference> = (

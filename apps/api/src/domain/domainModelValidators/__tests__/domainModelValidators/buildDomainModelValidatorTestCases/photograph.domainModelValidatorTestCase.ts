@@ -1,7 +1,7 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Photograph } from '../../../../models/photograph/entities/photograph.entity';
 import { ResourceType } from '../../../../types/ResourceType';
-import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from '../../../errors/InvalidResourceDTOError';
 import NullOrUndefinedResourceDTOError from '../../../errors/NullOrUndefinedResourceDTOError';
 import photographValidator from '../../../photographValidator';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
@@ -32,7 +32,7 @@ export const buildPhotographTestCase = (): DomainModelValidatorTestCase<Photogra
                 photographer: undefined,
             },
             // TODO compare inner errors as well
-            expectedError: new InvalidEntityDTOError(ResourceType.photograph, validDTO.id),
+            expectedError: new InvalidResourceDTOError(ResourceType.photograph, validDTO.id),
         },
         {
             description: 'The photograph has a negative height',
@@ -44,7 +44,7 @@ export const buildPhotographTestCase = (): DomainModelValidatorTestCase<Photogra
                 },
             },
             // TODO compare inner errors as well
-            expectedError: new InvalidEntityDTOError(ResourceType.photograph, validDTO.id),
+            expectedError: new InvalidResourceDTOError(ResourceType.photograph, validDTO.id),
         },
         {
             description: 'The photograph has a negative width',
@@ -56,7 +56,7 @@ export const buildPhotographTestCase = (): DomainModelValidatorTestCase<Photogra
                 },
             },
             // TODO compare inner errors as well
-            expectedError: new InvalidEntityDTOError(ResourceType.photograph, validDTO.id),
+            expectedError: new InvalidResourceDTOError(ResourceType.photograph, validDTO.id),
         },
     ],
 });

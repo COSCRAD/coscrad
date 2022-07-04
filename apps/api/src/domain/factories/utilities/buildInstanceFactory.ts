@@ -3,7 +3,7 @@ import { DTO } from '../../../types/DTO';
 import { DomainModelValidator } from '../../domainModelValidators/types/DomainModelValidator';
 import { isValid } from '../../domainModelValidators/Valid';
 import BaseDomainModel from '../../models/BaseDomainModel';
-import { InstanceFactory } from '../getInstanceFactoryForEntity';
+import { InstanceFactory } from '../getInstanceFactoryForResource';
 
 export default <TEntity extends BaseDomainModel = BaseDomainModel>(
         validator: DomainModelValidator,

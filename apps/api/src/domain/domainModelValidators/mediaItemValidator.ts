@@ -4,7 +4,7 @@ import { MediaItem } from '../models/media-item/entities/media-item.entity';
 import { AggregateId } from '../types/AggregateId';
 import { ResourceType } from '../types/ResourceType';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
-import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from './errors/InvalidResourceDTOError';
 import MediaItemHasNoTitleInAnyLanguageError from './errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import NullOrUndefinedResourceDTOError from './errors/NullOrUndefinedResourceDTOError';
 import { DomainModelValidator } from './types/DomainModelValidator';
@@ -12,7 +12,7 @@ import validateSimpleInvariants from './utilities/validateSimpleInvariants';
 import { Valid } from './Valid';
 
 const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]): InternalError =>
-    new InvalidEntityDTOError(ResourceType.mediaItem, id, innerErrors);
+    new InvalidResourceDTOError(ResourceType.mediaItem, id, innerErrors);
 
 const mediaItemValidator: DomainModelValidator = (dto: unknown) => {
     if (isNullOrUndefined(dto)) return new NullOrUndefinedResourceDTOError(ResourceType.mediaItem);
