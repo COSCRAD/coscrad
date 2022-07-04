@@ -1,6 +1,6 @@
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import InvalidEntityDTOError from '../../../domainModelValidators/errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from '../../../domainModelValidators/errors/InvalidResourceDTOError';
 import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { ResourceType } from '../../../types/ResourceType';
@@ -28,7 +28,8 @@ export class JournalArticleBibliographicReference
     validateInvariants(): ResultOrError<Valid> {
         const typeErrors = validateSimpleInvariants(JournalArticleBibliographicReference, this);
 
-        if (typeErrors.length > 0) return new InvalidEntityDTOError(this.type, this.id, typeErrors);
+        if (typeErrors.length > 0)
+            return new InvalidResourceDTOError(this.type, this.id, typeErrors);
 
         return Valid;
     }

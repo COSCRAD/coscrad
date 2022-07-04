@@ -3,13 +3,13 @@ import * as request from 'supertest';
 import { isDeepStrictEqual } from 'util';
 import { EdgeConnectionType } from '../../../domain/models/context/edge-connection.entity';
 import { Resource } from '../../../domain/models/resource.entity';
-import { isResourceCompositeIdentifier } from '../../../domain/types/ResourceCompositeIdentifier';
+import { isAggregateCompositeIdentifier } from '../../../domain/types/AggregateCompositeIdentifier';
 import { InMemorySnapshot, ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
-import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatResourceCompositeIdentifier';
+import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
 
@@ -104,7 +104,7 @@ describe('When querying for edge connections', () => {
                                 ({ compositeIdentifier: { type } }) => type === resourceType
                             )?.compositeIdentifier;
 
-                        if (!isResourceCompositeIdentifier(compositeIdToQuery)) {
+                        if (!isAggregateCompositeIdentifier(compositeIdToQuery)) {
                             throw new InternalError(
                                 `Failed to find a self edge for: ${formatResourceCompositeIdentifier(
                                     compositeIdToQuery
@@ -207,7 +207,7 @@ describe('When querying for edge connections', () => {
                             .map(({ compositeIdentifier }) => compositeIdentifier)
                             .find(({ type }) => type === resourceType);
 
-                        if (!isResourceCompositeIdentifier(compositeIdentifierToQuery)) {
+                        if (!isAggregateCompositeIdentifier(compositeIdentifierToQuery)) {
                             throw new InternalError(
                                 `Failed to find a dual connection for resource of type: ${resourceType}`
                             );

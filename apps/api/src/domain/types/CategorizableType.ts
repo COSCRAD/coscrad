@@ -3,7 +3,7 @@ import { ResourceType } from './ResourceType';
 export const CategorizableType = {
     ...ResourceType,
     note: 'note',
-};
+} as const;
 
 export type CategorizableType = ResourceType | typeof CategorizableType.note;
 

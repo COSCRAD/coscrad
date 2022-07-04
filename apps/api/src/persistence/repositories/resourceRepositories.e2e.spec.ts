@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
-import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForEntity';
+import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForResource';
 import { Resource } from '../../domain/models/resource.entity';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';

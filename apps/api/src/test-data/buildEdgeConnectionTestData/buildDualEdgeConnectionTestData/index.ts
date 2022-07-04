@@ -8,7 +8,7 @@ import {
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
-import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatResourceCompositeIdentifier';
+import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import buildOneSelfEdgeConnectionForEachResourceType from '../buildSelfConnectionTestData/buildOneSelfEdgeConnectionForEachResourceType';
 import buildOneDualEdgeConnectionForEveryContextType from './buildOneDualEdgeConnectionForEveryContextType';
 import buildOneFromConnectionForInstanceOfEachResourceType from './buildOneFromConnectionForInstanceOfEachResourceType';

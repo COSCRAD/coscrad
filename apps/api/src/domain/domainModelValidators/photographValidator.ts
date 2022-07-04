@@ -4,7 +4,7 @@ import { DTO } from '../../types/DTO';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { ResourceType } from '../types/ResourceType';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
-import InvalidEntityDTOError from './errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from './errors/InvalidResourceDTOError';
 import NullOrUndefinedResourceDTOError from './errors/NullOrUndefinedResourceDTOError';
 import { DomainModelValidator } from './types/DomainModelValidator';
 import { Valid } from './Valid';
@@ -28,7 +28,7 @@ const photographValidator: DomainModelValidator = (dto: unknown): Valid | Intern
     if (widthPX < 0) allErrors.push(new InternalError(`A photograph cannot have a negative width`));
 
     return allErrors.length > 0
-        ? new InvalidEntityDTOError(ResourceType.photograph, id, allErrors)
+        ? new InvalidResourceDTOError(ResourceType.photograph, id, allErrors)
         : Valid;
 };
 

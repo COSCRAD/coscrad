@@ -1,15 +1,15 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
+import formatResourceCompositeIdentifier from '../../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import formatBounds2D from '../../../../../../view-models/presentation/formatBounds2D';
 import formatPosition2D from '../../../../../../view-models/presentation/formatPosition2D';
-import formatResourceCompositeIdentifier from '../../../../../../view-models/presentation/formatResourceCompositeIdentifier';
 import { Position2D } from '../../../../../models/spatial-feature/types/Coordinates/Position2D';
-import { ResourceCompositeIdentifier } from '../../../../../types/ResourceCompositeIdentifier';
+import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 
 export default class PointContextOutOfBoundsError extends InternalError {
     constructor(
         point: Position2D,
         bounds: [Position2D, Position2D],
-        resourceCompositeIdentifier: ResourceCompositeIdentifier
+        resourceCompositeIdentifier: AggregateCompositeIdentifier
     ) {
         const msg = [
             `The point: ${formatPosition2D(point)}`,

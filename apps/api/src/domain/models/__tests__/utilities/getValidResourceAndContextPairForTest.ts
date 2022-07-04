@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import buildTestData from '../../../../test-data/buildTestData';
-import formatResourceCompositeIdentifier from '../../../../view-models/presentation/formatResourceCompositeIdentifier';
+import formatResourceCompositeIdentifier from '../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { ContextTypeToInstance } from '../../../models/context/types/ContextTypeToInstance';
 import { ResourceType, ResourceTypeToResourceModel } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';

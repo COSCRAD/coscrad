@@ -2,7 +2,7 @@ import { DTO } from '../../../../types/DTO';
 import spatialFeatureValidator from '../../../domainModelValidators/spatialFeatureValidator';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { ISpatialFeature } from '../../../models/spatial-feature/ISpatialFeature';
-import { InstanceFactory } from '../../getInstanceFactoryForEntity';
+import { InstanceFactory } from '../../getInstanceFactoryForResource';
 import buildSpatialFeatureModel from './buildSpatialFeatureModel';
 
 const spatialDataFactory: InstanceFactory<ISpatialFeature> = (dto: unknown) => {

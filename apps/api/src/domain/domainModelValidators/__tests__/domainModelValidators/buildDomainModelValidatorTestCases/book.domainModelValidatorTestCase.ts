@@ -1,7 +1,7 @@
 import { Book } from '../../../../models/book/entities/book.entity';
 import { ResourceType } from '../../../../types/ResourceType';
 import bookValidator from '../../../bookValidator';
-import InvalidEntityDTOError from '../../../errors/InvalidEntityDTOError';
+import InvalidResourceDTOError from '../../../errors/InvalidResourceDTOError';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
 import getValidResourceInstanceForTest from '../utilities/getValidResourceInstanceForTest';
 
@@ -23,7 +23,7 @@ export const buildBookTestCase = (): DomainModelValidatorTestCase<Book> => ({
                 title: undefined,
             },
             // TODO compare inner errors as well
-            expectedError: new InvalidEntityDTOError(ResourceType.book, validBookDTO.id),
+            expectedError: new InvalidResourceDTOError(ResourceType.book, validBookDTO.id),
         },
         {
             description: 'A book with no pages cannot be published',
@@ -32,7 +32,7 @@ export const buildBookTestCase = (): DomainModelValidatorTestCase<Book> => ({
                 published: true,
                 pages: [],
             },
-            expectedError: new InvalidEntityDTOError(ResourceType.book, validBookDTO.id),
+            expectedError: new InvalidResourceDTOError(ResourceType.book, validBookDTO.id),
         },
     ],
 });
