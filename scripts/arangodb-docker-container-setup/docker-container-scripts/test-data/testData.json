@@ -414,8 +414,10 @@
         {
             "_to": "terms/2",
             "_from": "terms/2",
-            "type": "self",
+            "type": "note",
             "_key": "1",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -434,8 +436,10 @@
         {
             "_to": "books/24",
             "_from": "books/24",
-            "type": "self",
+            "type": "note",
             "_key": "2",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -452,8 +456,10 @@
         {
             "_to": "vocabulary_lists/2",
             "_from": "vocabulary_lists/2",
-            "type": "self",
+            "type": "note",
             "_key": "3",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -472,8 +478,10 @@
         {
             "_to": "spatial_features/300",
             "_from": "spatial_features/300",
-            "type": "self",
+            "type": "note",
             "_key": "4",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -487,8 +495,10 @@
         {
             "_to": "transcribed_audio/110",
             "_from": "transcribed_audio/110",
-            "type": "self",
+            "type": "note",
             "_key": "5",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -506,8 +516,10 @@
         {
             "_to": "photographs/2",
             "_from": "photographs/2",
-            "type": "self",
+            "type": "note",
             "_key": "6",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -541,8 +553,10 @@
         {
             "_to": "photographs/2",
             "_from": "photographs/2",
-            "type": "self",
+            "type": "note",
             "_key": "7",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -560,8 +574,10 @@
         {
             "_to": "books/24",
             "_from": "books/24",
-            "type": "self",
+            "type": "note",
             "_key": "8",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -578,8 +594,10 @@
         {
             "_to": "bibliographic_references/1",
             "_from": "bibliographic_references/1",
-            "type": "self",
+            "type": "note",
             "_key": "9",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -593,8 +611,10 @@
         {
             "_to": "songs/1",
             "_from": "songs/1",
-            "type": "self",
+            "type": "note",
             "_key": "10",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -612,8 +632,10 @@
         {
             "_to": "media_items/1",
             "_from": "media_items/1",
-            "type": "self",
+            "type": "note",
             "_key": "11",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -632,8 +654,10 @@
         {
             "_to": "media_items/1",
             "_from": "media_items/1",
-            "type": "self",
+            "type": "note",
             "_key": "12",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -651,8 +675,10 @@
         {
             "_to": "terms/2",
             "_from": "terms/2",
-            "type": "self",
+            "type": "note",
             "_key": "13",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -666,8 +692,10 @@
         {
             "_to": "books/24",
             "_from": "books/24",
-            "type": "self",
+            "type": "note",
             "_key": "14",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -681,8 +709,10 @@
         {
             "_to": "vocabulary_lists/2",
             "_from": "vocabulary_lists/2",
-            "type": "self",
+            "type": "note",
             "_key": "15",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -696,8 +726,10 @@
         {
             "_to": "spatial_features/300",
             "_from": "spatial_features/300",
-            "type": "self",
+            "type": "note",
             "_key": "16",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -711,8 +743,10 @@
         {
             "_to": "transcribed_audio/110",
             "_from": "transcribed_audio/110",
-            "type": "self",
+            "type": "note",
             "_key": "17",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -726,8 +760,10 @@
         {
             "_to": "photographs/2",
             "_from": "photographs/2",
-            "type": "self",
+            "type": "note",
             "_key": "18",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -741,8 +777,10 @@
         {
             "_to": "photographs/2",
             "_from": "photographs/2",
-            "type": "self",
+            "type": "note",
             "_key": "19",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -756,8 +794,10 @@
         {
             "_to": "books/24",
             "_from": "books/24",
-            "type": "self",
+            "type": "note",
             "_key": "20",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -771,8 +811,10 @@
         {
             "_to": "bibliographic_references/1",
             "_from": "bibliographic_references/1",
-            "type": "self",
+            "type": "note",
             "_key": "21",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -786,8 +828,10 @@
         {
             "_to": "songs/1",
             "_from": "songs/1",
-            "type": "self",
+            "type": "note",
             "_key": "22",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -801,8 +845,10 @@
         {
             "_to": "media_items/1",
             "_from": "media_items/1",
-            "type": "self",
+            "type": "note",
             "_key": "23",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -816,8 +862,10 @@
         {
             "_to": "media_items/1",
             "_from": "media_items/1",
-            "type": "self",
+            "type": "note",
             "_key": "24",
+            "eventHistory": [],
+            "connectionType": "self",
             "members": [
                 {
                     "role": "self",
@@ -831,8 +879,10 @@
         {
             "_to": "terms/2",
             "_from": "vocabulary_lists/2",
-            "type": "dual",
+            "type": "note",
             "_key": "2000",
+            "eventHistory": [],
+            "connectionType": "dual",
             "members": [
                 {
                     "role": "to",
@@ -862,8 +912,10 @@
         {
             "_to": "vocabulary_lists/2",
             "_from": "transcribed_audio/110",
-            "type": "dual",
+            "type": "note",
             "_key": "2001",
+            "eventHistory": [],
+            "connectionType": "dual",
             "members": [
                 {
                     "role": "to",
@@ -892,8 +944,10 @@
         {
             "_to": "transcribed_audio/110",
             "_from": "books/24",
-            "type": "dual",
+            "type": "note",
             "_key": "2002",
+            "eventHistory": [],
+            "connectionType": "dual",
             "members": [
                 {
                     "role": "to",
@@ -920,8 +974,10 @@
         {
             "_to": "books/24",
             "_from": "photographs/2",
-            "type": "dual",
+            "type": "note",
             "_key": "2003",
+            "eventHistory": [],
+            "connectionType": "dual",
             "members": [
                 {
                     "role": "to",
@@ -964,8 +1020,10 @@
         {
             "_to": "photographs/2",
             "_from": "spatial_features/300",
-            "type": "dual",
+            "type": "note",
             "_key": "2004",
+            "eventHistory": [],
+            "connectionType": "dual",
             "members": [
                 {
                     "role": "to",
@@ -1005,8 +1063,10 @@
         {
             "_to": "spatial_features/300",
             "_from": "bibliographic_references/1",
-            "type": "dual",
+            "type": "note",
             "_key": "2005",
+            "eventHistory": [],
+            "connectionType": "dual",
             "members": [
                 {
                     "role": "to",
@@ -1026,8 +1086,10 @@
         {
             "_to": "bibliographic_references/1",
             "_from": "songs/1",
-            "type": "dual",
+            "type": "note",
             "_key": "2006",
+            "eventHistory": [],
+            "connectionType": "dual",
             "members": [
                 {
                     "role": "to",
@@ -1051,8 +1113,10 @@
         {
             "_to": "songs/1",
             "_from": "terms/2",
-            "type": "dual",
+            "type": "note",
             "_key": "2007",
+            "eventHistory": [],
+            "connectionType": "dual",
             "members": [
                 {
                     "role": "to",
@@ -1081,8 +1145,10 @@
         {
             "_from": "media_items/1",
             "_to": "terms/2",
-            "type": "dual",
+            "type": "note",
             "_key": "3001",
+            "eventHistory": [],
+            "connectionType": "dual",
             "members": [
                 {
                     "role": "from",
@@ -1111,8 +1177,10 @@
         {
             "_to": "media_items/1",
             "_from": "books/24",
-            "type": "dual",
+            "type": "note",
             "_key": "3101",
+            "eventHistory": [],
+            "connectionType": "dual",
             "members": [
                 {
                     "role": "to",
@@ -1139,7 +1207,9 @@
     ],
     "tags": [
         {
+            "type": "tag",
             "_key": "1",
+            "eventHistory": [],
             "label": "plants",
             "members": [
                 {
@@ -1177,7 +1247,9 @@
             ]
         },
         {
+            "type": "tag",
             "_key": "2",
+            "eventHistory": [],
             "label": "animals",
             "members": [
                 {
@@ -1207,7 +1279,9 @@
             ]
         },
         {
+            "type": "tag",
             "_key": "3",
+            "eventHistory": [],
             "label": "placenames",
             "members": [
                 {
@@ -1229,7 +1303,9 @@
             ]
         },
         {
+            "type": "tag",
             "_key": "4",
+            "eventHistory": [],
             "label": "songs",
             "members": [
                 {
@@ -1247,7 +1323,9 @@
             ]
         },
         {
+            "type": "tag",
             "_key": "5",
+            "eventHistory": [],
             "label": "legends",
             "members": [
                 {

@@ -7,6 +7,7 @@ import {
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
 import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
@@ -18,9 +19,10 @@ type TestCase = {
     expectedResult: ArangoEdgeDocument;
 };
 
-const selfEdgeConnection = {
+const selfEdgeConnection = new EdgeConnection({
     id: '123',
-    type: EdgeConnectionType.self,
+    connectionType: EdgeConnectionType.self,
+    type: AggregateType.note,
     note: 'These pages are about bears',
     members: [
         {
@@ -35,7 +37,7 @@ const selfEdgeConnection = {
             }).toDTO(),
         },
     ],
-};
+}).toDTO();
 
 const validPageRangeContext = new PageRangeContext({
     type: EdgeConnectionContextType.pageRange,
@@ -74,7 +76,8 @@ const buildValidTranscribedAudioConnectionMember = (
 });
 
 const dualEdgeConnection = new EdgeConnection({
-    type: EdgeConnectionType.dual,
+    type: AggregateType.note,
+    connectionType: EdgeConnectionType.dual,
     members: [
         buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.from),
         buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
@@ -91,9 +94,10 @@ const testCases: TestCase[] = [
             _from: 'books/24',
             _to: 'books/24',
             _key: '123',
-            type: EdgeConnectionType.self,
-
+            connectionType: EdgeConnectionType.self,
+            eventHistory: [],
             note: 'These pages are about bears',
+            type: AggregateType.note,
             members: [
                 {
                     role: EdgeConnectionMemberRole.self,
@@ -109,9 +113,10 @@ const testCases: TestCase[] = [
             _from: 'books/1123',
             _to: 'transcribed_audio/15',
             _key: '123',
-            type: EdgeConnectionType.dual,
-
+            connectionType: EdgeConnectionType.dual,
+            eventHistory: [],
             note: 'These are both about bears',
+            type: AggregateType.note,
             members: [
                 {
                     role: EdgeConnectionMemberRole.from,

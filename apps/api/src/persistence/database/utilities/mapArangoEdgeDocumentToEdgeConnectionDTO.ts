@@ -7,6 +7,7 @@ import {
 } from '../../../domain/models/context/edge-connection.entity';
 import { AggregateCompositeIdentifier } from '../../../domain/types/AggregateCompositeIdentifier';
 import { isAggregateId } from '../../../domain/types/AggregateId';
+import { AggregateType } from '../../../domain/types/AggregateType';
 import { isResourceCompositeIdentifier } from '../../../domain/types/ResourceCompositeIdentifier';
 import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../../lib/errors/InternalError';
@@ -86,7 +87,7 @@ const getCompositeIdentifierForMemberWithRole = (
         : parseResourceCompositeID(_to);
 
 export default (document: ArangoEdgeDocument): DTO<EdgeConnection> => {
-    const { members, note, _key: id, _to, _from } = document;
+    const { members, note, _key: id, _to, _from, eventHistory } = document;
 
     if ([_to, _from, id].some(isNullOrUndefined)) {
         throw new InternalError(`invalid edge document: ${JSON.stringify(document)}`);
@@ -108,9 +109,11 @@ export default (document: ArangoEdgeDocument): DTO<EdgeConnection> => {
     });
 
     return {
-        type: determineEdgeConnectionTypeFromDocument(document),
+        type: AggregateType.note,
+        connectionType: determineEdgeConnectionTypeFromDocument(document),
         id,
         note,
         members: membersForEdgeConnectionDTO,
+        eventHistory,
     };
 };

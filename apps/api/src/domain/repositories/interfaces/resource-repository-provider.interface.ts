@@ -1,9 +1,9 @@
 import { Resource } from '../../models/resource.entity';
 import { ResourceType } from '../../types/ResourceType';
-import { IRepositoryForEntity } from './repository-for-entity.interface';
+import { IRepositoryForAggregate } from './repository-for-aggregate';
 
 export interface IResourceRepositoryProvider {
     forResource: <TEntity extends Resource>(
         resourceType: ResourceType
-    ) => IRepositoryForEntity<TEntity>;
+    ) => IRepositoryForAggregate<TEntity>;
 }

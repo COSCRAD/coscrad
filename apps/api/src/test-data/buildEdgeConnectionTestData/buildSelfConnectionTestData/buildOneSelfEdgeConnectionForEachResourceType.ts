@@ -10,12 +10,13 @@ import { PointContext } from '../../../domain/models/context/point-context/point
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
 
 const role = EdgeConnectionMemberRole.self;
 
-const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id'>[] = [
+const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionType'>[] = [
     {
         note: 'This first 4 letters of this term form a syllable that indicates this is a plant ',
         members: [
@@ -225,7 +226,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id'>[] = [
 ];
 const selfEdgeConnectionInstancesWithSpecificContext = edgeConnectionDTOs.map((partialDTO) => ({
     ...partialDTO,
-    type: EdgeConnectionType.self,
+    connectionType: EdgeConnectionType.self,
 }));
 
 const selfEdgeConnectionsWithGeneralContext = selfEdgeConnectionInstancesWithSpecificContext.map(
@@ -245,5 +246,6 @@ export default (uniqueIdOffset: number): EdgeConnection[] =>
         .map((dto, index) => ({
             ...dto,
             id: `${index + uniqueIdOffset}`,
+            type: AggregateType.note,
         }))
         .map((dto) => new EdgeConnection(dto));
