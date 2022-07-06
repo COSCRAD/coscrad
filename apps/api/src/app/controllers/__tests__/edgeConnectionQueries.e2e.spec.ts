@@ -95,7 +95,7 @@ describe('When querying for edge connections', () => {
                         await testRepositoryProvider.addFullSnapshot(fullSnapshot);
 
                         const selfConnections = connections.filter(
-                            ({ type }) => type === EdgeConnectionType.self
+                            ({ connectionType: type }) => type === EdgeConnectionType.self
                         );
 
                         const compositeIdToQuery = selfConnections
@@ -199,7 +199,7 @@ describe('When querying for edge connections', () => {
                         await testRepositoryProvider.addFullSnapshot(fullSnapshot);
 
                         const dualConnections = connections.filter(
-                            ({ type }) => type === EdgeConnectionType.dual
+                            ({ connectionType: type }) => type === EdgeConnectionType.dual
                         );
 
                         const compositeIdentifierToQuery = dualConnections

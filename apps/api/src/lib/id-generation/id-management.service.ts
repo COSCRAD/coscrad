@@ -11,7 +11,7 @@ import { IIdRepository } from './interfaces/id-repository.interface';
 @Injectable()
 export class IdManagementService implements IIdManager {
     constructor(
-        @Inject('ID_REPOSITORY') private readonly idRepository: IIdRepository<AggregateId>
+        @Inject('ID_REPOSITORY') protected readonly idRepository: IIdRepository<AggregateId>
     ) {}
 
     async generate(): Promise<string> {

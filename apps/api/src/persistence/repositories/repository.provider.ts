@@ -19,15 +19,15 @@ import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocument
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
 import { ArangoIdRepository } from './arango-id-repository';
+import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate';
 import ArangoCategoryRepository from './ArangoCategoryRepository';
-import { RepositoryForEntity } from './repository-for-entity';
 
 @Injectable()
 export class RepositoryProvider implements IRepositoryProvider {
     constructor(protected databaseProvider: DatabaseProvider) {}
 
     getEdgeConnectionRepository() {
-        return new RepositoryForEntity<EdgeConnection>(
+        return new ArangoRepositoryForAggregate<EdgeConnection>(
             this.databaseProvider,
             ArangoCollectionId.edgeConnectionCollectionID,
             edgeConnectionFactory,
@@ -37,7 +37,7 @@ export class RepositoryProvider implements IRepositoryProvider {
     }
 
     getTagRepository() {
-        return new RepositoryForEntity<Tag>(
+        return new ArangoRepositoryForAggregate<Tag>(
             this.databaseProvider,
             ArangoCollectionId.tags,
             buildInstanceFactory(tagValidator, Tag),
@@ -55,7 +55,7 @@ export class RepositoryProvider implements IRepositoryProvider {
     }
 
     forResource<TResource extends Resource>(resourceType: ResourceType) {
-        return new RepositoryForEntity<TResource>(
+        return new ArangoRepositoryForAggregate<TResource>(
             this.databaseProvider,
             getArangoCollectionIDFromResourceType(resourceType),
             getInstanceFactoryForEntity(resourceType),

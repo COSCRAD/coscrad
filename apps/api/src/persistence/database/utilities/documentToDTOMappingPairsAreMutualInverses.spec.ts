@@ -5,6 +5,7 @@ import {
 } from '../../../domain/models/context/edge-connection.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { AggregateType } from '../../../domain/types/AggregateType';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildTestData from '../../../test-data/buildTestData';
@@ -29,7 +30,8 @@ const testData = buildTestData();
 
 const edgeConnections: DTO<EdgeConnection>[] = [
     {
-        type: EdgeConnectionType.self,
+        type: AggregateType.note,
+        connectionType: EdgeConnectionType.self,
         id: '1',
         note: 'the note',
         members: [
@@ -45,6 +47,7 @@ const edgeConnections: DTO<EdgeConnection>[] = [
                 },
             },
         ],
+        eventHistory: [],
     },
     ...testData.connections.map((connection) => connection.toDTO()),
 ];

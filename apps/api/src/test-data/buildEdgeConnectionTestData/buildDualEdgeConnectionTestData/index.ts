@@ -6,6 +6,7 @@ import {
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
 import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
@@ -84,7 +85,8 @@ const generateComprehensiveDualEdgeConnectionTestData = (
             oneFromMemberOfEachResourceType[(index + 1) % oneToMemberOfEachResourceType.length];
 
         return {
-            type: EdgeConnectionType.dual,
+            type: AggregateType.note,
+            connectionType: EdgeConnectionType.dual,
             // TODO generate this at the top level instead
             id: `${2000 + index}`,
             members: [toMember, fromMember],

@@ -1,4 +1,4 @@
-import { RepositoryForEntity } from '../../../persistence/repositories/repository-for-entity';
 import { Tag } from '../../models/tag/tag.entity';
+import { IRepositoryForAggregate } from './repository-for-aggregate';
 
-export type TagRepository = RepositoryForEntity<Tag>;
+export type TagRepository = IRepositoryForAggregate<Tag>;

@@ -3,6 +3,7 @@ import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrati
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
+import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import buildTestData from '../../test-data/buildTestData';
 import generateRandomTestDatabaseName from './__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
@@ -48,7 +49,7 @@ describe('Repository provider > getEdgeConnectionRepository', () => {
                 .getEdgeConnectionRepository()
                 .fetchMany();
 
-            expect(fetchManyResult).toEqual(connections);
+            expect(cloneToPlainObject(fetchManyResult)).toEqual(cloneToPlainObject(connections));
         });
     });
 
@@ -87,14 +88,18 @@ describe('Repository provider > getEdgeConnectionRepository', () => {
                     // In case expectedResult didn't find anything with the search
                     expect(actualResult).toBeTruthy();
 
-                    expect(actualResult).toEqual(expectedResult);
+                    expect(actualResult).toBeInstanceOf(EdgeConnection);
+
+                    const resultAsConnection = actualResult as EdgeConnection;
+
+                    expect(resultAsConnection.toDTO()).toEqual(expectedResult.toDTO());
                 });
             })
         );
     });
 
     describe('create', () => {
-        it('should create a new edge connection', async () => {
+        it('should create a new edge resultAsConnection', async () => {
             const uniqueNewId = 'brand-new-id-123';
 
             const edgeConnectionToCreate = connections[0].clone({ id: uniqueNewId });

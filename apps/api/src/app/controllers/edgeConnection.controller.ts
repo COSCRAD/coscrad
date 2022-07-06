@@ -81,7 +81,7 @@ export class EdgeConnectionController {
         const allEdgeConnections = result as EdgeConnection[];
 
         const selfEdgeConnectionsForThisResource = allEdgeConnections.filter(
-            ({ type: edgeConnectionType, members }) =>
+            ({ connectionType: edgeConnectionType, members }) =>
                 edgeConnectionType === EdgeConnectionType.self &&
                 isDeepStrictEqual(members[0].compositeIdentifier, { type, id })
         );
@@ -116,7 +116,7 @@ export class EdgeConnectionController {
         if (errors.length) return res.status(httpStatusCodes.badRequest).send({ errors });
 
         const allDualEdgeConnections = (result as EdgeConnection[]).filter(
-            ({ type }) => type === EdgeConnectionType.dual
+            ({ connectionType: type }) => type === EdgeConnectionType.dual
         );
 
         const dualEdgeConnectionsForThisResource = allDualEdgeConnections.filter(({ members }) =>

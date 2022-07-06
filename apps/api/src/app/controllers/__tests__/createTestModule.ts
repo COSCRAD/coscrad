@@ -11,6 +11,7 @@ import { TermQueryService } from '../../../domain/services/query-services/term-q
 import { TranscribedAudioQueryService } from '../../../domain/services/query-services/transribed-audio-query.service';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
 import { IdManagementService } from '../../../lib/id-generation/id-management.service';
+import { MockIdManagementService } from '../../../lib/id-generation/mock-id-management.service';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
@@ -22,7 +23,6 @@ import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMo
 import { CategoryController } from '../category.controller';
 import { CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
-import { MockIdManager } from '../command/__tests__/MockIdManager';
 import { EdgeConnectionController } from '../edgeConnection.controller';
 import { IdGenerationController } from '../id-generation/id-generation.controller';
 import { BibliographicReferenceController } from '../resources/bibliographic-reference.controller';
@@ -36,8 +36,6 @@ import { TermController } from '../resources/term.controller';
 import { TranscribedAudioController } from '../resources/transcribed-audio.controller';
 import { VocabularyListController } from '../resources/vocabulary-list.controller';
 import { TagController } from '../tag.controller';
-
-const mockIdManager = new MockIdManager();
 
 export default async (
     configOverrides: Partial<DTO<EnvironmentVariables>>,
@@ -168,7 +166,7 @@ export default async (
                 provide: 'ID_MANAGER',
                 useFactory: (repositoryProvider: RepositoryProvider) =>
                     shouldMockIdGenerator
-                        ? mockIdManager
+                        ? new MockIdManagementService(repositoryProvider.getIdRepository())
                         : new IdManagementService(repositoryProvider.getIdRepository()),
                 inject: [RepositoryProvider],
             },

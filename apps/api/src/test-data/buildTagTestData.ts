@@ -1,9 +1,10 @@
 import { Tag } from '../domain/models/tag/tag.entity';
+import { AggregateType } from '../domain/types/AggregateType';
 import { CategorizableType } from '../domain/types/CategorizableType';
 import { ResourceType } from '../domain/types/ResourceType';
 import { DTO } from '../types/DTO';
 
-const allTagsDTOs: DTO<Tag>[] = [
+const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
     {
         id: '1',
         label: 'plants',
@@ -145,4 +146,4 @@ const allTagsDTOs: DTO<Tag>[] = [
  * run `validateTestData.spec.ts` to ensure your test data satisfies all domain
  * invariants.
  */
-export default (): Tag[] => allTagsDTOs.map((dto) => new Tag(dto));
+export default (): Tag[] => allTagsDTOs.map((dto) => new Tag({ ...dto, type: AggregateType.tag }));
