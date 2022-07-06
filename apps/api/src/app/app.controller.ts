@@ -1,7 +1,7 @@
 import { MediaItem } from '@coscrad/api-interfaces';
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
 import { Message } from './message.entity';
@@ -18,6 +18,7 @@ export class AppController {
         private readonly commandInfoService: CommandInfoService
     ) {}
 
+    @ApiBearerAuth('JWT')
     @UseGuards(AuthGuard('jwt'))
     @Get('hello')
     getData(): MediaItem {
@@ -27,6 +28,6 @@ export class AppController {
     @Get('')
     @ApiOkResponse({ type: Message })
     getWelcomeMessage(): Message {
-        return { message: 'Welcome to the COSCRAD API!' };
+        return { message: 'Welcome to the COSCRAD API!we545435324' };
     }
 }
