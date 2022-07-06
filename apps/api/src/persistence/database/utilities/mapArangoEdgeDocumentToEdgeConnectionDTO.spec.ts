@@ -7,6 +7,7 @@ import {
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
 import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
@@ -32,7 +33,9 @@ const selfDocument: ArangoEdgeDocument = {
     _key: '5',
     _to: 'transcribed_audio/55',
     _from: 'transcribed_audio/55',
-    type: EdgeConnectionType.self,
+    type: AggregateType.note,
+    eventHistory: [],
+    connectionType: EdgeConnectionType.self,
     note: 'These pages are about deer',
     members: [
         {
@@ -42,9 +45,10 @@ const selfDocument: ArangoEdgeDocument = {
     ],
 };
 
-const selfEdgeConnection = {
+const selfEdgeConnection: DTO<EdgeConnection> = {
     id: '5',
-    type: EdgeConnectionType.self,
+    type: AggregateType.note,
+    connectionType: EdgeConnectionType.self,
     note: 'These pages are about deer',
     members: [
         {
@@ -56,13 +60,16 @@ const selfEdgeConnection = {
             context: timeRangeContext,
         },
     ],
+    eventHistory: [],
 };
 
 const dualEdgeDocument: ArangoEdgeDocument = {
     _key: '234',
     _to: 'books/11',
     _from: 'transcribed_audio/55',
-    type: EdgeConnectionType.dual,
+    connectionType: EdgeConnectionType.dual,
+    eventHistory: [],
+    type: AggregateType.note,
     note: 'the elder discusses this book in this part of the recording',
     members: [
         {
@@ -77,7 +84,8 @@ const dualEdgeDocument: ArangoEdgeDocument = {
 };
 
 const dualEdgeConnection: DTO<EdgeConnection> = {
-    type: EdgeConnectionType.dual,
+    type: AggregateType.note,
+    connectionType: EdgeConnectionType.dual,
     id: '234',
     note: 'the elder discusses this book in this part of the recording',
     members: [
@@ -98,6 +106,7 @@ const dualEdgeConnection: DTO<EdgeConnection> = {
             context: generalContext,
         },
     ],
+    eventHistory: [],
 };
 
 const testCases: TestCase[] = [

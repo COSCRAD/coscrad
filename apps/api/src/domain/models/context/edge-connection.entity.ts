@@ -1,10 +1,13 @@
+import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
+import { ResultOrError } from '../../../types/ResultOrError';
+import validateEdgeConnection from '../../domainModelValidators/contextValidators/validateEdgeConnection';
+import { Valid } from '../../domainModelValidators/Valid';
 import { AggregateId } from '../../types/AggregateId';
-import { CategorizableType } from '../../types/CategorizableType';
-import { HasAggregateId } from '../../types/HasAggregateId';
+import { AggregateType } from '../../types/AggregateType';
 import { ResourceCompositeIdentifier } from '../../types/ResourceCompositeIdentifier';
-import BaseDomainModel from '../BaseDomainModel';
+import { Aggregate } from '../aggregate.entity';
 import { ContextModelUnion } from './types/ContextModelUnion';
 
 export enum EdgeConnectionType {
@@ -28,8 +31,11 @@ export type EdgeConnectionMember<TContextModel extends ContextModelUnion = Conte
     role: EdgeConnectionMemberRole;
 };
 
-export class EdgeConnection extends BaseDomainModel implements HasAggregateId {
-    type: EdgeConnectionType;
+@RegisterIndexScopedCommands([])
+export class EdgeConnection extends Aggregate {
+    type = AggregateType.note;
+
+    connectionType: EdgeConnectionType;
 
     id: AggregateId;
 
@@ -37,10 +43,11 @@ export class EdgeConnection extends BaseDomainModel implements HasAggregateId {
 
     readonly note: string;
 
-    constructor({ id, members, note, type }: DTO<EdgeConnection>) {
-        super();
+    constructor(dto: DTO<EdgeConnection>) {
+        super(dto);
 
-        this.type = type;
+        const { id, members, note, connectionType: type } = dto;
+        this.connectionType = type;
 
         this.id = id;
 
@@ -50,10 +57,17 @@ export class EdgeConnection extends BaseDomainModel implements HasAggregateId {
         this.note = note;
     }
 
-    getCompositeIdentifier() {
-        return {
-            type: CategorizableType.note,
-            id: this.id,
-        } as const;
+    validateInvariants(): ResultOrError<Valid> {
+        return validateEdgeConnection(this);
     }
+
+    getAvailableCommands(): string[] {
+        return [];
+    }
+
+    getCompositeIdentifier = () =>
+        ({
+            type: AggregateType.note,
+            id: this.id,
+        } as const);
 }

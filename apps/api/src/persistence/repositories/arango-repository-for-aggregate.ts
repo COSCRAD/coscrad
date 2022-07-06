@@ -1,9 +1,8 @@
 import { InstanceFactory } from '../../domain/factories/getInstanceFactoryForResource';
-import BaseDomainModel from '../../domain/models/BaseDomainModel';
-import { IRepositoryForEntity } from '../../domain/repositories/interfaces/repository-for-entity.interface';
+import { Aggregate } from '../../domain/models/aggregate.entity';
+import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
-import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
@@ -22,8 +21,8 @@ import { DatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDT
  *
  * TODO Use a mixin for cloneable behaviour.
  */
-export class RepositoryForEntity<TEntity extends HasAggregateId & BaseDomainModel>
-    implements IRepositoryForEntity<TEntity>
+export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
+    implements IRepositoryForAggregate<TEntity>
 {
     #arangoDatabaseForEntitysCollection: ArangoDatabaseForCollection<TEntity>;
 

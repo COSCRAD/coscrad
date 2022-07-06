@@ -6,11 +6,12 @@ import {
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
 
 // type is the same for all, use map to mix this in below
-const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type'>>[] = [
+const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType'>>[] = [
     {
         id: '3101',
         note: 'this selection from the media item portrays the events in the book',
@@ -56,6 +57,7 @@ export default (): EdgeConnection[] =>
         (partialDTO) =>
             new EdgeConnection({
                 ...partialDTO,
-                type: EdgeConnectionType.dual,
+                connectionType: EdgeConnectionType.dual,
+                type: AggregateType.note,
             })
     );

@@ -10,6 +10,7 @@ import {
 import { PageRangeContext } from '../../../../../models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from '../../../../../models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../../../models/context/types/EdgeConnectionContextType';
+import { AggregateType } from '../../../../../types/AggregateType';
 import { ResourceType } from '../../../../../types/ResourceType';
 import BothMembersInEdgeConnectionHaveSameRoleError from '../../../../errors/context/edgeConnections/BothMembersInEdgeConnectionHaveSameRoleError';
 import ContextTypeIsNotAllowedForGivenResourceTypeError from '../../../../errors/context/edgeConnections/ContextTypeIsNotAllowedForGivenResourceTypeError';
@@ -58,14 +59,16 @@ const buildValidTranscribedAudioConnectionMember = (
 });
 
 const validBookSelfConnection = new EdgeConnection({
-    type: EdgeConnectionType.self,
+    type: AggregateType.note,
+    connectionType: EdgeConnectionType.self,
     id: '12345',
     note: 'This is an awesome note',
     members: [buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.self)],
 });
 
 const validBookToTranscribedAudioDualConnection = new EdgeConnection({
-    type: EdgeConnectionType.dual,
+    type: AggregateType.note,
+    connectionType: EdgeConnectionType.dual,
     members: [
         buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.from),
         buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
@@ -125,7 +128,8 @@ export default (): EdgeConnectionValidatorTestCase[] => [
             {
                 description: 'the DTO is for a Self connection, but has 0 members',
                 invalidDTO: {
-                    type: EdgeConnectionType.self,
+                    type: AggregateType.note,
+                    connectionType: EdgeConnectionType.self,
                     id: '123',
 
                     members: [],
@@ -189,7 +193,8 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 description:
                     'the DTO is for a Dual connection but one of the members has the role "self"',
                 invalidDTO: {
-                    type: EdgeConnectionType.dual,
+                    type: AggregateType.note,
+                    connectionType: EdgeConnectionType.dual,
                     id: '123',
 
                     members: [

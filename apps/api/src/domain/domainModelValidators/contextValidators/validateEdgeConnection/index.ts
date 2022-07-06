@@ -35,7 +35,7 @@ export default (input: unknown): Valid | InternalError => {
      */
     const test = input as EdgeConnection;
 
-    const { note, type: edgeConnectionType, id, members } = test;
+    const { note, connectionType: edgeConnectionType, id, members } = test;
 
     const allErrors: InternalError[] = [];
 
