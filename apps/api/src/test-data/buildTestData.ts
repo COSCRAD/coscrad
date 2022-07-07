@@ -10,6 +10,7 @@ import buildSpatialFeatureTestData from './buildSpatialFeatureTestData';
 import buildTagTestData from './buildTagTestData';
 import buildTermTestData from './buildTermTestData';
 import buildTranscribedAudioTestData from './buildTranscribedAudioTestData';
+import buildUserTestData from './buildUserTestData';
 import buildVocabularyListTestData from './buildVocabularyListTestData';
 
 /**
@@ -32,4 +33,5 @@ export default (): InMemorySnapshot => ({
     connections: buildEdgeConnectionTestData(),
     tags: buildTagTestData(),
     categoryTree: buildCategoryTestData(),
+    users: buildUserTestData(),
 });

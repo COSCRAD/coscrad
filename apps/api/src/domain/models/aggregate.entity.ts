@@ -1,3 +1,4 @@
+import { NonEmptyString } from '@coscrad/data-types';
 import { isInternalError } from '../../lib/errors/InternalError';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { DeepPartial } from '../../types/DeepPartial';
@@ -20,6 +21,7 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
 
     readonly type: AggregateType;
 
+    @NonEmptyString()
     readonly id: AggregateId;
 
     constructor(dto: DTO<Aggregate>) {

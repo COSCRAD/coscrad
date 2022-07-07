@@ -24,6 +24,7 @@ import { SongModule } from './domain-modules/song.module';
 import { SpatialFeatureModule } from './domain-modules/spatial-feature.module';
 import { TermModule } from './domain-modules/term.module';
 import { TranscribedAudioModule } from './domain-modules/transcribed-audio.module';
+import { UserManagementModule } from './domain-modules/user-management.module';
 import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
 
 @Module({
@@ -37,6 +38,9 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         }),
         AuthorizationModule,
         PersistenceModule.forRootAsync(),
+        CommandModule,
+        IdGenerationModule,
+        UserManagementModule,
         MediaItemModule,
         SongModule,
         TermModule,
@@ -46,8 +50,6 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         PhotographModule,
         BibliographicReferenceModule,
         SpatialFeatureModule,
-        CommandModule,
-        IdGenerationModule,
     ],
     controllers: [
         AppController,

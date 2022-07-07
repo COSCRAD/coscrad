@@ -1,6 +1,6 @@
 import { InstanceFactory } from '../../domain/factories/getInstanceFactoryForResource';
 import { Aggregate } from '../../domain/models/aggregate.entity';
-import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate';
+import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { InternalError } from '../../lib/errors/InternalError';

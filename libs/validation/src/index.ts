@@ -7,6 +7,7 @@ export {
      * **Warning**: This uses `===` and will compare references not values for reference types.
      */
     Equals as IsStrictlyEqualTo,
+    isEnum,
     IsEnum,
     IsInt,
     IsISBN,

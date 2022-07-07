@@ -21,13 +21,13 @@ import buildInMemorySnapshot from '../../utilities/buildInMemorySnapshot';
 import { GeneralQueryOptions } from './types/GeneralQueryOptions';
 import getDefaultQueryOptions from './utilities/getDefaultQueryOptions';
 
-type ResourceByIdQueryResult<UViewModel extends BaseViewModel> = {
+export type AggregateByIdQueryResult<UViewModel extends BaseViewModel> = {
     data: UViewModel;
     actions: CommandInfo[];
 };
 
-type ResourceIndexQueryResult<UViewModel extends BaseViewModel> = {
-    data: ResourceByIdQueryResult<UViewModel>[];
+export type AggregateIndexQueryResult<UViewModel extends BaseViewModel> = {
+    data: AggregateByIdQueryResult<UViewModel>[];
     actions: CommandInfo[];
 };
 
@@ -82,7 +82,7 @@ export abstract class BaseQueryService<
     public async fetchById(
         id: unknown,
         userOptions: Partial<GeneralQueryOptions> = {}
-    ): Promise<ResultOrError<Maybe<ResourceByIdQueryResult<ViewModelWithTags<UViewModel>>>>> {
+    ): Promise<ResultOrError<Maybe<AggregateByIdQueryResult<ViewModelWithTags<UViewModel>>>>> {
         if (!isAggregateId(id))
             return new InternalError(
                 `Invalid id: ${id} for resource of type: ${formatResourceType(this.type)}`
@@ -124,7 +124,7 @@ export abstract class BaseQueryService<
 
     public async fetchMany(
         specification: ISpecification<TDomainModel>
-    ): Promise<ResourceIndexQueryResult<ViewModelWithTags<UViewModel>>> {
+    ): Promise<AggregateIndexQueryResult<ViewModelWithTags<UViewModel>>> {
         const searchResult = await this.fetchManyDomainModels(specification);
 
         const requiredExternalState = await this.fetchRequiredExternalState();
@@ -145,6 +145,6 @@ export abstract class BaseQueryService<
         return {
             data,
             actions: this.getInfoForIndexScopedCommands(),
-        } as unknown as ResourceIndexQueryResult<ViewModelWithTags<UViewModel>>;
+        } as unknown as AggregateIndexQueryResult<ViewModelWithTags<UViewModel>>;
     }
 }

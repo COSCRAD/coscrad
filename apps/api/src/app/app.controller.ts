@@ -28,6 +28,6 @@ export class AppController {
     @Get('')
     @ApiOkResponse({ type: Message })
     getWelcomeMessage(): Message {
-        return { message: 'Welcome to the COSCRAD API!we545435324' };
+        return { message: 'Welcome to the COSCRAD API!' };
     }
 }

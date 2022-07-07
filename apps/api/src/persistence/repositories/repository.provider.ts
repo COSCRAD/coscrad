@@ -6,7 +6,10 @@ import buildInstanceFactory from '../../domain/factories/utilities/buildInstance
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import { Resource } from '../../domain/models/resource.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
+import { CoscradUser } from '../../domain/models/user-management/user/entities/coscrad-user.entity';
+import validateCoscradUser from '../../domain/models/user-management/user/invariant-validation/validateCoscradUser';
 import { ICategoryRepository } from '../../domain/repositories/interfaces/category-repository.interface';
+import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { ResourceType } from '../../domain/types/ResourceType';
@@ -52,6 +55,16 @@ export class RepositoryProvider implements IRepositoryProvider {
 
     getIdRepository(): IIdRepository<AggregateId> {
         return new ArangoIdRepository(this.databaseProvider);
+    }
+
+    getUserRepository(): IRepositoryForAggregate<CoscradUser> {
+        return new ArangoRepositoryForAggregate<CoscradUser>(
+            this.databaseProvider,
+            ArangoCollectionId.users,
+            buildInstanceFactory(validateCoscradUser, CoscradUser),
+            mapDatabaseDTOToEntityDTO,
+            mapEntityDTOToDatabaseDTO
+        );
     }
 
     forResource<TResource extends Resource>(resourceType: ResourceType) {

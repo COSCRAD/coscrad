@@ -1,4 +1,4 @@
-import { isEnum } from 'class-validator';
+import { isEnum } from '@coscrad/validation';
 
 export enum MIMEType {
     mp3 = 'audio/mpeg',

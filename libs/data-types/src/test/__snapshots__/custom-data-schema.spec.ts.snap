@@ -75,6 +75,27 @@ Object {
     "isOptional": false,
     "type": "RAW_DATA",
   },
+  "role": Object {
+    "enumLabel": "User Role",
+    "enumName": "CoscradUserRole",
+    "isArray": false,
+    "isOptional": false,
+    "labelsAndValues": Array [
+      Object {
+        "label": "admin",
+        "value": "admin",
+      },
+      Object {
+        "label": "viewer",
+        "value": "viewer",
+      },
+      Object {
+        "label": "COSCRAD admin",
+        "value": "super",
+      },
+    ],
+    "type": "Enum",
+  },
   "secondaryWhatsit": Object {
     "isArray": false,
     "isOptional": true,

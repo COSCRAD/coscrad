@@ -1,5 +1,334 @@
 {
-    "resources": {
+    "documentCollections": {
+        "tags": [
+            {
+                "type": "tag",
+                "_key": "1",
+                "eventHistory": [],
+                "label": "plants",
+                "members": [
+                    {
+                        "type": "term",
+                        "id": "1"
+                    },
+                    {
+                        "type": "book",
+                        "id": "23"
+                    },
+                    {
+                        "type": "book",
+                        "id": "24"
+                    },
+                    {
+                        "type": "vocabularyList",
+                        "id": "1"
+                    },
+                    {
+                        "type": "spatialFeature",
+                        "id": "100"
+                    },
+                    {
+                        "type": "note",
+                        "id": "2005"
+                    },
+                    {
+                        "type": "note",
+                        "id": "9"
+                    },
+                    {
+                        "type": "note",
+                        "id": "11"
+                    }
+                ]
+            },
+            {
+                "type": "tag",
+                "_key": "2",
+                "eventHistory": [],
+                "label": "animals",
+                "members": [
+                    {
+                        "type": "term",
+                        "id": "2"
+                    },
+                    {
+                        "type": "term",
+                        "id": "3"
+                    },
+                    {
+                        "type": "spatialFeature",
+                        "id": "102"
+                    },
+                    {
+                        "type": "note",
+                        "id": "2004"
+                    },
+                    {
+                        "type": "note",
+                        "id": "7"
+                    },
+                    {
+                        "type": "bibliographicReference",
+                        "id": "1"
+                    }
+                ]
+            },
+            {
+                "type": "tag",
+                "_key": "3",
+                "eventHistory": [],
+                "label": "placenames",
+                "members": [
+                    {
+                        "type": "photograph",
+                        "id": "0"
+                    },
+                    {
+                        "type": "transcribedAudio",
+                        "id": "110"
+                    },
+                    {
+                        "type": "note",
+                        "id": "2003"
+                    },
+                    {
+                        "type": "note",
+                        "id": "5"
+                    }
+                ]
+            },
+            {
+                "type": "tag",
+                "_key": "4",
+                "eventHistory": [],
+                "label": "songs",
+                "members": [
+                    {
+                        "type": "photograph",
+                        "id": "1"
+                    },
+                    {
+                        "type": "note",
+                        "id": "2002"
+                    },
+                    {
+                        "type": "note",
+                        "id": "3"
+                    }
+                ]
+            },
+            {
+                "type": "tag",
+                "_key": "5",
+                "eventHistory": [],
+                "label": "legends",
+                "members": [
+                    {
+                        "type": "vocabularyList",
+                        "id": "2"
+                    },
+                    {
+                        "type": "spatialFeature",
+                        "id": "101"
+                    },
+                    {
+                        "type": "note",
+                        "id": "2001"
+                    },
+                    {
+                        "type": "note",
+                        "id": "1"
+                    },
+                    {
+                        "type": "mediaItem",
+                        "id": "1"
+                    }
+                ]
+            }
+        ],
+        "categories": [
+            {
+                "_key": "0",
+                "label": "tree of knowledge",
+                "members": []
+            },
+            {
+                "_key": "1",
+                "label": "animals",
+                "members": [
+                    {
+                        "type": "vocabularyList",
+                        "id": "1"
+                    }
+                ]
+            },
+            {
+                "_key": "2",
+                "label": "mammals",
+                "members": [
+                    {
+                        "type": "term",
+                        "id": "1"
+                    },
+                    {
+                        "type": "book",
+                        "id": "23"
+                    }
+                ]
+            },
+            {
+                "_key": "3",
+                "label": "birds",
+                "members": []
+            },
+            {
+                "_key": "4",
+                "label": "canines",
+                "members": [
+                    {
+                        "type": "term",
+                        "id": "2"
+                    }
+                ]
+            },
+            {
+                "_key": "5",
+                "label": "felines",
+                "members": []
+            },
+            {
+                "_key": "6",
+                "label": "big cats",
+                "members": []
+            },
+            {
+                "_key": "7",
+                "label": "domestic cats",
+                "members": [
+                    {
+                        "type": "vocabularyList",
+                        "id": "2"
+                    },
+                    {
+                        "type": "photograph",
+                        "id": "0"
+                    }
+                ]
+            },
+            {
+                "_key": "8",
+                "label": "wolves",
+                "members": [
+                    {
+                        "type": "spatialFeature",
+                        "id": "101"
+                    }
+                ]
+            },
+            {
+                "_key": "9",
+                "label": "songs",
+                "members": [
+                    {
+                        "type": "term",
+                        "id": "3"
+                    },
+                    {
+                        "type": "spatialFeature",
+                        "id": "102"
+                    },
+                    {
+                        "type": "bibliographicReference",
+                        "id": "1"
+                    }
+                ]
+            },
+            {
+                "_key": "10",
+                "label": "domestic dogs",
+                "members": [
+                    {
+                        "type": "photograph",
+                        "id": "1"
+                    }
+                ]
+            },
+            {
+                "_key": "11",
+                "label": "rodents",
+                "members": [
+                    {
+                        "type": "book",
+                        "id": "24"
+                    }
+                ]
+            },
+            {
+                "_key": "12",
+                "label": "film",
+                "members": []
+            },
+            {
+                "_key": "13",
+                "label": "props",
+                "members": []
+            },
+            {
+                "_key": "14",
+                "label": "wardrobe",
+                "members": []
+            },
+            {
+                "_key": "15",
+                "label": "tools",
+                "members": [
+                    {
+                        "type": "transcribedAudio",
+                        "id": "110"
+                    }
+                ]
+            },
+            {
+                "_key": "16",
+                "label": "adornments",
+                "members": []
+            },
+            {
+                "_key": "17",
+                "label": "clothing",
+                "members": [
+                    {
+                        "type": "note",
+                        "id": "1"
+                    }
+                ]
+            },
+            {
+                "_key": "18",
+                "label": "tools",
+                "members": []
+            }
+        ],
+        "uuids": [],
+        "users": [
+            {
+                "type": "user",
+                "_key": "1",
+                "eventHistory": [],
+                "profile": {
+                    "email": "llcj1985@aol.com",
+                    "name": {
+                        "middleNames": [],
+                        "firstName": "James",
+                        "lastName": "Jones"
+                    }
+                },
+                "username": "cool-james",
+                "roles": [
+                    "viewer"
+                ]
+            }
+        ],
         "terms": [
             {
                 "type": "term",
@@ -1582,6 +1911,27 @@
         {
             "_to": "categories/15",
             "_from": "categories/16"
+        }
+    ],
+    "users": [
+        {
+            "type": "user",
+            "_key": "1",
+            "eventHistory": [],
+            "profile": {
+                "email": "llcj1985@hotmale.com",
+                "name": {
+                    "first": "James",
+                    "last": "Jones"
+                },
+                "contact": {},
+                "dateOfBirth": "beginning of time",
+                "communityConnection": "break dance instructor"
+            },
+            "username": "cool-james",
+            "roles": [
+                "viewer"
+            ]
         }
     ]
 }
