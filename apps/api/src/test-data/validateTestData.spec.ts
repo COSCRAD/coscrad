@@ -15,12 +15,9 @@ import {
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import isStringWithNonzeroLength from '../lib/utilities/isStringWithNonzeroLength';
 import { getArangoCollectionIDFromResourceType } from '../persistence/database/collection-references/getArangoCollectionIDFromResourceType';
-import buildEdgeDocumentsFromCategoryNodeDTOs from '../persistence/database/utilities/category/buildEdgeDocumentsFromCategoryNodeDTOs';
-import mapCategoryDTOToArangoDocument from '../persistence/database/utilities/category/mapCategoryDTOToArangoDocument';
-import mapEdgeConnectionDTOToArangoEdgeDocument from '../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
-import mapEntityDTOToDatabaseDTO from '../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
 import { DTO } from '../types/DTO';
 import buildTestData from './buildTestData';
+import convertInMemorySnapshotToDatabaseFormat from './utilities/convertInMemorySnapshotToDatabaseFormat';
 
 /**
  * TODO [https://www.pivotaltracker.com/story/show/182134037]
@@ -50,8 +47,6 @@ describe('buildTestData', () => {
         }),
         {}
     );
-
-    const connectionTestDataDTOs = connectionTestData.map((instance) => instance.toDTO());
 
     describe('test data for resources', () => {
         describe('the resulting test data', () => {
@@ -249,47 +244,7 @@ describe('buildTestData', () => {
 
     // If the test succeeds, write the data
     afterAll(() => {
-        /**
-         * TODO [https://www.pivotaltracker.com/story/show/182134037]
-         *
-         * Break out mapping test data to database format into separate
-         * utilities.
-         */
-        const resourceTestDataInDatabaseFormat =
-            // Use `collectionNames` not `resourceTypes` as keys
-            Object.entries(resourceTestDataDTOs).reduce(
-                (acc, [key, models]) => ({
-                    ...acc,
-                    [getArangoCollectionIDFromResourceType(key as ResourceType)]: models.map(
-                        (model) => mapEntityDTOToDatabaseDTO(model)
-                    ),
-                }),
-                {}
-            );
-
-        const connectionTestDataInDatabaseFormat = connectionTestDataDTOs.map(
-            mapEdgeConnectionDTOToArangoEdgeDocument
-        );
-
-        const tagTestDataInDatabaseFormat = tagTestData.map(mapEntityDTOToDatabaseDTO);
-
-        const categoryTestDataInDatabaseFormat = categoryTestData.map(
-            mapCategoryDTOToArangoDocument
-        );
-
-        const usersInDatabaseFormat = userTestData.map(mapEntityDTOToDatabaseDTO);
-
-        const categoryEdges = buildEdgeDocumentsFromCategoryNodeDTOs(categoryTestData);
-
-        const fullSnapshotInDatabaseFormat = {
-            resources: resourceTestDataInDatabaseFormat,
-            // note the change in this key ~~connections~~ -> edges
-            resource_edge_connections: connectionTestDataInDatabaseFormat,
-            tags: tagTestDataInDatabaseFormat,
-            categories: categoryTestDataInDatabaseFormat,
-            categoryEdges,
-            users: usersInDatabaseFormat,
-        };
+        const fullSnapshotInDatabaseFormat = convertInMemorySnapshotToDatabaseFormat(testData);
 
         const testDataFilePath = `${process.cwd()}/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.json`;
 
