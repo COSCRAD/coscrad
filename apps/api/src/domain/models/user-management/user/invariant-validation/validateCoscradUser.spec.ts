@@ -1,6 +1,6 @@
 import NullOrUndefinedCoscradUserDTOError from '../../../../../domain/domainModelValidators/errors/user-management/NullOrUndefinedCoscradUserDTOError';
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
+import clonePlainObjectWithoutProperty from '../../../../../lib/utilities/clonePlainObjectWithoutProperty';
 import { DTO } from '../../../../../types/DTO';
 import InvalidCoscradUserDTOError from '../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
 import { Valid } from '../../../../domainModelValidators/Valid';
@@ -22,25 +22,10 @@ const assertCoscradDataTypeError = (
     expect(error.toString().includes(propertyKey)).toBe(true);
 };
 
-// TODO [test-coverage] add a unit test for this
-const clonePlainObjectWithoutProperty = <
-    T extends Record<string | symbol, unknown>,
-    UProperty extends string | symbol
->(
-    object: T,
-    property: UProperty
-): Omit<T, UProperty> => {
-    const clone = cloneToPlainObject(object);
-
-    delete clone[property];
-
-    return clone;
-};
-
 const validUser: DTO<CoscradUser> = {
     type: AggregateType.user,
     username: 'joeyDoughy001@fastmail.org',
-    id: 'auth0|939384394839',
+    id: '939384394839',
     profile: new CoscradUserProfile({
         email: 'me@you.com',
         name: { first: 'Joey', last: 'Doughy' },
