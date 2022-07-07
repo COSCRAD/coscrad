@@ -316,12 +316,14 @@
                 "_key": "1",
                 "eventHistory": [],
                 "profile": {
-                    "email": "llcj1985@aol.com",
+                    "email": "llcj1985@hotmale.com",
                     "name": {
-                        "middleNames": [],
-                        "firstName": "James",
-                        "lastName": "Jones"
-                    }
+                        "first": "James",
+                        "last": "Jones"
+                    },
+                    "contact": {},
+                    "dateOfBirth": "beginning of time",
+                    "communityConnection": "break dance instructor"
                 },
                 "username": "cool-james",
                 "roles": [
@@ -739,1199 +741,871 @@
             }
         ]
     },
-    "resource_edge_connections": [
-        {
-            "_to": "terms/2",
-            "_from": "terms/2",
-            "type": "note",
-            "_key": "1",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "textField",
-                        "target": "term",
-                        "charRange": [
-                            0,
-                            3
-                        ]
-                    }
-                }
-            ],
-            "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
-        },
-        {
-            "_to": "books/24",
-            "_from": "books/24",
-            "type": "note",
-            "_key": "2",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "pageRange",
-                        "pageIdentifiers": [
-                            "ix"
-                        ]
-                    }
-                }
-            ],
-            "note": "This page is about bears"
-        },
-        {
-            "_to": "vocabulary_lists/2",
-            "_from": "vocabulary_lists/2",
-            "type": "note",
-            "_key": "3",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "textField",
-                        "target": "name",
-                        "charRange": [
-                            0,
-                            1
-                        ]
-                    }
-                }
-            ],
-            "note": "This is the first letter of the list name"
-        },
-        {
-            "_to": "spatial_features/300",
-            "_from": "spatial_features/300",
-            "type": "note",
-            "_key": "4",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "there is a placename for this point at the base of the mountain"
-        },
-        {
-            "_to": "transcribed_audio/110",
-            "_from": "transcribed_audio/110",
-            "type": "note",
-            "_key": "5",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "timeRange",
-                        "timeRange": {
-                            "inPoint": 11000,
-                            "outPoint": 12950
-                        }
-                    }
-                }
-            ],
-            "note": "this clip talks about songs"
-        },
-        {
-            "_to": "photographs/2",
-            "_from": "photographs/2",
-            "type": "note",
-            "_key": "6",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "freeMultiline",
-                        "lines": [
-                            [
-                                [
-                                    0,
-                                    200
-                                ],
-                                [
-                                    100,
-                                    300
-                                ],
-                                [
-                                    200,
-                                    400
-                                ],
-                                [
-                                    250,
-                                    475
-                                ]
-                            ]
-                        ]
-                    }
-                }
-            ],
-            "note": "this is the stem of the flower"
-        },
-        {
-            "_to": "photographs/2",
-            "_from": "photographs/2",
-            "type": "note",
-            "_key": "7",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "point2D",
-                        "point": [
-                            0,
-                            200
-                        ]
-                    }
-                }
-            ],
-            "note": "this is the base of the flower"
-        },
-        {
-            "_to": "books/24",
-            "_from": "books/24",
-            "type": "note",
-            "_key": "8",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "pageRange",
-                        "pageIdentifiers": [
-                            "ix"
-                        ]
-                    }
-                }
-            ],
-            "note": "this section is the best part of an illustrated book about birds"
-        },
-        {
-            "_to": "bibliographic_references/1",
-            "_from": "bibliographic_references/1",
-            "type": "note",
-            "_key": "9",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "found this in the archives"
-        },
-        {
-            "_to": "songs/1",
-            "_from": "songs/1",
-            "type": "note",
-            "_key": "10",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "timeRange",
-                        "timeRange": {
-                            "inPoint": 300,
-                            "outPoint": 500
-                        }
-                    }
-                }
-            ],
-            "note": "this is a song"
-        },
-        {
-            "_to": "media_items/1",
-            "_from": "media_items/1",
-            "type": "note",
-            "_key": "11",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "textField",
-                        "target": "title",
-                        "charRange": [
-                            0,
-                            2
-                        ]
-                    }
-                }
-            ],
-            "note": "this is an awesome show"
-        },
-        {
-            "_to": "media_items/1",
-            "_from": "media_items/1",
-            "type": "note",
-            "_key": "12",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "timeRange",
-                        "timeRange": {
-                            "inPoint": 650,
-                            "outPoint": 1230
-                        }
-                    }
-                }
-            ],
-            "note": "important clip from the show"
-        },
-        {
-            "_to": "terms/2",
-            "_from": "terms/2",
-            "type": "note",
-            "_key": "13",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
-        },
-        {
-            "_to": "books/24",
-            "_from": "books/24",
-            "type": "note",
-            "_key": "14",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "This page is about bears"
-        },
-        {
-            "_to": "vocabulary_lists/2",
-            "_from": "vocabulary_lists/2",
-            "type": "note",
-            "_key": "15",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "This is the first letter of the list name"
-        },
-        {
-            "_to": "spatial_features/300",
-            "_from": "spatial_features/300",
-            "type": "note",
-            "_key": "16",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "there is a placename for this point at the base of the mountain"
-        },
-        {
-            "_to": "transcribed_audio/110",
-            "_from": "transcribed_audio/110",
-            "type": "note",
-            "_key": "17",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "this clip talks about songs"
-        },
-        {
-            "_to": "photographs/2",
-            "_from": "photographs/2",
-            "type": "note",
-            "_key": "18",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "this is the stem of the flower"
-        },
-        {
-            "_to": "photographs/2",
-            "_from": "photographs/2",
-            "type": "note",
-            "_key": "19",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "this is the base of the flower"
-        },
-        {
-            "_to": "books/24",
-            "_from": "books/24",
-            "type": "note",
-            "_key": "20",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "this section is the best part of an illustrated book about birds"
-        },
-        {
-            "_to": "bibliographic_references/1",
-            "_from": "bibliographic_references/1",
-            "type": "note",
-            "_key": "21",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "found this in the archives"
-        },
-        {
-            "_to": "songs/1",
-            "_from": "songs/1",
-            "type": "note",
-            "_key": "22",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "this is a song"
-        },
-        {
-            "_to": "media_items/1",
-            "_from": "media_items/1",
-            "type": "note",
-            "_key": "23",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "this is an awesome show"
-        },
-        {
-            "_to": "media_items/1",
-            "_from": "media_items/1",
-            "type": "note",
-            "_key": "24",
-            "eventHistory": [],
-            "connectionType": "self",
-            "members": [
-                {
-                    "role": "self",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "important clip from the show"
-        },
-        {
-            "_to": "terms/2",
-            "_from": "vocabulary_lists/2",
-            "type": "note",
-            "_key": "2000",
-            "eventHistory": [],
-            "connectionType": "dual",
-            "members": [
-                {
-                    "role": "to",
-                    "context": {
-                        "type": "textField",
-                        "target": "term",
-                        "charRange": [
-                            0,
-                            3
-                        ]
-                    }
-                },
-                {
-                    "role": "from",
-                    "context": {
-                        "type": "textField",
-                        "target": "name",
-                        "charRange": [
-                            0,
-                            1
-                        ]
-                    }
-                }
-            ],
-            "note": "That is why term/2 is related to vocabularyList/2"
-        },
-        {
-            "_to": "vocabulary_lists/2",
-            "_from": "transcribed_audio/110",
-            "type": "note",
-            "_key": "2001",
-            "eventHistory": [],
-            "connectionType": "dual",
-            "members": [
-                {
-                    "role": "to",
-                    "context": {
-                        "type": "textField",
-                        "target": "name",
-                        "charRange": [
-                            0,
-                            1
-                        ]
-                    }
-                },
-                {
-                    "role": "from",
-                    "context": {
-                        "type": "timeRange",
-                        "timeRange": {
-                            "inPoint": 11000,
-                            "outPoint": 12950
-                        }
-                    }
-                }
-            ],
-            "note": "That is why vocabularyList/2 is related to transcribedAudio/110"
-        },
-        {
-            "_to": "transcribed_audio/110",
-            "_from": "books/24",
-            "type": "note",
-            "_key": "2002",
-            "eventHistory": [],
-            "connectionType": "dual",
-            "members": [
-                {
-                    "role": "to",
-                    "context": {
-                        "type": "timeRange",
-                        "timeRange": {
-                            "inPoint": 11000,
-                            "outPoint": 12950
-                        }
-                    }
-                },
-                {
-                    "role": "from",
-                    "context": {
-                        "type": "pageRange",
-                        "pageIdentifiers": [
-                            "ix"
-                        ]
-                    }
-                }
-            ],
-            "note": "That is why transcribedAudio/110 is related to book/24"
-        },
-        {
-            "_to": "books/24",
-            "_from": "photographs/2",
-            "type": "note",
-            "_key": "2003",
-            "eventHistory": [],
-            "connectionType": "dual",
-            "members": [
-                {
-                    "role": "to",
-                    "context": {
-                        "type": "pageRange",
-                        "pageIdentifiers": [
-                            "ix"
-                        ]
-                    }
-                },
-                {
-                    "role": "from",
-                    "context": {
-                        "type": "freeMultiline",
-                        "lines": [
-                            [
-                                [
-                                    0,
-                                    200
-                                ],
-                                [
-                                    100,
-                                    300
-                                ],
-                                [
-                                    200,
-                                    400
-                                ],
-                                [
-                                    250,
-                                    475
-                                ]
-                            ]
-                        ]
-                    }
-                }
-            ],
-            "note": "That is why book/24 is related to photograph/2"
-        },
-        {
-            "_to": "photographs/2",
-            "_from": "spatial_features/300",
-            "type": "note",
-            "_key": "2004",
-            "eventHistory": [],
-            "connectionType": "dual",
-            "members": [
-                {
-                    "role": "to",
-                    "context": {
-                        "type": "freeMultiline",
-                        "lines": [
-                            [
-                                [
-                                    0,
-                                    200
-                                ],
-                                [
-                                    100,
-                                    300
-                                ],
-                                [
-                                    200,
-                                    400
-                                ],
-                                [
-                                    250,
-                                    475
-                                ]
-                            ]
-                        ]
-                    }
-                },
-                {
-                    "role": "from",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "That is why photograph/2 is related to spatialFeature/300"
-        },
-        {
-            "_to": "spatial_features/300",
-            "_from": "bibliographic_references/1",
-            "type": "note",
-            "_key": "2005",
-            "eventHistory": [],
-            "connectionType": "dual",
-            "members": [
-                {
-                    "role": "to",
-                    "context": {
-                        "type": "general"
-                    }
-                },
-                {
-                    "role": "from",
-                    "context": {
-                        "type": "general"
-                    }
-                }
-            ],
-            "note": "That is why spatialFeature/300 is related to bibliographicReference/1"
-        },
-        {
-            "_to": "bibliographic_references/1",
-            "_from": "songs/1",
-            "type": "note",
-            "_key": "2006",
-            "eventHistory": [],
-            "connectionType": "dual",
-            "members": [
-                {
-                    "role": "to",
-                    "context": {
-                        "type": "general"
-                    }
-                },
-                {
-                    "role": "from",
-                    "context": {
-                        "type": "timeRange",
-                        "timeRange": {
-                            "inPoint": 300,
-                            "outPoint": 500
-                        }
-                    }
-                }
-            ],
-            "note": "That is why bibliographicReference/1 is related to song/1"
-        },
-        {
-            "_to": "songs/1",
-            "_from": "terms/2",
-            "type": "note",
-            "_key": "2007",
-            "eventHistory": [],
-            "connectionType": "dual",
-            "members": [
-                {
-                    "role": "to",
-                    "context": {
-                        "type": "timeRange",
-                        "timeRange": {
-                            "inPoint": 300,
-                            "outPoint": 500
-                        }
-                    }
-                },
-                {
-                    "role": "from",
-                    "context": {
-                        "type": "textField",
-                        "target": "term",
-                        "charRange": [
-                            0,
-                            3
-                        ]
-                    }
-                }
-            ],
-            "note": "That is why song/1 is related to term/2"
-        },
-        {
-            "_from": "media_items/1",
-            "_to": "terms/2",
-            "type": "note",
-            "_key": "3001",
-            "eventHistory": [],
-            "connectionType": "dual",
-            "members": [
-                {
-                    "role": "from",
-                    "context": {
-                        "type": "timeRange",
-                        "timeRange": {
-                            "inPoint": 100,
-                            "outPoint": 1200
-                        }
-                    }
-                },
-                {
-                    "role": "to",
-                    "context": {
-                        "type": "textField",
-                        "target": "term",
-                        "charRange": [
-                            1,
-                            4
-                        ]
-                    }
-                }
-            ],
-            "note": "this media item mentions a word in the term"
-        },
-        {
-            "_to": "media_items/1",
-            "_from": "books/24",
-            "type": "note",
-            "_key": "3101",
-            "eventHistory": [],
-            "connectionType": "dual",
-            "members": [
-                {
-                    "role": "to",
-                    "context": {
-                        "type": "timeRange",
-                        "timeRange": {
-                            "inPoint": 300,
-                            "outPoint": 1800
-                        }
-                    }
-                },
-                {
-                    "role": "from",
-                    "context": {
-                        "type": "pageRange",
-                        "pageIdentifiers": [
-                            "ix"
-                        ]
-                    }
-                }
-            ],
-            "note": "this selection from the media item portrays the events in the book"
-        }
-    ],
-    "tags": [
-        {
-            "type": "tag",
-            "_key": "1",
-            "eventHistory": [],
-            "label": "plants",
-            "members": [
-                {
-                    "type": "term",
-                    "id": "1"
-                },
-                {
-                    "type": "book",
-                    "id": "23"
-                },
-                {
-                    "type": "book",
-                    "id": "24"
-                },
-                {
-                    "type": "vocabularyList",
-                    "id": "1"
-                },
-                {
-                    "type": "spatialFeature",
-                    "id": "100"
-                },
-                {
-                    "type": "note",
-                    "id": "2005"
-                },
-                {
-                    "type": "note",
-                    "id": "9"
-                },
-                {
-                    "type": "note",
-                    "id": "11"
-                }
-            ]
-        },
-        {
-            "type": "tag",
-            "_key": "2",
-            "eventHistory": [],
-            "label": "animals",
-            "members": [
-                {
-                    "type": "term",
-                    "id": "2"
-                },
-                {
-                    "type": "term",
-                    "id": "3"
-                },
-                {
-                    "type": "spatialFeature",
-                    "id": "102"
-                },
-                {
-                    "type": "note",
-                    "id": "2004"
-                },
-                {
-                    "type": "note",
-                    "id": "7"
-                },
-                {
-                    "type": "bibliographicReference",
-                    "id": "1"
-                }
-            ]
-        },
-        {
-            "type": "tag",
-            "_key": "3",
-            "eventHistory": [],
-            "label": "placenames",
-            "members": [
-                {
-                    "type": "photograph",
-                    "id": "0"
-                },
-                {
-                    "type": "transcribedAudio",
-                    "id": "110"
-                },
-                {
-                    "type": "note",
-                    "id": "2003"
-                },
-                {
-                    "type": "note",
-                    "id": "5"
-                }
-            ]
-        },
-        {
-            "type": "tag",
-            "_key": "4",
-            "eventHistory": [],
-            "label": "songs",
-            "members": [
-                {
-                    "type": "photograph",
-                    "id": "1"
-                },
-                {
-                    "type": "note",
-                    "id": "2002"
-                },
-                {
-                    "type": "note",
-                    "id": "3"
-                }
-            ]
-        },
-        {
-            "type": "tag",
-            "_key": "5",
-            "eventHistory": [],
-            "label": "legends",
-            "members": [
-                {
-                    "type": "vocabularyList",
-                    "id": "2"
-                },
-                {
-                    "type": "spatialFeature",
-                    "id": "101"
-                },
-                {
-                    "type": "note",
-                    "id": "2001"
-                },
-                {
-                    "type": "note",
-                    "id": "1"
-                },
-                {
-                    "type": "mediaItem",
-                    "id": "1"
-                }
-            ]
-        }
-    ],
-    "categories": [
-        {
-            "_key": "0",
-            "label": "tree of knowledge",
-            "members": []
-        },
-        {
-            "_key": "1",
-            "label": "animals",
-            "members": [
-                {
-                    "type": "vocabularyList",
-                    "id": "1"
-                }
-            ]
-        },
-        {
-            "_key": "2",
-            "label": "mammals",
-            "members": [
-                {
-                    "type": "term",
-                    "id": "1"
-                },
-                {
-                    "type": "book",
-                    "id": "23"
-                }
-            ]
-        },
-        {
-            "_key": "3",
-            "label": "birds",
-            "members": []
-        },
-        {
-            "_key": "4",
-            "label": "canines",
-            "members": [
-                {
-                    "type": "term",
-                    "id": "2"
-                }
-            ]
-        },
-        {
-            "_key": "5",
-            "label": "felines",
-            "members": []
-        },
-        {
-            "_key": "6",
-            "label": "big cats",
-            "members": []
-        },
-        {
-            "_key": "7",
-            "label": "domestic cats",
-            "members": [
-                {
-                    "type": "vocabularyList",
-                    "id": "2"
-                },
-                {
-                    "type": "photograph",
-                    "id": "0"
-                }
-            ]
-        },
-        {
-            "_key": "8",
-            "label": "wolves",
-            "members": [
-                {
-                    "type": "spatialFeature",
-                    "id": "101"
-                }
-            ]
-        },
-        {
-            "_key": "9",
-            "label": "songs",
-            "members": [
-                {
-                    "type": "term",
-                    "id": "3"
-                },
-                {
-                    "type": "spatialFeature",
-                    "id": "102"
-                },
-                {
-                    "type": "bibliographicReference",
-                    "id": "1"
-                }
-            ]
-        },
-        {
-            "_key": "10",
-            "label": "domestic dogs",
-            "members": [
-                {
-                    "type": "photograph",
-                    "id": "1"
-                }
-            ]
-        },
-        {
-            "_key": "11",
-            "label": "rodents",
-            "members": [
-                {
-                    "type": "book",
-                    "id": "24"
-                }
-            ]
-        },
-        {
-            "_key": "12",
-            "label": "film",
-            "members": []
-        },
-        {
-            "_key": "13",
-            "label": "props",
-            "members": []
-        },
-        {
-            "_key": "14",
-            "label": "wardrobe",
-            "members": []
-        },
-        {
-            "_key": "15",
-            "label": "tools",
-            "members": [
-                {
-                    "type": "transcribedAudio",
-                    "id": "110"
-                }
-            ]
-        },
-        {
-            "_key": "16",
-            "label": "adornments",
-            "members": []
-        },
-        {
-            "_key": "17",
-            "label": "clothing",
-            "members": [
-                {
-                    "type": "note",
-                    "id": "1"
-                }
-            ]
-        },
-        {
-            "_key": "18",
-            "label": "tools",
-            "members": []
-        }
-    ],
-    "categoryEdges": [
-        {
-            "_to": "categories/1",
-            "_from": "categories/0"
-        },
-        {
-            "_to": "categories/12",
-            "_from": "categories/0"
-        },
-        {
-            "_to": "categories/2",
-            "_from": "categories/1"
-        },
-        {
-            "_to": "categories/3",
-            "_from": "categories/1"
-        },
-        {
-            "_to": "categories/4",
-            "_from": "categories/2"
-        },
-        {
-            "_to": "categories/5",
-            "_from": "categories/2"
-        },
-        {
-            "_to": "categories/11",
-            "_from": "categories/2"
-        },
-        {
-            "_to": "categories/8",
-            "_from": "categories/4"
-        },
-        {
-            "_to": "categories/10",
-            "_from": "categories/4"
-        },
-        {
-            "_to": "categories/6",
-            "_from": "categories/5"
-        },
-        {
-            "_to": "categories/7",
-            "_from": "categories/5"
-        },
-        {
-            "_to": "categories/13",
-            "_from": "categories/12"
-        },
-        {
-            "_to": "categories/14",
-            "_from": "categories/12"
-        },
-        {
-            "_to": "categories/16",
-            "_from": "categories/13"
-        },
-        {
-            "_to": "categories/17",
-            "_from": "categories/13"
-        },
-        {
-            "_to": "categories/18",
-            "_from": "categories/13"
-        },
-        {
-            "_to": "categories/15",
-            "_from": "categories/16"
-        }
-    ],
-    "users": [
-        {
-            "type": "user",
-            "_key": "1",
-            "eventHistory": [],
-            "profile": {
-                "email": "llcj1985@hotmale.com",
-                "name": {
-                    "first": "James",
-                    "last": "Jones"
-                },
-                "contact": {},
-                "dateOfBirth": "beginning of time",
-                "communityConnection": "break dance instructor"
+    "edgeCollections": {
+        "category_edges": [
+            {
+                "_to": "categories/1",
+                "_from": "categories/0"
             },
-            "username": "cool-james",
-            "roles": [
-                "viewer"
-            ]
-        }
-    ]
+            {
+                "_to": "categories/12",
+                "_from": "categories/0"
+            },
+            {
+                "_to": "categories/2",
+                "_from": "categories/1"
+            },
+            {
+                "_to": "categories/3",
+                "_from": "categories/1"
+            },
+            {
+                "_to": "categories/4",
+                "_from": "categories/2"
+            },
+            {
+                "_to": "categories/5",
+                "_from": "categories/2"
+            },
+            {
+                "_to": "categories/11",
+                "_from": "categories/2"
+            },
+            {
+                "_to": "categories/8",
+                "_from": "categories/4"
+            },
+            {
+                "_to": "categories/10",
+                "_from": "categories/4"
+            },
+            {
+                "_to": "categories/6",
+                "_from": "categories/5"
+            },
+            {
+                "_to": "categories/7",
+                "_from": "categories/5"
+            },
+            {
+                "_to": "categories/13",
+                "_from": "categories/12"
+            },
+            {
+                "_to": "categories/14",
+                "_from": "categories/12"
+            },
+            {
+                "_to": "categories/16",
+                "_from": "categories/13"
+            },
+            {
+                "_to": "categories/17",
+                "_from": "categories/13"
+            },
+            {
+                "_to": "categories/18",
+                "_from": "categories/13"
+            },
+            {
+                "_to": "categories/15",
+                "_from": "categories/16"
+            }
+        ],
+        "resource_edge_connections": [
+            {
+                "_to": "terms/2",
+                "_from": "terms/2",
+                "type": "note",
+                "_key": "1",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "textField",
+                            "target": "term",
+                            "charRange": [
+                                0,
+                                3
+                            ]
+                        }
+                    }
+                ],
+                "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
+            },
+            {
+                "_to": "books/24",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "2",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    }
+                ],
+                "note": "This page is about bears"
+            },
+            {
+                "_to": "vocabulary_lists/2",
+                "_from": "vocabulary_lists/2",
+                "type": "note",
+                "_key": "3",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "textField",
+                            "target": "name",
+                            "charRange": [
+                                0,
+                                1
+                            ]
+                        }
+                    }
+                ],
+                "note": "This is the first letter of the list name"
+            },
+            {
+                "_to": "spatial_features/300",
+                "_from": "spatial_features/300",
+                "type": "note",
+                "_key": "4",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "there is a placename for this point at the base of the mountain"
+            },
+            {
+                "_to": "transcribed_audio/110",
+                "_from": "transcribed_audio/110",
+                "type": "note",
+                "_key": "5",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 11000,
+                                "outPoint": 12950
+                            }
+                        }
+                    }
+                ],
+                "note": "this clip talks about songs"
+            },
+            {
+                "_to": "photographs/2",
+                "_from": "photographs/2",
+                "type": "note",
+                "_key": "6",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "freeMultiline",
+                            "lines": [
+                                [
+                                    [
+                                        0,
+                                        200
+                                    ],
+                                    [
+                                        100,
+                                        300
+                                    ],
+                                    [
+                                        200,
+                                        400
+                                    ],
+                                    [
+                                        250,
+                                        475
+                                    ]
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "note": "this is the stem of the flower"
+            },
+            {
+                "_to": "photographs/2",
+                "_from": "photographs/2",
+                "type": "note",
+                "_key": "7",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "point2D",
+                            "point": [
+                                0,
+                                200
+                            ]
+                        }
+                    }
+                ],
+                "note": "this is the base of the flower"
+            },
+            {
+                "_to": "books/24",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "8",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    }
+                ],
+                "note": "this section is the best part of an illustrated book about birds"
+            },
+            {
+                "_to": "bibliographic_references/1",
+                "_from": "bibliographic_references/1",
+                "type": "note",
+                "_key": "9",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "found this in the archives"
+            },
+            {
+                "_to": "songs/1",
+                "_from": "songs/1",
+                "type": "note",
+                "_key": "10",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 300,
+                                "outPoint": 500
+                            }
+                        }
+                    }
+                ],
+                "note": "this is a song"
+            },
+            {
+                "_to": "media_items/1",
+                "_from": "media_items/1",
+                "type": "note",
+                "_key": "11",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "textField",
+                            "target": "title",
+                            "charRange": [
+                                0,
+                                2
+                            ]
+                        }
+                    }
+                ],
+                "note": "this is an awesome show"
+            },
+            {
+                "_to": "media_items/1",
+                "_from": "media_items/1",
+                "type": "note",
+                "_key": "12",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 650,
+                                "outPoint": 1230
+                            }
+                        }
+                    }
+                ],
+                "note": "important clip from the show"
+            },
+            {
+                "_to": "terms/2",
+                "_from": "terms/2",
+                "type": "note",
+                "_key": "13",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
+            },
+            {
+                "_to": "books/24",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "14",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "This page is about bears"
+            },
+            {
+                "_to": "vocabulary_lists/2",
+                "_from": "vocabulary_lists/2",
+                "type": "note",
+                "_key": "15",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "This is the first letter of the list name"
+            },
+            {
+                "_to": "spatial_features/300",
+                "_from": "spatial_features/300",
+                "type": "note",
+                "_key": "16",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "there is a placename for this point at the base of the mountain"
+            },
+            {
+                "_to": "transcribed_audio/110",
+                "_from": "transcribed_audio/110",
+                "type": "note",
+                "_key": "17",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this clip talks about songs"
+            },
+            {
+                "_to": "photographs/2",
+                "_from": "photographs/2",
+                "type": "note",
+                "_key": "18",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this is the stem of the flower"
+            },
+            {
+                "_to": "photographs/2",
+                "_from": "photographs/2",
+                "type": "note",
+                "_key": "19",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this is the base of the flower"
+            },
+            {
+                "_to": "books/24",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "20",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this section is the best part of an illustrated book about birds"
+            },
+            {
+                "_to": "bibliographic_references/1",
+                "_from": "bibliographic_references/1",
+                "type": "note",
+                "_key": "21",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "found this in the archives"
+            },
+            {
+                "_to": "songs/1",
+                "_from": "songs/1",
+                "type": "note",
+                "_key": "22",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this is a song"
+            },
+            {
+                "_to": "media_items/1",
+                "_from": "media_items/1",
+                "type": "note",
+                "_key": "23",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this is an awesome show"
+            },
+            {
+                "_to": "media_items/1",
+                "_from": "media_items/1",
+                "type": "note",
+                "_key": "24",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "important clip from the show"
+            },
+            {
+                "_to": "terms/2",
+                "_from": "vocabulary_lists/2",
+                "type": "note",
+                "_key": "2000",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "textField",
+                            "target": "term",
+                            "charRange": [
+                                0,
+                                3
+                            ]
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "textField",
+                            "target": "name",
+                            "charRange": [
+                                0,
+                                1
+                            ]
+                        }
+                    }
+                ],
+                "note": "That is why term/2 is related to vocabularyList/2"
+            },
+            {
+                "_to": "vocabulary_lists/2",
+                "_from": "transcribed_audio/110",
+                "type": "note",
+                "_key": "2001",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "textField",
+                            "target": "name",
+                            "charRange": [
+                                0,
+                                1
+                            ]
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 11000,
+                                "outPoint": 12950
+                            }
+                        }
+                    }
+                ],
+                "note": "That is why vocabularyList/2 is related to transcribedAudio/110"
+            },
+            {
+                "_to": "transcribed_audio/110",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "2002",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 11000,
+                                "outPoint": 12950
+                            }
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    }
+                ],
+                "note": "That is why transcribedAudio/110 is related to book/24"
+            },
+            {
+                "_to": "books/24",
+                "_from": "photographs/2",
+                "type": "note",
+                "_key": "2003",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "freeMultiline",
+                            "lines": [
+                                [
+                                    [
+                                        0,
+                                        200
+                                    ],
+                                    [
+                                        100,
+                                        300
+                                    ],
+                                    [
+                                        200,
+                                        400
+                                    ],
+                                    [
+                                        250,
+                                        475
+                                    ]
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "note": "That is why book/24 is related to photograph/2"
+            },
+            {
+                "_to": "photographs/2",
+                "_from": "spatial_features/300",
+                "type": "note",
+                "_key": "2004",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "freeMultiline",
+                            "lines": [
+                                [
+                                    [
+                                        0,
+                                        200
+                                    ],
+                                    [
+                                        100,
+                                        300
+                                    ],
+                                    [
+                                        200,
+                                        400
+                                    ],
+                                    [
+                                        250,
+                                        475
+                                    ]
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "That is why photograph/2 is related to spatialFeature/300"
+            },
+            {
+                "_to": "spatial_features/300",
+                "_from": "bibliographic_references/1",
+                "type": "note",
+                "_key": "2005",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "That is why spatialFeature/300 is related to bibliographicReference/1"
+            },
+            {
+                "_to": "bibliographic_references/1",
+                "_from": "songs/1",
+                "type": "note",
+                "_key": "2006",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 300,
+                                "outPoint": 500
+                            }
+                        }
+                    }
+                ],
+                "note": "That is why bibliographicReference/1 is related to song/1"
+            },
+            {
+                "_to": "songs/1",
+                "_from": "terms/2",
+                "type": "note",
+                "_key": "2007",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 300,
+                                "outPoint": 500
+                            }
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "textField",
+                            "target": "term",
+                            "charRange": [
+                                0,
+                                3
+                            ]
+                        }
+                    }
+                ],
+                "note": "That is why song/1 is related to term/2"
+            },
+            {
+                "_from": "media_items/1",
+                "_to": "terms/2",
+                "type": "note",
+                "_key": "3001",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 100,
+                                "outPoint": 1200
+                            }
+                        }
+                    },
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "textField",
+                            "target": "term",
+                            "charRange": [
+                                1,
+                                4
+                            ]
+                        }
+                    }
+                ],
+                "note": "this media item mentions a word in the term"
+            },
+            {
+                "_to": "media_items/1",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "3101",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 300,
+                                "outPoint": 1800
+                            }
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    }
+                ],
+                "note": "this selection from the media item portrays the events in the book"
+            }
+        ]
+    }
 }
