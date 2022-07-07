@@ -1587,7 +1587,7 @@
     "users": [
         {
             "type": "user",
-            "_key": "auth0|123",
+            "_key": "1",
             "eventHistory": [],
             "profile": {
                 "email": "llcj1985@hotmale.com",
