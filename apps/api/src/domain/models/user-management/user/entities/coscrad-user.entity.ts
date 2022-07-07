@@ -6,9 +6,11 @@ import {
     NonEmptyString,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { InternalError } from '../../../../../lib/errors/InternalError';
+import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
+import { InvariantValidationMethod } from '../../../../../lib/web-of-knowledge/decorators/invariant-validation-method.decorator';
 import { DTO } from '../../../../../types/DTO';
-import { ResultOrError } from '../../../../../types/ResultOrError';
-import { Valid } from '../../../../domainModelValidators/Valid';
+import InvalidCoscradUserDTOError from '../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
 import { AggregateType } from '../../../../types/AggregateType';
 import { Aggregate } from '../../../aggregate.entity';
 import validateCoscradUser from '../invariant-validation/validateCoscradUser';
@@ -44,14 +46,18 @@ export class CoscradUser extends Aggregate {
         this.username = username;
 
         // Each role is a string, so a shallow clone is effectively deep clone
-        this.roles = [...roles];
+        this.roles = Array.isArray(roles) ? [...roles] : undefined;
     }
 
     getAvailableCommands(): string[] {
         return [];
     }
 
-    validateInvariants(): ResultOrError<Valid> {
+    @InvariantValidationMethod(
+        (allErrors: InternalError[], instance: CoscradUser) =>
+            new InvalidCoscradUserDTOError(allErrors, instance.id)
+    )
+    validateInvariants(): ValidationResult {
         return validateCoscradUser(this);
     }
 }
