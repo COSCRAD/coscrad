@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { NonEmptyString, URL, UUID } from '../index';
 import { Enum, NestedDataType, NonNegativeFiniteNumber, RawDataObject } from '../lib/decorators';
 import { CoscradEnum, MIMEType } from '../lib/enums';
+import { CoscradUserRole } from '../lib/enums/CoscradUserRole';
 import getCoscradDataSchema from '../lib/utilities/getCoscradDataSchema';
 
 describe('NonEmptyString', () => {
@@ -55,6 +56,9 @@ describe('NonEmptyString', () => {
 
         @Enum(CoscradEnum.MIMEType)
         mimeType = MIMEType.mp3;
+
+        @Enum(CoscradEnum.CoscradUserRole)
+        role = CoscradUserRole.viewer;
     }
 
     it('should populate the appropriate metadata', () => {

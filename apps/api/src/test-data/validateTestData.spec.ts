@@ -40,6 +40,7 @@ describe('buildTestData', () => {
         connections: connectionTestData,
         resources: resourceTestData,
         tags: tagTestData,
+        users: userTestData,
     } = testData;
 
     const resourceTestDataDTOs = Object.entries(resourceTestData).reduce(
@@ -234,6 +235,18 @@ describe('buildTestData', () => {
         });
     });
 
+    describe('the test data for users', () => {
+        userTestData.forEach((user) => {
+            describe(`user test data with id: ${user.id}`, () => {
+                it('should satisfy invariant validation', () => {
+                    const validationResult = user.validateInvariants();
+
+                    expect(validationResult).toBe(Valid);
+                });
+            });
+        });
+    });
+
     // If the test succeeds, write the data
     afterAll(() => {
         /**
@@ -264,6 +277,8 @@ describe('buildTestData', () => {
             mapCategoryDTOToArangoDocument
         );
 
+        const usersInDatabaseFormat = userTestData.map(mapEntityDTOToDatabaseDTO);
+
         const categoryEdges = buildEdgeDocumentsFromCategoryNodeDTOs(categoryTestData);
 
         const fullSnapshotInDatabaseFormat = {
@@ -273,6 +288,7 @@ describe('buildTestData', () => {
             tags: tagTestDataInDatabaseFormat,
             categories: categoryTestDataInDatabaseFormat,
             categoryEdges,
+            users: usersInDatabaseFormat,
         };
 
         const testDataFilePath = `${process.cwd()}/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.json`;

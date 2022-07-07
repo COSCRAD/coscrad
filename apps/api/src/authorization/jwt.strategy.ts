@@ -5,6 +5,11 @@ import { passportJwtSecret } from 'jwks-rsa';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { InternalError } from '../lib/errors/InternalError';
 
+/**
+ * It is convention for the auth provider to populate the `sub` field on the
+ * request body with the `userId`. Note that this has the format
+ * '<PROVIDER>|RANDOM NUMBER', e.g. 'auth0|2929394844594949...'
+ */
 type HasSub = { sub: string };
 
 @Injectable()

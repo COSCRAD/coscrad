@@ -4,6 +4,8 @@ import { ArangoResourceCollectionId } from './ArangoResourceCollectionId';
 const NonResourceCollectionId = {
     tags: 'tags',
     categories: 'categories',
+    uuids: 'uuids',
+    users: 'users',
 } as const;
 
 /**

@@ -15,7 +15,7 @@ export function NestedDataType(
 
         const { isArray, isOptional } = options;
 
-        const validationOptions = isArray ? { each: true } : {};
+        const validationOptions = { each: isArray };
 
         if (!isOptional) {
             IsDefined(validationOptions)(target, propertyKey);

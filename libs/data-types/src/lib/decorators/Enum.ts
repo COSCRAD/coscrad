@@ -14,7 +14,10 @@ export function Enum(
     return (target: Object, propertyKey: string | symbol) => {
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
-        WithValidation(IsEnum(getCoscradEnumFromName(enumName)), options)(target, propertyKey);
+        WithValidation(
+            IsEnum(getCoscradEnumFromName(enumName), { each: options.isArray }),
+            options
+        )(target, propertyKey);
 
         appendMetadata(target, propertyKey, getEnumMetadata(enumName), options);
     };
