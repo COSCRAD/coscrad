@@ -12,4 +12,5 @@ export default (): InMemorySnapshot => ({
     categoryTree: [],
     connections: [],
     users: [],
+    uuids: [],
 });
