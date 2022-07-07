@@ -18,7 +18,7 @@ const dummyProfile: DTO<CoscradUserProfile> = {
 const dtos: DTO<CoscradUser>[] = [
     {
         type: AggregateType.user,
-        id: 'auth0|123',
+        id: '1', // this is not allowed in arango! 'auth0|123',
 
         profile: new CoscradUserProfile(dummyProfile),
         username: 'cool-james',

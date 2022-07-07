@@ -32,6 +32,7 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         categoryTree,
         tags,
         connections,
+        users,
     }: InMemorySnapshot): Promise<void> {
         await this.addResourcesOfManyTypes(resources);
 
@@ -40,6 +41,8 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         await this.getTagRepository().createMany(tags);
 
         await this.getEdgeConnectionRepository().createMany(connections);
+
+        await this.getUserRepository().createMany(users);
     }
 
     // TODO fix types
