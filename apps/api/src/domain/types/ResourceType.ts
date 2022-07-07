@@ -1,3 +1,4 @@
+import { UuidDocument } from '../../lib/id-generation/types/UuidDocument';
 import { IBibliographicReference } from '../models/bibliographic-reference/interfaces/IBibliographicReference';
 import { Book } from '../models/book/entities/book.entity';
 import { Category } from '../models/categories/entities/category.entity';
@@ -11,6 +12,7 @@ import { Term } from '../models/term/entities/term.entity';
 import { TranscribedAudio } from '../models/transcribed-audio/entities/transcribed-audio.entity';
 import { CoscradUser } from '../models/user-management/user/entities/coscrad-user.entity';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
+import { AggregateId } from './AggregateId';
 
 export enum ResourceType {
     term = 'term',
@@ -58,4 +60,5 @@ export type InMemorySnapshot = {
      */
     categoryTree: Category[];
     users: CoscradUser[];
+    uuids: UuidDocument<AggregateId>[];
 };

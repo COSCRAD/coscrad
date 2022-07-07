@@ -34,4 +34,5 @@ export default (): InMemorySnapshot => ({
     tags: buildTagTestData(),
     categoryTree: buildCategoryTestData(),
     users: buildUserTestData(),
+    uuids: [],
 });
