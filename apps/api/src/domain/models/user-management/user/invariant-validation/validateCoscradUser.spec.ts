@@ -46,7 +46,7 @@ const buildInvalidUserDto = (overrides: { [K in keyof CoscradUser]?: unknown }):
 describe('validateCoscradUser', () => {
     describe('when the user is valid', () => {
         it('should return Valid', () => {
-            const result = validateCoscradUser(validUser);
+            const result = new CoscradUser(validUser).validateInvariants();
 
             expect(result).toBe(Valid);
         });
@@ -71,7 +71,11 @@ describe('validateCoscradUser', () => {
                                 propertyName
                             );
 
-                            const result = validateCoscradUser(invalidDto);
+                            const invalidInstance = new CoscradUser(
+                                invalidDto as unknown as DTO<CoscradUser>
+                            );
+
+                            const result = invalidInstance.validateInvariants();
 
                             expect(result).toBeInstanceOf(InvalidCoscradUserDTOError);
 
@@ -98,11 +102,11 @@ describe('validateCoscradUser', () => {
                     invalidValuesAndLabels.forEach(([invalidValue, label]) => {
                         describe(`when id has the type ${label} (${invalidValue})`, () => {
                             it('should return the expected error', () => {
-                                const result = validateCoscradUser(
+                                const result = new CoscradUser(
                                     buildInvalidUserDto({
                                         id: invalidValue,
                                     })
-                                );
+                                ).validateInvariants();
 
                                 expect(result).toBeInstanceOf(InternalError);
 
@@ -124,11 +128,11 @@ describe('validateCoscradUser', () => {
                     invalidValuesAndLabels.forEach(([invalidValue, label]) => {
                         describe(`when username has the type ${label} (${invalidValue})`, () => {
                             it('should return the expected error', () => {
-                                const result = validateCoscradUser(
+                                const result = new CoscradUser(
                                     buildInvalidUserDto({
                                         username: invalidValue,
                                     })
-                                );
+                                ).validateInvariants();
 
                                 expect(result).toBeInstanceOf(InternalError);
 
@@ -155,11 +159,11 @@ describe('validateCoscradUser', () => {
                     invalidValuesAndLabels.forEach(([invalidValue, label]) => {
                         describe(`when roles has the type ${label} (${invalidValue})`, () => {
                             it('should return the expected error', () => {
-                                const result = validateCoscradUser(
+                                const result = new CoscradUser(
                                     buildInvalidUserDto({
                                         roles: invalidValue,
                                     })
-                                );
+                                ).validateInvariants();
 
                                 expect(result).toBeInstanceOf(InternalError);
 
