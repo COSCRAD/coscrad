@@ -1,4 +1,4 @@
-import React from 'react';
+import { Typography } from '@mui/material';
 import Dropdown from './dropdown';
 import { Nav, NavBtn, NavBtnLink, NavLink, NavMenu } from './NavbarElements';
 
@@ -23,18 +23,20 @@ const Navbar = () => {
             <ul className="menu__box">
                 <Dropdown />
             </ul>
-            <NavMenu className="navLinks">
-                <NavLink to="/About">About</NavLink>
-                <NavLink to="/Apps">Apps</NavLink>
-                <NavLink to="/Songs">Songs</NavLink>
-                <NavLink to="/Videos">Videos</NavLink>
-                <NavLink to="/Teachers">Teachers</NavLink>
-                <NavLink to="/Funders">Funders</NavLink>
-                <NavLink to="/Greetings">Greetings</NavLink>
-                <NavLink to="/Links">Links</NavLink>
-                {/* Second Nav */}
-                {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
-            </NavMenu>
+            <Typography sx={{ margin: '15px', padding: '15px' }}>
+                <NavMenu className="navLinks">
+                    <NavLink to="/About">About</NavLink>
+                    <NavLink to="/Apps">Apps</NavLink>
+                    <NavLink to="/Songs">Songs</NavLink>
+                    <NavLink to="/Videos">Videos</NavLink>
+                    <NavLink to="/Teachers">Teachers</NavLink>
+                    <NavLink to="/Funders">Funders</NavLink>
+                    <NavLink to="/Greetings">Greetings</NavLink>
+                    <NavLink to="/Links">Links</NavLink>
+                    {/* Second Nav */}
+                    {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
+                </NavMenu>
+            </Typography>
             <NavBtn>
                 <NavBtnLink className="hamburder-menu">
                     <a

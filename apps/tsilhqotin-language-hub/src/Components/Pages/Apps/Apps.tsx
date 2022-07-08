@@ -3,7 +3,6 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
 import './Apps.module.css';
 
 /* eslint-disable-next-line */
@@ -22,7 +21,7 @@ export function Apps(props: AppsProps) {
                     <h1 id="pageTitle">Apps</h1>
                 </div>
             </div>
-            <div className="pageContent">
+            <Card className="pageContent">
                 <Card variant="outlined" className="appCard">
                     <CardContent>
                         <Typography variant="h5" component="div">
@@ -32,7 +31,7 @@ export function Apps(props: AppsProps) {
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
                             released 2022
                         </Typography>
-                        <Typography variant="body2">
+                        <Typography variant="body2" color="Highlight">
                             Version 1.0 is currently published and contains 'Third Person Singular
                             Paradigms' completed Bella Alphonse. These are really helpful for
                             semi-speakers who need practice with verb stem alternations. To date
@@ -51,7 +50,7 @@ export function Apps(props: AppsProps) {
                         />
                     </CardActions>
                 </Card>
-            </div>
+            </Card>
         </div>
     );
 }

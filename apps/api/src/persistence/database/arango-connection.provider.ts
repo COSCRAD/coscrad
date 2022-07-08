@@ -54,9 +54,12 @@ export class ArangoConnectionProvider {
             dbHostUrl: buildFullHostURL(
                 this.configService.get<string>('ARANGO_DB_HOST_DOMAIN', 'localhost'),
                 this.configService.get<Scheme>('ARANGO_DB_HOST_SCHEME', Scheme.http),
-                this.configService.get<Port>('ARANGO_DB_HOST_PORT', '80')
+                this.configService.get<number>('ARANGO_DB_HOST_PORT', 80).toString() as Port
             ),
         });
+
+        const dbconfig = this.databaseConfiguration;
+        console.log({ dbconfig });
 
         const systemDB = this.#getAdminDBConnection({
             shouldConnectToSystemDatabase: true,
