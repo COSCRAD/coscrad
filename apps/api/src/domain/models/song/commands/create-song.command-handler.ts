@@ -28,6 +28,7 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
             startMilliseconds: 0,
             type: ResourceType.song,
             eventHistory: [],
+            lengthMilliseconds: 0,
         };
 
         // Attempt state mutation - Result or Error (Invariant violation in our case- could also be invalid state transition in other cases)
