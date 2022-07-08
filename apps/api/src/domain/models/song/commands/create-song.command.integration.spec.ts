@@ -32,10 +32,9 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateSon
         id,
         title: 'test-song-name (language)',
         titleEnglish: 'test-song-name (English)',
-        contributorAndRoles: [],
+        contributions: [],
         lyrics: 'la la la',
         audioURL: 'https://www.mysound.org/song.mp3',
-        lengthMilliseconds: 15340,
     },
 });
 
@@ -131,7 +130,7 @@ describe('CreateSong', () => {
             });
         });
 
-        describe('when the required property contributorAndRoles is missing', () => {
+        describe('when the required property contributions is missing', () => {
             it('should return an error', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     buildCommandFSA: (id: AggregateId) => ({
@@ -142,12 +141,10 @@ describe('CreateSong', () => {
                             titleEnglish: 'test-song-name (English)',
                             lyrics: 'la la la',
                             audioURL: 'https://www.mysound.org/song.mp3',
-                            lengthMilliseconds: 15340,
                         },
                     }),
                     initialState,
-                    checkError: (error) =>
-                        assertCommandPayloadTypeError(error, 'contributorAndRoles'),
+                    checkError: (error) => assertCommandPayloadTypeError(error, 'contributions'),
                 });
             });
         });
