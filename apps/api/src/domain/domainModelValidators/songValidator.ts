@@ -24,7 +24,7 @@ const songValidator: DomainModelValidator = (dto: unknown): Valid | InternalErro
 
     allErrors.push(...validateSimpleInvariants(Song, dto));
 
-    if (startMilliseconds >= lengthMilliseconds)
+    if (startMilliseconds > lengthMilliseconds)
         allErrors.push(
             new InternalError(
                 `the start:${startMilliseconds} cannot be greater than the length:${lengthMilliseconds}`
