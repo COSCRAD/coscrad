@@ -691,7 +691,7 @@
                 "published": true,
                 "title": "Song title in language",
                 "titleEnglish": "Mary had a little lamb",
-                "contributorAndRoles": [
+                "contributions": [
                     {
                         "contributorId": "1",
                         "role": "performer"
@@ -709,7 +709,7 @@
                 "published": false,
                 "title": "Unpublished Song Title (lang)",
                 "titleEnglish": "Unpublished Song Title (Engl)",
-                "contributorAndRoles": [
+                "contributions": [
                     {
                         "contributorId": "33",
                         "role": "author"
