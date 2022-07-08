@@ -316,14 +316,12 @@
                 "_key": "1",
                 "eventHistory": [],
                 "profile": {
-                    "email": "llcj1985@hotmale.com",
+                    "email": "llcj1985@aol.com",
                     "name": {
-                        "first": "James",
-                        "last": "Jones"
-                    },
-                    "contact": {},
-                    "dateOfBirth": "beginning of time",
-                    "communityConnection": "break dance instructor"
+                        "middleNames": [],
+                        "firstName": "James",
+                        "lastName": "Jones"
+                    }
                 },
                 "username": "cool-james",
                 "roles": [
@@ -691,7 +689,7 @@
                 "published": true,
                 "title": "Song title in language",
                 "titleEnglish": "Mary had a little lamb",
-                "contributorAndRoles": [
+                "contributions": [
                     {
                         "contributorId": "1",
                         "role": "performer"
@@ -709,7 +707,7 @@
                 "published": false,
                 "title": "Unpublished Song Title (lang)",
                 "titleEnglish": "Unpublished Song Title (Engl)",
-                "contributorAndRoles": [
+                "contributions": [
                     {
                         "contributorId": "33",
                         "role": "author"

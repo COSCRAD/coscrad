@@ -75,10 +75,7 @@ export const buildSongTestCase = (): DomainModelValidatorTestCase<Song> => ({
             description: 'one of the contributors is a plain string',
             invalidDTO: {
                 ...validDTO,
-                contributorAndRoles: [
-                    ...validDTO.contributorAndRoles,
-                    'John Doe',
-                ] as ContributorAndRole[],
+                contributions: [...validDTO.contributions, 'John Doe'] as ContributorAndRole[],
             },
             expectedError: buildTopLevelError(validDTO.id, []),
         },

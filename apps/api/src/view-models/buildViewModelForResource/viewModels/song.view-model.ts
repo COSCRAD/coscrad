@@ -21,7 +21,7 @@ export class SongViewModel extends BaseViewModel {
         id,
         title,
         titleEnglish,
-        contributorAndRoles,
+        contributions: contributorAndRoles,
         lyrics,
         audioURL,
         lengthMilliseconds,

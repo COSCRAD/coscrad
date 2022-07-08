@@ -1,12 +1,5 @@
 import { Command } from '@coscrad/commands';
-import {
-    NestedDataType,
-    NonEmptyString,
-    NonNegativeFiniteNumber,
-    RawDataObject,
-    URL,
-    UUID,
-} from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
 import { AggregateId } from '../../../types/AggregateId';
 import { ICreateCommand } from '../../shared/command-handlers/interfaces/create-command.interface';
 import { ContributorAndRole } from '../ContributorAndRole';
@@ -27,7 +20,7 @@ export class CreateSong implements ICreateCommand {
     readonly titleEnglish?: string;
 
     @NestedDataType(ContributorAndRole, { isArray: true })
-    readonly contributorAndRoles: ContributorAndRole[];
+    readonly contributions: ContributorAndRole[];
 
     @NonEmptyString({ isOptional: true })
     readonly lyrics?: string;
@@ -35,9 +28,8 @@ export class CreateSong implements ICreateCommand {
     @URL()
     readonly audioURL: string;
 
-    @NonNegativeFiniteNumber()
-    readonly lengthMilliseconds: number;
-
     @RawDataObject({ isOptional: true })
     readonly rawData?: Record<string, unknown>;
+
+    // the length can be set later
 }

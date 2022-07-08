@@ -70,7 +70,7 @@ Object {
     "isOptional": false,
     "type": "URL",
   },
-  "contributorAndRoles": Object {
+  "contributions": Object {
     "isArray": true,
     "isOptional": false,
     "type": Object {
@@ -90,11 +90,6 @@ Object {
     "isArray": false,
     "isOptional": false,
     "type": "UUID",
-  },
-  "lengthMilliseconds": Object {
-    "isArray": false,
-    "isOptional": false,
-    "type": "NON_NEGATIVE_FINITE_NUMBER",
   },
   "lyrics": Object {
     "isArray": false,
