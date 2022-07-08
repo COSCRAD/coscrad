@@ -32,7 +32,7 @@ export class Song extends Resource implements ITimeBoundable {
     readonly titleEnglish?: string;
 
     @ValidateNested()
-    readonly contributorAndRoles: ContributorAndRole[];
+    readonly contributions: ContributorAndRole[];
 
     @IsOptional()
     @IsStringWithNonzeroLength()
@@ -56,7 +56,7 @@ export class Song extends Resource implements ITimeBoundable {
         const {
             title,
             titleEnglish,
-            contributorAndRoles,
+            contributions: contributorAndRoles,
             lyrics,
             audioURL,
             lengthMilliseconds,
@@ -67,7 +67,7 @@ export class Song extends Resource implements ITimeBoundable {
 
         this.titleEnglish = titleEnglish;
 
-        this.contributorAndRoles = (contributorAndRoles || []).map(
+        this.contributions = (contributorAndRoles || []).map(
             (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
         );
 

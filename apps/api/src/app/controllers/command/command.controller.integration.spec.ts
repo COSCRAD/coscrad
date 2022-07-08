@@ -22,10 +22,9 @@ const buildValidCommandFSA = (id: string): FluxStandardAction<DTO<CreateSong>> =
         id,
         title: 'test-song-name (language)',
         titleEnglish: 'test-song-name (English)',
-        contributorAndRoles: [],
+        contributions: [],
         lyrics: 'la la la',
         audioURL: 'https://www.mysound.org/song.mp3',
-        lengthMilliseconds: 15340,
     },
 });
 

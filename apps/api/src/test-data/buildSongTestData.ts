@@ -12,7 +12,7 @@ export default (): Song[] =>
             published: true,
             startMilliseconds: 0,
             lengthMilliseconds: 3500,
-            contributorAndRoles: [
+            contributions: [
                 {
                     contributorId: '1',
                     role: 'performer',
@@ -28,7 +28,7 @@ export default (): Song[] =>
             published: false,
             startMilliseconds: 0,
             lengthMilliseconds: 33000,
-            contributorAndRoles: [
+            contributions: [
                 {
                     contributorId: '33',
                     role: 'author',
