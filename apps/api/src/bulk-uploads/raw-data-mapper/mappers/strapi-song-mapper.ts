@@ -1,9 +1,12 @@
 import { isStringWithNonzeroLength } from '@coscrad/validation';
-import { AddSong } from '../../../domain/models/song/commands/add-song.command';
+import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { DTO } from '../../../types/DTO';
 import { FieldCalculationRules, RawDataMapping } from '../raw-data-mapping';
 
-type StrapiMedia = {
+export const migrateUrl = (url: string) =>
+    `https://be.tsilhqotinlanguage.ca:3003/download?id=${url.replace('/uploads/', '')}`;
+
+export type StrapiMedia = {
     id: number;
     name: string;
     hash: string;
@@ -15,7 +18,7 @@ type StrapiMedia = {
     updated_at: string;
 };
 
-type SongMetadata = {
+export type SongMetadata = {
     year: string;
     title: string;
     artists: string[];
@@ -43,7 +46,7 @@ export type StrapiWebMediaItem = {
 
 const strapiToCommandFieldCalculationRules: FieldCalculationRules<
     StrapiWebMediaItem,
-    DTO<AddSong>
+    DTO<CreateSong>
 > = (raw: StrapiWebMediaItem) => {
     const {
         id,
@@ -92,15 +95,12 @@ const strapiToCommandFieldCalculationRules: FieldCalculationRules<
             })
             .filter((c) => c !== null),
         lyrics: lyrics,
-        audioURL: `https://be.tsilhqotinlanguage.ca:3003/download?id=${url.replace(
-            '/uploads/',
-            ''
-        )}`,
+        audioURL: migrateUrl(url),
         rawData: raw,
         lengthMilliseconds: 0,
     };
 };
 
-export const strapiSongMapping = new RawDataMapping<StrapiWebMediaItem, DTO<AddSong>>(
+export const strapiSongMapping = new RawDataMapping<StrapiWebMediaItem, DTO<CreateSong>>(
     strapiToCommandFieldCalculationRules
 );

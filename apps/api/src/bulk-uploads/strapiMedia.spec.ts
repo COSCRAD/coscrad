@@ -1,17 +1,17 @@
-import { strapiSongMapping } from './raw-data-mapper/mappers/strapi-song-mapper';
-import { rawStrapiSongs } from './strapiSongs.data';
+import { strapiVideoMapper } from './raw-data-mapper/mappers/strapi-video-mapper';
+import { rawStrapiVideos } from './strapiVideos.data';
 
 // const numberOfSpacesToIndent = 4;
 
-describe('testing strapi song mapper', () => {
-    const result = rawStrapiSongs.map((strapiSong) => strapiSongMapping.apply(strapiSong));
-
-    console.log({
-        result,
-    });
+/**
+ * Doing this in a Jest test is a hack for having a quick environment within
+ * the backend to run a script that also leverages the domain (commands).
+ */
+describe.skip('testing strapi song mapper', () => {
+    const result = rawStrapiVideos.map((strapiSong) => strapiVideoMapper.apply(strapiSong));
 
     // writeFileSync(
-    //     'add-songs-from-strapi_FSAs_20220610.out.data.json',
+    //     'add-videos-from-strapi_FSAs_20220708.out.data.json',
     //     JSON.stringify(result, null, numberOfSpacesToIndent).concat('\n')
     // );
 
