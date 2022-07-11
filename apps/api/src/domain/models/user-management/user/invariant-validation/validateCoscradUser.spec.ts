@@ -9,7 +9,10 @@ import { CoscradUserProfile } from '../entities/coscrad-user-profile.entity';
 import { CoscradUser } from '../entities/coscrad-user.entity';
 import validateCoscradUser from './validateCoscradUser';
 
-// TODO move this to our utility types lib
+/**
+ * TODO [https://www.pivotaltracker.com/story/show/182694263]
+ * Move this to our utility types lib.
+ */
 export type Ctor<T> = new (...args: unknown[]) => T;
 
 const assertCoscradDataTypeError = (
@@ -28,10 +31,7 @@ const validUser: DTO<CoscradUser> = {
     id: '939384394839',
     profile: new CoscradUserProfile({
         email: 'me@you.com',
-        name: { first: 'Joey', last: 'Doughy' },
-        contact: { address: '123 big time lane' },
-        dateOfBirth: '2001-02-04',
-        communityConnection: 'member of Community X',
+        name: { firstName: 'Joey', middleNames: ['Roley', 'Poley'], lastName: 'Doughy' },
     }).toDTO(),
     roles: [],
     eventHistory: [],
@@ -61,6 +61,12 @@ describe('validateCoscradUser', () => {
             });
         });
 
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/182217249]
+         * Generate this test data using a fuzz generation utility. This
+         * part of the current test could serve as inspiration and a first
+         * test bed for said utility.
+         */
         describe('when a simple invariant validation (type) rule is violated', () => {
             describe('when a required property is missing', () => {
                 ['id', 'username', 'profile', 'roles'].forEach((propertyName) => {

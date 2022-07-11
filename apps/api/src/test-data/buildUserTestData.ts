@@ -6,13 +6,11 @@ import { DTO } from '../types/DTO';
 
 const dummyProfile: DTO<CoscradUserProfile> = {
     name: {
-        first: 'James',
-        last: 'Jones',
+        firstName: 'James',
+        middleNames: [],
+        lastName: 'Jones',
     },
-    email: 'llcj1985@hotmale.com',
-    contact: {},
-    dateOfBirth: 'beginning of time',
-    communityConnection: 'break dance instructor',
+    email: 'llcj1985@aol.com',
 };
 
 const dtos: DTO<CoscradUser>[] = [

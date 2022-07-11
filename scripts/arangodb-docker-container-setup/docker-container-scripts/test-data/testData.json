@@ -316,14 +316,12 @@
                 "_key": "1",
                 "eventHistory": [],
                 "profile": {
-                    "email": "llcj1985@hotmale.com",
+                    "email": "llcj1985@aol.com",
                     "name": {
-                        "first": "James",
-                        "last": "Jones"
-                    },
-                    "contact": {},
-                    "dateOfBirth": "beginning of time",
-                    "communityConnection": "break dance instructor"
+                        "middleNames": [],
+                        "firstName": "James",
+                        "lastName": "Jones"
+                    }
                 },
                 "username": "cool-james",
                 "roles": [
