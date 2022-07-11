@@ -27,7 +27,7 @@ const enumNameToMetadata: Record<string, EnumMetadata> = {
         labelsAndValues: [
             {
                 label: 'admin',
-                value: CoscradUserRole.admin,
+                value: CoscradUserRole.projectAdmin,
             },
             {
                 label: 'viewer',
@@ -35,7 +35,7 @@ const enumNameToMetadata: Record<string, EnumMetadata> = {
             },
             {
                 label: 'COSCRAD admin',
-                value: CoscradUserRole.super,
+                value: CoscradUserRole.superAdmin,
             },
         ],
     },

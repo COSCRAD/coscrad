@@ -17,6 +17,7 @@ export class CoscardUserViewModel extends BaseViewModel {
 
         this.username = username;
 
+        // Roles is a `string[]`, so shallow-clone is sufficient to avoid side-effects
         this.roles = [...roles];
     }
 }

@@ -40,6 +40,7 @@ export class CoscradUser extends Aggregate {
 
         const { profile: profileDto, roles, username } = dto;
 
+        // Note that this is necessary for our simple invariant validation to catch required but missing nested properties
         this.profile = profileDto ? new CoscradUserProfile(profileDto) : undefined;
 
         this.username = username;
