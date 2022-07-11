@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import { CoscradUser } from '../../domain/models/user-management/user/entities/coscrad-user.entity';
+import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import buildInMemorySnapshot from '../../domain/utilities/buildInMemorySnapshot';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
@@ -36,10 +37,14 @@ describe('Arango Repository Provider > getUserRepository', () => {
 
     let app: INestApplication;
 
+    let userRepository: IRepositoryForAggregate<CoscradUser>;
+
     beforeAll(async () => {
         ({ app, testRepositoryProvider, arangoConnectionProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
+
+        userRepository = testRepositoryProvider.getUserRepository();
     });
 
     afterAll(async () => {
@@ -58,9 +63,8 @@ describe('Arango Repository Provider > getUserRepository', () => {
 
     describe('fetchMany', () => {
         it('should return all users', async () => {
-            // We only need to add the users
             await testRepositoryProvider.addFullSnapshot(fullSnapshot);
-            const fetchManyResult = await testRepositoryProvider.getUserRepository().fetchMany();
+            const fetchManyResult = await userRepository.fetchMany();
 
             expect(fetchManyResult).not.toBeInstanceOf(InternalError);
 
@@ -72,7 +76,7 @@ describe('Arango Repository Provider > getUserRepository', () => {
         it('should return the correct number of edge connections', async () => {
             await testRepositoryProvider.addFullSnapshot(fullSnapshot);
 
-            const result = await testRepositoryProvider.getUserRepository().getCount();
+            const result = await userRepository.getCount();
 
             expect(result).toBe(numberOfUsers);
         });
@@ -104,9 +108,6 @@ describe('Arango Repository Provider > getUserRepository', () => {
         it('should create the new user', async () => {
             const userToCreate = users[0];
 
-            // We could do this in the before all!
-            const userRepository = testRepositoryProvider.getUserRepository();
-
             const searchResultBeforeCreatingUser = await userRepository.fetchById(userToCreate.id);
 
             expect(searchResultBeforeCreatingUser).toBe(NotFound);
@@ -122,17 +123,11 @@ describe('Arango Repository Provider > getUserRepository', () => {
             const foundUser = searchResultAfterCreatingUser as CoscradUser;
 
             expect(foundUser.toDTO()).toEqual(userToCreate.toDTO());
-
-            // This could never happen anyway, though
-            expect(foundUser).not.toBe(userToCreate);
         });
     });
 
     describe('createMany', () => {
         it('should create the new users', async () => {
-            // We could do this in the before all!
-            const userRepository = testRepositoryProvider.getUserRepository();
-
             const searchResultBeforeCreatingUsers = await userRepository.fetchMany();
 
             expect(searchResultBeforeCreatingUsers).toEqual([]);
