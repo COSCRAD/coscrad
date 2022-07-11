@@ -12,8 +12,11 @@ describe('clonePlainObjectWithoutProperty', () => {
 
             expect(result).toEqual(input);
 
-            // We do not want shared references.
-            // TODO [test-coverage] make this a deep check
+            /**
+             * TODO [https://www.pivotaltracker.com/story/show/182693933] [test-coverage]
+             * Make this a deep check.
+             */
+            // Ensure this is not a shared reference to the same object
             expect(result).not.toBe(input);
         });
     });
@@ -38,6 +41,10 @@ describe('clonePlainObjectWithoutProperty', () => {
 
                         expect(result).toEqual(expectedOutput);
 
+                        /**
+                         * TODO [https://www.pivotaltracker.com/story/show/182693933] [test-coverage]
+                         * Make this a deep check.
+                         */
                         // We want equality by value but not by reference
                         expect(result).not.toBe(expectedOutput);
                     });
