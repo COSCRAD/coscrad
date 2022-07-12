@@ -1,29 +1,14 @@
 import NullOrUndefinedCoscradUserDTOError from '../../../../../domain/domainModelValidators/errors/user-management/NullOrUndefinedCoscradUserDTOError';
+import assertCoscradDataTypeError from '../../../../../domain/models/__tests__/invariant-validation-helpers/assertCoscradDataTypeError';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import clonePlainObjectWithoutProperty from '../../../../../lib/utilities/clonePlainObjectWithoutProperty';
 import { DTO } from '../../../../../types/DTO';
 import InvalidCoscradUserDTOError from '../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { AggregateType } from '../../../../types/AggregateType';
-import { CoscradUserProfile } from '../entities/coscrad-user-profile.entity';
-import { CoscradUser } from '../entities/coscrad-user.entity';
+import { CoscradUserProfile } from '../entities/user/coscrad-user-profile.entity';
+import { CoscradUser } from '../entities/user/coscrad-user.entity';
 import validateCoscradUser from './validateCoscradUser';
-
-/**
- * TODO [https://www.pivotaltracker.com/story/show/182694263]
- * Move this to our utility types lib.
- */
-export type Ctor<T> = new (...args: unknown[]) => T;
-
-const assertCoscradDataTypeError = (
-    error: InternalError,
-    propertyKey: string,
-    TopLevelErrorCtor: Ctor<InternalError>
-) => {
-    expect(error).toBeInstanceOf(TopLevelErrorCtor);
-
-    expect(error.toString().includes(propertyKey)).toBe(true);
-};
 
 const validUser: DTO<CoscradUser> = {
     type: AggregateType.user,
@@ -31,7 +16,7 @@ const validUser: DTO<CoscradUser> = {
     id: '939384394839',
     profile: new CoscradUserProfile({
         email: 'me@you.com',
-        name: { firstName: 'Joey', middleNames: ['Roley', 'Poley'], lastName: 'Doughy' },
+        name: { firstName: 'Joey', lastName: 'Doughy' },
     }).toDTO(),
     roles: [],
     eventHistory: [],

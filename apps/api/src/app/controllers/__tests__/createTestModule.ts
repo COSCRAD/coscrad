@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
+import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
@@ -23,6 +24,7 @@ import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMo
 import { CategoryController } from '../category.controller';
 import { CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
+import { CoscradUserGroupController } from '../coscrad-user-group.controller';
 import { EdgeConnectionController } from '../edgeConnection.controller';
 import { IdGenerationController } from '../id-generation/id-generation.controller';
 import { BibliographicReferenceController } from '../resources/bibliographic-reference.controller';
@@ -163,6 +165,14 @@ export default async (
                 inject: [RepositoryProvider, CommandInfoService],
             },
             {
+                provide: CoscradUserGroupQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new CoscradUserGroupQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService],
+            },
+            {
                 provide: 'ID_MANAGER',
                 useFactory: (repositoryProvider: RepositoryProvider) =>
                     shouldMockIdGenerator
@@ -185,6 +195,7 @@ export default async (
             PhotographController,
             SpatialFeatureController,
             BibliographicReferenceController,
+            CoscradUserGroupController,
             CategoryController,
             CommandController,
             IdGenerationController,

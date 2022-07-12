@@ -33,6 +33,7 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         tags,
         connections,
         users,
+        userGroups,
     }: InMemorySnapshot): Promise<void> {
         await this.addResourcesOfManyTypes(resources);
 
@@ -43,6 +44,8 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         await this.getEdgeConnectionRepository().createMany(connections);
 
         await this.getUserRepository().createMany(users);
+
+        await this.getUserGroupRepository().createMany(userGroups);
     }
 
     // TODO fix types

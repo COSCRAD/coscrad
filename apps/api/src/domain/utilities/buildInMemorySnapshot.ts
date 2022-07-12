@@ -12,6 +12,7 @@ export default ({
     connections,
     categoryTree,
     users,
+    userGroups,
 }: DeepPartial<InMemorySnapshot>): InMemorySnapshot =>
     ({
         resources: Object.entries(resources || {}).reduce(
@@ -25,4 +26,5 @@ export default ({
         connections: connections || [],
         categoryTree: categoryTree || [],
         users: users || [],
+        userGroups: userGroups || [],
     } as InMemorySnapshot);

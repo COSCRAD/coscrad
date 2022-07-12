@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { passportJwtSecret } from 'jwks-rsa';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { CoscradUser } from '../domain/models/user-management/user/entities/coscrad-user.entity';
+import { CoscradUser } from '../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
 import { isNotFound } from '../lib/types/not-found';
 import { RepositoryProvider } from '../persistence/repositories/repository.provider';

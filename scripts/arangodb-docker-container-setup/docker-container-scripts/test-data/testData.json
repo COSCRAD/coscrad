@@ -318,7 +318,6 @@
                 "profile": {
                     "email": "llcj1985@aol.com",
                     "name": {
-                        "middleNames": [],
                         "firstName": "James",
                         "lastName": "Jones"
                     }
@@ -327,6 +326,18 @@
                 "roles": [
                     "viewer"
                 ]
+            }
+        ],
+        "groups": [
+            {
+                "type": "userGroup",
+                "_key": "1",
+                "eventHistory": [],
+                "label": "community members",
+                "userIds": [
+                    "1"
+                ],
+                "description": "This group is for members of the community only."
             }
         ],
         "terms": [

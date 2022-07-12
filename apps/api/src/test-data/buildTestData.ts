@@ -10,6 +10,7 @@ import buildSpatialFeatureTestData from './buildSpatialFeatureTestData';
 import buildTagTestData from './buildTagTestData';
 import buildTermTestData from './buildTermTestData';
 import buildTranscribedAudioTestData from './buildTranscribedAudioTestData';
+import buildUserGroupTestData from './buildUserGroupTestData';
 import buildUserTestData from './buildUserTestData';
 import buildVocabularyListTestData from './buildVocabularyListTestData';
 
@@ -34,5 +35,6 @@ export default (): InMemorySnapshot => ({
     tags: buildTagTestData(),
     categoryTree: buildCategoryTestData(),
     users: buildUserTestData(),
+    userGroups: buildUserGroupTestData(),
     uuids: [],
 });
