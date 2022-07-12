@@ -5,15 +5,15 @@ import {
     NestedDataType,
     NonEmptyString,
 } from '@coscrad/data-types';
-import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../../../lib/errors/InternalError';
-import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
-import { InvariantValidationMethod } from '../../../../../lib/web-of-knowledge/decorators/invariant-validation-method.decorator';
-import { DTO } from '../../../../../types/DTO';
-import InvalidCoscradUserDTOError from '../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
-import { AggregateType } from '../../../../types/AggregateType';
-import { Aggregate } from '../../../aggregate.entity';
-import validateCoscradUser from '../invariant-validation/validateCoscradUser';
+import { RegisterIndexScopedCommands } from '../../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { InternalError } from '../../../../../../lib/errors/InternalError';
+import { ValidationResult } from '../../../../../../lib/errors/types/ValidationResult';
+import { InvariantValidationMethod } from '../../../../../../lib/web-of-knowledge/decorators/invariant-validation-method.decorator';
+import { DTO } from '../../../../../../types/DTO';
+import InvalidCoscradUserDTOError from '../../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
+import { AggregateType } from '../../../../../types/AggregateType';
+import { Aggregate } from '../../../../aggregate.entity';
+import validateCoscradUser from '../../invariant-validation/validateCoscradUser';
 import { CoscradUserProfile } from './coscrad-user-profile.entity';
 
 @RegisterIndexScopedCommands([])

@@ -6,6 +6,7 @@ const NonResourceCollectionId = {
     categories: 'categories',
     uuids: 'uuids',
     users: 'users',
+    groups: 'groups',
 } as const;
 
 /**

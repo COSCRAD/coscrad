@@ -1,4 +1,4 @@
-import BaseDomainModel from '../../domain/models/BaseDomainModel';
+import { toDto } from '../../domain/models/shared/functional/index';
 import { AggregateId } from '../../domain/types/AggregateId';
 import {
     InMemorySnapshot,
@@ -13,7 +13,6 @@ import buildEdgeDocumentsFromCategoryNodeDTOs from '../../persistence/database/u
 import mapCategoryDTOToArangoDocument from '../../persistence/database/utilities/category/mapCategoryDTOToArangoDocument';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
-import { DTO } from '../../types/DTO';
 
 type InMemoryDatabaseSnapshot = {
     documentCollections: {
@@ -24,8 +23,6 @@ type InMemoryDatabaseSnapshot = {
         [K in ArangoEdgeCollectionId]: Record<string, unknown>[];
     };
 };
-
-const toDto = <T extends BaseDomainModel>(model: T): DTO<T> => model.toDTO();
 
 export default (snapshot: InMemorySnapshot): InMemoryDatabaseSnapshot => {
     const databaseTags = snapshot.tags.map(toDto).map(mapEntityDTOToDatabaseDTO);

@@ -26,6 +26,8 @@ describe(`Tag Queries`, () => {
 
     afterAll(async () => {
         await arangoConnectionProvider.dropDatabaseIfExists();
+
+        await app.close();
     });
 
     describe(`when fetching a tag by ID`, () => {

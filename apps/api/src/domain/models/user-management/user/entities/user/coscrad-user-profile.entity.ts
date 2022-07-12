@@ -1,10 +1,13 @@
-import { DTO } from '../../../../../types/DTO';
-import BaseDomainModel from '../../../BaseDomainModel';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { DTO } from '../../../../../../types/DTO';
+import BaseDomainModel from '../../../../BaseDomainModel';
 import { FullName } from './full-name.entity';
 
 export class CoscradUserProfile extends BaseDomainModel {
+    @NonEmptyString()
     readonly email: string;
 
+    @NestedDataType(FullName)
     readonly name: FullName;
 
     // readonly contact?: ContactInfo;

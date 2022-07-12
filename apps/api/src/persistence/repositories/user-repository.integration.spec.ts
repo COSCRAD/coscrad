@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
-import { CoscradUser } from '../../domain/models/user-management/user/entities/coscrad-user.entity';
+import { toDto } from '../../domain/models/shared/functional';
+import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import buildInMemorySnapshot from '../../domain/utilities/buildInMemorySnapshot';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
@@ -73,7 +74,7 @@ describe('Arango Repository Provider > getUserRepository', () => {
     });
 
     describe('getCount', () => {
-        it('should return the correct number of edge connections', async () => {
+        it('should return the correct number of users', async () => {
             await testRepositoryProvider.addFullSnapshot(fullSnapshot);
 
             const result = await userRepository.getCount();
@@ -89,9 +90,7 @@ describe('Arango Repository Provider > getUserRepository', () => {
 
                 const userToFind = users[0];
 
-                const result = await testRepositoryProvider
-                    .getUserRepository()
-                    .fetchById(userToFind.id);
+                const result = await userRepository.fetchById(userToFind.id);
 
                 expect(result).not.toBeInstanceOf(InternalError);
 
@@ -138,9 +137,9 @@ describe('Arango Repository Provider > getUserRepository', () => {
 
             const foundUserDTOs = searchResultAfterCreatingUsers
                 .filter((result): result is CoscradUser => !isInternalError(result))
-                .map((user) => user.toDTO());
+                .map(toDto);
 
-            const addedUserDTOs = users.map((user) => user.toDTO());
+            const addedUserDTOs = users.map(toDto);
 
             expect(foundUserDTOs).toEqual(addedUserDTOs);
         });

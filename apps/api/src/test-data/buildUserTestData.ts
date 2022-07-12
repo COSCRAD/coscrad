@@ -1,6 +1,6 @@
 import { CoscradUserRole } from '@coscrad/data-types';
-import { CoscradUserProfile } from '../domain/models/user-management/user/entities/coscrad-user-profile.entity';
-import { CoscradUser } from '../domain/models/user-management/user/entities/coscrad-user.entity';
+import { CoscradUserProfile } from '../domain/models/user-management/user/entities/user/coscrad-user-profile.entity';
+import { CoscradUser } from '../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { AggregateType } from '../domain/types/AggregateType';
 import { DTO } from '../types/DTO';
 

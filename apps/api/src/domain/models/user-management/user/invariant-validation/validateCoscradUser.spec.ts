@@ -5,8 +5,8 @@ import { DTO } from '../../../../../types/DTO';
 import InvalidCoscradUserDTOError from '../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { AggregateType } from '../../../../types/AggregateType';
-import { CoscradUserProfile } from '../entities/coscrad-user-profile.entity';
-import { CoscradUser } from '../entities/coscrad-user.entity';
+import { CoscradUserProfile } from '../entities/user/coscrad-user-profile.entity';
+import { CoscradUser } from '../entities/user/coscrad-user.entity';
 import validateCoscradUser from './validateCoscradUser';
 
 /**

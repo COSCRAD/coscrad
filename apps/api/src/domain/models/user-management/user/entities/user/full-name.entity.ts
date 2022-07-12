@@ -1,11 +1,15 @@
-import { DTO } from '../../../../../types/DTO';
-import BaseDomainModel from '../../../BaseDomainModel';
+import { NonEmptyString } from '@coscrad/data-types';
+import { DTO } from '../../../../../../types/DTO';
+import BaseDomainModel from '../../../../BaseDomainModel';
 
 export class FullName extends BaseDomainModel {
+    @NonEmptyString()
     readonly firstName: string;
 
+    @NonEmptyString({ isArray: true })
     readonly middleNames: string[] = [];
 
+    @NonEmptyString()
     readonly lastName: string;
 
     constructor(dto: DTO<FullName>) {
