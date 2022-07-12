@@ -1,5 +1,5 @@
 import { IsNonNegativeFiniteNumber } from '@coscrad/validation';
-import CoscradDataType from '../types/CoscradDataType';
+import { CoscradDataType } from '../types/CoscradDataType';
 import appendMetadata from '../utilities/appendMetadata';
 import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
 import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';

@@ -6,7 +6,6 @@ import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import InvalidCoscradUserGroupDTOError from '../../../../domainModelValidators/errors/InvalidCoscradUserGroupDTOError';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { Aggregate } from '../../../aggregate.entity';
 import validateCoscradUserGroup from './invariant-validation/validateCoscradUserGroup';
@@ -19,7 +18,7 @@ export class CoscradUserGroup extends Aggregate {
     readonly label: string; // Consider making this multi-lingual text
 
     @NonEmptyString({ isArray: true })
-    readonly userIds: AggregateId[];
+    readonly userIds: string[];
 
     @NonEmptyString()
     readonly description: string;

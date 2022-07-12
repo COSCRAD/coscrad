@@ -1,4 +1,4 @@
-import CoscradDataType from '../types/CoscradDataType';
+import { CoscradDataType } from '../types/CoscradDataType';
 import { CoscradEnum } from './CoscradEnum';
 import { CoscradUserRole } from './CoscradUserRole';
 import { MIMEType } from './MIMEType';

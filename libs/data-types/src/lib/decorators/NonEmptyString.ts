@@ -1,6 +1,6 @@
-import { IsStringWithNonzeroLength } from '@coscrad/validation';
+import { IsNotEmpty, IsString } from 'class-validator';
 import 'reflect-metadata';
-import CoscradDataType from '../types/CoscradDataType';
+import { CoscradDataType } from '../types/CoscradDataType';
 import appendMetadata from '../utilities/appendMetadata';
 import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
 import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
@@ -10,7 +10,9 @@ export function NonEmptyString(userOptions: Partial<TypeDecoratorOptions> = {}):
     return (target: Object, propertyKey: string | symbol) => {
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
-        WithValidation(IsStringWithNonzeroLength(), options)(target, propertyKey);
+        WithValidation(IsString({ each: options.isArray }), options)(target, propertyKey);
+
+        IsNotEmpty({ each: options.isArray })(target, propertyKey);
 
         appendMetadata(target, propertyKey, CoscradDataType.NonEmptyString, options);
     };

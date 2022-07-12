@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import CoscradDataType from '../types/CoscradDataType';
+import { CoscradDataType } from '../types/CoscradDataType';
 import getCoscradDataSchema from '../utilities/getCoscradDataSchema';
 import { NonEmptyString } from './NonEmptyString';
 

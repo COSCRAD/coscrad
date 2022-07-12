@@ -1,5 +1,5 @@
 import { ClassDataTypeMetadata } from '../../types';
-import CoscradDataType from '../../types/CoscradDataType';
+import { CoscradDataType } from '../../types/CoscradDataType';
 import { CoscradEnum } from '../CoscradEnum';
 import { LabelAndValue } from './LabelAndValue';
 
