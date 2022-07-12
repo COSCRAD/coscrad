@@ -63,7 +63,7 @@ const generateInvalidValuesForProperty = ({
     const validFuzzKeys = dataTypeToValidFuzz[type];
 
     if (isOptional) {
-        validFuzzKeys.concat(['null', 'undefined']);
+        validFuzzKeys.push('null', 'undefined');
     }
 
     if (!Array.isArray(validFuzzKeys)) {
