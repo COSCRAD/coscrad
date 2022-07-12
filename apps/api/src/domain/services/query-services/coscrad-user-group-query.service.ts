@@ -5,7 +5,7 @@ import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { CoscradUserGroupViewModel } from '../../../view-models/buildViewModelForResource/viewModels/coscrad-user-group.view-model';
-import validAggregateOrThrow from '../../models/shared/functional/validAggregateOrThrow';
+import { validAggregateOrThrow } from '../../models/shared/functional';
 import { CoscradUserGroup } from '../../models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../../models/user-management/user/entities/user/coscrad-user.entity';
 import { IRepositoryForAggregate } from '../../repositories/interfaces/repository-for-aggregate.interface';

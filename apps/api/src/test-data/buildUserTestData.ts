@@ -7,7 +7,6 @@ import { DTO } from '../types/DTO';
 const dummyProfile: DTO<CoscradUserProfile> = {
     name: {
         firstName: 'James',
-        middleNames: [],
         lastName: 'Jones',
     },
     email: 'llcj1985@aol.com',

@@ -6,9 +6,6 @@ export class FullName extends BaseDomainModel {
     @NonEmptyString()
     readonly firstName: string;
 
-    @NonEmptyString({ isArray: true })
-    readonly middleNames: string[] = [];
-
     @NonEmptyString()
     readonly lastName: string;
 
@@ -17,12 +14,9 @@ export class FullName extends BaseDomainModel {
 
         if (!dto) return;
 
-        const { firstName, middleNames, lastName } = dto;
+        const { firstName, lastName } = dto;
 
         this.firstName = firstName;
-
-        // Array of primitives- shallow clone suffices here
-        this.middleNames = [...middleNames];
 
         this.lastName = lastName;
     }

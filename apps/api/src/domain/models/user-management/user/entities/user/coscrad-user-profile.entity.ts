@@ -4,6 +4,10 @@ import BaseDomainModel from '../../../../BaseDomainModel';
 import { FullName } from './full-name.entity';
 
 export class CoscradUserProfile extends BaseDomainModel {
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/182703183]
+     * Add an `Email` `Coscrad Data Type`, and tighten the validation rules.
+     */
     @NonEmptyString()
     readonly email: string;
 

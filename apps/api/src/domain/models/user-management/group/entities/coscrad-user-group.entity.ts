@@ -21,8 +21,6 @@ export class CoscradUserGroup extends Aggregate {
     @NonEmptyString({ isArray: true })
     readonly userIds: AggregateId[];
 
-    // readonly adminUserIds: AggregateId[]; we may want this at some point
-
     @NonEmptyString()
     readonly description: string;
 
@@ -36,7 +34,7 @@ export class CoscradUserGroup extends Aggregate {
         this.label = label;
 
         // IDs are string, so a shallow-clone is sufficient to avoid side-effects
-        this.userIds = [...userIds];
+        this.userIds = Array.isArray(userIds) ? [...userIds] : undefined;
 
         this.description = description;
     }

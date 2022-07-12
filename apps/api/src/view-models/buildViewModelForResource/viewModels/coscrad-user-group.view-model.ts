@@ -1,4 +1,4 @@
-import { NestedDataType, NonEmptyString } from '../../../../../../libs/data-types/src';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { CoscradUserGroup } from '../../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { BaseViewModel } from './base.view-model';

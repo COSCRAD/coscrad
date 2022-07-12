@@ -29,10 +29,15 @@ export default (snapshot: InMemorySnapshot): InMemoryDatabaseSnapshot => {
 
     return {
         documentCollections: {
-            tags: databaseTags,
-            categories: snapshot.categoryTree.map(toDto).map(mapCategoryDTOToArangoDocument),
-            uuids: snapshot.uuids,
-            users: snapshot.users.map(toDto).map(mapEntityDTOToDatabaseDTO),
+            [ArangoCollectionId.tags]: databaseTags,
+            [ArangoCollectionId.categories]: snapshot.categoryTree
+                .map(toDto)
+                .map(mapCategoryDTOToArangoDocument),
+            [ArangoCollectionId.uuids]: snapshot.uuids,
+            [ArangoCollectionId.users]: snapshot.users.map(toDto).map(mapEntityDTOToDatabaseDTO),
+            [ArangoCollectionId.groups]: snapshot.userGroups
+                .map(toDto)
+                .map(mapEntityDTOToDatabaseDTO),
             ...Object.entries(snapshot.resources).reduce(
                 (acc: InMemorySnapshotOfResources, [key, resources]) => ({
                     ...acc,

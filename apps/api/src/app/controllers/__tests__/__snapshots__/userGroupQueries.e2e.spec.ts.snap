@@ -16,7 +16,6 @@ Object {
           "name": Object {
             "firstName": "James",
             "lastName": "Jones",
-            "middleNames": Array [],
           },
         },
         "roles": Array [
@@ -49,7 +48,6 @@ Object {
               "name": Object {
                 "firstName": "James",
                 "lastName": "Jones",
-                "middleNames": Array [],
               },
             },
             "roles": Array [

@@ -1,3 +1,4 @@
 import toDto from './toDto';
+import validAggregateOrThrow from './validAggregateOrThrow';
 
-export { toDto };
+export { toDto, validAggregateOrThrow };
