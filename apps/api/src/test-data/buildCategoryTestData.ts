@@ -1,4 +1,5 @@
 import { Category } from '../domain/models/categories/entities/category.entity';
+import { AggregateType } from '../domain/types/AggregateType';
 import { CategorizableType } from '../domain/types/CategorizableType';
 
 export default (): Category[] =>
@@ -184,4 +185,9 @@ export default (): Category[] =>
             members: [],
             childrenIDs: [],
         },
-    ].map((dto) => new Category(dto));
+    ]
+        .map((partialDto) => ({
+            ...partialDto,
+            type: AggregateType.category,
+        }))
+        .map((dto) => new Category(dto));

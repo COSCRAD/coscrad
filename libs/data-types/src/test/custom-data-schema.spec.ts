@@ -115,4 +115,12 @@ describe('NonEmptyString', () => {
             });
         });
     });
+
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/182578952]
+     * test the invalid data cases
+     *
+     * It may be helpful to wait for the following story to be finished
+     * [https://www.pivotaltracker.com/story/show/182217249]
+     */
 });

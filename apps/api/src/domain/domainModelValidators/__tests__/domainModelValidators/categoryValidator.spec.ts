@@ -1,6 +1,7 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { Category } from '../../../models/categories/entities/category.entity';
+import { AggregateType } from '../../../types/AggregateType';
 import { CategorizableType } from '../../../types/CategorizableType';
 import categoryValidator from '../../categoryValidator';
 import InvalidCategoryDTOError from '../../errors/category/InvalidCategoryDTOError';
@@ -19,6 +20,7 @@ type InvalidTestCase = {
 };
 
 const validDTO: DTO<Category> = {
+    type: AggregateType.category,
     id: '12',
     label: 'props',
     members: [

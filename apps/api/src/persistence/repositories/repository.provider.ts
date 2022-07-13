@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import tagValidator from '../../domain/domainModelValidators/tagValidator';
 import edgeConnectionFactory from '../../domain/factories/edgeConnectionFactory';
 import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForResource';
 import buildInstanceFactory from '../../domain/factories/utilities/buildInstanceFactory';
@@ -7,9 +6,7 @@ import { EdgeConnection } from '../../domain/models/context/edge-connection.enti
 import { Resource } from '../../domain/models/resource.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
-import validateCoscradUserGroup from '../../domain/models/user-management/group/entities/invariant-validation/validateCoscradUserGroup';
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
-import validateCoscradUser from '../../domain/models/user-management/user/invariant-validation/validateCoscradUser';
 import { ICategoryRepository } from '../../domain/repositories/interfaces/category-repository.interface';
 import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
@@ -45,7 +42,7 @@ export class RepositoryProvider implements IRepositoryProvider {
         return new ArangoRepositoryForAggregate<Tag>(
             this.databaseProvider,
             ArangoCollectionId.tags,
-            buildInstanceFactory(tagValidator, Tag),
+            buildInstanceFactory(Tag),
             mapDatabaseDTOToEntityDTO,
             mapEntityDTOToDatabaseDTO
         );
@@ -63,7 +60,7 @@ export class RepositoryProvider implements IRepositoryProvider {
         return new ArangoRepositoryForAggregate<CoscradUser>(
             this.databaseProvider,
             ArangoCollectionId.users,
-            buildInstanceFactory(validateCoscradUser, CoscradUser),
+            buildInstanceFactory(CoscradUser),
             mapDatabaseDTOToEntityDTO,
             mapEntityDTOToDatabaseDTO
         );
@@ -73,7 +70,7 @@ export class RepositoryProvider implements IRepositoryProvider {
         return new ArangoRepositoryForAggregate<CoscradUserGroup>(
             this.databaseProvider,
             ArangoCollectionId.groups,
-            buildInstanceFactory(validateCoscradUserGroup, CoscradUserGroup),
+            buildInstanceFactory(CoscradUserGroup),
             mapDatabaseDTOToEntityDTO,
             mapEntityDTOToDatabaseDTO
         );

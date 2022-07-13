@@ -10,7 +10,8 @@ import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { CoscradUserGroup } from '../coscrad-user-group.entity';
 
 /**
- * TODO Let's extract the following to a separate utility- possibly
+ * TODO [https://www.pivotaltracker.com/story/show/182217249]
+ * Let's extract the following to a separate utility- possibly
  * even within the `@coscrad/data-types` lib.
  */
 type ValueAndDescription<T = unknown> = {
@@ -62,12 +63,12 @@ const generateInvalidValuesForProperty = ({
 }: CoscradDataSchema): ValueAndDescription[] => {
     const validFuzzKeys = dataTypeToValidFuzz[type];
 
-    if (isOptional) {
-        validFuzzKeys.push('null', 'undefined');
-    }
-
     if (!Array.isArray(validFuzzKeys)) {
         throw new InternalError(`Failed to generate fuzz for unsupported data type: ${type}`);
+    }
+
+    if (isOptional) {
+        validFuzzKeys.push('null', 'undefined');
     }
 
     const invalidValuesAndDescriptions = Object.entries(fuzzData).reduce(
@@ -144,8 +145,6 @@ describe('CoscradUserGroup.validateInvariants', () => {
                                 const invalidInstance = new CoscradUserGroup(invalidDto);
 
                                 const result = invalidInstance.validateInvariants();
-
-                                expect(result).toBeInstanceOf(InternalError);
 
                                 assertCoscradDataTypeError(
                                     result as InternalError,

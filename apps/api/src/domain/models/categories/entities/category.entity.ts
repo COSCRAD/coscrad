@@ -1,34 +1,40 @@
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import categoryValidator from '../../../domainModelValidators/categoryValidator';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { HasAggregateIdAndLabel } from '../../../interfaces/HasAggregateIdAndLabel';
 import { ValidatesExternalState } from '../../../interfaces/ValidatesExternalState';
 import { AggregateId } from '../../../types/AggregateId';
+import { AggregateType } from '../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../types/ResourceType';
 import validateEntityReferencesAgainstExternalState from '../../../utilities/validation/validateEntityReferencesAgainstExternalState';
-import BaseDomainModel from '../../BaseDomainModel';
+import { Aggregate } from '../../aggregate.entity';
 import ChildCategoryDoesNotExistError from '../errors/ChildCategoryDoesNotExistError';
 import InvalidExternalReferenceInCategoryError from '../errors/InvalidExternalReferenceInCategoryError';
 import InvalidExternalStateForCategoryError from '../errors/InvalidExternalStateForCategoryError';
 import { CategorizableCompositeIdentifier } from '../types/ResourceOrNoteCompositeIdentifier';
 
-export class Category
-    extends BaseDomainModel
-    implements ValidatesExternalState, HasAggregateIdAndLabel
-{
-    id: AggregateId;
+@RegisterIndexScopedCommands([])
+export class Category extends Aggregate implements ValidatesExternalState, HasAggregateIdAndLabel {
+    readonly type = AggregateType.category;
 
-    label: string;
+    readonly id: AggregateId;
 
-    members: CategorizableCompositeIdentifier[];
+    readonly label: string;
+
+    readonly members: CategorizableCompositeIdentifier[];
 
     // These are `Category` IDs for the children categories of this category
-    childrenIDs: AggregateId[];
+    readonly childrenIDs: AggregateId[];
 
-    constructor({ id, label, members, childrenIDs }: DTO<Category>) {
-        super();
+    constructor(dto: DTO<Category>) {
+        super(dto);
+
+        const { id, label, members, childrenIDs } = dto;
 
         this.id = id;
 
@@ -36,7 +42,15 @@ export class Category
 
         this.members = cloneToPlainObject(members);
 
-        this.childrenIDs = [...childrenIDs];
+        this.childrenIDs = Array.isArray(childrenIDs) ? [...childrenIDs] : undefined;
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
+    }
+
+    validateInvariants(): ResultOrError<typeof Valid> {
+        return categoryValidator(this);
     }
 
     validateExternalState(externalState: DeepPartial<InMemorySnapshot>): Valid | InternalError {

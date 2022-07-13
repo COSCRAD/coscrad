@@ -3,6 +3,7 @@ import buildTestData from '../../../../test-data/buildTestData';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { HasAggregateIdAndLabel } from '../../../interfaces/HasAggregateIdAndLabel';
+import { AggregateType } from '../../../types/AggregateType';
 import { CategorizableType } from '../../../types/CategorizableType';
 import { InMemorySnapshot } from '../../../types/ResourceType';
 import { Term } from '../../term/entities/term.entity';
@@ -19,6 +20,7 @@ const missingTerm = buildTestData().resources.term[0].clone<Term>({
 });
 
 const validCategory = new Category({
+    type: AggregateType.category,
     id: '3',
     label: 'mammals',
     members: [

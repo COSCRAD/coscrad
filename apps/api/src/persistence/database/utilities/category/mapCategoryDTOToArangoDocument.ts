@@ -1,4 +1,5 @@
 import { Category } from '../../../../domain/models/categories/entities/category.entity';
+import { AggregateType } from '../../../../domain/types/AggregateType';
 import { DTO } from '../../../../types/DTO';
 import { CategoryDocument } from '../../types/CategoryDocument';
 import mapEntityDTOToDatabaseDTO from '../mapEntityDTOToDatabaseDTO';
@@ -13,4 +14,5 @@ export default ({ id, label, members }: DTO<Category>): CategoryDocument =>
         id,
         label,
         members,
+        type: AggregateType.category,
     });

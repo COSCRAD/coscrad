@@ -1,10 +1,12 @@
 import { Category } from '../../../../../../domain/models/categories/entities/category.entity';
+import { AggregateType } from '../../../../../../domain/types/AggregateType';
 import { DTO } from '../../../../../../types/DTO';
 import findRoot from './findRoot';
 
 describe('findRoot', () => {
     describe('when given a valid tree', () => {
         const rootNodeDTO: DTO<Category> = {
+            type: AggregateType.category,
             id: '1',
             label: 'root',
             childrenIDs: ['2', '3', '8'],
@@ -53,11 +55,11 @@ describe('findRoot', () => {
                 members: [],
             }))
             .concat(rootNodeDTO)
-            .map((dto) => new Category(dto));
+            .map((dto) => new Category({ ...dto, type: AggregateType.category }));
         it('should find the root', () => {
             const result = findRoot(validTree);
 
-            expect(result).toEqual(new Category(rootNodeDTO));
+            expect(result.toDTO()).toEqual(new Category(rootNodeDTO).toDTO());
         });
     });
 });
