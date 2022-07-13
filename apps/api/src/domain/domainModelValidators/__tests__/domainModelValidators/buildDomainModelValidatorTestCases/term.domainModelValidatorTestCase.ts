@@ -42,8 +42,11 @@ export const buildTermTestCase = (): DomainModelValidatorTestCase<Term> => ({
         /**
          * TODO [https://www.pivotaltracker.com/story/show/182217249]
          *
-         * Comprehensively test invalid types for each property. We may want to make
-         * this part of a separate test suite.
+         * Now that the linked story is done, we should refactor this test case
+         * to leverage `assertTypeErrorsFromInvalidFuzz`, in order to comprehensively
+         * test invalid types for each property. We may want to make
+         * this part of a separate test suite. We may want to get away
+         * from using a test case builder pattern.
          *  */
         {
             description: 'term is a number',
