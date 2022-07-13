@@ -1,3 +1,4 @@
+import { buildSimpleValidationFunction } from '@coscrad/validation';
 import 'reflect-metadata';
 import { NonEmptyString, URL, UUID } from '../index';
 import { Enum, NestedDataType, NonNegativeFiniteNumber, RawDataObject } from '../lib/decorators';
@@ -21,6 +22,8 @@ describe('NonEmptyString', () => {
         @NonEmptyString({ isOptional: true })
         locationName = 'Back Red Room 12';
 
+        // @IsString({ each: true })
+        // @IsNotEmpty()
         @NonEmptyString({ isArray: true })
         aliases: ['super machine', 'widget king'];
 
@@ -59,11 +62,65 @@ describe('NonEmptyString', () => {
 
         @Enum(CoscradEnum.CoscradUserRole)
         role = CoscradUserRole.viewer;
+
+        constructor(dto: Widget) {
+            Object.assign(this, dto);
+        }
     }
+
+    const validWidgetDTO: Widget = {
+        widgetName: 'Machine',
+
+        locationName: 'Back Red Room 12',
+
+        aliases: ['super machine', 'widget king'],
+
+        id: '25c5824f-6b4b-4341-bb60-3145d8109568',
+
+        locationId: '25c5824f-6b4b-4341-bb60-3145d8109568',
+
+        iconUrl: 'https://www.mylink.com/uploads/123.png',
+
+        specSheetUrl: undefined,
+
+        width: 134.5,
+
+        averageRating: 3.5,
+
+        primaryWhatsit: {},
+
+        secondaryWhatsit: {},
+
+        rawDataObject: { foo: 72 },
+
+        optionalRawData: undefined,
+
+        mimeType: MIMEType.mp3,
+
+        role: CoscradUserRole.viewer,
+    };
 
     it('should populate the appropriate metadata', () => {
         const actualMetadata = getCoscradDataSchema(Widget);
 
         expect(actualMetadata).toMatchSnapshot();
     });
+
+    describe('the corresponding invariant validation', () => {
+        describe('when the data is valid', () => {
+            it('should return Valid', () => {
+                const result = buildSimpleValidationFunction(Widget)(validWidgetDTO);
+
+                expect(result).toStrictEqual([]);
+            });
+        });
+    });
+
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/182578952]
+     * test the invalid data cases
+     *
+     * It may be helpful to wait for the following story to be finished
+     * [https://www.pivotaltracker.com/story/show/182217249]
+     */
 });

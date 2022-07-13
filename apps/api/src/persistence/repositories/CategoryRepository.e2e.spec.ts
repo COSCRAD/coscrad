@@ -1,7 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
+import { Category } from '../../domain/models/categories/entities/category.entity';
 import { InternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
+import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import buildTestData from '../../test-data/buildTestData';
 import { ArangoConnectionProvider } from '../database/arango-connection.provider';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
@@ -52,7 +54,7 @@ describe('Repository provider > getCategoryRepository', () => {
 
             const result = await testRepositoryProvider.getCategoryRepository().fetchTree();
 
-            expect(result).toEqual(categoryTree);
+            expect(cloneToPlainObject(result)).toEqual(cloneToPlainObject(categoryTree));
         });
 
         // TODO [test-coverage] Test that invalid documents lead to InternalErrors in result
@@ -71,7 +73,9 @@ describe('Repository provider > getCategoryRepository', () => {
                     .getCategoryRepository()
                     .fetchById(categoryToFetch.id);
 
-                expect(result).toEqual(categoryToFetch);
+                expect(result).toBeInstanceOf(Category);
+
+                expect((result as Category).toDTO()).toEqual(categoryToFetch.toDTO());
             });
         });
 

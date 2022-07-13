@@ -83,7 +83,7 @@ Object {
     "labelsAndValues": Array [
       Object {
         "label": "admin",
-        "value": "admin",
+        "value": "projectAdmin",
       },
       Object {
         "label": "viewer",
@@ -91,7 +91,7 @@ Object {
       },
       Object {
         "label": "COSCRAD admin",
-        "value": "super",
+        "value": "superAdmin",
       },
     ],
     "type": "Enum",

@@ -1,7 +1,7 @@
 import { COSCRAD_DATA_TYPE_METADATA } from '../constants';
 import { EnumMetadata, isEnumMetadata } from '../enums/types/EnumMetadata';
 import { ClassDataTypeMetadata } from '../types';
-import CoscradDataType from '../types/CoscradDataType';
+import { CoscradDataType } from '../types/CoscradDataType';
 import getCoscradDataSchemaFromPrototype from './getCoscradDataSchemaFromPrototype';
 
 type OptionalMetadata = { isOptional: boolean; isArray: boolean };

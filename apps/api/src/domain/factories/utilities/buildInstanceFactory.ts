@@ -1,16 +1,16 @@
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { DTO } from '../../../types/DTO';
-import { DomainModelValidator } from '../../domainModelValidators/types/DomainModelValidator';
 import { isValid } from '../../domainModelValidators/Valid';
-import BaseDomainModel from '../../models/BaseDomainModel';
+import { Aggregate } from '../../models/aggregate.entity';
 import { InstanceFactory } from '../getInstanceFactoryForResource';
 
-export default <TEntity extends BaseDomainModel = BaseDomainModel>(
-        validator: DomainModelValidator,
+export default <TEntity extends Aggregate = Aggregate>(
         Ctor: DomainModelCtor<TEntity>
     ): InstanceFactory<TEntity> =>
     (dto: unknown) => {
-        const validationResult = validator(dto);
+        const candidateInstance = new Ctor(dto as DTO<TEntity>);
+
+        const validationResult = candidateInstance.validateInvariants();
 
         if (!isValid(validationResult)) return validationResult;
 

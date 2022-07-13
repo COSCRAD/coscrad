@@ -150,7 +150,8 @@
             {
                 "_key": "0",
                 "label": "tree of knowledge",
-                "members": []
+                "members": [],
+                "type": "category"
             },
             {
                 "_key": "1",
@@ -160,7 +161,8 @@
                         "type": "vocabularyList",
                         "id": "1"
                     }
-                ]
+                ],
+                "type": "category"
             },
             {
                 "_key": "2",
@@ -174,12 +176,14 @@
                         "type": "book",
                         "id": "23"
                     }
-                ]
+                ],
+                "type": "category"
             },
             {
                 "_key": "3",
                 "label": "birds",
-                "members": []
+                "members": [],
+                "type": "category"
             },
             {
                 "_key": "4",
@@ -189,17 +193,20 @@
                         "type": "term",
                         "id": "2"
                     }
-                ]
+                ],
+                "type": "category"
             },
             {
                 "_key": "5",
                 "label": "felines",
-                "members": []
+                "members": [],
+                "type": "category"
             },
             {
                 "_key": "6",
                 "label": "big cats",
-                "members": []
+                "members": [],
+                "type": "category"
             },
             {
                 "_key": "7",
@@ -213,7 +220,8 @@
                         "type": "photograph",
                         "id": "0"
                     }
-                ]
+                ],
+                "type": "category"
             },
             {
                 "_key": "8",
@@ -223,7 +231,8 @@
                         "type": "spatialFeature",
                         "id": "101"
                     }
-                ]
+                ],
+                "type": "category"
             },
             {
                 "_key": "9",
@@ -241,7 +250,8 @@
                         "type": "bibliographicReference",
                         "id": "1"
                     }
-                ]
+                ],
+                "type": "category"
             },
             {
                 "_key": "10",
@@ -251,7 +261,8 @@
                         "type": "photograph",
                         "id": "1"
                     }
-                ]
+                ],
+                "type": "category"
             },
             {
                 "_key": "11",
@@ -261,22 +272,26 @@
                         "type": "book",
                         "id": "24"
                     }
-                ]
+                ],
+                "type": "category"
             },
             {
                 "_key": "12",
                 "label": "film",
-                "members": []
+                "members": [],
+                "type": "category"
             },
             {
                 "_key": "13",
                 "label": "props",
-                "members": []
+                "members": [],
+                "type": "category"
             },
             {
                 "_key": "14",
                 "label": "wardrobe",
-                "members": []
+                "members": [],
+                "type": "category"
             },
             {
                 "_key": "15",
@@ -286,12 +301,14 @@
                         "type": "transcribedAudio",
                         "id": "110"
                     }
-                ]
+                ],
+                "type": "category"
             },
             {
                 "_key": "16",
                 "label": "adornments",
-                "members": []
+                "members": [],
+                "type": "category"
             },
             {
                 "_key": "17",
@@ -301,12 +318,14 @@
                         "type": "note",
                         "id": "1"
                     }
-                ]
+                ],
+                "type": "category"
             },
             {
                 "_key": "18",
                 "label": "tools",
-                "members": []
+                "members": [],
+                "type": "category"
             }
         ],
         "uuids": [],

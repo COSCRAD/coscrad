@@ -1,12 +1,8 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Ctor } from '../../../../lib/types/Ctor';
 
-export default (
-    error: InternalError,
-    propertyKey: string,
-    TopLevelErrorCtor: Ctor<InternalError>
-) => {
-    expect(error).toBeInstanceOf(TopLevelErrorCtor);
+export default (result: unknown, propertyKey: string, TopLevelErrorCtor: Ctor<InternalError>) => {
+    expect(result).toBeInstanceOf(TopLevelErrorCtor);
 
-    expect(error.toString().includes(propertyKey)).toBe(true);
+    expect(result.toString().includes(propertyKey)).toBe(true);
 };

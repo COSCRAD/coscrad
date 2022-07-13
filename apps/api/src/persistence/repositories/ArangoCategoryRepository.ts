@@ -1,4 +1,3 @@
-import categoryValidator from '../../domain/domainModelValidators/categoryValidator';
 import buildInstanceFactory from '../../domain/factories/utilities/buildInstanceFactory';
 import { Category } from '../../domain/models/categories/entities/category.entity';
 import { ICategoryRepository } from '../../domain/repositories/interfaces/category-repository.interface';
@@ -18,7 +17,7 @@ import convertArangoDocumentHandleToCompositeIdentifier from '../database/utilit
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 
 export default class ArangoCategoryRepository implements ICategoryRepository {
-    #instanceFactory = buildInstanceFactory(categoryValidator, Category);
+    #instanceFactory = buildInstanceFactory(Category);
 
     #arangoDB: ArangoDatabase;
 

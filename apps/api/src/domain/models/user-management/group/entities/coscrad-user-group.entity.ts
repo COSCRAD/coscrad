@@ -6,10 +6,8 @@ import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import InvalidCoscradUserGroupDTOError from '../../../../domainModelValidators/errors/InvalidCoscradUserGroupDTOError';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { Aggregate } from '../../../aggregate.entity';
-import validateCoscradUserGroup from './invariant-validation/validateCoscradUserGroup';
 
 @RegisterIndexScopedCommands([])
 export class CoscradUserGroup extends Aggregate {
@@ -18,8 +16,12 @@ export class CoscradUserGroup extends Aggregate {
     @NonEmptyString()
     readonly label: string; // Consider making this multi-lingual text
 
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/182693980]
+     * Make this type `AggregateId`.
+     */
     @NonEmptyString({ isArray: true })
-    readonly userIds: AggregateId[];
+    readonly userIds: string[];
 
     @NonEmptyString()
     readonly description: string;
@@ -48,6 +50,6 @@ export class CoscradUserGroup extends Aggregate {
             new InvalidCoscradUserGroupDTOError(allErrors, instance.id)
     )
     validateInvariants(): ResultOrError<Valid> {
-        return validateCoscradUserGroup(this);
+        return Valid;
     }
 }

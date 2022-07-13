@@ -13,4 +13,4 @@ enum CoscradDataType {
     Enum = 'Enum',
 }
 
-export default CoscradDataType;
+export { CoscradDataType };
