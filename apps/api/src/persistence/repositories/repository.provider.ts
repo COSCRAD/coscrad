@@ -6,10 +6,10 @@ import { EdgeConnection } from '../../domain/models/context/edge-connection.enti
 import { Resource } from '../../domain/models/resource.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
-import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { ICategoryRepository } from '../../domain/repositories/interfaces/category-repository.interface';
 import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
+import { IUserRepository } from '../../domain/repositories/interfaces/user-repository.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { IIdRepository } from '../../lib/id-generation/interfaces/id-repository.interface';
@@ -20,6 +20,7 @@ import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapA
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoCoscradUserRepository } from './arango-coscrad-user-repository';
 import { ArangoIdRepository } from './arango-id-repository';
 import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate';
 import ArangoCategoryRepository from './ArangoCategoryRepository';
@@ -56,14 +57,8 @@ export class RepositoryProvider implements IRepositoryProvider {
         return new ArangoIdRepository(this.databaseProvider);
     }
 
-    getUserRepository(): IRepositoryForAggregate<CoscradUser> {
-        return new ArangoRepositoryForAggregate<CoscradUser>(
-            this.databaseProvider,
-            ArangoCollectionId.users,
-            buildInstanceFactory(CoscradUser),
-            mapDatabaseDTOToEntityDTO,
-            mapEntityDTOToDatabaseDTO
-        );
+    getUserRepository(): IUserRepository {
+        return new ArangoCoscradUserRepository(this.databaseProvider);
     }
 
     getUserGroupRepository(): IRepositoryForAggregate<CoscradUserGroup> {

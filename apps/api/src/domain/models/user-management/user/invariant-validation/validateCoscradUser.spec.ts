@@ -10,6 +10,7 @@ import validateCoscradUser from './validateCoscradUser';
 
 const validUserDto: DTO<CoscradUser> = {
     type: AggregateType.user,
+    authProviderUserId: 'auth0|9358793208590235832',
     username: 'joeyDoughy001@fastmail.org',
     id: '939384394839',
     profile: new CoscradUserProfile({

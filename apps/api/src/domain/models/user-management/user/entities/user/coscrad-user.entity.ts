@@ -20,6 +20,17 @@ import { CoscradUserProfile } from './coscrad-user-profile.entity';
 export class CoscradUser extends Aggregate {
     type = AggregateType.user;
 
+    /**
+     * We don't use the auth provider ID as the internal user ID for multiple reasons.
+     * - We want to be in control of our ID generation and format
+     * - Some auth providers use IDs that are not allowed as Arango keys
+     *     - This leads to leaky abstractions around the db and auth provider
+     * - We may want to use a different or multiple auth providers
+     * - We want it to be easy to switch auth providers
+     */
+    @NonEmptyString()
+    readonly authProviderUserId: string;
+
     @NonEmptyString()
     readonly username: string;
 
@@ -38,7 +49,7 @@ export class CoscradUser extends Aggregate {
 
         if (!dto) return;
 
-        const { profile: profileDto, roles, username } = dto;
+        const { profile: profileDto, roles, username, authProviderUserId } = dto;
 
         // Note that this is necessary for our simple invariant validation to catch required but missing nested properties
         this.profile = profileDto ? new CoscradUserProfile(profileDto) : undefined;
@@ -47,6 +58,8 @@ export class CoscradUser extends Aggregate {
 
         // Each role is a string, so a shallow clone is effectively deep clone
         this.roles = Array.isArray(roles) ? [...roles] : undefined;
+
+        this.authProviderUserId = authProviderUserId;
     }
 
     getAvailableCommands(): string[] {

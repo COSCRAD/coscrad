@@ -1,6 +1,5 @@
-import { IRepositoryForAggregate } from '../../../domain/repositories/interfaces/repository-for-aggregate.interface';
-import { CoscradUser } from '../../models/user-management/user/entities/user/coscrad-user.entity';
+import { IUserRepository } from './user-repository.interface';
 
 export interface IUserRepositoryProvider {
-    getUserRepository: () => IRepositoryForAggregate<CoscradUser>;
+    getUserRepository: () => IUserRepository;
 }

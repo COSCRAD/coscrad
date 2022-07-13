@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import { toDto } from '../../domain/models/shared/functional';
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
-import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
+import { IUserRepository } from '../../domain/repositories/interfaces/user-repository.interface';
 import buildInMemorySnapshot from '../../domain/utilities/buildInMemorySnapshot';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
@@ -38,7 +38,7 @@ describe('Arango Repository Provider > getUserRepository', () => {
 
     let app: INestApplication;
 
-    let userRepository: IRepositoryForAggregate<CoscradUser>;
+    let userRepository: IUserRepository;
 
     beforeAll(async () => {
         ({ app, testRepositoryProvider, arangoConnectionProvider } = await setUpIntegrationTest({
@@ -99,6 +99,48 @@ describe('Arango Repository Provider > getUserRepository', () => {
                 const foundUser = result as CoscradUser;
 
                 expect(foundUser.toDTO()).toEqual(userToFind.toDTO());
+            });
+        });
+
+        describe('when there is no user with the given id', () => {
+            it('should return not found', async () => {
+                await testRepositoryProvider.addFullSnapshot(fullSnapshot);
+
+                const result = await userRepository.fetchById('BOGUS-USER-ID');
+
+                expect(result).toBe(NotFound);
+            });
+        });
+    });
+
+    describe('fetchByProviderId', () => {
+        describe('when there is a user with the given auth provider userId', () => {
+            it('should return the user', async () => {
+                await testRepositoryProvider.addFullSnapshot(fullSnapshot);
+
+                const userToFind = users[0];
+
+                const result = await userRepository.fetchByProviderId(
+                    userToFind.authProviderUserId
+                );
+
+                expect(result).not.toBeInstanceOf(InternalError);
+
+                expect(result).not.toBe(NotFound);
+
+                const foundUser = result as CoscradUser;
+
+                expect(foundUser.toDTO()).toEqual(userToFind.toDTO());
+            });
+        });
+
+        describe('when there is no user with thte given auth provider userId', () => {
+            it('should return Not Found', async () => {
+                await testRepositoryProvider.addFullSnapshot(fullSnapshot);
+
+                const result = await userRepository.fetchByProviderId('NOWAY|1242332');
+
+                expect(result).toBe(NotFound);
             });
         });
     });

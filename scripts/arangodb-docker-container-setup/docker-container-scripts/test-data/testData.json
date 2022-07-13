@@ -344,7 +344,8 @@
                 "username": "cool-james",
                 "roles": [
                     "viewer"
-                ]
+                ],
+                "authProviderUserId": "auth0|123"
             }
         ],
         "groups": [
