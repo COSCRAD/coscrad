@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { passportJwtSecret } from 'jwks-rsa';
@@ -63,13 +63,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             .fetchByProviderId(auth0UserId);
 
         if (isInternalError(userSearchResult)) {
-            throw userSearchResult;
+            throw new UnauthorizedException();
         }
 
         if (isNotFound(userSearchResult)) {
-            throw new InternalError(
-                `There is no user with the auth provider assigned userId: ${auth0UserId}`
-            );
+            throw new UnauthorizedException();
         }
 
         const allUserGroups = await this.repositoryProvider.getUserGroupRepository().fetchMany();
