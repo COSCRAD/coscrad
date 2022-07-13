@@ -30,7 +30,9 @@ const fuzzData = {
 
 type FuzzDataType = keyof typeof fuzzData;
 
-const dataTypeToValidFuzz: Record<CoscradDataType, FuzzDataType[]> = {
+type DataTypeToFuzz = { [K in CoscradDataType]: FuzzDataType[] };
+
+const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.NonEmptyString]: ['url', 'randomString', 'uuid'],
     [CoscradDataType.Enum]: [],
     [CoscradDataType.NonNegativeFiniteNumber]: ['positiveInteger', 'positiveDecimal'],
@@ -41,6 +43,8 @@ const dataTypeToValidFuzz: Record<CoscradDataType, FuzzDataType[]> = {
 
 export default ({ type, isArray, isOptional }: CoscradDataSchema): ValueAndDescription[] => {
     /**
+     * TODO [https://www.pivotaltracker.com/story/show/182715254]
+     *
      * The condition checks if the property is itself a custom `Coscrad Data Type`.
      * It may be better to recurse here, but for now we get shallow type safety from
      * assigning any of the fuzz values.
@@ -66,6 +70,12 @@ export default ({ type, isArray, isOptional }: CoscradDataSchema): ValueAndDescr
         []
     );
 
+    /**
+     * If the property's schema indicates that it's an array, we add in
+     * various arrays of invalid types by turning each fuzz type into an array.
+     *
+     * TODO [test-coverage] return all non-array fuzz as well.
+     */
     if (isArray) {
         const numberOfElementsInEachArray = 5;
 

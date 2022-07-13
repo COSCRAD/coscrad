@@ -8,12 +8,12 @@ import createInvalidAggregateFactory from '../utilities/createInvalidAggregateFa
 
 export default <TAggregate extends Aggregate>(
     AggregateCtor: Ctor<TAggregate>,
-    validInstance: TAggregate,
+    validDto: DTO<TAggregate>,
     TopLevelErrorCtor: Ctor<InternalError>
 ): void => {
     const userGroupDataSchema = getCoscradDataSchema(AggregateCtor);
 
-    const buildInvalidDto = createInvalidAggregateFactory(validInstance);
+    const buildInvalidDto = createInvalidAggregateFactory(new AggregateCtor(validDto));
 
     Object.entries(userGroupDataSchema).forEach(([propertyName, propertySchema]) => {
         describe(`when the property: ${propertyName} is invalid`, () => {

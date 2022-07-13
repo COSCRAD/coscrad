@@ -42,7 +42,11 @@ describe('validateCoscradUser', () => {
 
         describe('when a simple invariant validation (type) rule is violated', () => {
             describe('when a property has an invalid type', () => {
-                assertTypeErrorsFromInvalidFuzz(CoscradUser, validUser, InvalidCoscradUserDTOError);
+                assertTypeErrorsFromInvalidFuzz(
+                    CoscradUser,
+                    validUserDto,
+                    InvalidCoscradUserDTOError
+                );
             });
         });
 

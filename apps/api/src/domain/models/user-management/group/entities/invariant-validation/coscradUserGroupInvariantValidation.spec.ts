@@ -29,7 +29,7 @@ describe('CoscradUserGroup.validateInvariants', () => {
         describe('when a simple invariant (generalized type) rule fails', () => {
             assertTypeErrorsFromInvalidFuzz(
                 CoscradUserGroup,
-                new CoscradUserGroup(validGroupDto),
+                validGroupDto,
                 InvalidCoscradUserGroupDTOError
             );
         });
