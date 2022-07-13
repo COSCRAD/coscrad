@@ -50,6 +50,7 @@ export class CoscradUserGroup extends Aggregate {
             new InvalidCoscradUserGroupDTOError(allErrors, instance.id)
     )
     validateInvariants(): ResultOrError<Valid> {
+        // There are no complex invariant rules for a `CoscradUserGroup`
         return Valid;
     }
 }

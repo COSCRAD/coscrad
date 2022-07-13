@@ -12,6 +12,7 @@ export {
     IsInt,
     IsISBN,
     IsNotEmptyObject as IsNonEmptyObject,
+    isNotEmptyObject as isNonEmptyObject,
     IsNumber,
     IsOptional,
     IsPositive,
