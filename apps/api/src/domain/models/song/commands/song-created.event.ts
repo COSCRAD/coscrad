@@ -15,8 +15,6 @@ export type EventRecordMetadata = {
 export class SongCreated extends BaseEvent {
     type = 'SONG_CREATED';
 
-    meta: EventRecordMetadata;
-
     constructor(command: CreateSong, eventId: AggregateId) {
         super(command, eventId);
     }

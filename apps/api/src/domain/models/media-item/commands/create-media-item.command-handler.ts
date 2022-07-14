@@ -1,13 +1,17 @@
 import { CommandHandler } from '@coscrad/commands';
+import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { isNotAvailable } from '../../../../lib/types/not-available';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { isOK } from '../../../../lib/types/ok';
+import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import getInstanceFactoryForEntity from '../../../factories/getInstanceFactoryForResource';
+import { IIdManager } from '../../../interfaces/id-manager.interface';
+import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
@@ -20,7 +24,18 @@ import { MediaItemCreated } from './media-item-created.event';
 
 @CommandHandler(CreateMediaItem)
 export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<MediaItem> {
-    protected resourceType = ResourceType.mediaItem;
+    protected aggregateType = ResourceType.mediaItem;
+
+    protected repository: IRepositoryForAggregate<MediaItem>;
+
+    constructor(
+        protected readonly repositoryProvider: RepositoryProvider,
+        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
+    ) {
+        super(repositoryProvider, idManager);
+
+        this.repository = this.repositoryProvider.forResource<MediaItem>(ResourceType.mediaItem);
+    }
 
     protected createNewInstance(command: CreateMediaItem): ResultOrError<MediaItem> {
         const { id, title, titleEnglish, url, contributions, mimeType } = command;

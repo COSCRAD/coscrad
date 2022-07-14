@@ -1,10 +1,14 @@
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { AggregateId } from '../../../types/AggregateId';
-import { ResourceType } from '../../../types/ResourceType';
-import { Resource } from '../../resource.entity';
+import { AggregateType } from '../../../types/AggregateType';
+import { Aggregate } from '../../aggregate.entity';
 import { BaseEvent } from '../events/base-event.entity';
 import { BaseCommandHandler } from './base-command-handler';
 import { ICreateCommand } from './interfaces/create-command.interface';
+
+interface ISimpleWriteRepository<TAggregate extends Aggregate> {
+    create(instance: TAggregate): Promise<void>;
+}
 
 /**
  * Extend this class if you'd like some guidance when implementing a new `CREATE_X`
@@ -14,9 +18,11 @@ import { ICreateCommand } from './interfaces/create-command.interface';
  * `ICommandHandler` (i.e. an async `execute` method) in 'free form'.
  */
 export abstract class BaseCreateCommandHandler<
-    TAggregate extends Resource
+    TAggregate extends Aggregate
 > extends BaseCommandHandler<TAggregate> {
-    protected abstract readonly resourceType: ResourceType;
+    protected abstract readonly aggregateType: AggregateType;
+
+    protected abstract readonly repository: ISimpleWriteRepository<TAggregate>;
 
     protected abstract createNewInstance(command: ICreateCommand): ResultOrError<TAggregate>;
 
@@ -55,8 +61,6 @@ export abstract class BaseCreateCommandHandler<
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 
         // Persist the valid instance
-        await this.repositoryProvider
-            .forResource(this.resourceType)
-            .create(instanceToPersistWithUpdatedEventHistory);
+        await this.repository.create(instanceToPersistWithUpdatedEventHistory);
     }
 }

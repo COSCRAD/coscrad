@@ -21,11 +21,11 @@ export class CoscradUserGroupViewModel extends BaseViewModel {
         this.description = description;
 
         this.users = allUsers.reduce(
-            (accumulatedUsers: CoscradUser[], user) =>
+            (accumulatedUsers: CoscradUserViewModel[], user) =>
                 !userIds.includes(user.id)
                     ? accumulatedUsers
                     : // clone the instance to avoid side-effects
-                      accumulatedUsers.concat(new CoscradUser(user.toDTO())),
+                      [...accumulatedUsers, new CoscradUserViewModel(user)],
             []
         );
     }
