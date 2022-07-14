@@ -9,8 +9,6 @@ Object {
     "label": "community members",
     "users": Array [
       Object {
-        "authProviderUserId": "auth0|123",
-        "eventHistory": Array [],
         "id": "1",
         "profile": Object {
           "email": "llcj1985@aol.com",
@@ -22,7 +20,6 @@ Object {
         "roles": Array [
           "viewer",
         ],
-        "type": "user",
         "username": "cool-james",
       },
     ],
@@ -42,8 +39,6 @@ Object {
         "label": "community members",
         "users": Array [
           Object {
-            "authProviderUserId": "auth0|123",
-            "eventHistory": Array [],
             "id": "1",
             "profile": Object {
               "email": "llcj1985@aol.com",
@@ -55,7 +50,6 @@ Object {
             "roles": Array [
               "viewer",
             ],
-            "type": "user",
             "username": "cool-james",
           },
         ],

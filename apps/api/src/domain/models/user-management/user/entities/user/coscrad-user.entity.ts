@@ -11,13 +11,21 @@ import { ValidationResult } from '../../../../../../lib/errors/types/ValidationR
 import { InvariantValidationMethod } from '../../../../../../lib/web-of-knowledge/decorators/invariant-validation-method.decorator';
 import { DTO } from '../../../../../../types/DTO';
 import InvalidCoscradUserDTOError from '../../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
+import { Valid } from '../../../../../domainModelValidators/Valid';
+import { ValidatesExternalState } from '../../../../../interfaces/ValidatesExternalState';
 import { AggregateType } from '../../../../../types/AggregateType';
+import { InMemorySnapshot } from '../../../../../types/ResourceType';
+import { isNullOrUndefined } from '../../../../../utilities/validation/is-null-or-undefined';
 import { Aggregate } from '../../../../aggregate.entity';
+import InvalidExternalStateError from '../../../../shared/common-command-errors/InvalidExternalStateError';
+import UserIdAlreadyInUseError from '../../errors/external-state-errors/UserIdAlreadyInUseError';
+import UserIdFromAuthProviderAlreadyInUseError from '../../errors/external-state-errors/UserIdFromAuthProviderAlreadyInUseError';
+import UsernameAlreadyInUseError from '../../errors/external-state-errors/UsernameAlreadyInUseError';
 import validateCoscradUser from '../../invariant-validation/validateCoscradUser';
 import { CoscradUserProfile } from './coscrad-user-profile.entity';
 
-@RegisterIndexScopedCommands([])
-export class CoscradUser extends Aggregate {
+@RegisterIndexScopedCommands(['REGISTER_USER'])
+export class CoscradUser extends Aggregate implements ValidatesExternalState {
     type = AggregateType.user;
 
     /**
@@ -34,8 +42,8 @@ export class CoscradUser extends Aggregate {
     @NonEmptyString()
     readonly username: string;
 
-    @NestedDataType(CoscradUserProfile)
-    readonly profile: CoscradUserProfile;
+    @NestedDataType(CoscradUserProfile, { isOptional: true })
+    readonly profile?: CoscradUserProfile;
 
     @Enum(CoscradEnum.CoscradUserRole, { isArray: true })
     readonly roles: CoscradUserRole[];
@@ -52,7 +60,9 @@ export class CoscradUser extends Aggregate {
         const { profile: profileDto, roles, username, authProviderUserId } = dto;
 
         // Note that this is necessary for our simple invariant validation to catch required but missing nested properties
-        this.profile = profileDto ? new CoscradUserProfile(profileDto) : undefined;
+        this.profile = !isNullOrUndefined(profileDto)
+            ? new CoscradUserProfile(profileDto)
+            : undefined;
 
         this.username = username;
 
@@ -72,5 +82,20 @@ export class CoscradUser extends Aggregate {
     )
     validateInvariants(): ValidationResult {
         return validateCoscradUser(this);
+    }
+
+    validateExternalState({ users }: InMemorySnapshot): InternalError | Valid {
+        const allErrors: InternalError[] = [];
+
+        if (users.some(({ id }) => id === this.id))
+            allErrors.push(new UserIdAlreadyInUseError(this.id));
+
+        if (users.some(({ authProviderUserId }) => authProviderUserId === this.authProviderUserId))
+            allErrors.push(new UserIdFromAuthProviderAlreadyInUseError(this.authProviderUserId));
+
+        if (users.some(({ username }) => username === this.username))
+            allErrors.push(new UsernameAlreadyInUseError(this.username));
+
+        return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
     }
 }
