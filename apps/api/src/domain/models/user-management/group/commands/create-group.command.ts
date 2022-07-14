@@ -4,19 +4,17 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { ICreateCommand } from '../../../shared/command-handlers/interfaces/create-command.interface';
 
 @Command({
-    type: 'REGISTER_USER',
-    label: 'Register User',
-    description: 'Registers a user that already exists with the auth provider',
+    type: 'CREATE_USER_GROUP',
+    label: 'Create User Group',
+    description: 'Creates a new user group',
 })
-export class RegisterUser implements ICreateCommand {
+export class CreateGroup implements ICreateCommand {
     @UUID()
     readonly id: AggregateId;
 
     @NonEmptyString()
-    userIdFromAuthProvider: string;
+    readonly label: string;
 
     @NonEmptyString()
-    username: string;
-
-    // the profile and roles must be set later
+    readonly description: string;
 }

@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateGroup when the command is valid should succeed 1`] = `
+CoscradUserGroup {
+  "description": "this group is for teachers from community schools",
+  "eventHistory": Array [
+    Object {
+      "meta": Object {
+        "dateCreated": 1657825697957,
+        "id": "9e518cd4-9ee5-4a4c-b3e7-30bcc2aa9cf9",
+      },
+      "payload": Object {
+        "description": "this group is for teachers from community schools",
+        "id": "d79c40c3-63d9-45d5-baa0-d79e56b117af",
+        "label": "teachers",
+      },
+      "type": "USER_GROUP_CREATED",
+    },
+  ],
+  "getCompositeIdentifier": [Function],
+  "id": "d79c40c3-63d9-45d5-baa0-d79e56b117af",
+  "label": "teachers",
+  "type": "userGroup",
+  "userIds": Array [],
+}
+`;
