@@ -18,6 +18,7 @@ import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../../utilities/validation/is-null-or-undefined';
 import { Aggregate } from '../../../../aggregate.entity';
 import InvalidExternalStateError from '../../../../shared/common-command-errors/InvalidExternalStateError';
+import idEquals from '../../../../shared/functional/idEquals';
 import UserIdAlreadyInUseError from '../../errors/external-state-errors/UserIdAlreadyInUseError';
 import UserIdFromAuthProviderAlreadyInUseError from '../../errors/external-state-errors/UserIdFromAuthProviderAlreadyInUseError';
 import UsernameAlreadyInUseError from '../../errors/external-state-errors/UsernameAlreadyInUseError';
@@ -84,11 +85,14 @@ export class CoscradUser extends Aggregate implements ValidatesExternalState {
         return validateCoscradUser(this);
     }
 
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/182727483]
+     * Add unit test.
+     */
     validateExternalState({ users }: InMemorySnapshot): InternalError | Valid {
         const allErrors: InternalError[] = [];
 
-        if (users.some(({ id }) => id === this.id))
-            allErrors.push(new UserIdAlreadyInUseError(this.id));
+        if (users.some(idEquals(this.id))) allErrors.push(new UserIdAlreadyInUseError(this.id));
 
         if (users.some(({ authProviderUserId }) => authProviderUserId === this.authProviderUserId))
             allErrors.push(new UserIdFromAuthProviderAlreadyInUseError(this.authProviderUserId));

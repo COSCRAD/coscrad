@@ -17,6 +17,7 @@ import { TimeRangeContext } from '../context/time-range-context/time-range-conte
 import { ITimeBoundable } from '../interfaces/ITimeBoundable';
 import { Resource } from '../resource.entity';
 import validateTimeRangeContextForModel from '../shared/contextValidators/validateTimeRangeContextForModel';
+import getId from '../shared/functional/getId';
 import { ContributorAndRole } from './ContributorAndRole';
 
 @RegisterIndexScopedCommands(['CREATE_SONG'])
@@ -98,7 +99,7 @@ export class Song extends Resource implements ITimeBoundable {
      * this instance.
      */
     validateExternalState({ resources: { song: allSongs } }: InMemorySnapshot): ValidationResult {
-        if (allSongs.map(({ id }) => id).includes(this.id)) {
+        if (allSongs.map(getId).includes(this.id)) {
             return new InternalError(`There is already a Song with id: ${this.id}}`);
         }
 

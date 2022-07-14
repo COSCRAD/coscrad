@@ -1,5 +1,7 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
+import { CreateGroup } from '../../domain/models/user-management/group/commands/create-group.command';
+import { CreateGroupCommandHandler } from '../../domain/models/user-management/group/commands/create-group.command-handler';
 import { RegisterUser } from '../../domain/models/user-management/user/commands/register-user.command';
 import { RegisterUserCommandHandler } from '../../domain/models/user-management/user/commands/register-user.command-handler';
 import { CoscradUserGroupQueryService } from '../../domain/services/query-services/coscrad-user-group-query.service';
@@ -19,6 +21,8 @@ import { CoscradUserController } from '../controllers/coscrad-user.controller';
         CommandInfoService,
         RegisterUser,
         RegisterUserCommandHandler,
+        CreateGroup,
+        CreateGroupCommandHandler,
     ],
 })
 export class UserManagementModule {}

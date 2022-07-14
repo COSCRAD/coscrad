@@ -6,7 +6,8 @@ import { ICreateCommand } from '../../../shared/command-handlers/interfaces/crea
 @Command({
     type: 'REGISTER_USER',
     label: 'Register User',
-    description: 'Registers a user that already exists with the auth provider',
+    description:
+        'Register a new COSCRAD user after the user has been registered with the auth provider',
 })
 export class RegisterUser implements ICreateCommand {
     @UUID()

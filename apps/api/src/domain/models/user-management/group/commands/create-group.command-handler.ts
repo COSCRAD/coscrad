@@ -23,8 +23,7 @@ import { GroupCreated } from './group-created.event';
 export class CreateGroupCommandHandler extends BaseCreateCommandHandler<CoscradUserGroup> {
     readonly aggregateType = AggregateType.userGroup;
 
-    // we may want to rename this `repositoryForCommandTargetAggregate`
-    protected readonly repository: IRepositoryForAggregate<CoscradUserGroup>;
+    protected readonly repositoryForCommandsTargetAggregate: IRepositoryForAggregate<CoscradUserGroup>;
 
     protected readonly userRepository: IUserRepository;
 
@@ -34,7 +33,7 @@ export class CreateGroupCommandHandler extends BaseCreateCommandHandler<CoscradU
     ) {
         super(repositoryProvider, idManager);
 
-        this.repository = repositoryProvider.getUserGroupRepository();
+        this.repositoryForCommandsTargetAggregate = repositoryProvider.getUserGroupRepository();
 
         this.userRepository = repositoryProvider.getUserRepository();
     }
@@ -62,7 +61,7 @@ export class CreateGroupCommandHandler extends BaseCreateCommandHandler<CoscradU
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
         const [existingUserGroupSearchResult, allUserSearchResult] = await Promise.all([
-            this.repository.fetchMany(),
+            this.repositoryForCommandsTargetAggregate.fetchMany(),
             this.userRepository.fetchMany(),
         ]);
 

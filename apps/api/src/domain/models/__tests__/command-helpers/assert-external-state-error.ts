@@ -5,7 +5,7 @@ import InvalidExternalStateError from '../../shared/common-command-errors/Invali
 
 export const assertExternalStateError = (
     result: unknown,
-    expectedMostSpecificError?: InternalError
+    expectedInnermostError?: InternalError
 ): void => {
     expect(result).toBeInstanceOf(CommandExecutionError);
 
@@ -15,6 +15,6 @@ export const assertExternalStateError = (
 
     const innerMostError = innerError.innerErrors[0];
 
-    if (!isNullOrUndefined(expectedMostSpecificError))
-        expect(innerMostError).toEqual(expectedMostSpecificError);
+    if (!isNullOrUndefined(expectedInnermostError))
+        expect(innerMostError).toEqual(expectedInnermostError);
 };

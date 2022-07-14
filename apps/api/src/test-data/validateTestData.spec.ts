@@ -7,6 +7,8 @@ import { isValid, Valid } from '../domain/domainModelValidators/Valid';
 import { Category } from '../domain/models/categories/entities/category.entity';
 import { EdgeConnectionMemberRole } from '../domain/models/context/edge-connection.entity';
 import { Resource } from '../domain/models/resource.entity';
+import getId from '../domain/models/shared/functional/getId';
+import idEquals from '../domain/models/shared/functional/idEquals';
 import {
     isResourceType,
     ResourceType,
@@ -164,7 +166,7 @@ describe('buildTestData', () => {
                                 it(`should be consistent with the state of ${resourceType}/${memberId}`, () => {
                                     const correspondingResourceInstance = (
                                         resourceTestData[resourceType] as { id: string }[]
-                                    ).find(({ id }) => id === memberId) as Resource;
+                                    ).find(idEquals(memberId)) as Resource;
 
                                     const validationResult =
                                         correspondingResourceInstance.validateContext(context);
@@ -219,7 +221,7 @@ describe('buildTestData', () => {
                     ({ childrenIDs }) => childrenIDs
                 );
 
-                const allCategoryIDs = categoryTestData.map(({ id }) => id);
+                const allCategoryIDs = categoryTestData.map(getId);
 
                 const childCategoriesThatDoNotExist = allChildCategoryIDs.filter(
                     (childId) => !allCategoryIDs.includes(childId)

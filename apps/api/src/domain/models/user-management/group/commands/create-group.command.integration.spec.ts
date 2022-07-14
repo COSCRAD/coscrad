@@ -1,5 +1,4 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
-import { FuzzGenerator, getCoscradDataSchema } from '@coscrad/data-types';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { assertExternalStateError } from '../../../../../domain/models/__tests__/command-helpers/assert-external-state-error';
 import { InternalError } from '../../../../../lib/errors/InternalError';
@@ -13,11 +12,12 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import buildEmptyInMemorySnapshot from '../../../../utilities/buildEmptyInMemorySnapshot';
 import buildInMemorySnapshot from '../../../../utilities/buildInMemorySnapshot';
-import { assertCommandPayloadTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
+import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
-import { InvalidFSAFactoryFunction } from '../../../__tests__/command-helpers/types/InvalidFSAFactoryFunction';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { CoscradUserGroup } from '../entities/coscrad-user-group.entity';
 import { UserGroupIdAlreadyInUseError } from '../errors/external-state-errors/UserGroupIdAlreadyInUseError';
@@ -39,17 +39,9 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateGro
 
 const initialState = buildEmptyInMemorySnapshot();
 
-// TODO share this as a util- it's time!
-const buildInvalidFSA: InvalidFSAFactoryFunction<CreateGroup> = (
-    id: AggregateId,
-    payloadOverrides: Partial<Record<keyof CreateGroup, unknown>> = {}
-): FluxStandardAction<DTO<CreateGroup>> => ({
-    type: commandType,
-    payload: {
-        ...buildValidCommandFSA(id).payload,
-        ...(payloadOverrides as Partial<CreateGroup>),
-    },
-});
+const fsaFactory = new DummyCommandFSAFactory<CreateGroup>(buildValidCommandFSA);
+
+const buildInvalidFSA = (id, payloadOverrides) => fsaFactory.buildInvalidFSA(id, payloadOverrides);
 
 const existingUserGroupDto: DTO<CoscradUserGroup> = {
     type: AggregateType.userGroup,
@@ -60,6 +52,7 @@ const existingUserGroupDto: DTO<CoscradUserGroup> = {
 };
 
 const existingUserGroup = new CoscradUserGroup(existingUserGroupDto);
+
 describe('CreateGroup', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -176,27 +169,20 @@ describe('CreateGroup', () => {
         });
 
         describe('when the payload has a property with an invalid type', () => {
-            const commandPayloadDataSchema = getCoscradDataSchema(CreateGroup);
-
-            Object.entries(commandPayloadDataSchema).forEach(([propertyName, propertySchema]) => {
-                const invalidValues = new FuzzGenerator(propertySchema).generateInvalidValues();
-
-                invalidValues.forEach(({ value, description }) => {
-                    describe(`when the property: ${propertyName} has an invalid value: ${value} (${description})`, () => {
-                        it('should return the appropriate type error', async () => {
-                            const validId = await idManager.generate();
-
-                            const result = await commandHandlerService.execute(
-                                buildInvalidFSA(validId, {
-                                    [propertyName]: value,
-                                })
+            generateCommandFuzzTestCases(CreateGroup).forEach(
+                ({ description, propertyName, invalidValue }) => {
+                    describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                        it('should fail with the appropriate error', async () => {
+                            await assertCommandFailsDueToTypeError(
+                                commandAssertionDependencies,
+                                propertyName,
+                                invalidValue,
+                                buildInvalidFSA
                             );
-
-                            assertCommandPayloadTypeError(result, propertyName);
                         });
                     });
-                });
-            });
+                }
+            );
         });
     });
 });

@@ -1,4 +1,5 @@
 import { Category } from '../../../../../../domain/models/categories/entities/category.entity';
+import idEquals from '../../../../../../domain/models/shared/functional/idEquals';
 import { CateogryTreeViewModel } from '../../../category-tree.view-model';
 
 const joinInTheChildren = (node: Category, allNodes: Category[]): CateogryTreeViewModel => ({
@@ -13,10 +14,7 @@ const joinInTheChildren = (node: Category, allNodes: Category[]): CateogryTreeVi
         node.childrenIDs.length === 0
             ? []
             : node.childrenIDs.map((childId) =>
-                  joinInTheChildren(
-                      allNodes.find(({ id }) => id === childId),
-                      allNodes
-                  )
+                  joinInTheChildren(allNodes.find(idEquals(childId)), allNodes)
               ),
 });
 

@@ -11,6 +11,8 @@ import { AggregateType } from '../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { Aggregate } from '../../../aggregate.entity';
 import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
+import getId from '../../../shared/functional/getId';
+import idEquals from '../../../shared/functional/idEquals';
 import { UserDoesNotExistError } from '../errors/external-state-errors/UserDoesNotExistError';
 import { UserGroupIdAlreadyInUseError } from '../errors/external-state-errors/UserGroupIdAlreadyInUseError';
 import { UserGroupLabelAlreadyInUseError } from '../errors/external-state-errors/UserGroupLabelAlreadyInUseError';
@@ -60,12 +62,16 @@ export class CoscradUserGroup extends Aggregate implements ValidatesExternalStat
         return Valid;
     }
 
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/182727483]
+     * Add unit test.
+     */
     validateExternalState({
         users,
         userGroups: existingUserGroups,
     }: InMemorySnapshot): InternalError | typeof Valid {
         const allErrors: InternalError[] = [];
-        const existingUserIds = users.map(({ id }) => id);
+        const existingUserIds = users.map(getId);
 
         const userIdsThatDoNotExist = this.userIds.filter(
             (referencedUserId) => !existingUserIds.includes(referencedUserId)
@@ -75,7 +81,7 @@ export class CoscradUserGroup extends Aggregate implements ValidatesExternalStat
             allErrors.push(...userIdsThatDoNotExist.map((id) => new UserDoesNotExistError(id)));
         }
 
-        if (existingUserGroups.some(({ id }) => id === this.id)) {
+        if (existingUserGroups.some(idEquals(this.id))) {
             allErrors.push(new UserGroupIdAlreadyInUseError(this.id));
         }
 
