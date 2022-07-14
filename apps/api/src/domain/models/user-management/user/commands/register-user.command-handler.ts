@@ -69,4 +69,6 @@ export class RegisterUserCommandHandler extends BaseCreateCommandHandler<Coscrad
     ): InternalError | Valid {
         return instance.validateExternalState(state);
     }
+
+    // TODO- We should reach out to the auth provider and validate that the user exists there
 }

@@ -1,5 +1,5 @@
 import { MediaItem } from '@coscrad/api-interfaces';
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
@@ -21,8 +21,8 @@ export class AppController {
     @ApiBearerAuth('JWT')
     @UseGuards(AuthGuard('jwt'))
     @Get('hello')
-    getData(): MediaItem {
-        return this.appService.getData();
+    getData(@Request() req): MediaItem {
+        return req.user.toDTO();
     }
 
     @Get('')
