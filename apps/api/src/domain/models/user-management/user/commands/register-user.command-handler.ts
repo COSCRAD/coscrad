@@ -22,7 +22,7 @@ import { UserRegistered } from './user-registered.event';
 export class RegisterUserCommandHandler extends BaseCreateCommandHandler<CoscradUser> {
     readonly aggregateType = AggregateType.user;
 
-    protected readonly repository: IUserRepository;
+    protected readonly repositoryForCommandsTargetAggregate: IUserRepository;
 
     constructor(
         protected readonly repositoryProvider: RepositoryProvider,
@@ -30,7 +30,7 @@ export class RegisterUserCommandHandler extends BaseCreateCommandHandler<Coscrad
     ) {
         super(repositoryProvider, idManager);
 
-        this.repository = this.repositoryProvider.getUserRepository();
+        this.repositoryForCommandsTargetAggregate = this.repositoryProvider.getUserRepository();
     }
 
     protected createNewInstance({
@@ -56,7 +56,7 @@ export class RegisterUserCommandHandler extends BaseCreateCommandHandler<Coscrad
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
-        const userSearchResult = await this.repository.fetchMany();
+        const userSearchResult = await this.repositoryForCommandsTargetAggregate.fetchMany();
 
         const users = userSearchResult.filter(validAggregateOrThrow);
 

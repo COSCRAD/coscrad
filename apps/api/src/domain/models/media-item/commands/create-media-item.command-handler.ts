@@ -13,6 +13,7 @@ import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
 import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
+import idEquals from '../../shared/functional/idEquals';
 import { ContributorAndRole } from '../../song/ContributorAndRole';
 import { MediaItem } from '../entities/media-item.entity';
 import { CreateMediaItem } from './create-media-item.command';
@@ -22,7 +23,7 @@ import { MediaItemCreated } from './media-item-created.event';
 export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<MediaItem> {
     protected aggregateType = ResourceType.mediaItem;
 
-    protected repository: IRepositoryForAggregate<MediaItem>;
+    protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<MediaItem>;
 
     constructor(
         protected readonly repositoryProvider: RepositoryProvider,
@@ -30,7 +31,9 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
     ) {
         super(repositoryProvider, idManager);
 
-        this.repository = this.repositoryProvider.forResource<MediaItem>(ResourceType.mediaItem);
+        this.repositoryForCommandsTargetAggregate = this.repositoryProvider.forResource<MediaItem>(
+            ResourceType.mediaItem
+        );
     }
 
     protected createNewInstance(command: CreateMediaItem): ResultOrError<MediaItem> {
@@ -77,7 +80,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
         { resources: { mediaItem: preExistingMediaItems } }: InMemorySnapshot,
         instance: MediaItem
     ): InternalError | Valid {
-        if (preExistingMediaItems.some(({ id }) => id === instance.id))
+        if (preExistingMediaItems.some(idEquals(instance.id)))
             return new ResourceIdAlreadyInUseError({
                 id: instance.id,
                 resourceType: ResourceType.mediaItem,

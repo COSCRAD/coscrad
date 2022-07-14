@@ -28,7 +28,7 @@ export abstract class BaseCreateCommandHandler<
 > extends BaseCommandHandler<TAggregate> {
     protected abstract readonly aggregateType: AggregateType;
 
-    protected abstract readonly repository: ISimpleWriteRepository<TAggregate>;
+    protected abstract readonly repositoryForCommandsTargetAggregate: ISimpleWriteRepository<TAggregate>;
 
     protected abstract createNewInstance(command: ICreateCommand): ResultOrError<TAggregate>;
 
@@ -67,7 +67,9 @@ export abstract class BaseCreateCommandHandler<
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 
         // Persist the valid instance
-        await this.repository.create(instanceToPersistWithUpdatedEventHistory);
+        await this.repositoryForCommandsTargetAggregate.create(
+            instanceToPersistWithUpdatedEventHistory
+        );
     }
 
     /**

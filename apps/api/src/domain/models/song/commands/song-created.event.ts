@@ -1,6 +1,4 @@
-import { AggregateId } from '../../../types/AggregateId';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { CreateSong } from './create-song.command';
 
 export type EventRecordMetadata = {
     dateCreated: number;
@@ -14,8 +12,4 @@ export type EventRecordMetadata = {
  */
 export class SongCreated extends BaseEvent {
     type = 'SONG_CREATED';
-
-    constructor(command: CreateSong, eventId: AggregateId) {
-        super(command, eventId);
-    }
 }

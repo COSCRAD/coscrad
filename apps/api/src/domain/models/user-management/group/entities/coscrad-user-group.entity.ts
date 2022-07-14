@@ -6,11 +6,19 @@ import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import InvalidCoscradUserGroupDTOError from '../../../../domainModelValidators/errors/InvalidCoscradUserGroupDTOError';
 import { Valid } from '../../../../domainModelValidators/Valid';
+import { ValidatesExternalState } from '../../../../interfaces/ValidatesExternalState';
 import { AggregateType } from '../../../../types/AggregateType';
+import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { Aggregate } from '../../../aggregate.entity';
+import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
+import getId from '../../../shared/functional/getId';
+import idEquals from '../../../shared/functional/idEquals';
+import { UserDoesNotExistError } from '../errors/external-state-errors/UserDoesNotExistError';
+import { UserGroupIdAlreadyInUseError } from '../errors/external-state-errors/UserGroupIdAlreadyInUseError';
+import { UserGroupLabelAlreadyInUseError } from '../errors/external-state-errors/UserGroupLabelAlreadyInUseError';
 
-@RegisterIndexScopedCommands([])
-export class CoscradUserGroup extends Aggregate {
+@RegisterIndexScopedCommands(['CREATE_GROUP'])
+export class CoscradUserGroup extends Aggregate implements ValidatesExternalState {
     type = AggregateType.userGroup;
 
     @NonEmptyString()
@@ -52,5 +60,35 @@ export class CoscradUserGroup extends Aggregate {
     validateInvariants(): ResultOrError<Valid> {
         // There are no complex invariant rules for a `CoscradUserGroup`
         return Valid;
+    }
+
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/182727483]
+     * Add unit test.
+     */
+    validateExternalState({
+        users,
+        userGroups: existingUserGroups,
+    }: InMemorySnapshot): InternalError | typeof Valid {
+        const allErrors: InternalError[] = [];
+        const existingUserIds = users.map(getId);
+
+        const userIdsThatDoNotExist = this.userIds.filter(
+            (referencedUserId) => !existingUserIds.includes(referencedUserId)
+        );
+
+        if (userIdsThatDoNotExist.length > 0) {
+            allErrors.push(...userIdsThatDoNotExist.map((id) => new UserDoesNotExistError(id)));
+        }
+
+        if (existingUserGroups.some(idEquals(this.id))) {
+            allErrors.push(new UserGroupIdAlreadyInUseError(this.id));
+        }
+
+        if (existingUserGroups.some(({ label }) => label === this.label)) {
+            allErrors.push(new UserGroupLabelAlreadyInUseError(this.label));
+        }
+
+        return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
     }
 }

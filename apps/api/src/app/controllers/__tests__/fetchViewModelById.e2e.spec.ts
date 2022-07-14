@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { Resource } from '../../../domain/models/resource.entity';
+import idEquals from '../../../domain/models/shared/functional/idEquals';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import { PublishSongCommandHandler } from '../../../domain/models/song/commands/publish-song.command-handler';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
@@ -159,9 +160,7 @@ describe('GET /resources (fetch view models)', () => {
                          * unpubished resource was in the db to start with
                          */
                         const isUnpublishedresourceIdInDB =
-                            publishedAndUnpublishedInstancesFromRepo.some(
-                                ({ id }) => id === unpublishedId
-                            );
+                            publishedAndUnpublishedInstancesFromRepo.some(idEquals(unpublishedId));
 
                         expect(isUnpublishedresourceIdInDB).toBe(true);
 
