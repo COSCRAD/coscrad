@@ -11,12 +11,14 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import buildEmptyInMemorySnapshot from '../../../../utilities/buildEmptyInMemorySnapshot';
 import buildInMemorySnapshot from '../../../../utilities/buildInMemorySnapshot';
+import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import { assertCommandPayloadTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
-import { InvalidFSAFactoryFunction } from '../../../__tests__/command-helpers/assert-command-type-errors-with-fuzz';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import { InvalidFSAFactoryFunction } from '../../../__tests__/command-helpers/types/InvalidFSAFactoryFunction';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { CoscradUserProfile } from '../entities/user/coscrad-user-profile.entity';
 import { CoscradUser } from '../entities/user/coscrad-user.entity';
@@ -64,6 +66,22 @@ const buildInvalidFSA: InvalidFSAFactoryFunction<RegisterUser> = (
 });
 
 const initialState = buildEmptyInMemorySnapshot();
+
+const assertExternalStateError = (
+    result: unknown,
+    expectedMostSpecificError?: InternalError
+): void => {
+    expect(result).toBeInstanceOf(CommandExecutionError);
+
+    const innerError = (result as CommandExecutionError).innerErrors[0];
+
+    expect(innerError).toBeInstanceOf(InvalidExternalStateError);
+
+    const innerMostError = innerError.innerErrors[0];
+
+    if (!isNullOrUndefined(expectedMostSpecificError))
+        expect(innerMostError).toEqual(expectedMostSpecificError);
+};
 
 describe('RegisterUser', () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -132,67 +150,42 @@ describe('RegisterUser', () => {
                         buildInMemorySnapshot({ users: [existingUser.clone({ id: newId })] })
                     );
 
-                    const validFSA = buildValidCommandFSA(newId);
+                    /**
+                     * We are invalidating the command by invalidating the existing
+                     * state rather than the payload here.
+                     */
+                    const fsaWithDuplicateUserId = buildValidCommandFSA(newId);
 
                     const executionResult =
-                        await commandAssertionDependencies.commandHandlerService.execute(validFSA);
+                        await commandAssertionDependencies.commandHandlerService.execute(
+                            fsaWithDuplicateUserId
+                        );
 
-                    expect(executionResult).toBeInstanceOf(CommandExecutionError);
-
-                    // TODO Tighten this check up with custom error
-                    expect(
-                        (executionResult as CommandExecutionError).innerErrors[0]
-                    ).toBeInstanceOf(InternalError);
+                    assertExternalStateError(executionResult);
                 });
             });
 
             describe('when there is already a user with the given auth provider assigned user ID', () => {
                 it('should fail', async () => {
-                    const newId = await idManager.generate();
-
-                    await testRepositoryProvider.addFullSnapshot(
-                        buildInMemorySnapshot({ users: [existingUser] })
-                    );
-
-                    const invalidFSA = buildInvalidFSA(newId, {
-                        userIdFromAuthProvider: existingUser.authProviderUserId,
+                    await assertCreateCommandError(commandAssertionDependencies, {
+                        buildCommandFSA: (newId: AggregateId) =>
+                            buildInvalidFSA(newId, {
+                                userIdFromAuthProvider: existingUser.authProviderUserId,
+                            }),
+                        initialState: buildInMemorySnapshot({ users: [existingUser] }),
+                        checkError: (error) => assertExternalStateError(error),
                     });
-
-                    const executionResult =
-                        await commandAssertionDependencies.commandHandlerService.execute(
-                            invalidFSA
-                        );
-
-                    expect(executionResult).toBeInstanceOf(CommandExecutionError);
-
-                    // TODO Tighten this check up with custom error
-                    expect(
-                        (executionResult as CommandExecutionError).innerErrors[0]
-                    ).toBeInstanceOf(InternalError);
                 });
             });
 
             describe('when there is already a user with the given id', () => {
                 it('should fail', async () => {
-                    const newId = await idManager.generate();
-
-                    await testRepositoryProvider.addFullSnapshot(
-                        buildInMemorySnapshot({ users: [existingUser] })
-                    );
-
-                    const invalidFSA = buildInvalidFSA(newId, { username: existingUser.username });
-
-                    const executionResult =
-                        await commandAssertionDependencies.commandHandlerService.execute(
-                            invalidFSA
-                        );
-
-                    expect(executionResult).toBeInstanceOf(CommandExecutionError);
-
-                    // TODO Tighten this check up with custom error
-                    expect(
-                        (executionResult as CommandExecutionError).innerErrors[0]
-                    ).toBeInstanceOf(InternalError);
+                    await assertCreateCommandError(commandAssertionDependencies, {
+                        buildCommandFSA: (newId: AggregateId) =>
+                            buildInvalidFSA(newId, { username: existingUser.username }),
+                        initialState: buildInMemorySnapshot({ users: [existingUser] }),
+                        checkError: (error) => assertExternalStateError(error),
+                    });
                 });
             });
         });
@@ -204,7 +197,6 @@ describe('RegisterUser', () => {
                 await assertCreateCommandError(commandAssertionDependencies, {
                     buildCommandFSA: (_: AggregateId) => buildInvalidFSA(bogusId, { id: bogusId }),
                     initialState,
-                    // TODO Tighten up the error check
                 });
             });
         });

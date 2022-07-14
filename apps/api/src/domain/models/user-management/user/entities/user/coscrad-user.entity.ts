@@ -17,6 +17,10 @@ import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../../utilities/validation/is-null-or-undefined';
 import { Aggregate } from '../../../../aggregate.entity';
+import InvalidExternalStateError from '../../../../shared/common-command-errors/InvalidExternalStateError';
+import UserIdAlreadyInUseError from '../../errors/external-state-errors/UserIdAlreadyInUseError';
+import UserIdFromAuthProviderAlreadyInUseError from '../../errors/external-state-errors/UserIdFromAuthProviderAlreadyInUseError';
+import UsernameAlreadyInUseError from '../../errors/external-state-errors/UsernameAlreadyInUseError';
 import validateCoscradUser from '../../invariant-validation/validateCoscradUser';
 import { CoscradUserProfile } from './coscrad-user-profile.entity';
 
@@ -81,19 +85,17 @@ export class CoscradUser extends Aggregate implements ValidatesExternalState {
     }
 
     validateExternalState({ users }: InMemorySnapshot): InternalError | Valid {
+        const allErrors: InternalError[] = [];
+
         if (users.some(({ id }) => id === this.id))
-            return new InternalError(`There is already a user with ID: ${this.id}`);
+            allErrors.push(new UserIdAlreadyInUseError(this.id));
 
         if (users.some(({ authProviderUserId }) => authProviderUserId === this.authProviderUserId))
-            return new InternalError(
-                `There is already a user with auth provider user ID: ${this.authProviderUserId}`
-            );
+            allErrors.push(new UserIdFromAuthProviderAlreadyInUseError(this.authProviderUserId));
 
         if (users.some(({ username }) => username === this.username))
-            return new InternalError(
-                `There is already a user with the given username: ${this.username}`
-            );
+            allErrors.push(new UsernameAlreadyInUseError(this.username));
 
-        return Valid;
+        return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
     }
 }

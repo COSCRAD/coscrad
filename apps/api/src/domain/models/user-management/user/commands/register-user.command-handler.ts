@@ -1,9 +1,6 @@
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import { NotAvailable } from '../../../../../lib/types/not-available';
-import { NotFound } from '../../../../../lib/types/not-found';
-import { OK } from '../../../../../lib/types/ok';
 import { RepositoryProvider } from '../../../../../persistence/repositories/repository.provider';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
@@ -71,22 +68,5 @@ export class RegisterUserCommandHandler extends BaseCreateCommandHandler<Coscrad
         instance: CoscradUser
     ): InternalError | Valid {
         return instance.validateExternalState(state);
-    }
-
-    protected async validateAdditionalConstraints({
-        id,
-    }: RegisterUser): Promise<InternalError | typeof Valid> {
-        const idStatus = await this.idManager.status(id);
-
-        if (idStatus === NotAvailable) return new InternalError(`The id ${id} is already in use`);
-
-        if (idStatus === NotFound)
-            return new InternalError(`The id ${id} has not been generated with our system`);
-
-        if (idStatus === OK) return Valid;
-
-        const exhaustiveCheck: never = idStatus;
-
-        throw new InternalError(`Invalid status: ${exhaustiveCheck} encountered for id: ${id}`);
     }
 }
