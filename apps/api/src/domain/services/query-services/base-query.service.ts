@@ -11,7 +11,7 @@ import { RepositoryProvider } from '../../../persistence/repositories/repository
 import { ResultOrError } from '../../../types/ResultOrError';
 import { TagViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
-import formatResourceType from '../../../view-models/presentation/formatResourceType';
+import formatResourceType from '../../../view-models/presentation/formatAggregateType';
 import { Resource } from '../../models/resource.entity';
 import { Tag } from '../../models/tag/tag.entity';
 import { ISpecification } from '../../repositories/interfaces/specification.interface';

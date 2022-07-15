@@ -21,4 +21,6 @@ export interface IRepositoryForAggregate<TEntity extends Aggregate> {
     create: (entity: TEntity) => Promise<void>;
 
     createMany: (entities: TEntity[]) => Promise<void>;
+
+    update: (entity: TEntity[]) => Promise<void>;
 }

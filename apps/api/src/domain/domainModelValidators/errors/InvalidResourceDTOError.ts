@@ -1,5 +1,5 @@
 import { InternalError } from '../../../lib/errors/InternalError';
-import formatResourceType from '../../../view-models/presentation/formatResourceType';
+import formatResourceType from '../../../view-models/presentation/formatAggregateType';
 import { ResourceType } from '../../types/ResourceType';
 
 export default class InvalidResourceDTOError extends InternalError {

@@ -6,13 +6,17 @@ import { RepositoryProvider } from '../../../../persistence/repositories/reposit
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
+import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { InMemorySnapshot } from '../../../types/ResourceType';
+import { Aggregate } from '../../aggregate.entity';
 import CommandExecutionError from '../common-command-errors/CommandExecutionError';
 import InvalidCommandPayloadTypeError from '../common-command-errors/InvalidCommandPayloadTypeError';
 
 const buildExecutionError = (allErrors: InternalError[]) => new CommandExecutionError(allErrors);
 
-export abstract class BaseCommandHandler<TAggregate> implements ICommandHandler {
+export abstract class BaseCommandHandler<TAggregate extends Aggregate> implements ICommandHandler {
+    protected abstract readonly repositoryForCommandsTargetAggregate: IRepositoryForAggregate<TAggregate>;
+
     constructor(
         protected readonly repositoryProvider: RepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
@@ -41,7 +45,10 @@ export abstract class BaseCommandHandler<TAggregate> implements ICommandHandler 
     protected abstract fetchRequiredExternalState(): Promise<InMemorySnapshot>;
 
     // TODO Consider putting this on the instance (e.g. an `applyCommand(type,payload)` method)
-    protected abstract actOnInstance(instance: TAggregate): ResultOrError<TAggregate>;
+    protected abstract actOnInstance(
+        instance: TAggregate,
+        command: ICommand
+    ): ResultOrError<TAggregate>;
 
     // TODO Put this on the Aggregate classes
     protected abstract validateExternalState(
@@ -69,7 +76,7 @@ export abstract class BaseCommandHandler<TAggregate> implements ICommandHandler 
         if (isInternalError(writeContextInstance))
             return buildExecutionError([writeContextInstance]);
 
-        const updatedInstance = this.actOnInstance(writeContextInstance);
+        const updatedInstance = this.actOnInstance(writeContextInstance, command);
 
         if (isInternalError(updatedInstance)) return buildExecutionError([updatedInstance]);
 

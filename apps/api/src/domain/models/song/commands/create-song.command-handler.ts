@@ -1,13 +1,17 @@
 import { CommandHandler } from '@coscrad/commands';
+import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { isNotAvailable } from '../../../../lib/types/not-available';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { isOK } from '../../../../lib/types/ok';
+import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import getInstanceFactoryForEntity from '../../../factories/getInstanceFactoryForResource';
+import { IIdManager } from '../../../interfaces/id-manager.interface';
+import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import { BaseCommandHandler } from '../../shared/command-handlers/base-command-handler';
@@ -21,6 +25,19 @@ import { SongCreated } from './song-created.event';
  */
 @CommandHandler(CreateSong)
 export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
+    protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<Song>;
+
+    constructor(
+        protected readonly repositoryProvider: RepositoryProvider,
+        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
+    ) {
+        super(repositoryProvider, idManager);
+
+        this.repositoryForCommandsTargetAggregate = this.repositoryProvider.forResource<Song>(
+            ResourceType.song
+        );
+    }
+
     async createOrFetchWriteContext(command: CreateSong): Promise<ResultOrError<Song>> {
         const songDTO: DTO<Song> = {
             ...command,

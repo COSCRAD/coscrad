@@ -2,9 +2,9 @@ import { ICommand } from '@coscrad/commands';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { AggregateId } from '../../../types/AggregateId';
-import { ResourceType } from '../../../types/ResourceType';
-import { Resource } from '../../resource.entity';
-import ResourceNotFoundError from '../common-command-errors/ResourceNotFoundError';
+import { AggregateType } from '../../../types/AggregateType';
+import { Aggregate } from '../../aggregate.entity';
+import AggregateNotFoundError from '../common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../events/base-event.entity';
 import { BaseCommandHandler } from './base-command-handler';
 import { IUpdateCommand } from './interfaces/update-command.interface';
@@ -17,21 +17,21 @@ import { IUpdateCommand } from './interfaces/update-command.interface';
  * `ICommandHandler` (i.e. an async `execute` method) in 'free form'.
  */
 export abstract class BaseUpdateCommandHandler<
-    TAggregate extends Resource
+    TAggregate extends Aggregate
 > extends BaseCommandHandler<TAggregate> {
-    protected abstract resourceType: ResourceType;
+    protected abstract aggregateType: AggregateType;
 
     protected abstract eventFactory(command: ICommand, eventId: AggregateId): BaseEvent;
 
-    protected async fetchInstanceToUpdate({
-        id,
-    }: IUpdateCommand): Promise<ResultOrError<TAggregate>> {
-        const searchResult = await this.repositoryProvider
-            .forResource<TAggregate>(this.resourceType)
-            .fetchById(id);
+    protected abstract getAggregateIdFromCommand(command: ICommand): AggregateId;
+
+    protected async fetchInstanceToUpdate(command: ICommand): Promise<ResultOrError<TAggregate>> {
+        const id = this.getAggregateIdFromCommand(command);
+
+        const searchResult = await this.repositoryForCommandsTargetAggregate.fetchById(id);
 
         if (isNotFound(searchResult))
-            return new ResourceNotFoundError({ type: this.resourceType, id });
+            return new AggregateNotFoundError({ type: this.aggregateType, id });
 
         return searchResult;
     }
@@ -53,8 +53,8 @@ export abstract class BaseUpdateCommandHandler<
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 
-        await this.repositoryProvider
-            .forResource(this.resourceType)
-            .update(instanceToPersistWithUpdatedEventHistory);
+        await this.repositoryForCommandsTargetAggregate.update(
+            instanceToPersistWithUpdatedEventHistory
+        );
     }
 }

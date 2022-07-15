@@ -9,8 +9,8 @@ import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandPayloadTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
+import AggregateNotFoundError from '../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
-import ResourceNotFoundError from '../../shared/common-command-errors/ResourceNotFoundError';
 import { assertCommandError } from '../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
@@ -170,7 +170,7 @@ describe('PublishMediaItem', () => {
                         expect(error).toBeInstanceOf(CommandExecutionError);
 
                         expect(error.innerErrors[0]).toEqual(
-                            new ResourceNotFoundError({
+                            new AggregateNotFoundError({
                                 type: ResourceType.mediaItem,
                                 id: validCommandFSA.payload.id,
                             })

@@ -1,6 +1,6 @@
 import buildViewModelPathForResourceType from '../../app/controllers/utilities/buildViewModelPathForResourceType';
 import { ResourceType } from '../../domain/types/ResourceType';
-import formatResourceType from '../presentation/formatResourceType';
+import formatResourceType from '../presentation/formatAggregateType';
 
 type ResourceTypeAndDescription = {
     resourceType: ResourceType;
