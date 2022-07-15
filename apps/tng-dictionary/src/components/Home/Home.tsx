@@ -2,7 +2,7 @@ import AndroidIcon from '@mui/icons-material/Android';
 import AppleIcon from '@mui/icons-material/Apple';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SearchIcon from '@mui/icons-material/Search';
-import { Backdrop, Button, Divider } from '@mui/material';
+import { Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
@@ -19,35 +19,7 @@ export function Home(props: HomeProps) {
     const handleToggle = () => {
         setOpen(!false);
     };
-    const backdrop = (
-        <Backdrop
-            sx={{ color: '#fff', zIndex: '100', background: 'rgb(168,4,4, .8)' }}
-            open={open}
-            onClick={handleClose}
-        >
-            <div style={{ padding: '15px' }}>
-                <h1>Disclaimer</h1>
-                <Divider sx={{ bgcolor: 'white' }} />
-                <p>
-                    The 'Tŝilhqot'in Dictionary' is still under active development and this domain
-                    is intended for testing purposes by those selected to give user feedback.
-                </p>
-                <p>Please do not distribute this app's address.</p>
-                <p>Sechanalyagh,</p>
-                <br />
-                <p>
-                    <img
-                        style={{ marginRight: '10px', verticalAlign: 'text-bottom' }}
-                        src="https://www.tsilhqotin.ca/wp-content/uploads/2022/02/imageedit_14_8913908156.png"
-                        height={20}
-                    ></img>
-                    Tŝilhqot'in National Government
-                </p>
-                <Divider sx={{ bgcolor: 'white' }} />
-                <p style={{ textAlign: 'center' }}>'Click anywhere to continue'</p>
-            </div>
-        </Backdrop>
-    );
+
     return (
         <div className="homeScreen">
             <motion.div
@@ -98,7 +70,6 @@ export function Home(props: HomeProps) {
                     </div>
                     <div></div>
                 </div>
-                <div>{/* {backdrop} */}</div>
             </motion.div>
         </div>
     );

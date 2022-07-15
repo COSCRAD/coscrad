@@ -80,20 +80,20 @@ export function Videos(props: VideosProps) {
             <div id="heading">
                 <div id="container">
                     <h1 id="pageTitle">Videos</h1>
-                    <Card className="pageContent">
-                        <DataGrid
-                            sx={{ minHeight: '60vh', padding: '10px' }}
-                            rows={rows}
-                            columns={columns}
-                            rowsPerPageOptions={[10, 50, 100]}
-                            initialState={{
-                                pagination: {
-                                    pageSize: 10,
-                                },
-                            }}
-                        />
-                    </Card>
                 </div>
+                <Card className="pageContent">
+                    <DataGrid
+                        sx={{ minHeight: '60vh', padding: '10px' }}
+                        rows={rows}
+                        columns={columns}
+                        rowsPerPageOptions={[10, 50, 100]}
+                        initialState={{
+                            pagination: {
+                                pageSize: 10,
+                            },
+                        }}
+                    />
+                </Card>
             </div>
         </div>
     );

@@ -89,24 +89,26 @@ export function SongListIndex(props: SongIndexProps) {
 
     return (
         <ThemeProvider theme={theme}>
-            <div id="heading">
-                <div id="container">
-                    <h1 id="pageTitle">Songs</h1>
+            <div className="page">
+                <div id="heading">
+                    <div id="container">
+                        <h1 id="pageTitle">Songs</h1>
+                    </div>
                 </div>
+                <Card className="pageContent">
+                    <DataGrid
+                        sx={{ minHeight: '60vh', padding: '10px' }}
+                        rows={rows}
+                        columns={columns}
+                        rowsPerPageOptions={[10, 50, 100]}
+                        initialState={{
+                            pagination: {
+                                pageSize: 10,
+                            },
+                        }}
+                    />
+                </Card>
             </div>
-            <Card className="pageContent">
-                <DataGrid
-                    sx={{ minHeight: '60vh', padding: '10px' }}
-                    rows={rows}
-                    columns={columns}
-                    rowsPerPageOptions={[10, 50, 100]}
-                    initialState={{
-                        pagination: {
-                            pageSize: 10,
-                        },
-                    }}
-                />
-            </Card>
         </ThemeProvider>
     );
 }
@@ -120,7 +122,3 @@ const theme = createTheme({
         },
     },
 });
-
-const search = {
-    color: 'rgb(159,2,2)',
-};

@@ -3,7 +3,7 @@ import './SongDetail.module.css';
 /* eslint-disable-next-line */
 export interface SongDetailProps {}
 
-export function SongDetail(props: SongDetailProps) {
+export function SongDetail(_props: SongDetailProps) {
     return (
         <div>
             {/*
