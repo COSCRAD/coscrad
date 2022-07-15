@@ -1,13 +1,15 @@
-import SearchIcon from '@mui/icons-material/Search';
-import { Card, TextField } from '@mui/material';
+import { Card } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getConfig } from '../../../config';
 
 export type SongData = {
     title: string;
+
     titleEnglish: string;
+
     id: string;
 };
 
@@ -23,9 +25,13 @@ type ComponentState = {
 const getData = async (endpoint: string) => fetch(endpoint).then((response) => response.json());
 
 /* eslint-disable-next-line */
-export interface SongIndexProps {}
+export interface SongIndexProps {
+    songData?: SongData;
+}
 
 export function SongListIndex(props: SongIndexProps) {
+    const { songData } = props;
+
     const [appState, setAppState] = useState<ComponentState>({
         //  loading: false,
         songs: [],
@@ -37,7 +43,7 @@ export function SongListIndex(props: SongIndexProps) {
 
     useEffect(() => {
         setAppState({ songs: [], searchContext: 'title' });
-        const apiUrl = `http://localhost:3131/api/resources/songs`;
+        const apiUrl = `${getConfig().apiBaseUrl}/api/resources/songs`;
         fetch(apiUrl, { mode: 'cors' })
             .then((res) => res.json())
             .then((songs) => {
@@ -81,18 +87,6 @@ export function SongListIndex(props: SongIndexProps) {
         },
     ];
 
-    const search = (
-        <div className="searchVocabulary">
-            <TextField
-                placeholder="Search Vocabulary Lists"
-                className="searchBars"
-                InputProps={{
-                    sx: { borderRadius: '24px' },
-                    endAdornment: <SearchIcon className="searchIcon" />,
-                }}
-            />
-        </div>
-    );
     return (
         <ThemeProvider theme={theme}>
             <div id="heading">

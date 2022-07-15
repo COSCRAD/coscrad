@@ -9,8 +9,8 @@
         "data-types": "libs/data-types",
         "tng-dictionary": "apps/tng-dictionary",
         "tng-dictionary-e2e": "apps/tng-dictionary-e2e",
-        "validation": "libs/validation",
         "tsilhqotin-language-hub": "apps/tsilhqotin-language-hub",
-        "tsilhqotin-language-hub-e2e": "apps/tsilhqotin-language-hub-e2e"
+        "tsilhqotin-language-hub-e2e": "apps/tsilhqotin-language-hub-e2e",
+        "validation": "libs/validation"
     }
 }
