@@ -19,7 +19,7 @@ import { UserGroupIdAlreadyInUseError } from '../errors/external-state-errors/Us
 import { UserGroupLabelAlreadyInUseError } from '../errors/external-state-errors/UserGroupLabelAlreadyInUseError';
 import UserIsAlreadyInGroupError from '../errors/invalid-state-transition-errors/UserIsAlreadyInGroupError';
 
-@RegisterIndexScopedCommands(['CREATE_GROUP'])
+@RegisterIndexScopedCommands(['CREATE_USER_GROUP'])
 export class CoscradUserGroup extends Aggregate implements ValidatesExternalState {
     type = AggregateType.userGroup;
 
@@ -52,7 +52,7 @@ export class CoscradUserGroup extends Aggregate implements ValidatesExternalStat
     }
 
     getAvailableCommands(): string[] {
-        return [];
+        return ['ADD_USER_TO_GROUP'];
     }
 
     hasUser(userId: AggregateId) {
