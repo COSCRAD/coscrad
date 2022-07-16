@@ -24,7 +24,11 @@ export default async (
 ): Promise<TestModuleInstances> => {
     jest.resetModules();
 
-    const moduleRef = await createTestModule(configOverrides, { shouldMockIdGenerator });
+    const moduleRef = await createTestModule(configOverrides, { shouldMockIdGenerator }).catch(
+        (error) => {
+            throw error;
+        }
+    );
 
     const arangoConnectionProvider =
         moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);

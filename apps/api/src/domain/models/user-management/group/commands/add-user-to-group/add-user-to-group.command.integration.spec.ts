@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError, isInternalError } from '../../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../../lib/types/not-found';
+import { ArangoConnectionProvider } from '../../../../../../persistence/database/arango-connection.provider';
 import generateRandomTestDatabaseName from '../../../../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../../../../test-data/buildTestData';
@@ -23,23 +24,19 @@ import { AddUserToGroupCommandHandler } from './add-user-to-group.command-handle
 
 const commandType = 'ADD_USER_TO_GROUP';
 
-const existingUserAlreadyInGroupId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dc001';
-
-const existingGroupId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dc002';
-
-const existingUserToAddToGroupId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dc003';
-
-const userAlreadyInGroup = buildTestData().users[0].clone({ id: existingUserAlreadyInGroupId });
+const userAlreadyInGroup = buildTestData().users[0].clone({
+    id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dc001',
+});
 
 const userToAdd = userAlreadyInGroup.clone({
-    id: existingUserToAddToGroupId,
+    id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dc003',
     username: 'al-b-added-2022',
     authProviderUserId: 'zauth|909878',
 });
 
 const existingGroup = buildTestData().userGroups[0].clone({
     userIds: [userAlreadyInGroup.id],
-    id: existingGroupId,
+    id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dc002',
 });
 
 const initialState = buildInMemorySnapshot({
@@ -50,8 +47,8 @@ const initialState = buildInMemorySnapshot({
 const validCommandFSA = {
     type: commandType,
     payload: {
-        groupId: existingGroupId,
-        userId: existingUserToAddToGroupId,
+        groupId: existingGroup.id,
+        userId: userToAdd.id,
     },
 };
 
@@ -67,7 +64,7 @@ describe('AddUserToGroup', () => {
 
     let commandHandlerService: CommandHandlerService;
 
-    // let arangoConnectionProvider: ArangoConnectionProvider;
+    let arangoConnectionProvider: ArangoConnectionProvider;
 
     let idManager: IIdManager;
 
@@ -78,10 +75,12 @@ describe('AddUserToGroup', () => {
             testRepositoryProvider,
             commandHandlerService,
             idManager,
-            // arangoConnectionProvider,
+            arangoConnectionProvider,
             app,
         } = await setUpIntegrationTest({
             ARANGO_DB_NAME: generateRandomTestDatabaseName(),
+        }).catch((error) => {
+            throw error;
         }));
 
         commandHandlerService.registerHandler(
@@ -97,7 +96,7 @@ describe('AddUserToGroup', () => {
     });
 
     afterAll(async () => {
-        // await arangoConnectionProvider.dropDatabaseIfExists();
+        await arangoConnectionProvider.dropDatabaseIfExists();
 
         await app.close();
     });
@@ -153,7 +152,7 @@ describe('AddUserToGroup', () => {
             });
         });
 
-        describe('when there is no group with the given userId', () => {
+        describe('when there is no group with the given groupId', () => {
             it('should fail with the appropriate error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     buildCommandFSA: buildValidCommandFSA,
@@ -173,13 +172,8 @@ describe('AddUserToGroup', () => {
         describe('when the user is already in the group', () => {
             it('should fail with the appropriate error', async () => {
                 assertCommandError(commandAssertionDependencies, {
-                    buildCommandFSA: () => ({
-                        ...validCommandFSA,
-                        payload: {
-                            ...validCommandFSA.payload,
-                            userId: userAlreadyInGroup.id,
-                        },
-                    }),
+                    buildCommandFSA: () =>
+                        buildInvalidFSA(userAlreadyInGroup.id, { id: userAlreadyInGroup.id }),
                     initialState,
                 });
             });

@@ -60,13 +60,14 @@ export class CoscradUserGroup extends Aggregate implements ValidatesExternalStat
     }
 
     addUser(newUserId: AggregateId) {
-        if (this.userIds.some((id) => id === newUserId)) {
+        if (this.userIds.includes(newUserId)) {
             // Invalid state transition
             return new UserIsAlreadyInGroupError(newUserId, this);
         }
 
         // ensure new instance does not violate invariants
         return this.safeClone<CoscradUserGroup>({
+            // userIds are strings so shallow clone is sufficient to avoid shared references
             userIds: [...this.userIds, newUserId],
         });
     }

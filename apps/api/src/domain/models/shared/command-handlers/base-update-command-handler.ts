@@ -7,7 +7,6 @@ import { Aggregate } from '../../aggregate.entity';
 import AggregateNotFoundError from '../common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../events/base-event.entity';
 import { BaseCommandHandler } from './base-command-handler';
-import { IUpdateCommand } from './interfaces/update-command.interface';
 
 /**
  * Extend this class if you'd like some guidance when implementing a new update
@@ -36,14 +35,12 @@ export abstract class BaseUpdateCommandHandler<
         return searchResult;
     }
 
-    protected createOrFetchWriteContext(
-        command: IUpdateCommand
-    ): Promise<ResultOrError<TAggregate>> {
+    protected createOrFetchWriteContext(command: ICommand): Promise<ResultOrError<TAggregate>> {
         return this.fetchInstanceToUpdate(command);
     }
 
     // TODO There's still lots of overlap with the `create` command handler base- move to base class
-    protected async persist(instance: TAggregate, command: IUpdateCommand): Promise<void> {
+    protected async persist(instance: TAggregate, command: ICommand): Promise<void> {
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
 

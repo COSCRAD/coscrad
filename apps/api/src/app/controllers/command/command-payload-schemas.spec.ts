@@ -7,6 +7,7 @@ import { CreateGroup } from '../../../domain/models/user-management/group/comman
 import { RegisterUser } from '../../../domain/models/user-management/user/commands/register-user.command';
 
 /**
+ * TODO [https://www.pivotaltracker.com/story/show/182576828]
  *
  * This is a placeholder. Currently we need to manually register each new
  * command here, but eventually we will have a service that will do this. We should

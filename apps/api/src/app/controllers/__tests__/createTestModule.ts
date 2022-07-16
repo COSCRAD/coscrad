@@ -11,6 +11,7 @@ import { SpatialFeatureQueryService } from '../../../domain/services/query-servi
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { TranscribedAudioQueryService } from '../../../domain/services/query-services/transribed-audio-query.service';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
+import { InternalError } from '../../../lib/errors/InternalError';
 import { IdManagementService } from '../../../lib/id-generation/id-management.service';
 import { MockIdManagementService } from '../../../lib/id-generation/mock-id-management.service';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
@@ -42,8 +43,8 @@ import { TagController } from '../tag.controller';
 export default async (
     configOverrides: Partial<DTO<EnvironmentVariables>>,
     { shouldMockIdGenerator }: { shouldMockIdGenerator: boolean } = { shouldMockIdGenerator: false }
-) =>
-    Test.createTestingModule({
+) => {
+    const testModule = await Test.createTestingModule({
         imports: [CommandModule],
         providers: [
             CommandInfoService,
@@ -200,4 +201,11 @@ export default async (
             CommandController,
             IdGenerationController,
         ],
-    }).compile();
+    })
+        .compile()
+        .catch((error) => {
+            throw new InternalError(error.message);
+        });
+
+    return testModule;
+};
