@@ -1,12 +1,18 @@
 import { isStringWithNonzeroLength } from '@coscrad/validation';
+import { AggregateType } from '../../domain/types/AggregateType';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { InternalError } from '../../lib/errors/InternalError';
 
-type ResourceTypeAndLabel = {
-    [K in ResourceType]: string;
+type AggregateTypeAndLabel = {
+    [K in AggregateType]: string;
 };
 
-const resourceTypeAndLabel: ResourceTypeAndLabel = {
+const resourceTypeAndLabel: AggregateTypeAndLabel = {
+    [AggregateType.note]: 'Note',
+    [AggregateType.category]: 'Category',
+    [AggregateType.tag]: 'Tag',
+    [AggregateType.user]: 'User',
+    [AggregateType.userGroup]: 'User Group',
     [ResourceType.bibliographicReference]: 'BibliographicReference',
     [ResourceType.book]: 'Book',
     [ResourceType.mediaItem]: 'Media Item',
@@ -18,11 +24,11 @@ const resourceTypeAndLabel: ResourceTypeAndLabel = {
     [ResourceType.vocabularyList]: 'Vocabulary List',
 };
 
-export default (resourceType: ResourceType): string => {
-    const label = resourceTypeAndLabel[resourceType];
+export default (aggregateType: AggregateType): string => {
+    const label = resourceTypeAndLabel[aggregateType];
 
     if (!isStringWithNonzeroLength(label)) {
-        throw new InternalError(`Failed to find label for resource type: ${resourceType}`);
+        throw new InternalError(`Failed to find label for resource type: ${aggregateType}`);
     }
 
     return label;

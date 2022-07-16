@@ -12,10 +12,6 @@ import { BaseEvent } from '../events/base-event.entity';
 import { BaseCommandHandler } from './base-command-handler';
 import { ICreateCommand } from './interfaces/create-command.interface';
 
-interface ISimpleWriteRepository<TAggregate extends Aggregate> {
-    create(instance: TAggregate): Promise<void>;
-}
-
 /**
  * Extend this class if you'd like some guidance when implementing a new `CREATE_X`
  * command. This class specialize the `CommandHandlerBase` to the `Create` case.
@@ -27,8 +23,6 @@ export abstract class BaseCreateCommandHandler<
     TAggregate extends Aggregate
 > extends BaseCommandHandler<TAggregate> {
     protected abstract readonly aggregateType: AggregateType;
-
-    protected abstract readonly repositoryForCommandsTargetAggregate: ISimpleWriteRepository<TAggregate>;
 
     protected abstract createNewInstance(command: ICreateCommand): ResultOrError<TAggregate>;
 

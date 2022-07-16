@@ -21,16 +21,8 @@ export class InternalError extends Error {
     constructor(message: string, innerErrors: InternalError[] = []) {
         super(message);
 
-        const invalidInnerErrors = innerErrors.filter((error) => !isError(error));
-
-        if (invalidInnerErrors.length)
-            throw new Error(
-                `One or more of the inner errors provided is not an error: ${JSON.stringify(
-                    invalidInnerErrors
-                )}`
-            );
-
-        this.innerErrors = [...innerErrors];
+        // TODO we should clone this
+        this.innerErrors = innerErrors;
     }
 
     toString(): string {

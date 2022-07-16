@@ -7,6 +7,7 @@ import { ResultOrError } from '../../../../../types/ResultOrError';
 import InvalidCoscradUserGroupDTOError from '../../../../domainModelValidators/errors/InvalidCoscradUserGroupDTOError';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { ValidatesExternalState } from '../../../../interfaces/ValidatesExternalState';
+import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { Aggregate } from '../../../aggregate.entity';
@@ -16,8 +17,9 @@ import idEquals from '../../../shared/functional/idEquals';
 import { UserDoesNotExistError } from '../errors/external-state-errors/UserDoesNotExistError';
 import { UserGroupIdAlreadyInUseError } from '../errors/external-state-errors/UserGroupIdAlreadyInUseError';
 import { UserGroupLabelAlreadyInUseError } from '../errors/external-state-errors/UserGroupLabelAlreadyInUseError';
+import UserIsAlreadyInGroupError from '../errors/invalid-state-transition-errors/UserIsAlreadyInGroupError';
 
-@RegisterIndexScopedCommands(['CREATE_GROUP'])
+@RegisterIndexScopedCommands(['CREATE_USER_GROUP'])
 export class CoscradUserGroup extends Aggregate implements ValidatesExternalState {
     type = AggregateType.userGroup;
 
@@ -50,7 +52,24 @@ export class CoscradUserGroup extends Aggregate implements ValidatesExternalStat
     }
 
     getAvailableCommands(): string[] {
-        return [];
+        return ['ADD_USER_TO_GROUP'];
+    }
+
+    hasUser(userId: AggregateId) {
+        return this.userIds.includes(userId);
+    }
+
+    addUser(newUserId: AggregateId) {
+        if (this.userIds.includes(newUserId)) {
+            // Invalid state transition
+            return new UserIsAlreadyInGroupError(newUserId, this);
+        }
+
+        // ensure new instance does not violate invariants
+        return this.safeClone<CoscradUserGroup>({
+            // userIds are strings so shallow clone is sufficient to avoid shared references
+            userIds: [...this.userIds, newUserId],
+        });
     }
 
     @InvariantValidationMethod(

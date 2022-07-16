@@ -1,7 +1,7 @@
 import { Command } from '@coscrad/commands';
 import { NonEmptyString, UUID } from '@coscrad/data-types';
-import { AggregateId } from '../../../../types/AggregateId';
-import { ICreateCommand } from '../../../shared/command-handlers/interfaces/create-command.interface';
+import { AggregateId } from '../../../../../types/AggregateId';
+import { ICreateCommand } from '../../../../shared/command-handlers/interfaces/create-command.interface';
 
 @Command({
     type: 'CREATE_USER_GROUP',

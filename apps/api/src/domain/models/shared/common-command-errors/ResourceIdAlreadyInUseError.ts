@@ -1,5 +1,5 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
-import formatResourceType from '../../../../view-models/presentation/formatResourceType';
+import formatResourceType from '../../../../view-models/presentation/formatAggregateType';
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 

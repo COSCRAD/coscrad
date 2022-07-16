@@ -1,5 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`command payload schemas The schema for command ADD_USER_TO_GROUP should have the expected value 1`] = `
+Object {
+  "groupId": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "UUID",
+  },
+  "userId": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "UUID",
+  },
+}
+`;
+
 exports[`command payload schemas The schema for command CREATE_MEDIA_ITEM should have the expected value 1`] = `
 Object {
   "contributions": Object {
@@ -114,12 +129,52 @@ Object {
 }
 `;
 
+exports[`command payload schemas The schema for command CREATE_USER_GROUP should have the expected value 1`] = `
+Object {
+  "description": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "UUID",
+  },
+  "label": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
 exports[`command payload schemas The schema for command PUBLISH_SONG should have the expected value 1`] = `
 Object {
   "id": Object {
     "isArray": false,
     "isOptional": false,
     "type": "UUID",
+  },
+}
+`;
+
+exports[`command payload schemas The schema for command REGISTER_USER should have the expected value 1`] = `
+Object {
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "UUID",
+  },
+  "userIdFromAuthProvider": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "username": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
   },
 }
 `;
