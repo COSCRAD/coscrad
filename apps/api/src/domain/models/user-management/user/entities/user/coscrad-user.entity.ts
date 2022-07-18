@@ -10,6 +10,7 @@ import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../../lib/errors/types/ValidationResult';
 import { InvariantValidationMethod } from '../../../../../../lib/web-of-knowledge/decorators/invariant-validation-method.decorator';
 import { DTO } from '../../../../../../types/DTO';
+import { ResultOrError } from '../../../../../../types/ResultOrError';
 import InvalidCoscradUserDTOError from '../../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import { ValidatesExternalState } from '../../../../../interfaces/ValidatesExternalState';
@@ -73,8 +74,19 @@ export class CoscradUser extends Aggregate implements ValidatesExternalState {
         this.authProviderUserId = authProviderUserId;
     }
 
+    grantRole(role: CoscradUserRole): ResultOrError<CoscradUser> {
+        return this.safeClone<CoscradUser>({
+            roles: [...this.roles, role],
+        });
+    }
+
     getAvailableCommands(): string[] {
-        return [];
+        const availableCommands: string[] = [];
+
+        if (this.roles.length < Object.values(CoscradUserRole).length)
+            availableCommands.push('GRANT_USER_ROLE');
+
+        return availableCommands;
     }
 
     @InvariantValidationMethod(
