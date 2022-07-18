@@ -23,6 +23,7 @@ import idEquals from '../../../../shared/functional/idEquals';
 import UserIdAlreadyInUseError from '../../errors/external-state-errors/UserIdAlreadyInUseError';
 import UserIdFromAuthProviderAlreadyInUseError from '../../errors/external-state-errors/UserIdFromAuthProviderAlreadyInUseError';
 import UsernameAlreadyInUseError from '../../errors/external-state-errors/UsernameAlreadyInUseError';
+import UserAlreadyHasRoleError from '../../errors/invalid-state-transition-errors/UserAlreadyHasRoleError';
 import validateCoscradUser from '../../invariant-validation/validateCoscradUser';
 import { CoscradUserProfile } from './coscrad-user-profile.entity';
 
@@ -75,6 +76,8 @@ export class CoscradUser extends Aggregate implements ValidatesExternalState {
     }
 
     grantRole(role: CoscradUserRole): ResultOrError<CoscradUser> {
+        if (this.roles.includes(role)) return new UserAlreadyHasRoleError(this.id, role);
+
         return this.safeClone<CoscradUser>({
             roles: [...this.roles, role],
         });

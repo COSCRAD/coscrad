@@ -39,6 +39,21 @@ const validCommandFSA: FluxStandardAction<GrantUserRole> = {
 const buildInvalidFSA = (id, payloadOverrides) =>
     new DummyCommandFSAFactory(() => validCommandFSA).buildInvalidFSA(id, payloadOverrides);
 
+/**
+ * We dynamically generate one valid case for each `CoscradUserRole`. In order
+ * for this to work, it is necessary that there is no colision between the
+ * new role to add and the initial role(s) of the user. This function allows us
+ * to side-step that.
+ */
+const getDistinctRole = (role: CoscradUserRole): CoscradUserRole => {
+    const allRoles = Object.values(CoscradUserRole);
+
+    const indexOfRole = allRoles.findIndex((roleToTest) => roleToTest === role);
+
+    // Return the next (cyclically) role in the list
+    return allRoles[(indexOfRole + 1) % allRoles.length];
+};
+
 describe('GrantUserRole', () => {
     let app: INestApplication;
 
@@ -104,7 +119,11 @@ describe('GrantUserRole', () => {
                             },
                         }),
                         initialState: buildInMemorySnapshot({
-                            users: [existingUser],
+                            users: [
+                                existingUser.clone({
+                                    roles: [getDistinctRole(role)],
+                                }),
+                            ],
                         }),
                     });
                 });
@@ -125,6 +144,22 @@ describe('GrantUserRole', () => {
                             new AggregateNotFoundError(existingUser.getCompositeIdentifier())
                         );
                     },
+                });
+            });
+        });
+
+        describe('when the user already has the given role', () => {
+            it('should return the appropriate error', async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    buildCommandFSA: () => validCommandFSA,
+                    initialState: buildInMemorySnapshot({
+                        users: [
+                            existingUser.clone({
+                                // the existing user already has the specified role
+                                roles: [validCommandFSA.payload.role],
+                            }),
+                        ],
+                    }),
                 });
             });
         });
