@@ -4,8 +4,10 @@ import { AddUserToGroup } from '../../domain/models/user-management/group/comman
 import { AddUserToGroupCommandHandler } from '../../domain/models/user-management/group/commands/add-user-to-group/add-user-to-group.command-handler';
 import { CreateGroup } from '../../domain/models/user-management/group/commands/create-group/create-group.command';
 import { CreateGroupCommandHandler } from '../../domain/models/user-management/group/commands/create-group/create-group.command-handler';
-import { RegisterUser } from '../../domain/models/user-management/user/commands/register-user.command';
-import { RegisterUserCommandHandler } from '../../domain/models/user-management/user/commands/register-user.command-handler';
+import { GrantUserRole } from '../../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
+import { GrantUserRoleCommandHandler } from '../../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command-handler';
+import { RegisterUser } from '../../domain/models/user-management/user/commands/register-user/register-user.command';
+import { RegisterUserCommandHandler } from '../../domain/models/user-management/user/commands/register-user/register-user.command-handler';
 import { CoscradUserGroupQueryService } from '../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../domain/services/query-services/coscrad-user-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -27,6 +29,8 @@ import { CoscradUserController } from '../controllers/coscrad-user.controller';
         CreateGroupCommandHandler,
         AddUserToGroup,
         AddUserToGroupCommandHandler,
+        GrantUserRole,
+        GrantUserRoleCommandHandler,
     ],
 })
 export class UserManagementModule {}

@@ -10,6 +10,7 @@ import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../../lib/errors/types/ValidationResult';
 import { InvariantValidationMethod } from '../../../../../../lib/web-of-knowledge/decorators/invariant-validation-method.decorator';
 import { DTO } from '../../../../../../types/DTO';
+import { ResultOrError } from '../../../../../../types/ResultOrError';
 import InvalidCoscradUserDTOError from '../../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import { ValidatesExternalState } from '../../../../../interfaces/ValidatesExternalState';
@@ -22,6 +23,7 @@ import idEquals from '../../../../shared/functional/idEquals';
 import UserIdAlreadyInUseError from '../../errors/external-state-errors/UserIdAlreadyInUseError';
 import UserIdFromAuthProviderAlreadyInUseError from '../../errors/external-state-errors/UserIdFromAuthProviderAlreadyInUseError';
 import UsernameAlreadyInUseError from '../../errors/external-state-errors/UsernameAlreadyInUseError';
+import UserAlreadyHasRoleError from '../../errors/invalid-state-transition-errors/UserAlreadyHasRoleError';
 import validateCoscradUser from '../../invariant-validation/validateCoscradUser';
 import { CoscradUserProfile } from './coscrad-user-profile.entity';
 
@@ -73,8 +75,21 @@ export class CoscradUser extends Aggregate implements ValidatesExternalState {
         this.authProviderUserId = authProviderUserId;
     }
 
+    grantRole(role: CoscradUserRole): ResultOrError<CoscradUser> {
+        if (this.roles.includes(role)) return new UserAlreadyHasRoleError(this.id, role);
+
+        return this.safeClone<CoscradUser>({
+            roles: [...this.roles, role],
+        });
+    }
+
     getAvailableCommands(): string[] {
-        return [];
+        const availableCommands: string[] = [];
+
+        if (this.roles.length < Object.values(CoscradUserRole).length)
+            availableCommands.push('GRANT_USER_ROLE');
+
+        return availableCommands;
     }
 
     @InvariantValidationMethod(

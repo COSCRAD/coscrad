@@ -149,6 +149,37 @@ Object {
 }
 `;
 
+exports[`command payload schemas The schema for command GRANT_USER_ROLE should have the expected value 1`] = `
+Object {
+  "role": Object {
+    "enumLabel": "User Role",
+    "enumName": "CoscradUserRole",
+    "isArray": false,
+    "isOptional": false,
+    "labelsAndValues": Array [
+      Object {
+        "label": "admin",
+        "value": "projectAdmin",
+      },
+      Object {
+        "label": "viewer",
+        "value": "viewer",
+      },
+      Object {
+        "label": "COSCRAD admin",
+        "value": "superAdmin",
+      },
+    ],
+    "type": "Enum",
+  },
+  "userId": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "UUID",
+  },
+}
+`;
+
 exports[`command payload schemas The schema for command PUBLISH_SONG should have the expected value 1`] = `
 Object {
   "id": Object {

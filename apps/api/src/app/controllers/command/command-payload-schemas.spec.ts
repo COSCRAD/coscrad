@@ -4,7 +4,8 @@ import { CreateSong } from '../../../domain/models/song/commands/create-song.com
 import { PublishSong } from '../../../domain/models/song/commands/publish-song.command';
 import { AddUserToGroup } from '../../../domain/models/user-management/group/commands/add-user-to-group/add-user-to-group.command';
 import { CreateGroup } from '../../../domain/models/user-management/group/commands/create-group/create-group.command';
-import { RegisterUser } from '../../../domain/models/user-management/user/commands/register-user.command';
+import { GrantUserRole } from '../../../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
+import { RegisterUser } from '../../../domain/models/user-management/user/commands/register-user/register-user.command';
 
 /**
  * TODO [https://www.pivotaltracker.com/story/show/182576828]
@@ -22,6 +23,7 @@ const getAllCommandSchemas = () =>
         ['REGISTER_USER', RegisterUser],
         ['CREATE_USER_GROUP', CreateGroup],
         ['ADD_USER_TO_GROUP', AddUserToGroup],
+        ['GRANT_USER_ROLE', GrantUserRole],
     ].map(([commandType, Ctor]) => [commandType, getCoscradDataSchema(Ctor)]);
 
 describe('command payload schemas', () => {
