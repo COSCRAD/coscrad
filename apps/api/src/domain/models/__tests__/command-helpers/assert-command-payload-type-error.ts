@@ -1,8 +1,8 @@
-import { ICommand } from '@coscrad/commands';
+import { FluxStandardAction, ICommand } from '@coscrad/commands';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import InvalidCommandPayloadTypeError from '../../../models/shared/common-command-errors/InvalidCommandPayloadTypeError';
+import { DummyCommandFSAFactory } from './dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from './types/CommandAssertionDependencies';
-import { InvalidFSAFactoryFunction } from './types/InvalidFSAFactoryFunction';
 
 export const assertCommandPayloadTypeError = (result: unknown, propertyKey: string) => {
     expect(result).toBeInstanceOf(InternalError);
@@ -14,13 +14,20 @@ export const assertCommandPayloadTypeError = (result: unknown, propertyKey: stri
     expect(error.toString().includes(propertyKey)).toBe(true);
 };
 
+type PropertyNameAndInvalidValue = {
+    propertyName: string;
+    invalidValue: unknown;
+};
+
 export const assertCommandFailsDueToTypeError = async (
     { idManager, commandHandlerService }: CommandAssertionDependencies,
-    propertyName: string,
-    invalidValue: unknown,
-    buildInvalidFSA: InvalidFSAFactoryFunction<ICommand>
+    { propertyName, invalidValue }: PropertyNameAndInvalidValue,
+    validCommandFSA: FluxStandardAction<ICommand>
 ) => {
     const validId = await idManager.generate();
+
+    const buildInvalidFSA = (id, payloadOverrides) =>
+        new DummyCommandFSAFactory(() => validCommandFSA).buildInvalidFSA(id, payloadOverrides);
 
     const result = await commandHandlerService.execute(
         buildInvalidFSA(validId, {

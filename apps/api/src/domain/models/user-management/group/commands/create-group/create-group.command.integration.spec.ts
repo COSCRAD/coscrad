@@ -175,9 +175,8 @@ describe('CreateGroup', () => {
                         it('should fail with the appropriate error', async () => {
                             await assertCommandFailsDueToTypeError(
                                 commandAssertionDependencies,
-                                propertyName,
-                                invalidValue,
-                                buildInvalidFSA
+                                { propertyName, invalidValue },
+                                buildValidCommandFSA('unused-id')
                             );
                         });
                     });

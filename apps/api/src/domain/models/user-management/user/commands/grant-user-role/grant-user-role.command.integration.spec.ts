@@ -15,7 +15,6 @@ import CommandExecutionError from '../../../../shared/common-command-errors/Comm
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
-import { DummyCommandFSAFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
@@ -35,9 +34,6 @@ const validCommandFSA: FluxStandardAction<GrantUserRole> = {
         role: CoscradUserRole.projectAdmin,
     },
 };
-
-const buildInvalidFSA = (id, payloadOverrides) =>
-    new DummyCommandFSAFactory(() => validCommandFSA).buildInvalidFSA(id, payloadOverrides);
 
 /**
  * We dynamically generate one valid case for each `CoscradUserRole`. In order
@@ -167,13 +163,12 @@ describe('GrantUserRole', () => {
         describe('when there is a property with an invalid type on the command payload', () => {
             generateCommandFuzzTestCases(GrantUserRole).forEach(
                 ({ description, propertyName, invalidValue }) => {
-                    describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                    describe(`when the property: ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
                         it('should fail with the appropriate error', async () => {
                             await assertCommandFailsDueToTypeError(
                                 commandAssertionDependencies,
-                                propertyName,
-                                invalidValue,
-                                buildInvalidFSA
+                                { propertyName, invalidValue },
+                                validCommandFSA
                             );
                         });
                     });

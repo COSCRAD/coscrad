@@ -186,9 +186,8 @@ describe('AddUserToGroup', () => {
                         it('should fail with the appropriate error', async () => {
                             await assertCommandFailsDueToTypeError(
                                 commandAssertionDependencies,
-                                propertyName,
-                                invalidValue,
-                                buildInvalidFSA
+                                { propertyName, invalidValue },
+                                validCommandFSA
                             );
                         });
                     });
