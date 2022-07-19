@@ -366,6 +366,10 @@
                 "_key": "1",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "term": "Chil-term-1",
                 "termEnglish": "Engl-term-1",
                 "contributorId": "John Doe"
@@ -375,6 +379,10 @@
                 "_key": "2",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "term": "Chil-term-2",
                 "termEnglish": "Engl-term-2",
                 "contributorId": "John Doe"
@@ -384,6 +392,10 @@
                 "_key": "3",
                 "eventHistory": [],
                 "published": false,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "term": "Chil-term-no-english",
                 "contributorId": "Jane Deer"
             }
@@ -394,6 +406,10 @@
                 "_key": "1",
                 "eventHistory": [],
                 "published": false,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "name": "test VL 1 chil",
                 "nameEnglish": "test VL 1 engl",
                 "entries": [
@@ -432,6 +448,10 @@
                 "_key": "2",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "name": "test VL 2 CHIL- no engl name",
                 "entries": [
                     {
@@ -450,6 +470,10 @@
                 "_key": "110",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "audioFilename": "123.mp3",
                 "lengthMilliseconds": 20000,
                 "startMilliseconds": 0,
@@ -475,6 +499,10 @@
                 "_key": "23",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "title": "Three Little Pigs",
                 "subtitle": "The wolf's revenge",
                 "author": "John Doeburg",
@@ -497,6 +525,10 @@
                 "_key": "24",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "title": "An Adventure Story",
                 "author": "Jane Donnaldson",
                 "publicationDate": "2011",
@@ -513,6 +545,10 @@
                 "_key": "25",
                 "eventHistory": [],
                 "published": false,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "title": "An Adventure Story II",
                 "author": "Jane Donnaldson",
                 "publicationDate": "2012",
@@ -531,6 +567,10 @@
                 "_key": "0",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "filename": "cat",
                 "photographer": "Susie McRealart",
                 "dimensions": {
@@ -543,6 +583,10 @@
                 "_key": "1",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "filename": "dog",
                 "photographer": "Robert McRealart",
                 "dimensions": {
@@ -555,6 +599,10 @@
                 "_key": "2",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "filename": "wildflower",
                 "photographer": "Kenny Tree-Huggens",
                 "dimensions": {
@@ -569,6 +617,10 @@
                 "_key": "100",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
@@ -582,6 +634,10 @@
                 "_key": "101",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
@@ -595,6 +651,10 @@
                 "_key": "102",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
@@ -608,6 +668,10 @@
                 "_key": "1",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "geometry": {
                     "type": "LineString",
                     "coordinates": [
@@ -635,6 +699,10 @@
                 "_key": "300",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "geometry": {
                     "type": "Polygon",
                     "coordinates": [
@@ -670,6 +738,10 @@
                 "_key": "1",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "data": {
                     "type": "book",
                     "title": "A Day in the Life",
@@ -693,6 +765,10 @@
                 "_key": "23",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "data": {
                     "type": "journalArticle",
                     "title": "Report on the Cariboo Chilcotin Justice inquiry",
@@ -718,6 +794,10 @@
                 "_key": "1",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "title": "Song title in language",
                 "titleEnglish": "Mary had a little lamb",
                 "contributions": [
@@ -736,6 +816,10 @@
                 "_key": "2",
                 "eventHistory": [],
                 "published": false,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "title": "Unpublished Song Title (lang)",
                 "titleEnglish": "Unpublished Song Title (Engl)",
                 "contributions": [
@@ -756,6 +840,10 @@
                 "_key": "1",
                 "eventHistory": [],
                 "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
                 "title": "episode title (in language)",
                 "titleEnglish": "Metal Mondays episode 1",
                 "contributorAndRoles": [
