@@ -1,6 +1,5 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import IsPublished from '../../../domain/repositories/specifications/isPublished';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { VocabularyListViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
@@ -29,6 +28,6 @@ export class VocabularyListController {
     async fetchMany() {
         // TODO Eventually, we'll want to build the filter spec based on the user's role \ context
 
-        return this.vocabularyListQueryService.fetchMany(new IsPublished(true));
+        return this.vocabularyListQueryService.fetchMany();
     }
 }
