@@ -1,5 +1,4 @@
 /*
-
 https://www.tsilhqotin.ca/wp-content/uploads/2020/12/IMG_2516-scaled-e1607038804272.jpg
 https://www.tsilhqotin.ca/wp-content/uploads/2020/12/tsilhqotin_fire-scaled.jpg
 https://www.tsilhqotin.ca/wp-content/uploads/2020/11/cropped-tsilhqotin_horse-scaled-2.jpg
@@ -12,59 +11,21 @@ html {
     margin: 0 !important;
     background-position: center;
     background-size: 100vw !important;
-    background-image: linear-gradient(
-            112.5deg,
-            rgb(214, 214, 214) 0%,
-            rgb(214, 214, 214) 10%,
-            rgb(195, 195, 195) 10%,
-            rgb(195, 195, 195) 53%,
-            rgb(176, 176, 176) 53%,
-            rgb(176, 176, 176) 55%,
-            rgb(157, 157, 157) 55%,
-            rgb(157, 157, 157) 60%,
-            rgb(137, 137, 137) 60%,
-            rgb(137, 137, 137) 88%,
-            rgb(118, 118, 118) 88%,
-            rgb(118, 118, 118) 91%,
-            rgb(99, 99, 99) 91%,
-            rgb(99, 99, 99) 100%
+    background-image: repeating-linear-gradient(
+            284deg,
+            transparent 0px,
+            transparent 1px,
+            rgb(251, 251, 251) 1px,
+            rgb(251, 251, 251) 3px
         ),
-        linear-gradient(
-            157.5deg,
-            rgb(214, 214, 214) 0%,
-            rgb(214, 214, 214) 10%,
-            rgb(195, 195, 195) 10%,
-            rgb(195, 195, 195) 53%,
-            rgb(176, 176, 176) 53%,
-            rgb(176, 176, 176) 55%,
-            rgb(157, 157, 157) 55%,
-            rgb(157, 157, 157) 60%,
-            rgb(137, 137, 137) 60%,
-            rgb(137, 137, 137) 88%,
-            rgb(118, 118, 118) 88%,
-            rgb(118, 118, 118) 91%,
-            rgb(99, 99, 99) 91%,
-            rgb(99, 99, 99) 100%
+        repeating-linear-gradient(
+            14deg,
+            transparent 0px,
+            transparent 1px,
+            rgb(251, 251, 251) 1px,
+            rgb(251, 251, 251) 3px
         ),
-        linear-gradient(
-            135deg,
-            rgb(214, 214, 214) 0%,
-            rgb(214, 214, 214) 10%,
-            rgb(195, 195, 195) 10%,
-            rgb(195, 195, 195) 53%,
-            rgb(176, 176, 176) 53%,
-            rgb(176, 176, 176) 55%,
-            rgb(157, 157, 157) 55%,
-            rgb(157, 157, 157) 60%,
-            rgb(137, 137, 137) 60%,
-            rgb(137, 137, 137) 88%,
-            rgb(118, 118, 118) 88%,
-            rgb(118, 118, 118) 91%,
-            rgb(99, 99, 99) 91%,
-            rgb(99, 99, 99) 100%
-        ),
-        linear-gradient(90deg, rgb(195, 195, 195), rgb(228, 228, 228));
-    background-blend-mode: overlay, overlay, overlay, normal;
+        linear-gradient(90deg, rgb(222, 222, 222), rgb(222, 222, 222));
 }
 
 .logo {
@@ -107,7 +68,9 @@ a {
 }
 
 .midDiv {
-    background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg');
+    /* background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg');
+   */
+    background-image: linear-gradient(3deg, rgb(249, 144, 110), rgb(225, 14, 225));
     height: 100vh;
     background-position: center;
 }
@@ -210,7 +173,7 @@ a {
     }
 
     .title {
-        font-size: 4vh !important;
+        font-size: 5vh !important;
     }
 }
 
@@ -418,7 +381,7 @@ a {
     width: 100%;
     background: url(https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg)
         no-repeat center center;
-    background-position: no-repeat center center fixed;
+    background-position: 100% 30%;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -427,11 +390,11 @@ a {
 }
 
 .page {
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh - 96px);
 }
 
 .backdrop {
-    background: rgba(18, 10, 86, 0.5) !important;
+    background: rgba(18, 10, 86, 0.3) !important;
     height: calc(100vh - 95px) !important;
 }
 
@@ -439,16 +402,87 @@ a {
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 30px;
+    padding-top: 30px;
+    margin-left: 40px;
+    margin-right: 40px;
+    min-height: calc(100vh - 300px);
 }
 
 #pageTitle {
     text-align: center;
     padding-bottom: 35px;
     padding-top: 50px;
+    background: rgba(18, 10, 86, 0.3);
 }
 
 .appCard {
     width: 350px;
     text-align: center;
     margin: auto;
+}
+
+h3 {
+    color: rgb(72, 72, 72);
+}
+h2 {
+    text-align: center;
+}
+
+.flex-container {
+    display: flex !important;
+    height: 100vh;
+    background-image: linear-gradient(3deg, rgb(122, 110, 249), rgb(225, 14, 225)) !important;
+}
+
+.flex-child1 {
+    width: 50vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-child2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex: 1;
+}
+
+.button:hover {
+    background-color: rgba(255, 255, 255, 0.145) !important;
+    border-color: #ffffff !important;
+}
+
+.download {
+    font-size: 4vw !important;
+}
+
+.pageContent p h1 h2 h3 a {
+    color: rgb(0, 0, 0) !important;
+}
+
+.downloadApp {
+    font-size: 1.6;
+    padding: 0;
+}
+
+@media only screen and (max-width: 800px) {
+    .flex-child1,
+    .flex-child2 {
+        width: 100vw;
+        height: 50vh !important;
+        flex-wrap: wrap !important;
+    }
+    .flex-child2 {
+        position: absolute !important;
+    }
+    .flex-container {
+        display: inline !important;
+        float: left !important;
+    }
+}
+
+.language {
+    color: #000000c6;
 }

@@ -1,8 +1,8 @@
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import './Home.module.css';
 
-function App() {
+function App(): JSX.Element {
     return (
         <Typography className="page" component={'span'} variant={'body2'}>
             <div className="Home">
@@ -19,11 +19,29 @@ function App() {
                         </div>
                     </div>
                 </div>
-                {/*
-                                <div id="mid" className="midDiv"></div>
-                <div id="bottom" className="bottomDiv"></div>
-                
-                */}
+
+                <div className="flex-container">
+                    <div className="flex-child1">Cell Phone Image</div>
+
+                    <div className="flex-child2">
+                        <div style={{ width: '60%', textAlign: 'center' }}>
+                            <h1 className="download">DOWNLOAD</h1>
+                            <h2 className="downloadApp">Tsilhqot'in Digital Phrasebook</h2>
+                            <br />
+                            <p>
+                                The Tsilhqot'in Digital Phrasebook contains over 10,000 Tsilhqot'in
+                                terms and 1,000 Paradigms/Vocabulary Lists
+                            </p>
+                            <br />
+                            <Button className="button" variant="outlined">
+                                APP STORE
+                            </Button>
+                            <Button className="button" variant="outlined">
+                                PLAY STORE
+                            </Button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </Typography>
     );

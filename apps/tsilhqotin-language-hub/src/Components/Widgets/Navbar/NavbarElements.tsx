@@ -86,6 +86,8 @@ export const Bars = styled(MenuIcon)`
 
 export const NavMenu = styled.div`
     display: flex;
+    font-family: inherit;
+    padding: 0px;
     align-items: center;
     margin-right: -24px;
     /* Second Nav */
@@ -101,6 +103,7 @@ export const NavMenu = styled.div`
 export const NavBtn = styled.nav`
     display: flex;
     align-items: center;
+
     margin-right: 24px;
     /* Third Nav */
     /* justify-content: flex-end;
