@@ -3,10 +3,10 @@ import { AggregateId } from '../../../types/AggregateId';
 
 export class DummyCommandFSAFactory<T extends ICommand> {
     // TODO make building a valid FSA the responsibility of this class as well
-    constructor(private readonly buildValidFSA: (id: AggregateId) => FluxStandardAction<T>) {}
+    constructor(private readonly buildValidFSA: (id?: AggregateId) => FluxStandardAction<T>) {}
 
-    buildInvalidFSA(
-        id: AggregateId,
+    build(
+        id?: AggregateId,
         payloadOverrides: Partial<Record<keyof T, unknown>> = {}
     ): FluxStandardAction<T> {
         const { type, payload: validPayload } = this.buildValidFSA(id);
