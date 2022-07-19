@@ -1,5 +1,4 @@
 import { Card, Divider } from '@mui/material';
-import './Funders.module.css';
 
 /* eslint-disable-next-line */
 export interface FundersProps {}

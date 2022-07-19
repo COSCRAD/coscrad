@@ -2,7 +2,7 @@ import { Card } from '@mui/material';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { getConfig } from '../../../config';
-import './Videos.module.css';
+import './MediaViewModel.module.css';
 
 export type MediaData = {
     id: string;
@@ -22,13 +22,12 @@ type ComponentState = {
 };
 
 /* eslint-disable-next-line */
-export interface VideosProps {
+export interface MediaViewModelProps {
     mediaData?: MediaData;
 }
 
-export function Videos(props: VideosProps) {
+export function MediaViewModel(props: MediaViewModelProps) {
     const [appState, setAppState] = useState<ComponentState>({
-        //  loading: false,
         mediaItems: [],
         searchContext: 'title',
     });
@@ -99,4 +98,4 @@ export function Videos(props: VideosProps) {
     );
 }
 
-export default Videos;
+export default MediaViewModel;

@@ -25,15 +25,12 @@ type ComponentState = {
 const getData = async (endpoint: string) => fetch(endpoint).then((response) => response.json());
 
 /* eslint-disable-next-line */
-export interface SongIndexProps {
+export interface SongViewModelProps {
     songData?: SongData;
 }
 
-export function SongListIndex(props: SongIndexProps) {
-    const { songData } = props;
-
+export function SongViewModel(props: SongViewModelProps) {
     const [appState, setAppState] = useState<ComponentState>({
-        //  loading: false,
         songs: [],
         searchContext: 'title',
     });
@@ -53,15 +50,12 @@ export function SongListIndex(props: SongIndexProps) {
             .catch((rej) => console.log(rej));
     }, [setAppState]);
 
-    // if (!appState.vocabularyLists || appState.vocabularyLists === []) return <Loading />
-
     const rows: GridRowsProp = searchResults.selectedSongs
         .map((result) => result.data)
         .map((song) => ({
             title: song.title,
             titleEnglish: song.titleEnglish,
             id: song.id,
-            //  name: vocabularyList.name
         }));
 
     const columns: GridColDef[] = [
@@ -113,12 +107,12 @@ export function SongListIndex(props: SongIndexProps) {
     );
 }
 
-export default SongListIndex;
+export default SongViewModel;
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: 'rgb(168,4,4)', // main color
+            main: 'rgb(168,4,4)',
         },
     },
 });

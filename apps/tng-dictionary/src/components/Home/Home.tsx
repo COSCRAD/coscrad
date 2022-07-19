@@ -4,22 +4,10 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import { Button } from '@mui/material';
 import { motion } from 'framer-motion';
-import * as React from 'react';
 import { Link } from 'react-router-dom';
 import './Home.module.css';
 
-/* eslint-disable-next-line */
-export interface HomeProps {}
-
-export function Home(props: HomeProps) {
-    const [open, setOpen] = React.useState(true);
-    const handleClose = () => {
-        setOpen(false);
-    };
-    const handleToggle = () => {
-        setOpen(!false);
-    };
-
+export function Home() {
     return (
         <div className="homeScreen">
             <motion.div

@@ -1,9 +1,9 @@
 import './SongDetail.module.css';
 
 /* eslint-disable-next-line */
-export interface SongDetailProps {}
+export interface SongViewModel {}
 
-export function SongDetail(_props: SongDetailProps) {
+export function SongDetail(_props: SongViewModel) {
     return (
         <div>
             {/*

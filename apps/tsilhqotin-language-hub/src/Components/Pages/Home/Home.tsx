@@ -19,17 +19,6 @@ function App(): JSX.Element {
                         </div>
                     </div>
                 </div>
-                {/*
-                                <div id="mid" className="midDiv"></div>
-                <div id="bottom" className="bottomDiv"></div>
-                                <div id="mid" className="midDiv">
-                    <div>CELLPHONE IMAGE</div>
-                    <div>
-                        <h1 style={{ color: 'white', fontSize: '8vw', margin: 0 }}>DOWNLOAD</h1>{' '}
-                        <br /> <h1 style={{ color: 'white', margin: 0 }}>OUR APP</h1>
-                    </div>
-                </div>
-                */}
 
                 <div className="flex-container">
                     <div className="flex-child1">Cell Phone Image</div>

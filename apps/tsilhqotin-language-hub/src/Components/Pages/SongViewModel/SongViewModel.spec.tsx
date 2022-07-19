@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import Songs from './Songs';
+import Songs from './SongViewModel';
 
 describe('Songs', () => {
     it('should render successfully', () => {
