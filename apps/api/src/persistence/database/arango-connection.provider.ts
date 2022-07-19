@@ -56,6 +56,9 @@ export class ArangoConnectionProvider {
             ),
         });
 
+        const dbconfig = this.databaseConfiguration;
+        console.log({ dbconfig });
+
         const systemDB = this.#getAdminDBConnection({
             shouldConnectToSystemDatabase: true,
         });
