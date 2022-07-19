@@ -1,6 +1,5 @@
 import { Controller, Get, Param, Res, UseFilters } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import IsPublished from '../../../domain/repositories/specifications/isPublished';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { MediaItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
@@ -30,6 +29,6 @@ export class MediaItemController {
     @Get('')
     async fetchMany() {
         // TODO Eventually, we'll want to build the filter spec based on the user's role \ context
-        return this.mediaItemQueryService.fetchMany(new IsPublished(true));
+        return this.mediaItemQueryService.fetchMany();
     }
 }
