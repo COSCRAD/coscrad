@@ -41,7 +41,7 @@ const initialState = buildEmptyInMemorySnapshot();
 
 const fsaFactory = new DummyCommandFSAFactory<CreateGroup>(buildValidCommandFSA);
 
-const buildInvalidFSA = (id, payloadOverrides) => fsaFactory.buildInvalidFSA(id, payloadOverrides);
+const buildInvalidFSA = (id, payloadOverrides) => fsaFactory.build(id, payloadOverrides);
 
 const existingUserGroupDto: DTO<CoscradUserGroup> = {
     type: AggregateType.userGroup,
