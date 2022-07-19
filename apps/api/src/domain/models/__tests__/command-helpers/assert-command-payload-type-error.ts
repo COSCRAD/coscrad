@@ -27,7 +27,7 @@ export const assertCommandFailsDueToTypeError = async (
     const validId = await idManager.generate();
 
     const buildInvalidFSA = (id, payloadOverrides) =>
-        new DummyCommandFSAFactory(() => validCommandFSA).buildInvalidFSA(id, payloadOverrides);
+        new DummyCommandFSAFactory(() => validCommandFSA).build(id, payloadOverrides);
 
     const result = await commandHandlerService.execute(
         buildInvalidFSA(validId, {

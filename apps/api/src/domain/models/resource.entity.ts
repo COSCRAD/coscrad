@@ -6,6 +6,7 @@ import { ResultOrError } from '../../types/ResultOrError';
 import formatResourceCompositeIdentifier from '../../view-models/presentation/formatAggregateCompositeIdentifier';
 import DisallowedContextTypeForResourceError from '../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';
 import { Valid } from '../domainModelValidators/Valid';
+import { AggregateId } from '../types/AggregateId';
 import { HasAggregateId } from '../types/HasAggregateId';
 import { ResourceCompositeIdentifier } from '../types/ResourceCompositeIdentifier';
 import { ResourceType } from '../types/ResourceType';
@@ -14,6 +15,7 @@ import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedFo
 import { EdgeConnectionContext } from './context/context.entity';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
 import { AccessControlList } from './shared/access-control/access-control-list.entity';
+import UserAlreadyHasReadAccessError from './shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
 
 export abstract class Resource extends Aggregate implements HasAggregateId {
     readonly type: ResourceType;
@@ -44,6 +46,15 @@ export abstract class Resource extends Aggregate implements HasAggregateId {
         type: this.type,
         id: this.id,
     });
+
+    grantReadAccessToUser<T extends Resource>(this: T, userId: AggregateId): ResultOrError<T> {
+        if (this.queryAccessControlList.canUser(userId))
+            return new UserAlreadyHasReadAccessError(userId, this.getCompositeIdentifier());
+
+        return this.safeClone({
+            queryAccessControlList: this.queryAccessControlList.allowUser(userId),
+        } as DeepPartial<DTO<T>>);
+    }
 
     publish<T extends Resource>(this: T): ResultOrError<T> {
         if (this.published)

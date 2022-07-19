@@ -33,7 +33,7 @@ export class Point extends Resource implements ISpatialFeature {
 
     validateInvariants(): ResultOrError<Valid> {
         // TODO breakout the individual type validators into each class
-        return geometricFeatureValidator(this);
+        return geometricFeatureValidator(this.geometry);
     }
 
     getAvailableCommands(): string[] {

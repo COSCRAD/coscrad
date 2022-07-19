@@ -37,9 +37,9 @@ export class AccessControlList extends BaseDomainModel {
             throw new InternalError(`The user with ID: ${userId} is already allowed`);
         }
 
-        this.allowedUserIds.push(userId);
-
-        return this;
+        return this.clone<AccessControlList>({
+            allowedUserIds: [...this.allowedUserIds, userId],
+        });
     }
 
     allowGroup(groupId: AggregateId): AccessControlList {
@@ -47,9 +47,9 @@ export class AccessControlList extends BaseDomainModel {
             throw new InternalError(`The group with ID: ${groupId} is already allowed`);
         }
 
-        this.allowedGroupIds.push(groupId);
-
-        return this;
+        return this.clone<AccessControlList>({
+            allowedGroupIds: [...this.allowedGroupIds, groupId],
+        });
     }
 
     canUser(userId: AggregateId) {
