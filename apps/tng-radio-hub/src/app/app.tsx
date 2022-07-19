@@ -14,7 +14,7 @@ export function App() {
             <Route path="/about" element={<About />} />
             <Route path="/stream" element={<Stream />} />
             <Route path="/links" element={<Links />} />
-            <Route path="/contactUs" element={<Contact />} />
+            <Route path="/Contact" element={<Contact />} />
             <Route path="/funders" element={<Funders />} />
             </Routes>
     );
