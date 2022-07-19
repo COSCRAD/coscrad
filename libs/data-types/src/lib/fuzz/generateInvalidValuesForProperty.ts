@@ -26,6 +26,7 @@ const fuzzData = {
     uuid: `249d797b-1f18-49d3-8de0-9e338783306b`,
     null: null,
     undefined: undefined,
+    compositeIdentifier: { type: 'widget', id: '123' },
 } as const;
 
 type FuzzDataType = keyof typeof fuzzData;
@@ -36,9 +37,32 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.NonEmptyString]: ['url', 'randomString', 'uuid'],
     [CoscradDataType.Enum]: [],
     [CoscradDataType.NonNegativeFiniteNumber]: ['positiveInteger', 'positiveDecimal'],
-    [CoscradDataType.RawData]: ['shallowObject', 'deeplyNestedObject'],
+    [CoscradDataType.RawData]: ['shallowObject', 'deeplyNestedObject', 'compositeIdentifier'],
     [CoscradDataType.URL]: ['url'],
     [CoscradDataType.UUID]: ['uuid'],
+    [CoscradDataType.CompositeIdentifier]: ['compositeIdentifier'],
+};
+
+export const generateValidValuesOfType = ({
+    type,
+    isArray,
+    isOptional,
+}: CoscradDataSchema): unknown[] => {
+    const validValues = dataTypeToValidFuzz[type];
+
+    if (!Array.isArray(validValues)) {
+        throw new FailedToGenerateFuzzForUnsupportedDataTypeException(type);
+    }
+
+    if (isOptional) validValues.push(null, undefined);
+
+    if (isArray) {
+        const numberOfElementsInEachArray = 7;
+
+        return validValues.map((value) => Array(numberOfElementsInEachArray).fill(value));
+    }
+
+    return validValues;
 };
 
 export default ({ type, isArray, isOptional }: CoscradDataSchema): ValueAndDescription[] => {

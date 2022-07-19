@@ -1,5 +1,4 @@
 import { Ack, ICommand, ICommandHandler } from '@coscrad/commands';
-import { buildSimpleValidationFunction } from '@coscrad/validation';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
@@ -10,7 +9,7 @@ import { IRepositoryForAggregate } from '../../../repositories/interfaces/reposi
 import { InMemorySnapshot } from '../../../types/ResourceType';
 import { Aggregate } from '../../aggregate.entity';
 import CommandExecutionError from '../common-command-errors/CommandExecutionError';
-import InvalidCommandPayloadTypeError from '../common-command-errors/InvalidCommandPayloadTypeError';
+import validateCommandPayloadType from './utilities/validateCommandPayloadType';
 
 const buildExecutionError = (allErrors: InternalError[]) => new CommandExecutionError(allErrors);
 
@@ -23,19 +22,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
     ) {}
 
     protected validateType(command: ICommand, commandType: string): Valid | InternalError {
-        // Validate command type
-        const payloadTypeErrors = buildSimpleValidationFunction(
-            Object.getPrototypeOf(command).constructor
-        )(command).map(
-            (simpleError) => new InternalError(`invalid payload type: ${simpleError.toString()}`)
-        );
-
-        if (payloadTypeErrors.length > 0) {
-            // TODO PAss through the command type
-            return new InvalidCommandPayloadTypeError(commandType, payloadTypeErrors);
-        }
-
-        return Valid;
+        return validateCommandPayloadType(command, commandType);
     }
 
     protected abstract createOrFetchWriteContext(

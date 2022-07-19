@@ -55,7 +55,7 @@ const validCommandFSA = {
 const buildValidCommandFSA = (): FluxStandardAction<DTO<AddUserToGroup>> => validCommandFSA;
 
 const buildInvalidFSA = (id, payloadOverrides) =>
-    new DummyCommandFSAFactory(buildValidCommandFSA).buildInvalidFSA(id, payloadOverrides);
+    new DummyCommandFSAFactory(buildValidCommandFSA).build(id, payloadOverrides);
 
 describe('AddUserToGroup', () => {
     let app: INestApplication;
