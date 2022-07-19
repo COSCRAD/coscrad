@@ -13,6 +13,7 @@ import { Aggregate } from './aggregate.entity';
 import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedForGivenResourceType';
 import { EdgeConnectionContext } from './context/context.entity';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
+import { AccessControlList } from './shared/access-control/access-control-list.entity';
 
 export abstract class Resource extends Aggregate implements HasAggregateId {
     readonly type: ResourceType;
@@ -20,13 +21,23 @@ export abstract class Resource extends Aggregate implements HasAggregateId {
     // TODO: Rename this 'isPublished' - db migration
     readonly published: boolean;
 
+    /**
+     * TODO We need a migration to make the acl required. We'll also need to
+     * populate this on all test data.
+     */
+    readonly queryAccessControlList?: AccessControlList;
+
     constructor(dto: DTO<Resource>) {
         super(dto);
 
         // This should only happen in the validation flow
         if (!dto) return;
 
-        this.published = typeof dto.published === 'boolean' ? dto.published : false;
+        const { published, queryAccessControlList: aclDto } = dto;
+
+        this.published = typeof published === 'boolean' ? published : false;
+
+        this.queryAccessControlList = new AccessControlList(aclDto);
     }
 
     override getCompositeIdentifier = (): ResourceCompositeIdentifier => ({

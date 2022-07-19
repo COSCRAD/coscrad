@@ -1,9 +1,12 @@
 import { MediaItem } from '@coscrad/api-interfaces';
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, Request, Response, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { OptionalJwtAuthGuard } from '../authorization/optional-jwt-auth-guard';
+import { CoscradUserWithGroups } from '../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { NotFound } from '../lib/types/not-found';
 import { AppService } from './app.service';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
+import sendInternalResultAsHttpResponse from './controllers/resources/common/sendInternalResultAsHttpResponse';
 import { Message } from './message.entity';
 
 /**
@@ -19,9 +22,13 @@ export class AppController {
     ) {}
 
     @ApiBearerAuth('JWT')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(OptionalJwtAuthGuard)
     @Get('hello')
-    getData(@Request() req): MediaItem {
+    getData(@Request() req, @Response() res): MediaItem {
+        if (!(req.user instanceof CoscradUserWithGroups)) {
+            return sendInternalResultAsHttpResponse(res, NotFound);
+        }
+
         return req.user.toDTO();
     }
 
