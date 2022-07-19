@@ -1,5 +1,7 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
+import { GrantResourceReadAccessToUser } from '../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
+import { GrantResourceReadAccessToUserCommandHandler } from '../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
 import { AddUserToGroup } from '../../domain/models/user-management/group/commands/add-user-to-group/add-user-to-group.command';
 import { AddUserToGroupCommandHandler } from '../../domain/models/user-management/group/commands/add-user-to-group/add-user-to-group.command-handler';
 import { CreateGroup } from '../../domain/models/user-management/group/commands/create-group/create-group.command';
@@ -31,6 +33,9 @@ import { CoscradUserController } from '../controllers/coscrad-user.controller';
         AddUserToGroupCommandHandler,
         GrantUserRole,
         GrantUserRoleCommandHandler,
+        // We include this command here for lack of a better place
+        GrantResourceReadAccessToUser,
+        GrantResourceReadAccessToUserCommandHandler,
     ],
 })
 export class UserManagementModule {}
