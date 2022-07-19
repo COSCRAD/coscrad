@@ -1,5 +1,4 @@
-import { Divider } from '@mui/material';
-import './Funders.module.css';
+import { Card, Divider } from '@mui/material';
 
 /* eslint-disable-next-line */
 export interface FundersProps {}
@@ -12,8 +11,8 @@ export function Funders(props: FundersProps) {
                     <h1 id="pageTitle">Funders</h1>
                 </div>
             </div>
-            <div className="pageContent">
-                <h2 style={{ textAlign: 'center' }}>Language Program</h2>
+            <Card className="pageContent">
+                <h2 className="language">Language Program</h2>
                 <Divider />
 
                 <h3>National Research Council</h3>
@@ -33,7 +32,7 @@ export function Funders(props: FundersProps) {
                     </a>
                 </p>
 
-                <h2 style={{ textAlign: 'center' }}>Community Radio Project</h2>
+                <h2 className="language">Community Radio Project</h2>
                 <Divider />
 
                 <h3>Northern Aboriginal Broadcasting</h3>
@@ -107,7 +106,7 @@ export function Funders(props: FundersProps) {
                         2017-2018.
                     </a>
                 </p>
-            </div>
+            </Card>
         </div>
     );
 }
