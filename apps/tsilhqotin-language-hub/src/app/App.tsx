@@ -6,9 +6,9 @@ import Funders from '../Components/Pages/Funders/Funders';
 import Greetings from '../Components/Pages/Greetings/Greetings';
 import Home from '../Components/Pages/Home/Home';
 import Links from '../Components/Pages/Links/Links';
-import Songs from '../Components/Pages/Songs/Songs';
+import Videos from '../Components/Pages/MediaViewModel/MediaViewModel';
+import Songs from '../Components/Pages/SongViewModel/SongViewModel';
 import Teachers from '../Components/Pages/Teachers/Teachers';
-import Videos from '../Components/Pages/Videos/Videos';
 import Navbar from '../Components/Widgets/Navbar/Navbar';
 
 export function App() {

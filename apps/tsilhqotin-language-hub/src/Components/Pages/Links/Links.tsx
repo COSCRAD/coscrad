@@ -1,4 +1,4 @@
-import { Divider } from '@mui/material';
+import { Card, Divider } from '@mui/material';
 import './Links.module.css';
 
 /* eslint-disable-next-line */
@@ -12,7 +12,7 @@ export function Links(props: LinksProps) {
                     <h1 id="pageTitle">Links</h1>
                 </div>
             </div>
-            <div className="pageContent">
+            <Card className="pageContent">
                 <h2>Tŝilhqot’in National Government</h2>
                 <p>
                     This website is an undertaking of the{' '}
@@ -118,7 +118,7 @@ export function Links(props: LinksProps) {
                     </a>
                     , a really cool tool that can be used to batch convert documents to Unicode.
                 </p>
-            </div>
+            </Card>
         </div>
     );
 }
