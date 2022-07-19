@@ -1,6 +1,5 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import IsPublished from '../../../domain/repositories/specifications/isPublished';
 import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { SpatialFeatureViewModel } from '../../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
@@ -29,6 +28,6 @@ export class SpatialFeatureController {
     async fetchMany() {
         // TODO Eventually, we'll want to build the filter spec based on the user's role \ context
 
-        return this.spatialFeatureQueryService.fetchMany(new IsPublished(true));
+        return this.spatialFeatureQueryService.fetchMany();
     }
 }

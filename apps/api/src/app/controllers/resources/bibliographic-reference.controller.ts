@@ -1,6 +1,5 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import IsPublished from '../../../domain/repositories/specifications/isPublished';
 import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
@@ -32,6 +31,6 @@ export class BibliographicReferenceController {
     @Get('')
     async fetchMany() {
         // TODO Eventually, we'll want to build the filter spec based on the user's role \ context
-        return this.bibliographicReferenceQueryService.fetchMany(new IsPublished(true));
+        return this.bibliographicReferenceQueryService.fetchMany();
     }
 }

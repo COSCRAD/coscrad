@@ -1,3 +1,4 @@
+import { CoscradUserRole } from '@coscrad/data-types';
 import { Inject } from '@nestjs/common';
 import {
     CommandInfo,
@@ -13,13 +14,14 @@ import { TagViewModel } from '../../../view-models/buildViewModelForResource/vie
 import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
 import formatResourceType from '../../../view-models/presentation/formatAggregateType';
 import { Resource } from '../../models/resource.entity';
+import { validAggregateOrThrow } from '../../models/shared/functional';
 import { Tag } from '../../models/tag/tag.entity';
+import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { ISpecification } from '../../repositories/interfaces/specification.interface';
 import { AggregateId, isAggregateId } from '../../types/AggregateId';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import buildInMemorySnapshot from '../../utilities/buildInMemorySnapshot';
-import { GeneralQueryOptions } from './types/GeneralQueryOptions';
-import getDefaultQueryOptions from './utilities/getDefaultQueryOptions';
+import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
 
 export type AggregateByIdQueryResult<UViewModel extends BaseViewModel> = {
     data: UViewModel;
@@ -32,6 +34,32 @@ export type AggregateIndexQueryResult<UViewModel extends BaseViewModel> = {
 };
 
 type ViewModelWithTags<T> = T & { tags: TagViewModel[] };
+
+type ResourceFilter = (resource: Resource) => boolean;
+
+const buildAccessFilter = (userWithGroups?: CoscradUserWithGroups): ResourceFilter => {
+    if (isNullOrUndefined(userWithGroups)) return (resource: Resource) => resource.published;
+
+    if (!(userWithGroups instanceof CoscradUserWithGroups)) {
+        throw new InternalError(`Invalid user with groups encountered: ${userWithGroups}`);
+    }
+
+    const { roles } = userWithGroups;
+
+    if (!roles) {
+        throw new InternalError(`Invalid user with groups encountered: ${userWithGroups.toDTO()}`);
+    }
+
+    return userWithGroups.roles.includes(CoscradUserRole.projectAdmin) ||
+        userWithGroups.roles.includes(CoscradUserRole.superAdmin)
+        ? (_: Resource) => true
+        : (resource: Resource) =>
+              resource.published ||
+              resource.queryAccessControlList.canUser(userWithGroups.id) ||
+              userWithGroups.groups.some(({ id: groupId }) =>
+                  resource.queryAccessControlList.canGroup(groupId)
+              );
+};
 
 export abstract class BaseQueryService<
     TDomainModel extends Resource,
@@ -65,7 +93,7 @@ export abstract class BaseQueryService<
     }
 
     protected fetchManyDomainModels(
-        specification: ISpecification<TDomainModel>
+        specification?: ISpecification<TDomainModel>
     ): Promise<ResultOrError<TDomainModel>[]> {
         return this.repositoryProvider
             .forResource<TDomainModel>(this.type)
@@ -81,17 +109,12 @@ export abstract class BaseQueryService<
 
     public async fetchById(
         id: unknown,
-        userOptions: Partial<GeneralQueryOptions> = {}
+        userWithGroups?: CoscradUserWithGroups
     ): Promise<ResultOrError<Maybe<AggregateByIdQueryResult<ViewModelWithTags<UViewModel>>>>> {
         if (!isAggregateId(id))
             return new InternalError(
                 `Invalid id: ${id} for resource of type: ${formatResourceType(this.type)}`
             );
-
-        const { shouldReturnUnpublishedEntities } = {
-            ...getDefaultQueryOptions(),
-            ...userOptions,
-        };
 
         const externalState = await this.fetchRequiredExternalState();
 
@@ -104,7 +127,9 @@ export abstract class BaseQueryService<
 
         if (isNotFound(domainModelSearchResult)) return NotFound;
 
-        if (!shouldReturnUnpublishedEntities && !domainModelSearchResult.published) return NotFound;
+        const isResourceAvailableToUser = buildAccessFilter(userWithGroups);
+
+        if (!isResourceAvailableToUser(domainModelSearchResult)) return NotFound;
 
         const viewModel = this.buildViewModel(domainModelSearchResult, externalState);
 
@@ -123,15 +148,17 @@ export abstract class BaseQueryService<
     }
 
     public async fetchMany(
-        specification: ISpecification<TDomainModel>
+        userWithGroups?: CoscradUserWithGroups
     ): Promise<AggregateIndexQueryResult<ViewModelWithTags<UViewModel>>> {
-        const searchResult = await this.fetchManyDomainModels(specification);
+        console.log({ userWithGroups });
+
+        const searchResult = await this.fetchManyDomainModels();
 
         const requiredExternalState = await this.fetchRequiredExternalState();
 
-        const validInstances = searchResult.filter(
-            (result): result is TDomainModel => !isInternalError(result)
-        );
+        const accessFilter = buildAccessFilter(userWithGroups);
+
+        const validInstances = searchResult.filter(validAggregateOrThrow).filter(accessFilter);
 
         const data = validInstances.map((instance) => ({
             data: mixTagsIntoViewModel(
