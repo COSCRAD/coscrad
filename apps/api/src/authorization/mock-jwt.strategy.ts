@@ -16,8 +16,7 @@ export class MockJwtStrategy extends PassportStrategy(Strategy) {
         }
     }
 
-    async validate(...args) {
-        args;
+    async validate() {
         return Promise.resolve(this.testUserWithGroups.clone() || undefined);
     }
 }

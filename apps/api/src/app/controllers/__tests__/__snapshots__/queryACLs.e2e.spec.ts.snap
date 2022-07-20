@@ -1,6 +1,1286 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Access Control List and Role Based filtering in resource queries when querying for Book when the user is authenticated, and not a project or COSCRAD admin should find unpublished resources when the user is in the ACL 1`] = `
+exports[`Access Control List and Role Based filtering in resource queries when querying for BibliographicReference when the user is a COSCRAD admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-0",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-1",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-2",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-3",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-4",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-5",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-6",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-7",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-13",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-14",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-15",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-16",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-17",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-18",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-19",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-20",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for BibliographicReference when the user is a project admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-0",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-1",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-2",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-3",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-4",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-5",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-6",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-7",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-13",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-14",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-15",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-16",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-17",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-18",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-19",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "CONFIDENTIAL-20",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for BibliographicReference when the user is authenticated, and not a project or COSCRAD admin when querying for many resources (fetch many) should find unpublished resources when the user is in the ACL 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-0",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-1",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-2",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-3",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-4",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-5",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-6",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PRIVATE-ACL-OK-7",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for BibliographicReference when the user is not authenticated (public request) when querying for many resources (fetch many) should return only public results 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+  },
+  Object {
+    "data": Object {
+      "abstract": "This is the abstract, NOT a general note!",
+      "creators": Array [
+        Object {
+          "name": "Alana Duvernay",
+          "type": "author",
+        },
+      ],
+      "isbn": "978-1-895811-34-6",
+      "numberOfPages": 455,
+      "place": "Kennebunk Port, Maine",
+      "publisher": "Atlantic Publishing",
+      "title": "A Day in the Life",
+      "type": "book",
+      "url": "https://atlanticpublishing.com",
+      "year": 1999,
+    },
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Book when the user is a COSCRAD admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
 Array [
   Object {
     "author": "John Doeburg",
@@ -105,6 +1385,5697 @@ Array [
     "subtitle": "The wolf's revenge",
     "tags": Array [],
     "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-13",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-14",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-15",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-16",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-17",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-18",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-19",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-20",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Book when the user is a project admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-0",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-1",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-2",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-3",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-4",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-5",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-6",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-7",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-8",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-9",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-10",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-11",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-12",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-13",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-14",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-15",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-16",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-17",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-18",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-19",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "CONFIDENTIAL-20",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Book when the user is authenticated, and not a project or COSCRAD admin when querying for many resources (fetch many) should find unpublished resources when the user is in the ACL 1`] = `
+Array [
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-0",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-1",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-2",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-3",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-4",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-5",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-6",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PRIVATE-ACL-OK-7",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-8",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-9",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-10",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-11",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-12",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Book when the user is not authenticated (public request) when querying for many resources (fetch many) should return only public results 1`] = `
+Array [
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-8",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-9",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-10",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-11",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+  Object {
+    "author": "John Doeburg",
+    "id": "PUBLISHED-12",
+    "publicationDate": "2002",
+    "subtitle": "The wolf's revenge",
+    "tags": Array [],
+    "title": "Three Little Pigs",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Media Item when the user is a COSCRAD admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-0",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-1",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-2",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-3",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-4",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-5",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-6",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-7",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-8",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-9",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-10",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-11",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-12",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-13",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-14",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-15",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-16",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-17",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-18",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-19",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-20",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Media Item when the user is a project admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-0",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-1",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-2",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-3",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-4",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-5",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-6",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-7",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-8",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-9",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-10",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-11",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-12",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-13",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-14",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-15",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-16",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-17",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-18",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-19",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "CONFIDENTIAL-20",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Media Item when the user is authenticated, and not a project or COSCRAD admin when querying for many resources (fetch many) should find unpublished resources when the user is in the ACL 1`] = `
+Array [
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-0",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-1",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-2",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-3",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-4",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-5",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-6",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PRIVATE-ACL-OK-7",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": false,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-8",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-9",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-10",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-11",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-12",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Media Item when the user is not authenticated (public request) when querying for many resources (fetch many) should return only public results 1`] = `
+Array [
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-8",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-9",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-10",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-11",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+  Object {
+    "contributorAndRoles": Array [
+      Object {
+        "contributorId": "2",
+        "role": "host",
+      },
+    ],
+    "id": "PUBLISHED-12",
+    "lengthMilliseconds": 2500,
+    "mimeType": "audio/mpeg",
+    "published": true,
+    "tags": Array [],
+    "title": "episode title (in language)",
+    "titleEnglish": "Metal Mondays episode 1",
+    "url": "https://www.metalmondays.com/1.mp3",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Photograph when the user is a COSCRAD admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "id": "PRIVATE-ACL-OK-0",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-1",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-2",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-3",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-4",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-5",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-6",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-7",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-8",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-9",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-10",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-11",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-12",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-13",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-14",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-15",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-16",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-17",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-18",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-19",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-20",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Photograph when the user is a project admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "id": "PRIVATE-ACL-OK-0",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-1",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-2",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-3",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-4",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-5",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-6",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-7",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-8",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-9",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-10",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-11",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-12",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-13",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-14",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-15",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-16",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-17",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-18",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-19",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "CONFIDENTIAL-20",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Photograph when the user is authenticated, and not a project or COSCRAD admin when querying for many resources (fetch many) should find unpublished resources when the user is in the ACL 1`] = `
+Array [
+  Object {
+    "id": "PRIVATE-ACL-OK-0",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-1",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-2",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-3",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-4",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-5",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-6",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PRIVATE-ACL-OK-7",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-8",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-9",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-10",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-11",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-12",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Photograph when the user is not authenticated (public request) when querying for many resources (fetch many) should return only public results 1`] = `
+Array [
+  Object {
+    "id": "PUBLISHED-8",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-9",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-10",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-11",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+  Object {
+    "id": "PUBLISHED-12",
+    "imageURL": "https://www.mysound.org/downloads/cat.png",
+    "photographer": "Susie McRealart",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Song when the user is a COSCRAD admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-0",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-1",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-2",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-3",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-4",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-5",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-6",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-7",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-8",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-9",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-10",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-11",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-12",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-13",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-14",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-15",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-16",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-17",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-18",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-19",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-20",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Song when the user is a project admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-0",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-1",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-2",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-3",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-4",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-5",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-6",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-7",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-8",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-9",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-10",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-11",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-12",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-13",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-14",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-15",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-16",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-17",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-18",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-19",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "CONFIDENTIAL-20",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Song when the user is authenticated, and not a project or COSCRAD admin when querying for many resources (fetch many) should find unpublished resources when the user is in the ACL 1`] = `
+Array [
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-0",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-1",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-2",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-3",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-4",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-5",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-6",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PRIVATE-ACL-OK-7",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-8",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-9",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-10",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-11",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-12",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Song when the user is not authenticated (public request) when querying for many resources (fetch many) should return only public results 1`] = `
+Array [
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-8",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-9",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-10",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-11",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+  Object {
+    "audioURL": "https://www.myaudio.com/lamb.mp3",
+    "contributions": Array [
+      "1 (performer)",
+    ],
+    "id": "PUBLISHED-12",
+    "lengthMilliseconds": 3500,
+    "lyrics": "Mary had a little lamb, little lamb.",
+    "startMilliseconds": 0,
+    "tags": Array [],
+    "title": "Song title in language",
+    "titleEnglish": "Mary had a little lamb",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Spatial Feature when the user is a COSCRAD admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-0",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-1",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-2",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-3",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-4",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-5",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-6",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-7",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-13",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-14",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-15",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-16",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-17",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-18",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-19",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-20",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Spatial Feature when the user is a project admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-0",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-1",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-2",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-3",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-4",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-5",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-6",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-7",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-13",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-14",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-15",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-16",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-17",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-18",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-19",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "CONFIDENTIAL-20",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Spatial Feature when the user is authenticated, and not a project or COSCRAD admin when querying for many resources (fetch many) should find unpublished resources when the user is in the ACL 1`] = `
+Array [
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-0",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-1",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-2",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-3",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-4",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-5",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-6",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PRIVATE-ACL-OK-7",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Spatial Feature when the user is not authenticated (public request) when querying for many resources (fetch many) should return only public results 1`] = `
+Array [
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+  },
+  Object {
+    "geometry": Object {
+      "coordinates": Array [
+        100,
+        0,
+      ],
+      "type": "Point",
+    },
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Term when the user is a COSCRAD admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-0",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-1",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-2",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-3",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-4",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-5",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-6",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-7",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-13",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-14",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-15",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-16",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-17",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-18",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-19",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-20",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Term when the user is a project admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-0",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-1",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-2",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-3",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-4",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-5",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-6",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-7",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-13",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-14",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-15",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-16",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-17",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-18",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-19",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "CONFIDENTIAL-20",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Term when the user is authenticated, and not a project or COSCRAD admin when querying for many resources (fetch many) should find unpublished resources when the user is in the ACL 1`] = `
+Array [
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-0",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-1",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-2",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-3",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-4",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-5",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-6",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PRIVATE-ACL-OK-7",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Term when the user is not authenticated (public request) when querying for many resources (fetch many) should return only public results 1`] = `
+Array [
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-8",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-9",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-10",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-11",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+  Object {
+    "contributor": "",
+    "id": "PUBLISHED-12",
+    "tags": Array [],
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Transcribed Audio Item when the user is a COSCRAD admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-0",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-1",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-2",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-3",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-4",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-5",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-6",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-7",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-8",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-9",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-10",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-11",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-12",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-13",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-14",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-15",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-16",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-17",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-18",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-19",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-20",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Transcribed Audio Item when the user is a project admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-0",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-1",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-2",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-3",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-4",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-5",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-6",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-7",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-8",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-9",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-10",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-11",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-12",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-13",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-14",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-15",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-16",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-17",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-18",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-19",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "CONFIDENTIAL-20",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Transcribed Audio Item when the user is authenticated, and not a project or COSCRAD admin when querying for many resources (fetch many) should find unpublished resources when the user is in the ACL 1`] = `
+Array [
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-0",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-1",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-2",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-3",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-4",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-5",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-6",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PRIVATE-ACL-OK-7",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-8",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-9",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-10",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-11",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-12",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Transcribed Audio Item when the user is not authenticated (public request) when querying for many resources (fetch many) should return only public results 1`] = `
+Array [
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-8",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-9",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-10",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-11",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+  Object {
+    "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
+    "id": "PUBLISHED-12",
+    "length": 20000,
+    "plainText": "
+[12000] There once was a little wooden boy. [15550]
+[18300] His name was Pinocchio. [19240]",
+    "start": 0,
+    "tags": Array [],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Vocabulary List when the user is a COSCRAD admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-0",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-1",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-2",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-3",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-4",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-5",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-6",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-7",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-8",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-9",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-10",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-11",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-12",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-13",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-14",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-15",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-16",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-17",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-18",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-19",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-20",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Vocabulary List when the user is a project admin when querying for many resources (fetch many) should find all resources of the given kind 1`] = `
+Array [
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-0",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-1",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-2",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-3",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-4",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-5",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-6",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-7",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-8",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-9",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-10",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-11",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-12",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-13",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-14",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-15",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-16",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-17",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-18",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-19",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "CONFIDENTIAL-20",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Vocabulary List when the user is authenticated, and not a project or COSCRAD admin when querying for many resources (fetch many) should find unpublished resources when the user is in the ACL 1`] = `
+Array [
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-0",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-1",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-2",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-3",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-4",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-5",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-6",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PRIVATE-ACL-OK-7",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-8",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-9",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-10",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-11",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-12",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+]
+`;
+
+exports[`Access Control List and Role Based filtering in resource queries when querying for Vocabulary List when the user is not authenticated (public request) when querying for many resources (fetch many) should return only public results 1`] = `
+Array [
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-8",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-9",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-10",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-11",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
+  },
+  Object {
+    "entries": Array [],
+    "id": "PUBLISHED-12",
+    "name": "test VL 1 chil",
+    "nameEnglish": "test VL 1 engl",
+    "tags": Array [],
+    "variables": Array [
+      Object {
+        "name": "person",
+        "type": "dropbox",
+        "validValues": Array [
+          Object {
+            "display": "I",
+            "value": "11",
+          },
+          Object {
+            "display": "We",
+            "value": "21",
+          },
+        ],
+      },
+    ],
   },
 ]
 `;
