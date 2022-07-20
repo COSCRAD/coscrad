@@ -150,8 +150,6 @@ export abstract class BaseQueryService<
     public async fetchMany(
         userWithGroups?: CoscradUserWithGroups
     ): Promise<AggregateIndexQueryResult<ViewModelWithTags<UViewModel>>> {
-        console.log({ userWithGroups });
-
         const searchResult = await this.fetchManyDomainModels();
 
         const requiredExternalState = await this.fetchRequiredExternalState();

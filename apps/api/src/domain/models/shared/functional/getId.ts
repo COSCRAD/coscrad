@@ -1,4 +1,4 @@
 import { AggregateId } from '../../../types/AggregateId';
-import { Aggregate } from '../../aggregate.entity';
+import { HasAggregateId } from '../../../types/HasAggregateId';
 
-export default ({ id }: Aggregate): AggregateId => id;
+export default ({ id }: HasAggregateId): AggregateId => id;
