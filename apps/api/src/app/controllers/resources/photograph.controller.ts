@@ -1,5 +1,6 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Request, Res, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { PhotographViewModel } from '../../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
@@ -15,19 +16,21 @@ import { RESOURCES_ROUTE_PREFIX } from './constants';
 export class PhotographController {
     constructor(private readonly photographQueryService: PhotographQueryService) {}
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: PhotographViewModel })
     @Get(`/:id`)
-    async fetchById(@Res() res, @Param('id') id: unknown) {
-        const searchResult = await this.photographQueryService.fetchById(id);
+    async fetchById(@Request() req, @Res() res, @Param('id') id: unknown) {
+        const searchResult = await this.photographQueryService.fetchById(id, req.user || undefined);
 
         return sendInternalResultAsHttpResponse(res, searchResult);
     }
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
     @Get('')
-    async fetchMany() {
-        // TODO Eventually, we'll want to build the filter spec based on the user's role \ context
-
-        return this.photographQueryService.fetchMany();
+    async fetchMany(@Request() req) {
+        return this.photographQueryService.fetchMany(req.user || undefined);
     }
 }

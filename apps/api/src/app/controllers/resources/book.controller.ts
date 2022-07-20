@@ -1,5 +1,6 @@
-import { Controller, Get, Param, Request, Res } from '@nestjs/common';
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Request, Res, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { BookViewModel } from '../../../view-models/buildViewModelForResource/viewModels/book.view-model';
@@ -13,8 +14,8 @@ import { RESOURCES_ROUTE_PREFIX } from './constants';
 export class BookController {
     constructor(private readonly bookQueryService: BookQueryService) {}
 
-    // @ApiBearerAuth('JWT')
-    // @UseGuards(OptionalJwtAuthGuard)
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: BookViewModel })
     @Get(`/:id`)
@@ -24,14 +25,10 @@ export class BookController {
         return sendInternalResultAsHttpResponse(res, searchResult);
     }
 
-    // @ApiBearerAuth('JWT')
-    // @UseGuards(OptionalJwtAuthGuard)
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
     @Get('')
     async fetchMany(@Request() req) {
-        console.log({
-            userAtTop: req.user,
-        });
-        // TODO Eventually, we'll want to build the filter spec based on the user's role \ context
         return this.bookQueryService.fetchMany(req.user || undefined);
     }
 }
