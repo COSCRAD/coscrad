@@ -1,5 +1,6 @@
-import { Controller, Get, Param, Res, UseFilters } from '@nestjs/common';
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Request, Res, UseFilters, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { MediaItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
@@ -17,18 +18,21 @@ import { RESOURCES_ROUTE_PREFIX } from './constants';
 export class MediaItemController {
     constructor(private readonly mediaItemQueryService: MediaItemQueryService) {}
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
     @ApiParam(buildByIdApiParamMetadata())
     @ApiOkResponse({ type: MediaItemViewModel })
     @Get('/:id')
-    async fetchById(@Res() res, @Param('id') id: unknown) {
-        const searchResult = await this.mediaItemQueryService.fetchById(id);
+    async fetchById(@Request() req, @Res() res, @Param('id') id: unknown) {
+        const searchResult = await this.mediaItemQueryService.fetchById(id, req.user || undefined);
 
         return sendInternalResultAsHttpResponse(res, searchResult);
     }
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
     @Get('')
-    async fetchMany() {
-        // TODO Eventually, we'll want to build the filter spec based on the user's role \ context
-        return this.mediaItemQueryService.fetchMany();
+    async fetchMany(@Request() req) {
+        return this.mediaItemQueryService.fetchMany(req.user || undefined);
     }
 }

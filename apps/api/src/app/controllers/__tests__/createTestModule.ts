@@ -1,6 +1,12 @@
 import { CommandModule } from '@coscrad/commands';
 import { ConfigService } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
+import { JwtStrategy } from '../../../authorization/jwt.strategy';
+import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
+import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
+import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
+import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
@@ -40,12 +46,25 @@ import { TranscribedAudioController } from '../resources/transcribed-audio.contr
 import { VocabularyListController } from '../resources/vocabulary-list.controller';
 import { TagController } from '../tag.controller';
 
+type CreateTestModuleOptions = {
+    shouldMockIdGenerator: boolean;
+    testUserWithGroups?: CoscradUserWithGroups;
+};
+
+// If not specified, there will be no test user attached to requests
+const optionDefaults = { shouldMockIdGenerator: false };
+
 export default async (
     configOverrides: Partial<DTO<EnvironmentVariables>>,
-    { shouldMockIdGenerator }: { shouldMockIdGenerator: boolean } = { shouldMockIdGenerator: false }
+    userOptions: Partial<CreateTestModuleOptions> = optionDefaults
 ) => {
+    const { shouldMockIdGenerator, testUserWithGroups } = {
+        ...optionDefaults,
+        ...userOptions,
+    };
+
     const testModule = await Test.createTestingModule({
-        imports: [CommandModule],
+        imports: [CommandModule, PassportModule.register({ defaultStrategy: 'jwt' })],
         providers: [
             CommandInfoService,
             {
@@ -181,6 +200,10 @@ export default async (
                         : new IdManagementService(repositoryProvider.getIdRepository()),
                 inject: [RepositoryProvider],
             },
+            {
+                provide: JwtStrategy,
+                useFactory: () => new MockJwtStrategy(testUserWithGroups),
+            },
         ],
 
         controllers: [
@@ -202,6 +225,8 @@ export default async (
             IdGenerationController,
         ],
     })
+        .overrideGuard(OptionalJwtAuthGuard)
+        .useValue(new MockJwtAuthGuard(testUserWithGroups, true))
         .compile()
         .catch((error) => {
             throw new InternalError(error.message);

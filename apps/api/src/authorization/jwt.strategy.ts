@@ -6,7 +6,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { validAggregateOrThrow } from '../domain/models/shared/functional';
 import { CoscradUserWithGroups } from '../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../domain/models/user-management/user/entities/user/coscrad-user.entity';
-import { InternalError, isInternalError } from '../lib/errors/InternalError';
+import { isInternalError } from '../lib/errors/InternalError';
 import { isNotFound } from '../lib/types/not-found';
 import { RepositoryProvider } from '../persistence/repositories/repository.provider';
 
@@ -50,7 +50,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         const auth0UserId = (payload as HasSub)?.sub;
 
         if (!auth0UserId) {
-            throw new InternalError(`Invalid user payload received from auth0: ${payload}`);
+            throw new UnauthorizedException();
         }
 
         /**
