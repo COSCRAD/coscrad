@@ -1,27 +1,29 @@
-import { Entity } from 'apps/api/src/domain/models/entity';
-import { isEntityId } from 'apps/api/src/domain/types/EntityId';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { EdgeConnection } from '../../../domain/models/context/edge-connection.entity';
+import { isAggregateId } from '../../../domain/types/AggregateId';
+import { HasAggregateId } from '../../../domain/types/HasAggregateId';
+import { DTO } from '../../../types/DTO';
+import { HasArangoDocumentDirectionAttributes } from '../types/HasArangoDocumentDirectionAttributes';
 
-export type DatabaseDTO<TEntityDTO extends PartialDTO<Entity> = PartialDTO<Entity>> = Omit<
+// TODO Rename this, the common base type for edge and non-edge documents in arango
+export type DatabaseDTO<TEntityDTO extends HasAggregateId = HasAggregateId> = Omit<
     TEntityDTO,
     'id'
 > & {
     _key: string;
 };
 
-export default <TEntity extends Entity>(
-    entityDTO: PartialDTO<TEntity>
-): DatabaseDTO<PartialDTO<TEntity>> =>
-    Object.entries(entityDTO).reduce(
-        (accumulatedMappedObject: DatabaseDTO<PartialDTO<TEntity>>, [key, value]) => {
-            if (key === 'id') {
-                // Note invalid ids will be omitted from the output
-                if (isEntityId(value)) accumulatedMappedObject['_key'] = value as string;
-            } else {
-                accumulatedMappedObject[key] = value;
-            }
+export type DatabaseDocument<TEntity extends HasAggregateId> = TEntity extends EdgeConnection
+    ? HasArangoDocumentDirectionAttributes<DatabaseDTO<TEntity>>
+    : DatabaseDTO<TEntity>;
 
-            return accumulatedMappedObject as unknown as DatabaseDTO<PartialDTO<TEntity>>;
-        },
-        {} as DatabaseDTO<PartialDTO<TEntity>>
-    );
+export default <T extends HasAggregateId>(entityDTO: DTO<T>): DatabaseDTO<T> =>
+    Object.entries(entityDTO).reduce((accumulatedMappedObject: DatabaseDTO<T>, [key, value]) => {
+        if (key === 'id') {
+            // Note invalid ids will be omitted from the output
+            if (isAggregateId(value)) accumulatedMappedObject['_key'] = value as string;
+        } else {
+            accumulatedMappedObject[key] = value;
+        }
+
+        return accumulatedMappedObject as unknown as DatabaseDTO<T>;
+    }, {} as DatabaseDTO<T>);

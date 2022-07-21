@@ -1,26 +1,47 @@
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import { EntityId } from '../../../types/EntityId';
-import { EntityType, entityTypes } from '../../../types/entityTypes';
-import { Entity } from '../../entity';
+import { IsOptional, IsStringWithNonzeroLength } from '@coscrad/validation';
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { DTO } from '../../../../types/DTO';
+import termValidator from '../../../domainModelValidators/termValidator';
+import { Valid } from '../../../domainModelValidators/Valid';
+import { AggregateId } from '../../../types/AggregateId';
+import { ResourceType } from '../../../types/ResourceType';
+import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
+import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
+import { Resource } from '../../resource.entity';
+import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 
-export class Term extends Entity {
-    readonly type: EntityType = entityTypes.term;
+@RegisterIndexScopedCommands([])
+export class Term extends Resource {
+    readonly type: ResourceType = ResourceType.term;
 
-    readonly term: string;
+    @IsOptional()
+    @IsStringWithNonzeroLength()
+    readonly term?: string;
 
+    @IsOptional()
+    @IsStringWithNonzeroLength()
     readonly termEnglish?: string;
 
-    readonly contributorId: EntityId;
+    @IsStringWithNonzeroLength()
+    readonly contributorId: AggregateId;
 
     // TODO Create separate media item model
+    @IsOptional()
+    @IsStringWithNonzeroLength()
     readonly audioFilename?: string;
 
     // We may want to use tags for this
-    readonly sourceProject: string;
+    @IsOptional()
+    @IsStringWithNonzeroLength()
+    readonly sourceProject?: string;
 
     // The constructor should only be called after validating the input DTO
-    constructor(dto: PartialDTO<Term>) {
-        super(dto);
+    constructor(dto: DTO<Term>) {
+        super({ ...dto, type: ResourceType.term });
+
+        // This should only happen in the validation context
+        if (isNullOrUndefined(dto)) return;
 
         /**
          * TODO [design]: We should abstract this pattern of having text in multiple
@@ -49,6 +70,19 @@ export class Term extends Entity {
 
         this.audioFilename = dto.audioFilename;
 
-        if (dto.sourceProject) this.sourceProject = dto.sourceProject;
+        this.sourceProject = dto.sourceProject;
+    }
+
+    getAvailableCommands(): string[] {
+        return [];
+    }
+
+    validateInvariants() {
+        return termValidator(this);
+    }
+
+    // TODO We should 'goodlist' properties that can be targets for this context as well
+    validateTextFieldContext(context: TextFieldContext): Valid | InternalError {
+        return validateTextFieldContextForModel(this, context);
     }
 }

@@ -25,20 +25,45 @@ else {
   testDataFlag = false;
   print("Loading empty collections\n");
 }
-  
+
 const testData = require(process.env.ARANGODB_DESTINATION_CONTAINER_DOCKER_SHARED_VOLUME_SCRIPTS_PATH + '/test-data/testData.json');
 
-const collectionNames = Object.keys(testData);
+// TODO [https://www.pivotaltracker.com/story/show/182132515]
+const reformatedTestData = {
+  document: {
+    ...testData.resources,
+    categories: testData.categories,
+    tags: testData.tags,
+  },
+  edge: {
+    resource_edge_connections: testData.resource_edge_connections,
+    category_edges: testData.categoryEdges,
+  }
+}
 
-// Add Collections and data
-collectionNames.forEach(collectionName => {
-  print(`Attempting to add collection "${collectionName}" to ${process.env.ARANGO_DB_NAME}`);
-  // TODO: need to pass in collection type document or edge
-  if (db._create(collectionName)) {
-    print(`Created Collection ${collectionName}`);
+for (collectionType in reformatedTestData) {
+  for (collectionName in reformatedTestData[collectionType]) {
+    addCollectionAndData(collectionName, collectionType, reformatedTestData[collectionType][collectionName]);
+  }
+}
+
+function addCollectionAndData(collectionName, collectionType, data) {
+  print(`Attempting to add ${collectionType} collection "${collectionName}" to ${process.env.ARANGO_DB_NAME}`);
+  let success = false;
+  if (collectionType == 'document') {
+    if (db._create(collectionName)) {
+      success = true;
+    }
+  }
+  else if (collectionType == 'edge') {
+    if (db._createEdgeCollection(collectionName)) {
+      success = true;
+    }
+  }
+
+  if (success) {
     if (testDataFlag) {
       print(`Attempting to add data to collection "${collectionName}"`);
-      const data = testData[collectionName];
       data.forEach(document => {
         if (db._collection(collectionName).save(document)) {
           print(`Added document to Collection ${collectionName}`);
@@ -49,7 +74,4 @@ collectionNames.forEach(collectionName => {
       });
     }
   }
-  else {
-    print(`Collection "${collectionName}" could not be created`);
-  }
-});
+}

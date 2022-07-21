@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { DropboxOrCheckbox } from 'apps/api/src/domain/models/vocabulary-list/types/dropbox-or-checkbox';
-import { VocabularyListVariableValue } from 'apps/api/src/domain/models/vocabulary-list/types/vocabulary-list-variable-value';
+import { DropboxOrCheckbox } from '../../vocabulary-list/types/dropbox-or-checkbox';
+import { VocabularyListVariableValue } from '../../vocabulary-list/types/vocabulary-list-variable-value';
 import { ValueAndDisplay } from './value-and-display.entity';
 
 /**

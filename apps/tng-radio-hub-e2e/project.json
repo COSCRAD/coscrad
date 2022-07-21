@@ -1,0 +1,28 @@
+{
+    "root": "apps/tng-radio-hub-e2e",
+    "sourceRoot": "apps/tng-radio-hub-e2e/src",
+    "projectType": "application",
+    "targets": {
+        "e2e": {
+            "executor": "@nrwl/cypress:cypress",
+            "options": {
+                "cypressConfig": "apps/tng-radio-hub-e2e/cypress.json",
+                "devServerTarget": "tng-radio-hub:serve"
+            },
+            "configurations": {
+                "production": {
+                    "devServerTarget": "tng-radio-hub:serve:production"
+                }
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["apps/tng-radio-hub-e2e/**/*.{js,ts}"]
+            }
+        }
+    },
+    "tags": [],
+    "implicitDependencies": ["tng-radio-hub"]
+}

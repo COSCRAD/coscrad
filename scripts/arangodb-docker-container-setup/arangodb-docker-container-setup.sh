@@ -62,6 +62,11 @@ then
     if [ -f "$SUGGESTED_APP_ENV_FILE" ];
     then
       COSCRAD_APP_ENV_FILE=$SUGGESTED_APP_ENV_FILE;
+    else
+      echo $'\n>> COSCRAD_APP_ENV_FILE:' $SUGGESTED_APP_ENV_FILE $'does not exist.\n'
+      echo $'PLEASE CREATE' $SUGGESTED_APP_ENV_FILE $'and populate with environment variables based on "sample.env".\n';
+      echo $'Unable to continue, exiting COSCRAD setup script.\n';
+      exit;
     fi
 elif [ $project_env_file_answer = "n" ];
 then
@@ -75,8 +80,6 @@ then
         fi
     done
 fi
-
-echo $'\n>> COSCRAD_APP_ENV_FILE set to:' $COSCRAD_APP_ENV_FILE $'\n';
 
 # Get .env variables from app configuration
 source $COSCRAD_APP_ENV_FILE; set +a;
@@ -182,6 +185,9 @@ fi
 wait
 
 echo "Starting new fresh instance of [$ARANGO_DB_SERVER]"
+
+# TODO support ssl for arango docker container
+# [https://www.arangodb.com/docs/stable/programs-arangod-ssl.html]
 
 sudo -u root docker run \
 --name $ARANGO_DB_SERVER \

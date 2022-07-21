@@ -1,21 +1,66 @@
 import { Injectable } from '@nestjs/common';
+import tagValidator from '../../domain/domainModelValidators/tagValidator';
+import edgeConnectionFactory from '../../domain/factories/edgeConnectionFactory';
 import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForEntity';
-import { Entity } from '../../domain/models/entity';
-import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider';
-import { EntityType } from '../../domain/types/entityTypes';
+import buildInstanceFactory from '../../domain/factories/utilities/buildInstanceFactory';
+import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
+import { Resource } from '../../domain/models/resource.entity';
+import { Tag } from '../../domain/models/tag/tag.entity';
+import { ICategoryRepository } from '../../domain/repositories/interfaces/category-repository.interface';
+import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
+import { AggregateId } from '../../domain/types/AggregateId';
+import { ResourceType } from '../../domain/types/ResourceType';
+import { IIdRepository } from '../../lib/id-generation/interfaces/id-repository.interface';
+import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
+import { getArangoCollectionIDFromResourceType } from '../database/collection-references/getArangoCollectionIDFromResourceType';
 import { DatabaseProvider } from '../database/database.provider';
-import { getArangoCollectionIDFromEntityType } from '../database/getArangoCollectionIDFromEntityType';
+import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapArangoEdgeDocumentToEdgeConnectionDTO';
+import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDTOToEntityDTO';
+import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
+import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoIdRepository } from './arango-id-repository';
+import ArangoCategoryRepository from './ArangoCategoryRepository';
 import { RepositoryForEntity } from './repository-for-entity';
 
 @Injectable()
 export class RepositoryProvider implements IRepositoryProvider {
     constructor(protected databaseProvider: DatabaseProvider) {}
 
-    forEntity<TEntity extends Entity>(entityType: EntityType) {
-        return new RepositoryForEntity<TEntity>(
+    getEdgeConnectionRepository() {
+        return new RepositoryForEntity<EdgeConnection>(
             this.databaseProvider,
-            getArangoCollectionIDFromEntityType(entityType),
-            getInstanceFactoryForEntity(entityType)
+            ArangoCollectionId.edgeConnectionCollectionID,
+            edgeConnectionFactory,
+            mapArangoEdgeDocumentToEdgeConnectionDTO,
+            mapEdgeConnectionDTOToArangoEdgeDocument
+        );
+    }
+
+    getTagRepository() {
+        return new RepositoryForEntity<Tag>(
+            this.databaseProvider,
+            ArangoCollectionId.tags,
+            buildInstanceFactory(tagValidator, Tag),
+            mapDatabaseDTOToEntityDTO,
+            mapEntityDTOToDatabaseDTO
+        );
+    }
+
+    getCategoryRepository(): ICategoryRepository {
+        return new ArangoCategoryRepository(this.databaseProvider);
+    }
+
+    getIdRepository(): IIdRepository<AggregateId> {
+        return new ArangoIdRepository(this.databaseProvider);
+    }
+
+    forResource<TResource extends Resource>(resourceType: ResourceType) {
+        return new RepositoryForEntity<TResource>(
+            this.databaseProvider,
+            getArangoCollectionIDFromResourceType(resourceType),
+            getInstanceFactoryForEntity(resourceType),
+            mapDatabaseDTOToEntityDTO,
+            mapEntityDTOToDatabaseDTO
         );
     }
 }

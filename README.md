@@ -16,7 +16,7 @@ This monorepo workspace is managed using [Nx](https://nx.dev). See the `README` 
 
 ### Requirements
 
-You'll need Node 14 and . It is recommended that you install node using [nvm](https://github.com/nvm-sh/nvm)).
+You'll need Node v14.17.6. It is recommended that you install node using [nvm](https://github.com/nvm-sh/nvm)).
 
 You'll also need an instance of [ArangoDB](https://www.arangodb.com/).
 

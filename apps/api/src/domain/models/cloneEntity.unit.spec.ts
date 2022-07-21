@@ -1,11 +1,11 @@
 import buildTestData from '../../test-data/buildTestData';
-import { PartialDTO } from '../../types/partial-dto';
-import { entityTypes } from '../types/entityTypes';
+import { DTO } from '../../types/DTO';
+import { ResourceType } from '../types/ResourceType';
 import { VocabularyList } from './vocabulary-list/entities/vocabulary-list.entity';
 
-describe('the entity clone method', () => {
+describe('the (base) resource clone method', () => {
     describe('for a vocabularyList', () => {
-        const initialVocabularyList = buildTestData()[entityTypes.vocabularyList][0];
+        const initialVocabularyList = buildTestData().resources[ResourceType.vocabularyList][0];
 
         describe('when no updates are provided', () => {
             const updatedVocabularyList = initialVocabularyList.clone();
@@ -29,7 +29,7 @@ describe('the entity clone method', () => {
 
             const newNameEnglish = 'new name english';
 
-            const updates: PartialDTO<VocabularyList> = {
+            const updates: Partial<DTO<VocabularyList>> = {
                 name: newName,
                 nameEnglish: newNameEnglish,
             };

@@ -1,0 +1,33 @@
+{
+    "root": "libs/validation",
+    "sourceRoot": "libs/validation/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/node:package",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/libs/validation",
+                "tsConfig": "libs/validation/tsconfig.lib.json",
+                "packageJson": "libs/validation/package.json",
+                "main": "libs/validation/src/index.ts",
+                "assets": ["libs/validation/*.md"]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": ["libs/validation/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/libs/validation"],
+            "options": {
+                "jestConfig": "libs/validation/jest.config.js",
+                "passWithNoTests": true
+            }
+        }
+    },
+    "tags": []
+}

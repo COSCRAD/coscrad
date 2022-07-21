@@ -1,4 +1,4 @@
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import cloneToPlainObject from './cloneToPlainObject';
 
 type TestCase = {
@@ -28,7 +28,7 @@ class DummyClass {
     }
 }
 
-const dummyClassDto: PartialDTO<DummyClass> = {
+const dummyClassDto: DTO<DummyClass> = {
     foo: 7,
     bar: ['a', 'b'],
     baz: 'hello world',

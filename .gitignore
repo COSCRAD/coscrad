@@ -43,3 +43,8 @@ Thumbs.db
 
 # data for data processing scripts
 /scripts/data-processing/data
+*.data.*
+
+# front-end configs
+auth_config.json
+config.json

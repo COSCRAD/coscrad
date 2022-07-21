@@ -5,8 +5,10 @@
     "module": "commonjs",
     "types": ["node"],
     "emitDecoratorMetadata": true,
-    "target": "es2015"
+    "target": "es2019",
+    "lib": ["ES2019"]
   },
   "exclude": ["**/*.spec.ts","**/*.test.ts","**/*.d.ts","**/__tests__/*"],
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"],
+  
 }

@@ -3,12 +3,13 @@ import { ConfigService } from '@nestjs/config';
 import { Database } from 'arangojs';
 import { Scheme } from '../../app/config/constants/Scheme';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
-import { PartialDTO } from '../../types/partial-dto';
+import { DTO } from '../../types/DTO';
 import ArangoDatabaseConfiguration from './ArangoDatabaseConfiguration';
+import { getAllArangoCollectionIDs } from './collection-references/ArangoCollectionId';
+import { isArangoEdgeCollectionCollectionID } from './collection-references/ArangoEdgeCollectionId';
 import DatabaseAlreadyInitializedError from './errors/DatabaseAlreadyInitializedError';
 import DatabaseCannotBeDroppedError from './errors/DatabaseCannotBeDroppedError';
 import DatabaseNotYetInitializedError from './errors/DatabaseNotYetInitializedError';
-import { getAllArangoCollectionIDs } from './types/ArangoCollectionId';
 import canDatabaseBeDropped from './utilities/canDatabaseBeDropped';
 
 // Alias for more clarity from the outside; TODO wrap `Database` with simpler API?
@@ -53,7 +54,7 @@ export class ArangoConnectionProvider {
             dbHostUrl: buildFullHostURL(
                 this.configService.get<string>('ARANGO_DB_HOST_DOMAIN', 'localhost'),
                 this.configService.get<Scheme>('ARANGO_DB_HOST_SCHEME', Scheme.http),
-                this.configService.get<Port>('ARANGO_DB_HOST_PORT', '80')
+                this.configService.get<number>('ARANGO_DB_HOST_PORT', 80).toString() as Port
             ),
         });
 
@@ -99,7 +100,7 @@ export class ArangoConnectionProvider {
         return this.#connection;
     }
 
-    public setDatabaseConfiguration(config: PartialDTO<ArangoDatabaseConfiguration>) {
+    public setDatabaseConfiguration(config: DTO<ArangoDatabaseConfiguration>) {
         this.#databaseConfiguration = new ArangoDatabaseConfiguration({
             ...config,
         });
@@ -161,7 +162,15 @@ export class ArangoConnectionProvider {
 
         if (doesCollectionExist) return;
 
-        await this.#connection.createCollection(collectionName);
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/182132515]
+         * cleanup the references
+         */
+        if (isArangoEdgeCollectionCollectionID(collectionName)) {
+            await this.#connection.createEdgeCollection(collectionName);
+        } else {
+            await this.#connection.createCollection(collectionName);
+        }
     }
 
     #doesDatabaseExist = async (databaseName: string) => {
@@ -186,6 +195,7 @@ export class ArangoConnectionProvider {
 
         if (!doesDatabaseExist) return;
 
+        // for safety, you can only drop a db whose name matches the test db name pattern
         if (!canDatabaseBeDropped(dbName)) throw new DatabaseCannotBeDroppedError(dbName);
 
         await this.#getAdminDBConnection({

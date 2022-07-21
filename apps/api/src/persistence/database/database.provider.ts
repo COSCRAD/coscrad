@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Entity } from '../../domain/models/entity';
+import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { ArangoConnection, ArangoConnectionProvider } from './arango-connection.provider';
 import { ArangoDatabase } from './arango-database';
 import { ArangoDatabaseForCollection } from './arango-database-for-collection';
-import { IDatabaseProvider } from './interfaces/database-provider';
-import { ArangoCollectionID } from './types/ArangoCollectionId';
+import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
 
 /**
  * TODO [https://www.pivotaltracker.com/story/show/181559601]
@@ -14,7 +13,7 @@ import { ArangoCollectionID } from './types/ArangoCollectionId';
  * to dependency injection.
  */
 @Injectable()
-export class DatabaseProvider implements IDatabaseProvider {
+export class DatabaseProvider {
     readonly #databaseConnection: ArangoConnection;
 
     #arangoInstance: ArangoDatabase;
@@ -32,9 +31,8 @@ export class DatabaseProvider implements IDatabaseProvider {
     };
 
     // TODO [type-safety] Can we correlate entity `DTOs` with `collection IDs`?
-    // @ts-expect-error TODO fix the following!
-    getDatabaseForCollection = <TEntity extends Entity>(
-        collectionName: ArangoCollectionID
+    getDatabaseForCollection = <TEntity extends HasAggregateId>(
+        collectionName: ArangoCollectionId
     ): ArangoDatabaseForCollection<TEntity> => {
         if (!this.#arangoInstance)
             // TODO should we inject this?

@@ -1,42 +1,25 @@
 import { INestApplication } from '@nestjs/common';
-import createTestModule from '../../app/controllers/__tests__/createTestModule';
+import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import TermEnglishEquals from '../../domain/repositories/specifications/TermEnglishEquals';
-import { entityTypes } from '../../domain/types/entityTypes';
+import { ResourceType } from '../../domain/types/ResourceType';
 import buildTestData from '../../test-data/buildTestData';
-import { ArangoConnectionProvider } from '../database/arango-connection.provider';
-import { DatabaseProvider } from '../database/database.provider';
 import generateRandomTestDatabaseName from './__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 
 describe('Repository for entity (with filters)', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
-    const testData = buildTestData();
-
-    let arangoConnectionProvider: ArangoConnectionProvider;
-
-    let databaseProvider: DatabaseProvider;
+    const testData = buildTestData().resources;
 
     let testRepositoryProvider: TestRepositoryProvider;
 
     let app: INestApplication;
 
     beforeAll(async () => {
-        jest.resetModules();
-
-        const moduleRef = await createTestModule(testDatabaseName);
-
-        arangoConnectionProvider =
-            moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
-
-        databaseProvider = new DatabaseProvider(arangoConnectionProvider);
-
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
-
-        app = moduleRef.createNestApplication();
-
-        await app.init();
+        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
+            ARANGO_DB_NAME: testDatabaseName,
+        }));
     });
 
     afterAll(async () => {
@@ -57,7 +40,7 @@ describe('Repository for entity (with filters)', () => {
             it('should find the matching data', async () => {
                 const textToMatch = 'foobar';
 
-                const matchingTerms = testData[entityTypes.term].map(
+                const matchingTerms = testData[ResourceType.term].map(
                     (term) =>
                         new Term({
                             ...term.toDTO(),
@@ -65,7 +48,7 @@ describe('Repository for entity (with filters)', () => {
                         })
                 );
 
-                const nonMatchingTerms = testData[entityTypes.term]
+                const nonMatchingTerms = testData[ResourceType.term]
                     .map(
                         (term, index) =>
                             new Term({
@@ -78,12 +61,12 @@ describe('Repository for entity (with filters)', () => {
 
                 const allTerms = [...matchingTerms, ...nonMatchingTerms];
 
-                await testRepositoryProvider.addEntitiesOfSingleType(entityTypes.term, allTerms);
+                await testRepositoryProvider.addResourcesOfSingleType(ResourceType.term, allTerms);
 
                 const specification = new TermEnglishEquals(textToMatch);
 
                 const foundTerms = await testRepositoryProvider
-                    .forEntity<Term>(entityTypes.term)
+                    .forResource<Term>(ResourceType.term)
                     .fetchMany(specification);
 
                 expect(foundTerms.length).toBe(matchingTerms.length);
@@ -94,16 +77,16 @@ describe('Repository for entity (with filters)', () => {
 
         describe('when there is no data that matches the specification', () => {
             it('should return an empty result set', async () => {
-                const terms = testData[entityTypes.term];
+                const terms = testData[ResourceType.term];
 
                 const unmatchedSearchTerm = 'abcdefghijklmnopqrstuvwxyz-123';
 
                 const specification = new TermEnglishEquals(unmatchedSearchTerm);
 
-                await testRepositoryProvider.addEntitiesOfSingleType(entityTypes.term, terms);
+                await testRepositoryProvider.addResourcesOfSingleType(ResourceType.term, terms);
 
                 const searchResult = await testRepositoryProvider
-                    .forEntity<Term>(entityTypes.term)
+                    .forResource<Term>(ResourceType.term)
                     .fetchMany(specification);
 
                 expect(searchResult).toEqual([]);

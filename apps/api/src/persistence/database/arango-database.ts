@@ -1,14 +1,17 @@
-import { Maybe } from 'apps/api/src/lib/types/maybe';
-import { isNotFound, NotFound } from 'apps/api/src/lib/types/not-found';
 import { Database } from 'arangojs';
-import { AqlQuery } from 'arangojs/aql';
+import { aql, AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
-import { Entity } from '../../domain/models/entity';
-import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
+import { Environment } from '../../app/config/constants/Environment';
 import { QueryOperator } from '../../domain/repositories/interfaces/QueryOperator';
+import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
+import { isAggregateId } from '../../domain/types/AggregateId';
+import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
-import { PartialDTO } from '../../types/partial-dto';
-import { IDatabase } from './interfaces/database';
+import { Maybe } from '../../lib/types/maybe';
+import { isNotFound, NotFound } from '../../lib/types/not-found';
+import { isArangoCollectionId } from './collection-references/ArangoCollectionId';
+import buildArangoDocumentHandle from './utilities/buildArangoDocumentHandle';
+import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
 
 type ArangoDTO<T> = T & {
     _key: string;
@@ -30,7 +33,7 @@ const interpretQueryOperatorForAQL = (operator: QueryOperator): string => {
 /**
  * TODO It seems we should sanatize inputs here.
  */
-export class ArangoDatabase implements IDatabase {
+export class ArangoDatabase {
     #db: Database;
 
     constructor(database: Database) {
@@ -40,15 +43,25 @@ export class ArangoDatabase implements IDatabase {
         this.#db = database;
     }
 
-    fetchById = async <TCreateEntityDto extends PartialDTO<Entity>>(
+    fetchById = async <TDatabaseDTO extends DatabaseDTO<HasAggregateId>>(
         id: string,
         collectionName: string
-    ): Promise<Maybe<TCreateEntityDto>> => {
-        const allEntities = await this.fetchMany<TCreateEntityDto>(collectionName);
+    ): Promise<Maybe<TDatabaseDTO>> => {
+        if (!isAggregateId(id)) {
+            throw new InternalError(`Arango cannot fetchById with invalid id: ${id}`);
+        }
+
+        if (!isArangoCollectionId(collectionName)) {
+            throw new InternalError(
+                `Arango cannot fetchById from an invalid collection: ${collectionName}`
+            );
+        }
+
+        const allEntities = await this.fetchMany<TDatabaseDTO>(collectionName);
 
         if (allEntities.length === 0) return NotFound;
 
-        const searchId = `${collectionName}/${id}`;
+        const searchId = buildArangoDocumentHandle(collectionName, id);
 
         const doIdsMatch = (searchId) => (dbDTO) => {
             const result = dbDTO._id === searchId;
@@ -66,20 +79,28 @@ export class ArangoDatabase implements IDatabase {
      * @param collectionName name of the collection
      * @returns array of `DTOs`, empty array if none found
      */
-    fetchMany = async <TCreateEntityDTO>(
+    fetchMany = async <TEntityDTO>(
         collectionName: string,
-        specification?: ISpecification<TCreateEntityDTO>
-    ): Promise<TCreateEntityDTO[]> => {
+        specification?: ISpecification<TEntityDTO>
+    ): Promise<TEntityDTO[]> => {
+        const { query: filterQuery, bindVars: filterBindVars } = specification
+            ? this.#convertSpecificationToAQLFilter(specification, 't')
+            : aql``;
+
         const query = specification
             ? `
-      FOR t IN ${collectionName} \n\t${this.#convertSpecificationToAQLFilter(specification, 't')}
+      FOR t IN @@collectionName 
+        ${filterQuery}
         return t
       `
-            : `FOR t IN ${collectionName} 
+            : `FOR t IN @@collectionName 
       return t
     `;
 
-        const bindVars = {};
+        const bindVars = {
+            ...filterBindVars,
+            '@collectionName': collectionName,
+        };
 
         const aqlQuery: AqlQuery = {
             query,
@@ -94,30 +115,38 @@ export class ArangoDatabase implements IDatabase {
     };
 
     getCount = async (collectionName: string): Promise<number> => {
+        if (!isArangoCollectionId(collectionName)) {
+            throw new InternalError(
+                `Arango cannot count for collection with invalid collection name: ${collectionName}`
+            );
+        }
+
         const results = await this.fetchMany(collectionName);
 
         return isNotFound(results) ? 0 : results.length;
     };
 
-    create = async <TCreateEntityDto>(
-        dto: TCreateEntityDto,
-        collectionName: string
-    ): Promise<void> => {
+    create = async <TEntityDTO>(dto: TEntityDTO, collectionName: string): Promise<void> => {
         /**
          * Although the caller should ensure this, it's nice to double check here
          * as a means of making sure our query isn't subject to injection.
          */
+        if (!isArangoCollectionId(collectionName)) {
+            throw new Error(`Cannot insert into invalid collection: ${collectionName}`);
+        }
+
         const collectionExists = await this.#doesCollectionExist(collectionName);
 
         if (!collectionExists) throw new Error(`Collection ${collectionName} not found!`);
 
         const query = `
     INSERT @dto
-        INTO ${collectionName}
+        INTO @@collectionName
     `;
 
         const bindVars = {
             dto,
+            '@collectionName': collectionName,
         };
 
         await this.#db.query({
@@ -126,10 +155,7 @@ export class ArangoDatabase implements IDatabase {
         });
     };
 
-    createMany = async <TCreateEntityDto>(
-        dtos: TCreateEntityDto[],
-        collectionName: string
-    ): Promise<void> => {
+    createMany = async <TEntityDTO>(dtos: TEntityDTO[], collectionName: string): Promise<void> => {
         const collectionExists = await this.#doesCollectionExist(collectionName);
 
         if (!collectionExists) throw new Error(`Collection ${collectionName} not found!`);
@@ -137,11 +163,12 @@ export class ArangoDatabase implements IDatabase {
         const query = `
     FOR dto IN @dtos
         INSERT dto
-            INTO ${collectionName}
+            INTO @@collectionName
     `;
 
         const bindVars = {
             dtos,
+            '@collectionName': collectionName,
         };
 
         await this.#db.query({
@@ -152,28 +179,55 @@ export class ArangoDatabase implements IDatabase {
 
     update = async <TUpdateEntityDTO>(
         id: string,
-        dto: TUpdateEntityDTO,
+        updatedDto: TUpdateEntityDTO,
         collectionName: string
     ): Promise<void> => {
         const documentToUpdate = await this.fetchById(id, collectionName);
 
         if (isNotFound(documentToUpdate))
             throw new Error(
-                [`Cannot update document`, `${id}`, `as no document with that id was found`].join(
-                    ' '
-                )
+                `Cannot update document: ${id} in collection: ${collectionName}, as no document with that id was found`
             );
 
         // TODO remove cast
-        const key = this.#getKeyOfDocument(documentToUpdate as ArangoDTO<TUpdateEntityDTO>);
+        const key = this.#getKeyOfDocument(
+            documentToUpdate as unknown as ArangoDTO<TUpdateEntityDTO>
+        );
 
         if (isNotFound(key))
             throw new Error(`No property '_key' was found on document: ${documentToUpdate}`);
 
-        throw new InternalError('Not Implemented!');
-    };
+        const query = `
+            UPDATE @updatedDto IN @@collectionName
+        `;
 
-    // TODO Add Replace
+        const bindVars = {
+            updatedDto: {
+                /**
+                 * An update query in arango must include enough information
+                 * to uniquely identify the document to update.
+                 *
+                 * Further note that we are merging the `updatedDTO` with the
+                 * existing document in case there is information that is persisted
+                 * but not populated on the model (e.g. event history, metadata).
+                 */
+                _key: key,
+                ...updatedDto,
+            },
+            '@collectionName': collectionName,
+        };
+
+        await this.#db
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((err) => {
+                throw new InternalError(
+                    `Failed to update dto: ${updatedDto} in ${collectionName}. \n Arango errors: ${err}`
+                );
+            });
+    };
 
     // TODO Add Soft Delete
 
@@ -186,24 +240,32 @@ export class ArangoDatabase implements IDatabase {
                 `You cannot remove document ${id} in collection ${collectionName} as it does not exist`
             );
 
-        const query = `
-    REMOVE ${id} in ${collectionName}
-    `;
-
-        this.#db.query(query);
+        throw new InternalError('ArangoDatabase.delete Not Implemented');
     };
 
     // TODO We only want this power within test utilities!
     deleteAll = async (collectionName: string): Promise<void> => {
+        if (process.env.NODE_ENV !== Environment.test) {
+            throw new InternalError(`You can only delete all in a test environment`);
+        }
+
+        if (!isArangoCollectionId(collectionName)) {
+            throw new InternalError(`Cannot delete all in invalid collection: ${collectionName}`);
+        }
+
         const query = `
-    FOR doc in ${collectionName}
-    REMOVE doc in ${collectionName}
+    FOR doc in @@collectionName
+    REMOVE doc in @@collectionName
     `;
 
-        this.#db.query(query);
+        const bindVars = {
+            '@collectionName': collectionName,
+        };
+
+        this.#db.query({ query, bindVars });
     };
 
-    #getKeyOfDocument = <TCreateEntityDto>(document: ArangoDTO<TCreateEntityDto>): Maybe<string> =>
+    #getKeyOfDocument = <TEntityDTO>(document: ArangoDTO<TEntityDTO>): Maybe<string> =>
         typeof document._key === 'string' ? document._key : NotFound;
 
     #doesCollectionExist = async (collectionName: string): Promise<boolean> =>
@@ -216,12 +278,15 @@ export class ArangoDatabase implements IDatabase {
     #convertSpecificationToAQLFilter<TModel>(
         { criterion: { field, operator, value } }: ISpecification<TModel>,
         docNamePlaceholder: string
-    ): string {
-        // a string value must be wrapped in quotes in the query
-        const valueToCompare = typeof value === 'string' ? `'${value}'` : value;
-
-        return `FILTER ${docNamePlaceholder}.${field} ${interpretQueryOperatorForAQL(
-            operator
-        )} ${valueToCompare}`;
+    ) {
+        return {
+            query: `FILTER ${docNamePlaceholder}.${field} ${interpretQueryOperatorForAQL(
+                operator
+            )} @valueToCompare`,
+            bindVars: {
+                // This prevents AQL injection attacks
+                valueToCompare: value,
+            },
+        };
     }
 }

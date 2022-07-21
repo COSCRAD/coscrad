@@ -1,34 +1,43 @@
+import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
-import { Entity } from 'apps/api/src/domain/models/entity';
-import { EntityType, entityTypes, InMemorySnapshot } from 'apps/api/src/domain/types/entityTypes';
-import { isInternalError } from 'apps/api/src/lib/errors/InternalError';
-import { ArangoConnectionProvider } from 'apps/api/src/persistence/database/arango-connection.provider';
-import TestRepositoryProvider from 'apps/api/src/persistence/repositories/__tests__/TestRepositoryProvider';
-import buildTestData from 'apps/api/src/test-data/buildTestData';
 import * as request from 'supertest';
-import { DatabaseProvider } from '../../../persistence/database/database.provider';
+import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
+import { Resource } from '../../../domain/models/resource.entity';
+import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
+import { PublishSongCommandHandler } from '../../../domain/models/song/commands/publish-song.command-handler';
+import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
+import { isInternalError } from '../../../lib/errors/InternalError';
+import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import buildViewModelPathForEntityType from '../utilities/buildViewModelPathForEntityType';
-import createTestModule from './createTestModule';
+import buildViewModelPathForRe from '../utilities/buildViewModelPathForResourceType';
+import setUpIntegrationTest from './setUpIntegrationTest';
 
-describe('GET /entities (fetch view models)', () => {
+describe('GET /resources (fetch view models)', () => {
     const testDatabaseName = generateRandomTestDatabaseName();
 
     let app: INestApplication;
 
     let arangoConnectionProvider: ArangoConnectionProvider;
 
-    let databaseProvider: DatabaseProvider;
-
     let testRepositoryProvider: TestRepositoryProvider;
+
+    let commandHandlerService: CommandHandlerService;
+
+    let idManager: IIdManager;
 
     const testData = buildTestData();
 
-    const testDataWithAllEntitiesPublished = Object.entries(testData).reduce(
-        (accumulatedData: InMemorySnapshot, [entityType, instances]) => ({
+    const tagTestData = testData.tags;
+
+    const resourceTestData = testData.resources;
+
+    const testDataWithAllResourcesPublished = Object.entries(resourceTestData).reduce(
+        (accumulatedData: InMemorySnapshotOfResources, [Re, instances]) => ({
             ...accumulatedData,
-            [entityType]: instances.map((instance) =>
+            [Re]: instances.map((instance) =>
                 instance.clone({
                     published: true,
                 })
@@ -38,128 +47,132 @@ describe('GET /entities (fetch view models)', () => {
     );
 
     beforeAll(async () => {
-        jest.resetModules();
+        ({
+            app,
+            arangoConnectionProvider,
+            testRepositoryProvider,
+            idManager,
+            commandHandlerService,
+        } = await setUpIntegrationTest({
+            ARANGO_DB_NAME: testDatabaseName,
+            BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
+        }));
 
-        const moduleRef = await createTestModule(testDatabaseName);
+        commandHandlerService.registerHandler(
+            'CREATE_SONG',
+            new CreateSongCommandHandler(testRepositoryProvider, idManager)
+        );
 
-        arangoConnectionProvider =
-            moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
-
-        databaseProvider = new DatabaseProvider(arangoConnectionProvider);
-
-        testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
-
-        app = moduleRef.createNestApplication();
-
-        await app.init();
+        commandHandlerService.registerHandler(
+            'PUBLISH_SONG',
+            new PublishSongCommandHandler(testRepositoryProvider, idManager)
+        );
     });
 
-    beforeEach(async () => {
-        await testRepositoryProvider.testSetup();
-    });
+    Object.values(ResourceType).forEach((resourceType) => {
+        const endpointUnderTest = `/${buildViewModelPathForRe(resourceType)}`;
 
-    // These entities are always published
-    const entityTypesToExclude: EntityType[] = [entityTypes.tag];
+        const buildFullPathFromId = (id: string): string => `${endpointUnderTest}/${id}`;
 
-    Object.values(entityTypes)
-        .filter((entityType) => !entityTypesToExclude.includes(entityType))
-        .forEach((entityType) => {
-            const endpointUnderTest = `/${buildViewModelPathForEntityType(entityType)}`;
-
-            const buildFullPathFromId = (id: string): string => `${endpointUnderTest}/${id}`;
-
-            describe(`When querying for a single View Model by ID`, () => {
-                describe(`GET ${endpointUnderTest}/:id`, () => {
-                    describe('when the entity is published', () => {
-                        describe('when no entity with the id exists', () => {
-                            beforeEach(async () => {
-                                await testRepositoryProvider.addEntitiesOfManyTypes(
-                                    testDataWithAllEntitiesPublished
-                                );
-                            });
-
-                            it(`should return not found`, () => {
-                                return request(app.getHttpServer())
-                                    .get(`/entities${buildFullPathFromId('bogus-id')}`)
-                                    .expect(httpStatusCodes.notFound);
-                            });
-                        });
-
-                        describe('when an entity with the id is found', () => {
-                            beforeEach(async () => {
-                                await testRepositoryProvider.addEntitiesOfManyTypes(
-                                    testDataWithAllEntitiesPublished
-                                );
-                            });
-
-                            it('should return the expected response', async () => {
-                                const entityToFind =
-                                    testDataWithAllEntitiesPublished[entityType][0];
-
-                                const res = await request(app.getHttpServer()).get(
-                                    `/entities${buildFullPathFromId(entityToFind.id)}`
-                                );
-
-                                expect(res.status).toBe(httpStatusCodes.ok);
-
-                                expect(res.body.id).toBe(entityToFind.id);
-
-                                expect(res.body).toMatchSnapshot();
-                            });
-                        });
-                    });
-
-                    describe('when an entity with the id is unpublished', () => {
-                        const unpublishedId = 'unpublished-01';
-
-                        beforeEach(async () => {
-                            await testRepositoryProvider.addEntitiesOfManyTypes(testData);
-
-                            const unpublishedInstance = testData[entityType][0].clone({
-                                published: false,
-                                id: unpublishedId,
-                            });
-
-                            await testRepositoryProvider.addEntitiesOfSingleType(entityType, [
-                                unpublishedInstance,
-                            ]);
-                        });
-
-                        it('should return not found', async () => {
-                            const publishedAndUnpublishedInstancesFromRepo =
-                                await testRepositoryProvider
-                                    .forEntity(entityType)
-                                    .fetchMany()
-                                    .then((result) =>
-                                        result.filter(
-                                            (singleInstance): singleInstance is Entity =>
-                                                !isInternalError(singleInstance)
-                                        )
-                                    );
-
-                            /**
-                             * Given 404 is not a very specific symptom, let's be sure the
-                             * unpubished entity was in the db to start with
-                             */
-                            const isUnpublishedEntityIdInDB =
-                                publishedAndUnpublishedInstancesFromRepo.some(
-                                    ({ id }) => id === unpublishedId
-                                );
-
-                            expect(isUnpublishedEntityIdInDB).toBe(true);
-
-                            return request(app.getHttpServer())
-                                .get(`/entities${buildFullPathFromId(unpublishedId)}`)
-                                .expect(httpStatusCodes.notFound);
-                        });
-                    });
-                });
+        describe(`When querying for a single View Model by ID`, () => {
+            beforeEach(async () => {
+                await testRepositoryProvider.testSetup();
             });
 
             afterEach(async () => {
                 await testRepositoryProvider.testTeardown();
             });
+            describe(`GET ${endpointUnderTest}/:id`, () => {
+                describe('when the resource is published', () => {
+                    describe('when no resource with the id exists', () => {
+                        beforeEach(async () => {
+                            await testRepositoryProvider.addResourcesOfManyTypes(
+                                testDataWithAllResourcesPublished
+                            );
+
+                            await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+                        });
+
+                        it(`should return not found`, () => {
+                            return request(app.getHttpServer())
+                                .get(`/resources${buildFullPathFromId('bogus-id')}`)
+                                .expect(httpStatusCodes.notFound);
+                        });
+                    });
+
+                    describe('when an resource with the id is found', () => {
+                        beforeEach(async () => {
+                            await testRepositoryProvider.addResourcesOfManyTypes(
+                                testDataWithAllResourcesPublished
+                            );
+
+                            await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+                        });
+
+                        it('should return the expected response', async () => {
+                            const resourceToFind =
+                                testDataWithAllResourcesPublished[resourceType][0];
+
+                            const res = await request(app.getHttpServer()).get(
+                                `/resources${buildFullPathFromId(resourceToFind.id)}`
+                            );
+
+                            expect(res.status).toBe(httpStatusCodes.ok);
+
+                            expect(res.body.data.id).toBe(resourceToFind.id);
+
+                            expect(res.body).toMatchSnapshot();
+                        });
+                    });
+                });
+
+                describe('when an resource with the id is unpublished', () => {
+                    const unpublishedId = 'unpublished-01';
+
+                    beforeEach(async () => {
+                        await testRepositoryProvider.addResourcesOfManyTypes(resourceTestData);
+
+                        const unpublishedInstance = resourceTestData[resourceType][0].clone({
+                            published: false,
+                            id: unpublishedId,
+                        });
+
+                        await testRepositoryProvider.addResourcesOfSingleType(resourceType, [
+                            unpublishedInstance,
+                        ]);
+                    });
+
+                    it('should return not found', async () => {
+                        const publishedAndUnpublishedInstancesFromRepo =
+                            await testRepositoryProvider
+                                .forResource(resourceType)
+                                .fetchMany()
+                                .then((result) =>
+                                    result.filter(
+                                        (singleInstance): singleInstance is Resource =>
+                                            !isInternalError(singleInstance)
+                                    )
+                                );
+
+                        /**
+                         * Given 404 is not a very specific symptom, let's be sure the
+                         * unpubished resource was in the db to start with
+                         */
+                        const isUnpublishedresourceIdInDB =
+                            publishedAndUnpublishedInstancesFromRepo.some(
+                                ({ id }) => id === unpublishedId
+                            );
+
+                        expect(isUnpublishedresourceIdInDB).toBe(true);
+
+                        return request(app.getHttpServer())
+                            .get(`/resources${buildFullPathFromId(unpublishedId)}`)
+                            .expect(httpStatusCodes.notFound);
+                    });
+                });
+            });
         });
+    });
 
     afterAll(async () => {
         await arangoConnectionProvider.dropDatabaseIfExists();

@@ -1,4 +1,4 @@
-import { InternalError } from 'apps/api/src/lib/errors/InternalError';
+import { InternalError } from '../../../../lib/errors/InternalError';
 
 // TODO extract this and the term DTO error into a generic InvalidEntityDTOError
 export default class InvalidVocabularyListDTOError extends InternalError {

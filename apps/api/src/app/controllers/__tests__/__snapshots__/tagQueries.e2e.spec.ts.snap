@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tag Queries when fetching a tag by ID when there is a tag with the given ID should return the expected result 1`] = `
+Object {
+  "id": "1",
+  "label": "plants",
+}
+`;
+
+exports[`Tag Queries when fetching all tags should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "1",
+    "label": "plants",
+  },
+  Object {
+    "id": "2",
+    "label": "animals",
+  },
+  Object {
+    "id": "3",
+    "label": "placenames",
+  },
+  Object {
+    "id": "4",
+    "label": "songs",
+  },
+  Object {
+    "id": "5",
+    "label": "legends",
+  },
+]
+`;

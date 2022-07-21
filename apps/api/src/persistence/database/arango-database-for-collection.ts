@@ -1,27 +1,24 @@
 import { isArangoDatabase } from 'arangojs/database';
-import { Entity } from '../../domain/models/entity';
-import { ISpecification } from '../../domain/repositories/interfaces/ISpecification';
-import { EntityId } from '../../domain/types/EntityId';
+import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
+import { AggregateId } from '../../domain/types/AggregateId';
+import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { Maybe } from '../../lib/types/maybe';
-import { PartialDTO } from '../../types/partial-dto';
+import { DeepPartial } from '../../types/DeepPartial';
 import { ArangoDatabase } from './arango-database';
-import { IDatabaseForCollection } from './interfaces/database-for-collection';
-import { ArangoCollectionID } from './types/ArangoCollectionId';
-import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
+import { DatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
 
 /**
- * Note that at this level we are working with a `DatabaseDTO` (has _key
+ * Note that at this level we are working with a `DatabaseDocument` (has _key
  * and _id), not an `EntityDTO`. The mapping is taken care of in the
  * repositories layer.
  */
-export class ArangoDatabaseForCollection<TEntity extends Entity>
-    implements IDatabaseForCollection<TEntity>
-{
-    #collectionID: ArangoCollectionID;
+export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
+    #collectionID: ArangoCollectionId;
 
     #arangoDatabase: ArangoDatabase;
 
-    constructor(arangoDatabase: ArangoDatabase, collectionName: ArangoCollectionID) {
+    constructor(arangoDatabase: ArangoDatabase, collectionName: ArangoCollectionId) {
         this.#collectionID = collectionName;
 
         this.#arangoDatabase = arangoDatabase;
@@ -33,15 +30,15 @@ export class ArangoDatabaseForCollection<TEntity extends Entity>
     }
 
     // Queries (return information)
-    fetchById(id: EntityId): Promise<Maybe<DatabaseDTO<PartialDTO<TEntity>>>> {
-        return this.#arangoDatabase.fetchById<DatabaseDTO<TEntity>>(id, this.#collectionID);
+    fetchById(id: AggregateId): Promise<Maybe<DatabaseDocument<TEntity>>> {
+        return this.#arangoDatabase.fetchById<DatabaseDocument<TEntity>>(id, this.#collectionID);
     }
 
-    fetchMany(specification?: ISpecification<TEntity>): Promise<DatabaseDTO<TEntity>[]> {
-        return this.#arangoDatabase.fetchMany<DatabaseDTO<TEntity>>(
+    fetchMany(specification?: ISpecification<TEntity>): Promise<DatabaseDocument<TEntity>[]> {
+        return this.#arangoDatabase.fetchMany<DatabaseDocument<TEntity>>(
             this.#collectionID,
             // TODO remove cast, handle mapping layer
-            specification as unknown as ISpecification<DatabaseDTO<TEntity>>
+            specification as unknown as ISpecification<DatabaseDocument<TEntity>>
         );
     }
 
@@ -50,16 +47,16 @@ export class ArangoDatabaseForCollection<TEntity extends Entity>
     }
 
     // Commands (mutate state)
-    create(databaseDTO: DatabaseDTO<PartialDTO<TEntity>>) {
+    create(DatabaseDocument: DatabaseDocument<TEntity>) {
         // Handle the difference in _id \ _key between model and database
-        return this.#arangoDatabase.create(databaseDTO, this.#collectionID);
+        return this.#arangoDatabase.create(DatabaseDocument, this.#collectionID);
     }
 
-    createMany(databaseDTOs: DatabaseDTO<PartialDTO<TEntity>>[]) {
-        return this.#arangoDatabase.createMany(databaseDTOs, this.#collectionID);
+    createMany(DatabaseDocuments: DatabaseDocument<TEntity>[]) {
+        return this.#arangoDatabase.createMany(DatabaseDocuments, this.#collectionID);
     }
 
-    update(id: EntityId, updateDTO: DatabaseDTO<TEntity>) {
+    update(id: AggregateId, updateDTO: DeepPartial<DatabaseDocument<TEntity>>) {
         return this.#arangoDatabase.update(id, updateDTO, this.#collectionID);
     }
 }

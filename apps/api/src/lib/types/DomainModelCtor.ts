@@ -1,6 +1,6 @@
-import { Entity } from '../../domain/models/entity';
-import { PartialDTO } from '../../types/partial-dto';
+import BaseDomainModel from '../../domain/models/BaseDomainModel';
+import { DTO } from '../../types/DTO';
 
-export type DomainModelCtor<TEntity extends Entity> = new (
-  dto: PartialDTO<TEntity>
+export type DomainModelCtor<TEntity extends BaseDomainModel = BaseDomainModel> = new (
+    dto: DTO<TEntity>
 ) => TEntity;

@@ -1,19 +1,19 @@
-import { DomainModelCtor } from 'apps/api/src/lib/types/DomainModelCtor';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
-import { DomainModelValidator } from '../../domainModelValidators';
+import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
+import { DTO } from '../../../types/DTO';
+import { DomainModelValidator } from '../../domainModelValidators/types/DomainModelValidator';
 import { isValid } from '../../domainModelValidators/Valid';
-import { Entity } from '../../models/entity';
+import BaseDomainModel from '../../models/BaseDomainModel';
 import { InstanceFactory } from '../getInstanceFactoryForEntity';
 
-export default <TEntity extends Entity = Entity>(
-    validator: DomainModelValidator,
-    Ctor: DomainModelCtor<TEntity>
-  ): InstanceFactory<TEntity> =>
-  (dto: unknown) => {
-    const validationResult = validator(dto);
+export default <TEntity extends BaseDomainModel = BaseDomainModel>(
+        validator: DomainModelValidator,
+        Ctor: DomainModelCtor<TEntity>
+    ): InstanceFactory<TEntity> =>
+    (dto: unknown) => {
+        const validationResult = validator(dto);
 
-    if (!isValid(validationResult)) return validationResult;
+        if (!isValid(validationResult)) return validationResult;
 
-    // We must cast unless we can use the validator as a type guard
-    return new Ctor(dto as PartialDTO<TEntity>);
-  };
+        // We must cast unless we can make the validator into a type guard
+        return new Ctor(dto as DTO<TEntity>);
+    };

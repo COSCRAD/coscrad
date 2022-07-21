@@ -1,20 +1,15 @@
-import { Entity } from 'apps/api/src/domain/models/entity';
-import { isEntityId } from 'apps/api/src/domain/types/EntityId';
-import { PartialDTO } from 'apps/api/src/types/partial-dto';
+import { isAggregateId } from '../../../domain/types/AggregateId';
+import { HasAggregateId } from '../../../domain/types/HasAggregateId';
+import { DTO } from '../../../types/DTO';
 import { DatabaseDTO } from './mapEntityDTOToDatabaseDTO';
 
-export default <TEntity extends Entity>(
-    databaseDTO: DatabaseDTO<PartialDTO<TEntity>>
-): PartialDTO<TEntity> =>
-    Object.entries(databaseDTO).reduce(
-        (accumulatedMappedObject: PartialDTO<TEntity>, [key, value]) => {
-            if (key === '_key') {
-                if (isEntityId(value)) accumulatedMappedObject['id'] = value;
-            } else {
-                accumulatedMappedObject[key] = value;
-            }
+export default <TEntity extends HasAggregateId>(databaseDTO: DatabaseDTO<TEntity>): DTO<TEntity> =>
+    Object.entries(databaseDTO).reduce((accumulatedMappedObject: DTO<TEntity>, [key, value]) => {
+        if (key === '_key') {
+            if (isAggregateId(value)) accumulatedMappedObject['id'] = value;
+        } else {
+            accumulatedMappedObject[key] = value;
+        }
 
-            return accumulatedMappedObject as unknown as PartialDTO<TEntity>;
-        },
-        {} as PartialDTO<TEntity>
-    );
+        return accumulatedMappedObject as unknown as DTO<TEntity>;
+    }, {} as DTO<TEntity>);

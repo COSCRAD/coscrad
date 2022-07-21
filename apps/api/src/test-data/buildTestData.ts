@@ -1,6 +1,15 @@
-import { entityTypes, InMemorySnapshot } from '../domain/types/entityTypes';
+import { InMemorySnapshot, ResourceType } from '../domain/types/ResourceType';
+import buildBibliographicReferenceTestData from './buildBibliographicReferenceTestData';
+import buildBookTestData from './buildBookTestData';
+import buildCategoryTestData from './buildCategoryTestData';
+import buildEdgeConnectionTestData from './buildEdgeConnectionTestData';
+import buildMediaItemTestData from './buildMediaItemTestData';
+import buildPhotographTestData from './buildPhotographTestData';
+import buildSongTestData from './buildSongTestData';
+import buildSpatialFeatureTestData from './buildSpatialFeatureTestData';
 import buildTagTestData from './buildTagTestData';
 import buildTermTestData from './buildTermTestData';
+import buildTranscribedAudioTestData from './buildTranscribedAudioTestData';
 import buildVocabularyListTestData from './buildVocabularyListTestData';
 
 /**
@@ -9,7 +18,18 @@ import buildVocabularyListTestData from './buildVocabularyListTestData';
  * invariants.
  */
 export default (): InMemorySnapshot => ({
-    [entityTypes.tag]: buildTagTestData(),
-    [entityTypes.term]: buildTermTestData(),
-    [entityTypes.vocabularyList]: buildVocabularyListTestData(),
+    resources: {
+        [ResourceType.term]: buildTermTestData(),
+        [ResourceType.vocabularyList]: buildVocabularyListTestData(),
+        [ResourceType.transcribedAudio]: buildTranscribedAudioTestData(),
+        [ResourceType.book]: buildBookTestData(),
+        [ResourceType.photograph]: buildPhotographTestData(),
+        [ResourceType.spatialFeature]: buildSpatialFeatureTestData(),
+        [ResourceType.bibliographicReference]: buildBibliographicReferenceTestData(),
+        [ResourceType.song]: buildSongTestData(),
+        [ResourceType.mediaItem]: buildMediaItemTestData(),
+    },
+    connections: buildEdgeConnectionTestData(),
+    tags: buildTagTestData(),
+    categoryTree: buildCategoryTestData(),
 });

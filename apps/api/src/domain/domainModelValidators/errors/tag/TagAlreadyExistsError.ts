@@ -1,9 +1,9 @@
-import { InternalError } from 'apps/api/src/lib/errors/InternalError';
+import { InternalError } from '../../../../lib/errors/InternalError';
 
 export default class TagAlreadyExistsError extends InternalError {
-  constructor(text: string) {
-    const message = `The tag ${text} already exists`;
+    constructor(text: string) {
+        const message = `The tag ${text} already exists`;
 
-    super(message);
-  }
+        super(message);
+    }
 }

@@ -1,7 +1,7 @@
-import { Term } from 'apps/api/src/domain/models/term/entities/term.entity';
-import { Criterion } from 'apps/api/src/domain/repositories/interfaces/Criterion';
-import { ISpecification } from 'apps/api/src/domain/repositories/interfaces/ISpecification';
-import { QueryOperator } from 'apps/api/src/domain/repositories/interfaces/QueryOperator';
+import { Term } from '../../models/term/entities/term.entity';
+import { Criterion } from '../../repositories/interfaces/Criterion';
+import { QueryOperator } from '../../repositories/interfaces/QueryOperator';
+import { ISpecification } from '../interfaces/specification.interface';
 
 export default class TermEnglishEquals implements ISpecification<Term, string> {
     /**

@@ -1,13 +1,13 @@
-import { InternalError } from 'apps/api/src/lib/errors/InternalError';
+import { InternalError } from '../../../../lib/errors/InternalError';
 
 export default class VocabularyListHasNoNameInAnyLanguageError extends InternalError {
-  constructor(vocabularyListId?: string) {
-    const message = [
-      `Vocabulary list`,
-      vocabularyListId ? `with ID ${vocabularyListId}` : ``,
-      `has no name in either language`,
-    ].join(' ');
+    constructor(vocabularyListId?: string) {
+        const message = [
+            `Vocabulary list`,
+            vocabularyListId ? `with ID ${vocabularyListId}` : ``,
+            `has no name in either language`,
+        ].join(' ');
 
-    super(message);
-  }
+        super(message);
+    }
 }

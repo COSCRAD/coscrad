@@ -1,0 +1,34 @@
+{
+    "root": "libs/commands",
+    "sourceRoot": "libs/commands/src",
+    "entryFile": "index",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/node:package",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/libs/commands",
+                "tsConfig": "libs/commands/tsconfig.lib.json",
+                "packageJson": "libs/commands/package.json",
+                "main": "libs/commands/src/index.ts",
+                "assets": ["libs/commands/*.md"]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": ["libs/commands/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/libs/commands"],
+            "options": {
+                "jestConfig": "libs/commands/jest.config.js",
+                "passWithNoTests": true
+            }
+        }
+    },
+    "tags": []
+}

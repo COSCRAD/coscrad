@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { getConfig } from '../../config';
 import './AllEntities.module.scss';
 
 /* eslint-disable-next-line */
@@ -19,7 +20,7 @@ export function AllEntities(props: AllEntitiesProps) {
 
     setAppState({ entitiesAndDescriptions: {} });
 
-    const apiUrl = `http://104.225.142.106:3131/api/entities/`;
+    const apiUrl = `${getConfig().apiUrl}/api/entities/`;
 
     fetch(apiUrl, { mode: 'cors' })
       .then((res) =>{
