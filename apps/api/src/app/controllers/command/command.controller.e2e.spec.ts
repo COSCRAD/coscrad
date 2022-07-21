@@ -1,4 +1,5 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
+import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import getValidResourceInstanceForTest from '../../../domain/domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
@@ -6,10 +7,12 @@ import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import { Song } from '../../../domain/models/song/song.entity';
+import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import buildTestData from '../../../test-data/buildTestData';
 import { DTO } from '../../../types/DTO';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
@@ -30,10 +33,20 @@ const buildValidCommandFSA = (id: string): FluxStandardAction<DTO<CreateSong>> =
 
 const existingSong = getValidResourceInstanceForTest(ResourceType.song);
 
+const dummyAdminUser = buildTestData().users[0].clone({
+    roles: [CoscradUserRole.projectAdmin],
+});
+
+// Only the role matters here
+const testUserWithGroups = new CoscradUserWithGroups(dummyAdminUser, []);
+
 /**
  * This is a high level integration test. It's purpose is to check that
  * the command controller returns the correct Http status codes in its response
  * depending on the result \ exception that occurs.
+ *
+ * This test assumes an authorized user. `command-rbac.e2e.spec.ts` has the
+ * responsibility of testing our Role Based Access Control for the commands route.
  */
 describe('The Command Controller', () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -50,7 +63,7 @@ describe('The Command Controller', () => {
                 {
                     ARANGO_DB_NAME: generateRandomTestDatabaseName(),
                 },
-                { shouldMockIdGenerator: true }
+                { shouldMockIdGenerator: true, testUserWithGroups }
             ));
 
         commandHandlerService.registerHandler(
@@ -59,6 +72,17 @@ describe('The Command Controller', () => {
         );
 
         jest.useFakeTimers().setSystemTime(new Date('2020-04-05'));
+    });
+
+    beforeEach(async () => {
+        await testRepositoryProvider.testSetup();
+
+        // The admin user must be there for the auth middleware
+        await testRepositoryProvider.getUserRepository().create(dummyAdminUser);
+    });
+
+    afterEach(async () => {
+        await testRepositoryProvider.testTeardown();
     });
 
     describe('when the command type is invalid', () => {
