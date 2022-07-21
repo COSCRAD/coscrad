@@ -1,1 +1,193 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleleapis.com/css2?family=Sora&display=swap');
+
+body {
+  font-family: 'Sora', sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background-image: url(https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg);
+}
+
+h1, h2 {
+  margin-top: 0;
+  padding: 10px;
+}
+
+.home, .stream, .links, .contact, .about, .funders {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  min-height: calc( 100vh - 71px);
+  background: linear-gradient(90deg, rgba(2,0,36,0.7570378493194152) 0%, rgba(210,47,27,0.4405112386751575) 100%);
+;
+  ;
+}
+
+.active {
+  color: orangered;
+}
+
+a {
+  text-decoration: none;
+}
+
+.contact {
+  color: #fff;
+}
+
+.about {
+  color: white;
+}
+
+.funders {
+  color: #fff;
+}
+
+.fundersLink {
+  text-decoration: none;
+  color: lightgray;
+}
+
+.fundersLink:hover {
+  color: #fff;
+  transition: 200ms ease-in-out;
+}
+
+.Link {
+  text-decoration: none;
+  color: lightgray;
+  font-size: 30px;
+}
+
+.Link:hover {
+  color: #fff;
+  transition: 250ms ease-in-out;
+}
+
+.Links {
+  text-decoration: none;
+  color: lightgray;
+}
+
+.Links:hover {
+  color: #fff;
+  transition: 250ms ease-in-out;
+}
+
+html, body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.footerLink{
+  text-decoration: none;
+  color: lightgray;
+}
+
+.footerLink:hover {
+  color: white;
+  transition: 400ms ease-in-out;
+}
+
+.copyright {
+  text-align: center;
+  padding-top: 10px;
+}
+
+/* radio css */
+@import url("https://fonts.googleapis.com/css?family=Permanent+Marker|Rock+Salt");
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.player {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  background-color: rgba(211, 211, 211, 0.5);
+}
+
+
+.song {
+  user-select: none;
+  margin: 0 20px;
+}
+  
+.song__title {
+  text-align: left;
+  margin: 0;
+  color: white;
+  font-family: "Permanent Marker", cursive;
+  font-weight: normal;
+  font-size: 3.5em;
+}
+
+.song__title:hover {
+  color: rgba(252,8,0,255);
+}
+   
+.song__artist {
+  margin: 0;
+  color: white;
+  font-family: "Rock Salt", cursive;
+  font-weight: normal;
+  font-size: 1em;
+}
+
+.song__artist:hover {
+  color: rgba(252,8,0,255);
+}
+   
+.controls {
+  flex-grow: 1;
+  margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.player__button {
+  width: fit-content;
+  margin-bottom: 15px;
+  background-color: transparent;
+  border: none;
+}
+    
+.player__button:focus {
+  outline: none;
+}
+  
+.player__button:hover {
+  cursor: pointer;
+}
+
+    
+.player {
+    flex-direction: column; 
+}
+
+
+@media screen and (max-width: 800px) {
+    
+.controls {
+  width: 100%;
+  margin-top: 20px;
+}
+
+}
+
+@media screen and (max-width: 500px) {
+
+.song__title {
+  font-size: 2.5em;
+}
+
+.song__artist {
+  font-size: 0.8em;
+  }
+}
