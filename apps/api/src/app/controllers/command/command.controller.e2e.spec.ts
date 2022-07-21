@@ -44,6 +44,9 @@ const testUserWithGroups = new CoscradUserWithGroups(dummyAdminUser, []);
  * This is a high level integration test. It's purpose is to check that
  * the command controller returns the correct Http status codes in its response
  * depending on the result \ exception that occurs.
+ *
+ * This test assumes an authorized user. `command-rbac.e2e.spec.ts` has the
+ * responsibility of testing our Role Based Access Control for the commands route.
  */
 describe('The Command Controller', () => {
     let testRepositoryProvider: TestRepositoryProvider;

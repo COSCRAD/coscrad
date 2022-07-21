@@ -10,12 +10,19 @@ import { CoscradUserWithGroups } from '../../../domain/models/user-management/us
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
+import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
 
+/**
+ * This is a high level test that checks the Role Base Access Control for
+ * the commands endpoint. It mocks out the auth strategy / guard.
+ *
+ * `command.controller.e2e.spec.ts` tests the command controller in more detail
+ **/
 describe('Role Based Access Control for commands', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -24,6 +31,8 @@ describe('Role Based Access Control for commands', () => {
     let commandHandlerService: CommandHandlerService;
 
     let idManager: IIdManager;
+
+    let arangoConnectionProvider: ArangoConnectionProvider;
 
     const existingSong = getValidResourceInstanceForTest(ResourceType.song).clone({
         id: buildDummyUuid(),
@@ -49,13 +58,18 @@ describe('Role Based Access Control for commands', () => {
         const testUserWithGroups = new CoscradUserWithGroups(ordinaryUser, [userGroup]);
 
         beforeAll(async () => {
-            ({ testRepositoryProvider, app, commandHandlerService, idManager } =
-                await setUpIntegrationTest(
-                    {
-                        ARANGO_DB_NAME: generateRandomTestDatabaseName(),
-                    },
-                    { shouldMockIdGenerator: true, testUserWithGroups }
-                ));
+            ({
+                testRepositoryProvider,
+                app,
+                commandHandlerService,
+                idManager,
+                arangoConnectionProvider,
+            } = await setUpIntegrationTest(
+                {
+                    ARANGO_DB_NAME: generateRandomTestDatabaseName(),
+                },
+                { shouldMockIdGenerator: true, testUserWithGroups }
+            ));
 
             commandHandlerService.registerHandler(
                 'PUBLISH_SONG',
@@ -75,11 +89,14 @@ describe('Role Based Access Control for commands', () => {
 
         afterAll(async () => {
             await app.close();
+
+            await arangoConnectionProvider.dropDatabaseIfExists();
         });
         it('should return an unauthroized error', async () => {
-            const res = await request(app.getHttpServer()).post(`/commands`).send(validCommandFSA);
-
-            expect(res.status).toBe(httpStatusCodes.unauthorized);
+            await request(app.getHttpServer())
+                .post(`/commands`)
+                .send(validCommandFSA)
+                .expect(httpStatusCodes.unauthorized);
         });
     });
 
@@ -109,11 +126,14 @@ describe('Role Based Access Control for commands', () => {
 
         afterAll(async () => {
             await app.close();
+
+            await arangoConnectionProvider.dropDatabaseIfExists();
         });
         it('should return an unauthroized error', async () => {
-            const res = await request(app.getHttpServer()).post(`/commands`).send(validCommandFSA);
-
-            expect(res.status).toBe(httpStatusCodes.unauthorized);
+            await request(app.getHttpServer())
+                .post(`/commands`)
+                .send(validCommandFSA)
+                .expect(httpStatusCodes.unauthorized);
         });
     });
 
@@ -161,13 +181,14 @@ describe('Role Based Access Control for commands', () => {
 
             afterAll(async () => {
                 await app.close();
+
+                await arangoConnectionProvider.dropDatabaseIfExists();
             });
             it('should return ok', async () => {
-                const res = await request(app.getHttpServer())
+                await request(app.getHttpServer())
                     .post(`/commands`)
-                    .send(validCommandFSA);
-
-                expect(res.status).toBe(httpStatusCodes.ok);
+                    .send(validCommandFSA)
+                    .expect(httpStatusCodes.ok);
             });
         });
     });

@@ -25,8 +25,15 @@ export const AdminJwtGuard = AuthGuard('jwt');
 @ApiTags('commands')
 @Controller('commands')
 /**
+ * TODO [https://www.pivotaltracker.com/story/show/182785593]
+ * Enforce RBAC for commands in a guard isntead.
+ */
+/**
  * The next two filters convert a thrown error to a returned error (400) when an
  * invalid command type is provided by the user.
+ *
+ * TODO [https://www.pivotaltracker.com/story/show/182785593]
+ * We may want to do this in a pipe in the future.
  */
 @UseFilters(new CommandWithGivenTypeNotFoundExceptionFilter())
 @UseFilters(new NoCommandHandlerForCommandTypeFilter())
