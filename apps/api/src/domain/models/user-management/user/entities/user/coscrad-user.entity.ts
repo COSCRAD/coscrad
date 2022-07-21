@@ -75,6 +75,12 @@ export class CoscradUser extends Aggregate implements ValidatesExternalState {
         this.authProviderUserId = authProviderUserId;
     }
 
+    isAdmin() {
+        return [CoscradUserRole.projectAdmin, CoscradUserRole.superAdmin].some((role) =>
+            this.roles.includes(role)
+        );
+    }
+
     grantRole(role: CoscradUserRole): ResultOrError<CoscradUser> {
         if (this.roles.includes(role)) return new UserAlreadyHasRoleError(this.id, role);
 
