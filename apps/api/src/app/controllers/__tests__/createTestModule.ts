@@ -29,7 +29,7 @@ import { Environment } from '../../config/constants/Environment';
 import { EnvironmentVariables } from '../../config/env.validation';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import { CategoryController } from '../category.controller';
-import { CommandController } from '../command/command.controller';
+import { AdminJwtGuard, CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
 import { CoscradUserGroupController } from '../coscrad-user-group.controller';
 import { EdgeConnectionController } from '../edgeConnection.controller';
@@ -227,6 +227,8 @@ export default async (
     })
         .overrideGuard(OptionalJwtAuthGuard)
         .useValue(new MockJwtAuthGuard(testUserWithGroups, true))
+        .overrideGuard(AdminJwtGuard)
+        .useValue(new MockJwtAuthGuard(testUserWithGroups, false))
         .compile()
         .catch((error) => {
             throw new InternalError(error.message);
