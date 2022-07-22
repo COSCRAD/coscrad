@@ -15,11 +15,11 @@ import mapEdgeConnectionDTOToArangoEdgeDocument from '../../persistence/database
 import mapEntityDTOToDatabaseDTO from '../../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
 
 type InMemoryDatabaseSnapshot = {
-    documentCollections: {
+    document: {
         [K in Exclude<ArangoCollectionId, 'uuids'>]: unknown[];
     } & { uuids: UuidDocument<AggregateId>[] };
 
-    edgeCollections: {
+    edge: {
         [K in ArangoEdgeCollectionId]: Record<string, unknown>[];
     };
 };
@@ -28,7 +28,7 @@ export default (snapshot: InMemorySnapshot): InMemoryDatabaseSnapshot => {
     const databaseTags = snapshot.tags.map(toDto).map(mapEntityDTOToDatabaseDTO);
 
     return {
-        documentCollections: {
+        document: {
             [ArangoCollectionId.tags]: databaseTags,
             [ArangoCollectionId.categories]: snapshot.categoryTree
                 .map(toDto)
@@ -49,7 +49,7 @@ export default (snapshot: InMemorySnapshot): InMemoryDatabaseSnapshot => {
             ),
         },
 
-        edgeCollections: {
+        edge: {
             category_edges: buildEdgeDocumentsFromCategoryNodeDTOs(snapshot.categoryTree),
             resource_edge_connections: snapshot.connections
                 .map(toDto)

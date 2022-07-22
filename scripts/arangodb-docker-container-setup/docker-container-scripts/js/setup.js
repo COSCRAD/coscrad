@@ -28,22 +28,9 @@ else {
 
 const testData = require(process.env.ARANGODB_DESTINATION_CONTAINER_DOCKER_SHARED_VOLUME_SCRIPTS_PATH + '/test-data/testData.json');
 
-// TODO [https://www.pivotaltracker.com/story/show/182132515]
-const reformatedTestData = {
-  document: {
-    ...testData.resources,
-    categories: testData.categories,
-    tags: testData.tags,
-  },
-  edge: {
-    resource_edge_connections: testData.resource_edge_connections,
-    category_edges: testData.categoryEdges,
-  }
-}
-
-for (collectionType in reformatedTestData) {
-  for (collectionName in reformatedTestData[collectionType]) {
-    addCollectionAndData(collectionName, collectionType, reformatedTestData[collectionType][collectionName]);
+for (collectionType in testData) {
+  for (collectionName in testData[collectionType]) {
+    addCollectionAndData(collectionName, collectionType, testData[collectionType][collectionName]);
   }
 }
 
