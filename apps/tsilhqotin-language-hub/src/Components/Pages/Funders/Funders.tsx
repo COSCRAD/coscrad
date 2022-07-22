@@ -1,4 +1,5 @@
 import { Card, Divider } from '@mui/material';
+import ScrollToTop from '../../Widgets/ScrollButton/ScrollToTop';
 
 /* eslint-disable-next-line */
 export interface FundersProps {}
@@ -6,6 +7,8 @@ export interface FundersProps {}
 export function Funders(props: FundersProps) {
     return (
         <div className="page">
+            <ScrollToTop />
+
             <div id="heading">
                 <div id="container">
                     <h1 id="pageTitle">Funders</h1>

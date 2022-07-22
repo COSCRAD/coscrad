@@ -486,3 +486,60 @@ h2 {
 .language {
     color: #000000c6;
 }
+
+.top-to-btm {
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
+.top-to-div {
+    position: relative !important;
+    z-index: 1000 !important;
+}
+.icon-position {
+    position: fixed !important;
+    bottom: 40px !important;
+    right: 25px !important;
+    z-index: 20 !important;
+}
+
+.bottomCenter {
+    position: relative;
+    text-align: center;
+    bottom: 80px;
+}
+
+.icon-style {
+    background-color: rgba(18, 10, 86, 0.3) !important;
+    border: 2px solid #fff !important;
+    border-radius: 50% !important;
+    height: 50px !important;
+    width: 50px !important;
+    color: #fff !important;
+    cursor: pointer !important;
+    animation: movebtn 3s ease-in-out infinite !important;
+    transition: all 0.5s ease-in-out !important;
+}
+.icon-style:hover {
+    animation: none !important;
+    background: rgba(18, 10, 86, 1) !important;
+    color: rgb(255, 255, 255) !important;
+}
+
+@keyframes movebtn {
+    0% {
+        transform: translateY(0px) !important;
+    }
+    25% {
+        transform: translateY(20px) !important;
+    }
+    50% {
+        transform: translateY(0px) !important;
+    }
+    75% {
+        transform: translateY(-20px) !important;
+    }
+    100% {
+        transform: translateY(0px) !important;
+    }
+}

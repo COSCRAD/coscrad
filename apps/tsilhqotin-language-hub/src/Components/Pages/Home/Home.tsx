@@ -1,11 +1,15 @@
 import { Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import ScrollToDiv from '../../Widgets/ScrollButton/ScrollDiv';
+import ScrollToTop from '../../Widgets/ScrollButton/ScrollToTop';
 import './Home.module.css';
 
 function App(): JSX.Element {
     return (
         <Typography className="page" component={'span'} variant={'body2'}>
             <div className="Home">
+                <ScrollToTop />
+
                 <div className="topDiv">
                     <div className="backdrop">
                         <div className="title">
@@ -13,14 +17,19 @@ function App(): JSX.Element {
                                 <b>Tŝilhqot’in Ch’ih Yaltɨg</b>
                                 <p className="heroTitle">We’re speaking the Tŝilhqot’in language</p>
                             </div>
-                            <Link to={'/About'} id="top" className="dialect">
-                                Dialect
-                            </Link>
+                            <div>
+                                <Link to={'/About'} id="top" className="dialect">
+                                    Dialect
+                                </Link>{' '}
+                            </div>
                         </div>
+                    </div>
+                    <div className="bottomCenter">
+                        <ScrollToDiv />
                     </div>
                 </div>
 
-                <div className="flex-container">
+                <section className="flex-container">
                     <div className="flex-child1">Cell Phone Image</div>
 
                     <div className="flex-child2">
@@ -41,7 +50,8 @@ function App(): JSX.Element {
                             </Button>
                         </div>
                     </div>
-                </div>
+                </section>
+                <section className="flex-container">hi</section>
             </div>
         </Typography>
     );
