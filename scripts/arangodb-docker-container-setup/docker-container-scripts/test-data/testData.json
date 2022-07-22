@@ -1,5 +1,5 @@
 {
-    "documentCollections": {
+    "document": {
         "tags": [
             {
                 "type": "tag",
@@ -858,7 +858,7 @@
             }
         ]
     },
-    "edgeCollections": {
+    "edge": {
         "category_edges": [
             {
                 "_to": "categories/1",
