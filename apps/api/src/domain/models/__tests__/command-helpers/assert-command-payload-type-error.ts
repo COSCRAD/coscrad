@@ -24,6 +24,8 @@ export const assertCommandFailsDueToTypeError = async (
     { propertyName, invalidValue }: PropertyNameAndInvalidValue,
     validCommandFSA: FluxStandardAction<ICommand>
 ) => {
+    const dummyAdminUserId = 'adminb4d-3b7d-4bad-9bdd-2b0d7b3admin';
+
     const validId = await idManager.generate();
 
     const buildInvalidFSA = (id, payloadOverrides) =>
@@ -32,7 +34,10 @@ export const assertCommandFailsDueToTypeError = async (
     const result = await commandHandlerService.execute(
         buildInvalidFSA(validId, {
             [propertyName]: invalidValue,
-        })
+        }),
+        {
+            userId: dummyAdminUserId,
+        }
     );
 
     assertCommandPayloadTypeError(result, propertyName);

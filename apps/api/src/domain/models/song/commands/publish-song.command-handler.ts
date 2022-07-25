@@ -48,7 +48,7 @@ export class PublishSongCommandHandler extends BaseUpdateCommandHandler<Song> {
         return Valid;
     }
 
-    protected eventFactory(command: PublishSong, eventId: string): BaseEvent {
-        return new SongPublished(command, eventId);
+    protected buildEvent(command: PublishSong, eventId: string, userId: AggregateId): BaseEvent {
+        return new SongPublished(command, eventId, userId);
     }
 }

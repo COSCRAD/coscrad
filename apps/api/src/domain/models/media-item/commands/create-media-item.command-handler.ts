@@ -89,7 +89,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
         return Valid;
     }
 
-    protected eventFactory(command: CreateMediaItem, eventId: AggregateId) {
-        return new MediaItemCreated(command, eventId);
+    protected buildEvent(command: CreateMediaItem, eventId: AggregateId, userId: AggregateId) {
+        return new MediaItemCreated(command, eventId, userId);
     }
 }

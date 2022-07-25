@@ -6,6 +6,7 @@ import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../../repositories/interfaces/repository-for-aggregate.interface';
+import { AggregateId } from '../../../../../types/AggregateId';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
@@ -54,7 +55,7 @@ export class GrantUserRoleCommandHandler extends BaseUpdateCommandHandler<Coscra
         return Valid;
     }
 
-    protected eventFactory(command: GrantUserRole, eventId: string): BaseEvent {
-        return new UserRoleGranted(command, eventId);
+    protected buildEvent(command: GrantUserRole, eventId: string, userId: AggregateId): BaseEvent {
+        return new UserRoleGranted(command, eventId, userId);
     }
 }

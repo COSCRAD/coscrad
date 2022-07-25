@@ -1,6 +1,7 @@
 import { Ack, ICommand } from '@coscrad/commands';
 import { CommandFSA } from '../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import { InMemorySnapshot } from '../../../../domain/types/ResourceType';
+import { AggregateId } from '../../../types/AggregateId';
 import { CommandAssertionDependencies } from '../command-helpers/types/CommandAssertionDependencies';
 
 type TestCase = {
@@ -12,6 +13,8 @@ type TestCase = {
      * ID is marked as such.
      */
     checkStateOnSuccess?: (command: ICommand) => Promise<void>;
+
+    userId: AggregateId;
 };
 
 /**
@@ -20,7 +23,12 @@ type TestCase = {
  */
 export const assertCommandSuccess = async (
     dependencies: Omit<CommandAssertionDependencies, 'idManager'>,
-    { buildValidCommandFSA: buildCommandFSA, initialState: state, checkStateOnSuccess }: TestCase
+    {
+        buildValidCommandFSA: buildCommandFSA,
+        initialState: state,
+        checkStateOnSuccess,
+        userId,
+    }: TestCase
 ) => {
     const { testRepositoryProvider, commandHandlerService } = dependencies;
 
@@ -30,7 +38,7 @@ export const assertCommandSuccess = async (
     const commandFSA = buildCommandFSA();
 
     // Act
-    const result = await commandHandlerService.execute(commandFSA);
+    const result = await commandHandlerService.execute(commandFSA, { userId });
 
     // Assert
     expect(result).toBe(Ack);

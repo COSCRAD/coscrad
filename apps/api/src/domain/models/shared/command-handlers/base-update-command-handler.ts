@@ -5,7 +5,6 @@ import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { Aggregate } from '../../aggregate.entity';
 import AggregateNotFoundError from '../common-command-errors/AggregateNotFoundError';
-import { BaseEvent } from '../events/base-event.entity';
 import { BaseCommandHandler } from './base-command-handler';
 
 /**
@@ -19,8 +18,6 @@ export abstract class BaseUpdateCommandHandler<
     TAggregate extends Aggregate
 > extends BaseCommandHandler<TAggregate> {
     protected abstract aggregateType: AggregateType;
-
-    protected abstract eventFactory(command: ICommand, eventId: AggregateId): BaseEvent;
 
     protected abstract getAggregateIdFromCommand(command: ICommand): AggregateId;
 
@@ -40,13 +37,17 @@ export abstract class BaseUpdateCommandHandler<
     }
 
     // TODO There's still lots of overlap with the `create` command handler base- move to base class
-    protected async persist(instance: TAggregate, command: ICommand): Promise<void> {
+    protected async persist(
+        instance: TAggregate,
+        command: ICommand,
+        userId: AggregateId
+    ): Promise<void> {
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
 
         await this.idManager.use(eventId);
 
-        const event = this.eventFactory(command, eventId);
+        const event = this.buildEvent(command, eventId, userId);
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 

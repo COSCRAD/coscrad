@@ -8,6 +8,7 @@ import { Valid } from '../../../../../domainModelValidators/Valid';
 import buildInstanceFactory from '../../../../../factories/utilities/buildInstanceFactory';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { IUserRepository } from '../../../../../repositories/interfaces/user-repository.interface';
+import { AggregateId } from '../../../../../types/AggregateId';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
@@ -51,8 +52,8 @@ export class RegisterUserCommandHandler extends BaseCreateCommandHandler<Coscrad
         return buildInstanceFactory(CoscradUser)(createDto);
     }
 
-    protected eventFactory(command: RegisterUser, eventId: string): BaseEvent {
-        return new UserRegistered(command, eventId);
+    protected buildEvent(command: RegisterUser, eventId: string, userId: AggregateId): BaseEvent {
+        return new UserRegistered(command, eventId, userId);
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

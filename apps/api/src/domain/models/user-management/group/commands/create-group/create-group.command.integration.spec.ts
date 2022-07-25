@@ -15,6 +15,7 @@ import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapsho
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../../__tests__/command-helpers/assert-create-command-success';
+import { assertEventRecordPersisted } from '../../../../__tests__/command-helpers/assert-event-record-persisted';
 import { DummyCommandFSAFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
@@ -52,6 +53,8 @@ const existingUserGroupDto: DTO<CoscradUserGroup> = {
 };
 
 const existingUserGroup = new CoscradUserGroup(existingUserGroupDto);
+
+const dummyAdminUserId = buildDummyUuid();
 
 describe('CreateGroup', () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -101,6 +104,7 @@ describe('CreateGroup', () => {
     describe('when the command is valid', () => {
         it('should succeed', async () => {
             await assertCreateCommandSuccess(commandAssertionDependencies, {
+                adminUserId: dummyAdminUserId,
                 buildValidCommandFSA,
                 initialState,
                 checkStateOnSuccess: async ({ id }: CreateGroup) => {
@@ -117,6 +121,12 @@ describe('CreateGroup', () => {
                     const idStatus = await idManager.status(id);
 
                     expect(idStatus).toBe(NotAvailable);
+
+                    assertEventRecordPersisted(
+                        userGroupSearchResult as CoscradUserGroup,
+                        'USER_GROUP_CREATED',
+                        dummyAdminUserId
+                    );
                 },
             });
         });
@@ -126,6 +136,7 @@ describe('CreateGroup', () => {
         describe('when the new group ID was not generated with our system', () => {
             it('should return the expected error', async () => {
                 await assertCreateCommandError(commandAssertionDependencies, {
+                    adminUserId: dummyAdminUserId,
                     buildCommandFSA: (id: AggregateId) =>
                         buildInvalidFSA(id, { id: buildDummyUuid() }),
                     initialState,
@@ -145,7 +156,10 @@ describe('CreateGroup', () => {
 
                 const commandFSAThatReusesId = buildValidCommandFSA(newId);
 
-                const executionResult = await commandHandlerService.execute(commandFSAThatReusesId);
+                const executionResult = await commandHandlerService.execute(
+                    commandFSAThatReusesId,
+                    { userId: dummyAdminUserId }
+                );
 
                 assertExternalStateError(executionResult, new UserGroupIdAlreadyInUseError(newId));
             });
@@ -154,6 +168,7 @@ describe('CreateGroup', () => {
         describe('when there is already a user group with the given label', () => {
             it('should fail with the expected error', async () => {
                 await assertCreateCommandError(commandAssertionDependencies, {
+                    adminUserId: dummyAdminUserId,
                     buildCommandFSA: (id: AggregateId) =>
                         buildInvalidFSA(id, { label: existingUserGroup.label }),
                     initialState: buildInMemorySnapshot({

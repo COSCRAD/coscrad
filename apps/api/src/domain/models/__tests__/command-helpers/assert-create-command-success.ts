@@ -1,11 +1,13 @@
 import { Ack, ICommand } from '@coscrad/commands';
 import { InMemorySnapshot } from '../../../../domain/types/ResourceType';
+import { AggregateId } from '../../../types/AggregateId';
 import { CommandAssertionDependencies } from '../command-helpers/types/CommandAssertionDependencies';
 import { FSAFactoryFunction } from '../command-helpers/types/FSAFactoryFunction';
 
 type TestCase = {
     buildValidCommandFSA: FSAFactoryFunction;
     initialState: InMemorySnapshot;
+    adminUserId: AggregateId;
     /**
      * This allows us to run additional checks after the command succeeds. E.g.
      * we may want to check that the instance was persisted or that a newly used
@@ -16,7 +18,12 @@ type TestCase = {
 
 export const assertCreateCommandSuccess = async (
     dependencies: CommandAssertionDependencies,
-    { buildValidCommandFSA: buildCommandFSA, initialState: state, checkStateOnSuccess }: TestCase
+    {
+        buildValidCommandFSA: buildCommandFSA,
+        initialState: state,
+        checkStateOnSuccess,
+        adminUserId,
+    }: TestCase
 ) => {
     const { testRepositoryProvider, commandHandlerService, idManager } = dependencies;
 
@@ -28,7 +35,7 @@ export const assertCreateCommandSuccess = async (
     const commandFSA = buildCommandFSA(newId);
 
     // Act
-    const result = await commandHandlerService.execute(commandFSA);
+    const result = await commandHandlerService.execute(commandFSA, { userId: adminUserId });
 
     // Assert
     expect(result).toBe(Ack);

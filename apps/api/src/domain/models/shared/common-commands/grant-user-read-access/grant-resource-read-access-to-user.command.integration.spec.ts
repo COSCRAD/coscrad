@@ -16,6 +16,7 @@ import buildInMemorySnapshot from '../../../../utilities/buildInMemorySnapshot';
 import { Resource } from '../../../resource.entity';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
+import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -49,6 +50,8 @@ const validFSA: FluxStandardAction<GrantResourceReadAccessToUser> = {
 const buildValidCommandFSA = () => validFSA;
 
 const fsaFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
+
+const dummyAdminUserId = buildDummyUuid();
 
 describe('GrantResourceReadAccesstoUser', () => {
     let app: INestApplication;
@@ -117,6 +120,7 @@ describe('GrantResourceReadAccesstoUser', () => {
                                     resourceCompositeIdentifier: resource.getCompositeIdentifier(),
                                 }),
                             initialState,
+                            userId: dummyAdminUserId,
                             checkStateOnSuccess: async ({
                                 userId,
                                 resourceCompositeIdentifier: { type, id },
@@ -136,6 +140,12 @@ describe('GrantResourceReadAccesstoUser', () => {
                                 expect(updatedResource.queryAccessControlList.canUser(userId)).toBe(
                                     true
                                 );
+
+                                assertEventRecordPersisted(
+                                    updatedResource,
+                                    'RESOURCE_READ_ACCESS_GRANTED_TO_USER',
+                                    dummyAdminUserId
+                                );
                             },
                         });
                     });
@@ -152,6 +162,7 @@ describe('GrantResourceReadAccesstoUser', () => {
                         // no users
                         resources,
                     }),
+                    adminUserId: dummyAdminUserId,
                     checkError: (error: InternalError) => {
                         expect(error).toBeInstanceOf(CommandExecutionError);
 
@@ -174,6 +185,7 @@ describe('GrantResourceReadAccesstoUser', () => {
                         users: [existingUser],
                         // no resources
                     }),
+                    adminUserId: dummyAdminUserId,
                     checkError: (error: InternalError) => {
                         expect(error).toBeInstanceOf(CommandExecutionError);
 
@@ -189,6 +201,7 @@ describe('GrantResourceReadAccesstoUser', () => {
             it('should fail', async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     buildCommandFSA: buildValidCommandFSA,
+                    adminUserId: dummyAdminUserId,
                     initialState: buildInMemorySnapshot({
                         users: [existingUser],
                         resources: {

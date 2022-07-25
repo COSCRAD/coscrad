@@ -14,6 +14,7 @@ import { CoscradUser } from '../../../user-management/user/entities/user/coscrad
 import validateCommandPayloadType from '../../command-handlers/utilities/validateCommandPayloadType';
 import AggregateNotFoundError from '../../common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../common-command-errors/CommandExecutionError';
+import { EventRecordMetadata } from '../../events/types/EventRecordMetadata';
 import { GrantResourceReadAccessToUser } from './grant-resource-read-access-to-user.command';
 import { ResourceReadAccessGrantedToUser } from './resource-read-access-granted-to-user.event';
 
@@ -29,7 +30,8 @@ export class GrantResourceReadAccessToUserCommandHandler implements ICommandHand
 
     async execute(
         command: GrantResourceReadAccessToUser,
-        commandType: string
+        commandType: string,
+        { userId: commandExecutorUserId }: Pick<EventRecordMetadata, 'userId'>
     ): Promise<Ack | Error> {
         const typeValidationResult = validateCommandPayloadType(command, commandType);
 
@@ -86,7 +88,7 @@ export class GrantResourceReadAccessToUserCommandHandler implements ICommandHand
         const eventId = await this.idManager.generate();
 
         const updatedResourceWithEvents = resourceUpdateResult.addEventToHistory(
-            new ResourceReadAccessGrantedToUser(command, eventId)
+            new ResourceReadAccessGrantedToUser(command, eventId, commandExecutorUserId)
         );
 
         /**

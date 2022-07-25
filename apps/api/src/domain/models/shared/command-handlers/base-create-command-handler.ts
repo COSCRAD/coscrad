@@ -8,7 +8,6 @@ import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { Aggregate } from '../../aggregate.entity';
-import { BaseEvent } from '../events/base-event.entity';
 import { BaseCommandHandler } from './base-command-handler';
 import { ICreateCommand } from './interfaces/create-command.interface';
 
@@ -26,8 +25,6 @@ export abstract class BaseCreateCommandHandler<
 
     protected abstract createNewInstance(command: ICreateCommand): ResultOrError<TAggregate>;
 
-    protected abstract eventFactory(command: ICreateCommand, eventId: AggregateId): BaseEvent;
-
     protected createOrFetchWriteContext(
         command: ICreateCommand
     ): Promise<ResultOrError<TAggregate>> {
@@ -42,7 +39,11 @@ export abstract class BaseCreateCommandHandler<
         return instance;
     }
 
-    protected async persist(instance: TAggregate, command: ICreateCommand): Promise<void> {
+    protected async persist(
+        instance: TAggregate,
+        command: ICreateCommand,
+        userId: AggregateId
+    ): Promise<void> {
         /**
          * TODO [https://www.pivotaltracker.com/story/show/182597855]
          *
@@ -56,7 +57,7 @@ export abstract class BaseCreateCommandHandler<
 
         await this.idManager.use(eventId);
 
-        const event = this.eventFactory(command, eventId);
+        const event = this.buildEvent(command, eventId, userId);
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 

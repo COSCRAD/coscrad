@@ -1,11 +1,13 @@
 import { CommandFSA } from '../../../../app/controllers/command/command-fsa/command-fsa.entity';
 import { InMemorySnapshot } from '../../../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
+import { AggregateId } from '../../../types/AggregateId';
 import { CommandAssertionDependencies } from '../command-helpers/types/CommandAssertionDependencies';
 
 type TestCase = {
     buildCommandFSA: () => CommandFSA;
     initialState: InMemorySnapshot;
+    adminUserId: AggregateId;
     checkError?: (error: InternalError) => void;
 };
 
@@ -15,7 +17,7 @@ type TestCase = {
  */
 export const assertCommandError = async (
     dependencies: Omit<CommandAssertionDependencies, 'idManager'>,
-    { buildCommandFSA: buildCommandFSA, initialState: state, checkError }: TestCase
+    { buildCommandFSA: buildCommandFSA, initialState: state, checkError, adminUserId }: TestCase
 ) => {
     const { testRepositoryProvider, commandHandlerService } = dependencies;
 
@@ -25,7 +27,7 @@ export const assertCommandError = async (
     const commandFSA = await buildCommandFSA();
 
     // Act
-    const result = await commandHandlerService.execute(commandFSA);
+    const result = await commandHandlerService.execute(commandFSA, { userId: adminUserId });
 
     // Assert
     expect(result).toBeInstanceOf(InternalError);

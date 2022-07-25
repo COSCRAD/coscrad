@@ -41,6 +41,8 @@ const buildFullState = (song: Song) =>
         },
     });
 
+const dummyAdminUserId = 'adminb4d-3b7d-4bad-9bdd-2b0d7b3admin';
+
 describe('PublishSong', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -85,6 +87,7 @@ describe('PublishSong', () => {
     describe('when the payload is valid', () => {
         it('should succeed', async () => {
             await assertCommandSuccess(commandAssertionDependencies, {
+                userId: dummyAdminUserId,
                 buildValidCommandFSA: buildCommandFSA,
                 initialState: buildFullState(unpublishedSong),
             });
@@ -95,6 +98,7 @@ describe('PublishSong', () => {
         describe('when the id property has an invalid type (number[])', () => {
             it('should return an error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
+                    adminUserId: dummyAdminUserId,
                     buildCommandFSA: () => ({
                         type: publishSongCommandType,
                         payload: {
@@ -119,6 +123,7 @@ describe('PublishSong', () => {
         describe('when there is no song with the given ID', () => {
             it('should return the expected error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
+                    adminUserId: dummyAdminUserId,
                     buildCommandFSA,
                     // Note the absence of any existing songs here
                     initialState: buildInMemorySnapshot({}),
@@ -131,6 +136,7 @@ describe('PublishSong', () => {
         describe('when the song is already published', () => {
             it('should return the expected error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
+                    adminUserId: dummyAdminUserId,
                     buildCommandFSA,
                     initialState: buildFullState(unpublishedSong.clone({ published: true })),
                 });

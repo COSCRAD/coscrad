@@ -1,11 +1,5 @@
 import { BaseEvent } from '../../shared/events/base-event.entity';
 
-export type EventRecordMetadata = {
-    dateCreated: number;
-
-    id: string;
-};
-
 /**
  * For now, we are just mirroring our command payload onto our events. We can update
  * this if and when we decide to use the events (e.g. for event sourcing).

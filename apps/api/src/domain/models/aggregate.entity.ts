@@ -16,8 +16,11 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
     /**
      * We make this property optional so we don't need to specify it on existing data
      * or test data. If it is not on a DTO, it will be set to [] in the constructor.
+     *
+     * We do not populate instances of the event- only plain objects (DTOs). In order
+     * to use instances, we will need an `EventFactory`.
      */
-    readonly eventHistory?: BaseEvent[];
+    readonly eventHistory?: DTO<BaseEvent>[];
 
     readonly type: AggregateType;
 

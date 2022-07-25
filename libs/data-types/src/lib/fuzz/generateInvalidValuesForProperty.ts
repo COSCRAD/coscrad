@@ -103,10 +103,15 @@ export default ({ type, isArray, isOptional }: CoscradDataSchema): ValueAndDescr
     if (isArray) {
         const numberOfElementsInEachArray = 5;
 
-        return invalidValuesAndDescriptions.map(({ value, description }) => ({
-            description: `${description}[]`,
-            value: Array(numberOfElementsInEachArray).fill(value),
-        }));
+        return (
+            invalidValuesAndDescriptions
+                // TODO Investigate nested array properties' behaviour here
+                .filter(({ description }) => description !== 'emptyArray')
+                .map(({ value, description }) => ({
+                    description: `${description}[]`,
+                    value: Array(numberOfElementsInEachArray).fill(value),
+                }))
+        );
     }
 
     return invalidValuesAndDescriptions;

@@ -63,7 +63,10 @@ export class CommandController {
 
         const { type, payload } = commandFSA;
 
-        const result = await this.commandHandlerService.execute({ type, payload });
+        const result = await this.commandHandlerService.execute(
+            { type, payload },
+            { userId: user.id }
+        );
 
         if (result !== Ack) return sendInternalResultAsHttpResponse(res, result);
 

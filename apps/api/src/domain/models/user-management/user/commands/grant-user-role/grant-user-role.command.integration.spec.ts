@@ -50,6 +50,8 @@ const getDistinctRole = (role: CoscradUserRole): CoscradUserRole => {
     return allRoles[(indexOfRole + 1) % allRoles.length];
 };
 
+const dummyAdminId = 'adminb4d-3b7d-4bad-9bdd-2b0d7b3admin';
+
 describe('GrantUserRole', () => {
     let app: INestApplication;
 
@@ -107,6 +109,7 @@ describe('GrantUserRole', () => {
             describe(`when the role is: ${role}`, () => {
                 it('should succeed', async () => {
                     await assertCommandSuccess(commandAssertionDependencies, {
+                        userId: dummyAdminId,
                         buildValidCommandFSA: () => ({
                             type: commandType,
                             payload: {
@@ -131,6 +134,7 @@ describe('GrantUserRole', () => {
         describe('when there is no user with the given ID', () => {
             it('should fail', async () => {
                 await assertCommandError(commandAssertionDependencies, {
+                    adminUserId: dummyAdminId,
                     buildCommandFSA: () => validCommandFSA,
                     initialState: buildEmptyInMemorySnapshot(),
                     checkError: (error: InternalError) => {
@@ -147,6 +151,7 @@ describe('GrantUserRole', () => {
         describe('when the user already has the given role', () => {
             it('should return the appropriate error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
+                    adminUserId: dummyAdminId,
                     buildCommandFSA: () => validCommandFSA,
                     initialState: buildInMemorySnapshot({
                         users: [

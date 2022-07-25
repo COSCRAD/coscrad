@@ -9,6 +9,7 @@ import buildInstanceFactory from '../../../../../factories/utilities/buildInstan
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IUserRepository } from '../../../../../repositories/interfaces/user-repository.interface';
+import { AggregateId } from '../../../../../types/AggregateId';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
@@ -55,8 +56,12 @@ export class CreateGroupCommandHandler extends BaseCreateCommandHandler<CoscradU
         return buildInstanceFactory(CoscradUserGroup)(createDto);
     }
 
-    protected eventFactory(command: CreateGroup, eventId: string): BaseEvent {
-        return new GroupCreated(command, eventId);
+    protected buildEvent(
+        command: CreateGroup,
+        eventId: string,
+        adminUserId: AggregateId
+    ): BaseEvent {
+        return new GroupCreated(command, eventId, adminUserId);
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

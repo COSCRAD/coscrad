@@ -12,15 +12,16 @@ import InvalidResourceDTOError from '../../../domainModelValidators/errors/Inval
 import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
-import { assertCommandPayloadTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
+import { assertCommandFailsDueToTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
-import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/InvalidCommandPayloadTypeError';
 import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
+import { assertEventRecordPersisted } from '../../__tests__/command-helpers/assert-event-record-persisted';
+import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { MediaItem } from '../entities/media-item.entity';
@@ -64,6 +65,8 @@ const buildInvalidFSA = (
 });
 
 const emptyInitialState = buildInMemorySnapshot({});
+
+const dummyAdminUserId = buildDummyUuid();
 
 describe('CreateMediaItem', () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -109,6 +112,7 @@ describe('CreateMediaItem', () => {
     describe('when the command is valid', () => {
         it('should succeed', async () => {
             await assertCreateCommandSuccess(assertionHelperDependencies, {
+                adminUserId: dummyAdminUserId,
                 buildValidCommandFSA,
                 initialState: emptyInitialState,
                 checkStateOnSuccess: async ({ id }: CreateMediaItem) => {
@@ -125,173 +129,36 @@ describe('CreateMediaItem', () => {
                     expect(mediaItemSearchResult).not.toBeInstanceOf(InternalError);
 
                     expect(mediaItemSearchResult).toBeInstanceOf(MediaItem);
+
+                    const mediaItem = mediaItemSearchResult as MediaItem;
+
+                    assertEventRecordPersisted(mediaItem, 'MEDIA_ITEM_CREATED', dummyAdminUserId);
                 },
             });
         });
     });
 
     describe('when the command payload type is invalid', () => {
-        describe('when `id` is a random string (not a UUID)', () => {
-            it('should fail', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) => buildInvalidFSA(id, { id: '855' }),
-                    initialState: emptyInitialState,
-                    checkError: (error) => assertCommandPayloadTypeError(error, 'id'),
-                });
-            });
-        });
-
-        describe('when `title` is a number', () => {
-            it('should fail', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            title: 702,
-                        }),
-                    initialState: emptyInitialState,
-                    checkError: (error) => assertCommandPayloadTypeError(error, 'title'),
-                });
-            });
-        });
-
-        describe('when `url` is an invalidly formatted string', () => {
-            it('should fail', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            url: 'djp:--woooo',
-                        }),
-                    initialState: emptyInitialState,
-                });
-            });
-        });
-
-        describe('when `titleEnglish` is an array', () => {
-            it('should fail', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            url: ['55', '57'],
-                        }),
-                    initialState: emptyInitialState,
-                    checkError: (error) => assertCommandPayloadTypeError(error, `url`),
-                });
-            });
-        });
-
-        describe('when one of the contributions is a plain string', () => {
-            it('should fail', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            contributions: [
-                                {
-                                    contributorId: '33',
-                                    role: 'set design',
-                                },
-                                'John did the edits',
-                            ],
-                        }),
-                    initialState: emptyInitialState,
-                    checkError: (error) => assertCommandPayloadTypeError(error, 'contributions'),
-                });
-            });
-        });
-
-        describe('when one of the contributions has a numeric ID', () => {
-            it('should fail', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            contributions: [
-                                {
-                                    contributorId: '33',
-                                    role: 'set design',
-                                },
-                                {
-                                    contributorId: 445,
-                                    role: 'editor',
-                                },
-                            ],
-                        }),
-                    initialState: emptyInitialState,
-                    checkError: (error) => assertCommandPayloadTypeError(error, 'contributions'),
-                });
-            });
-        });
-
-        describe('when one of the contributions has an array of roles', () => {
-            it('should fail', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            contributions: [
-                                {
-                                    contributorId: '33',
-                                    role: ['screenplay', 'editor'],
-                                },
-                            ],
-                        }),
-                    initialState: emptyInitialState,
-                    checkError: (error) => assertCommandPayloadTypeError(error, 'contributions'),
-                });
-            });
-        });
-
-        describe('when the MIME type is not one of the registered types', () => {
-            it('should fail', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            mimeType: 'bogus/mp12',
-                        }),
-                    initialState: emptyInitialState,
-                    checkError: (error) => assertCommandPayloadTypeError(error, 'mimeType'),
-                });
-            });
-        });
-
-        describe('when RawData is a string', () => {
-            it('should fail', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            rawData: 'I should really be an object!',
-                        }),
-                    initialState: emptyInitialState,
-                    checkError: (error) => assertCommandPayloadTypeError(error, 'rawData'),
-                });
-            });
-        });
-
-        describe('when there are multiple properties with invalid types', () => {
-            it('should fail with multiple errors', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, { rawData: 'I am not an object', id: 99 }),
-                    initialState: emptyInitialState,
-                    checkError: (error) => {
-                        expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
-
-                        const innerErrors = error.innerErrors;
-
-                        expect(innerErrors.length).toBe(2);
-
-                        expect(innerErrors.some((e) => e.toString().includes('rawData'))).toBe(
-                            true
+        generateCommandFuzzTestCases(CreateMediaItem).forEach(
+            ({ description, propertyName, invalidValue }) => {
+                describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                    it('should fail with the appropriate error', async () => {
+                        await assertCommandFailsDueToTypeError(
+                            assertionHelperDependencies,
+                            { propertyName, invalidValue },
+                            buildValidCommandFSA('unused-id')
                         );
-
-                        expect(innerErrors.some((e) => e.toString().includes('id'))).toBe(true);
-                    },
+                    });
                 });
-            });
-        });
+            }
+        );
     });
 
     describe('when the external state is invalid', () => {
         describe('when the ID was not generated by our system', () => {
             it('should fail', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
+                    adminUserId: dummyAdminUserId,
                     buildCommandFSA: (_: AggregateId) => buildValidCommandFSA(buildDummyUuid()),
                     initialState: emptyInitialState,
                     checkError: (error) => {
@@ -308,6 +175,7 @@ describe('CreateMediaItem', () => {
         describe('when there is already a media item with the given id', () => {
             it('should fail', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
+                    adminUserId: dummyAdminUserId,
                     buildCommandFSA: (_: AggregateId) => buildValidCommandFSA(existingMediaItemId),
                     initialState: buildInMemorySnapshot({
                         resources: {
@@ -342,6 +210,7 @@ describe('CreateMediaItem', () => {
         describe('when the media item has no title in any language', () => {
             it('should fail', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
+                    adminUserId: dummyAdminUserId,
                     buildCommandFSA: (id: AggregateId) =>
                         buildInvalidFSA(id, {
                             title: null,

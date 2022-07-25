@@ -23,14 +23,17 @@ export class CommandHandlerService {
         this.#handlers.set(type, handler);
     }
 
-    async execute({ type, payload }: FluxStandardAction): Promise<Error | Ack> {
+    async execute(
+        { type, payload }: FluxStandardAction,
+        meta?: Record<string, unknown>
+    ): Promise<Error | Ack> {
         const handler = this.#handlers.get(type);
 
         if (!handler) throw new NoCommandHandlerRegisteredForCommandException(type);
 
         const commandInstance = this.#buildCommand({ type, payload });
 
-        return handler.execute(commandInstance, type);
+        return handler.execute(commandInstance, type, meta);
     }
 
     #buildCommand({ type, payload }: FluxStandardAction): ICommand {

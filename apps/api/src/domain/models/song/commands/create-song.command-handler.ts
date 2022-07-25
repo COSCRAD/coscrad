@@ -12,9 +12,11 @@ import { Valid } from '../../../domainModelValidators/Valid';
 import getInstanceFactoryForEntity from '../../../factories/getInstanceFactoryForResource';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
+import { AggregateId } from '../../../types/AggregateId';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import { BaseCommandHandler } from '../../shared/command-handlers/base-command-handler';
+import { BaseEvent } from '../../shared/events/base-event.entity';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 import { SongCreated } from './song-created.event';
@@ -106,7 +108,11 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         return Valid;
     }
 
-    async persist(instance: Song, command: CreateSong): Promise<void> {
+    protected buildEvent(command: CreateSong, eventId: string, userId: string): BaseEvent {
+        return new SongCreated(command, eventId, userId);
+    }
+
+    async persist(instance: Song, command: CreateSong, userId: AggregateId): Promise<void> {
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
 
@@ -119,7 +125,7 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         await this.idManager.use(command.id);
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(
-            new SongCreated(command, eventId)
+            this.buildEvent(command, eventId, userId)
         );
 
         // Persist the valid instance

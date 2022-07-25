@@ -6,6 +6,7 @@ import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../../repositories/interfaces/repository-for-aggregate.interface';
+import { AggregateId } from '../../../../../types/AggregateId';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
@@ -43,8 +44,12 @@ export class AddUserToGroupCommandHandler extends BaseUpdateCommandHandler<Coscr
         return instance.addUser(userId);
     }
 
-    protected eventFactory(command: AddUserToGroup, eventId: string): BaseEvent {
-        return new UserAddedToGroup(command, eventId);
+    protected buildEvent(
+        command: AddUserToGroup,
+        eventId: string,
+        adminUserId: AggregateId
+    ): BaseEvent {
+        return new UserAddedToGroup(command, eventId, adminUserId);
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

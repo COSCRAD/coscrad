@@ -6,6 +6,7 @@ Array [
     "meta": Object {
       "dateCreated": 1586044800000,
       "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0005",
+      "userId": "1",
     },
     "payload": Object {
       "audioURL": "https://www.mysound.org/song.mp3",

@@ -6,6 +6,7 @@ import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
+import { AggregateId } from '../../../types/AggregateId';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import { BaseUpdateCommandHandler } from '../../shared/command-handlers/base-update-command-handler';
@@ -48,7 +49,11 @@ export class PublishMediaItemCommandHandler extends BaseUpdateCommandHandler<Med
         return instance.publish();
     }
 
-    protected eventFactory(command: PublishMediaItem, eventId: string): BaseEvent {
-        return new MediaItemPublished(command, eventId);
+    protected buildEvent(
+        command: PublishMediaItem,
+        eventId: string,
+        userId: AggregateId
+    ): BaseEvent {
+        return new MediaItemPublished(command, eventId, userId);
     }
 }

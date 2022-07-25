@@ -2,7 +2,7 @@ import { ICommand } from '@coscrad/commands';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { AggregateId } from '../../../types/AggregateId';
 import BaseDomainModel from '../../BaseDomainModel';
-import { EventRecordMetadata } from '../../song/commands/song-created.event';
+import { EventRecordMetadata } from './types/EventRecordMetadata';
 
 export abstract class BaseEvent extends BaseDomainModel {
     abstract type: string;
@@ -11,7 +11,7 @@ export abstract class BaseEvent extends BaseDomainModel {
 
     payload: ICommand;
 
-    constructor(command: ICommand, eventId: AggregateId) {
+    constructor(command: ICommand, eventId: AggregateId, userId: AggregateId) {
         super();
 
         this.payload = cloneToPlainObject(command);
@@ -19,6 +19,7 @@ export abstract class BaseEvent extends BaseDomainModel {
         this.meta = {
             dateCreated: Date.now(),
             id: eventId,
+            userId,
         };
     }
 }

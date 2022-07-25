@@ -6,9 +6,12 @@ import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
+import { AggregateId } from '../../../types/AggregateId';
 import { InMemorySnapshot } from '../../../types/ResourceType';
 import { Aggregate } from '../../aggregate.entity';
 import CommandExecutionError from '../common-command-errors/CommandExecutionError';
+import { BaseEvent } from '../events/base-event.entity';
+import { EventRecordMetadata } from '../events/types/EventRecordMetadata';
 import validateCommandPayloadType from './utilities/validateCommandPayloadType';
 
 const buildExecutionError = (allErrors: InternalError[]) => new CommandExecutionError(allErrors);
@@ -43,7 +46,17 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         instance: TAggregate
     ): Valid | InternalError;
 
-    protected abstract persist(instance: TAggregate, command: ICommand): Promise<void>;
+    protected abstract buildEvent(
+        command: ICommand,
+        eventId: AggregateId,
+        userId: AggregateId
+    ): BaseEvent;
+
+    protected abstract persist(
+        instance: TAggregate,
+        command: ICommand,
+        userId: AggregateId
+    ): Promise<void>;
 
     /**
      * This is a catch-all in case there's some presently unforeseen validation
@@ -53,7 +66,11 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         return Valid;
     }
 
-    async execute(command: ICommand, commandType: string): Promise<Ack | InternalError> {
+    async execute(
+        command: ICommand,
+        commandType: string,
+        { userId }: Pick<EventRecordMetadata, 'userId'>
+    ): Promise<Ack | InternalError> {
         const typeValidationResult = this.validateType(command, commandType);
 
         if (isInternalError(typeValidationResult)) return typeValidationResult;
@@ -83,7 +100,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         if (isInternalError(additionalValidationResult))
             return buildExecutionError([additionalValidationResult]);
 
-        await this.persist(updatedInstance, command);
+        await this.persist(updatedInstance, command, userId);
 
         return Ack;
     }
