@@ -786,6 +786,22 @@
                     "issn": "00052949",
                     "doi": "10.14288/bcs.v0i19.784"
                 }
+            },
+            {
+                "type": "bibliographicReference",
+                "_key": "1",
+                "published": true,
+                "eventHistory": [],
+                "data": {
+                    "type": "courtCase",
+                    "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+                    "creators": [],
+                    "abstract": "William, June\n- Nemiah Valley\n- Qualifying as an expert in Tsilhqot'in written language",
+                    "dateDecided": "Recorded 2002-07-08",
+                    "court": "Supreme Court of British Columbia",
+                    "url": "",
+                    "pages": "Pages 1-6"
+                }
             }
         ],
         "songs": [
