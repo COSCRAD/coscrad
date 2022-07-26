@@ -1,8 +1,9 @@
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { InvariantValidationMethod } from '../../../../lib/web-of-knowledge/decorators/invariant-validation-method.decorator';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import InvalidResourceDTOError from '../../../domainModelValidators/errors/InvalidResourceDTOError';
-import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
@@ -17,6 +18,7 @@ export class CourtCaseBibliographicReference
     implements IBibliographicReference<CourtCaseBibliographicReferenceData>
 {
     readonly type = AggregateType.bibliographicReference;
+
     readonly data: CourtCaseBibliographicReferenceData;
 
     constructor(dto: DTO<CourtCaseBibliographicReference>) {
@@ -27,11 +29,15 @@ export class CourtCaseBibliographicReference
         this.data = new CourtCaseBibliographicReferenceData(dto.data);
     }
 
+    @InvariantValidationMethod(
+        (allErrors: InternalError[], instance: CourtCaseBibliographicReference) =>
+            new InvalidResourceDTOError(ResourceType.bibliographicReference, instance.id, allErrors)
+    )
     validateInvariants(): ResultOrError<Valid> {
-        const typeErrors = validateSimpleInvariants(CourtCaseBibliographicReference, this);
+        // const typeErrors = validateSimpleInvariants(CourtCaseBibliographicReference, this);
 
-        if (typeErrors.length > 0)
-            return new InvalidResourceDTOError(this.type, this.id, typeErrors);
+        // if (typeErrors.length > 0)
+        //     return new InvalidResourceDTOError(this.type, this.id, typeErrors);
 
         return Valid;
     }
