@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import BibliographicReferenceCreator from '../../../../../models/bibliographic-reference/entities/BibliographicReferenceCreator';
-import { JournalArticleBibliographicReference } from '../../../../../models/bibliographic-reference/entities/journal-article-bibliographic-reference.entity';
+import BibliographicReferenceCreator from '../../../../../models/bibliographic-reference/common/bibliographic-reference-creator.entity';
+import { JournalArticleBibliographicReference } from '../../../../../models/bibliographic-reference/journal-article-bibliographic-reference/journal-article-bibliographic-reference.entity';
 import { BibliographicReferenceType } from '../../../../../models/bibliographic-reference/types/BibliographicReferenceType';
 import { AggregateId } from '../../../../../types/AggregateId';
 import { ResourceType } from '../../../../../types/ResourceType';

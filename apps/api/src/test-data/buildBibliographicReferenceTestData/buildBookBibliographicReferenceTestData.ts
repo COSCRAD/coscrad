@@ -1,4 +1,4 @@
-import { BookBibliographicReference } from '../../domain/models/bibliographic-reference/entities/book-bibliographic-reference.entity';
+import { BookBibliographicReference } from '../../domain/models/bibliographic-reference/book-bibliographic-reference/book-bibliographic-reference.entity';
 import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/IBibliographicReference';
 import { BibliographicReferenceType } from '../../domain/models/bibliographic-reference/types/BibliographicReferenceType';
 import { CreatorType } from '../../domain/models/bibliographic-reference/types/CreatorType';

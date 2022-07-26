@@ -1,7 +1,7 @@
 import { InternalError } from '../../../lib/errors/InternalError';
-import BookBibliographicReferenceData from '../../models/bibliographic-reference/entities/BookBibliographicReferenceData';
-import JournalArticleBibliographicReferenceData from '../../models/bibliographic-reference/entities/JournalArticleBibliographicReferenceData';
+import BookBibliographicReferenceData from '../../models/bibliographic-reference/book-bibliographic-reference/book-bibliographic-reference-data.entity';
 import { IBibliographicReference } from '../../models/bibliographic-reference/interfaces/IBibliographicReference';
+import JournalArticleBibliographicReferenceData from '../../models/bibliographic-reference/journal-article-bibliographic-reference/journal-article-bibliographic-reference-data.entity';
 import { BibliographicReferenceType } from '../../models/bibliographic-reference/types/BibliographicReferenceType';
 import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';

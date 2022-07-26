@@ -8,9 +8,9 @@ import {
 import { DTO } from '../../../../types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
+import BibliographicReferenceCreator from '../common/bibliographic-reference-creator.entity';
 import { IBibliographicReferenceData } from '../interfaces/IBibliographicReferenceData';
 import { BibliographicReferenceType } from '../types/BibliographicReferenceType';
-import BibliographicReferenceCreator from './BibliographicReferenceCreator';
 
 export default class JournalArticleBibliographicReferenceData
     extends BaseDomainModel

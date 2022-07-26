@@ -1,4 +1,3 @@
-import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import InvalidResourceDTOError from '../../../domainModelValidators/errors/InvalidResourceDTOError';
@@ -8,27 +7,26 @@ import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { Resource } from '../../resource.entity';
 import { IBibliographicReference } from '../interfaces/IBibliographicReference';
-import BookBibliographicReferenceData from './BookBibliographicReferenceData';
+import JournalArticleBibliographicReferenceData from './journal-article-bibliographic-reference-data.entity';
 
-@RegisterIndexScopedCommands([])
-export class BookBibliographicReference
+export class JournalArticleBibliographicReference
     extends Resource
-    implements IBibliographicReference<BookBibliographicReferenceData>
+    implements IBibliographicReference<JournalArticleBibliographicReferenceData>
 {
     readonly type = ResourceType.bibliographicReference;
 
-    readonly data: BookBibliographicReferenceData;
+    readonly data: JournalArticleBibliographicReferenceData;
 
-    constructor(dto: DTO<BookBibliographicReference>) {
+    constructor(dto: DTO<JournalArticleBibliographicReference>) {
         super({ ...dto, type: ResourceType.bibliographicReference });
 
         if (isNullOrUndefined(dto)) return;
 
-        this.data = new BookBibliographicReferenceData(dto.data);
+        this.data = new JournalArticleBibliographicReferenceData(dto.data);
     }
 
     validateInvariants(): ResultOrError<Valid> {
-        const typeErrors = validateSimpleInvariants(BookBibliographicReference, this);
+        const typeErrors = validateSimpleInvariants(JournalArticleBibliographicReference, this);
 
         if (typeErrors.length > 0)
             return new InvalidResourceDTOError(this.type, this.id, typeErrors);

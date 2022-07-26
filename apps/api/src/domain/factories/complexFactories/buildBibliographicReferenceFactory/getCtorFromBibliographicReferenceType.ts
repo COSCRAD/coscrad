@@ -1,7 +1,7 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
-import { BookBibliographicReference } from '../../../models/bibliographic-reference/entities/book-bibliographic-reference.entity';
-import { JournalArticleBibliographicReference } from '../../../models/bibliographic-reference/entities/journal-article-bibliographic-reference.entity';
+import { BookBibliographicReference } from '../../../models/bibliographic-reference/book-bibliographic-reference/book-bibliographic-reference.entity';
+import { JournalArticleBibliographicReference } from '../../../models/bibliographic-reference/journal-article-bibliographic-reference/journal-article-bibliographic-reference.entity';
 import { BibliographicReferenceType } from '../../../models/bibliographic-reference/types/BibliographicReferenceType';
 
 const bibliographicReferenceTypeToModel = {
