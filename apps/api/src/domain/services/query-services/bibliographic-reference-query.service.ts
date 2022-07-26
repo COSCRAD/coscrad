@@ -1,7 +1,7 @@
 import { CommandInfo } from '../../../app/controllers/command/services/command-info-service';
 import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
-import { IBibliographicReference } from '../../models/bibliographic-reference/interfaces/IBibliographicReference';
-import { IBibliographicReferenceData } from '../../models/bibliographic-reference/interfaces/IBibliographicReferenceData';
+import { IBibliographicReferenceData } from '../../models/bibliographic-reference/interfaces/bibliographic-reference-data.interface';
+import { IBibliographicReference } from '../../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { ResourceType } from '../../types/ResourceType';
 import { BaseQueryService } from './base-query.service';
 

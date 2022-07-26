@@ -1,22 +1,30 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
 import { BookBibliographicReference } from '../../../models/bibliographic-reference/book-bibliographic-reference/book-bibliographic-reference.entity';
+import { CourtCaseBibliographicReference } from '../../../models/bibliographic-reference/court-case-bibliographic-reference/court-case-bibliographic-reference.entity';
+import { IBibliographicReference } from '../../../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { JournalArticleBibliographicReference } from '../../../models/bibliographic-reference/journal-article-bibliographic-reference/journal-article-bibliographic-reference.entity';
 import { BibliographicReferenceType } from '../../../models/bibliographic-reference/types/BibliographicReferenceType';
 
-const bibliographicReferenceTypeToModel = {
+// TODO move this to utility types lib
+type CtorToInstance<T> = T extends DomainModelCtor<infer U> ? U : never;
+
+const bibliographicReferenceTypeToModel: {
+    [K in BibliographicReferenceType]: DomainModelCtor<IBibliographicReference>;
+} = {
     [BibliographicReferenceType.book]: BookBibliographicReference,
     [BibliographicReferenceType.journalArticle]: JournalArticleBibliographicReference,
-};
-
-export type BibliographicReferenceTypeToInstance = {
-    [BibliographicReferenceType.book]: BookBibliographicReference;
-    [BibliographicReferenceType.journalArticle]: JournalArticleBibliographicReference;
+    [BibliographicReferenceType.courtCase]: CourtCaseBibliographicReference,
 };
 
 export type BibliographicReferenceTypeToCtor = {
-    [BibliographicReferenceType.book]: DomainModelCtor<BookBibliographicReference>;
-    [BibliographicReferenceType.journalArticle]: DomainModelCtor<JournalArticleBibliographicReference>;
+    [K in keyof typeof bibliographicReferenceTypeToModel]: typeof bibliographicReferenceTypeToModel[K];
+};
+
+export type BibliographicReferenceTypeToInstance = {
+    [K in keyof BibliographicReferenceTypeToCtor]: CtorToInstance<
+        BibliographicReferenceTypeToCtor[K]
+    >;
 };
 
 export default <TBibliographicReferenceType extends BibliographicReferenceType>(

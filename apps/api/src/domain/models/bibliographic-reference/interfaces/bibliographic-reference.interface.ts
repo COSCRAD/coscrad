@@ -1,6 +1,6 @@
 import { ResourceType } from '../../../types/ResourceType';
 import { Resource } from '../../resource.entity';
-import { IBibliographicReferenceData } from './IBibliographicReferenceData';
+import { IBibliographicReferenceData } from './bibliographic-reference-data.interface';
 
 export interface IBibliographicReference<
     T extends IBibliographicReferenceData = IBibliographicReferenceData

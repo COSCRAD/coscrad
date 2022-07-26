@@ -1,4 +1,4 @@
-import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/IBibliographicReference';
+import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import buildBookBibliographicReferenceTestData from './buildBookBibliographicReferenceTestData';
 import buildJournalArticleBibliographicReferenceTestData from './buildJournalArticleBibliographicReferenceTestData';
 

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IBibliographicReference } from '../../../../domain/models/bibliographic-reference/interfaces/IBibliographicReference';
-import { IBibliographicReferenceData } from '../../../../domain/models/bibliographic-reference/interfaces/IBibliographicReferenceData';
+import { IBibliographicReferenceData } from '../../../../domain/models/bibliographic-reference/interfaces/bibliographic-reference-data.interface';
+import { IBibliographicReference } from '../../../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { BaseViewModel } from '../base.view-model';
 
 export class BibliographicReferenceViewModel extends BaseViewModel {

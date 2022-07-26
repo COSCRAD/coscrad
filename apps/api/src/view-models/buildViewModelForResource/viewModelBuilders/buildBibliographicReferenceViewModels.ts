@@ -1,4 +1,4 @@
-import { IBibliographicReference } from '../../../domain/models/bibliographic-reference/interfaces/IBibliographicReference';
+import { IBibliographicReference } from '../../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import IsPublished from '../../../domain/repositories/specifications/isPublished';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { isInternalError } from '../../../lib/errors/InternalError';

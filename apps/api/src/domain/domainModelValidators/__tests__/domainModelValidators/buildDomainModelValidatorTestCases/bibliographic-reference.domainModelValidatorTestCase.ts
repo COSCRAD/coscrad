@@ -1,4 +1,4 @@
-import { IBibliographicReference } from '../../../../models/bibliographic-reference/interfaces/IBibliographicReference';
+import { IBibliographicReference } from '../../../../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { BibliographicReferenceType } from '../../../../models/bibliographic-reference/types/BibliographicReferenceType';
 import { ResourceType } from '../../../../types/ResourceType';
 import bibliographicReferenceValidator from '../../../bibliographicReferenceValidator';

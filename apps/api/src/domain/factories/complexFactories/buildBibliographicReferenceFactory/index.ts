@@ -1,7 +1,7 @@
 import { DTO } from '../../../../types/DTO';
 import bibliographicReferenceValidator from '../../../domainModelValidators/bibliographicReferenceValidator';
 import { isValid } from '../../../domainModelValidators/Valid';
-import { IBibliographicReference } from '../../../models/bibliographic-reference/interfaces/IBibliographicReference';
+import { IBibliographicReference } from '../../../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { InstanceFactory } from '../../getInstanceFactoryForResource';
 import getCtorFromBibliographicReferenceType from './getCtorFromBibliographicReferenceType';
 
@@ -15,10 +15,9 @@ const bibliographicReferenceFactory: InstanceFactory<IBibliographicReference> = 
 
     const dto = input as DTO<IBibliographicReference>;
 
-    const ctor = getCtorFromBibliographicReferenceType(dto.data.type);
+    const Ctor = getCtorFromBibliographicReferenceType(dto.data.type);
 
-    // @ts-expect-error The alternative is to program to the union
-    return new ctor(dto);
+    return new Ctor(dto);
 };
 
 export default () => bibliographicReferenceFactory;

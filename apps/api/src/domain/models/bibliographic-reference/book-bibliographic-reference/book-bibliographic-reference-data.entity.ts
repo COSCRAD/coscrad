@@ -12,7 +12,7 @@ import { DTO } from '../../../../types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
 import BibliographicReferenceCreator from '../common/bibliographic-reference-creator.entity';
-import { IBibliographicReferenceData } from '../interfaces/IBibliographicReferenceData';
+import { IBibliographicReferenceData } from '../interfaces/bibliographic-reference-data.interface';
 import { BibliographicReferenceType } from '../types/BibliographicReferenceType';
 
 export default class BookBibliographicReferenceData

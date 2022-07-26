@@ -1,5 +1,5 @@
 import { UuidDocument } from '../../lib/id-generation/types/UuidDocument';
-import { IBibliographicReference } from '../models/bibliographic-reference/interfaces/IBibliographicReference';
+import { IBibliographicReference } from '../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { Book } from '../models/book/entities/book.entity';
 import { Category } from '../models/categories/entities/category.entity';
 import { EdgeConnection } from '../models/context/edge-connection.entity';

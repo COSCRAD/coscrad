@@ -1,4 +1,4 @@
-import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/IBibliographicReference';
+import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { JournalArticleBibliographicReference } from '../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/journal-article-bibliographic-reference.entity';
 import { BibliographicReferenceType } from '../../domain/models/bibliographic-reference/types/BibliographicReferenceType';
 import { CreatorType } from '../../domain/models/bibliographic-reference/types/CreatorType';
