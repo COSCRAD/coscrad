@@ -59,9 +59,9 @@ export class CreateGroupCommandHandler extends BaseCreateCommandHandler<CoscradU
     protected buildEvent(
         command: CreateGroup,
         eventId: string,
-        adminUserId: AggregateId
+        systemUserId: AggregateId
     ): BaseEvent {
-        return new GroupCreated(command, eventId, adminUserId);
+        return new GroupCreated(command, eventId, systemUserId);
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

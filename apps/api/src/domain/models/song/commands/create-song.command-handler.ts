@@ -108,11 +108,11 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         return Valid;
     }
 
-    protected buildEvent(command: CreateSong, eventId: string, userId: string): BaseEvent {
-        return new SongCreated(command, eventId, userId);
+    protected buildEvent(command: CreateSong, eventId: string, systemUserId: string): BaseEvent {
+        return new SongCreated(command, eventId, systemUserId);
     }
 
-    async persist(instance: Song, command: CreateSong, userId: AggregateId): Promise<void> {
+    async persist(instance: Song, command: CreateSong, systemUserId: AggregateId): Promise<void> {
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
 
@@ -125,7 +125,7 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         await this.idManager.use(command.id);
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(
-            this.buildEvent(command, eventId, userId)
+            this.buildEvent(command, eventId, systemUserId)
         );
 
         // Persist the valid instance

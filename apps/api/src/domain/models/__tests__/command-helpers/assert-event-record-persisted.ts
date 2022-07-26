@@ -6,7 +6,7 @@ import { Aggregate } from '../../aggregate.entity';
 export const assertEventRecordPersisted = (
     aggregate: Aggregate,
     eventType: string,
-    adminUserId: AggregateId
+    systemUserId: AggregateId
 ) => {
     const { eventHistory } = aggregate;
 
@@ -31,10 +31,5 @@ export const assertEventRecordPersisted = (
      */
     expect(foundEvent).toBeTruthy();
 
-    if (!foundEvent) {
-        // This shouldn't happen if the expect is satisfied
-        throw new InternalError(`No event record was found`);
-    }
-
-    expect(foundEvent.meta.userId).toBe(adminUserId);
+    expect(foundEvent.meta.userId).toBe(systemUserId);
 };

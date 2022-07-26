@@ -47,9 +47,9 @@ export class AddUserToGroupCommandHandler extends BaseUpdateCommandHandler<Coscr
     protected buildEvent(
         command: AddUserToGroup,
         eventId: string,
-        adminUserId: AggregateId
+        systemUserId: AggregateId
     ): BaseEvent {
-        return new UserAddedToGroup(command, eventId, adminUserId);
+        return new UserAddedToGroup(command, eventId, systemUserId);
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

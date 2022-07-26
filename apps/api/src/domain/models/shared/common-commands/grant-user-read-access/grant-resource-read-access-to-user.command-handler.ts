@@ -31,7 +31,7 @@ export class GrantResourceReadAccessToUserCommandHandler implements ICommandHand
     async execute(
         command: GrantResourceReadAccessToUser,
         commandType: string,
-        { userId: commandExecutorUserId }: Pick<EventRecordMetadata, 'userId'>
+        { userId: systemUserId }: Pick<EventRecordMetadata, 'userId'>
     ): Promise<Ack | Error> {
         const typeValidationResult = validateCommandPayloadType(command, commandType);
 
@@ -88,7 +88,7 @@ export class GrantResourceReadAccessToUserCommandHandler implements ICommandHand
         const eventId = await this.idManager.generate();
 
         const updatedResourceWithEvents = resourceUpdateResult.addEventToHistory(
-            new ResourceReadAccessGrantedToUser(command, eventId, commandExecutorUserId)
+            new ResourceReadAccessGrantedToUser(command, eventId, systemUserId)
         );
 
         /**

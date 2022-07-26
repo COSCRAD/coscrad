@@ -18,6 +18,7 @@ import { assertEventRecordPersisted } from '../../../../__tests__/command-helper
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { InvalidFSAFactoryFunction } from '../../../../__tests__/command-helpers/types/InvalidFSAFactoryFunction';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import { CoscradUserProfile } from '../../entities/user/coscrad-user-profile.entity';
 import { CoscradUser } from '../../entities/user/coscrad-user.entity';
 import { FullName } from '../../entities/user/full-name.entity';
@@ -65,8 +66,6 @@ const buildInvalidFSA: InvalidFSAFactoryFunction<RegisterUser> = (
 
 const initialState = buildEmptyInMemorySnapshot();
 
-const dummyAdminUserId = buildDummyUuid();
-
 describe('RegisterUser', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -111,7 +110,7 @@ describe('RegisterUser', () => {
     describe('when the command is valid', () => {
         it('should succeed', async () => {
             await assertCreateCommandSuccess(commandAssertionDependencies, {
-                adminUserId: dummyAdminUserId,
+                systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
                 initialState,
                 checkStateOnSuccess: async ({ id }: RegisterUser) => {
@@ -124,7 +123,7 @@ describe('RegisterUser', () => {
                     assertEventRecordPersisted(
                         userSearchResult as CoscradUser,
                         'USER_REGISTERED',
-                        dummyAdminUserId
+                        dummySystemUserId
                     );
                 },
             });
@@ -151,7 +150,7 @@ describe('RegisterUser', () => {
                         await commandAssertionDependencies.commandHandlerService.execute(
                             fsaWithDuplicateUserId,
                             // TODO we need type safety here
-                            { userId: dummyAdminUserId }
+                            { userId: dummySystemUserId }
                         );
 
                     assertExternalStateError(executionResult);
@@ -161,7 +160,7 @@ describe('RegisterUser', () => {
             describe('when there is already a user with the given auth provider assigned user ID', () => {
                 it('should fail', async () => {
                     await assertCreateCommandError(commandAssertionDependencies, {
-                        adminUserId: dummyAdminUserId,
+                        systemUserId: dummySystemUserId,
                         buildCommandFSA: (newId: AggregateId) =>
                             buildInvalidFSA(newId, {
                                 userIdFromAuthProvider: existingUser.authProviderUserId,
@@ -175,7 +174,7 @@ describe('RegisterUser', () => {
             describe('when there is already a user with the given id', () => {
                 it('should fail', async () => {
                     await assertCreateCommandError(commandAssertionDependencies, {
-                        adminUserId: dummyAdminUserId,
+                        systemUserId: dummySystemUserId,
                         buildCommandFSA: (newId: AggregateId) =>
                             buildInvalidFSA(newId, { username: existingUser.username }),
                         initialState: buildInMemorySnapshot({ users: [existingUser] }),
@@ -190,7 +189,7 @@ describe('RegisterUser', () => {
                 const bogusId = '4604b265-3fbd-4e1c-9603-66c43773aec0';
 
                 await assertCreateCommandError(commandAssertionDependencies, {
-                    adminUserId: dummyAdminUserId,
+                    systemUserId: dummySystemUserId,
                     buildCommandFSA: (_: AggregateId) => buildInvalidFSA(bogusId, { id: bogusId }),
                     initialState,
                 });
@@ -212,7 +211,7 @@ describe('RegisterUser', () => {
                                 buildInvalidFSA(validId, {
                                     [propertyName]: value,
                                 }),
-                                { userId: dummyAdminUserId }
+                                { userId: dummySystemUserId }
                             );
 
                             assertCommandPayloadTypeError(result, propertyName);

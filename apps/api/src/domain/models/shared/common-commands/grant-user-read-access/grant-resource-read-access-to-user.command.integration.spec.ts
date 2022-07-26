@@ -120,7 +120,7 @@ describe('GrantResourceReadAccesstoUser', () => {
                                     resourceCompositeIdentifier: resource.getCompositeIdentifier(),
                                 }),
                             initialState,
-                            userId: dummyAdminUserId,
+                            systemUserId: dummyAdminUserId,
                             checkStateOnSuccess: async ({
                                 userId,
                                 resourceCompositeIdentifier: { type, id },
@@ -162,7 +162,7 @@ describe('GrantResourceReadAccesstoUser', () => {
                         // no users
                         resources,
                     }),
-                    adminUserId: dummyAdminUserId,
+                    systemUserId: dummyAdminUserId,
                     checkError: (error: InternalError) => {
                         expect(error).toBeInstanceOf(CommandExecutionError);
 
@@ -185,7 +185,7 @@ describe('GrantResourceReadAccesstoUser', () => {
                         users: [existingUser],
                         // no resources
                     }),
-                    adminUserId: dummyAdminUserId,
+                    systemUserId: dummyAdminUserId,
                     checkError: (error: InternalError) => {
                         expect(error).toBeInstanceOf(CommandExecutionError);
 
@@ -201,7 +201,7 @@ describe('GrantResourceReadAccesstoUser', () => {
             it('should fail', async () => {
                 await assertCommandError(commandAssertionDependencies, {
                     buildCommandFSA: buildValidCommandFSA,
-                    adminUserId: dummyAdminUserId,
+                    systemUserId: dummyAdminUserId,
                     initialState: buildInMemorySnapshot({
                         users: [existingUser],
                         resources: {

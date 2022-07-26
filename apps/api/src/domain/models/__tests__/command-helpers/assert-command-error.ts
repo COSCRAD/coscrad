@@ -7,7 +7,7 @@ import { CommandAssertionDependencies } from '../command-helpers/types/CommandAs
 type TestCase = {
     buildCommandFSA: () => CommandFSA;
     initialState: InMemorySnapshot;
-    adminUserId: AggregateId;
+    systemUserId: AggregateId;
     checkError?: (error: InternalError) => void;
 };
 
@@ -17,17 +17,17 @@ type TestCase = {
  */
 export const assertCommandError = async (
     dependencies: Omit<CommandAssertionDependencies, 'idManager'>,
-    { buildCommandFSA: buildCommandFSA, initialState: state, checkError, adminUserId }: TestCase
+    { buildCommandFSA: buildCommandFSA, initialState: state, checkError, systemUserId }: TestCase
 ) => {
     const { testRepositoryProvider, commandHandlerService } = dependencies;
 
     // Arrange
     await testRepositoryProvider.addFullSnapshot(state);
 
-    const commandFSA = await buildCommandFSA();
+    const commandFSA = buildCommandFSA();
 
     // Act
-    const result = await commandHandlerService.execute(commandFSA, { userId: adminUserId });
+    const result = await commandHandlerService.execute(commandFSA, { userId: systemUserId });
 
     // Assert
     expect(result).toBeInstanceOf(InternalError);

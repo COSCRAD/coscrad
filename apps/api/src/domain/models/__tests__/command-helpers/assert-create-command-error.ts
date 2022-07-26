@@ -7,13 +7,13 @@ import { FSAFactoryFunction } from './types/FSAFactoryFunction';
 type TestCase = {
     buildCommandFSA: FSAFactoryFunction;
     initialState: InMemorySnapshot;
-    adminUserId: AggregateId;
+    systemUserId: AggregateId;
     checkError?: (error: InternalError, id?: AggregateId) => void;
 };
 
 export const assertCreateCommandError = async (
     dependencies: CommandAssertionDependencies,
-    { buildCommandFSA: buildCommandFSA, initialState: state, checkError, adminUserId }: TestCase
+    { buildCommandFSA: buildCommandFSA, initialState: state, checkError, systemUserId }: TestCase
 ) => {
     const { testRepositoryProvider, commandHandlerService, idManager } = dependencies;
 
@@ -25,7 +25,7 @@ export const assertCreateCommandError = async (
     const commandFSA = await buildCommandFSA(newId);
 
     // Act
-    const result = await commandHandlerService.execute(commandFSA, { userId: adminUserId });
+    const result = await commandHandlerService.execute(commandFSA, { userId: systemUserId });
 
     // Assert
     expect(result).toBeInstanceOf(InternalError);

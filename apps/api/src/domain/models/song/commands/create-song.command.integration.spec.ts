@@ -21,7 +21,7 @@ import { assertCreateCommandError } from '../../__tests__/command-helpers/assert
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
 import { assertEventRecordPersisted } from '../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
-import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 import { CreateSongCommandHandler } from './create-song.command-handler';
@@ -52,8 +52,6 @@ const buildInvalidFSA = (
 });
 
 const initialState = buildInMemorySnapshot({});
-
-const dummyAdminUserId = buildDummyUuid();
 
 describe('CreateSong', () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -101,7 +99,7 @@ describe('CreateSong', () => {
             await assertCreateCommandSuccess(assertionHelperDependencies, {
                 buildValidCommandFSA,
                 initialState,
-                adminUserId: dummyAdminUserId,
+                systemUserId: dummySystemUserId,
                 checkStateOnSuccess: async ({ id }: CreateSong) => {
                     const idStatus = await idManager.status(id);
 
@@ -120,7 +118,7 @@ describe('CreateSong', () => {
                     assertEventRecordPersisted(
                         songSearchResult as Song,
                         'SONG_CREATED',
-                        dummyAdminUserId
+                        dummySystemUserId
                     );
                 },
             });
@@ -133,7 +131,7 @@ describe('CreateSong', () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     buildCommandFSA: (id: AggregateId) => buildInvalidFSA(id, { id: [99] }),
                     initialState,
-                    adminUserId: dummyAdminUserId,
+                    systemUserId: dummySystemUserId,
                     checkError: (error) => {
                         // TODO Check inner errors
                         expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
@@ -156,7 +154,7 @@ describe('CreateSong', () => {
                         },
                     }),
                     initialState,
-                    adminUserId: dummyAdminUserId,
+                    systemUserId: dummySystemUserId,
 
                     checkError: (error) => assertCommandPayloadTypeError(error, 'contributions'),
                 });
@@ -188,7 +186,7 @@ describe('CreateSong', () => {
                 );
 
                 const result = await commandHandlerService.execute(validCommandFSA, {
-                    userId: dummyAdminUserId,
+                    userId: dummySystemUserId,
                 });
 
                 expect(result).toBeInstanceOf(InternalError);
@@ -201,7 +199,7 @@ describe('CreateSong', () => {
             const bogusId = '4604b265-3fbd-4e1c-9603-66c43773aec0';
 
             await assertCreateCommandError(assertionHelperDependencies, {
-                adminUserId: dummyAdminUserId,
+                systemUserId: dummySystemUserId,
                 buildCommandFSA: (_: AggregateId) => buildInvalidFSA(bogusId),
                 initialState,
                 // TODO Tighten up the error check
@@ -213,7 +211,7 @@ describe('CreateSong', () => {
         describe('when creating a song with no title in any language', () => {
             it('should return the expected error', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
-                    adminUserId: dummyAdminUserId,
+                    systemUserId: dummySystemUserId,
                     buildCommandFSA: (id: AggregateId) =>
                         buildInvalidFSA(id, {
                             title: undefined,

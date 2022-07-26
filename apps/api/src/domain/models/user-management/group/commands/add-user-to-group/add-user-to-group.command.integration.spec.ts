@@ -19,6 +19,7 @@ import { assertExternalStateError } from '../../../../__tests__/command-helpers/
 import { DummyCommandFSAFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import { CoscradUserGroup } from '../../entities/coscrad-user-group.entity';
 import { UserDoesNotExistError } from '../../errors/external-state-errors/UserDoesNotExistError';
 import { AddUserToGroup } from './add-user-to-group.command';
@@ -58,8 +59,6 @@ const buildValidCommandFSA = (): FluxStandardAction<DTO<AddUserToGroup>> => vali
 
 const buildInvalidFSA = (id, payloadOverrides) =>
     new DummyCommandFSAFactory(buildValidCommandFSA).build(id, payloadOverrides);
-
-const dummyCommandIssuingUserId = 'adminb4d-3b7d-4bad-9bdd-2b0d7b3admin';
 
 describe('AddUserToGroup', () => {
     let app: INestApplication;
@@ -116,7 +115,7 @@ describe('AddUserToGroup', () => {
     describe('when the command is valid', () => {
         it('should succeed', async () => {
             await assertCommandSuccess(commandAssertionDependencies, {
-                userId: dummyCommandIssuingUserId,
+                systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
                 initialState,
                 checkStateOnSuccess: async ({ groupId, userId }: AddUserToGroup) => {
@@ -137,7 +136,7 @@ describe('AddUserToGroup', () => {
                     assertEventRecordPersisted(
                         groupSearchResult as CoscradUserGroup,
                         'USER_ADDED_TO_GROUP',
-                        dummyCommandIssuingUserId
+                        dummySystemUserId
                     );
                 },
             });
@@ -148,7 +147,7 @@ describe('AddUserToGroup', () => {
         describe('when there is no user with the given userId', () => {
             it('should fail with the appropriate error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
-                    adminUserId: dummyCommandIssuingUserId,
+                    systemUserId: dummySystemUserId,
                     buildCommandFSA: buildValidCommandFSA,
                     initialState: buildInMemorySnapshot({
                         users: [userAlreadyInGroup],
@@ -167,7 +166,7 @@ describe('AddUserToGroup', () => {
         describe('when there is no group with the given groupId', () => {
             it('should fail with the appropriate error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
-                    adminUserId: dummyCommandIssuingUserId,
+                    systemUserId: dummySystemUserId,
                     buildCommandFSA: buildValidCommandFSA,
                     initialState: buildInMemorySnapshot({
                         users: [userToAdd, userAlreadyInGroup],
@@ -185,7 +184,7 @@ describe('AddUserToGroup', () => {
         describe('when the user is already in the group', () => {
             it('should fail with the appropriate error', async () => {
                 assertCommandError(commandAssertionDependencies, {
-                    adminUserId: dummyCommandIssuingUserId,
+                    systemUserId: dummySystemUserId,
                     buildCommandFSA: () =>
                         buildInvalidFSA(userAlreadyInGroup.id, { id: userAlreadyInGroup.id }),
                     initialState,

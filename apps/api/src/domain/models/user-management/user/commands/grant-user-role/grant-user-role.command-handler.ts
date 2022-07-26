@@ -55,7 +55,11 @@ export class GrantUserRoleCommandHandler extends BaseUpdateCommandHandler<Coscra
         return Valid;
     }
 
-    protected buildEvent(command: GrantUserRole, eventId: string, userId: AggregateId): BaseEvent {
-        return new UserRoleGranted(command, eventId, userId);
+    protected buildEvent(
+        command: GrantUserRole,
+        eventId: string,
+        systemUserId: AggregateId
+    ): BaseEvent {
+        return new UserRoleGranted(command, eventId, systemUserId);
     }
 }

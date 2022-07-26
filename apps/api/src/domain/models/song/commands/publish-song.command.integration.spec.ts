@@ -14,6 +14,7 @@ import { assertCommandError } from '../../__tests__/command-helpers/assert-comma
 import { assertCommandSuccess } from '../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { Song } from '../song.entity';
 import { PublishSong } from './publish-song.command';
 import { PublishSongCommandHandler } from './publish-song.command-handler';
@@ -40,8 +41,6 @@ const buildFullState = (song: Song) =>
             song: [song],
         },
     });
-
-const dummyAdminUserId = 'adminb4d-3b7d-4bad-9bdd-2b0d7b3admin';
 
 describe('PublishSong', () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -87,7 +86,7 @@ describe('PublishSong', () => {
     describe('when the payload is valid', () => {
         it('should succeed', async () => {
             await assertCommandSuccess(commandAssertionDependencies, {
-                userId: dummyAdminUserId,
+                systemUserId: dummySystemUserId,
                 buildValidCommandFSA: buildCommandFSA,
                 initialState: buildFullState(unpublishedSong),
             });
@@ -98,7 +97,7 @@ describe('PublishSong', () => {
         describe('when the id property has an invalid type (number[])', () => {
             it('should return an error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
-                    adminUserId: dummyAdminUserId,
+                    systemUserId: dummySystemUserId,
                     buildCommandFSA: () => ({
                         type: publishSongCommandType,
                         payload: {
@@ -123,7 +122,7 @@ describe('PublishSong', () => {
         describe('when there is no song with the given ID', () => {
             it('should return the expected error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
-                    adminUserId: dummyAdminUserId,
+                    systemUserId: dummySystemUserId,
                     buildCommandFSA,
                     // Note the absence of any existing songs here
                     initialState: buildInMemorySnapshot({}),
@@ -136,7 +135,7 @@ describe('PublishSong', () => {
         describe('when the song is already published', () => {
             it('should return the expected error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
-                    adminUserId: dummyAdminUserId,
+                    systemUserId: dummySystemUserId,
                     buildCommandFSA,
                     initialState: buildFullState(unpublishedSong.clone({ published: true })),
                 });

@@ -11,7 +11,7 @@ export abstract class BaseEvent extends BaseDomainModel {
 
     payload: ICommand;
 
-    constructor(command: ICommand, eventId: AggregateId, userId: AggregateId) {
+    constructor(command: ICommand, eventId: AggregateId, systemUserId: AggregateId) {
         super();
 
         this.payload = cloneToPlainObject(command);
@@ -19,7 +19,7 @@ export abstract class BaseEvent extends BaseDomainModel {
         this.meta = {
             dateCreated: Date.now(),
             id: eventId,
-            userId,
+            userId: systemUserId,
         };
     }
 }

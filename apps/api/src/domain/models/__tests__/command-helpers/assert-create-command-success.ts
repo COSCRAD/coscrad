@@ -7,7 +7,7 @@ import { FSAFactoryFunction } from '../command-helpers/types/FSAFactoryFunction'
 type TestCase = {
     buildValidCommandFSA: FSAFactoryFunction;
     initialState: InMemorySnapshot;
-    adminUserId: AggregateId;
+    systemUserId: AggregateId;
     /**
      * This allows us to run additional checks after the command succeeds. E.g.
      * we may want to check that the instance was persisted or that a newly used
@@ -22,7 +22,7 @@ export const assertCreateCommandSuccess = async (
         buildValidCommandFSA: buildCommandFSA,
         initialState: state,
         checkStateOnSuccess,
-        adminUserId,
+        systemUserId,
     }: TestCase
 ) => {
     const { testRepositoryProvider, commandHandlerService, idManager } = dependencies;
@@ -35,7 +35,7 @@ export const assertCreateCommandSuccess = async (
     const commandFSA = buildCommandFSA(newId);
 
     // Act
-    const result = await commandHandlerService.execute(commandFSA, { userId: adminUserId });
+    const result = await commandHandlerService.execute(commandFSA, { userId: systemUserId });
 
     // Assert
     expect(result).toBe(Ack);

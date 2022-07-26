@@ -18,6 +18,7 @@ import { assertCommandSuccess } from '../../../../__tests__/command-helpers/asse
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import { GrantUserRole } from './grant-user-role.command';
 import { GrantUserRoleCommandHandler } from './grant-user-role.command-handler';
 
@@ -49,8 +50,6 @@ const getDistinctRole = (role: CoscradUserRole): CoscradUserRole => {
     // Return the next (cyclically) role in the list
     return allRoles[(indexOfRole + 1) % allRoles.length];
 };
-
-const dummyAdminId = 'adminb4d-3b7d-4bad-9bdd-2b0d7b3admin';
 
 describe('GrantUserRole', () => {
     let app: INestApplication;
@@ -109,7 +108,7 @@ describe('GrantUserRole', () => {
             describe(`when the role is: ${role}`, () => {
                 it('should succeed', async () => {
                     await assertCommandSuccess(commandAssertionDependencies, {
-                        userId: dummyAdminId,
+                        systemUserId: dummySystemUserId,
                         buildValidCommandFSA: () => ({
                             type: commandType,
                             payload: {
@@ -134,7 +133,7 @@ describe('GrantUserRole', () => {
         describe('when there is no user with the given ID', () => {
             it('should fail', async () => {
                 await assertCommandError(commandAssertionDependencies, {
-                    adminUserId: dummyAdminId,
+                    systemUserId: dummySystemUserId,
                     buildCommandFSA: () => validCommandFSA,
                     initialState: buildEmptyInMemorySnapshot(),
                     checkError: (error: InternalError) => {
@@ -151,7 +150,7 @@ describe('GrantUserRole', () => {
         describe('when the user already has the given role', () => {
             it('should return the appropriate error', async () => {
                 await assertCommandError(commandAssertionDependencies, {
-                    adminUserId: dummyAdminId,
+                    systemUserId: dummySystemUserId,
                     buildCommandFSA: () => validCommandFSA,
                     initialState: buildInMemorySnapshot({
                         users: [

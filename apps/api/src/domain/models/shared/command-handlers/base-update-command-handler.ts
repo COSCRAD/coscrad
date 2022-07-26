@@ -40,14 +40,14 @@ export abstract class BaseUpdateCommandHandler<
     protected async persist(
         instance: TAggregate,
         command: ICommand,
-        userId: AggregateId
+        systemUserId: AggregateId
     ): Promise<void> {
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
 
         await this.idManager.use(eventId);
 
-        const event = this.buildEvent(command, eventId, userId);
+        const event = this.buildEvent(command, eventId, systemUserId);
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
 

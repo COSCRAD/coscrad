@@ -14,7 +14,7 @@ type TestCase = {
      */
     checkStateOnSuccess?: (command: ICommand) => Promise<void>;
 
-    userId: AggregateId;
+    systemUserId: AggregateId;
 };
 
 /**
@@ -27,7 +27,7 @@ export const assertCommandSuccess = async (
         buildValidCommandFSA: buildCommandFSA,
         initialState: state,
         checkStateOnSuccess,
-        userId,
+        systemUserId,
     }: TestCase
 ) => {
     const { testRepositoryProvider, commandHandlerService } = dependencies;
@@ -38,7 +38,7 @@ export const assertCommandSuccess = async (
     const commandFSA = buildCommandFSA();
 
     // Act
-    const result = await commandHandlerService.execute(commandFSA, { userId });
+    const result = await commandHandlerService.execute(commandFSA, { userId: systemUserId });
 
     // Assert
     expect(result).toBe(Ack);

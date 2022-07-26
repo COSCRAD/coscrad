@@ -52,8 +52,8 @@ export class PublishMediaItemCommandHandler extends BaseUpdateCommandHandler<Med
     protected buildEvent(
         command: PublishMediaItem,
         eventId: string,
-        userId: AggregateId
+        systemUserId: AggregateId
     ): BaseEvent {
-        return new MediaItemPublished(command, eventId, userId);
+        return new MediaItemPublished(command, eventId, systemUserId);
     }
 }

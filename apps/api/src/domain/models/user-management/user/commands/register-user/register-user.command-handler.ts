@@ -52,8 +52,12 @@ export class RegisterUserCommandHandler extends BaseCreateCommandHandler<Coscrad
         return buildInstanceFactory(CoscradUser)(createDto);
     }
 
-    protected buildEvent(command: RegisterUser, eventId: string, userId: AggregateId): BaseEvent {
-        return new UserRegistered(command, eventId, userId);
+    protected buildEvent(
+        command: RegisterUser,
+        eventId: string,
+        systemUserId: AggregateId
+    ): BaseEvent {
+        return new UserRegistered(command, eventId, systemUserId);
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
