@@ -1,8 +1,8 @@
-import BookBibliographicReferenceData from '../../../../../../domain/models/bibliographic-reference/entities/BookBibliographicReferenceData';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../../types/DTO';
-import BibliographicReferenceCreator from '../../../../../models/bibliographic-reference/entities/BibliographicReferenceCreator';
-import { BookBibliographicReference } from '../../../../../models/bibliographic-reference/entities/book-bibliographic-reference.entity';
+import BookBibliographicReferenceData from '../../../../../models/bibliographic-reference/book-bibliographic-reference/book-bibliographic-reference-data.entity';
+import { BookBibliographicReference } from '../../../../../models/bibliographic-reference/book-bibliographic-reference/book-bibliographic-reference.entity';
+import BibliographicReferenceCreator from '../../../../../models/bibliographic-reference/common/bibliographic-reference-creator.entity';
 import { BibliographicReferenceType } from '../../../../../models/bibliographic-reference/types/BibliographicReferenceType';
 import { AggregateId } from '../../../../../types/AggregateId';
 import { ResourceType } from '../../../../../types/ResourceType';
@@ -10,9 +10,7 @@ import InvalidResourceDTOError from '../../../../errors/InvalidResourceDTOError'
 import { DomainModelValidatorInvalidTestCase } from '../../../types/DomainModelValidatorTestCase';
 import getValidBibliographicReferenceInstanceForTest from '../utils/getValidBibliographicReferenceInstanceForTest';
 
-const validDto = getValidBibliographicReferenceInstanceForTest(
-    BibliographicReferenceType.book
-).toDTO();
+const validDto = getValidBibliographicReferenceInstanceForTest(BibliographicReferenceType.book);
 
 const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]): InternalError =>
     new InvalidResourceDTOError(ResourceType.bibliographicReference, id, innerErrors);
@@ -37,7 +35,7 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     creators: [],
-                },
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -48,7 +46,7 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     creators: [88 as unknown as BibliographicReferenceCreator],
-                },
+                } as unknown as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -59,7 +57,7 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     abstract: '',
-                },
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -70,7 +68,7 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     year: 2100,
-                },
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -81,7 +79,7 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     publisher: '',
-                },
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -92,7 +90,7 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     place: '',
-                },
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -103,7 +101,7 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     url: 'qttps://www.sample.com',
-                },
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -114,7 +112,7 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     isbn: '978-1-8k5811-34-6',
-                },
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -125,7 +123,7 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     numberOfPages: -34,
-                },
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },
@@ -147,7 +145,7 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     numberOfPages: Infinity,
-                },
+                } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
         },

@@ -57,6 +57,30 @@ Object {
         "tags": Array [],
       },
     },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "data": Object {
+          "abstract": "William, June
+- Nemiah Valley
+- Qualifying as an expert in Tsilhqot'in written language",
+          "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+          "court": "Supreme Court of British Columbia",
+          "creators": Array [],
+          "dateDecided": "Recorded 2002-07-08",
+          "pages": "Pages 1-6",
+          "type": "courtCase",
+          "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
+        },
+        "id": "3",
+        "tags": Array [
+          Object {
+            "id": "6",
+            "label": "law",
+          },
+        ],
+      },
+    },
   ],
 }
 `;
@@ -116,6 +140,30 @@ Object {
         },
         "id": "23",
         "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [],
+      "data": Object {
+        "data": Object {
+          "abstract": "William, June
+- Nemiah Valley
+- Qualifying as an expert in Tsilhqot'in written language",
+          "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+          "court": "Supreme Court of British Columbia",
+          "creators": Array [],
+          "dateDecided": "Recorded 2002-07-08",
+          "pages": "Pages 1-6",
+          "type": "courtCase",
+          "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
+        },
+        "id": "3",
+        "tags": Array [
+          Object {
+            "id": "6",
+            "label": "law",
+          },
+        ],
       },
     },
   ],

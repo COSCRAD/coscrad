@@ -139,6 +139,16 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
             },
         ],
     },
+    {
+        id: '6',
+        label: 'law',
+        members: [
+            {
+                type: CategorizableType.bibliographicReference,
+                id: '3',
+            },
+        ],
+    },
 ];
 
 /**

@@ -789,7 +789,7 @@
             },
             {
                 "type": "bibliographicReference",
-                "_key": "1",
+                "_key": "3",
                 "published": true,
                 "eventHistory": [],
                 "data": {
@@ -799,7 +799,7 @@
                     "abstract": "William, June\n- Nemiah Valley\n- Qualifying as an expert in Tsilhqot'in written language",
                     "dateDecided": "Recorded 2002-07-08",
                     "court": "Supreme Court of British Columbia",
-                    "url": "",
+                    "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
                     "pages": "Pages 1-6"
                 }
             }
@@ -1735,10 +1735,390 @@
                                 "ix"
                             ]
                         }
-                    }
-                ],
-                "note": "this selection from the media item portrays the events in the book"
-            }
-        ]
-    }
+                    }],
+                    "note": "this selection from the media item portrays the events in the book"
+                }
+            ]
+
+        }
+    ,
+    "tags": [
+        {
+            "_key": "1",
+            "label": "plants",
+            "members": [
+                {
+                    "type": "term",
+                    "id": "1"
+                },
+                {
+                    "type": "book",
+                    "id": "23"
+                },
+                {
+                    "type": "book",
+                    "id": "24"
+                },
+                {
+                    "type": "vocabularyList",
+                    "id": "1"
+                },
+                {
+                    "type": "spatialFeature",
+                    "id": "100"
+                },
+                {
+                    "type": "note",
+                    "id": "2005"
+                },
+                {
+                    "type": "note",
+                    "id": "9"
+                },
+                {
+                    "type": "note",
+                    "id": "11"
+                }
+            ]
+        },
+        {
+            "_key": "2",
+            "label": "animals",
+            "members": [
+                {
+                    "type": "term",
+                    "id": "2"
+                },
+                {
+                    "type": "term",
+                    "id": "3"
+                },
+                {
+                    "type": "spatialFeature",
+                    "id": "102"
+                },
+                {
+                    "type": "note",
+                    "id": "2004"
+                },
+                {
+                    "type": "note",
+                    "id": "7"
+                },
+                {
+                    "type": "bibliographicReference",
+                    "id": "1"
+                }
+            ]
+        },
+        {
+            "_key": "3",
+            "label": "placenames",
+            "members": [
+                {
+                    "type": "photograph",
+                    "id": "0"
+                },
+                {
+                    "type": "transcribedAudio",
+                    "id": "110"
+                },
+                {
+                    "type": "note",
+                    "id": "2003"
+                },
+                {
+                    "type": "note",
+                    "id": "5"
+                }
+            ]
+        },
+        {
+            "_key": "4",
+            "label": "songs",
+            "members": [
+                {
+                    "type": "photograph",
+                    "id": "1"
+                },
+                {
+                    "type": "note",
+                    "id": "2002"
+                },
+                {
+                    "type": "note",
+                    "id": "3"
+                }
+            ]
+        },
+        {
+            "_key": "5",
+            "label": "legends",
+            "members": [
+                {
+                    "type": "vocabularyList",
+                    "id": "2"
+                },
+                {
+                    "type": "spatialFeature",
+                    "id": "101"
+                },
+                {
+                    "type": "note",
+                    "id": "2001"
+                },
+                {
+                    "type": "note",
+                    "id": "1"
+                },
+                {
+                    "type": "mediaItem",
+                    "id": "1"
+                }
+            ]
+        },
+        {
+            "_key": "6",
+            "label": "law",
+            "members": [
+                {
+                    "type": "bibliographicReference",
+                    "id": "3"
+                }
+            ]
+        }
+    ],
+    "categories": [
+        {
+            "_key": "0",
+            "label": "tree of knowledge",
+            "members": []
+        },
+        {
+            "_key": "1",
+            "label": "animals",
+            "members": [
+                {
+                    "type": "vocabularyList",
+                    "id": "1"
+                }
+            ]
+        },
+        {
+            "_key": "2",
+            "label": "mammals",
+            "members": [
+                {
+                    "type": "term",
+                    "id": "1"
+                },
+                {
+                    "type": "book",
+                    "id": "23"
+                }
+            ]
+        },
+        {
+            "_key": "3",
+            "label": "birds",
+            "members": []
+        },
+        {
+            "_key": "4",
+            "label": "canines",
+            "members": [
+                {
+                    "type": "term",
+                    "id": "2"
+                }
+            ]
+        },
+        {
+            "_key": "5",
+            "label": "felines",
+            "members": []
+        },
+        {
+            "_key": "6",
+            "label": "big cats",
+            "members": []
+        },
+        {
+            "_key": "7",
+            "label": "domestic cats",
+            "members": [
+                {
+                    "type": "vocabularyList",
+                    "id": "2"
+                },
+                {
+                    "type": "photograph",
+                    "id": "0"
+                }
+            ]
+        },
+        {
+            "_key": "8",
+            "label": "wolves",
+            "members": [
+                {
+                    "type": "spatialFeature",
+                    "id": "101"
+                }
+            ]
+        },
+        {
+            "_key": "9",
+            "label": "songs",
+            "members": [
+                {
+                    "type": "term",
+                    "id": "3"
+                },
+                {
+                    "type": "spatialFeature",
+                    "id": "102"
+                },
+                {
+                    "type": "bibliographicReference",
+                    "id": "1"
+                }
+            ]
+        },
+        {
+            "_key": "10",
+            "label": "domestic dogs",
+            "members": [
+                {
+                    "type": "photograph",
+                    "id": "1"
+                }
+            ]
+        },
+        {
+            "_key": "11",
+            "label": "rodents",
+            "members": [
+                {
+                    "type": "book",
+                    "id": "24"
+                }
+            ]
+        },
+        {
+            "_key": "12",
+            "label": "film",
+            "members": []
+        },
+        {
+            "_key": "13",
+            "label": "props",
+            "members": []
+        },
+        {
+            "_key": "14",
+            "label": "wardrobe",
+            "members": []
+        },
+        {
+            "_key": "15",
+            "label": "tools",
+            "members": [
+                {
+                    "type": "transcribedAudio",
+                    "id": "110"
+                }
+            ]
+        },
+        {
+            "_key": "16",
+            "label": "adornments",
+            "members": []
+        },
+        {
+            "_key": "17",
+            "label": "clothing",
+            "members": [
+                {
+                    "type": "note",
+                    "id": "1"
+                }
+            ]
+        },
+        {
+            "_key": "18",
+            "label": "tools",
+            "members": []
+        }
+    ],
+    "categoryEdges": [
+        {
+            "_to": "categories/1",
+            "_from": "categories/0"
+        },
+        {
+            "_to": "categories/12",
+            "_from": "categories/0"
+        },
+        {
+            "_to": "categories/2",
+            "_from": "categories/1"
+        },
+        {
+            "_to": "categories/3",
+            "_from": "categories/1"
+        },
+        {
+            "_to": "categories/4",
+            "_from": "categories/2"
+        },
+        {
+            "_to": "categories/5",
+            "_from": "categories/2"
+        },
+        {
+            "_to": "categories/11",
+            "_from": "categories/2"
+        },
+        {
+            "_to": "categories/8",
+            "_from": "categories/4"
+        },
+        {
+            "_to": "categories/10",
+            "_from": "categories/4"
+        },
+        {
+            "_to": "categories/6",
+            "_from": "categories/5"
+        },
+        {
+            "_to": "categories/7",
+            "_from": "categories/5"
+        },
+        {
+            "_to": "categories/13",
+            "_from": "categories/12"
+        },
+        {
+            "_to": "categories/14",
+            "_from": "categories/12"
+        },
+        {
+            "_to": "categories/16",
+            "_from": "categories/13"
+        },
+        {
+            "_to": "categories/17",
+            "_from": "categories/13"
+        },
+        {
+            "_to": "categories/18",
+            "_from": "categories/13"
+        },
+        {
+            "_to": "categories/15",
+            "_from": "categories/16"
+        }
+    ]
 }

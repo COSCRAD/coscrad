@@ -4,6 +4,8 @@ import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/
 import { ResourceType } from '../../domain/types/ResourceType';
 import { DTO } from '../../types/DTO';
 
+const indexOffset = 100;
+
 const pointCoordinates: Position2D[] = [
     [100.0, 0],
     [20.0, 10.0],
@@ -11,7 +13,7 @@ const pointCoordinates: Position2D[] = [
 ];
 
 const dtos: DTO<Point>[] = pointCoordinates.map((point, index) => ({
-    id: `${index + 100}`,
+    id: `${index + indexOffset}`,
     type: ResourceType.spatialFeature,
     geometry: {
         type: GeometricFeatureType.point,

@@ -29,5 +29,9 @@ Array [
     "id": "5",
     "label": "legends",
   },
+  Object {
+    "id": "6",
+    "label": "law",
+  },
 ]
 `;

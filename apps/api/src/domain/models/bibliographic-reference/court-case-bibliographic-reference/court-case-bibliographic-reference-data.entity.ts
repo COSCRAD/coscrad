@@ -1,5 +1,5 @@
 import { NonEmptyString, URL } from '@coscrad/data-types';
-import { IsNonEmptyArray, ValidateNested } from '@coscrad/validation';
+import { ValidateNested } from '@coscrad/validation';
 import { DTO } from '../../../../types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
@@ -16,25 +16,24 @@ export class CourtCaseBibliographicReferenceData
     @NonEmptyString()
     readonly caseName: string;
 
-    // TODO wrap this decorator
-    @IsNonEmptyArray()
+    // TODO Link isOptional with allowing a non-empty array
     @ValidateNested()
     readonly creators: BibliographicReferenceCreator[];
 
     @NonEmptyString({ isOptional: true })
-    readonly abstract: string;
+    readonly abstract?: string;
 
     @NonEmptyString({ isOptional: true })
-    readonly dateDecided: string;
+    readonly dateDecided?: string;
 
     @NonEmptyString({ isOptional: true })
-    readonly court: string;
+    readonly court?: string;
 
     @URL({ isOptional: true })
-    readonly url: string;
+    readonly url?: string;
 
     @NonEmptyString({ isOptional: true })
-    readonly pages: string;
+    readonly pages?: string;
 
     constructor(dto: DTO<CourtCaseBibliographicReferenceData>) {
         super();

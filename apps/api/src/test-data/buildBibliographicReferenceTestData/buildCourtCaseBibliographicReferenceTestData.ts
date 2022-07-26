@@ -15,11 +15,11 @@ const dtos: DTO<CourtCaseBibliographicReference>[] = [
                 "William, June\n- Nemiah Valley\n- Qualifying as an expert in Tsilhqot'in written language",
             dateDecided: 'Recorded 2002-07-08',
             court: 'Supreme Court of British Columbia',
-            url: '',
+            url: 'https://www.myzoterolink.com/bogus-link-to-doc.php',
             pages: 'Pages 1-6',
         },
         published: true,
-        id: '1',
+        id: '3',
     },
 ];
 
