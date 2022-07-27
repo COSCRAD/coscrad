@@ -144,23 +144,44 @@ describe('The Command Controller', () => {
     });
 
     describe('when the payload has an invalid type', () => {
-        it('should return a 400', async () => {
-            const idResponse = await request(app.getHttpServer()).post(`/ids`);
+        describe('when one of the properties on the payload has an invalid type', () => {
+            it('should return a 400', async () => {
+                const idResponse = await request(app.getHttpServer()).post(`/ids`);
 
-            const id = idResponse.text;
+                const id = idResponse.text;
 
-            const validCommandFSA = buildValidCommandFSA(id);
+                const validCommandFSA = buildValidCommandFSA(id);
 
-            const { payload: validPayload } = validCommandFSA;
+                const { payload: validPayload } = validCommandFSA;
 
-            const result = await request(app.getHttpServer())
-                .post(commandEndpoint)
-                .send({
-                    ...validCommandFSA,
-                    payload: { ...validPayload, id: [99] },
-                });
+                await request(app.getHttpServer())
+                    .post(commandEndpoint)
+                    .send({
+                        ...validCommandFSA,
+                        payload: { ...validPayload, id: [99] },
+                    })
+                    .expect(httpStatusCodes.badRequest);
+            });
+        });
 
-            expect(result.status).toBe(httpStatusCodes.badRequest);
+        describe('when there is a superfluous property on the payload', () => {
+            it('should return a 400', async () => {
+                const idResponse = await request(app.getHttpServer()).post(`/ids`);
+
+                const id = idResponse.text;
+
+                const validCommandFSA = buildValidCommandFSA(id);
+
+                const { payload: validPayload } = validCommandFSA;
+
+                await request(app.getHttpServer())
+                    .post(commandEndpoint)
+                    .send({
+                        ...validCommandFSA,
+                        payload: { ...validPayload, foo: ["I'm bogus, so bogus!"] },
+                    })
+                    .expect(httpStatusCodes.badRequest);
+            });
         });
     });
 

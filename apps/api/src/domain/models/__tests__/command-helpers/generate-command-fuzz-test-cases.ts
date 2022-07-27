@@ -10,9 +10,16 @@ type CommandFuzzTestCase = {
 
 export const generateCommandFuzzTestCases = (CommandCtor: Ctor<ICommand>): CommandFuzzTestCase[] =>
     Object.entries(getCoscradDataSchema(CommandCtor)).flatMap(([propertyName, propertySchema]) =>
-        new FuzzGenerator(propertySchema).generateInvalidValues().map(({ value, description }) => ({
-            propertyName,
-            invalidValue: value,
-            description,
-        }))
+        new FuzzGenerator(propertySchema)
+            .generateInvalidValues()
+            .map(({ value, description }) => ({
+                propertyName,
+                invalidValue: value,
+                description,
+            }))
+            .concat({
+                propertyName: 'bogusProperty',
+                invalidValue: ['I am oh so bogus!'],
+                description: 'superfluous (bogus) property key',
+            })
     );
