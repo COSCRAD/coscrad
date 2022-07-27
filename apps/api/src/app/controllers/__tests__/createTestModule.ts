@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
 import { JwtStrategy } from '../../../authorization/jwt.strategy';
+import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-auth-guard';
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
@@ -10,6 +11,7 @@ import { CoscradUserWithGroups } from '../../../domain/models/user-management/us
 import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
+import { CoscradUserQueryService } from '../../../domain/services/query-services/coscrad-user-query.service';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
@@ -32,6 +34,7 @@ import { CategoryController } from '../category.controller';
 import { AdminJwtGuard, CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
 import { CoscradUserGroupController } from '../coscrad-user-group.controller';
+import { CoscradUserController } from '../coscrad-user.controller';
 import { EdgeConnectionController } from '../edgeConnection.controller';
 import { IdGenerationController } from '../id-generation/id-generation.controller';
 import { BibliographicReferenceController } from '../resources/bibliographic-reference.controller';
@@ -193,6 +196,14 @@ export default async (
                 inject: [RepositoryProvider, CommandInfoService],
             },
             {
+                provide: CoscradUserQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new CoscradUserQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService],
+            },
+            {
                 provide: 'ID_MANAGER',
                 useFactory: (repositoryProvider: RepositoryProvider) =>
                     shouldMockIdGenerator
@@ -223,12 +234,13 @@ export default async (
             CategoryController,
             CommandController,
             IdGenerationController,
+            CoscradUserController,
         ],
     })
         .overrideGuard(OptionalJwtAuthGuard)
         .useValue(new MockJwtAuthGuard(testUserWithGroups, true))
         .overrideGuard(AdminJwtGuard)
-        .useValue(new MockJwtAuthGuard(testUserWithGroups, false))
+        .useValue(new MockJwtAdminAuthGuard(testUserWithGroups))
         .compile()
         .catch((error) => {
             throw new InternalError(error.message);

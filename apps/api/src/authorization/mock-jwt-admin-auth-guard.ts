@@ -2,18 +2,13 @@ import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CoscradUserWithGroups } from '../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 
-export class MockJwtAuthGuard extends AuthGuard('jwt') {
-    constructor(
-        private readonly testUserWithGroups: CoscradUserWithGroups | undefined,
-        private readonly isAuthOptional: boolean
-    ) {
+export class MockJwtAdminAuthGuard extends AuthGuard('jwt') {
+    constructor(private readonly testUserWithGroups: CoscradUserWithGroups | undefined) {
         super();
     }
 
-    override handleRequest<TUser = unknown>() {
+    override handleRequest<TUser = CoscradUserWithGroups>() {
         if (!this.testUserWithGroups) {
-            if (this.isAuthOptional) return undefined;
-
             throw new UnauthorizedException();
         }
 
@@ -25,7 +20,8 @@ export class MockJwtAuthGuard extends AuthGuard('jwt') {
 
         if (this.testUserWithGroups) request.user = this.testUserWithGroups;
 
-        if (!this.testUserWithGroups && !this.isAuthOptional) return Promise.resolve(false);
+        if (!this.testUserWithGroups || !this.testUserWithGroups.isAdmin())
+            return Promise.resolve(false);
 
         return Promise.resolve(true);
     }

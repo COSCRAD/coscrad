@@ -96,7 +96,8 @@ describe('Role Based Access Control for commands', () => {
             await request(app.getHttpServer())
                 .post(`/commands`)
                 .send(validCommandFSA)
-                .expect(httpStatusCodes.unauthorized);
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
         });
     });
 
@@ -133,7 +134,8 @@ describe('Role Based Access Control for commands', () => {
             await request(app.getHttpServer())
                 .post(`/commands`)
                 .send(validCommandFSA)
-                .expect(httpStatusCodes.unauthorized);
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
         });
     });
 
