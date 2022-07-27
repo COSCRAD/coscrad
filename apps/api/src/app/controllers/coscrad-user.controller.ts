@@ -1,15 +1,17 @@
 import { isStringWithNonzeroLength } from '@coscrad/validation';
-import { Controller, Get, Param, Res } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CoscradUserQueryService } from '../../domain/services/query-services/coscrad-user-query.service';
 import { InternalError } from '../../lib/errors/InternalError';
+import { AdminJwtGuard } from './command/command.controller';
 import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
-
 @ApiTags('user management')
 @Controller('users')
 export class CoscradUserController {
     constructor(private readonly userQueryService: CoscradUserQueryService) {}
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
     @Get('/:id')
     async fetchById(@Res() res, @Param('id') id: string) {
         if (!isStringWithNonzeroLength(id))
@@ -23,6 +25,8 @@ export class CoscradUserController {
         return sendInternalResultAsHttpResponse(res, result);
     }
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
     @Get('')
     async fetchMany(@Res() res) {
         const result = await this.userQueryService.fetchMany();
