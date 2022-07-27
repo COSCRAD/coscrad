@@ -8,7 +8,7 @@ CoscradUserGroup {
       "meta": Object {
         "dateCreated": 1586044800000,
         "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0002",
-        "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+        "userId": "system4d-3b7d-4bad-9bdd-2b0d70userid",
       },
       "payload": Object {
         "description": "this group is for teachers from community schools",

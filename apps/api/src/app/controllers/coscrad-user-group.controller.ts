@@ -1,8 +1,9 @@
 import { isStringWithNonzeroLength } from '@coscrad/validation';
-import { Controller, Get, Param, Res } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CoscradUserGroupQueryService } from '../../domain/services/query-services/coscrad-user-group-query.service';
 import { InternalError } from '../../lib/errors/InternalError';
+import { AdminJwtGuard } from './command/command.controller';
 import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
 
 @ApiTags('user management')
@@ -10,6 +11,8 @@ import sendInternalResultAsHttpResponse from './resources/common/sendInternalRes
 export class CoscradUserGroupController {
     constructor(private readonly userGroupQueryService: CoscradUserGroupQueryService) {}
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
     @Get('/:id')
     async fetchById(@Res() res, @Param('id') id: string) {
         if (!isStringWithNonzeroLength(id))
@@ -23,6 +26,8 @@ export class CoscradUserGroupController {
         return sendInternalResultAsHttpResponse(res, result);
     }
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
     @Get('')
     async fetchMany(@Res() res) {
         const result = await this.userGroupQueryService.fetchMany();
