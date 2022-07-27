@@ -1,4 +1,4 @@
-import { NestedDataType } from '../../../../../../../libs/data-types/src';
+import { NestedDataType } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { InvariantValidationMethod } from '../../../../lib/web-of-knowledge/decorators/invariant-validation-method.decorator';
