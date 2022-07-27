@@ -81,7 +81,7 @@ export class Song extends Resource implements ITimeBoundable {
         this.startMilliseconds = startMilliseconds;
     }
 
-    getAvailableCommands(): string[] {
+    protected getResourceSpecificAvailableCommands(): string[] {
         const allCommands = ['PUBLISH_SONG'];
 
         // There's no reason to publish a Song that is already published.

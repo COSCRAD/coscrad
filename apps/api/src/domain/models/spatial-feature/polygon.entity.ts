@@ -36,7 +36,7 @@ export class Polygon extends Resource implements ISpatialFeature {
         return geometricFeatureValidator(this);
     }
 
-    getAvailableCommands(): string[] {
+    protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 }

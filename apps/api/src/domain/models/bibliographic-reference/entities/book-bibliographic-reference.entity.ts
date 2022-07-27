@@ -36,7 +36,7 @@ export class BookBibliographicReference
         return Valid;
     }
 
-    getAvailableCommands(): string[] {
+    protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 }
