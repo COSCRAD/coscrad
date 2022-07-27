@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import About from '../Components/Pages/About/About';
 import Apps from '../Components/Pages/Apps/Apps';
 import Funders from '../Components/Pages/Funders/Funders';
@@ -7,20 +7,22 @@ import Greetings from '../Components/Pages/Greetings/Greetings';
 import Home from '../Components/Pages/Home/Home';
 import Links from '../Components/Pages/Links/Links';
 import Videos from '../Components/Pages/MediaViewModel/MediaViewModel';
-import Songs from '../Components/Pages/SongViewModel/SongViewModel';
+import SongDetail from '../Components/Pages/SongDetail/SongDetail';
+import Songs from '../Components/Pages/SongIndex/SongIndex';
 import Teachers from '../Components/Pages/Teachers/Teachers';
 import Navbar from '../Components/Widgets/Navbar/Navbar';
 
 export function App() {
     return (
         <Typography component={'span'} variant={'body2'}>
-            <HashRouter>
+            <BrowserRouter>
                 <Navbar />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/About" element={<About />} />
                     <Route path="/Apps" element={<Apps />} />
                     <Route path="/Songs" element={<Songs />} />
+                    <Route path="/Songs/:id" element={<SongDetail />} />
                     <Route path="/Videos" element={<Videos />} />
                     <Route path="/Links" element={<Links />} />
                     <Route path="/Teachers" element={<Teachers />} />
@@ -36,7 +38,7 @@ export function App() {
                         }
                     ></Route>
                 </Routes>
-            </HashRouter>
+            </BrowserRouter>
         </Typography>
     );
 }
