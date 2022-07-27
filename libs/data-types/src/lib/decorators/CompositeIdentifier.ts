@@ -11,7 +11,7 @@ export function CompositeIdentifier(
     userOptions: Partial<TypeDecoratorOptions> = {}
 ): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol) => {
-        const options = mixinDefaultTypeDecoratorOptions(userOptions);
+        const options = { ...mixinDefaultTypeDecoratorOptions(userOptions) };
 
         WithValidation(IsCompositeIdentifier(AllowedTypesEnum, idTypeGuard), options);
 
