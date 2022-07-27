@@ -1,3 +1,4 @@
+import { NestedDataType } from '../../../../../../../libs/data-types/src';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { InvariantValidationMethod } from '../../../../lib/web-of-knowledge/decorators/invariant-validation-method.decorator';
@@ -19,6 +20,7 @@ export class CourtCaseBibliographicReference
 {
     readonly type = AggregateType.bibliographicReference;
 
+    @NestedDataType(CourtCaseBibliographicReferenceData)
     readonly data: CourtCaseBibliographicReferenceData;
 
     constructor(dto: DTO<CourtCaseBibliographicReference>) {
@@ -34,10 +36,7 @@ export class CourtCaseBibliographicReference
             new InvalidResourceDTOError(ResourceType.bibliographicReference, instance.id, allErrors)
     )
     validateInvariants(): ResultOrError<Valid> {
-        // const typeErrors = validateSimpleInvariants(CourtCaseBibliographicReference, this);
-
-        // if (typeErrors.length > 0)
-        //     return new InvalidResourceDTOError(this.type, this.id, typeErrors);
+        // Note: there are no complex invariant rules for this model
 
         return Valid;
     }

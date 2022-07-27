@@ -88,10 +88,6 @@ describe('buildTestData', () => {
                                 it(`should satisfy invariant validation`, () => {
                                     const validationResult = entityValidator(dto);
 
-                                    if (!isValid(validationResult)) {
-                                        validationResult;
-                                    }
-
                                     expect(isValid(validationResult)).toBe(true);
                                 });
                             });

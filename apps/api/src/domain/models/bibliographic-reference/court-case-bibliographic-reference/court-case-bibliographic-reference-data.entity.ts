@@ -40,11 +40,13 @@ export class CourtCaseBibliographicReferenceData
 
         if (isNullOrUndefined(dto)) return;
 
-        const { caseName, abstract, dateDecided, court, url, pages } = dto;
+        const { caseName, creators, abstract, dateDecided, court, url, pages } = dto;
 
         this.caseName = caseName;
 
-        this.creators = dto.creators as BibliographicReferenceCreator[];
+        this.creators = Array.isArray(creators)
+            ? creators.map((dto) => new BibliographicReferenceCreator(dto))
+            : undefined;
 
         this.abstract = abstract;
 

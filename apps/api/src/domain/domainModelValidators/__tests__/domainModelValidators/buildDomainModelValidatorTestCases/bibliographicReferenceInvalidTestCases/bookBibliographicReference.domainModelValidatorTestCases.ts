@@ -24,6 +24,10 @@ export const buildBookBibliographicReferenceTestCases =
                 data: {
                     ...validDto.data,
                     title: '',
+                    /**
+                     * TODO[https://www.pivotaltracker.com/story/show/182823742]
+                     * We need to fix the return type of getValidBibliographicReferenceInstanceForTest
+                     */
                 } as DTO<BookBibliographicReferenceData>,
             },
             expectedError: buildTopLevelError(validDto.id, []),
