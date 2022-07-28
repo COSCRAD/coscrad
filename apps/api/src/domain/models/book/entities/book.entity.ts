@@ -73,7 +73,7 @@ export class Book extends Resource {
         return Valid;
     }
 
-    getAvailableCommands(): string[] {
+    protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 }

@@ -58,7 +58,7 @@ export class TranscribedAudio extends Resource {
         return this.startMilliseconds + this.lengthMilliseconds;
     }
 
-    getAvailableCommands(): string[] {
+    protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 }

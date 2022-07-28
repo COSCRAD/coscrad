@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { Resource } from '../../../domain/models/resource.entity';
+import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
 import idEquals from '../../../domain/models/shared/functional/idEquals';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import { PublishSongCommandHandler } from '../../../domain/models/song/commands/publish-song.command-handler';
@@ -59,6 +60,10 @@ describe('GET /resources (fetch view models)', () => {
             BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
         }));
 
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/182576828] 
+     * We should just use the real app module for this.
+     */
         commandHandlerService.registerHandler(
             'CREATE_SONG',
             new CreateSongCommandHandler(testRepositoryProvider, idManager)
@@ -67,6 +72,11 @@ describe('GET /resources (fetch view models)', () => {
         commandHandlerService.registerHandler(
             'PUBLISH_SONG',
             new PublishSongCommandHandler(testRepositoryProvider, idManager)
+        );
+
+        commandHandlerService.registerHandler(
+            'GRANT_RESOURCE_READ_ACCESS_TO_USER',
+            new GrantResourceReadAccessToUserCommandHandler(testRepositoryProvider, idManager)
         );
     });
 

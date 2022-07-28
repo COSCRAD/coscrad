@@ -74,11 +74,9 @@ export abstract class Resource extends Aggregate implements HasAggregateId {
     }
 
     /**
-     * We choose to put the invariant validation in the factory so not to
-     * clutter the class with that logic. However, the compatibility between
-     * a context model and the resource instance to which it refers depends on the
-     * state of the resource. Therefore, this seems like a good place for this kind
-     * of validation logic.
+     * Validates that the state of an `EdgeConnectionContext` instance used
+     * to contextualize this resource instance is in fact consistent with the state
+     * of this resource.
      */
     validateContext(context: EdgeConnectionContext): Valid | InternalError {
         const { type } = context;
@@ -97,5 +95,23 @@ export abstract class Resource extends Aggregate implements HasAggregateId {
             );
 
         return validator.apply(this, [context]);
+    }
+
+    protected abstract getResourceSpecificAvailableCommands(): string[];
+
+    /**
+     * The following returns a list of command types for all commands generic
+     * to any resource type that are currently available based on the resource
+     * isntance's state.
+     */
+    private getAvailableGenericCommands(): string[] {
+        return ['GRANT_RESOURCE_READ_ACCESS_TO_USER'];
+    }
+
+    getAvailableCommands(): string[] {
+        return [
+            ...this.getResourceSpecificAvailableCommands(),
+            ...this.getAvailableGenericCommands(),
+        ];
     }
 }
