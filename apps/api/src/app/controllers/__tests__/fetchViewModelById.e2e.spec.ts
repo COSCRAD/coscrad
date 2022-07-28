@@ -60,7 +60,10 @@ describe('GET /resources (fetch view models)', () => {
             BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
         }));
 
-        // TODO We should just use the real app module for this
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/182576828] 
+     * We should just use the real app module for this.
+     */
         commandHandlerService.registerHandler(
             'CREATE_SONG',
             new CreateSongCommandHandler(testRepositoryProvider, idManager)

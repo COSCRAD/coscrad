@@ -51,6 +51,11 @@ describe('When fetching multiple resources', () => {
                 BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
             }));
 
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/182576828]
+         * We should use the real app module to dynamically discover all
+         * commands.
+         */
         commandHandlerService.registerHandler(
             'GRANT_RESOURCE_READ_ACCESS_TO_USER',
             new GrantResourceReadAccessToUserCommandHandler(testRepositoryProvider, idManager)
