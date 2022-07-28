@@ -84,7 +84,7 @@ export class MediaItem extends Resource implements ITimeBoundable {
         return [0, this.lengthMilliseconds];
     }
 
-    getAvailableCommands(): string[] {
+    protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 }

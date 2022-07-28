@@ -115,7 +115,7 @@ export class Photograph extends Resource implements Boundable2D {
         ];
     }
 
-    getAvailableCommands(): string[] {
+    protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 }

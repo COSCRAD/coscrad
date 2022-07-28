@@ -37,7 +37,7 @@ export class VocabularyList extends Resource {
         this.variables = [...variables];
     }
 
-    getAvailableCommands(): string[] {
+    protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 

@@ -2,7 +2,25 @@
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /bibliographicReferences/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Allow a user to view (but not edit) a given resource",
+      "label": "Grant Read Access to User",
+      "schema": Object {
+        "resourceCompositeIdentifier": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "COMPOSITE_IDENTIFIER",
+        },
+        "userId": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "UUID",
+        },
+      },
+      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+    },
+  ],
   "data": Object {
     "data": Object {
       "abstract": "This is the abstract, NOT a general note!",
@@ -34,7 +52,25 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /books/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Allow a user to view (but not edit) a given resource",
+      "label": "Grant Read Access to User",
+      "schema": Object {
+        "resourceCompositeIdentifier": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "COMPOSITE_IDENTIFIER",
+        },
+        "userId": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "UUID",
+        },
+      },
+      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+    },
+  ],
   "data": Object {
     "author": "John Doeburg",
     "id": "23",
@@ -53,7 +89,25 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /mediaItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Allow a user to view (but not edit) a given resource",
+      "label": "Grant Read Access to User",
+      "schema": Object {
+        "resourceCompositeIdentifier": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "COMPOSITE_IDENTIFIER",
+        },
+        "userId": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "UUID",
+        },
+      },
+      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+    },
+  ],
   "data": Object {
     "contributorAndRoles": Array [
       Object {
@@ -80,7 +134,25 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /photographs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Allow a user to view (but not edit) a given resource",
+      "label": "Grant Read Access to User",
+      "schema": Object {
+        "resourceCompositeIdentifier": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "COMPOSITE_IDENTIFIER",
+        },
+        "userId": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "UUID",
+        },
+      },
+      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+    },
+  ],
   "data": Object {
     "id": "0",
     "imageURL": "https://www.mysound.org/downloads/cat.png",
@@ -97,7 +169,25 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /songs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Allow a user to view (but not edit) a given resource",
+      "label": "Grant Read Access to User",
+      "schema": Object {
+        "resourceCompositeIdentifier": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "COMPOSITE_IDENTIFIER",
+        },
+        "userId": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "UUID",
+        },
+      },
+      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+    },
+  ],
   "data": Object {
     "audioURL": "https://www.myaudio.com/lamb.mp3",
     "contributions": Array [
@@ -116,7 +206,25 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /spatialFeatures/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Allow a user to view (but not edit) a given resource",
+      "label": "Grant Read Access to User",
+      "schema": Object {
+        "resourceCompositeIdentifier": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "COMPOSITE_IDENTIFIER",
+        },
+        "userId": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "UUID",
+        },
+      },
+      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+    },
+  ],
   "data": Object {
     "geometry": Object {
       "coordinates": Array [
@@ -138,7 +246,25 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /terms/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Allow a user to view (but not edit) a given resource",
+      "label": "Grant Read Access to User",
+      "schema": Object {
+        "resourceCompositeIdentifier": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "COMPOSITE_IDENTIFIER",
+        },
+        "userId": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "UUID",
+        },
+      },
+      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+    },
+  ],
   "data": Object {
     "contributor": "",
     "id": "1",
@@ -156,7 +282,25 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /transcribedAudioItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Allow a user to view (but not edit) a given resource",
+      "label": "Grant Read Access to User",
+      "schema": Object {
+        "resourceCompositeIdentifier": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "COMPOSITE_IDENTIFIER",
+        },
+        "userId": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "UUID",
+        },
+      },
+      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+    },
+  ],
   "data": Object {
     "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
     "id": "110",
@@ -177,7 +321,25 @@ Object {
 
 exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /vocabularyLists/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Allow a user to view (but not edit) a given resource",
+      "label": "Grant Read Access to User",
+      "schema": Object {
+        "resourceCompositeIdentifier": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "COMPOSITE_IDENTIFIER",
+        },
+        "userId": Object {
+          "isArray": false,
+          "isOptional": false,
+          "type": "UUID",
+        },
+      },
+      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+    },
+  ],
   "data": Object {
     "entries": Array [
       Object {

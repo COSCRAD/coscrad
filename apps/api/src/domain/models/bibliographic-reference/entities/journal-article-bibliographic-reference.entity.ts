@@ -34,7 +34,7 @@ export class JournalArticleBibliographicReference
         return Valid;
     }
 
-    getAvailableCommands(): string[] {
+    protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 }

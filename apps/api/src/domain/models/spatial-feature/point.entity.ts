@@ -36,7 +36,7 @@ export class Point extends Resource implements ISpatialFeature {
         return geometricFeatureValidator(this.geometry);
     }
 
-    getAvailableCommands(): string[] {
+    protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 }

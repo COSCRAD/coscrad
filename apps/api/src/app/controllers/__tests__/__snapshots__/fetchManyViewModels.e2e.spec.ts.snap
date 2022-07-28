@@ -5,7 +5,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "data": Object {
           "abstract": "This is the abstract, NOT a general note!",
@@ -34,7 +52,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "data": Object {
           "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
@@ -66,7 +102,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "data": Object {
           "abstract": "This is the abstract, NOT a general note!",
@@ -95,7 +149,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "data": Object {
           "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
@@ -127,7 +199,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "author": "John Doeburg",
         "id": "23",
@@ -143,7 +233,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "author": "Jane Donnaldson",
         "id": "24",
@@ -158,7 +266,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "author": "Jane Donnaldson",
         "id": "25",
@@ -176,7 +302,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "author": "John Doeburg",
         "id": "23",
@@ -192,7 +336,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "author": "Jane Donnaldson",
         "id": "24",
@@ -207,7 +369,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "author": "Jane Donnaldson",
         "id": "25",
@@ -225,7 +405,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "contributorAndRoles": Array [
           Object {
@@ -257,7 +455,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "contributorAndRoles": Array [
           Object {
@@ -289,7 +505,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "id": "0",
         "imageURL": "https://www.mysound.org/downloads/cat.png",
@@ -303,7 +537,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "id": "1",
         "imageURL": "https://www.mysound.org/downloads/dog.png",
@@ -317,7 +569,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "id": "2",
         "imageURL": "https://www.mysound.org/downloads/wildflower.png",
@@ -334,7 +604,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "id": "0",
         "imageURL": "https://www.mysound.org/downloads/cat.png",
@@ -348,7 +636,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "id": "1",
         "imageURL": "https://www.mysound.org/downloads/dog.png",
@@ -362,7 +668,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "id": "2",
         "imageURL": "https://www.mysound.org/downloads/wildflower.png",
@@ -379,7 +703,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "audioURL": "https://www.myaudio.com/lamb.mp3",
         "contributions": Array [
@@ -395,7 +737,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "audioURL": "https://www.myaudio.com/badsong.wav",
         "contributions": Array [
@@ -419,7 +779,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "audioURL": "https://www.myaudio.com/lamb.mp3",
         "contributions": Array [
@@ -435,7 +813,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "audioURL": "https://www.myaudio.com/badsong.wav",
         "contributions": Array [
@@ -459,7 +855,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
@@ -478,7 +892,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
@@ -497,7 +929,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
@@ -516,7 +966,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
@@ -544,7 +1012,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
@@ -586,7 +1072,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
@@ -605,7 +1109,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
@@ -624,7 +1146,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
@@ -643,7 +1183,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
@@ -671,7 +1229,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
@@ -713,7 +1289,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "contributor": "",
         "id": "1",
@@ -728,7 +1322,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "contributor": "",
         "id": "2",
@@ -743,7 +1355,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "contributor": "",
         "id": "3",
@@ -765,7 +1395,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "contributor": "",
         "id": "1",
@@ -780,7 +1428,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "contributor": "",
         "id": "2",
@@ -795,7 +1461,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "contributor": "",
         "id": "3",
@@ -817,7 +1501,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
         "id": "110",
@@ -843,7 +1545,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "audioURL": "https://www.mysound.org/downloads/123.mp3.mp3",
         "id": "110",
@@ -869,7 +1589,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "entries": Array [
           Object {
@@ -923,7 +1661,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "entries": Array [
           Object {
@@ -958,7 +1714,25 @@ Object {
   "actions": Array [],
   "data": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "entries": Array [],
         "id": "1",
@@ -989,7 +1763,25 @@ Object {
       },
     },
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
       "data": Object {
         "entries": Array [],
         "id": "2",
