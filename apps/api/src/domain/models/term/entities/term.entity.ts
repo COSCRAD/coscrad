@@ -73,7 +73,7 @@ export class Term extends Resource {
         this.sourceProject = dto.sourceProject;
     }
 
-    getAvailableCommands(): string[] {
+    protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 

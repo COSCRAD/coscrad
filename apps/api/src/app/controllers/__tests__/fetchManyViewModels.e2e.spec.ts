@@ -1,6 +1,9 @@
+import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { Resource } from '../../../domain/models/resource.entity';
+import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
@@ -18,6 +21,10 @@ describe('When fetching multiple resources', () => {
     let arangoConnectionProvider: ArangoConnectionProvider;
 
     let testRepositoryProvider: TestRepositoryProvider;
+
+    let commandHandlerService: CommandHandlerService;
+
+    let idManager: IIdManager;
 
     const testData = buildTestData();
 
@@ -38,10 +45,21 @@ describe('When fetching multiple resources', () => {
     );
 
     beforeAll(async () => {
-        ({ app, arangoConnectionProvider, testRepositoryProvider } = await setUpIntegrationTest({
-            ARANGO_DB_NAME: testDatabaseName,
-            BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
-        }));
+        ({ app, arangoConnectionProvider, commandHandlerService, testRepositoryProvider } =
+            await setUpIntegrationTest({
+                ARANGO_DB_NAME: testDatabaseName,
+                BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
+            }));
+
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/182576828]
+         * We should use the real app module to dynamically discover all
+         * commands.
+         */
+        commandHandlerService.registerHandler(
+            'GRANT_RESOURCE_READ_ACCESS_TO_USER',
+            new GrantResourceReadAccessToUserCommandHandler(testRepositoryProvider, idManager)
+        );
     });
 
     Object.values(ResourceType).forEach((resourceType) => {
