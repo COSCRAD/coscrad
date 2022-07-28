@@ -23,7 +23,10 @@ export default (
         const additionalOptions = forbidUnknownValues
             ? {
                   forbidUnknownValues,
-                  // TODO alias the following props in favor of more inclusive identifiers
+                  /**
+                   * TODO [https://www.pivotaltracker.com/story/show/182840162]
+                   * Alias the following props in favor of more inclusive identifiers.
+                   */
                   forbidNonWhitelisted: true,
                   whitelist: true,
               }
