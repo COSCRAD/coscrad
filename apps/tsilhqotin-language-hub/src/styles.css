@@ -523,23 +523,23 @@ h2 {
 .icon-style:hover {
     animation: none !important;
     background: rgba(18, 10, 86, 1) !important;
-    color: rgb(255, 255, 255) !important;
+    box-shadow: 0px 0px 0px 1px rgb(249, 249, 249);
 }
 
 @keyframes movebtn {
     0% {
-        transform: translateY(0px) !important;
+        transform: translateY(0px);
     }
     25% {
-        transform: translateY(20px) !important;
+        transform: translateY(10px);
     }
     50% {
-        transform: translateY(0px) !important;
+        transform: translateY(0px);
     }
     75% {
-        transform: translateY(-20px) !important;
+        transform: translateY(-10px);
     }
     100% {
-        transform: translateY(0px) !important;
+        transform: translateY(0px);
     }
 }

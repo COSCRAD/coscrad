@@ -35,7 +35,7 @@ export function Song(props: SongsDetailComponentProps) {
                 <div>English: {titleEnglish}</div>
                 <audio src={`${audioURL}`} controls />
                 <div>Contributions: {`${contributions}`}</div>
-                <div>Lyrics: {`${lyrics}`}</div>
+                <div>Lyrics: {`${lyrics || ''}`}</div>
                 <div>URL: {`${audioURL}`}</div>
                 <div>ID: {`${id}`} </div>
             </Card>
