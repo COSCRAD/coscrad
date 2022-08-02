@@ -5,6 +5,7 @@ export enum EdgeConnectionContextType {
     textField = 'textField',
     point2D = 'point2D',
     freeMultiline = 'freeMultiline',
+    identity = 'identity',
 }
 
 export const isEdgeConnectionContextType = (input: unknown): input is EdgeConnectionContextType =>

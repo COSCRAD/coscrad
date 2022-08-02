@@ -3,6 +3,7 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
+import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
@@ -39,6 +40,35 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                 context: new PageRangeContext({
                     pageIdentifiers: ['ix'],
                     type: EdgeConnectionContextType.pageRange,
+                }),
+            },
+        ],
+    },
+    {
+        id: '3102',
+        // Do we want to allow edge connections to a bibliographic Reference?
+        note: 'this library book has the lyrics from the song, but we do not have access to the book',
+        members: [
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.bibliographicReference,
+                    id: '1',
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.song,
+                    id: '1',
+                },
+                context: new TimeRangeContext({
+                    type: EdgeConnectionContextType.timeRange,
+                    timeRange: {
+                        inPoint: 500,
+                        outPoint: 778.4,
+                    },
                 }),
             },
         ],

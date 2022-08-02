@@ -223,6 +223,19 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             },
         ],
     },
+    {
+        note: 'this book is hard to track down',
+        members: [
+            {
+                role,
+                compositeIdentifier: {
+                    id: '1',
+                    type: ResourceType.bibliographicReference,
+                },
+                context: new GeneralContext(),
+            },
+        ],
+    },
 ];
 const selfEdgeConnectionInstancesWithSpecificContext = edgeConnectionDTOs.map((partialDTO) => ({
     ...partialDTO,

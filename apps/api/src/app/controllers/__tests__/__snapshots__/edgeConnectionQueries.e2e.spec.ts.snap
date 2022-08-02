@@ -1,73 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: bibliographicReference should return the expected result 1`] = `
-Array [
-  Object {
-    "id": "2005",
-    "note": "That is why spatialFeature/300 is related to bibliographicReference/1",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "300",
-          "type": "spatialFeature",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "from",
-      },
-    ],
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-      },
-    ],
-  },
-  Object {
-    "id": "2006",
-    "note": "That is why bibliographicReference/1 is related to song/1",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "song",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 300,
-            "outPoint": 500,
-          },
-          "type": "timeRange",
-        },
-        "role": "from",
-      },
-    ],
-    "tags": Array [],
-  },
-]
-`;
-
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: book should return the expected result 1`] = `
 Array [
   Object {
@@ -163,6 +95,33 @@ Array [
         "label": "placenames",
       },
     ],
+  },
+  Object {
+    "id": "3002",
+    "note": "here is the digital version of the book!",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "identity",
+        },
+        "role": "from",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "type": "identity",
+        },
+        "role": "to",
+      },
+    ],
+    "tags": Array [],
   },
   Object {
     "id": "3101",
@@ -391,13 +350,13 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: song should return the expected result 1`] = `
 Array [
   Object {
-    "id": "2006",
-    "note": "That is why bibliographicReference/1 is related to song/1",
+    "id": "2005",
+    "note": "That is why spatialFeature/300 is related to song/1",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
+          "id": "300",
+          "type": "spatialFeature",
         },
         "context": Object {
           "type": "general",
@@ -419,10 +378,15 @@ Array [
         "role": "from",
       },
     ],
-    "tags": Array [],
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
   },
   Object {
-    "id": "2007",
+    "id": "2006",
     "note": "That is why song/1 is related to term/2",
     "relatedResources": Array [
       Object {
@@ -451,6 +415,37 @@ Array [
           ],
           "target": "term",
           "type": "textField",
+        },
+        "role": "from",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "3102",
+    "note": "this library book has the lyrics from the song, but we do not have access to the book",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "song",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 500,
+            "outPoint": 778.4,
+          },
+          "type": "timeRange",
         },
         "role": "from",
       },
@@ -516,7 +511,7 @@ Array [
   },
   Object {
     "id": "2005",
-    "note": "That is why spatialFeature/300 is related to bibliographicReference/1",
+    "note": "That is why spatialFeature/300 is related to song/1",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
@@ -531,10 +526,14 @@ Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
-          "type": "bibliographicReference",
+          "type": "song",
         },
         "context": Object {
-          "type": "general",
+          "timeRange": Object {
+            "inPoint": 300,
+            "outPoint": 500,
+          },
+          "type": "timeRange",
         },
         "role": "from",
       },
@@ -589,7 +588,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "2007",
+    "id": "2006",
     "note": "That is why song/1 is related to term/2",
     "relatedResources": Array [
       Object {
@@ -1126,6 +1125,23 @@ Array [
   },
   Object {
     "id": "13",
+    "note": "this book is hard to track down",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "14",
     "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
     "relatedResources": Array [
       Object {
@@ -1142,7 +1158,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "14",
+    "id": "15",
     "note": "This page is about bears",
     "relatedResources": Array [
       Object {
@@ -1159,7 +1175,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "15",
+    "id": "16",
     "note": "This is the first letter of the list name",
     "relatedResources": Array [
       Object {
@@ -1176,7 +1192,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "16",
+    "id": "17",
     "note": "there is a placename for this point at the base of the mountain",
     "relatedResources": Array [
       Object {
@@ -1193,7 +1209,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "17",
+    "id": "18",
     "note": "this clip talks about songs",
     "relatedResources": Array [
       Object {
@@ -1210,7 +1226,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "18",
+    "id": "19",
     "note": "this is the stem of the flower",
     "relatedResources": Array [
       Object {
@@ -1227,7 +1243,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "19",
+    "id": "20",
     "note": "this is the base of the flower",
     "relatedResources": Array [
       Object {
@@ -1244,7 +1260,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "20",
+    "id": "21",
     "note": "this section is the best part of an illustrated book about birds",
     "relatedResources": Array [
       Object {
@@ -1261,7 +1277,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "21",
+    "id": "22",
     "note": "found this in the archives",
     "relatedResources": Array [
       Object {
@@ -1278,7 +1294,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "22",
+    "id": "23",
     "note": "this is a song",
     "relatedResources": Array [
       Object {
@@ -1295,7 +1311,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "23",
+    "id": "24",
     "note": "this is an awesome show",
     "relatedResources": Array [
       Object {
@@ -1312,13 +1328,30 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "24",
+    "id": "25",
     "note": "important clip from the show",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
           "type": "mediaItem",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "26",
+    "note": "this book is hard to track down",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
         },
         "context": Object {
           "type": "general",
@@ -1554,44 +1587,12 @@ Array [
   },
   Object {
     "id": "2005",
-    "note": "That is why spatialFeature/300 is related to bibliographicReference/1",
+    "note": "That is why spatialFeature/300 is related to song/1",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "300",
           "type": "spatialFeature",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "from",
-      },
-    ],
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-      },
-    ],
-  },
-  Object {
-    "id": "2006",
-    "note": "That is why bibliographicReference/1 is related to song/1",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
         },
         "context": Object {
           "type": "general",
@@ -1613,10 +1614,15 @@ Array [
         "role": "from",
       },
     ],
-    "tags": Array [],
+    "tags": Array [
+      Object {
+        "id": "1",
+        "label": "plants",
+      },
+    ],
   },
   Object {
-    "id": "2007",
+    "id": "2006",
     "note": "That is why song/1 is related to term/2",
     "relatedResources": Array [
       Object {
@@ -1688,6 +1694,33 @@ Array [
     "tags": Array [],
   },
   Object {
+    "id": "3002",
+    "note": "here is the digital version of the book!",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "identity",
+        },
+        "role": "from",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "type": "identity",
+        },
+        "role": "to",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
     "id": "3101",
     "note": "this selection from the media item portrays the events in the book",
     "relatedResources": Array [
@@ -1715,6 +1748,37 @@ Array [
             "ix",
           ],
           "type": "pageRange",
+        },
+        "role": "from",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "3102",
+    "note": "this library book has the lyrics from the song, but we do not have access to the book",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "song",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 500,
+            "outPoint": 778.4,
+          },
+          "type": "timeRange",
         },
         "role": "from",
       },
@@ -1749,8 +1813,42 @@ Array [
     ],
   },
   Object {
-    "id": "21",
+    "id": "13",
+    "note": "this book is hard to track down",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "22",
     "note": "found this in the archives",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "26",
+    "note": "this book is hard to track down",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
@@ -1811,7 +1909,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "14",
+    "id": "15",
     "note": "This page is about bears",
     "relatedResources": Array [
       Object {
@@ -1828,7 +1926,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "20",
+    "id": "21",
     "note": "this section is the best part of an illustrated book about birds",
     "relatedResources": Array [
       Object {
@@ -1898,7 +1996,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "23",
+    "id": "24",
     "note": "this is an awesome show",
     "relatedResources": Array [
       Object {
@@ -1915,7 +2013,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "24",
+    "id": "25",
     "note": "important clip from the show",
     "relatedResources": Array [
       Object {
@@ -2000,7 +2098,7 @@ Array [
     ],
   },
   Object {
-    "id": "18",
+    "id": "19",
     "note": "this is the stem of the flower",
     "relatedResources": Array [
       Object {
@@ -2017,7 +2115,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "19",
+    "id": "20",
     "note": "this is the base of the flower",
     "relatedResources": Array [
       Object {
@@ -2060,7 +2158,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "22",
+    "id": "23",
     "note": "this is a song",
     "relatedResources": Array [
       Object {
@@ -2099,7 +2197,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "16",
+    "id": "17",
     "note": "there is a placename for this point at the base of the mountain",
     "relatedResources": Array [
       Object {
@@ -2148,7 +2246,7 @@ Array [
     ],
   },
   Object {
-    "id": "13",
+    "id": "14",
     "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
     "relatedResources": Array [
       Object {
@@ -2196,7 +2294,7 @@ Array [
     ],
   },
   Object {
-    "id": "17",
+    "id": "18",
     "note": "this clip talks about songs",
     "relatedResources": Array [
       Object {
@@ -2245,7 +2343,7 @@ Array [
     ],
   },
   Object {
-    "id": "15",
+    "id": "16",
     "note": "This is the first letter of the list name",
     "relatedResources": Array [
       Object {

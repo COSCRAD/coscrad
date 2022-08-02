@@ -84,9 +84,15 @@ describe(`resource model context state validators`, () => {
             expect(missingValidCases).toEqual([]);
         });
 
+        // TODO We need a single source of truth for this list
+        const trivialContextTypes = [
+            EdgeConnectionContextType.general,
+            EdgeConnectionContextType.identity,
+        ];
+
         it('should have at least one invalid test case for each resource type \\ context type combo', () => {
             const missingValidCases = allResourceTypeContextTypeCombos
-                .filter(([_, contextType]) => contextType !== EdgeConnectionContextType.general)
+                .filter(([_, contextType]) => !trivialContextTypes.includes(contextType))
                 .reduce(
                     (
                         acc: [ResourceType, EdgeConnectionContextType][],

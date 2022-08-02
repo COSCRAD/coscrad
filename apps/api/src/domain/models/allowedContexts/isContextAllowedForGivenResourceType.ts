@@ -4,7 +4,11 @@ import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefin
 import { EdgeConnectionContextType } from '../context/types/EdgeConnectionContextType';
 
 const resourceTypeToAllowedContextTypes = {
-    [ResourceType.book]: [EdgeConnectionContextType.general, EdgeConnectionContextType.pageRange],
+    [ResourceType.book]: [
+        EdgeConnectionContextType.general,
+        EdgeConnectionContextType.identity,
+        EdgeConnectionContextType.pageRange,
+    ],
     [ResourceType.photograph]: [
         EdgeConnectionContextType.general,
         EdgeConnectionContextType.point2D,
@@ -29,7 +33,10 @@ const resourceTypeToAllowedContextTypes = {
         EdgeConnectionContextType.general,
         EdgeConnectionContextType.textField,
     ],
-    [ResourceType.bibliographicReference]: [EdgeConnectionContextType.general],
+    [ResourceType.bibliographicReference]: [
+        EdgeConnectionContextType.general,
+        EdgeConnectionContextType.identity,
+    ],
     [ResourceType.song]: [EdgeConnectionContextType.general, EdgeConnectionContextType.timeRange],
     [ResourceType.mediaItem]: [
         EdgeConnectionContextType.general,

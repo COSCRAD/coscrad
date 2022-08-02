@@ -5,13 +5,16 @@ import buildEdgeConnectionContextValidatorTestCases from './buildEdgeConnectionC
 
 const testCases = buildEdgeConnectionContextValidatorTestCases();
 
+// There is nothing to validate for these contezt types
+const trivialContextTypes = [EdgeConnectionContextType.general, EdgeConnectionContextType.identity];
+
 describe('Edge Connection Validators', () => {
     Object.values(EdgeConnectionContextType)
         // there is no need to validate the general context
-        .filter((contextType) => contextType !== EdgeConnectionContextType.general)
+        .filter((contextType) => !trivialContextTypes.includes(contextType))
         .forEach((contextType) => {
-            describe(`An entity of type ${contextType}`, () => {
-                it('should have an edge connection validator test case', () => {
+            describe(`A context of type ${contextType}`, () => {
+                it('should have a corresponding edge connection validator test case', () => {
                     const testCaseSearchResult = testCases.find(
                         ({ contextType: testCaseContextType }) =>
                             testCaseContextType === contextType

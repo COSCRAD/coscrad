@@ -7,6 +7,7 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../../../models/context/edge-connection.entity';
+import { IdentityContext } from '../../../../../models/context/identity-context.entity/identity-context.entity';
 import { PageRangeContext } from '../../../../../models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from '../../../../../models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../../../models/context/types/EdgeConnectionContextType';
@@ -17,7 +18,10 @@ import ContextTypeIsNotAllowedForGivenResourceTypeError from '../../../../errors
 import InvalidEdgeConnectionDTOError from '../../../../errors/context/edgeConnections/InvalidEdgeConnectionDTOError';
 import InvalidEdgeConnectionMemberRolesError from '../../../../errors/context/edgeConnections/InvalidEdgeConnectionMemberRolesError';
 import InvalidNumberOfMembersInEdgeConnectionError from '../../../../errors/context/edgeConnections/InvalidNumberOfMembersInEdgeConnectionError';
+import IncompatibleIdentityConnectionMembersError from '../../../../errors/context/IncompatibleIdentityConnectionMembersError';
 import InvalidEdgeConnectionContextModelError from '../../../../errors/context/InvalidEdgeConnectionContextModelError';
+import LonelyIdentityContextInEdgeconnectionError from '../../../../errors/context/LonelyIdentityContextInEdgeConnectionError';
+import SelfConnectionCannotUseIdentityContextError from '../../../../errors/context/SelfConnectionCannotUseIdentityContextError';
 import { EdgeConnectionValidatorTestCase } from '../types/EdgeConnectionValidatorTestCase';
 
 const buildTopLevelError = (innerErrors: InternalError[]): InternalError =>
@@ -76,6 +80,16 @@ const validBookToTranscribedAudioDualConnection = new EdgeConnection({
     id: '123',
     note: 'These are both about bears',
 }).toDTO();
+
+const validBookBibliographicReferenceMemberWithIdentityContext: EdgeConnectionMember<IdentityContext> =
+    {
+        compositeIdentifier: {
+            type: ResourceType.bibliographicReference,
+            id: '123',
+        },
+        context: new IdentityContext(),
+        role: EdgeConnectionMemberRole.from,
+    };
 
 export default (): EdgeConnectionValidatorTestCase[] => [
     {
@@ -296,6 +310,122 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                  * should be tested in `edgeConnectionContextValidator.spec.ts`
                  */
                 expectedError: buildTopLevelError([new InvalidEdgeConnectionContextModelError([])]),
+            },
+            {
+                description: 'When only one member in a dual connection uses the Identity Context',
+                invalidDTO: {
+                    type: AggregateType.note,
+                    connectionType: EdgeConnectionType.dual,
+                    id: '123',
+                    note: 'I do not get how identity context works!',
+                    members: [
+                        {
+                            compositeIdentifier: {
+                                type: ResourceType.bibliographicReference,
+                                id: '123',
+                            },
+                            context: new IdentityContext(),
+                            role: EdgeConnectionMemberRole.from,
+                        },
+                        buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.to),
+                    ],
+                },
+                expectedError: buildTopLevelError([
+                    new LonelyIdentityContextInEdgeconnectionError(),
+                ]),
+            },
+            {
+                description:
+                    'when the from member in an identity connection is not a bibliographic reference',
+                invalidDTO: {
+                    type: AggregateType.note,
+                    connectionType: EdgeConnectionType.dual,
+                    id: '123',
+                    note: 'my from member should be a bibliographic reference, but it is not!',
+                    members: [
+                        {
+                            role: EdgeConnectionMemberRole.from,
+                            compositeIdentifier: {
+                                type: ResourceType.book,
+                                id: '6789',
+                            },
+                            context: new IdentityContext(),
+                        },
+                        {
+                            role: EdgeConnectionMemberRole.to,
+                            compositeIdentifier: {
+                                type: ResourceType.bibliographicReference,
+                                id: '390',
+                            },
+                            context: new IdentityContext(),
+                        },
+                    ],
+                },
+                expectedError: buildTopLevelError([
+                    new IncompatibleIdentityConnectionMembersError({
+                        fromType: ResourceType.book,
+                        toType: ResourceType.bibliographicReference,
+                    }),
+                ]),
+            },
+            {
+                description: 'when the members in an identity connection are not compatible',
+                invalidDTO: {
+                    type: AggregateType.note,
+                    connectionType: EdgeConnectionType.dual,
+                    id: '123',
+                    note: 'This book reference is having an identity crisis. Thinks it is a term.',
+                    members: [
+                        validBookBibliographicReferenceMemberWithIdentityContext,
+                        {
+                            role: EdgeConnectionMemberRole.to,
+                            compositeIdentifier: {
+                                type: ResourceType.term,
+                                id: '5678',
+                            },
+                            context: new IdentityContext(),
+                        },
+                    ],
+                },
+                expectedError: buildTopLevelError([
+                    /**
+                     * For now, we don't have any resource types that can
+                     * participate as the from member in an Identity Connection
+                     * that can't participate with any `BibliographicReference` as
+                     * the to member. Once we do, rewrite this test so we only see
+                     * one error.
+                     */
+                    new ContextTypeIsNotAllowedForGivenResourceTypeError(
+                        EdgeConnectionContextType.identity,
+                        ResourceType.term
+                    ),
+                    new IncompatibleIdentityConnectionMembersError({
+                        fromType: ResourceType.bibliographicReference,
+                        toType: ResourceType.term,
+                    }),
+                ]),
+            },
+            {
+                description: 'when a self connection member uses the Identity Context',
+                invalidDTO: {
+                    type: AggregateType.note,
+                    connectionType: EdgeConnectionType.self,
+                    id: '99',
+                    note: 'This self member is having an identity crisis!',
+                    members: [
+                        {
+                            role: EdgeConnectionMemberRole.self,
+                            compositeIdentifier: {
+                                type: ResourceType.bibliographicReference,
+                                id: '45',
+                            },
+                            context: new IdentityContext(),
+                        },
+                    ],
+                },
+                expectedError: buildTopLevelError([
+                    new SelfConnectionCannotUseIdentityContextError(),
+                ]),
             },
         ],
     },

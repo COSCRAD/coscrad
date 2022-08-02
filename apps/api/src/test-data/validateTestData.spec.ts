@@ -99,6 +99,7 @@ describe('buildTestData', () => {
     });
 
     describe('test data for edge connections', () => {
+        // TODO Leverage `validateExternalState` for this
         it(`should have no duplicate IDs`, () => {
             const allIds = connectionTestData
                 .map((connection) => connection.id)
@@ -139,46 +140,52 @@ describe('buildTestData', () => {
             });
         });
 
-        connectionTestData.forEach((edgeConnection, index) => {
-            describe(`Edge Connection at index ${index}`, () => {
-                it(`should satisfy the invariants for an Edge Connection`, () => {
-                    const validationResult = validateEdgeConnection(edgeConnection);
+        connectionTestData
+            .filter(({ id }) => id === '3002')
+            .forEach((edgeConnection) => {
+                describe(`Edge Connection: ${edgeConnection.id}`, () => {
+                    it(`should satisfy the invariants for an Edge Connection`, () => {
+                        const validationResult = validateEdgeConnection(edgeConnection);
 
-                    expect(validationResult).toBe(Valid);
-                });
+                        expect(validationResult).toBe(Valid);
+                    });
 
-                const { members } = edgeConnection;
+                    const { members } = edgeConnection;
 
-                members.forEach(
-                    ({ compositeIdentifier: { id: memberId, type: resourceType }, context }) => {
-                        describe(`the member with composite ID ${resourceType}/${memberId}`, () => {
-                            it(`should reference resource instances that are in the test data`, () => {
-                                const areAllResourcesInSnapshot = resourceTestData[
-                                    resourceType
-                                ].some(
-                                    ({ id: resourceInstanceId }) => resourceInstanceId === memberId
-                                );
+                    members.forEach(
+                        ({
+                            compositeIdentifier: { id: memberId, type: resourceType },
+                            context,
+                        }) => {
+                            describe(`the member with composite ID ${resourceType}/${memberId}`, () => {
+                                it(`should reference resource instances that are in the test data`, () => {
+                                    const areAllResourcesInSnapshot = resourceTestData[
+                                        resourceType
+                                    ].some(
+                                        ({ id: resourceInstanceId }) =>
+                                            resourceInstanceId === memberId
+                                    );
 
-                                expect(areAllResourcesInSnapshot).toBe(true);
-                            });
+                                    expect(areAllResourcesInSnapshot).toBe(true);
+                                });
 
-                            describe(`its context`, () => {
-                                it(`should be consistent with the state of ${resourceType}/${memberId}`, () => {
-                                    const correspondingResourceInstance = (
-                                        resourceTestData[resourceType] as { id: string }[]
-                                    ).find(idEquals(memberId)) as Resource;
+                                describe(`its context`, () => {
+                                    it(`should be consistent with the state of ${resourceType}/${memberId}`, () => {
+                                        const correspondingResourceInstance = (
+                                            resourceTestData[resourceType] as { id: string }[]
+                                        ).find(idEquals(memberId)) as Resource;
 
-                                    const validationResult =
-                                        correspondingResourceInstance.validateContext(context);
+                                        const validationResult =
+                                            correspondingResourceInstance.validateContext(context);
 
-                                    expect(validationResult).toBe(Valid);
+                                        expect(validationResult).toBe(Valid);
+                                    });
                                 });
                             });
-                        });
-                    }
-                );
+                        }
+                    );
+                });
             });
-        });
 
         describe('tag test data', () => {
             it('should contain tags that satisfy invariant validation rules', () => {

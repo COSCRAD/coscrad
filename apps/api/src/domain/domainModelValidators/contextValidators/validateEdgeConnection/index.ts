@@ -2,10 +2,12 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import isContextAllowedForGivenResourceType from '../../../models/allowedContexts/isContextAllowedForGivenResourceType';
 import {
     EdgeConnection,
+    EdgeConnectionMember,
     EdgeConnectionMemberRole,
     EdgeConnectionType,
     isEdgeConnectionType,
 } from '../../../models/context/edge-connection.entity';
+import { EdgeConnectionContextType } from '../../../models/context/types/EdgeConnectionContextType';
 import { isAggregateId } from '../../../types/AggregateId';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BothMembersInEdgeConnectionHaveSameRoleError from '../../errors/context/edgeConnections/BothMembersInEdgeConnectionHaveSameRoleError';
@@ -19,6 +21,10 @@ import NoteMissingFromEdgeConnectionError from '../../errors/context/edgeConnect
 import NullOrUndefinedEdgeConnectionDTOError from '../../errors/context/edgeConnections/NullOrUndefindEdgeConnectionDTOError';
 import { isValid, Valid } from '../../Valid';
 import validateContextModelInvariants from '../validateContextModelInvariants';
+import { validateIdentityEdgeConnection } from './validateIdentityEdgeConnection';
+
+export const isMemberContextTheIdentityContext = ({ context: { type } }: EdgeConnectionMember) =>
+    type === EdgeConnectionContextType.identity;
 
 const buildTopLevelError = (innerErrors: InternalError[]) =>
     new InvalidEdgeConnectionDTOError(innerErrors);
@@ -140,6 +146,13 @@ export default (input: unknown): Valid | InternalError => {
     );
 
     if (contextModelInvariantErrors.length > 0) allErrors.push(...contextModelInvariantErrors);
+
+    /**
+     * Validate requirements for an identity connection, if that is what we have.
+     */
+    if (members.some(isMemberContextTheIdentityContext)) {
+        validateIdentityEdgeConnection(test).forEach((error) => allErrors.push(error));
+    }
 
     return allErrors.length > 0 ? buildTopLevelError(allErrors) : Valid;
 };

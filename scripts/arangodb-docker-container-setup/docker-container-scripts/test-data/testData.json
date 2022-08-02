@@ -1224,10 +1224,27 @@
                 "note": "important clip from the show"
             },
             {
+                "_to": "bibliographic_references/1",
+                "_from": "bibliographic_references/1",
+                "type": "note",
+                "_key": "13",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this book is hard to track down"
+            },
+            {
                 "_to": "terms/2",
                 "_from": "terms/2",
                 "type": "note",
-                "_key": "13",
+                "_key": "14",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1244,7 +1261,7 @@
                 "_to": "books/24",
                 "_from": "books/24",
                 "type": "note",
-                "_key": "14",
+                "_key": "15",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1261,7 +1278,7 @@
                 "_to": "vocabulary_lists/2",
                 "_from": "vocabulary_lists/2",
                 "type": "note",
-                "_key": "15",
+                "_key": "16",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1278,7 +1295,7 @@
                 "_to": "spatial_features/300",
                 "_from": "spatial_features/300",
                 "type": "note",
-                "_key": "16",
+                "_key": "17",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1295,7 +1312,7 @@
                 "_to": "transcribed_audio/110",
                 "_from": "transcribed_audio/110",
                 "type": "note",
-                "_key": "17",
+                "_key": "18",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1312,7 +1329,7 @@
                 "_to": "photographs/2",
                 "_from": "photographs/2",
                 "type": "note",
-                "_key": "18",
+                "_key": "19",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1329,7 +1346,7 @@
                 "_to": "photographs/2",
                 "_from": "photographs/2",
                 "type": "note",
-                "_key": "19",
+                "_key": "20",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1346,7 +1363,7 @@
                 "_to": "books/24",
                 "_from": "books/24",
                 "type": "note",
-                "_key": "20",
+                "_key": "21",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1363,7 +1380,7 @@
                 "_to": "bibliographic_references/1",
                 "_from": "bibliographic_references/1",
                 "type": "note",
-                "_key": "21",
+                "_key": "22",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1380,7 +1397,7 @@
                 "_to": "songs/1",
                 "_from": "songs/1",
                 "type": "note",
-                "_key": "22",
+                "_key": "23",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1397,7 +1414,7 @@
                 "_to": "media_items/1",
                 "_from": "media_items/1",
                 "type": "note",
-                "_key": "23",
+                "_key": "24",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1414,7 +1431,7 @@
                 "_to": "media_items/1",
                 "_from": "media_items/1",
                 "type": "note",
-                "_key": "24",
+                "_key": "25",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1426,6 +1443,23 @@
                     }
                 ],
                 "note": "important clip from the show"
+            },
+            {
+                "_to": "bibliographic_references/1",
+                "_from": "bibliographic_references/1",
+                "type": "note",
+                "_key": "26",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this book is hard to track down"
             },
             {
                 "_to": "terms/2",
@@ -1613,32 +1647,9 @@
             },
             {
                 "_to": "spatial_features/300",
-                "_from": "bibliographic_references/1",
-                "type": "note",
-                "_key": "2005",
-                "eventHistory": [],
-                "connectionType": "dual",
-                "members": [
-                    {
-                        "role": "to",
-                        "context": {
-                            "type": "general"
-                        }
-                    },
-                    {
-                        "role": "from",
-                        "context": {
-                            "type": "general"
-                        }
-                    }
-                ],
-                "note": "That is why spatialFeature/300 is related to bibliographicReference/1"
-            },
-            {
-                "_to": "bibliographic_references/1",
                 "_from": "songs/1",
                 "type": "note",
-                "_key": "2006",
+                "_key": "2005",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -1659,13 +1670,13 @@
                         }
                     }
                 ],
-                "note": "That is why bibliographicReference/1 is related to song/1"
+                "note": "That is why spatialFeature/300 is related to song/1"
             },
             {
                 "_to": "songs/1",
                 "_from": "terms/2",
                 "type": "note",
-                "_key": "2007",
+                "_key": "2006",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -1726,6 +1737,29 @@
                 "note": "this media item mentions a word in the term"
             },
             {
+                "_from": "bibliographic_references/1",
+                "_to": "books/24",
+                "type": "note",
+                "_key": "3002",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "identity"
+                        }
+                    },
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "identity"
+                        }
+                    }
+                ],
+                "note": "here is the digital version of the book!"
+            },
+            {
                 "_to": "media_items/1",
                 "_from": "books/24",
                 "type": "note",
@@ -1754,6 +1788,33 @@
                     }
                 ],
                 "note": "this selection from the media item portrays the events in the book"
+            },
+            {
+                "_to": "bibliographic_references/1",
+                "_from": "songs/1",
+                "type": "note",
+                "_key": "3102",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 500,
+                                "outPoint": 778.4
+                            }
+                        }
+                    }
+                ],
+                "note": "this library book has the lyrics from the song, but we do not have access to the book"
             }
         ]
     }

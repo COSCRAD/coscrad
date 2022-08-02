@@ -102,7 +102,10 @@ export default (uniqueIdOffset: number): EdgeConnection[] => [
      * TODO [https://www.pivotaltracker.com/story/show/182302542]
      * "Strangle out" auto generation of test data.
      */
-    ...generateComprehensiveDualEdgeConnectionTestData(uniqueIdOffset, [ResourceType.mediaItem]),
+    ...generateComprehensiveDualEdgeConnectionTestData(uniqueIdOffset, [
+        ResourceType.mediaItem,
+        ResourceType.bibliographicReference,
+    ]),
     ...buildOneDualEdgeConnectionForEveryContextType(),
     ...buildOneFromConnectionForInstanceOfEachResourceType(),
     ...buildOneToConnectionForInstanceOfEachResourceType(),

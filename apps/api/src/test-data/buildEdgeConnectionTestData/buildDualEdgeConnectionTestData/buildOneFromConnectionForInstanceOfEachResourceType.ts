@@ -3,6 +3,7 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
+import { IdentityContext } from '../../../domain/models/context/identity-context.entity/identity-context.entity';
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
@@ -41,6 +42,29 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                     target: 'term',
                     charRange: [1, 4],
                 }),
+            },
+        ],
+    },
+    {
+        id: '3002',
+        // Do we want to allow edge connections to a bibliographic Reference?
+        note: 'here is the digital version of the book!',
+        members: [
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.bibliographicReference,
+                    id: '1',
+                },
+                context: new IdentityContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.book,
+                    id: '24',
+                },
+                context: new IdentityContext(),
             },
         ],
     },
