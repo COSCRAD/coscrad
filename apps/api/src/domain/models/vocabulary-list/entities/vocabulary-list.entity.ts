@@ -4,6 +4,8 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import vocabularyListValidator from '../../../domainModelValidators/vocabularyListValidator';
+import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
+import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
@@ -43,6 +45,13 @@ export class VocabularyList extends Resource {
 
     validateInvariants(): ResultOrError<typeof Valid> {
         return vocabularyListValidator(this);
+    }
+
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return this.entries.map(({ termId }) => ({
+            type: AggregateType.term,
+            id: termId,
+        }));
     }
 
     validateTextFieldContext(context: TextFieldContext): Valid | InternalError {

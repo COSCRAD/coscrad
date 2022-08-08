@@ -25,17 +25,17 @@ type InMemoryDatabaseSnapshot = {
 };
 
 export default (snapshot: InMemorySnapshot): InMemoryDatabaseSnapshot => {
-    const databaseTags = snapshot.tags.map(toDto).map(mapEntityDTOToDatabaseDTO);
+    const databaseTags = snapshot.tag.map(toDto).map(mapEntityDTOToDatabaseDTO);
 
     return {
         document: {
             [ArangoCollectionId.tags]: databaseTags,
-            [ArangoCollectionId.categories]: snapshot.categoryTree
+            [ArangoCollectionId.categories]: snapshot.category
                 .map(toDto)
                 .map(mapCategoryDTOToArangoDocument),
-            [ArangoCollectionId.uuids]: snapshot.uuids,
-            [ArangoCollectionId.users]: snapshot.users.map(toDto).map(mapEntityDTOToDatabaseDTO),
-            [ArangoCollectionId.groups]: snapshot.userGroups
+            [ArangoCollectionId.uuids]: snapshot.uuid,
+            [ArangoCollectionId.users]: snapshot.user.map(toDto).map(mapEntityDTOToDatabaseDTO),
+            [ArangoCollectionId.groups]: snapshot.userGroup
                 .map(toDto)
                 .map(mapEntityDTOToDatabaseDTO),
             ...Object.entries(snapshot.resources).reduce(
@@ -50,8 +50,8 @@ export default (snapshot: InMemorySnapshot): InMemoryDatabaseSnapshot => {
         },
 
         edge: {
-            category_edges: buildEdgeDocumentsFromCategoryNodeDTOs(snapshot.categoryTree),
-            resource_edge_connections: snapshot.connections
+            category_edges: buildEdgeDocumentsFromCategoryNodeDTOs(snapshot.category),
+            resource_edge_connections: snapshot.note
                 .map(toDto)
                 .map(mapEdgeConnectionDTOToArangoEdgeDocument),
         },

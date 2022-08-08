@@ -9,7 +9,9 @@ import TestRepositoryProvider from '../../../../../../persistence/repositories/_
 import buildTestData from '../../../../../../test-data/buildTestData';
 import { DTO } from '../../../../../../types/DTO';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
+import { AggregateType } from '../../../../../types/AggregateType';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
+import InvalidExternalReferenceByAggregateError from '../../../../categories/errors/InvalidExternalReferenceInCategoryError';
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
@@ -21,13 +23,12 @@ import { generateCommandFuzzTestCases } from '../../../../__tests__/command-help
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import { CoscradUserGroup } from '../../entities/coscrad-user-group.entity';
-import { UserDoesNotExistError } from '../../errors/external-state-errors/UserDoesNotExistError';
 import { AddUserToGroup } from './add-user-to-group.command';
 import { AddUserToGroupCommandHandler } from './add-user-to-group.command-handler';
 
 const commandType = 'ADD_USER_TO_GROUP';
 
-const userAlreadyInGroup = buildTestData().users[0].clone({
+const userAlreadyInGroup = buildTestData().user[0].clone({
     id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dc001',
 });
 
@@ -37,14 +38,14 @@ const userToAdd = userAlreadyInGroup.clone({
     authProviderUserId: 'zauth|909878',
 });
 
-const existingGroup = buildTestData().userGroups[0].clone({
+const existingGroup = buildTestData().userGroup[0].clone({
     userIds: [userAlreadyInGroup.id],
     id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dc002',
 });
 
 const initialState = buildInMemorySnapshot({
-    users: [userAlreadyInGroup, userToAdd],
-    userGroups: [existingGroup],
+    user: [userAlreadyInGroup, userToAdd],
+    userGroup: [existingGroup],
 });
 
 const validCommandFSA = {
@@ -150,13 +151,15 @@ describe('AddUserToGroup', () => {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: buildValidCommandFSA,
                     initialState: buildInMemorySnapshot({
-                        users: [userAlreadyInGroup],
-                        userGroups: [existingGroup],
+                        user: [userAlreadyInGroup],
+                        userGroup: [existingGroup],
                     }),
                     checkError: (error: InternalError) => {
                         assertExternalStateError(
                             error,
-                            new UserDoesNotExistError(validCommandFSA.payload.userId)
+                            new InvalidExternalReferenceByAggregateError(existingGroup, [
+                                { id: validCommandFSA.payload.userId, type: AggregateType.user },
+                            ])
                         );
                     },
                 });
@@ -169,8 +172,8 @@ describe('AddUserToGroup', () => {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: buildValidCommandFSA,
                     initialState: buildInMemorySnapshot({
-                        users: [userToAdd, userAlreadyInGroup],
-                        userGroups: [],
+                        user: [userToAdd, userAlreadyInGroup],
+                        userGroup: [],
                     }),
                     checkError: (error: InternalError) => {
                         expect(error.innerErrors[0]).toEqual(

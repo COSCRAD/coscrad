@@ -75,8 +75,8 @@ export class CreateGroupCommandHandler extends BaseCreateCommandHandler<CoscradU
         const users = allUserSearchResult.filter(validAggregateOrThrow);
 
         return buildInMemorySnapshot({
-            users,
-            userGroups: existingGroups,
+            user: users,
+            userGroup: existingGroups,
         });
     }
 

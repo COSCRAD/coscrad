@@ -3,6 +3,7 @@ import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import geometricFeatureValidator from '../../domainModelValidators/spatialFeatureValidator/geometricFeatureValidator';
 import { Valid } from '../../domainModelValidators/Valid';
+import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../types/ResourceType';
 import { Resource } from '../resource.entity';
 import { IGeometricFeature } from './GeometricFeature';
@@ -34,6 +35,11 @@ export class Point extends Resource implements ISpatialFeature {
     validateInvariants(): ResultOrError<Valid> {
         // TODO breakout the individual type validators into each class
         return geometricFeatureValidator(this.geometry);
+    }
+
+    // Should we have a base class? Does this logic vary amongst subtypes?
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return [];
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {

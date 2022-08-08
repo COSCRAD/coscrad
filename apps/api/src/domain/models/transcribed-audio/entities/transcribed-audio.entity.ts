@@ -4,6 +4,7 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import transcribedAudioValidator from '../../../domainModelValidators/transcribedAudioValidator';
 import { Valid } from '../../../domainModelValidators/Valid';
+import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
 import { Resource } from '../../resource.entity';
@@ -44,6 +45,10 @@ export class TranscribedAudio extends Resource {
 
     validateInvariants(): ResultOrError<typeof Valid> {
         return transcribedAudioValidator(this);
+    }
+
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return [];
     }
 
     validateTimeRangeContext(timeRangeContext: TimeRangeContext): Valid | InternalError {

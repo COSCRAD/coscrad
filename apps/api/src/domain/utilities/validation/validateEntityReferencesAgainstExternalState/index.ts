@@ -9,7 +9,7 @@ import { InMemorySnapshot } from '../../../types/ResourceType';
 type ErrorFactory = (invalidReferences: CategorizableCompositeIdentifier[]) => InternalError;
 
 export default (
-    { resources, connections }: DeepPartial<InMemorySnapshot>,
+    { resources, note: connections }: DeepPartial<InMemorySnapshot>,
     modelReferences: CategorizableCompositeIdentifier[],
     buildError: ErrorFactory
 ): Valid | InternalError => {

@@ -6,9 +6,9 @@ import { ResourceType } from '../../../../types/ResourceType';
 import InvalidResourceDTOError from '../../../errors/InvalidResourceDTOError';
 import songValidator from '../../../songValidator';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
-import getValidResourceInstanceForTest from '../utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../utilities/getValidAggregateInstanceForTest';
 
-const validDTO = getValidResourceInstanceForTest(ResourceType.song).toDTO();
+const validDTO = getValidAggregateInstanceForTest(ResourceType.song).toDTO();
 
 const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]) =>
     new InvalidResourceDTOError(ResourceType.song, id, innerErrors);

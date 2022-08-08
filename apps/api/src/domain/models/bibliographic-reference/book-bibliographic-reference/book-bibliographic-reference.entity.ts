@@ -4,6 +4,7 @@ import { ResultOrError } from '../../../../types/ResultOrError';
 import InvalidResourceDTOError from '../../../domainModelValidators/errors/InvalidResourceDTOError';
 import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
 import { Valid } from '../../../domainModelValidators/Valid';
+import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { Resource } from '../../resource.entity';
@@ -34,6 +35,10 @@ export class BookBibliographicReference
             return new InvalidResourceDTOError(this.type, this.id, typeErrors);
 
         return Valid;
+    }
+
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return [];
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {

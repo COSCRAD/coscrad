@@ -13,6 +13,7 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import mediaItemValidator from '../../../domainModelValidators/mediaItemValidator';
 import { Valid } from '../../../domainModelValidators/Valid';
+import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
@@ -70,6 +71,10 @@ export class MediaItem extends Resource implements ITimeBoundable {
 
     validateInvariants(): ResultOrError<typeof Valid> {
         return mediaItemValidator(this);
+    }
+
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return [];
     }
 
     validateTextFieldContext(context: TextFieldContext): Valid | InternalError {

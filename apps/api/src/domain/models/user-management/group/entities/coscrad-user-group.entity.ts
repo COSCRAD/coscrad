@@ -5,22 +5,20 @@ import { InvariantValidationMethod } from '../../../../../lib/web-of-knowledge/d
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import InvalidCoscradUserGroupDTOError from '../../../../domainModelValidators/errors/InvalidCoscradUserGroupDTOError';
-import { Valid } from '../../../../domainModelValidators/Valid';
-import { ValidatesExternalState } from '../../../../interfaces/ValidatesExternalState';
+import { isValid, Valid } from '../../../../domainModelValidators/Valid';
+import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { Aggregate } from '../../../aggregate.entity';
 import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import getId from '../../../shared/functional/getId';
-import idEquals from '../../../shared/functional/idEquals';
 import { UserDoesNotExistError } from '../errors/external-state-errors/UserDoesNotExistError';
-import { UserGroupIdAlreadyInUseError } from '../errors/external-state-errors/UserGroupIdAlreadyInUseError';
 import { UserGroupLabelAlreadyInUseError } from '../errors/external-state-errors/UserGroupLabelAlreadyInUseError';
 import UserIsAlreadyInGroupError from '../errors/invalid-state-transition-errors/UserIsAlreadyInGroupError';
 
 @RegisterIndexScopedCommands(['CREATE_USER_GROUP'])
-export class CoscradUserGroup extends Aggregate implements ValidatesExternalState {
+export class CoscradUserGroup extends Aggregate {
     type = AggregateType.userGroup;
 
     @NonEmptyString()
@@ -81,15 +79,28 @@ export class CoscradUserGroup extends Aggregate implements ValidatesExternalStat
         return Valid;
     }
 
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return this.userIds.map((id) => ({
+            type: AggregateType.user,
+            id,
+        }));
+    }
+
     /**
      * TODO [https://www.pivotaltracker.com/story/show/182727483]
      * Add unit test.
      */
-    validateExternalState({
-        users,
-        userGroups: existingUserGroups,
-    }: InMemorySnapshot): InternalError | typeof Valid {
+    validateExternalState(externalState: InMemorySnapshot): InternalError | typeof Valid {
+        const { user: users, userGroup: existingUserGroups } = externalState;
+
         const allErrors: InternalError[] = [];
+
+        // TODO We should use a different pattern so that we don't have to explicitly call this
+        const inheritedExternalStateValidationResult = super.validateExternalState(externalState);
+
+        if (!isValid(inheritedExternalStateValidationResult))
+            allErrors.push(...inheritedExternalStateValidationResult.innerErrors);
+
         const existingUserIds = users.map(getId);
 
         const userIdsThatDoNotExist = this.userIds.filter(
@@ -98,10 +109,6 @@ export class CoscradUserGroup extends Aggregate implements ValidatesExternalStat
 
         if (userIdsThatDoNotExist.length > 0) {
             allErrors.push(...userIdsThatDoNotExist.map((id) => new UserDoesNotExistError(id)));
-        }
-
-        if (existingUserGroups.some(idEquals(this.id))) {
-            allErrors.push(new UserGroupIdAlreadyInUseError(this.id));
         }
 
         if (existingUserGroups.some(({ label }) => label === this.label)) {

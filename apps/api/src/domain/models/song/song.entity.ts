@@ -6,18 +6,17 @@ import {
     ValidateNested,
 } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import songValidator from '../../domainModelValidators/songValidator';
 import { Valid } from '../../domainModelValidators/Valid';
-import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
+import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
+import { ResourceType } from '../../types/ResourceType';
 import { TimeRangeContext } from '../context/time-range-context/time-range-context.entity';
 import { ITimeBoundable } from '../interfaces/ITimeBoundable';
 import { Resource } from '../resource.entity';
 import validateTimeRangeContextForModel from '../shared/contextValidators/validateTimeRangeContextForModel';
-import getId from '../shared/functional/getId';
 import { ContributorAndRole } from './ContributorAndRole';
 
 @RegisterIndexScopedCommands(['CREATE_SONG'])
@@ -94,16 +93,8 @@ export class Song extends Resource implements ITimeBoundable {
         return songValidator(this);
     }
 
-    /**
-     * The state here is the state of the system **prior** to creating or updating
-     * this instance.
-     */
-    validateExternalState({ resources: { song: allSongs } }: InMemorySnapshot): ValidationResult {
-        if (allSongs.map(getId).includes(this.id)) {
-            return new InternalError(`There is already a Song with id: ${this.id}}`);
-        }
-
-        return Valid;
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return [];
     }
 
     validateTimeRangeContext(timeRangeContext: TimeRangeContext): ValidationResult {

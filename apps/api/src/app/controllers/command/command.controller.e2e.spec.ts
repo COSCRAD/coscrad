@@ -2,7 +2,7 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import getValidResourceInstanceForTest from '../../../domain/domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../../../domain/domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
@@ -31,9 +31,9 @@ const buildValidCommandFSA = (id: string): FluxStandardAction<DTO<CreateSong>> =
     },
 });
 
-const existingSong = getValidResourceInstanceForTest(ResourceType.song);
+const existingSong = getValidAggregateInstanceForTest(ResourceType.song);
 
-const dummyAdminUser = buildTestData().users[0].clone({
+const dummyAdminUser = buildTestData().user[0].clone({
     roles: [CoscradUserRole.projectAdmin],
 });
 

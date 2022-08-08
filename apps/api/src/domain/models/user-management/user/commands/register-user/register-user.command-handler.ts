@@ -65,7 +65,7 @@ export class RegisterUserCommandHandler extends BaseCreateCommandHandler<Coscrad
 
         const users = userSearchResult.filter(validAggregateOrThrow);
 
-        return buildInMemorySnapshot({ users });
+        return buildInMemorySnapshot({ user: users });
     }
 
     protected validateExternalState(

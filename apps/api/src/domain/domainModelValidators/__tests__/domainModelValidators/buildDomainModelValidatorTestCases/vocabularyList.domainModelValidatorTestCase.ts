@@ -6,9 +6,11 @@ import VocabularyListHasNoEntriesError from '../../../errors/vocabularyList/Voca
 import VocabularyListHasNoNameInAnyLanguageError from '../../../errors/vocabularyList/VocabularyListHasNoNameInAnyLanguageError';
 import vocabularyListValidator from '../../../vocabularyListValidator';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
-import getValidResourceInstanceForTest from '../utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../utilities/getValidAggregateInstanceForTest';
 
-const validVocabularyListDTO = getValidResourceInstanceForTest(ResourceType.vocabularyList).toDTO();
+const validVocabularyListDTO = getValidAggregateInstanceForTest(
+    ResourceType.vocabularyList
+).toDTO();
 
 export const buildVocabularyListTestCase = (): DomainModelValidatorTestCase<VocabularyList> => ({
     resourceType: ResourceType.vocabularyList,

@@ -18,7 +18,7 @@ describe('User Management Queries', () => {
 
     const userIndexEndpoint = '/users';
 
-    const { userGroups, users } = buildTestData();
+    const { userGroup: userGroups, user: users } = buildTestData();
 
     const popularUser = users[0];
 
@@ -44,12 +44,12 @@ describe('User Management Queries', () => {
     });
 
     const snapshotWithUsersAndGroups = buildInMemorySnapshot({
-        userGroups: userGroups.map((group) =>
+        userGroup: userGroups.map((group) =>
             group.clone({
                 userIds: [popularUser.id],
             })
         ),
-        users,
+        user: users,
     });
 
     describe('when the system user issuing the command is authorized', () => {

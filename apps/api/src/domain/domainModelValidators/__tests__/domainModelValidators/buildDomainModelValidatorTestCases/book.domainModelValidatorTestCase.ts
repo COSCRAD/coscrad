@@ -3,9 +3,9 @@ import { ResourceType } from '../../../../types/ResourceType';
 import bookValidator from '../../../bookValidator';
 import InvalidResourceDTOError from '../../../errors/InvalidResourceDTOError';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
-import getValidResourceInstanceForTest from '../utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../utilities/getValidAggregateInstanceForTest';
 
-const validBookDTO = getValidResourceInstanceForTest(ResourceType.book).toDTO();
+const validBookDTO = getValidAggregateInstanceForTest(ResourceType.book).toDTO();
 
 export const buildBookTestCase = (): DomainModelValidatorTestCase<Book> => ({
     resourceType: ResourceType.book,

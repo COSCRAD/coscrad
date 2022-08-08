@@ -5,6 +5,7 @@ import { ResultOrError } from '../../../../types/ResultOrError';
 import bookValidator from '../../../domainModelValidators/bookValidator';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
 import { Valid } from '../../../domainModelValidators/Valid';
+import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { PageRangeContext } from '../../context/page-range-context/page-range.context.entity';
@@ -46,6 +47,10 @@ export class Book extends Resource {
 
     validateInvariants(): ResultOrError<typeof Valid> {
         return bookValidator(this);
+    }
+
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return [];
     }
 
     protected validatePageRangeContext(context: PageRangeContext): Valid | InternalError {

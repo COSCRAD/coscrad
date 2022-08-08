@@ -47,7 +47,7 @@ export class CoscradUserGroupQueryService {
 
         const allUsers = userSearchResult.filter(validAggregateOrThrow);
 
-        const externalState = buildInMemorySnapshot({ users: allUsers });
+        const externalState = buildInMemorySnapshot({ user: allUsers });
 
         return this.buildDetailResponse(userGroupSearchResult, externalState);
     }
@@ -61,7 +61,7 @@ export class CoscradUserGroupQueryService {
         ]);
 
         const externalState: InMemorySnapshot = buildInMemorySnapshot({
-            users: allUsers.filter(validAggregateOrThrow),
+            user: allUsers.filter(validAggregateOrThrow),
         });
 
         const viewModelsAndActions = allResults
@@ -76,7 +76,7 @@ export class CoscradUserGroupQueryService {
 
     private buildDetailResponse(
         userGroup: CoscradUserGroup,
-        { users: allUsers }: InMemorySnapshot
+        { user: allUsers }: InMemorySnapshot
     ): AggregateByIdQueryResult<CoscradUserGroupViewModel> {
         return {
             data: new CoscradUserGroupViewModel(userGroup, allUsers),

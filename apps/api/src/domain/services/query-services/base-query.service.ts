@@ -84,7 +84,7 @@ export abstract class BaseQueryService<
         );
 
         return buildInMemorySnapshot({
-            tags,
+            tag: tags,
         });
     }
 
@@ -135,7 +135,7 @@ export abstract class BaseQueryService<
 
         const viewModelWithTags = mixTagsIntoViewModel(
             viewModel,
-            externalState.tags,
+            externalState.tag,
             this.type
         ) as UViewModel & {
             tags: TagViewModel[];
@@ -161,7 +161,7 @@ export abstract class BaseQueryService<
         const data = validInstances.map((instance) => ({
             data: mixTagsIntoViewModel(
                 this.buildViewModel(instance, requiredExternalState),
-                requiredExternalState.tags,
+                requiredExternalState.tag,
                 this.type
             ),
             actions: this.commandInfoService.getCommandInfo(instance),

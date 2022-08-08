@@ -4,6 +4,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import termValidator from '../../../domainModelValidators/termValidator';
 import { Valid } from '../../../domainModelValidators/Valid';
+import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
@@ -79,6 +80,10 @@ export class Term extends Resource {
 
     validateInvariants() {
         return termValidator(this);
+    }
+
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return [];
     }
 
     // TODO We should 'goodlist' properties that can be targets for this context as well

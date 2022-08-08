@@ -2,7 +2,7 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import getValidResourceInstanceForTest from '../../../domain/domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../../../domain/domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { PublishSong } from '../../../domain/models/song/commands/publish-song.command';
 import { PublishSongCommandHandler } from '../../../domain/models/song/commands/publish-song.command-handler';
@@ -34,7 +34,7 @@ describe('Role Based Access Control for commands', () => {
 
     let arangoConnectionProvider: ArangoConnectionProvider;
 
-    const existingSong = getValidResourceInstanceForTest(ResourceType.song).clone({
+    const existingSong = getValidAggregateInstanceForTest(ResourceType.song).clone({
         id: buildDummyUuid(),
         published: false,
     });
@@ -47,11 +47,11 @@ describe('Role Based Access Control for commands', () => {
     };
 
     describe('when the user does not have an admin role', () => {
-        const ordinaryUser = buildTestData().users[0].clone({
+        const ordinaryUser = buildTestData().user[0].clone({
             roles: [CoscradUserRole.viewer],
         });
 
-        const userGroup = buildTestData().userGroups[0].clone({
+        const userGroup = buildTestData().userGroup[0].clone({
             userIds: [ordinaryUser.id],
         });
 
@@ -78,8 +78,8 @@ describe('Role Based Access Control for commands', () => {
 
             await testRepositoryProvider.addFullSnapshot(
                 buildInMemorySnapshot({
-                    users: [ordinaryUser],
-                    userGroups: [userGroup],
+                    user: [ordinaryUser],
+                    userGroup: [userGroup],
                     resources: {
                         song: [existingSong],
                     },
@@ -146,11 +146,11 @@ describe('Role Based Access Control for commands', () => {
         ] as const
     ).forEach(([role, description]) => {
         describe(description, () => {
-            const adminUser = buildTestData().users[0].clone({
+            const adminUser = buildTestData().user[0].clone({
                 roles: [role],
             });
 
-            const userGroup = buildTestData().userGroups[0].clone({
+            const userGroup = buildTestData().userGroup[0].clone({
                 userIds: [adminUser.id],
             });
 
@@ -172,8 +172,8 @@ describe('Role Based Access Control for commands', () => {
 
                 await testRepositoryProvider.addFullSnapshot(
                     buildInMemorySnapshot({
-                        users: [adminUser],
-                        userGroups: [userGroup],
+                        user: [adminUser],
+                        userGroup: [userGroup],
                         resources: {
                             song: [existingSong],
                         },

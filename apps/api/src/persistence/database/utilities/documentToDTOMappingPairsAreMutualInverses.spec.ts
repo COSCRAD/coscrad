@@ -49,7 +49,7 @@ const edgeConnections: DTO<EdgeConnection>[] = [
         ],
         eventHistory: [],
     },
-    ...testData.connections.map((connection) => connection.toDTO()),
+    ...testData.note.map((connection) => connection.toDTO()),
 ];
 
 const resourceDTOs = Object.values(testData.resources).flatMap((instances) =>

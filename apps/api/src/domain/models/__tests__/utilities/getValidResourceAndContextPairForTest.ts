@@ -17,7 +17,7 @@ export default <
     ResourceTypeToResourceModel[TResourceType],
     ContextTypeToInstance[UEdgeConnectionContextType]
 ] => {
-    const { resources, connections } = buildTestData();
+    const { resources, note: connections } = buildTestData();
 
     const allMembers = connections.flatMap(({ members }) => members);
 

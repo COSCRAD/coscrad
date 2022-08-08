@@ -29,11 +29,11 @@ export default class TestRepositoryProvider extends RepositoryProvider {
 
     public async addFullSnapshot({
         resources,
-        categoryTree,
-        tags,
-        connections,
-        users,
-        userGroups,
+        category: categoryTree,
+        tag: tags,
+        note: connections,
+        user: users,
+        userGroup: userGroups,
     }: InMemorySnapshot): Promise<void> {
         await this.addResourcesOfManyTypes(resources);
 

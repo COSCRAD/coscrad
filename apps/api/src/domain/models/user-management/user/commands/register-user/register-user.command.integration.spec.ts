@@ -137,7 +137,7 @@ describe('RegisterUser', () => {
                     const newId = await idManager.generate();
 
                     await testRepositoryProvider.addFullSnapshot(
-                        buildInMemorySnapshot({ users: [existingUser.clone({ id: newId })] })
+                        buildInMemorySnapshot({ user: [existingUser.clone({ id: newId })] })
                     );
 
                     /**
@@ -165,7 +165,7 @@ describe('RegisterUser', () => {
                             buildInvalidFSA(newId, {
                                 userIdFromAuthProvider: existingUser.authProviderUserId,
                             }),
-                        initialState: buildInMemorySnapshot({ users: [existingUser] }),
+                        initialState: buildInMemorySnapshot({ user: [existingUser] }),
                         checkError: (error) => assertExternalStateError(error),
                     });
                 });
@@ -177,7 +177,7 @@ describe('RegisterUser', () => {
                         systemUserId: dummySystemUserId,
                         buildCommandFSA: (newId: AggregateId) =>
                             buildInvalidFSA(newId, { username: existingUser.username }),
-                        initialState: buildInMemorySnapshot({ users: [existingUser] }),
+                        initialState: buildInMemorySnapshot({ user: [existingUser] }),
                         checkError: (error) => assertExternalStateError(error),
                     });
                 });

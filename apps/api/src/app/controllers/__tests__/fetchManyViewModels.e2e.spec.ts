@@ -28,7 +28,7 @@ describe('When fetching multiple resources', () => {
 
     const testData = buildTestData();
 
-    const tagTestData = testData.tags;
+    const tagTestData = testData.tag;
 
     const resourceTestData = testData.resources;
 

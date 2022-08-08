@@ -1,7 +1,7 @@
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import getValidResourceInstanceForTest from '../../../domain/domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../../../domain/domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { Resource } from '../../../domain/models/resource.entity';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import getId from '../../../domain/models/shared/functional/getId';
@@ -25,7 +25,7 @@ const CONFIDENTIAL_ID_PREFIX = 'CONFIDENTIAL-';
 
 const PUBLISHED_ID_PREFIX = 'PUBLISHED-';
 
-const { users, userGroups } = buildTestData();
+const { user: users, userGroup: userGroups } = buildTestData();
 
 const dummyUser = users[0];
 
@@ -86,7 +86,7 @@ describe('Access Control List and Role Based filtering in resource queries', () 
 
         const buildDetailEndpoint = (idToQuery: string) => `${indexEndpoint}/${idToQuery}`;
 
-        const unpublishedResourceWithUserInACL = getValidResourceInstanceForTest(
+        const unpublishedResourceWithUserInACL = getValidAggregateInstanceForTest(
             resourceType
         ).clone({
             published: false,
@@ -166,8 +166,8 @@ describe('Access Control List and Role Based filtering in resource queries', () 
 
                     await testRepositoryProvider.addFullSnapshot(
                         buildInMemorySnapshot({
-                            users: [dummyUser],
-                            userGroups: [dummyGroup],
+                            user: [dummyUser],
+                            userGroup: [dummyGroup],
                             resources: {
                                 [resourceType]: allResourcesOfCurrentType,
                             },
@@ -260,8 +260,8 @@ describe('Access Control List and Role Based filtering in resource queries', () 
 
                         await testRepositoryProvider.addFullSnapshot(
                             buildInMemorySnapshot({
-                                users: [dummyAdminUser],
-                                userGroups: [dummyGroup],
+                                user: [dummyAdminUser],
+                                userGroup: [dummyGroup],
                                 resources: {
                                     [resourceType]: allResourcesOfCurrentType,
                                 },

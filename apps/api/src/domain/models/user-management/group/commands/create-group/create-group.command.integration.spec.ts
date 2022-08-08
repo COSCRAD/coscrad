@@ -12,6 +12,7 @@ import { AggregateId } from '../../../../../types/AggregateId';
 import { AggregateType } from '../../../../../types/AggregateType';
 import buildEmptyInMemorySnapshot from '../../../../../utilities/buildEmptyInMemorySnapshot';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
+import AggregateIdAlraedyInUseError from '../../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../../__tests__/command-helpers/assert-create-command-success';
@@ -22,7 +23,6 @@ import { CommandAssertionDependencies } from '../../../../__tests__/command-help
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import { CoscradUserGroup } from '../../entities/coscrad-user-group.entity';
-import { UserGroupIdAlreadyInUseError } from '../../errors/external-state-errors/UserGroupIdAlreadyInUseError';
 import { UserGroupLabelAlreadyInUseError } from '../../errors/external-state-errors/UserGroupLabelAlreadyInUseError';
 import { CreateGroup } from './create-group.command';
 import { CreateGroupCommandHandler } from './create-group.command-handler';
@@ -149,7 +149,7 @@ describe('CreateGroup', () => {
 
                 await testRepositoryProvider.addFullSnapshot(
                     buildInMemorySnapshot({
-                        userGroups: [existingUserGroup.clone({ id: newId })],
+                        userGroup: [existingUserGroup.clone({ id: newId })],
                     })
                 );
 
@@ -160,7 +160,10 @@ describe('CreateGroup', () => {
                     { userId: dummySystemUserId }
                 );
 
-                assertExternalStateError(executionResult, new UserGroupIdAlreadyInUseError(newId));
+                assertExternalStateError(
+                    executionResult,
+                    new AggregateIdAlraedyInUseError({ id: newId, type: AggregateType.userGroup })
+                );
             });
         });
 
@@ -171,7 +174,7 @@ describe('CreateGroup', () => {
                     buildCommandFSA: (id: AggregateId) =>
                         buildInvalidFSA(id, { label: existingUserGroup.label }),
                     initialState: buildInMemorySnapshot({
-                        userGroups: [existingUserGroup],
+                        userGroup: [existingUserGroup],
                     }),
                     checkError: (error: InternalError) =>
                         assertExternalStateError(

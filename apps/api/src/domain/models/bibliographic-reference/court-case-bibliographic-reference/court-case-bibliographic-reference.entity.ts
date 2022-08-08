@@ -6,6 +6,7 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import InvalidResourceDTOError from '../../../domainModelValidators/errors/InvalidResourceDTOError';
 import { Valid } from '../../../domainModelValidators/Valid';
+import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
@@ -39,6 +40,10 @@ export class CourtCaseBibliographicReference
         // Note: there are no complex invariant rules for this model
 
         return Valid;
+    }
+
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return [];
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {

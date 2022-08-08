@@ -25,7 +25,7 @@ describe('Repository provider > getCategoryRepository', () => {
 
     let app: INestApplication;
 
-    const { categoryTree } = testData;
+    const { category: categoryTree } = testData;
 
     beforeAll(async () => {
         ({ app, arangoConnectionProvider, databaseProvider, testRepositoryProvider } =

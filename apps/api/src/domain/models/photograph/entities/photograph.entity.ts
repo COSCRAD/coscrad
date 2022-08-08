@@ -9,6 +9,7 @@ import FreeMultilineContextOutOfBoundsError from '../../../domainModelValidators
 import PointContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pointContext/PointContextOutOfBoundsError';
 import photographValidator from '../../../domainModelValidators/photographValidator';
 import { Valid } from '../../../domainModelValidators/Valid';
+import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
 import { FreeMultilineContext } from '../../context/free-multiline-context/free-multiline-context.entity';
 import { PointContext } from '../../context/point-context/point-context.entity';
@@ -50,6 +51,10 @@ export class Photograph extends Resource implements Boundable2D {
 
     validateInvariants(): ResultOrError<typeof Valid> {
         return photographValidator(this);
+    }
+
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return [];
     }
 
     // TODO break out the validate point logic into a validation library instead

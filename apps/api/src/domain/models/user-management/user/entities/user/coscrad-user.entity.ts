@@ -13,14 +13,14 @@ import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import InvalidCoscradUserDTOError from '../../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
-import { ValidatesExternalState } from '../../../../../interfaces/ValidatesExternalState';
+import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../../utilities/validation/is-null-or-undefined';
 import { Aggregate } from '../../../../aggregate.entity';
+import AggregateIdAlraedyInUseError from '../../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../../../../shared/common-command-errors/InvalidExternalStateError';
 import idEquals from '../../../../shared/functional/idEquals';
-import UserIdAlreadyInUseError from '../../errors/external-state-errors/UserIdAlreadyInUseError';
 import UserIdFromAuthProviderAlreadyInUseError from '../../errors/external-state-errors/UserIdFromAuthProviderAlreadyInUseError';
 import UsernameAlreadyInUseError from '../../errors/external-state-errors/UsernameAlreadyInUseError';
 import UserAlreadyHasRoleError from '../../errors/invalid-state-transition-errors/UserAlreadyHasRoleError';
@@ -28,7 +28,7 @@ import validateCoscradUser from '../../invariant-validation/validateCoscradUser'
 import { CoscradUserProfile } from './coscrad-user-profile.entity';
 
 @RegisterIndexScopedCommands(['REGISTER_USER'])
-export class CoscradUser extends Aggregate implements ValidatesExternalState {
+export class CoscradUser extends Aggregate {
     type = AggregateType.user;
 
     /**
@@ -106,14 +106,19 @@ export class CoscradUser extends Aggregate implements ValidatesExternalState {
         return validateCoscradUser(this);
     }
 
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return [];
+    }
+
     /**
      * TODO [https://www.pivotaltracker.com/story/show/182727483]
      * Add unit test.
      */
-    validateExternalState({ users }: InMemorySnapshot): InternalError | Valid {
+    validateExternalState({ user: users }: InMemorySnapshot): InternalError | Valid {
         const allErrors: InternalError[] = [];
 
-        if (users.some(idEquals(this.id))) allErrors.push(new UserIdAlreadyInUseError(this.id));
+        if (users.some(idEquals(this.id)))
+            allErrors.push(new AggregateIdAlraedyInUseError(this.getCompositeIdentifier()));
 
         if (users.some(({ authProviderUserId }) => authProviderUserId === this.authProviderUserId))
             allErrors.push(new UserIdFromAuthProviderAlreadyInUseError(this.authProviderUserId));

@@ -16,7 +16,7 @@ describe('When fetching the category tree (/treeOfKnowledge)', () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
-    const testData = buildTestData().categoryTree;
+    const testData = buildTestData().category;
 
     beforeAll(async () => {
         ({ app, arangoConnectionProvider, testRepositoryProvider } = await setUpIntegrationTest({

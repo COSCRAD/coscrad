@@ -6,6 +6,7 @@ import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import validateEdgeConnection from '../../domainModelValidators/contextValidators/validateEdgeConnection';
 import { isValid, Valid } from '../../domainModelValidators/Valid';
+import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../types/AggregateId';
 import { AggregateType } from '../../types/AggregateType';
 import { ResourceCompositeIdentifier } from '../../types/ResourceCompositeIdentifier';
@@ -75,7 +76,7 @@ export class EdgeConnection extends Aggregate {
     }
 
     validateExternalState(externalState: InMemorySnapshot): ValidationResult {
-        const { connections } = externalState;
+        const { note: connections } = externalState;
 
         const allErrors: InternalError[] = [];
 
@@ -100,6 +101,10 @@ export class EdgeConnection extends Aggregate {
 
     validateInvariants(): ResultOrError<Valid> {
         return validateEdgeConnection(this);
+    }
+
+    protected getExternalReferences(): AggregateCompositeIdentifier[] {
+        return this.members.flatMap(({ compositeIdentifier }) => compositeIdentifier);
     }
 
     getAvailableCommands(): string[] {

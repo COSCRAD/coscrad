@@ -52,15 +52,15 @@ export type InMemorySnapshotOfResources = {
 
 export type InMemorySnapshot = {
     resources: InMemorySnapshotOfResources;
-    connections: EdgeConnection[];
-    tags: Tag[];
+    note: EdgeConnection[];
+    tag: Tag[];
     /**
      * We do not intend to leak the abstraction of how the categories are
      * represented in the database here. Defer this to (the db specific) document
      * mapping layer.
      */
-    categoryTree: Category[];
-    users: CoscradUser[];
-    userGroups: CoscradUserGroup[];
-    uuids: UuidDocument<AggregateId>[];
+    category: Category[];
+    user: CoscradUser[];
+    userGroup: CoscradUserGroup[];
+    uuid: UuidDocument<AggregateId>[];
 };

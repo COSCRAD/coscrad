@@ -16,7 +16,7 @@ describe(`Tag Queries`, () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
-    const testTagData = buildTestData().tags;
+    const testTagData = buildTestData().tag;
 
     beforeAll(async () => {
         ({ app, arangoConnectionProvider, testRepositoryProvider } = await setUpIntegrationTest({

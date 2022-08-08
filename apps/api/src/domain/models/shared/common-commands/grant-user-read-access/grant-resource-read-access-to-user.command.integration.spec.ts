@@ -8,7 +8,7 @@ import generateRandomTestDatabaseName from '../../../../../persistence/repositor
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../../../test-data/buildTestData';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
-import getValidResourceInstanceForTest from '../../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../types/AggregateType';
 import { ResourceType } from '../../../../types/ResourceType';
@@ -28,14 +28,14 @@ import { GrantResourceReadAccessToUserCommandHandler } from './grant-resource-re
 
 const commandType = 'GRANT_RESOURCE_READ_ACCESS_TO_USER';
 
-const { users, resources } = buildTestData();
+const { user: users, resources } = buildTestData();
 
 const existingUser = users[0].clone({ id: buildDummyUuid() });
 
 const existingBook = resources.book[0];
 
 const initialState = buildInMemorySnapshot({
-    users: [existingUser],
+    user: [existingUser],
     resources,
 });
 
@@ -107,7 +107,7 @@ describe('GrantResourceReadAccesstoUser', () => {
 
     describe('when the command is valid', () => {
         Object.values(ResourceType)
-            .map(getValidResourceInstanceForTest)
+            .map(getValidAggregateInstanceForTest)
 
             .forEach((resource) => {
                 describe(`when granting access to: ${formatAggregateCompositeIdentifier(
@@ -182,7 +182,7 @@ describe('GrantResourceReadAccesstoUser', () => {
                 await assertCommandError(commandAssertionDependencies, {
                     buildCommandFSA: buildValidCommandFSA,
                     initialState: buildInMemorySnapshot({
-                        users: [existingUser],
+                        user: [existingUser],
                         // no resources
                     }),
                     systemUserId: dummyAdminUserId,
@@ -203,7 +203,7 @@ describe('GrantResourceReadAccesstoUser', () => {
                     buildCommandFSA: buildValidCommandFSA,
                     systemUserId: dummyAdminUserId,
                     initialState: buildInMemorySnapshot({
-                        users: [existingUser],
+                        user: [existingUser],
                         resources: {
                             book: [
                                 existingBook.clone({

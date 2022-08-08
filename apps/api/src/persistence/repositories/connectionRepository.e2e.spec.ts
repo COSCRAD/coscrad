@@ -29,7 +29,7 @@ describe('Repository provider > getEdgeConnectionRepository', () => {
         await app.close();
     });
 
-    const { connections, resources } = testData;
+    const { note: connections, resources } = testData;
 
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();

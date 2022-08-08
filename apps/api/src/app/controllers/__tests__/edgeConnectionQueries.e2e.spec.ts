@@ -41,7 +41,7 @@ describe('When querying for edge connections', () => {
         ),
     };
 
-    const { connections } = buildTestData();
+    const { note: connections } = buildTestData();
 
     beforeAll(async () => {
         ({ app, testRepositoryProvider } = await setUpIntegrationTest({

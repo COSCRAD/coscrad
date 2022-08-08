@@ -6,7 +6,7 @@ import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionCon
 export default <TContextType extends EdgeConnectionContextType = EdgeConnectionContextType>(
     contextType: TContextType
 ): ContextTypeToInstance[TContextType] => {
-    const { connections } = buildTestData();
+    const { note: connections } = buildTestData();
 
     const validContext = connections
         .flatMap(({ members }) => members)

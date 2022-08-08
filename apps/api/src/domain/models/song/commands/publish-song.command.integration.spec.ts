@@ -5,7 +5,7 @@ import { ArangoConnectionProvider } from '../../../../persistence/database/arang
 import generateRandomTestDatabaseName from '../../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../types/DTO';
-import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
@@ -23,7 +23,7 @@ const publishSongCommandType = 'PUBLISH_SONG';
 
 const dummyUuid = buildDummyUuid();
 
-const unpublishedSong = getValidResourceInstanceForTest(ResourceType.song).clone({
+const unpublishedSong = getValidAggregateInstanceForTest(ResourceType.song).clone({
     id: dummyUuid,
     published: false,
 });

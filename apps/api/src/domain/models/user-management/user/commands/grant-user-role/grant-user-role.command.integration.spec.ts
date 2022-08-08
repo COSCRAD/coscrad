@@ -24,7 +24,7 @@ import { GrantUserRoleCommandHandler } from './grant-user-role.command-handler';
 
 const commandType = 'GRANT_USER_ROLE';
 
-const existingUser = buildTestData().users[0].clone({
+const existingUser = buildTestData().user[0].clone({
     id: buildDummyUuid(),
 });
 
@@ -117,7 +117,7 @@ describe('GrantUserRole', () => {
                             },
                         }),
                         initialState: buildInMemorySnapshot({
-                            users: [
+                            user: [
                                 existingUser.clone({
                                     roles: [getDistinctRole(role)],
                                 }),
@@ -153,7 +153,7 @@ describe('GrantUserRole', () => {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: () => validCommandFSA,
                     initialState: buildInMemorySnapshot({
-                        users: [
+                        user: [
                             existingUser.clone({
                                 // the existing user already has the specified role
                                 roles: [validCommandFSA.payload.role],

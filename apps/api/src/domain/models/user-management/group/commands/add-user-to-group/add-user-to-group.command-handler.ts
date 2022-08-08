@@ -58,7 +58,7 @@ export class AddUserToGroupCommandHandler extends BaseUpdateCommandHandler<Coscr
         const users = allUserSearchResult.filter(validAggregateOrThrow);
 
         return buildInMemorySnapshot({
-            users,
+            user: users,
         });
     }
 

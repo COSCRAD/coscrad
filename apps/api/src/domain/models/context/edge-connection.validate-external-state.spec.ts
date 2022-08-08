@@ -1,7 +1,7 @@
-import { InternalError } from '../../../lib/errors/InternalError';
+import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
 import { Valid } from '../../domainModelValidators/Valid';
-import getValidResourceInstanceForTest from '../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { AggregateType } from '../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import buildInMemorySnapshot from '../../utilities/buildInMemorySnapshot';
@@ -20,7 +20,7 @@ import { EdgeConnectionContextType } from './types/EdgeConnectionContextType';
 
 // const testData = buildTestData();
 
-const dummyBook = getValidResourceInstanceForTest(ResourceType.book).clone({
+const dummyBook = getValidAggregateInstanceForTest(ResourceType.book).clone({
     pages: [
         {
             identifier: 'ix',
@@ -34,7 +34,7 @@ const validPageRangeContextForDummyBook = new PageRangeContext({
     pageIdentifiers: dummyBook.pages.map(({ identifier }) => identifier),
 });
 
-const dummySong = getValidResourceInstanceForTest(ResourceType.song);
+const dummySong = getValidAggregateInstanceForTest(ResourceType.song);
 
 const generalContext = new GeneralContext();
 
@@ -67,28 +67,6 @@ const validExternalStateForDualConnection: InMemorySnapshot = buildInMemorySnaps
     // Note that we don't add the connection, as we want its **external state**
 });
 
-/**
- *
- * Note that the expeccted error that you provide is the source of truth
- * for the depth to which you want to confirm internal errors. This helper
- * only asserts that the result is an error and its inner errors match those
- * specified.
- */
-const assertExpectedError = (result: unknown, expectedError: InternalError) => {
-    expect(result).toBeInstanceOf(InternalError);
-
-    const error = result as InternalError;
-
-    expect(error).toEqual(expectedError);
-
-    const { innerErrors } = error;
-
-    if (innerErrors.length > 0)
-        innerErrors.forEach((innerError, index) =>
-            assertExpectedError(innerError, expectedError.innerErrors[index])
-        );
-};
-
 describe('EdgeConnection.validateExternalState', () => {
     describe('when the edge connection type is "dual"', () => {
         describe('when the external state is valid', () => {
@@ -105,14 +83,14 @@ describe('EdgeConnection.validateExternalState', () => {
             it('should return the expected error', () => {
                 const result = validDualConnection.validateExternalState({
                     ...validExternalStateForDualConnection,
-                    connections: [
+                    note: [
                         validDualConnection.clone({
                             // id: same!
                         }),
                     ],
                 });
 
-                assertExpectedError(
+                assertErrorAsExpected(
                     result,
                     new InvalidExternalStateError([
                         new AggregateIdAlreadyInUseError(
@@ -152,7 +130,7 @@ describe('EdgeConnection.validateExternalState', () => {
                     ),
                 ]);
 
-                assertExpectedError(result, epxectedError);
+                assertErrorAsExpected(result, epxectedError);
             });
         });
     });

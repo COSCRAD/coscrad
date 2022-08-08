@@ -9,7 +9,7 @@ import TestRepositoryProvider from '../../../../persistence/repositories/__tests
 import { DTO } from '../../../../types/DTO';
 import InvalidResourceDTOError from '../../../domainModelValidators/errors/InvalidResourceDTOError';
 import MissingSongTitleError from '../../../domainModelValidators/errors/song/MissingSongTitleError';
-import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandPayloadTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
@@ -177,7 +177,7 @@ describe('CreateSong', () => {
                     buildInMemorySnapshot({
                         resources: {
                             [ResourceType.song]: [
-                                getValidResourceInstanceForTest(ResourceType.song).clone({
+                                getValidAggregateInstanceForTest(ResourceType.song).clone({
                                     id: newId,
                                 }),
                             ],

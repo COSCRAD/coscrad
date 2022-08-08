@@ -3,7 +3,7 @@ import buildTreeFromNodes from './buildTreeFromNodes';
 
 describe('buildTreeFromNodes', () => {
     describe('when given a valid tree', () => {
-        const validTree = buildTestData().categoryTree;
+        const validTree = buildTestData().category;
 
         it('should return the expected result', () => {
             const result = buildTreeFromNodes(validTree);

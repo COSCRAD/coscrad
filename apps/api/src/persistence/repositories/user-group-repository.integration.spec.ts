@@ -19,7 +19,7 @@ describe('Arango Repository Provider > getUserGroupRepository', () => {
 
     const numberOfGroups = 9;
 
-    const validUser = testData.userGroups[0];
+    const validUser = testData.userGroup[0];
 
     const userGroups = Array(numberOfGroups)
         .fill(0)
@@ -30,7 +30,7 @@ describe('Arango Repository Provider > getUserGroupRepository', () => {
             })
         );
 
-    const fullSnapshot = buildInMemorySnapshot({ userGroups });
+    const fullSnapshot = buildInMemorySnapshot({ userGroup: userGroups });
 
     let testRepositoryProvider: TestRepositoryProvider;
 

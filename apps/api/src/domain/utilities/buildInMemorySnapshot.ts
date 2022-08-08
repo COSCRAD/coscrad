@@ -8,11 +8,11 @@ const emptySnapshotOfResources = emptySnapshot.resources;
 
 export default ({
     resources,
-    tags,
-    connections,
-    categoryTree,
-    users,
-    userGroups,
+    tag: tags,
+    note: connections,
+    category: categoryTree,
+    user: users,
+    userGroup: userGroups,
 }: DeepPartial<InMemorySnapshot>): InMemorySnapshot =>
     ({
         resources: Object.entries(resources || {}).reduce(
@@ -22,9 +22,9 @@ export default ({
             }),
             emptySnapshotOfResources
         ),
-        tags: tags || [],
-        connections: connections || [],
-        categoryTree: categoryTree || [],
-        users: users || [],
-        userGroups: userGroups || [],
+        tag: tags || [],
+        note: connections || [],
+        category: categoryTree || [],
+        user: users || [],
+        userGroup: userGroups || [],
     } as InMemorySnapshot);

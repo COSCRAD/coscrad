@@ -4,7 +4,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../types/DTO';
-import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandPayloadTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { ResourceType } from '../../../types/ResourceType';
@@ -35,7 +35,7 @@ const buildInvalidCommandFSA = (id: unknown) => ({
     payload: { id },
 });
 
-const unpublishedMediaItem = getValidResourceInstanceForTest(ResourceType.mediaItem).clone({
+const unpublishedMediaItem = getValidAggregateInstanceForTest(ResourceType.mediaItem).clone({
     published: false,
     id: dummyUUID,
 });

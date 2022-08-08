@@ -1,16 +1,25 @@
 import { NonEmptyString } from '@coscrad/data-types';
-import { isInternalError } from '../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../lib/errors/InternalError';
+import { ValidationResult } from '../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
-import { Valid } from '../domainModelValidators/Valid';
+import { isValid, Valid } from '../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../types/AggregateId';
 import { AggregateType } from '../types/AggregateType';
+import { DeluxInMemoryStore } from '../types/DeluxInMemoryStore';
 import { HasAggregateId } from '../types/HasAggregateId';
+import { InMemorySnapshot, isResourceType } from '../types/ResourceType';
 import BaseDomainModel from './BaseDomainModel';
+import InvalidExternalReferenceByAggregateError from './categories/errors/InvalidExternalReferenceInCategoryError';
+import AggregateIdAlraedyInUseError from './shared/common-command-errors/AggregateIdAlreadyInUseError';
+import InvalidExternalStateError from './shared/common-command-errors/InvalidExternalStateError';
 import { BaseEvent } from './shared/events/base-event.entity';
+import not from './shared/functional/common/not';
+import getId from './shared/functional/getId';
+import idEquals from './shared/functional/idEquals';
 
 export abstract class Aggregate extends BaseDomainModel implements HasAggregateId {
     /**
@@ -63,6 +72,53 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
     abstract validateInvariants(): ResultOrError<Valid>;
 
     abstract getAvailableCommands(): string[];
+
+    /**
+     * This method should be implemented on each aggregate class to return an array
+     * of composite identifiers for every other aggregate that is referred to
+     * by composite identifier.
+     */
+    protected abstract getExternalReferences(): AggregateCompositeIdentifier[];
+
+    validateExternalReferences(externalState: InMemorySnapshot): ValidationResult {
+        const invalidReferences = this.getExternalReferences().filter(({ type, id }) =>
+            new DeluxInMemoryStore(externalState).fetchAllOfType(type).every(not(idEquals(id)))
+        );
+
+        return invalidReferences.length > 0
+            ? new InvalidExternalReferenceByAggregateError(this, invalidReferences)
+            : Valid;
+    }
+
+    validateIdIsUnique(externalState: InMemorySnapshot): InternalError[] {
+        const otherAggregatesOfSameType = (
+            isResourceType(this.type)
+                ? externalState.resources[this.type]
+                : externalState[this.type]
+        ) as Aggregate[];
+
+        if (!otherAggregatesOfSameType) {
+            throw new InternalError(
+                `There were no aggregates of type: ${
+                    this.type
+                } on the provided snapshot: ${JSON.stringify(externalState)}`
+            );
+        }
+
+        if (otherAggregatesOfSameType.map(getId).includes(this.id))
+            return [new AggregateIdAlraedyInUseError(this.getCompositeIdentifier())];
+
+        return [];
+    }
+
+    validateExternalState(externalState: InMemorySnapshot): ValidationResult {
+        const allErrors = [
+            this.validateExternalReferences(externalState),
+            ...this.validateIdIsUnique(externalState),
+        ].filter((result): result is InternalError => !isValid(result));
+
+        return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
+    }
 
     /**
      * The name of this method is a bit misleading. It merely adds an event

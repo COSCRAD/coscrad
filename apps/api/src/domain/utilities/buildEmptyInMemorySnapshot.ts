@@ -8,10 +8,10 @@ export default (): InMemorySnapshot => ({
         }),
         {}
     ),
-    tags: [],
-    categoryTree: [],
-    connections: [],
-    users: [],
-    userGroups: [],
-    uuids: [],
+    tag: [],
+    category: [],
+    note: [],
+    user: [],
+    userGroup: [],
+    uuid: [],
 });

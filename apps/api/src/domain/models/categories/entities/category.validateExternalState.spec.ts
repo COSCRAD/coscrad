@@ -5,15 +5,16 @@ import { Valid } from '../../../domainModelValidators/Valid';
 import { HasAggregateIdAndLabel } from '../../../interfaces/HasAggregateIdAndLabel';
 import { AggregateType } from '../../../types/AggregateType';
 import { CategorizableType } from '../../../types/CategorizableType';
+import { DeluxInMemoryStore } from '../../../types/DeluxInMemoryStore';
 import { InMemorySnapshot } from '../../../types/ResourceType';
+import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import { Term } from '../../term/entities/term.entity';
-import ChildCategoryDoesNotExistError from '../errors/ChildCategoryDoesNotExistError';
-import InvalidExternalReferenceInCategoryError from '../errors/InvalidExternalReferenceInCategoryError';
-import InvalidExternalStateForCategoryError from '../errors/InvalidExternalStateForCategoryError';
+import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
+import InvalidExternalReferenceByAggregateError from '../errors/InvalidExternalReferenceInCategoryError';
 import { Category } from './category.entity';
 
 const buildTopLevelError = (idAndLabel: HasAggregateIdAndLabel, innerErrors) =>
-    new InvalidExternalStateForCategoryError(idAndLabel, innerErrors);
+    new InvalidExternalStateError(innerErrors);
 
 const missingTerm = buildTestData().resources.term[0].clone<Term>({
     id: 'id-of-missing-term-id',
@@ -57,6 +58,7 @@ const validTestCases: ValidTestCase[] = [
     {
         description: 'the category has no members',
         category: validCategory.clone<Category>({
+            id: dummyUuid,
             members: [],
         }),
         externalState: {},
@@ -64,15 +66,15 @@ const validTestCases: ValidTestCase[] = [
     {
         description: 'the category holds valid references for notes',
         category: validCategory.clone<Category>({
-            members: validSnapshot.connections.map((connection) =>
-                connection.getCompositeIdentifier()
-            ),
+            id: dummyUuid,
+            members: validSnapshot.note.map((connection) => connection.getCompositeIdentifier()),
         }),
         externalState: validSnapshot,
     },
     {
         description: 'the category holds valid references for resources',
         category: validCategory.clone<Category>({
+            id: dummyUuid,
             members: Object.values(validSnapshot.resources).flatMap((allResourcesOfType) =>
                 allResourcesOfType.map((resource) => resource.getCompositeIdentifier())
             ),
@@ -93,7 +95,7 @@ const invalidTestCases: InvalidTestCase[] = [
         }),
         externalState: validSnapshot,
         expectedError: buildTopLevelError(validCategory, [
-            new InvalidExternalReferenceInCategoryError(validCategory, [
+            new InvalidExternalReferenceByAggregateError(validCategory, [
                 missingTerm.getCompositeIdentifier(),
             ]),
         ]),
@@ -101,13 +103,13 @@ const invalidTestCases: InvalidTestCase[] = [
     {
         description: 'the category refers to non-existent members',
         category: validCategory.clone<Category>({
-            members: validSnapshot.connections
+            members: validSnapshot.note
                 .map((connection) => connection.getCompositeIdentifier())
                 .concat(missingNoteCompositeIdentifier),
         }),
         externalState: validSnapshot,
         expectedError: buildTopLevelError(validCategory, [
-            new InvalidExternalReferenceInCategoryError(validCategory, [
+            new InvalidExternalReferenceByAggregateError(validCategory, [
                 missingTerm.getCompositeIdentifier(),
             ]),
         ]),
@@ -119,17 +121,21 @@ const invalidTestCases: InvalidTestCase[] = [
         }),
         externalState: validSnapshot,
         expectedError: buildTopLevelError(validCategory, [
-            new ChildCategoryDoesNotExistError('BOGUS-CHILD-CATEGOR-ID-BOO', validCategory),
+            new InvalidExternalReferenceByAggregateError(validCategory, [
+                { type: AggregateType.category, id: 'BOGUS-CHILD-CATEGOR-ID-BOO' },
+            ]),
         ]),
     },
 ];
 
 describe('Category external state validation', () => {
     describe('when the external state is valid for the given category model', () => {
-        validTestCases.forEach(({ description, category, externalState }) =>
+        validTestCases.forEach(({ description, category, externalState }: ValidTestCase) =>
             describe(description, () => {
                 it('should return Valid', () => {
-                    const result = category.validateExternalState(externalState);
+                    const result = category.validateExternalState(
+                        new DeluxInMemoryStore(externalState).fetchFullSnapshot()
+                    );
 
                     expect(result).toBe(Valid);
                 });
@@ -141,7 +147,9 @@ describe('Category external state validation', () => {
         invalidTestCases.forEach(({ description, category, externalState, expectedError }) =>
             describe(description, () => {
                 it('should return the expected error', () => {
-                    const result = category.validateExternalState(externalState);
+                    const result = category.validateExternalState(
+                        new DeluxInMemoryStore(externalState).fetchFullSnapshot()
+                    );
 
                     expect(result).toEqual(expectedError);
                 });

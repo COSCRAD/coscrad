@@ -10,7 +10,7 @@ import TestRepositoryProvider from '../../../../persistence/repositories/__tests
 import { DTO } from '../../../../types/DTO';
 import InvalidResourceDTOError from '../../../domainModelValidators/errors/InvalidResourceDTOError';
 import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
-import getValidResourceInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidResourceInstanceForTest';
+import getValidAggregateInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandFailsDueToTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
@@ -180,7 +180,7 @@ describe('CreateMediaItem', () => {
                     initialState: buildInMemorySnapshot({
                         resources: {
                             mediaItem: [
-                                getValidResourceInstanceForTest(ResourceType.mediaItem).clone({
+                                getValidAggregateInstanceForTest(ResourceType.mediaItem).clone({
                                     id: existingMediaItemId,
                                 }),
                             ],

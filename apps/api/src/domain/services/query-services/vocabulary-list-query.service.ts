@@ -58,7 +58,7 @@ export class VocabularyListQueryService extends BaseQueryService<
         ]);
 
         return buildInMemorySnapshot({
-            tags: allTags,
+            tag: allTags,
             resources: {
                 term: allTerms,
             },

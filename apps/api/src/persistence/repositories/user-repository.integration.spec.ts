@@ -19,7 +19,7 @@ describe('Arango Repository Provider > getUserRepository', () => {
 
     const numberOfUsers = 12;
 
-    const validUser = testData.users[0];
+    const validUser = testData.user[0];
 
     const users = Array(numberOfUsers)
         .fill(0)
@@ -30,7 +30,7 @@ describe('Arango Repository Provider > getUserRepository', () => {
             })
         );
 
-    const fullSnapshot = buildInMemorySnapshot({ users });
+    const fullSnapshot = buildInMemorySnapshot({ user: users });
 
     let testRepositoryProvider: TestRepositoryProvider;
 
