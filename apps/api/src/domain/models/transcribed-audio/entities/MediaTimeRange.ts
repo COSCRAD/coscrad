@@ -17,8 +17,12 @@ export class MediaTimeRange extends BaseDomainModel {
 
     readonly data?: MediaData;
 
-    constructor({ inPoint, outPoint, data }: DTO<MediaTimeRange>) {
+    constructor(dto: DTO<MediaTimeRange>) {
         super();
+
+        if (!dto) return;
+
+        const { inPoint, outPoint, data } = dto;
 
         this.inPoint = inPoint;
 

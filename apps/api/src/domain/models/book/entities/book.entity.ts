@@ -1,8 +1,7 @@
+import { NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
-import { ResultOrError } from '../../../../types/ResultOrError';
-import bookValidator from '../../../domainModelValidators/bookValidator';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -16,6 +15,7 @@ import BookPage from './BookPage';
 export class Book extends Resource {
     readonly type = ResourceType.book;
 
+    @NonEmptyString()
     readonly title: string;
 
     readonly subtitle?: string;
@@ -31,6 +31,8 @@ export class Book extends Resource {
     constructor(dto: DTO<Book>) {
         super({ ...dto, type: ResourceType.book });
 
+        if (!dto) return;
+
         const { title, subtitle, author, publicationDate, pages: pageDTOs } = dto;
 
         this.title = title;
@@ -42,11 +44,20 @@ export class Book extends Resource {
         this.publicationDate = publicationDate;
 
         // TODO remove all casts like this
-        this.pages = pageDTOs.map((pageDTO) => new BookPage(pageDTO));
+        this.pages = Array.isArray(pageDTOs)
+            ? pageDTOs.map((pageDTO) => new BookPage(pageDTO))
+            : undefined;
     }
 
-    validateInvariants(): ResultOrError<typeof Valid> {
-        return bookValidator(this);
+    protected validateComplexInvariants(): InternalError[] {
+        const allErrors: InternalError[] = [];
+
+        const { published, pages } = this;
+
+        if (published && pages.length === 0)
+            allErrors.push(new InternalError('You cannot publish a book that has no pages'));
+
+        return allErrors;
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

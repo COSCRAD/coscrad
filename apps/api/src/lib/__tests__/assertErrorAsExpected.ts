@@ -16,9 +16,11 @@ const assertErrorAsExpected = (result: unknown, expectedError: InternalError) =>
 
     const { innerErrors } = error;
 
-    if (innerErrors.length > 0)
-        innerErrors.forEach((innerError, index) =>
-            assertErrorAsExpected(innerError, expectedError.innerErrors[index])
+    const { innerErrors: expectedInnerErrors } = expectedError;
+
+    if (expectedInnerErrors.length > 0)
+        expectedInnerErrors.forEach((expectedInnerError, index) =>
+            assertErrorAsExpected(innerErrors[index], expectedInnerError)
         );
 };
 

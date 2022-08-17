@@ -6,8 +6,8 @@
  * more of a high level test compared to `edgeConnectionContextValidators.spec.ts`.
  */
 
-import { InternalError } from '../../../../../lib/errors/InternalError';
-import validateEdgeConnection from '../../../contextValidators/validateEdgeConnection/index';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
+import { EdgeConnection } from '../../../../models/context/edge-connection.entity';
 import { Valid } from '../../../Valid';
 import buildEdgeConnectionValidatorTestCases from './buildEdgeConnectionValidatorTestCases';
 
@@ -16,7 +16,9 @@ buildEdgeConnectionValidatorTestCases().forEach(({ validCases, invalidCases }) =
         describe('When the DTO for an Edge Connection is valid', () => {
             describe(description || `Valid test case #${index}`, () => {
                 it('should return Valid', () => {
-                    const result = validateEdgeConnection(dto);
+                    const instance = new EdgeConnection(dto);
+
+                    const result = instance.validateInvariants();
 
                     expect(result).toBe(Valid);
                 });
@@ -24,21 +26,17 @@ buildEdgeConnectionValidatorTestCases().forEach(({ validCases, invalidCases }) =
         });
     });
 
-    invalidCases
-        // .filter(({ description }) => description.includes('not consistent with the resource type'))
-        .forEach(({ description, invalidDTO, expectedError }) => {
-            describe('When the DTO for the Edge Connection is invalid', () => {
-                describe(description, () => {
-                    it('should return the expected Error', () => {
-                        const result = validateEdgeConnection(invalidDTO);
+    invalidCases.forEach(({ description, invalidDTO, expectedError }) => {
+        describe('When the DTO for the Edge Connection is invalid', () => {
+            describe(description, () => {
+                it('should return the expected Error', () => {
+                    const instance = new EdgeConnection(invalidDTO);
 
-                        expect(result).toEqual(expectedError);
+                    const result = instance.validateInvariants();
 
-                        expect((result as InternalError).innerErrors).toEqual(
-                            expectedError.innerErrors
-                        );
-                    });
+                    assertErrorAsExpected(result, expectedError);
                 });
             });
         });
+    });
 });

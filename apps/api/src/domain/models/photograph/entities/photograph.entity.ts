@@ -1,13 +1,12 @@
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import findAllPointsInLineNotWithinBounds from '../../../../lib/validation/geometry/findAllPointsInLineNotWithinBounds';
 import isPointWithinBounds from '../../../../lib/validation/geometry/isPointWithinBounds';
 import { DTO } from '../../../../types/DTO';
-import { ResultOrError } from '../../../../types/ResultOrError';
 import formatPosition2D from '../../../../view-models/presentation/formatPosition2D';
 import FreeMultilineContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/freeMultilineContext/FreeMultilineContextOutOfBoundsError';
 import PointContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pointContext/PointContextOutOfBoundsError';
-import photographValidator from '../../../domainModelValidators/photographValidator';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
@@ -25,13 +24,16 @@ export class Photograph extends Resource implements Boundable2D {
     readonly filename: string;
 
     // TODO make this a `contributorID`
+    @NonEmptyString()
     readonly photographer: string;
 
-    // Should we really cache this here?
+    @NestedDataType(PhotographDimensions)
     readonly dimensions: PhotographDimensions;
 
     constructor(dto: DTO<Photograph>) {
         super({ ...dto, type: ResourceType.photograph });
+
+        if (!dto) return;
 
         const { filename, photographer, dimensions: dimensionsDTO } = dto;
 
@@ -49,8 +51,8 @@ export class Photograph extends Resource implements Boundable2D {
         });
     }
 
-    validateInvariants(): ResultOrError<typeof Valid> {
-        return photographValidator(this);
+    protected validateComplexInvariants(): InternalError[] {
+        return [];
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

@@ -1,9 +1,9 @@
+import { NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
-import { ResultOrError } from '../../../types/ResultOrError';
 import validateEdgeConnection from '../../domainModelValidators/contextValidators/validateEdgeConnection';
 import { isValid, Valid } from '../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
@@ -49,10 +49,13 @@ export class EdgeConnection extends Aggregate {
 
     readonly members: EdgeConnectionMember[];
 
+    @NonEmptyString()
     readonly note: string;
 
     constructor(dto: DTO<EdgeConnection>) {
         super(dto);
+
+        if (!dto) return;
 
         const { id, members, note, connectionType: type } = dto;
         this.connectionType = type;
@@ -99,7 +102,7 @@ export class EdgeConnection extends Aggregate {
          */
     }
 
-    validateInvariants(): ResultOrError<Valid> {
+    protected validateComplexInvariants(): InternalError[] {
         return validateEdgeConnection(this);
     }
 

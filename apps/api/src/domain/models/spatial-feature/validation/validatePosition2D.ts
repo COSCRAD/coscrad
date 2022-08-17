@@ -1,8 +1,8 @@
-import { InternalError } from '../../../../../../lib/errors/InternalError';
-import { isValid, Valid } from '../../../../Valid';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { isValid } from '../../../domainModelValidators/Valid';
 import validateCoordinate from './validateCoordinate';
 
-export default (input: unknown): Valid | InternalError[] => {
+export default (input: unknown): InternalError[] => {
     if (!Array.isArray(input)) return [new InternalError(`A 2D coordinate must be an array`)];
 
     const allErrors = input.reduce(
@@ -20,7 +20,5 @@ export default (input: unknown): Valid | InternalError[] => {
         ]
     );
 
-    if (allErrors.length > 0) return allErrors;
-
-    return Valid;
+    return allErrors;
 };

@@ -1,6 +1,6 @@
 import { isNumber } from 'class-validator';
-import { InternalError } from '../../../../../../lib/errors/InternalError';
-import { Valid } from '../../../../Valid';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { Valid } from '../../../domainModelValidators/Valid';
 
 export default (coordinate: unknown, index?: number): Valid | InternalError => {
     if (

@@ -1,15 +1,15 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../types/DTO';
 import { Term } from '../../../../models/term/entities/term.entity';
-import { AggregateId } from '../../../../types/AggregateId';
 import { ResourceType } from '../../../../types/ResourceType';
-import InvalidTermDTOError from '../../../errors/term/InvalidTermDTOError';
 import TermHasNoTextInAnyLanguageError from '../../../errors/term/TermHasNoTextInAnyLanguageError';
-import termValidator from '../../../termValidator';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
+import buildInvariantValidationErrorFactoryFunction from './utils/buildInvariantValidationErrorFactoryFunction';
+
+const resourceType = ResourceType.term;
 
 const validDTO: DTO<Term> = {
-    type: ResourceType.term,
+    type: resourceType,
     term: 'test term in language',
     termEnglish: 'test term in english',
     id: '123',
@@ -17,12 +17,10 @@ const validDTO: DTO<Term> = {
     contributorId: '123',
 };
 
-const buildTopLevelError = (termID: AggregateId, innerErrors: InternalError[]): InternalError =>
-    new InvalidTermDTOError(termID, innerErrors);
+const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(resourceType);
 
-export const buildTermTestCase = (): DomainModelValidatorTestCase<Term> => ({
-    resourceType: ResourceType.term,
-    validator: termValidator,
+export const buildTermTestCase = (): DomainModelValidatorTestCase<ResourceType.term> => ({
+    resourceType: resourceType,
     validCases: [
         {
             dto: validDTO,
@@ -34,7 +32,7 @@ export const buildTermTestCase = (): DomainModelValidatorTestCase<Term> => ({
             invalidDTO: {
                 id: '123',
             },
-            expectedError: new InvalidTermDTOError('123', [
+            expectedError: buildTopLevelError('123', [
                 new TermHasNoTextInAnyLanguageError('123'),
                 // Why is casting necessary when this extends `Internal Error`???
             ]) as InternalError,

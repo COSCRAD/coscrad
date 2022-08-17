@@ -1,8 +1,5 @@
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
-import { ResultOrError } from '../../../../types/ResultOrError';
-import InvalidResourceDTOError from '../../../domainModelValidators/errors/InvalidResourceDTOError';
-import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
-import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
@@ -26,13 +23,8 @@ export class JournalArticleBibliographicReference
         this.data = new JournalArticleBibliographicReferenceData(dto.data);
     }
 
-    validateInvariants(): ResultOrError<Valid> {
-        const typeErrors = validateSimpleInvariants(JournalArticleBibliographicReference, this);
-
-        if (typeErrors.length > 0)
-            return new InvalidResourceDTOError(this.type, this.id, typeErrors);
-
-        return Valid;
+    protected validateComplexInvariants(): InternalError[] {
+        return [];
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

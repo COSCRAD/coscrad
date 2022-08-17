@@ -1,9 +1,8 @@
-import { InternalError } from '../../../../../../lib/errors/InternalError';
-import InvalidLineTypeError from '../../../../errors/context/InvalidLineTypeError';
-import { isValid, Valid } from '../../../../Valid';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import InvalidLineTypeError from '../../../domainModelValidators/errors/context/InvalidLineTypeError';
 import validatePosition2D from './validatePosition2D';
 
-export default (input: unknown): Valid | InternalError[] => {
+export default (input: unknown): InternalError[] => {
     if (!Array.isArray(input)) return [new InvalidLineTypeError(input)];
 
     if (input.length < 2)
@@ -12,7 +11,7 @@ export default (input: unknown): Valid | InternalError[] => {
     const allErrors = input.reduce((accumulatedErrors: InternalError[], coordinatePair, index) => {
         const validationResult = validatePosition2D(coordinatePair);
 
-        if (!isValid(validationResult))
+        if (validationResult.length > 0)
             return accumulatedErrors.concat(
                 new InternalError(`Invalid 2D point coordinate at index ${index}`, validationResult)
             );
@@ -20,7 +19,5 @@ export default (input: unknown): Valid | InternalError[] => {
         return accumulatedErrors;
     }, []);
 
-    if (allErrors.length > 0) return allErrors;
-
-    return Valid;
+    return allErrors;
 };

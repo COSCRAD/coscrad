@@ -2,8 +2,6 @@ import { RegisterIndexScopedCommands } from '../../../app/controllers/command/co
 import { InternalError } from '../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
-import { ResultOrError } from '../../../types/ResultOrError';
-import tagValidator from '../../domainModelValidators/tagValidator';
 import { isValid, Valid } from '../../domainModelValidators/Valid';
 import { HasAggregateIdAndLabel } from '../../interfaces/HasAggregateIdAndLabel';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
@@ -29,6 +27,8 @@ export class Tag extends Aggregate implements HasAggregateIdAndLabel {
     constructor(dto: DTO<Tag>) {
         super(dto);
 
+        if (!dto) return;
+
         const { id, label, members } = dto;
 
         this.id = id;
@@ -42,8 +42,8 @@ export class Tag extends Aggregate implements HasAggregateIdAndLabel {
         return [];
     }
 
-    validateInvariants(): ResultOrError<typeof Valid> {
-        return tagValidator(this);
+    protected validateComplexInvariants(): InternalError[] {
+        return [];
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

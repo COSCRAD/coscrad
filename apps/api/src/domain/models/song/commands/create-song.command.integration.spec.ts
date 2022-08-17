@@ -7,7 +7,7 @@ import { ArangoConnectionProvider } from '../../../../persistence/database/arang
 import generateRandomTestDatabaseName from '../../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../types/DTO';
-import InvalidResourceDTOError from '../../../domainModelValidators/errors/InvalidResourceDTOError';
+import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import MissingSongTitleError from '../../../domainModelValidators/errors/song/MissingSongTitleError';
 import getValidAggregateInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
@@ -219,9 +219,10 @@ describe('CreateSong', () => {
                         }),
                     initialState,
                     checkError: (error: InternalError, id) => {
-                        const expectedError = new InvalidResourceDTOError(ResourceType.song, id, [
-                            new MissingSongTitleError(),
-                        ]);
+                        const expectedError = new InvariantValidationError(
+                            { type: ResourceType.song, id },
+                            [new MissingSongTitleError()]
+                        );
 
                         const wrappedError = new CommandExecutionError([expectedError]);
 

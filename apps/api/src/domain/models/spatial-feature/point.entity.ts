@@ -1,8 +1,6 @@
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { InternalError } from '../../../lib/errors/InternalError';
 import { DTO } from '../../../types/DTO';
-import { ResultOrError } from '../../../types/ResultOrError';
-import geometricFeatureValidator from '../../domainModelValidators/spatialFeatureValidator/geometricFeatureValidator';
-import { Valid } from '../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../types/ResourceType';
 import { Resource } from '../resource.entity';
@@ -10,6 +8,7 @@ import { IGeometricFeature } from './GeometricFeature';
 import { ISpatialFeature } from './ISpatialFeature';
 import { PointCoordinates } from './types/Coordinates/PointCoordinates';
 import { GeometricFeatureType } from './types/GeometricFeatureType';
+import validatePosition2D from './validation/validatePosition2D';
 
 @RegisterIndexScopedCommands([])
 export class Point extends Resource implements ISpatialFeature {
@@ -19,6 +18,8 @@ export class Point extends Resource implements ISpatialFeature {
 
     constructor(dto: DTO<Point>) {
         super({ ...dto, type: ResourceType.spatialFeature });
+
+        if (!dto) return;
 
         const { geometry: geometryDTO } = dto;
 
@@ -32,9 +33,10 @@ export class Point extends Resource implements ISpatialFeature {
         >;
     }
 
-    validateInvariants(): ResultOrError<Valid> {
-        // TODO breakout the individual type validators into each class
-        return geometricFeatureValidator(this.geometry);
+    protected validateComplexInvariants(): InternalError[] {
+        const { coordinates } = this.geometry;
+
+        return validatePosition2D(coordinates);
     }
 
     // Should we have a base class? Does this logic vary amongst subtypes?

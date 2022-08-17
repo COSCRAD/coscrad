@@ -5,6 +5,8 @@ import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
+import InvariantValidationError from '../domainModelValidators/errors/InvariantValidationError';
+import validateSimpleInvariants from '../domainModelValidators/utilities/validateSimpleInvariants';
 import { isValid, Valid } from '../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../types/AggregateId';
@@ -69,7 +71,22 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
         return updatedInstance;
     }
 
-    abstract validateInvariants(): ResultOrError<Valid>;
+    validateInvariants(): ResultOrError<Valid> {
+        const simpleValidationResult = validateSimpleInvariants(
+            Object.getPrototypeOf(this).constructor,
+            this
+        );
+
+        const complexValidationResult = this.validateComplexInvariants();
+
+        const allErrors = [...simpleValidationResult, ...complexValidationResult];
+
+        return allErrors.length > 0
+            ? new InvariantValidationError(this.getCompositeIdentifier(), allErrors)
+            : Valid;
+    }
+
+    protected abstract validateComplexInvariants(): InternalError[];
 
     abstract getAvailableCommands(): string[];
 

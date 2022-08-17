@@ -1,8 +1,6 @@
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
-import { ResultOrError } from '../../../../types/ResultOrError';
-import transcribedAudioValidator from '../../../domainModelValidators/transcribedAudioValidator';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
@@ -27,6 +25,8 @@ export class TranscribedAudio extends Resource {
     constructor(dto: DTO<TranscribedAudio>) {
         super({ ...dto, type: ResourceType.transcribedAudio });
 
+        if (!dto) return;
+
         const {
             audioFilename,
             lengthMilliseconds,
@@ -43,8 +43,8 @@ export class TranscribedAudio extends Resource {
         this.transcript = new Transcript(transcriptDto);
     }
 
-    validateInvariants(): ResultOrError<typeof Valid> {
-        return transcribedAudioValidator(this);
+    protected validateComplexInvariants(): InternalError[] {
+        return [];
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

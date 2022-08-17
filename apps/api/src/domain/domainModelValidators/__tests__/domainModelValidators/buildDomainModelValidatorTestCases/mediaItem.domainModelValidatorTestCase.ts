@@ -1,24 +1,20 @@
 import { MIMEType } from '@coscrad/data-types';
-import { InternalError } from '../../../../../lib/errors/InternalError';
-import { MediaItem } from '../../../../models/media-item/entities/media-item.entity';
 import { ContributorAndRole } from '../../../../models/song/ContributorAndRole';
-import { AggregateId } from '../../../../types/AggregateId';
 import { ResourceType } from '../../../../types/ResourceType';
-import InvalidResourceDTOError from '../../../errors/InvalidResourceDTOError';
 import MediaItemHasNoTitleInAnyLanguageError from '../../../errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
-import NullOrUndefinedResourceDTOError from '../../../errors/NullOrUndefinedResourceDTOError';
-import mediaItemValidator from '../../../mediaItemValidator';
+import NullOrUndefinedAggregateDTOError from '../../../errors/NullOrUndefinedAggregateDTOError';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
 import getValidAggregateInstanceForTest from '../utilities/getValidAggregateInstanceForTest';
+import buildInvariantValidationErrorFactoryFunction from './utils/buildInvariantValidationErrorFactoryFunction';
 
-const validDTO = getValidAggregateInstanceForTest(ResourceType.mediaItem).toDTO();
+const resourceType = ResourceType.mediaItem;
 
-const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]): InternalError =>
-    new InvalidResourceDTOError(ResourceType.mediaItem, id, innerErrors);
+const validDTO = getValidAggregateInstanceForTest(resourceType).toDTO();
 
-export const buildmediaItemTestCase = (): DomainModelValidatorTestCase<MediaItem> => ({
+const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(resourceType);
+
+export const buildmediaItemTestCase = (): DomainModelValidatorTestCase<ResourceType.mediaItem> => ({
     resourceType: ResourceType.mediaItem,
-    validator: mediaItemValidator,
     validCases: [
         {
             dto: validDTO,
@@ -28,12 +24,12 @@ export const buildmediaItemTestCase = (): DomainModelValidatorTestCase<MediaItem
         {
             description: 'the dto is undefined',
             invalidDTO: undefined,
-            expectedError: new NullOrUndefinedResourceDTOError(ResourceType.mediaItem),
+            expectedError: new NullOrUndefinedAggregateDTOError(ResourceType.mediaItem),
         },
         {
             description: 'the dto is null',
             invalidDTO: null,
-            expectedError: new NullOrUndefinedResourceDTOError(ResourceType.mediaItem),
+            expectedError: new NullOrUndefinedAggregateDTOError(ResourceType.mediaItem),
         },
         {
             description: 'the media item has no title in either language',
@@ -97,14 +93,6 @@ export const buildmediaItemTestCase = (): DomainModelValidatorTestCase<MediaItem
             invalidDTO: {
                 ...validDTO,
                 lengthMilliseconds: Infinity,
-            },
-            expectedError: buildTopLevelError(validDTO.id, []),
-        },
-        {
-            description: 'the media item resource type is "book"',
-            invalidDTO: {
-                ...validDTO,
-                type: ResourceType.book as unknown as typeof ResourceType.mediaItem,
             },
             expectedError: buildTopLevelError(validDTO.id, []),
         },

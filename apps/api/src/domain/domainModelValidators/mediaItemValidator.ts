@@ -6,7 +6,7 @@ import { ResourceType } from '../types/ResourceType';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import InvalidResourceDTOError from './errors/InvalidResourceDTOError';
 import MediaItemHasNoTitleInAnyLanguageError from './errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
-import NullOrUndefinedResourceDTOError from './errors/NullOrUndefinedResourceDTOError';
+import NullOrUndefinedAggregateDTOError from './errors/NullOrUndefinedAggregateDTOError';
 import { DomainModelValidator } from './types/DomainModelValidator';
 import validateSimpleInvariants from './utilities/validateSimpleInvariants';
 import { Valid } from './Valid';
@@ -15,7 +15,7 @@ const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]): Inte
     new InvalidResourceDTOError(ResourceType.mediaItem, id, innerErrors);
 
 const mediaItemValidator: DomainModelValidator = (dto: unknown) => {
-    if (isNullOrUndefined(dto)) return new NullOrUndefinedResourceDTOError(ResourceType.mediaItem);
+    if (isNullOrUndefined(dto)) return new NullOrUndefinedAggregateDTOError(ResourceType.mediaItem);
 
     const { id, title, titleEnglish } = dto as MediaItem;
 

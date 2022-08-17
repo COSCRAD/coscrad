@@ -6,12 +6,11 @@ import {
     NonEmptyString,
     URL,
 } from '@coscrad/data-types';
-import { IsNonNegativeFiniteNumber, IsStrictlyEqualTo } from '@coscrad/validation';
+import { IsNonNegativeFiniteNumber, isStringWithNonzeroLength } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
-import { ResultOrError } from '../../../../types/ResultOrError';
-import mediaItemValidator from '../../../domainModelValidators/mediaItemValidator';
+import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
@@ -25,7 +24,6 @@ import { ContributorAndRole } from '../../song/ContributorAndRole';
 
 @RegisterIndexScopedCommands(['CREATE_MEDIA_ITEM'])
 export class MediaItem extends Resource implements ITimeBoundable {
-    @IsStrictlyEqualTo(ResourceType.mediaItem)
     readonly type = ResourceType.mediaItem;
 
     @NonEmptyString({ isOptional: true })
@@ -69,8 +67,15 @@ export class MediaItem extends Resource implements ITimeBoundable {
         this.lengthMilliseconds = lengthMilliseconds;
     }
 
-    validateInvariants(): ResultOrError<typeof Valid> {
-        return mediaItemValidator(this);
+    protected validateComplexInvariants(): InternalError[] {
+        const { id, title, titleEnglish } = this;
+
+        const allErrors: InternalError[] = [];
+
+        if (!isStringWithNonzeroLength(title) && !isStringWithNonzeroLength(titleEnglish))
+            allErrors.push(new MediaItemHasNoTitleInAnyLanguageError(id));
+
+        return allErrors;
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

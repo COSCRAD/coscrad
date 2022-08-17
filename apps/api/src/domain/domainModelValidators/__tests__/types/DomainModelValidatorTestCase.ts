@@ -1,7 +1,6 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
-import { ResourceType } from '../../../types/ResourceType';
-import { DomainModelValidator } from '../../types/DomainModelValidator';
+import { ResourceType, ResourceTypeToResourceModel } from '../../../types/ResourceType';
 
 export type DomainModelValidatorInvalidTestCase<TEntity> = {
     description?: string;
@@ -14,12 +13,11 @@ export type DomainModelValidatorInvalidTestCase<TEntity> = {
     expectedError: InternalError;
 };
 
-export type DomainModelValidatorTestCase<TResource> = {
-    resourceType: ResourceType; // TODO correlate this with TEntity
-    validator: DomainModelValidator;
+export type DomainModelValidatorTestCase<TResourceType extends ResourceType> = {
+    resourceType: TResourceType;
     validCases: {
         description?: string;
-        dto: DTO<TResource>;
+        dto: DTO<ResourceTypeToResourceModel[TResourceType]>;
     }[];
-    invalidCases: DomainModelValidatorInvalidTestCase<TResource>[];
+    invalidCases: DomainModelValidatorInvalidTestCase<ResourceTypeToResourceModel[TResourceType]>[];
 };

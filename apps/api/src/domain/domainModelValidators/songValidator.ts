@@ -6,7 +6,7 @@ import { AggregateId } from '../types/AggregateId';
 import { ResourceType } from '../types/ResourceType';
 import { isNullOrUndefined } from '../utilities/validation/is-null-or-undefined';
 import InvalidResourceDTOError from './errors/InvalidResourceDTOError';
-import NullOrUndefinedResourceDTOError from './errors/NullOrUndefinedResourceDTOError';
+import NullOrUndefinedAggregateDTOError from './errors/NullOrUndefinedAggregateDTOError';
 import MissingSongTitleError from './errors/song/MissingSongTitleError';
 import { DomainModelValidator } from './types/DomainModelValidator';
 import validateSimpleInvariants from './utilities/validateSimpleInvariants';
@@ -16,7 +16,7 @@ const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]) =>
     new InvalidResourceDTOError(ResourceType.song, id, innerErrors);
 
 const songValidator: DomainModelValidator = (dto: unknown): Valid | InternalError => {
-    if (isNullOrUndefined(dto)) return new NullOrUndefinedResourceDTOError(ResourceType.song);
+    if (isNullOrUndefined(dto)) return new NullOrUndefinedAggregateDTOError(ResourceType.song);
 
     const allErrors: InternalError[] = [];
 

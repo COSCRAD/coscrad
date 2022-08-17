@@ -1,8 +1,7 @@
 import { Point } from '../../../../../models/spatial-feature/point.entity';
 import { GeometricFeatureType } from '../../../../../models/spatial-feature/types/GeometricFeatureType';
-import { ResourceType } from '../../../../../types/ResourceType';
-import InvalidResourceDTOError from '../../../../errors/InvalidResourceDTOError';
 import { DomainModelValidatorInvalidTestCase } from '../../../types/DomainModelValidatorTestCase';
+import { buildInvalidSpatialFeatureDtoError } from '../spatial-feature.domainModelValidatorTestCase';
 import { getValidSpatialFeatureInstanceForTest } from '../utils/getValidSpatialFeatureInstanceForTest';
 
 const validPointDTO = getValidSpatialFeatureInstanceForTest(GeometricFeatureType.point);
@@ -17,6 +16,7 @@ export const buildPointInvalidTestCases = (): DomainModelValidatorInvalidTestCas
                 coordinates: [12, 'foo' as unknown as number],
             },
         },
-        expectedError: new InvalidResourceDTOError(ResourceType.spatialFeature, validPointDTO.id),
+        // TODO [https://www.pivotaltracker.com/story/show/183014405] Check inner errors
+        expectedError: buildInvalidSpatialFeatureDtoError(validPointDTO.id, []),
     },
 ];

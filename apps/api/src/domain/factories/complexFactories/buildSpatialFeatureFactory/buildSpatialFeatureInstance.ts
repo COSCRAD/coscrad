@@ -1,5 +1,6 @@
-import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import InvalidGeometryTypeForSpatialFeatureError from '../../../models/spatial-feature/errors/InvalidGeometryTypeForSpatialFeatureError';
 import { ISpatialFeature } from '../../../models/spatial-feature/ISpatialFeature';
 import { Line } from '../../../models/spatial-feature/line.entity';
 import { Point } from '../../../models/spatial-feature/point.entity';
@@ -9,8 +10,10 @@ import { GeometricFeatureType } from '../../../models/spatial-feature/types/Geom
 /**
  * We may want to introduce a `SpatialFeatureUnion` and strive for type safety \ narrowing here
  */
-export default (dto: DTO<ISpatialFeature>): ISpatialFeature => {
-    switch (dto.geometry.type) {
+export default (dto: DTO<ISpatialFeature>): ResultOrError<ISpatialFeature> => {
+    const type = dto?.geometry?.type;
+
+    switch (type) {
         case GeometricFeatureType.line:
             return new Line(dto as DTO<Line>);
 
@@ -21,8 +24,6 @@ export default (dto: DTO<ISpatialFeature>): ISpatialFeature => {
             return new Polygon(dto as DTO<Polygon>);
 
         default:
-            throw new InternalError(
-                `Cannot build Spatial Feature model with unsupported geometric feature type: ${dto.geometry.type}`
-            );
+            return new InvalidGeometryTypeForSpatialFeatureError(type);
     }
 };

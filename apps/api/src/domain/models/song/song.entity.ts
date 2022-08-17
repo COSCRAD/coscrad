@@ -1,16 +1,16 @@
 import {
     IsNonNegativeFiniteNumber,
     IsOptional,
+    isStringWithNonzeroLength,
     IsStringWithNonzeroLength,
     IsUrl,
     ValidateNested,
 } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../types/DTO';
-import { ResultOrError } from '../../../types/ResultOrError';
-import songValidator from '../../domainModelValidators/songValidator';
-import { Valid } from '../../domainModelValidators/Valid';
+import MissingSongTitleError from '../../domainModelValidators/errors/song/MissingSongTitleError';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../types/ResourceType';
 import { TimeRangeContext } from '../context/time-range-context/time-range-context.entity';
@@ -89,8 +89,22 @@ export class Song extends Resource implements ITimeBoundable {
         return allCommands;
     }
 
-    validateInvariants(): ResultOrError<typeof Valid> {
-        return songValidator(this);
+    protected validateComplexInvariants(): InternalError[] {
+        const allErrors: InternalError[] = [];
+
+        const { startMilliseconds, lengthMilliseconds, title, titleEnglish } = this;
+
+        if (startMilliseconds > lengthMilliseconds)
+            allErrors.push(
+                new InternalError(
+                    `the start:${startMilliseconds} cannot be greater than the length:${lengthMilliseconds}`
+                )
+            );
+
+        if (!isStringWithNonzeroLength(title) && !isStringWithNonzeroLength(titleEnglish))
+            allErrors.push(new MissingSongTitleError());
+
+        return allErrors;
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

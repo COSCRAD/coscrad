@@ -1,8 +1,13 @@
-import { IsOptional, IsStringWithNonzeroLength } from '@coscrad/validation';
+import {
+    IsOptional,
+    isStringWithNonzeroLength,
+    IsStringWithNonzeroLength,
+} from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
-import termValidator from '../../../domainModelValidators/termValidator';
+import InvalidPublicationStatusError from '../../../domainModelValidators/errors/InvalidPublicationStatusError';
+import TermHasNoTextInAnyLanguageError from '../../../domainModelValidators/errors/term/TermHasNoTextInAnyLanguageError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
@@ -78,8 +83,18 @@ export class Term extends Resource {
         return [];
     }
 
-    validateInvariants() {
-        return termValidator(this);
+    protected validateComplexInvariants(): InternalError[] {
+        const allErrors: InternalError[] = [];
+
+        const { term, termEnglish, id, published } = this;
+
+        if (!isStringWithNonzeroLength(term) && !isStringWithNonzeroLength(termEnglish))
+            allErrors.push(new TermHasNoTextInAnyLanguageError(id));
+
+        if (typeof published !== 'boolean')
+            allErrors.push(new InvalidPublicationStatusError(ResourceType.term));
+
+        return allErrors;
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

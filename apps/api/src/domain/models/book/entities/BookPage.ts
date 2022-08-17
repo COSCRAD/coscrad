@@ -9,8 +9,12 @@ export default class BookPage extends BaseDomainModel {
 
     readonly translation: string;
 
-    constructor({ identifier, text, translation }: DTO<BookPage>) {
+    constructor(dto: DTO<BookPage>) {
         super();
+
+        if (!dto) return;
+
+        const { identifier, text, translation } = dto;
 
         this.identifier = identifier;
 

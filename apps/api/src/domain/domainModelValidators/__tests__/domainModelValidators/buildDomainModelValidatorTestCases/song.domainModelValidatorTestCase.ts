@@ -1,21 +1,18 @@
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ContributorAndRole } from '../../../../models/song/ContributorAndRole';
-import { Song } from '../../../../models/song/song.entity';
-import { AggregateId } from '../../../../types/AggregateId';
 import { ResourceType } from '../../../../types/ResourceType';
-import InvalidResourceDTOError from '../../../errors/InvalidResourceDTOError';
-import songValidator from '../../../songValidator';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
 import getValidAggregateInstanceForTest from '../utilities/getValidAggregateInstanceForTest';
+import buildInvariantValidationErrorFactoryFunction from './utils/buildInvariantValidationErrorFactoryFunction';
 
-const validDTO = getValidAggregateInstanceForTest(ResourceType.song).toDTO();
+const resourceType = ResourceType.song;
 
-const buildTopLevelError = (id: AggregateId, innerErrors: InternalError[]) =>
-    new InvalidResourceDTOError(ResourceType.song, id, innerErrors);
+const validDTO = getValidAggregateInstanceForTest(resourceType).toDTO();
 
-export const buildSongTestCase = (): DomainModelValidatorTestCase<Song> => ({
+const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(resourceType);
+
+export const buildSongTestCase = (): DomainModelValidatorTestCase<ResourceType.song> => ({
     resourceType: ResourceType.song,
-    validator: songValidator,
     validCases: [
         {
             dto: validDTO,

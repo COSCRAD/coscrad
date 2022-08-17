@@ -1,12 +1,17 @@
+import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
+import { Resource } from '../../../models/resource.entity';
 import { ResourceType } from '../../../types/ResourceType';
-import { Valid } from '../../Valid';
 import buildDomainModelValidatorTestCases from './buildDomainModelValidatorTestCases';
 
 const testCases = buildDomainModelValidatorTestCases();
 
-describe('Domain Model Validators', () => {
+/**
+ * TODO [https://www.pivotaltracker.com/story/show/183014320]
+ * Make this test for all aggregates
+ */
+describe('Aggregate Factories', () => {
     Object.values(ResourceType).forEach((resourceType) => {
-        describe(`An entity of type ${resourceType}`, () => {
+        describe(`When building a resource of type ${resourceType}`, () => {
             it('should have a domain model validator test case', () => {
                 const testCaseSearchResult = testCases.find(
                     ({ resourceType: testCaseEntityType }) => testCaseEntityType === resourceType
@@ -17,15 +22,15 @@ describe('Domain Model Validators', () => {
         });
     });
 
-    testCases.forEach(({ resourceType, validCases, invalidCases, validator }) => {
+    testCases.forEach(({ resourceType, validCases, invalidCases }) => {
         describe(`${resourceType} validator`, () => {
             describe('When the DTO is valid', () => {
                 validCases.forEach(({ description, dto }, index) => {
                     describe(description || `valid case ${index + 1}`, () => {
                         it('should return Valid', () => {
-                            const result = validator(dto);
+                            const result = getInstanceFactoryForResource(resourceType)(dto);
 
-                            expect(result).toBe(Valid);
+                            expect(result).toBeInstanceOf(Resource);
                         });
                     });
                 });
@@ -35,7 +40,7 @@ describe('Domain Model Validators', () => {
                 invalidCases.forEach(({ description, invalidDTO, expectedError }, index) => {
                     describe(description || `invalid case ${index + 1}`, () => {
                         it('should return the appropriate errors', () => {
-                            const result = validator(invalidDTO);
+                            const result = getInstanceFactoryForResource(resourceType)(invalidDTO);
 
                             expect(result).toEqual(expectedError);
                         });

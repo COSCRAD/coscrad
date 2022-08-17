@@ -7,11 +7,8 @@ import {
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import { ValidationResult } from '../../../../../../lib/errors/types/ValidationResult';
-import { InvariantValidationMethod } from '../../../../../../lib/web-of-knowledge/decorators/invariant-validation-method.decorator';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
-import InvalidCoscradUserDTOError from '../../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../../types/AggregateType';
@@ -24,7 +21,6 @@ import idEquals from '../../../../shared/functional/idEquals';
 import UserIdFromAuthProviderAlreadyInUseError from '../../errors/external-state-errors/UserIdFromAuthProviderAlreadyInUseError';
 import UsernameAlreadyInUseError from '../../errors/external-state-errors/UsernameAlreadyInUseError';
 import UserAlreadyHasRoleError from '../../errors/invalid-state-transition-errors/UserAlreadyHasRoleError';
-import validateCoscradUser from '../../invariant-validation/validateCoscradUser';
 import { CoscradUserProfile } from './coscrad-user-profile.entity';
 
 @RegisterIndexScopedCommands(['REGISTER_USER'])
@@ -98,12 +94,8 @@ export class CoscradUser extends Aggregate {
         return availableCommands;
     }
 
-    @InvariantValidationMethod(
-        (allErrors: InternalError[], instance: CoscradUser) =>
-            new InvalidCoscradUserDTOError(allErrors, instance.id)
-    )
-    validateInvariants(): ValidationResult {
-        return validateCoscradUser(this);
+    protected validateComplexInvariants(): InternalError[] {
+        return [];
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

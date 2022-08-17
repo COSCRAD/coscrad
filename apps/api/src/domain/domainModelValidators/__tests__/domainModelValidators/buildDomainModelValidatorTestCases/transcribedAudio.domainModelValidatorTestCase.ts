@@ -1,16 +1,15 @@
-import { TranscribedAudio } from '../../../../models/transcribed-audio/entities/transcribed-audio.entity';
 import { ResourceType } from '../../../../types/ResourceType';
-import NullOrUndefinedResourceDTOError from '../../../errors/NullOrUndefinedResourceDTOError';
-import transcribedAudioValidator from '../../../transcribedAudioValidator';
+import NullOrUndefinedAggregateDTOError from '../../../errors/NullOrUndefinedAggregateDTOError';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
 import getValidAggregateInstanceForTest from '../utilities/getValidAggregateInstanceForTest';
 
-const validDTO = getValidAggregateInstanceForTest(ResourceType.transcribedAudio).toDTO();
+const resourceType = ResourceType.transcribedAudio;
+
+const validDTO = getValidAggregateInstanceForTest(resourceType).toDTO();
 
 export const buildTranscribedAudioTestCase =
-    (): DomainModelValidatorTestCase<TranscribedAudio> => ({
-        resourceType: ResourceType.transcribedAudio,
-        validator: transcribedAudioValidator,
+    (): DomainModelValidatorTestCase<ResourceType.transcribedAudio> => ({
+        resourceType: resourceType,
         validCases: [
             {
                 dto: validDTO,
@@ -20,7 +19,7 @@ export const buildTranscribedAudioTestCase =
             {
                 description: 'the dto is null',
                 invalidDTO: null,
-                expectedError: new NullOrUndefinedResourceDTOError(ResourceType.transcribedAudio),
+                expectedError: new NullOrUndefinedAggregateDTOError(ResourceType.transcribedAudio),
             },
         ],
     });

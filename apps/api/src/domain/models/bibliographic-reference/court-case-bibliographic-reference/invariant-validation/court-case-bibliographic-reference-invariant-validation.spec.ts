@@ -1,5 +1,5 @@
 import { DTO } from '../../../../../types/DTO';
-import InvalidResourceDTOError from '../../../../domainModelValidators/errors/InvalidResourceDTOError';
+import InvariantValidationError from '../../../../domainModelValidators/errors/InvariantValidationError';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { AggregateType } from '../../../../types/AggregateType';
 import assertTypeErrorsFromInvalidFuzz from '../../../__tests__/invariant-validation-helpers/assertTypeErrorsFromInvalidFuzz';
@@ -39,7 +39,7 @@ describe('CourtCaseBibliographicReference.validateInvariants', () => {
             assertTypeErrorsFromInvalidFuzz(
                 CourtCaseBibliographicReference,
                 validDto,
-                InvalidResourceDTOError
+                InvariantValidationError
             );
         });
     });

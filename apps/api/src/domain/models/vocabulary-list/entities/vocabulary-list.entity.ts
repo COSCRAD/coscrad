@@ -1,9 +1,10 @@
+import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
-import { ResultOrError } from '../../../../types/ResultOrError';
+import VocabularyListHasNoEntriesError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoEntriesError';
+import VocabularyListHasNoNameInAnyLanguageError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoNameInAnyLanguageError';
 import { Valid } from '../../../domainModelValidators/Valid';
-import vocabularyListValidator from '../../../domainModelValidators/vocabularyListValidator';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
@@ -28,6 +29,8 @@ export class VocabularyList extends Resource {
     constructor(dto: DTO<VocabularyList>) {
         super({ ...dto, type: ResourceType.vocabularyList });
 
+        if (!dto) return;
+
         const { name, nameEnglish, entries, variables } = dto;
 
         this.name = name;
@@ -36,15 +39,25 @@ export class VocabularyList extends Resource {
 
         this.entries = [...entries];
 
-        this.variables = [...variables];
+        this.variables = Array.isArray(variables) ? [...variables] : null;
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 
-    validateInvariants(): ResultOrError<typeof Valid> {
-        return vocabularyListValidator(this);
+    protected validateComplexInvariants(): InternalError[] {
+        const allErrors: InternalError[] = [];
+
+        const { name, nameEnglish, id, entries } = this;
+
+        if (!isStringWithNonzeroLength(name) && !isStringWithNonzeroLength(nameEnglish))
+            allErrors.push(new VocabularyListHasNoNameInAnyLanguageError(id));
+
+        if (!Array.isArray(entries) || !entries.length)
+            allErrors.push(new VocabularyListHasNoEntriesError(id));
+
+        return allErrors;
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {

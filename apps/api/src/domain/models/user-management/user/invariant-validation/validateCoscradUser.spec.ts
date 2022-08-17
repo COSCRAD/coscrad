@@ -1,6 +1,6 @@
-import NullOrUndefinedCoscradUserDTOError from '../../../../../domain/domainModelValidators/errors/user-management/NullOrUndefinedCoscradUserDTOError';
 import { DTO } from '../../../../../types/DTO';
-import InvalidCoscradUserDTOError from '../../../../domainModelValidators/errors/InvalidCoscradUserDTOError';
+import InvariantValidationError from '../../../../domainModelValidators/errors/InvariantValidationError';
+import NullOrUndefinedAggregateDTOError from '../../../../domainModelValidators/errors/NullOrUndefinedAggregateDTOError';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { AggregateType } from '../../../../types/AggregateType';
 import assertTypeErrorsFromInvalidFuzz from '../../../__tests__/invariant-validation-helpers/assertTypeErrorsFromInvalidFuzz';
@@ -37,7 +37,7 @@ describe('validateCoscradUser', () => {
             it('should return the expected error', () => {
                 const result = validateCoscradUser(undefined);
 
-                expect(result).toEqual(new NullOrUndefinedCoscradUserDTOError());
+                expect(result).toEqual(new NullOrUndefinedAggregateDTOError(AggregateType.user));
             });
         });
 
@@ -46,7 +46,7 @@ describe('validateCoscradUser', () => {
                 assertTypeErrorsFromInvalidFuzz(
                     CoscradUser,
                     validUserDto,
-                    InvalidCoscradUserDTOError
+                    InvariantValidationError
                 );
             });
         });

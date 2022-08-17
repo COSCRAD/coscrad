@@ -1,16 +1,22 @@
+import { NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 
 // This is a value-object
 export default class PhotographDimensions extends BaseDomainModel {
-    // Do we need the unit in the prop name? Do we need other units?
+    @NonNegativeFiniteNumber()
     readonly widthPX: number;
 
+    @NonNegativeFiniteNumber()
     readonly heightPX: number;
 
-    constructor({ widthPX, heightPX }: DTO<PhotographDimensions>) {
+    constructor(dto: DTO<PhotographDimensions>) {
         super();
+
+        if (!dto) return;
+
+        const { widthPX, heightPX } = dto;
 
         this.widthPX = widthPX;
 

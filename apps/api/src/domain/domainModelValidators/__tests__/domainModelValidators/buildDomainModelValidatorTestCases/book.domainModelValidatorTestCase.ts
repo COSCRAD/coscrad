@@ -1,15 +1,16 @@
-import { Book } from '../../../../models/book/entities/book.entity';
 import { ResourceType } from '../../../../types/ResourceType';
-import bookValidator from '../../../bookValidator';
-import InvalidResourceDTOError from '../../../errors/InvalidResourceDTOError';
 import { DomainModelValidatorTestCase } from '../../types/DomainModelValidatorTestCase';
 import getValidAggregateInstanceForTest from '../utilities/getValidAggregateInstanceForTest';
+import buildInvariantValidationErrorFactoryFunction from './utils/buildInvariantValidationErrorFactoryFunction';
 
-const validBookDTO = getValidAggregateInstanceForTest(ResourceType.book).toDTO();
+const resourceType = ResourceType.book;
 
-export const buildBookTestCase = (): DomainModelValidatorTestCase<Book> => ({
-    resourceType: ResourceType.book,
-    validator: bookValidator,
+const validBookDTO = getValidAggregateInstanceForTest(resourceType).toDTO();
+
+const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(resourceType);
+
+export const buildBookTestCase = (): DomainModelValidatorTestCase<ResourceType.book> => ({
+    resourceType: resourceType,
     validCases: [
         {
             dto: validBookDTO,
@@ -22,8 +23,8 @@ export const buildBookTestCase = (): DomainModelValidatorTestCase<Book> => ({
                 ...validBookDTO,
                 title: undefined,
             },
-            // TODO compare inner errors as well
-            expectedError: new InvalidResourceDTOError(ResourceType.book, validBookDTO.id),
+            // TODO [https://www.pivotaltracker.com/story/show/183014405] compare inner errors as well
+            expectedError: buildTopLevelError(validBookDTO.id, []),
         },
         {
             description: 'A book with no pages cannot be published',
@@ -32,7 +33,7 @@ export const buildBookTestCase = (): DomainModelValidatorTestCase<Book> => ({
                 published: true,
                 pages: [],
             },
-            expectedError: new InvalidResourceDTOError(ResourceType.book, validBookDTO.id),
+            expectedError: buildTopLevelError(validBookDTO.id, []),
         },
     ],
 });

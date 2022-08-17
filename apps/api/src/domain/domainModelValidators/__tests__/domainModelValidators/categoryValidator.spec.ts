@@ -7,7 +7,7 @@ import categoryValidator from '../../categoryValidator';
 import InvalidCategoryDTOError from '../../errors/category/InvalidCategoryDTOError';
 import InvalidCategoryMemberReferenceError from '../../errors/category/InvalidCategoryMemberReferenceError';
 import MissingCategoryLabelError from '../../errors/category/MissingCategoryLabelError';
-import NullOrUndefinedCategoryDTOError from '../../errors/category/NullOrUndefinedCategoryDTOError';
+import NullOrUndefinedAggregateDTOError from '../../errors/NullOrUndefinedAggregateDTOError';
 import { Valid } from '../../Valid';
 
 const buildTopLevelError = (innerErrors: InternalError[]): InternalError =>
@@ -40,12 +40,12 @@ const invalidTestCases: InvalidTestCase[] = [
     {
         description: 'when the dto is undefind',
         dto: undefined,
-        expectedError: new NullOrUndefinedCategoryDTOError(),
+        expectedError: new NullOrUndefinedAggregateDTOError(AggregateType.category),
     },
     {
         description: 'when the dto is null',
         dto: null,
-        expectedError: new NullOrUndefinedCategoryDTOError(),
+        expectedError: new NullOrUndefinedAggregateDTOError(AggregateType.category),
     },
     {
         description: 'when the label is an empty string',

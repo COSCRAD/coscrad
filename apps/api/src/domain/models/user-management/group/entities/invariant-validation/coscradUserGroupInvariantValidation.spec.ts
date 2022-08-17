@@ -1,6 +1,6 @@
 import assertTypeErrorsFromInvalidFuzz from '../../../../../../domain/models/__tests__/invariant-validation-helpers/assertTypeErrorsFromInvalidFuzz';
 import { DTO } from '../../../../../../types/DTO';
-import InvalidCoscradUserGroupDTOError from '../../../../../domainModelValidators/errors/InvalidCoscradUserGroupDTOError';
+import InvariantValidationError from '../../../../../domainModelValidators/errors/InvariantValidationError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import { AggregateType } from '../../../../../types/AggregateType';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
@@ -30,7 +30,7 @@ describe('CoscradUserGroup.validateInvariants', () => {
             assertTypeErrorsFromInvalidFuzz(
                 CoscradUserGroup,
                 validGroupDto,
-                InvalidCoscradUserGroupDTOError
+                InvariantValidationError
             );
         });
     });

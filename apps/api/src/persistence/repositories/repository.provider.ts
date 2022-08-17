@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import edgeConnectionFactory from '../../domain/factories/edgeConnectionFactory';
 import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForResource';
 import buildInstanceFactory from '../../domain/factories/utilities/buildInstanceFactory';
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
@@ -33,7 +32,7 @@ export class RepositoryProvider implements IRepositoryProvider {
         return new ArangoRepositoryForAggregate<EdgeConnection>(
             this.databaseProvider,
             ArangoCollectionId.edgeConnectionCollectionID,
-            edgeConnectionFactory,
+            buildInstanceFactory(EdgeConnection),
             mapArangoEdgeDocumentToEdgeConnectionDTO,
             mapEdgeConnectionDTOToArangoEdgeDocument
         );
