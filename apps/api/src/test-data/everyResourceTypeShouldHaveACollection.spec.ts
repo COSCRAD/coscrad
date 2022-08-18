@@ -5,7 +5,6 @@ import formatAggregateType from '../view-models/presentation/formatAggregateType
 
 Object.values(ResourceType).forEach((resourceType) => {
     describe(`${formatAggregateType(resourceType)}`, () => {
-        // Should we make this a separate test?
         it(`should have a corresponding collection name`, () => {
             const collectionName = getArangoCollectionIDFromResourceType(resourceType);
 

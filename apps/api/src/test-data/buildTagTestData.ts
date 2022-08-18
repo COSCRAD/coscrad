@@ -137,6 +137,10 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
                 type: ResourceType.mediaItem,
                 id: '1',
             },
+            {
+                type: ResourceType.song,
+                id: '1',
+            },
         ],
     },
     {

@@ -9,15 +9,13 @@ import { RegisterIndexScopedCommands } from '../../../../../../app/controllers/c
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
-import { Valid } from '../../../../../domainModelValidators/Valid';
+import { isValid, Valid } from '../../../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../../utilities/validation/is-null-or-undefined';
 import { Aggregate } from '../../../../aggregate.entity';
-import AggregateIdAlraedyInUseError from '../../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../../../../shared/common-command-errors/InvalidExternalStateError';
-import idEquals from '../../../../shared/functional/idEquals';
 import UserIdFromAuthProviderAlreadyInUseError from '../../errors/external-state-errors/UserIdFromAuthProviderAlreadyInUseError';
 import UsernameAlreadyInUseError from '../../errors/external-state-errors/UsernameAlreadyInUseError';
 import UserAlreadyHasRoleError from '../../errors/invalid-state-transition-errors/UserAlreadyHasRoleError';
@@ -106,11 +104,15 @@ export class CoscradUser extends Aggregate {
      * TODO [https://www.pivotaltracker.com/story/show/182727483]
      * Add unit test.
      */
-    validateExternalState({ user: users }: InMemorySnapshot): InternalError | Valid {
+    validateExternalState(externalState: InMemorySnapshot): InternalError | Valid {
+        const { user: users } = externalState;
+
         const allErrors: InternalError[] = [];
 
-        if (users.some(idEquals(this.id)))
-            allErrors.push(new AggregateIdAlraedyInUseError(this.getCompositeIdentifier()));
+        const defaultValidationResult = super.validateExternalState(externalState);
+
+        if (!isValid(defaultValidationResult))
+            allErrors.push(...defaultValidationResult.innerErrors);
 
         if (users.some(({ authProviderUserId }) => authProviderUserId === this.authProviderUserId))
             allErrors.push(new UserIdFromAuthProviderAlreadyInUseError(this.authProviderUserId));

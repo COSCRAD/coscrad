@@ -1,16 +1,16 @@
 import { Valid } from '../../domain/domainModelValidators/Valid';
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import idEquals from '../../domain/models/shared/functional/idEquals';
-import { DeluxInMemoryStore } from '../../domain/types/DeluxInMemoryStore';
+import { DeluxeInMemoryStore } from '../../domain/types/DeluxeInMemoryStore';
 import { Snapshot } from '../../domain/types/Snapshot';
 import { InternalError } from '../../lib/errors/InternalError';
 import formatAggregateCompositeIdentifier from '../../view-models/presentation/formatAggregateCompositeIdentifier';
 
 export default (snapshot: Snapshot, connection: EdgeConnection) => {
-    const deluxInMemoryStore = new DeluxInMemoryStore(snapshot);
+    const deluxeInMemoryStore = new DeluxeInMemoryStore(snapshot);
 
     connection.members.forEach((member) => {
-        const correspondingResource = deluxInMemoryStore
+        const correspondingResource = deluxeInMemoryStore
             .fetchAllOfType(member.compositeIdentifier.type)
             .find(idEquals(member.compositeIdentifier.id));
 

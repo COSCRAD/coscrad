@@ -1,4 +1,6 @@
-import { CompositeIdentifier, NonEmptyString } from '@coscrad/data-types';
+import { NonEmptyString } from '@coscrad/data-types';
+import { Type } from 'class-transformer';
+import { IsEnum, ValidateNested } from 'class-validator';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
@@ -7,9 +9,16 @@ import { HasAggregateIdAndLabel } from '../../../interfaces/HasAggregateIdAndLab
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
-import { CategorizableType, isCategorizableType } from '../../../types/CategorizableType';
+import { CategorizableType } from '../../../types/CategorizableType';
 import { Aggregate } from '../../aggregate.entity';
-import { CategorizableCompositeIdentifier } from '../types/ResourceOrNoteCompositeIdentifier';
+
+class CategorizableCompositeIdentifier {
+    @IsEnum(CategorizableType)
+    type: CategorizableType;
+
+    @NonEmptyString()
+    id: AggregateId;
+}
 
 @RegisterIndexScopedCommands([])
 export class Category extends Aggregate implements HasAggregateIdAndLabel {
@@ -20,10 +29,14 @@ export class Category extends Aggregate implements HasAggregateIdAndLabel {
     @NonEmptyString()
     readonly label: string;
 
-    @CompositeIdentifier(CategorizableType, isCategorizableType, { isArray: true })
+    // TODO abstract this into our data-types lib
+    @Type(() => CategorizableCompositeIdentifier)
+    @ValidateNested({ each: true })
     readonly members: CategorizableCompositeIdentifier[];
 
     // These are `Category` IDs for the children categories of this category
+    // TODO Make this a UUID
+    @NonEmptyString({ isArray: true })
     readonly childrenIDs: AggregateId[];
 
     constructor(dto: DTO<Category>) {

@@ -24,6 +24,9 @@ type InMemoryDatabaseSnapshot = {
     };
 };
 
+/**
+ * TODO Leverage `DeluxeInMemroySnapshot` for this logic.
+ */
 export default (snapshot: InMemorySnapshot): InMemoryDatabaseSnapshot => {
     const databaseTags = snapshot.tag.map(toDto).map(mapEntityDTOToDatabaseDTO);
 

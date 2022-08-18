@@ -35,15 +35,18 @@ export function IsCompositeIdentifier<TIdType extends string | number>(
     idTypeGuard: TypeGuard<TIdType>,
     validationOptions?: ValidationOptions
 ) {
-    return ValidateBy({
-        name: isCompositeIdentifier.name,
-        validator: {
-            validate: (value, _): boolean =>
-                isCompositeIdentifier(AllowedTypesEnum, idTypeGuard, value),
-            defaultMessage: buildMessage(
-                (eachPrefix) => eachPrefix + '$property must be a composite identifier',
-                validationOptions
-            ),
+    return ValidateBy(
+        {
+            name: isCompositeIdentifier.name,
+            validator: {
+                validate: (value, _): boolean =>
+                    isCompositeIdentifier(AllowedTypesEnum, idTypeGuard, value),
+                defaultMessage: buildMessage(
+                    (eachPrefix) => eachPrefix + '$property must be a composite identifier',
+                    validationOptions
+                ),
+            },
         },
-    });
+        validationOptions
+    );
 }

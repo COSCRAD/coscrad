@@ -13,7 +13,10 @@ export function CompositeIdentifier(
     return (target: Object, propertyKey: string | symbol) => {
         const options = { ...mixinDefaultTypeDecoratorOptions(userOptions) };
 
-        WithValidation(IsCompositeIdentifier(AllowedTypesEnum, idTypeGuard), options);
+        WithValidation(
+            IsCompositeIdentifier(AllowedTypesEnum, idTypeGuard, { each: options.isArray }),
+            options
+        );
 
         appendMetadata(target, propertyKey, CoscradDataType.CompositeIdentifier, options);
     };

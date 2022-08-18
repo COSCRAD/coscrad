@@ -3,7 +3,7 @@ import buildTestDataInFlatFormat from '../../../test-data/buildTestDataInFlatFor
 import { DTO } from '../../../types/DTO';
 import getValidAggregateInstanceForTest from '../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { AggregateType } from '../../types/AggregateType';
-import { DeluxInMemoryStore } from '../../types/DeluxInMemoryStore';
+import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { PartialSnapshot } from '../../types/PartialSnapshot';
 import AggregateIdAlraedyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
@@ -46,11 +46,11 @@ Object.values(AggregateType).forEach((aggregateType) => {
 
         const testData = buildTestDataInFlatFormat();
 
-        const inMemoryStore = new DeluxInMemoryStore(testData);
+        const inMemoryStore = new DeluxeInMemoryStore(testData);
 
         const externalStateWithSongWithDuplicateId = inMemoryStore
             .append(partialSnapshot)
-            .fetchFullSnapshot();
+            .fetchFullSnapshotInLegacyFormat();
 
         describe('when there is another aggregate of the same type with the same ID', () => {
             it('should return the expected error', () => {

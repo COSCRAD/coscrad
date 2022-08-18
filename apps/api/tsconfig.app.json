@@ -9,6 +9,6 @@
     "lib": ["ES2019"]
   },
   "exclude": ["**/*.spec.ts","**/*.test.ts","**/*.d.ts","**/__tests__/*"],
-  "include": ["**/*.ts", "src/domain/models/shared/functional/deepClone.tInstances"],
+  "include": ["**/*.ts"],
   
 }

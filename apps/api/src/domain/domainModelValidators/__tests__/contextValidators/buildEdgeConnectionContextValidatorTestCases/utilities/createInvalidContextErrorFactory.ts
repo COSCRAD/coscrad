@@ -1,4 +1,3 @@
-import {} from '../../../../';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { EdgeConnectionContextType } from '../../../../../models/context/types/EdgeConnectionContextType';
 import InvalidEdgeConnectionContextError from '../../../../errors/context/InvalidEdgeConnectionContextError';

@@ -11,7 +11,7 @@ import { isValid, Valid } from '../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../types/AggregateId';
 import { AggregateType } from '../types/AggregateType';
-import { DeluxInMemoryStore } from '../types/DeluxInMemoryStore';
+import { DeluxeInMemoryStore } from '../types/DeluxeInMemoryStore';
 import { HasAggregateId } from '../types/HasAggregateId';
 import { InMemorySnapshot, isResourceType } from '../types/ResourceType';
 import BaseDomainModel from './BaseDomainModel';
@@ -99,7 +99,7 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
 
     validateExternalReferences(externalState: InMemorySnapshot): ValidationResult {
         const invalidReferences = this.getExternalReferences().filter(({ type, id }) =>
-            new DeluxInMemoryStore(externalState).fetchAllOfType(type).every(not(idEquals(id)))
+            new DeluxeInMemoryStore(externalState).fetchAllOfType(type).every(not(idEquals(id)))
         );
 
         return invalidReferences.length > 0

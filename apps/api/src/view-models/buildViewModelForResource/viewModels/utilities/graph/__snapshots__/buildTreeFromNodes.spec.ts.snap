@@ -92,6 +92,10 @@ Object {
               "id": "23",
               "type": "book",
             },
+            Object {
+              "id": "1",
+              "type": "song",
+            },
           ],
         },
         Object {

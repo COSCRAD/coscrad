@@ -1,11 +1,9 @@
 import { writeFileSync } from 'fs';
 import { Valid } from '../domain/domainModelValidators/Valid';
-import { EdgeConnectionMemberRole } from '../domain/models/context/edge-connection.entity';
 import getId from '../domain/models/shared/functional/getId';
 import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
-import { DeluxInMemoryStore } from '../domain/types/DeluxInMemoryStore';
-import { ResourceType } from '../domain/types/ResourceType';
+import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import assertTestInstancesOfTypeAreComprehensive from '../test-data/__tests__/assertTestInstancesOfTypeAreComprehensive';
 import formatAggregateCompositeIdentifier from '../view-models/presentation/formatAggregateCompositeIdentifier';
 import formatAggregateType from '../view-models/presentation/formatAggregateType';
@@ -16,9 +14,7 @@ import assertEdgeConnectionContextStateIsValid from './__tests__/assertEdgeConne
 describe('buildTestData', () => {
     const testData = buildTestData();
 
-    const { note: connectionTestData } = testData;
-
-    const deluxInMemoryStore = new DeluxInMemoryStore(testData);
+    const deluxeInMemoryStore = new DeluxeInMemoryStore(testData);
 
     Object.values(AggregateType).forEach((aggregateType) => {
         describe(`The test instances for ${formatAggregateType(aggregateType)}`, () => {
@@ -27,7 +23,7 @@ describe('buildTestData', () => {
             });
 
             if (aggregateType === AggregateType.note) {
-                deluxInMemoryStore
+                deluxeInMemoryStore
                     .fetchAllOfType(AggregateType.note)
                     .forEach((connection) =>
                         assertEdgeConnectionContextStateIsValid(testData, connection)
@@ -41,7 +37,7 @@ describe('buildTestData', () => {
              * `externalState` within a loop.
              */
             it(`should contain no duplicate identifiers`, () => {
-                const duplicateIdentifiers = deluxInMemoryStore
+                const duplicateIdentifiers = deluxeInMemoryStore
                     .fetchAllOfType(aggregateType)
                     .map(getId)
                     .reduce((acc: Map<'duplicates' | 'known', AggregateId[]>, id: AggregateId) => {
@@ -58,8 +54,8 @@ describe('buildTestData', () => {
                 expect(duplicateIdentifiers).toEqual([]);
             });
 
-            deluxInMemoryStore.fetchAllOfType(aggregateType).forEach((aggregate) => {
-                const externalState = deluxInMemoryStore.fetchFullSnapshot();
+            deluxeInMemoryStore.fetchAllOfType(aggregateType).forEach((aggregate) => {
+                const externalState = deluxeInMemoryStore.fetchFullSnapshotInLegacyFormat();
 
                 describe(`${formatAggregateCompositeIdentifier(
                     aggregate.getCompositeIdentifier()
@@ -75,36 +71,6 @@ describe('buildTestData', () => {
                             aggregate.validateExternalReferences(externalState);
 
                         expect(externalReferencesValidationResult).toBe(Valid);
-                    });
-                });
-            });
-        });
-    });
-
-    describe('test data for edge connections', () => {
-        const doesMemberWithResourceTypeAndRoleExist = (
-            targetResourceType: ResourceType,
-            targetRole: EdgeConnectionMemberRole
-        ) =>
-            connectionTestData
-                .flatMap(({ members }) => members)
-                .filter(({ compositeIdentifier: { type } }) => type === targetResourceType)
-                .some(({ role }) => role === targetRole);
-
-        // Move this to assert comprehensive...
-        Object.values(ResourceType).forEach((resourceType) => {
-            /**
-             * Ensure there is a `self`,`to`, and `from` edge connection instance
-             * for each resource type.
-             *
-             * TODO Move this to `comprehensive checks`
-             */
-            describe(`the resource type: ${resourceType}`, () => {
-                Object.values(EdgeConnectionMemberRole).forEach((role) => {
-                    it(`should have one instance that is associated with a ${role} connection`, () => {
-                        const result = doesMemberWithResourceTypeAndRoleExist(resourceType, role);
-
-                        expect(result).toBe(true);
                     });
                 });
             });

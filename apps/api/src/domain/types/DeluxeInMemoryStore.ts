@@ -17,8 +17,11 @@ type AggregatesMap = Map<AggregateType, Aggregate[]>;
 const doesSnapshotHaveResourcesKey = (snapshot: unknown): snapshot is SnapshotWithResources =>
     !isNullOrUndefined((snapshot as SnapshotWithResources).resources);
 
-// TODO Strangle out the old type and then rename this `InMemoryStore`
-export class DeluxInMemoryStore {
+/**
+ * TODO [https://www.pivotaltracker.com/story/show/183023347]
+ * Strangle out the old type and then rename this `InMemoryStore`
+ */
+export class DeluxeInMemoryStore {
     private readonly inMemoryMapOfAggregates: AggregatesMap;
 
     constructor(partialSnapshot: PartialSnapshot | DeepPartial<InMemorySnapshot> = {}) {
@@ -47,7 +50,7 @@ export class DeluxInMemoryStore {
         ) as AggregateTypeToAggregateInstance[TAggregateType][];
     }
 
-    append(partialSnapshot: PartialSnapshot): DeluxInMemoryStore {
+    append(partialSnapshot: PartialSnapshot): DeluxeInMemoryStore {
         Object.entries(partialSnapshot).forEach(
             ([key, additionalInstances]: [AggregateType, Aggregate[]]) => {
                 const existingInstances = this.inMemoryMapOfAggregates.get(key);
@@ -64,7 +67,7 @@ export class DeluxInMemoryStore {
         return this;
     }
 
-    fetchFullSnapshot(): Snapshot {
+    fetchFullSnapshotInLegacyFormat(): Snapshot {
         const result = Object.values(AggregateType).reduce(
             (acc: DeepPartial<Snapshot>, key: AggregateType) => {
                 const value = this.inMemoryMapOfAggregates.get(key);
@@ -95,7 +98,7 @@ export class DeluxInMemoryStore {
     filter<TAggregateType extends AggregateType>(
         aggregateType: TAggregateType,
         callback: (instance: AggregateTypeToAggregateInstance[TAggregateType]) => boolean
-    ): DeluxInMemoryStore {
+    ): DeluxeInMemoryStore {
         this.inMemoryMapOfAggregates.set(
             aggregateType,
             this.inMemoryMapOfAggregates.get(aggregateType).filter(callback)

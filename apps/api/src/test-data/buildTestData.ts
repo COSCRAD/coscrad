@@ -15,6 +15,8 @@ import buildUserTestData from './buildUserTestData';
 import buildVocabularyListTestData from './buildVocabularyListTestData';
 
 /**
+ * @deprecated Use `buildTestDataInFlatFormat`
+ *
  * **note** When adding new test data \ modifying existing test data, be sure to
  * run `validateTestData.spec.ts` to ensure your test data satisfies all domain
  * invariants.

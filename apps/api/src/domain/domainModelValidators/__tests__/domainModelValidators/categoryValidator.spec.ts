@@ -1,17 +1,13 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
+import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import { DTO } from '../../../../types/DTO';
 import { Category } from '../../../models/categories/entities/category.entity';
 import { AggregateType } from '../../../types/AggregateType';
 import { CategorizableType } from '../../../types/CategorizableType';
-import categoryValidator from '../../categoryValidator';
-import InvalidCategoryDTOError from '../../errors/category/InvalidCategoryDTOError';
-import InvalidCategoryMemberReferenceError from '../../errors/category/InvalidCategoryMemberReferenceError';
-import MissingCategoryLabelError from '../../errors/category/MissingCategoryLabelError';
-import NullOrUndefinedAggregateDTOError from '../../errors/NullOrUndefinedAggregateDTOError';
 import { Valid } from '../../Valid';
+import buildInvariantValidationErrorFactoryFunction from './buildDomainModelValidatorTestCases/utils/buildInvariantValidationErrorFactoryFunction';
 
-const buildTopLevelError = (innerErrors: InternalError[]): InternalError =>
-    new InvalidCategoryDTOError(innerErrors);
+const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(AggregateType.category);
 
 type InvalidTestCase = {
     description: string;
@@ -37,23 +33,21 @@ const validDTO: DTO<Category> = {
 };
 
 const invalidTestCases: InvalidTestCase[] = [
-    {
-        description: 'when the dto is undefind',
-        dto: undefined,
-        expectedError: new NullOrUndefinedAggregateDTOError(AggregateType.category),
-    },
-    {
-        description: 'when the dto is null',
-        dto: null,
-        expectedError: new NullOrUndefinedAggregateDTOError(AggregateType.category),
-    },
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/183014320]
+     * Test that the factory handles the following cases:
+     * - the dto is null
+     * - the dto is undefined
+     */
     {
         description: 'when the label is an empty string',
         dto: {
             ...validDTO,
             label: '',
         },
-        expectedError: buildTopLevelError([new MissingCategoryLabelError(validDTO.id)]),
+        expectedError: buildTopLevelError(validDTO.id, [
+            // TODO Check inner error
+        ]),
     },
     {
         description: 'when one the category members is of an invalid type',
@@ -61,7 +55,9 @@ const invalidTestCases: InvalidTestCase[] = [
             ...validDTO,
             members: ['foo'],
         },
-        expectedError: buildTopLevelError([new InvalidCategoryMemberReferenceError(['foo'])]),
+        expectedError: buildTopLevelError(validDTO.id, [
+            // TODO check inner Error
+        ]),
     },
 ];
 
@@ -70,7 +66,9 @@ const invalidTestCases: InvalidTestCase[] = [
 describe('the category invariants validator', () => {
     describe('when the input is valid', () => {
         it('should return Valid', () => {
-            const result = categoryValidator(validDTO);
+            const instance = new Category(validDTO);
+
+            const result = instance.validateInvariants();
 
             expect(result).toBe(Valid);
         });
@@ -79,13 +77,11 @@ describe('the category invariants validator', () => {
     invalidTestCases.forEach(({ description, dto, expectedError }) =>
         describe(description, () => {
             it('should return the expected error', () => {
-                const result = categoryValidator(dto);
+                const instance = new Category(dto as DTO<Category>);
 
-                expect(result).toEqual(expectedError);
+                const result = instance.validateInvariants();
 
-                const innerErrors = (result as InternalError).innerErrors;
-
-                expect(innerErrors).toEqual(expectedError.innerErrors);
+                assertErrorAsExpected(result, expectedError);
             });
         })
     );

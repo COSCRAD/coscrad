@@ -815,7 +815,12 @@ Object {
         "lengthMilliseconds": 3500,
         "lyrics": "Mary had a little lamb, little lamb.",
         "startMilliseconds": 0,
-        "tags": Array [],
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
         "title": "Song title in language",
         "titleEnglish": "Mary had a little lamb",
       },
@@ -891,7 +896,12 @@ Object {
         "lengthMilliseconds": 3500,
         "lyrics": "Mary had a little lamb, little lamb.",
         "startMilliseconds": 0,
-        "tags": Array [],
+        "tags": Array [
+          Object {
+            "id": "5",
+            "label": "legends",
+          },
+        ],
         "title": "Song title in language",
         "titleEnglish": "Mary had a little lamb",
       },

@@ -5,7 +5,7 @@ import { Valid } from '../../../domainModelValidators/Valid';
 import { HasAggregateIdAndLabel } from '../../../interfaces/HasAggregateIdAndLabel';
 import { AggregateType } from '../../../types/AggregateType';
 import { CategorizableType } from '../../../types/CategorizableType';
-import { DeluxInMemoryStore } from '../../../types/DeluxInMemoryStore';
+import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../types/ResourceType';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import { Term } from '../../term/entities/term.entity';
@@ -134,7 +134,7 @@ describe('Category external state validation', () => {
             describe(description, () => {
                 it('should return Valid', () => {
                     const result = category.validateExternalState(
-                        new DeluxInMemoryStore(externalState).fetchFullSnapshot()
+                        new DeluxeInMemoryStore(externalState).fetchFullSnapshotInLegacyFormat()
                     );
 
                     expect(result).toBe(Valid);
@@ -148,7 +148,7 @@ describe('Category external state validation', () => {
             describe(description, () => {
                 it('should return the expected error', () => {
                     const result = category.validateExternalState(
-                        new DeluxInMemoryStore(externalState).fetchFullSnapshot()
+                        new DeluxeInMemoryStore(externalState).fetchFullSnapshotInLegacyFormat()
                     );
 
                     expect(result).toEqual(expectedError);

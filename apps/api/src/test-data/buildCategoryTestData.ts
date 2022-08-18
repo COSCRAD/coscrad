@@ -33,6 +33,10 @@ export default (): Category[] =>
                     type: CategorizableType.book,
                     id: '23',
                 },
+                {
+                    type: CategorizableType.song,
+                    id: '1',
+                },
             ],
             childrenIDs: ['4', '5', '11'],
         },
@@ -105,6 +109,10 @@ export default (): Category[] =>
                 },
                 {
                     type: CategorizableType.bibliographicReference,
+                    id: '1',
+                },
+                {
+                    type: CategorizableType.mediaItem,
                     id: '1',
                 },
             ],
