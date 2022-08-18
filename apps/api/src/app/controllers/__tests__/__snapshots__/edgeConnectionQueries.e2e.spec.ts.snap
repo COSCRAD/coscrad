@@ -1,5 +1,68 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: bibliographicReference should return the expected result 1`] = `
+Array [
+  Object {
+    "id": "3002",
+    "note": "here is the digital version of the book!",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "identity",
+        },
+        "role": "from",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "type": "identity",
+        },
+        "role": "to",
+      },
+    ],
+    "tags": Array [],
+  },
+  Object {
+    "id": "3102",
+    "note": "this library book has the lyrics from the song, but we do not have access to the book",
+    "relatedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "to",
+      },
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "song",
+        },
+        "context": Object {
+          "timeRange": Object {
+            "inPoint": 500,
+            "outPoint": 778.4,
+          },
+          "type": "timeRange",
+        },
+        "role": "from",
+      },
+    ],
+    "tags": Array [],
+  },
+]
+`;
+
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: book should return the expected result 1`] = `
 Array [
   Object {
@@ -1193,23 +1256,6 @@ Array [
   },
   Object {
     "id": "17",
-    "note": "there is a placename for this point at the base of the mountain",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "300",
-          "type": "spatialFeature",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "tags": Array [],
-  },
-  Object {
-    "id": "18",
     "note": "this clip talks about songs",
     "relatedResources": Array [
       Object {
@@ -1226,7 +1272,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "19",
+    "id": "18",
     "note": "this is the stem of the flower",
     "relatedResources": Array [
       Object {
@@ -1243,7 +1289,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "20",
+    "id": "19",
     "note": "this is the base of the flower",
     "relatedResources": Array [
       Object {
@@ -1260,7 +1306,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "21",
+    "id": "20",
     "note": "this section is the best part of an illustrated book about birds",
     "relatedResources": Array [
       Object {
@@ -1277,24 +1323,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "22",
-    "note": "found this in the archives",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "tags": Array [],
-  },
-  Object {
-    "id": "23",
+    "id": "21",
     "note": "this is a song",
     "relatedResources": Array [
       Object {
@@ -1311,7 +1340,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "24",
+    "id": "22",
     "note": "this is an awesome show",
     "relatedResources": Array [
       Object {
@@ -1328,30 +1357,13 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "25",
+    "id": "23",
     "note": "important clip from the show",
     "relatedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
           "type": "mediaItem",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "tags": Array [],
-  },
-  Object {
-    "id": "26",
-    "note": "this book is hard to track down",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
         },
         "context": Object {
           "type": "general",
@@ -1829,40 +1841,6 @@ Array [
     ],
     "tags": Array [],
   },
-  Object {
-    "id": "22",
-    "note": "found this in the archives",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "tags": Array [],
-  },
-  Object {
-    "id": "26",
-    "note": "this book is hard to track down",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "tags": Array [],
-  },
 ]
 `;
 
@@ -1926,7 +1904,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "21",
+    "id": "20",
     "note": "this section is the best part of an illustrated book about birds",
     "relatedResources": Array [
       Object {
@@ -1996,7 +1974,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "24",
+    "id": "22",
     "note": "this is an awesome show",
     "relatedResources": Array [
       Object {
@@ -2013,7 +1991,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "25",
+    "id": "23",
     "note": "important clip from the show",
     "relatedResources": Array [
       Object {
@@ -2098,7 +2076,7 @@ Array [
     ],
   },
   Object {
-    "id": "19",
+    "id": "18",
     "note": "this is the stem of the flower",
     "relatedResources": Array [
       Object {
@@ -2115,7 +2093,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "20",
+    "id": "19",
     "note": "this is the base of the flower",
     "relatedResources": Array [
       Object {
@@ -2158,7 +2136,7 @@ Array [
     "tags": Array [],
   },
   Object {
-    "id": "23",
+    "id": "21",
     "note": "this is a song",
     "relatedResources": Array [
       Object {
@@ -2181,23 +2159,6 @@ exports[`When querying for edge connections GET /connections/selfNotes when the 
 Array [
   Object {
     "id": "4",
-    "note": "there is a placename for this point at the base of the mountain",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "300",
-          "type": "spatialFeature",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "tags": Array [],
-  },
-  Object {
-    "id": "17",
     "note": "there is a placename for this point at the base of the mountain",
     "relatedResources": Array [
       Object {
@@ -2294,7 +2255,7 @@ Array [
     ],
   },
   Object {
-    "id": "18",
+    "id": "17",
     "note": "this clip talks about songs",
     "relatedResources": Array [
       Object {

@@ -87,6 +87,7 @@ export abstract class Resource extends Aggregate implements HasAggregateId {
             return new DisallowedContextTypeForResourceError(type, this.getCompositeIdentifier());
         }
 
+        // There is no state to validate here.
         if (type === EdgeConnectionContextType.identity) return Valid;
 
         const validator = this[`validate${capitalizeFirstLetter(type)}Context`];

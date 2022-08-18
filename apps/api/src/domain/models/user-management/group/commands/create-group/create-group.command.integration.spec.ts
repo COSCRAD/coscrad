@@ -12,7 +12,7 @@ import { AggregateId } from '../../../../../types/AggregateId';
 import { AggregateType } from '../../../../../types/AggregateType';
 import buildEmptyInMemorySnapshot from '../../../../../utilities/buildEmptyInMemorySnapshot';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
-import AggregateIdAlraedyInUseError from '../../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
+import AggregateIdAlreadyInUseError from '../../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../../__tests__/command-helpers/assert-create-command-success';
@@ -162,7 +162,7 @@ describe('CreateGroup', () => {
 
                 assertExternalStateError(
                     executionResult,
-                    new AggregateIdAlraedyInUseError({ id: newId, type: AggregateType.userGroup })
+                    new AggregateIdAlreadyInUseError({ id: newId, type: AggregateType.userGroup })
                 );
             });
         });

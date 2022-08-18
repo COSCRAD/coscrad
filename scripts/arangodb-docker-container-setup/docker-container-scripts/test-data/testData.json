@@ -1304,27 +1304,10 @@
                 "note": "This is the first letter of the list name"
             },
             {
-                "_to": "spatial_features/300",
-                "_from": "spatial_features/300",
-                "type": "note",
-                "_key": "17",
-                "eventHistory": [],
-                "connectionType": "self",
-                "members": [
-                    {
-                        "role": "self",
-                        "context": {
-                            "type": "general"
-                        }
-                    }
-                ],
-                "note": "there is a placename for this point at the base of the mountain"
-            },
-            {
                 "_to": "transcribed_audio/110",
                 "_from": "transcribed_audio/110",
                 "type": "note",
-                "_key": "18",
+                "_key": "17",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1341,7 +1324,7 @@
                 "_to": "photographs/2",
                 "_from": "photographs/2",
                 "type": "note",
-                "_key": "19",
+                "_key": "18",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1358,7 +1341,7 @@
                 "_to": "photographs/2",
                 "_from": "photographs/2",
                 "type": "note",
-                "_key": "20",
+                "_key": "19",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1375,7 +1358,7 @@
                 "_to": "books/24",
                 "_from": "books/24",
                 "type": "note",
-                "_key": "21",
+                "_key": "20",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1389,27 +1372,10 @@
                 "note": "this section is the best part of an illustrated book about birds"
             },
             {
-                "_to": "bibliographic_references/1",
-                "_from": "bibliographic_references/1",
-                "type": "note",
-                "_key": "22",
-                "eventHistory": [],
-                "connectionType": "self",
-                "members": [
-                    {
-                        "role": "self",
-                        "context": {
-                            "type": "general"
-                        }
-                    }
-                ],
-                "note": "found this in the archives"
-            },
-            {
                 "_to": "songs/1",
                 "_from": "songs/1",
                 "type": "note",
-                "_key": "23",
+                "_key": "21",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1426,7 +1392,7 @@
                 "_to": "media_items/1",
                 "_from": "media_items/1",
                 "type": "note",
-                "_key": "24",
+                "_key": "22",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1443,7 +1409,7 @@
                 "_to": "media_items/1",
                 "_from": "media_items/1",
                 "type": "note",
-                "_key": "25",
+                "_key": "23",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1455,23 +1421,6 @@
                     }
                 ],
                 "note": "important clip from the show"
-            },
-            {
-                "_to": "bibliographic_references/1",
-                "_from": "bibliographic_references/1",
-                "type": "note",
-                "_key": "26",
-                "eventHistory": [],
-                "connectionType": "self",
-                "members": [
-                    {
-                        "role": "self",
-                        "context": {
-                            "type": "general"
-                        }
-                    }
-                ],
-                "note": "this book is hard to track down"
             },
             {
                 "_to": "terms/2",

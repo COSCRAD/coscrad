@@ -242,8 +242,9 @@ const selfEdgeConnectionInstancesWithSpecificContext = edgeConnectionDTOs.map((p
     connectionType: EdgeConnectionType.self,
 }));
 
-const selfEdgeConnectionsWithGeneralContext = selfEdgeConnectionInstancesWithSpecificContext.map(
-    (edgeConnection) => ({
+const selfEdgeConnectionsWithGeneralContext = selfEdgeConnectionInstancesWithSpecificContext
+    .filter(({ members }) => !(members[0].context instanceof GeneralContext))
+    .map((edgeConnection) => ({
         ...edgeConnection,
         members: [
             {
@@ -251,8 +252,7 @@ const selfEdgeConnectionsWithGeneralContext = selfEdgeConnectionInstancesWithSpe
                 context: new GeneralContext().toDTO(),
             },
         ],
-    })
-);
+    }));
 
 export default (uniqueIdOffset: number): EdgeConnection[] =>
     [...selfEdgeConnectionInstancesWithSpecificContext, ...selfEdgeConnectionsWithGeneralContext]

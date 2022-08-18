@@ -123,14 +123,14 @@ describe('EdgeConnection.validateExternalState', () => {
                     })
                     .validateExternalState(validExternalStateForDualConnection);
 
-                const epxectedError = new InvalidExternalStateError([
+                const expectedError = new InvalidExternalStateError([
                     new PageRangeContextHasSuperfluousPageIdentifiersError(
                         invalidPageIdentifiers,
                         dummyBook.getCompositeIdentifier()
                     ),
                 ]);
 
-                assertErrorAsExpected(result, epxectedError);
+                assertErrorAsExpected(result, expectedError);
             });
         });
     });

@@ -47,7 +47,6 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3002',
-        // Do we want to allow edge connections to a bibliographic Reference?
         note: 'here is the digital version of the book!',
         members: [
             {

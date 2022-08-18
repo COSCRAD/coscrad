@@ -1,3 +1,4 @@
+import getTrivialContextTypes from '../../../../domain/models/context/types/getTrivialContextTypes';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { EdgeConnectionContextType } from '../../../models/context/types/EdgeConnectionContextType';
 import { Valid } from '../../Valid';
@@ -5,8 +6,7 @@ import buildEdgeConnectionContextValidatorTestCases from './buildEdgeConnectionC
 
 const testCases = buildEdgeConnectionContextValidatorTestCases();
 
-// There is nothing to validate for these contezt types
-const trivialContextTypes = [EdgeConnectionContextType.general, EdgeConnectionContextType.identity];
+const trivialContextTypes = getTrivialContextTypes();
 
 describe('Edge Connection Validators', () => {
     Object.values(EdgeConnectionContextType)

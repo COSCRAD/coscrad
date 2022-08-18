@@ -13,10 +13,10 @@ import { ResourceCompositeIdentifier } from '../../types/ResourceCompositeIdenti
 import { InMemorySnapshot } from '../../types/ResourceType';
 import { Aggregate } from '../aggregate.entity';
 import { Resource } from '../resource.entity';
-import AggregateIdAlraedyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
+import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
 import idEquals from '../shared/functional/idEquals';
-import { ContextModelUnion } from './types/ContextModelUnion';
+import { EdgeConnectionContext } from './context.entity';
 
 export enum EdgeConnectionType {
     self = 'self',
@@ -33,7 +33,9 @@ export enum EdgeConnectionMemberRole {
 }
 
 // Consider using a class for this
-export type EdgeConnectionMember<TContextModel extends ContextModelUnion = ContextModelUnion> = {
+export type EdgeConnectionMember<
+    TContextModel extends EdgeConnectionContext = EdgeConnectionContext
+> = {
     compositeIdentifier: ResourceCompositeIdentifier;
     context: TContextModel;
     role: EdgeConnectionMemberRole;
@@ -84,7 +86,7 @@ export class EdgeConnection extends Aggregate {
         const allErrors: InternalError[] = [];
 
         if (connections.some(idEquals(this.id)))
-            allErrors.push(new AggregateIdAlraedyInUseError(this.getCompositeIdentifier()));
+            allErrors.push(new AggregateIdAlreadyInUseError(this.getCompositeIdentifier()));
 
         allErrors.push(...this.validateMembersState(externalState));
 

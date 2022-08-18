@@ -16,7 +16,7 @@ import { HasAggregateId } from '../types/HasAggregateId';
 import { InMemorySnapshot, isResourceType } from '../types/ResourceType';
 import BaseDomainModel from './BaseDomainModel';
 import InvalidExternalReferenceByAggregateError from './categories/errors/InvalidExternalReferenceInCategoryError';
-import AggregateIdAlraedyInUseError from './shared/common-command-errors/AggregateIdAlreadyInUseError';
+import AggregateIdAlreadyInUseError from './shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from './shared/common-command-errors/InvalidExternalStateError';
 import { BaseEvent } from './shared/events/base-event.entity';
 import not from './shared/functional/common/not';
@@ -123,7 +123,7 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
         }
 
         if (otherAggregatesOfSameType.map(getId).includes(this.id))
-            return [new AggregateIdAlraedyInUseError(this.getCompositeIdentifier())];
+            return [new AggregateIdAlreadyInUseError(this.getCompositeIdentifier())];
 
         return [];
     }

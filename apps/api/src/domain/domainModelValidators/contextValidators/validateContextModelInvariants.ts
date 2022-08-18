@@ -1,5 +1,5 @@
 import { InternalError } from '../../../lib/errors/InternalError';
-import { ContextModelUnion } from '../../models/context/types/ContextModelUnion';
+import { EdgeConnectionContext } from '../../models/context/context.entity';
 import { isEdgeConnectionContextType } from '../../models/context/types/EdgeConnectionContextType';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
 import InvalidEdgeConnectionContextModelError from '../errors/context/InvalidEdgeConnectionContextModelError';
@@ -15,8 +15,11 @@ import getContextTypeWithContextModelInvariantValidators from './getContextTypeW
  * were looking for, whereas here, we register the validators with the type of
  * the model (here `EdgeConnectionContextType`) externally in an array of tuples
  * and pattern match the types only at the top level.
+ *
+ * Alternatively, we could use polymorphism and have a `validateInvariants`
+ * method on the `EdgeConnectionContext` classes.
  */
-export default (contextModel: ContextModelUnion): Valid | InternalError => {
+export default (contextModel: EdgeConnectionContext): Valid | InternalError => {
     if (isNullOrUndefined(contextModel)) return new NullOrUndefinedEdgeConnectionContextDTOError();
 
     const { type } = contextModel;

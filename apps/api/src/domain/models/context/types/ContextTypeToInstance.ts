@@ -6,7 +6,7 @@ import { TextFieldContext } from '../text-field-context/text-field-context.entit
 import { TimeRangeContext } from '../time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from './EdgeConnectionContextType';
 
-// TODO type safaety!!! now!!!
+// TODO type safety
 export type ContextTypeToInstance = {
     [EdgeConnectionContextType.freeMultiline]: PageRangeContext;
     [EdgeConnectionContextType.pageRange]: PageRangeContext;

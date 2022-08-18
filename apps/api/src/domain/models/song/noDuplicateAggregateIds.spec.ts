@@ -5,7 +5,7 @@ import getValidAggregateInstanceForTest from '../../domainModelValidators/__test
 import { AggregateType } from '../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { PartialSnapshot } from '../../types/PartialSnapshot';
-import AggregateIdAlraedyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
+import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
 import { CoscradUserGroup } from '../user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../user-management/user/entities/user/coscrad-user.entity';
@@ -59,7 +59,7 @@ Object.values(AggregateType).forEach((aggregateType) => {
                 );
 
                 const expectedError = new InvalidExternalStateError([
-                    new AggregateIdAlraedyInUseError(dummyAggregate.getCompositeIdentifier()),
+                    new AggregateIdAlreadyInUseError(dummyAggregate.getCompositeIdentifier()),
                 ]);
 
                 assertErrorAsExpected(result, expectedError);

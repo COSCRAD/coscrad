@@ -46,7 +46,6 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3102',
-        // Do we want to allow edge connections to a bibliographic Reference?
         note: 'this library book has the lyrics from the song, but we do not have access to the book',
         members: [
             {

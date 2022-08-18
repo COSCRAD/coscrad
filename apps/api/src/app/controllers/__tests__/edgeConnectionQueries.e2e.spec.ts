@@ -193,55 +193,49 @@ describe('When querying for edge connections', () => {
         });
 
         describe(`when the composite id for the resource is valid`, () => {
-            Object.values(ResourceType)
-                // TODO Remove this filter
-                .filter((resourceType) => resourceType !== ResourceType.bibliographicReference)
-                .forEach((resourceType) =>
-                    describe(`for a resource of type: ${resourceType}`, () => {
-                        it(`should return the expected result`, async () => {
-                            await testRepositoryProvider.addFullSnapshot(fullSnapshot);
+            Object.values(ResourceType).forEach((resourceType) =>
+                describe(`for a resource of type: ${resourceType}`, () => {
+                    it(`should return the expected result`, async () => {
+                        await testRepositoryProvider.addFullSnapshot(fullSnapshot);
 
-                            const dualConnections = connections.filter(
-                                ({ connectionType: type }) => type === EdgeConnectionType.dual
+                        const dualConnections = connections.filter(
+                            ({ connectionType: type }) => type === EdgeConnectionType.dual
+                        );
+
+                        const compositeIdentifierToQuery = dualConnections
+                            .flatMap(({ members }) => members)
+                            .map(({ compositeIdentifier }) => compositeIdentifier)
+                            .find(({ type }) => type === resourceType);
+
+                        if (!isAggregateCompositeIdentifier(compositeIdentifierToQuery)) {
+                            throw new InternalError(
+                                `Failed to find a dual connection for resource of type: ${resourceType}`
                             );
+                        }
 
-                            const compositeIdentifierToQuery = dualConnections
-                                .flatMap(({ members }) => members)
-                                .map(({ compositeIdentifier }) => compositeIdentifier)
-                                .find(({ type }) => type === resourceType);
+                        const expectedNumberOfResults = dualConnections.filter(({ members }) =>
+                            members.some(({ compositeIdentifier }) =>
+                                isDeepStrictEqual(compositeIdentifier, compositeIdentifierToQuery)
+                            )
+                        ).length;
 
-                            if (!isAggregateCompositeIdentifier(compositeIdentifierToQuery)) {
-                                throw new InternalError(
-                                    `Failed to find a dual connection for resource of type: ${resourceType}`
-                                );
-                            }
+                        const { id, type } = compositeIdentifierToQuery;
 
-                            const expectedNumberOfResults = dualConnections.filter(({ members }) =>
-                                members.some(({ compositeIdentifier }) =>
-                                    isDeepStrictEqual(
-                                        compositeIdentifier,
-                                        compositeIdentifierToQuery
-                                    )
-                                )
-                            ).length;
+                        const result = await request(app.getHttpServer())
+                            .get('/connections/forResource')
+                            .query({
+                                id,
+                                type,
+                            });
 
-                            const { id, type } = compositeIdentifierToQuery;
+                        expect(result.status).toBe(httpStatusCodes.ok);
 
-                            const result = await request(app.getHttpServer())
-                                .get('/connections/forResource')
-                                .query({
-                                    id,
-                                    type,
-                                });
+                        expect(result.body?.length).toBe(expectedNumberOfResults);
 
-                            expect(result.status).toBe(httpStatusCodes.ok);
-
-                            expect(result.body?.length).toBe(expectedNumberOfResults);
-
-                            expect(result.body).toMatchSnapshot();
-                        });
-                    })
-                );
+                        expect(result.body).toMatchSnapshot();
+                    });
+                })
+            );
         });
     });
 });

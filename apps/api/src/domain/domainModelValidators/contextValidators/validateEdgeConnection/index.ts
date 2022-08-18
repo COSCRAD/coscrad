@@ -124,7 +124,9 @@ export default (input: unknown): InternalError[] => {
     /**
      * Validate requirements for an identity connection, if that is what we have.
      *
-     * We may want to refactor this. We should branch based on the explicit
+     * TODO[https://www.pivotaltracker.com/story/show/183029681] refactor this.
+     *
+     * We should branch based on the explicit
      * self \ dual connection. We should confirm that
      * - a self connection's member does not use the identity context
      * - a dual connection with one member using the identity context has both

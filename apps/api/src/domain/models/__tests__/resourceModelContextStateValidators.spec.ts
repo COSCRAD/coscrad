@@ -1,3 +1,4 @@
+import getTrivialContextTypes from '../../../domain/models/context/types/getTrivialContextTypes';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { Valid } from '../../domainModelValidators/Valid';
 import { ResourceType } from '../../types/ResourceType';
@@ -84,15 +85,9 @@ describe(`resource model context state validators`, () => {
             expect(missingValidCases).toEqual([]);
         });
 
-        // TODO We need a single source of truth for this list
-        const trivialContextTypes = [
-            EdgeConnectionContextType.general,
-            EdgeConnectionContextType.identity,
-        ];
-
         it('should have at least one invalid test case for each resource type \\ context type combo', () => {
             const missingValidCases = allResourceTypeContextTypeCombos
-                .filter(([_, contextType]) => !trivialContextTypes.includes(contextType))
+                .filter(([_, contextType]) => !getTrivialContextTypes().includes(contextType))
                 .reduce(
                     (
                         acc: [ResourceType, EdgeConnectionContextType][],
