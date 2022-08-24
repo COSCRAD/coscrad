@@ -3,7 +3,8 @@ import {
     AggregateTypeToAggregateInstance,
 } from '../../../../domain/types/AggregateType';
 import { DTO } from '../../../../types/DTO';
-import { buildBookAggregateFactoryTestCases } from './book.aggregate-factory.test-cases';
+import { buildBookAggregateFactoryTestCaseSet } from './book.aggregate-factory.test-cases';
+import { buildTermAggregateFactoryTestCaseSet } from './term.aggregate-factory.test-cases';
 
 type AggregateFactoryValidTestCase<TAggregateType extends AggregateType> = {
     dto: DTO<AggregateTypeToAggregateInstance[TAggregateType]>;
@@ -22,4 +23,7 @@ export type FactoryTestSuiteForAggregate<TAggregateType extends AggregateType = 
     invalidCases: AggregateFactoryInalidTestCase[];
 };
 
-export default (): FactoryTestSuiteForAggregate[] => [buildBookAggregateFactoryTestCases()];
+export default (): FactoryTestSuiteForAggregate[] => [
+    buildBookAggregateFactoryTestCaseSet(),
+    buildTermAggregateFactoryTestCaseSet(),
+];

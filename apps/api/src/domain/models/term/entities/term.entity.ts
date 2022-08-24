@@ -1,8 +1,5 @@
-import {
-    IsOptional,
-    isStringWithNonzeroLength,
-    IsStringWithNonzeroLength,
-} from '@coscrad/validation';
+import { NonEmptyString } from '@coscrad/data-types';
+import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
@@ -17,29 +14,25 @@ import { TextFieldContext } from '../../context/text-field-context/text-field-co
 import { Resource } from '../../resource.entity';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 
+const isOptional = true;
+
 @RegisterIndexScopedCommands([])
 export class Term extends Resource {
     readonly type: ResourceType = ResourceType.term;
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly term?: string;
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly termEnglish?: string;
 
-    @IsStringWithNonzeroLength()
+    @NonEmptyString()
     readonly contributorId: AggregateId;
 
-    // TODO Create separate media item model
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly audioFilename?: string;
 
-    // We may want to use tags for this
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly sourceProject?: string;
 
     // The constructor should only be called after validating the input DTO

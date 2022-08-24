@@ -29,3 +29,22 @@ Book {
   "type": "book",
 }
 `;
+
+exports[`Aggregate factories when attempting to build an instance of type: term from a DTO when the DTO is valid when the dto is valid should succeed 1`] = `
+Term {
+  "audioFilename": undefined,
+  "contributorId": "John Doe",
+  "eventHistory": Array [],
+  "getCompositeIdentifier": [Function],
+  "id": "1",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "sourceProject": undefined,
+  "term": "Chil-term-1",
+  "termEnglish": "Engl-term-1",
+  "type": "term",
+}
+`;

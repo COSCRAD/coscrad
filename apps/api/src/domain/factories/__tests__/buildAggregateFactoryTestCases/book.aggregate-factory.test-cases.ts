@@ -16,7 +16,7 @@ const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(resource
 
 const fuzzTestCases = generateFuzzAggregateFactoryTestCases(AggregateType.book, validBookDTO);
 
-export const buildBookAggregateFactoryTestCases = (): FactoryTestSuiteForAggregate<
+export const buildBookAggregateFactoryTestCaseSet = (): FactoryTestSuiteForAggregate<
     typeof AggregateType.book
 > => ({
     aggregateType: AggregateType.book,
