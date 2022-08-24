@@ -1,4 +1,4 @@
-import { NonEmptyString } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
@@ -10,7 +10,9 @@ import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-unde
 import { PageRangeContext } from '../../context/page-range-context/page-range.context.entity';
 import { Resource } from '../../resource.entity';
 import BookPage from './BookPage';
+import PublishedBookHasNoPagesError from './errors/PublishedBookHasNoPagesError';
 
+const isOptional = true;
 @RegisterIndexScopedCommands([])
 export class Book extends Resource {
     readonly type = ResourceType.book;
@@ -18,14 +20,18 @@ export class Book extends Resource {
     @NonEmptyString()
     readonly title: string;
 
+    @NonEmptyString({ isOptional })
     readonly subtitle?: string;
 
+    @NonEmptyString()
     // TODO Use `contributorID` instead
     readonly author: string;
 
+    @NonEmptyString({ isOptional })
     // TODO Determine a publication model
     readonly publicationDate?: string;
 
+    @NestedDataType(BookPage)
     pages: BookPage[];
 
     constructor(dto: DTO<Book>) {
@@ -54,8 +60,7 @@ export class Book extends Resource {
 
         const { published, pages } = this;
 
-        if (published && pages.length === 0)
-            allErrors.push(new InternalError('You cannot publish a book that has no pages'));
+        if (published && pages?.length === 0) allErrors.push(new PublishedBookHasNoPagesError()); // PublishedBookHasNoPagesError
 
         return allErrors;
     }

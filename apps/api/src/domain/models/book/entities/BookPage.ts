@@ -1,12 +1,16 @@
+import { NonEmptyString } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 import { PageIdentifier } from './types/PageIdentifier';
 
 export default class BookPage extends BaseDomainModel {
+    @NonEmptyString()
     readonly identifier: PageIdentifier;
 
+    @NonEmptyString()
     readonly text: string;
 
+    @NonEmptyString()
     readonly translation: string;
 
     constructor(dto: DTO<BookPage>) {

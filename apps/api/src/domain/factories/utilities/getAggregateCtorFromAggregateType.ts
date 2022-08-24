@@ -24,7 +24,7 @@ type SpecialCaseType = typeof specialCases[number];
 
 type AggregateTypesWithADistinctCtor = Exclude<AggregateType, SpecialCaseType>;
 
-const aggregateTypeToAggregateCtor: {
+export const aggregateTypeToAggregateCtor: {
     [K in AggregateTypesWithADistinctCtor]: DomainModelCtor<Aggregate>;
 } = {
     [AggregateType.tag]: Tag,

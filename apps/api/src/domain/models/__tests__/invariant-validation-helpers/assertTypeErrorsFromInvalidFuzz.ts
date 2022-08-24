@@ -3,8 +3,8 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import { Ctor } from '../../../../lib/types/Ctor';
 import { DTO } from '../../../../types/DTO';
 import { Aggregate } from '../../aggregate.entity';
-import assertCoscradDataTypeError from '../../__tests__/invariant-validation-helpers/assertCoscradDataTypeError';
 import createInvalidAggregateFactory from '../utilities/createInvalidAggregateFactory';
+import assertCoscradDataTypeAndTopLevelError from './assertCoscradDataTypeAndTopLevelError';
 
 export default <TAggregate extends Aggregate>(
     AggregateCtor: Ctor<TAggregate>,
@@ -32,7 +32,7 @@ export default <TAggregate extends Aggregate>(
 
                         const result = invalidInstance.validateInvariants();
 
-                        assertCoscradDataTypeError(result, 'id', TopLevelErrorCtor);
+                        assertCoscradDataTypeAndTopLevelError(result, 'id', TopLevelErrorCtor);
                     });
                 });
             });
