@@ -14,8 +14,6 @@ const validBookDTO = getValidAggregateInstanceForTest(resourceType).toDTO();
 
 const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(resourceType);
 
-const fuzzTestCases = generateFuzzAggregateFactoryTestCases(AggregateType.book, validBookDTO);
-
 export const buildBookAggregateFactoryTestCaseSet = (): FactoryTestSuiteForAggregate<
     typeof AggregateType.book
 > => ({
@@ -41,6 +39,6 @@ export const buildBookAggregateFactoryTestCaseSet = (): FactoryTestSuiteForAggre
                 ),
         },
         ...buildNullAndUndefinedAggregateFactoryInvalidTestCases(AggregateType.book),
-        ...fuzzTestCases,
+        ...generateFuzzAggregateFactoryTestCases(AggregateType.book, validBookDTO),
     ],
 });

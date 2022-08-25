@@ -1,3 +1,4 @@
+import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
@@ -13,13 +14,16 @@ import { Transcript } from './Transcript';
 export class TranscribedAudio extends Resource {
     readonly type = ResourceType.transcribedAudio;
 
+    @NonEmptyString()
     readonly audioFilename: string;
 
-    // we need to deal with units here
+    @NonNegativeFiniteNumber()
     readonly lengthMilliseconds: number;
 
+    @NonNegativeFiniteNumber()
     readonly startMilliseconds: number;
 
+    @NestedDataType(Transcript)
     readonly transcript: Transcript;
 
     constructor(dto: DTO<TranscribedAudio>) {

@@ -1,3 +1,4 @@
+import { NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
@@ -11,10 +12,14 @@ type MediaTimestamp = number;
 type MediaData = string;
 
 export class MediaTimeRange extends BaseDomainModel {
+    @NonNegativeFiniteNumber()
     readonly inPoint: MediaTimestamp;
 
+    @NonNegativeFiniteNumber()
     readonly outPoint: MediaTimestamp;
 
+    // TODO Abstract over different data types
+    @NonEmptyString({ isOptional: true })
     readonly data?: MediaData;
 
     constructor(dto: DTO<MediaTimeRange>) {

@@ -1,8 +1,10 @@
+import { NestedDataType } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 import { MediaTimeRange } from './MediaTimeRange';
 
 export class Transcript extends BaseDomainModel {
+    @NestedDataType(MediaTimeRange, { isArray: true })
     // TODO rename this, as it includes the data as well
     timeRanges: MediaTimeRange[];
 
@@ -13,6 +15,8 @@ export class Transcript extends BaseDomainModel {
 
         const { timeRanges } = dto;
 
-        this.timeRanges = timeRanges.map((timerange) => new MediaTimeRange(timerange));
+        this.timeRanges = Array.isArray(timeRanges)
+            ? timeRanges.map((timerange) => new MediaTimeRange(timerange))
+            : null;
     }
 }

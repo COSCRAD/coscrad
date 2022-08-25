@@ -30,6 +30,77 @@ Book {
 }
 `;
 
+exports[`Aggregate factories when attempting to build an instance of type: mediaItem from a DTO when the DTO is valid valid media item should succeed 1`] = `
+MediaItem {
+  "contributorAndRoles": Array [
+    ContributorAndRole {
+      "contributorId": "2",
+      "role": "host",
+    },
+  ],
+  "eventHistory": Array [],
+  "getCompositeIdentifier": [Function],
+  "id": "1",
+  "lengthMilliseconds": 2500,
+  "mimeType": "audio/mpeg",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "title": "episode title (in language)",
+  "titleEnglish": "Metal Mondays episode 1",
+  "type": "mediaItem",
+  "url": "https://www.metalmondays.com/1.mp3",
+}
+`;
+
+exports[`Aggregate factories when attempting to build an instance of type: photograph from a DTO when the DTO is valid valid photograph should succeed 1`] = `
+Photograph {
+  "dimensions": PhotographDimensions {
+    "heightPX": 400,
+    "widthPX": 300,
+  },
+  "eventHistory": Array [],
+  "filename": "cat",
+  "getCompositeIdentifier": [Function],
+  "id": "0",
+  "photographer": "Susie McRealart",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "type": "photograph",
+}
+`;
+
+exports[`Aggregate factories when attempting to build an instance of type: song from a DTO when the DTO is valid valid song should succeed 1`] = `
+Song {
+  "audioURL": "https://www.myaudio.com/lamb.mp3",
+  "contributions": Array [
+    ContributorAndRole {
+      "contributorId": "1",
+      "role": "performer",
+    },
+  ],
+  "eventHistory": Array [],
+  "getCompositeIdentifier": [Function],
+  "id": "1",
+  "lengthMilliseconds": 3500,
+  "lyrics": "Mary had a little lamb, little lamb.",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "startMilliseconds": 0,
+  "title": "Song title in language",
+  "titleEnglish": "Mary had a little lamb",
+  "type": "song",
+}
+`;
+
 exports[`Aggregate factories when attempting to build an instance of type: term from a DTO when the DTO is valid when the dto is valid should succeed 1`] = `
 Term {
   "audioFilename": undefined,
@@ -46,5 +117,36 @@ Term {
   "term": "Chil-term-1",
   "termEnglish": "Engl-term-1",
   "type": "term",
+}
+`;
+
+exports[`Aggregate factories when attempting to build an instance of type: transcribedAudio from a DTO when the DTO is valid valid transribed audio DTO should succeed 1`] = `
+TranscribedAudio {
+  "audioFilename": "123.mp3",
+  "eventHistory": Array [],
+  "getCompositeIdentifier": [Function],
+  "id": "110",
+  "lengthMilliseconds": 20000,
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "startMilliseconds": 0,
+  "transcript": Transcript {
+    "timeRanges": Array [
+      MediaTimeRange {
+        "data": "There once was a little wooden boy.",
+        "inPoint": 12000,
+        "outPoint": 15550,
+      },
+      MediaTimeRange {
+        "data": "His name was Pinocchio.",
+        "inPoint": 18300,
+        "outPoint": 19240,
+      },
+    ],
+  },
+  "type": "transcribedAudio",
 }
 `;

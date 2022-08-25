@@ -1,11 +1,5 @@
-import {
-    IsNonNegativeFiniteNumber,
-    IsOptional,
-    isStringWithNonzeroLength,
-    IsStringWithNonzeroLength,
-    IsUrl,
-    ValidateNested,
-} from '@coscrad/validation';
+import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
+import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
@@ -19,33 +13,32 @@ import { Resource } from '../resource.entity';
 import validateTimeRangeContextForModel from '../shared/contextValidators/validateTimeRangeContextForModel';
 import { ContributorAndRole } from './ContributorAndRole';
 
+const isOptional = true;
+
 @RegisterIndexScopedCommands(['CREATE_SONG'])
 export class Song extends Resource implements ITimeBoundable {
     readonly type = ResourceType.song;
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly title?: string;
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly titleEnglish?: string;
 
-    @ValidateNested()
+    @NestedDataType(ContributorAndRole, { isArray: true })
     readonly contributions: ContributorAndRole[];
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     // the type of `lyrics` should allow three way translation in future
     readonly lyrics?: string;
 
-    @IsUrl()
+    @URL()
     readonly audioURL: string;
 
-    @IsNonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber()
     readonly lengthMilliseconds: number;
 
-    @IsNonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber()
     readonly startMilliseconds: number;
 
     constructor(dto: DTO<Song>) {

@@ -4,9 +4,14 @@ import {
 } from '../../../../domain/types/AggregateType';
 import { DTO } from '../../../../types/DTO';
 import { buildBookAggregateFactoryTestCaseSet } from './book.aggregate-factory.test-cases';
+import { buildMediaItemFactoryTestCaseSet } from './media-item.aggregate-factory.test-cases';
+import { buildPhotographFactoryTestSet } from './photograph.aggregate-factory.test-cases';
+import { buildSongFactoryTestSet } from './song.aggregate-factory.test-cases';
 import { buildTermAggregateFactoryTestCaseSet } from './term.aggregate-factory.test-cases';
+import { buildTranscribedAudioFactoryTestCaseSet } from './transcribed-audio.aggregate-factory.test-cases';
+import { buildVocabularyListAggregateFactoryTestCases } from './vocabulary-list.aggregate-factory.test-cases';
 
-type AggregateFactoryValidTestCase<TAggregateType extends AggregateType> = {
+export type AggregateFactoryValidTestCase<TAggregateType extends AggregateType> = {
     dto: DTO<AggregateTypeToAggregateInstance[TAggregateType]>;
     description: string;
 };
@@ -25,5 +30,10 @@ export type FactoryTestSuiteForAggregate<TAggregateType extends AggregateType = 
 
 export default (): FactoryTestSuiteForAggregate[] => [
     buildBookAggregateFactoryTestCaseSet(),
+    buildMediaItemFactoryTestCaseSet(),
+    buildPhotographFactoryTestSet(),
+    buildSongFactoryTestSet(),
     buildTermAggregateFactoryTestCaseSet(),
+    buildTranscribedAudioFactoryTestCaseSet(),
+    buildVocabularyListAggregateFactoryTestCases(),
 ];

@@ -32,7 +32,7 @@ export class MediaItem extends Resource implements ITimeBoundable {
     @NonEmptyString({ isOptional: true })
     readonly titleEnglish?: string;
 
-    @NestedDataType(ContributorAndRole)
+    @NestedDataType(ContributorAndRole, { isArray: true })
     readonly contributorAndRoles: ContributorAndRole[];
 
     @URL()
@@ -56,9 +56,11 @@ export class MediaItem extends Resource implements ITimeBoundable {
 
         this.titleEnglish = titleEnglish;
 
-        this.contributorAndRoles = contributorAndRoles.map(
-            (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
-        );
+        this.contributorAndRoles = Array.isArray(contributorAndRoles)
+            ? contributorAndRoles.map(
+                  (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
+              )
+            : null;
 
         this.url = url;
 

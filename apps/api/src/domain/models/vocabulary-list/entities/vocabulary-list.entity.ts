@@ -52,7 +52,7 @@ export class VocabularyList extends Resource {
         const { name, nameEnglish, id, entries } = this;
 
         if (!isStringWithNonzeroLength(name) && !isStringWithNonzeroLength(nameEnglish))
-            allErrors.push(new VocabularyListHasNoNameInAnyLanguageError(id));
+            allErrors.push(new VocabularyListHasNoNameInAnyLanguageError());
 
         if (!Array.isArray(entries) || !entries.length)
             allErrors.push(new VocabularyListHasNoEntriesError(id));
