@@ -27,6 +27,9 @@ export type BibliographicReferenceTypeToInstance = {
     >;
 };
 
+/**
+ * TODO Consolidate this with apps/api/src/domain/models/bibliographic-reference/common/getBibliographicReferenceCtorFromSubtype.ts
+ */
 export default <TBibliographicReferenceType extends BibliographicReferenceType>(
     bibliographicReferenceType: TBibliographicReferenceType
 ): BibliographicReferenceTypeToCtor[TBibliographicReferenceType] => {

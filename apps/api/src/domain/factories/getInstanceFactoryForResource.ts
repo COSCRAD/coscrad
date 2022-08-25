@@ -25,5 +25,5 @@ export default <TResource extends Resource>(
 
     const Ctor = getAggregateCtorFromAggregateType(resourceType);
 
-    return buildInstanceFactory<TResource>(Ctor as DomainModelCtor<TResource>);
+    return buildInstanceFactory<TResource>(Ctor as unknown as DomainModelCtor<TResource>);
 };

@@ -1,7 +1,7 @@
+import { BiblographicSubjectCreatorType } from '@coscrad/data-types';
 import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { JournalArticleBibliographicReference } from '../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/journal-article-bibliographic-reference.entity';
 import { BibliographicReferenceType } from '../../domain/models/bibliographic-reference/types/BibliographicReferenceType';
-import { CreatorType } from '../../domain/models/bibliographic-reference/types/CreatorType';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { DTO } from '../../types/DTO';
 
@@ -14,7 +14,7 @@ const dtos: DTO<JournalArticleBibliographicReference>[] = [
             creators: [
                 {
                     name: 'Sigurd Purcell',
-                    type: CreatorType.author,
+                    type: BiblographicSubjectCreatorType.author,
                 },
             ],
             abstract: 'An analysis of the Cariboo Chilcotin Justice inquiry.',

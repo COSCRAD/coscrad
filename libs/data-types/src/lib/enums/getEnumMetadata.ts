@@ -1,10 +1,11 @@
 import { CoscradDataType } from '../types/CoscradDataType';
+import { BiblographicSubjectCreatorType } from './BibliographicSubjectCreatorType';
 import { CoscradEnum } from './CoscradEnum';
 import { CoscradUserRole } from './CoscradUserRole';
 import { MIMEType } from './MIMEType';
 import { EnumMetadata } from './types/EnumMetadata';
 
-const enumNameToMetadata: Record<string, EnumMetadata> = {
+const enumNameToMetadata: { [K in CoscradEnum]: EnumMetadata } = {
     [CoscradEnum.MIMEType]: {
         type: CoscradDataType.Enum,
         enumName: CoscradEnum.MIMEType,
@@ -36,6 +37,25 @@ const enumNameToMetadata: Record<string, EnumMetadata> = {
             {
                 label: 'COSCRAD admin',
                 value: CoscradUserRole.superAdmin,
+            },
+        ],
+    },
+    [CoscradEnum.BibliographicSubjectCreatorType]: {
+        type: CoscradDataType.Enum,
+        enumName: CoscradEnum.BibliographicSubjectCreatorType,
+        enumLabel: 'Creator Type',
+        labelsAndValues: [
+            {
+                label: 'artist',
+                value: BiblographicSubjectCreatorType.artist,
+            },
+            {
+                label: 'author',
+                value: BiblographicSubjectCreatorType.author,
+            },
+            {
+                label: 'director',
+                value: BiblographicSubjectCreatorType.director,
             },
         ],
     },

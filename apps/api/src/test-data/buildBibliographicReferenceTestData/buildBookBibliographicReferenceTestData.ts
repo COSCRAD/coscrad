@@ -1,7 +1,7 @@
+import { BiblographicSubjectCreatorType } from '@coscrad/data-types';
 import { BookBibliographicReference } from '../../domain/models/bibliographic-reference/book-bibliographic-reference/book-bibliographic-reference.entity';
 import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { BibliographicReferenceType } from '../../domain/models/bibliographic-reference/types/BibliographicReferenceType';
-import { CreatorType } from '../../domain/models/bibliographic-reference/types/CreatorType';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { DTO } from '../../types/DTO';
 
@@ -14,7 +14,7 @@ const dtos: DTO<BookBibliographicReference>[] = [
             creators: [
                 {
                     name: 'Alana Duvernay',
-                    type: CreatorType.author,
+                    type: BiblographicSubjectCreatorType.author,
                 },
             ],
             abstract: 'This is the abstract, NOT a general note!',

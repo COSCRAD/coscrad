@@ -1,16 +1,13 @@
-import {
-    IsNonEmptyArray,
-    IsOptional,
-    IsStringWithNonzeroLength,
-    IsUrl,
-    ValidateNested,
-} from '@coscrad/validation';
+import { NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
+import { IsNonEmptyArray, IsStringWithNonzeroLength } from '@coscrad/validation';
 import { DTO } from '../../../../types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
 import BibliographicReferenceCreator from '../common/bibliographic-reference-creator.entity';
 import { IBibliographicReferenceData } from '../interfaces/bibliographic-reference-data.interface';
 import { BibliographicReferenceType } from '../types/BibliographicReferenceType';
+
+const isOptional = true;
 
 export default class JournalArticleBibliographicReferenceData
     extends BaseDomainModel
@@ -21,36 +18,31 @@ export default class JournalArticleBibliographicReferenceData
     @IsStringWithNonzeroLength()
     readonly title: string;
 
+    // TODO Support non-empty array based on `isOptional`
     @IsNonEmptyArray()
-    @ValidateNested()
+    @NestedDataType(BibliographicReferenceCreator, { isArray: true })
     readonly creators: BibliographicReferenceCreator[];
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly abstract?: string;
 
-    @IsStringWithNonzeroLength()
+    @NonEmptyString()
     // WARNING: this is unstructured data from Zotero
     readonly issueDate: string;
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly publicationTitle?: string;
 
-    @IsOptional()
-    @IsUrl()
+    @URL({ isOptional })
     readonly url?: string;
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly pages?: string;
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly issn?: string;
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly doi?: string;
 
     constructor(dto: DTO<JournalArticleBibliographicReferenceData>) {

@@ -1,12 +1,10 @@
+import { NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
 import {
     IsISBN,
     IsNonEmptyArray,
     IsOptional,
     IsPositiveInteger,
-    IsStringWithNonzeroLength,
-    IsUrl,
     IsYear,
-    ValidateNested,
 } from '@coscrad/validation';
 import { DTO } from '../../../../types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
@@ -15,44 +13,45 @@ import BibliographicReferenceCreator from '../common/bibliographic-reference-cre
 import { IBibliographicReferenceData } from '../interfaces/bibliographic-reference-data.interface';
 import { BibliographicReferenceType } from '../types/BibliographicReferenceType';
 
+const isOptional = true;
+
 export default class BookBibliographicReferenceData
     extends BaseDomainModel
     implements IBibliographicReferenceData
 {
     readonly type = BibliographicReferenceType.book;
 
-    @IsStringWithNonzeroLength()
+    @NonEmptyString()
     readonly title: string;
 
     @IsNonEmptyArray()
-    @ValidateNested()
+    @NestedDataType(BibliographicReferenceCreator, { isArray: true })
     readonly creators: BibliographicReferenceCreator[];
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     // `abstractNote` is what Zotero calls this property
     readonly abstract?: string;
 
+    // TODO Support `Year` data type
     @IsOptional()
     @IsYear()
     readonly year?: number;
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly publisher?: string;
 
-    @IsOptional()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({ isOptional })
     readonly place?: string;
 
-    @IsOptional()
-    @IsUrl()
+    @URL({ isOptional })
     readonly url?: string;
 
+    // TODO Support `PositiveInteger` data type
     @IsOptional()
     @IsPositiveInteger()
     readonly numberOfPages?: number;
 
+    // TODO Support `ISBN` data type
     @IsOptional()
     @IsISBN()
     readonly isbn?: string;

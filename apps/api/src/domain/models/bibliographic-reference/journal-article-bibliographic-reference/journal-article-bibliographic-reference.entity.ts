@@ -1,3 +1,4 @@
+import { NestedDataType } from '@coscrad/data-types';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -13,6 +14,7 @@ export class JournalArticleBibliographicReference
 {
     readonly type = ResourceType.bibliographicReference;
 
+    @NestedDataType(JournalArticleBibliographicReferenceData)
     readonly data: JournalArticleBibliographicReferenceData;
 
     constructor(dto: DTO<JournalArticleBibliographicReference>) {

@@ -1,5 +1,93 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Aggregate factories when attempting to build an instance of type: bibliographicReference from a DTO when the DTO is valid valid dto for a BibliographicReference of sub-type: Book should succeed 1`] = `
+BookBibliographicReference {
+  "data": BookBibliographicReferenceData {
+    "abstract": "This is the abstract, NOT a general note!",
+    "creators": Array [
+      Object {
+        "name": "Alana Duvernay",
+        "type": "author",
+      },
+    ],
+    "isbn": "978-1-895811-34-6",
+    "numberOfPages": 455,
+    "place": "Kennebunk Port, Maine",
+    "publisher": "Atlantic Publishing",
+    "title": "A Day in the Life",
+    "type": "book",
+    "url": "https://atlanticpublishing.com",
+    "year": 1999,
+  },
+  "eventHistory": Array [],
+  "getCompositeIdentifier": [Function],
+  "id": "1",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "type": "bibliographicReference",
+}
+`;
+
+exports[`Aggregate factories when attempting to build an instance of type: bibliographicReference from a DTO when the DTO is valid valid dto for a BibliographicReference of sub-type: Court Case should succeed 1`] = `
+CourtCaseBibliographicReference {
+  "data": CourtCaseBibliographicReferenceData {
+    "abstract": "William, June
+- Nemiah Valley
+- Qualifying as an expert in Tsilhqot'in written language",
+    "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+    "court": "Supreme Court of British Columbia",
+    "creators": Array [],
+    "dateDecided": "Recorded 2002-07-08",
+    "pages": "Pages 1-6",
+    "type": "courtCase",
+    "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
+  },
+  "eventHistory": Array [],
+  "getCompositeIdentifier": [Function],
+  "id": "3",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "type": "bibliographicReference",
+}
+`;
+
+exports[`Aggregate factories when attempting to build an instance of type: bibliographicReference from a DTO when the DTO is valid valid dto for a BibliographicReference of sub-type: Journal Article should succeed 1`] = `
+JournalArticleBibliographicReference {
+  "data": JournalArticleBibliographicReferenceData {
+    "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
+    "creators": Array [
+      BibliographicReferenceCreator {
+        "name": "Sigurd Purcell",
+        "type": "author",
+      },
+    ],
+    "doi": "10.14288/bcs.v0i19.784",
+    "issn": "00052949",
+    "issueDate": "Spring 2013",
+    "pages": "109-113,115-136,240",
+    "publicationTitle": "Journal of History",
+    "title": "Report on the Cariboo Chilcotin Justice inquiry",
+    "type": "journalArticle",
+    "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+  },
+  "eventHistory": Array [],
+  "getCompositeIdentifier": [Function],
+  "id": "23",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "type": "bibliographicReference",
+}
+`;
+
 exports[`Aggregate factories when attempting to build an instance of type: book from a DTO when the DTO is valid valid book should succeed 1`] = `
 Book {
   "author": "John Doeburg",

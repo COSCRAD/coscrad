@@ -3,6 +3,7 @@ import {
     AggregateTypeToAggregateInstance,
 } from '../../../../domain/types/AggregateType';
 import { DTO } from '../../../../types/DTO';
+import { buildBibliographicReferenceFactoryTestSet } from './bibliographic-reference.aggregate-factory.test-cases';
 import { buildBookAggregateFactoryTestCaseSet } from './book.aggregate-factory.test-cases';
 import { buildMediaItemFactoryTestCaseSet } from './media-item.aggregate-factory.test-cases';
 import { buildPhotographFactoryTestSet } from './photograph.aggregate-factory.test-cases';
@@ -29,6 +30,7 @@ export type FactoryTestSuiteForAggregate<TAggregateType extends AggregateType = 
 };
 
 export default (): FactoryTestSuiteForAggregate[] => [
+    buildBibliographicReferenceFactoryTestSet(),
     buildBookAggregateFactoryTestCaseSet(),
     buildMediaItemFactoryTestCaseSet(),
     buildPhotographFactoryTestSet(),

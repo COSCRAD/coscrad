@@ -1,4 +1,5 @@
 import { ResourceType } from '../../../types/ResourceType';
+import BaseDomainModel from '../../BaseDomainModel';
 import { Resource } from '../../resource.entity';
 import { IBibliographicReferenceData } from './bibliographic-reference-data.interface';
 
@@ -7,5 +8,5 @@ export interface IBibliographicReference<
 > extends Resource {
     type: typeof ResourceType.bibliographicReference;
 
-    data: T;
+    data: T & BaseDomainModel;
 }

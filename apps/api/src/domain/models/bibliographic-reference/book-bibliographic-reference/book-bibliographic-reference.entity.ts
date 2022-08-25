@@ -1,3 +1,4 @@
+import { NestedDataType } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
@@ -14,6 +15,7 @@ export class BookBibliographicReference
 {
     readonly type = ResourceType.bibliographicReference;
 
+    @NestedDataType(BookBibliographicReferenceData)
     readonly data: BookBibliographicReferenceData;
 
     constructor(dto: DTO<BookBibliographicReference>) {

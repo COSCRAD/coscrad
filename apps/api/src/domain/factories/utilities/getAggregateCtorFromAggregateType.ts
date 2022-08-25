@@ -12,7 +12,7 @@ import { TranscribedAudio } from '../../models/transcribed-audio/entities/transc
 import { CoscradUserGroup } from '../../models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../../models/user-management/user/entities/user/coscrad-user.entity';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
-import { AggregateType } from '../../types/AggregateType';
+import { AggregateType, AggregateTypeToAggregateInstance } from '../../types/AggregateType';
 
 const specialCases = [
     AggregateType.bibliographicReference,
@@ -41,8 +41,10 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.vocabularyList]: VocabularyList,
 };
 
-export default (aggregateType: AggregateTypesWithADistinctCtor): DomainModelCtor<Aggregate> => {
-    const searchResult = aggregateTypeToAggregateCtor[aggregateType];
+export default <T extends AggregateType>(
+    aggregateType: T
+): DomainModelCtor<AggregateTypeToAggregateInstance[T]> => {
+    const searchResult = aggregateTypeToAggregateCtor[aggregateType as AggregateType];
 
     if (!searchResult) {
         throw new InternalError(`Failed to find a CTOR for aggregate of type: ${aggregateType}`);
