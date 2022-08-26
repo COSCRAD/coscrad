@@ -1,5 +1,6 @@
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
@@ -26,10 +27,12 @@ export class Polygon extends Resource implements ISpatialFeature {
          * Do we want a class instead of a type for this property? Either way,
          * this should already have been validated at this point.
          */
-        this.geometry = geometryDTO as IGeometricFeature<
-            typeof GeometricFeatureType.polygon,
-            PolygonCoordinates
-        >;
+        this.geometry = cloneToPlainObject(
+            geometryDTO as IGeometricFeature<
+                typeof GeometricFeatureType.polygon,
+                PolygonCoordinates
+            >
+        );
     }
 
     protected validateComplexInvariants(): InternalError[] {

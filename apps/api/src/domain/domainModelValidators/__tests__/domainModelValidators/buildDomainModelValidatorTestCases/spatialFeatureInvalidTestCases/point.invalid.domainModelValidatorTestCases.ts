@@ -1,4 +1,4 @@
-import { Point } from '../../../../../models/spatial-feature/point.entity';
+import { Point } from '../../../../../models/spatial-feature/entities/point.entity';
 import { GeometricFeatureType } from '../../../../../models/spatial-feature/types/GeometricFeatureType';
 import { DomainModelValidatorInvalidTestCase } from '../../../types/DomainModelValidatorTestCase';
 import { buildInvalidSpatialFeatureDtoError } from '../spatial-feature.domainModelValidatorTestCase';
