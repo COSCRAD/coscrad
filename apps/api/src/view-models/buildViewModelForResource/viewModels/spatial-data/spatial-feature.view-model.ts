@@ -1,4 +1,5 @@
 import { ISpatialFeature } from '../../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from '../base.view-model';
 
 type GeometryViewModel = {
@@ -16,17 +17,9 @@ export class SpatialFeatureViewModel extends BaseViewModel {
      */
     readonly geometry: GeometryViewModel;
 
-    constructor({ id, geometry: { type, coordinates } }: ISpatialFeature) {
+    constructor({ id, geometry }: ISpatialFeature) {
         super({ id });
 
-        this.geometry = {
-            type,
-            /**
-             * We use nested classes in order to leverage decorator-based
-             * simple invariant validation. However, the view models must
-             * strictly adhere to GEO-JSON. So we handle the mapping here.
-             */
-            coordinates: coordinates.toPlainArray(),
-        };
+        this.geometry = cloneToPlainObject(geometry);
     }
 }

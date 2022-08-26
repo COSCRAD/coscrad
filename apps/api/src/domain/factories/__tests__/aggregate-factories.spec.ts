@@ -4,6 +4,7 @@ import { DTO } from '../../../types/DTO';
 import formatAggregateType from '../../../view-models/presentation/formatAggregateType';
 import { Aggregate } from '../../models/aggregate.entity';
 import { AggregateType } from '../../types/AggregateType';
+import { CategorizableType } from '../../types/CategorizableType';
 import { isResourceType } from '../../types/ResourceType';
 import getInstanceFactoryForResource from '../getInstanceFactoryForResource';
 import buildAggregateFactoryTestCases from './buildAggregateFactoryTestCases';
@@ -18,7 +19,11 @@ const buildInstanceFactoryFunction = (aggregateType: AggregateType) => (dto: DTO
           );
 
 describe(`Aggregate factories`, () => {
-    Object.values(AggregateType).forEach((aggregateType) =>
+    /**
+     * TODO Change this to `AggregateType` and add test coverage for non-resource
+     * aggregates.
+     */
+    Object.values(CategorizableType).forEach((aggregateType) =>
         describe.skip(`An aggregate of type: ${formatAggregateType(aggregateType)}`, () => {
             describe(`the corresponding test suite`, () => {
                 const testSuite = testCaseSets.find(
