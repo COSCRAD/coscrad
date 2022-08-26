@@ -1,10 +1,10 @@
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { Line } from '../../../models/spatial-feature/entities/line.entity';
+import { Point } from '../../../models/spatial-feature/entities/point.entity';
+import { Polygon } from '../../../models/spatial-feature/entities/polygon.entity';
 import InvalidGeometryTypeForSpatialFeatureError from '../../../models/spatial-feature/errors/InvalidGeometryTypeForSpatialFeatureError';
-import { ISpatialFeature } from '../../../models/spatial-feature/ISpatialFeature';
-import { Line } from '../../../models/spatial-feature/line.entity';
-import { Point } from '../../../models/spatial-feature/point.entity';
-import { Polygon } from '../../../models/spatial-feature/polygon.entity';
+import { ISpatialFeature } from '../../../models/spatial-feature/interfaces/spatial-feature.interface';
 import { GeometricFeatureType } from '../../../models/spatial-feature/types/GeometricFeatureType';
 
 /**

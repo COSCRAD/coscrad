@@ -6,7 +6,7 @@ import { EdgeConnection } from '../models/context/edge-connection.entity';
 import { MediaItem } from '../models/media-item/entities/media-item.entity';
 import { Photograph } from '../models/photograph/entities/photograph.entity';
 import { Song } from '../models/song/song.entity';
-import { ISpatialFeature } from '../models/spatial-feature/ISpatialFeature';
+import { ISpatialFeature } from '../models/spatial-feature/interfaces/spatial-feature.interface';
 import { Tag } from '../models/tag/tag.entity';
 import { Term } from '../models/term/entities/term.entity';
 import { TranscribedAudio } from '../models/transcribed-audio/entities/transcribed-audio.entity';

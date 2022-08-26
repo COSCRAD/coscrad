@@ -1,4 +1,4 @@
-import { Line } from '../../../../../models/spatial-feature/line.entity';
+import { Line } from '../../../../../models/spatial-feature/entities/line.entity';
 import { GeometricFeatureType } from '../../../../../models/spatial-feature/types/GeometricFeatureType';
 import { DomainModelValidatorInvalidTestCase } from '../../../types/DomainModelValidatorTestCase';
 import { buildInvalidSpatialFeatureDtoError } from '../spatial-feature.domainModelValidatorTestCase';

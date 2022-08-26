@@ -1,9 +1,10 @@
 import { CommandInfo } from '../../../app/controllers/command/services/command-info-service';
+import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { SpatialFeatureViewModel } from '../../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
-import { ISpatialFeature } from '../../models/spatial-feature/ISpatialFeature';
-import { Line } from '../../models/spatial-feature/line.entity';
-import { Point } from '../../models/spatial-feature/point.entity';
-import { Polygon } from '../../models/spatial-feature/polygon.entity';
+import { Line } from '../../models/spatial-feature/entities/line.entity';
+import { Point } from '../../models/spatial-feature/entities/point.entity';
+import { Polygon } from '../../models/spatial-feature/entities/polygon.entity';
+import { ISpatialFeature } from '../../models/spatial-feature/interfaces/spatial-feature.interface';
 import { ResourceType } from '../../types/ResourceType';
 import { BaseQueryService } from './base-query.service';
 
@@ -18,7 +19,7 @@ export class SpatialFeatureQueryService extends BaseQueryService<
     }
 
     getInfoForIndexScopedCommands(): CommandInfo[] {
-        return [Line, Point, Polygon].flatMap(
+        return ([Line, Point, Polygon] as DomainModelCtor[]).flatMap(
             (Ctor) => this.commandInfoService.getCommandInfo(Ctor) || []
         );
     }

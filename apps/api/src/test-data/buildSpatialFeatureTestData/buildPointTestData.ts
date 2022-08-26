@@ -1,4 +1,4 @@
-import { Point } from '../../domain/models/spatial-feature/point.entity';
+import { Point } from '../../domain/models/spatial-feature/entities/point.entity';
 import { Position2D } from '../../domain/models/spatial-feature/types/Coordinates/Position2D';
 import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
 import { ResourceType } from '../../domain/types/ResourceType';

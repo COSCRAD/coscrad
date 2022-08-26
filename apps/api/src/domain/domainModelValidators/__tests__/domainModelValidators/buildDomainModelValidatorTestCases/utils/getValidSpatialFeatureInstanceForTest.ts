@@ -1,6 +1,6 @@
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import buildTestData from '../../../../../../test-data/buildTestData';
-import { ISpatialFeature } from '../../../../../models/spatial-feature/ISpatialFeature';
+import { ISpatialFeature } from '../../../../../models/spatial-feature/interfaces/spatial-feature.interface';
 import { GeometricFeatureType } from '../../../../../models/spatial-feature/types/GeometricFeatureType';
 
 export const getValidSpatialFeatureInstanceForTest = (

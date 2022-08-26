@@ -1,13 +1,13 @@
-import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../lib/errors/InternalError';
-import { DTO } from '../../../types/DTO';
-import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
-import { ResourceType } from '../../types/ResourceType';
-import { Resource } from '../resource.entity';
-import { IGeometricFeature } from './GeometricFeature';
-import { ISpatialFeature } from './ISpatialFeature';
-import { PolygonCoordinates } from './types/Coordinates/PolygonCoordinates';
-import { GeometricFeatureType } from './types/GeometricFeatureType';
+import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { DTO } from '../../../../types/DTO';
+import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
+import { ResourceType } from '../../../types/ResourceType';
+import { Resource } from '../../resource.entity';
+import { IGeometricFeature } from '../interfaces/geometric-feature.interface';
+import { ISpatialFeature } from '../interfaces/spatial-feature.interface';
+import { PolygonCoordinates } from '../types/Coordinates/PolygonCoordinates';
+import { GeometricFeatureType } from '../types/GeometricFeatureType';
 
 @RegisterIndexScopedCommands([])
 export class Polygon extends Resource implements ISpatialFeature {

@@ -189,6 +189,103 @@ Song {
 }
 `;
 
+exports[`Aggregate factories when attempting to build an instance of type: spatialFeature from a DTO when the DTO is valid valid dto for a Spatial Feature of sub-type: Line should succeed 1`] = `
+Line {
+  "eventHistory": Array [],
+  "geometry": Object {
+    "coordinates": Array [
+      Array [
+        1,
+        2,
+      ],
+      Array [
+        1,
+        3,
+      ],
+      Array [
+        1.5,
+        3.5,
+      ],
+      Array [
+        3,
+        4.2,
+      ],
+    ],
+    "type": "LineString",
+  },
+  "getCompositeIdentifier": [Function],
+  "id": "1",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "type": "spatialFeature",
+}
+`;
+
+exports[`Aggregate factories when attempting to build an instance of type: spatialFeature from a DTO when the DTO is valid valid dto for a Spatial Feature of sub-type: Point should succeed 1`] = `
+Point {
+  "eventHistory": Array [],
+  "geometry": Object {
+    "coordinates": Array [
+      100,
+      0,
+    ],
+    "type": "Point",
+  },
+  "getCompositeIdentifier": [Function],
+  "id": "100",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "type": "spatialFeature",
+}
+`;
+
+exports[`Aggregate factories when attempting to build an instance of type: spatialFeature from a DTO when the DTO is valid valid dto for a Spatial Feature of sub-type: Polygon should succeed 1`] = `
+Polygon {
+  "eventHistory": Array [],
+  "geometry": Object {
+    "coordinates": Array [
+      Array [
+        Array [
+          1,
+          3,
+        ],
+        Array [
+          2,
+          5,
+        ],
+        Array [
+          1.5,
+          3.7,
+        ],
+        Array [
+          1.2,
+          3.3,
+        ],
+        Array [
+          1,
+          3,
+        ],
+      ],
+    ],
+    "type": "Polygon",
+  },
+  "getCompositeIdentifier": [Function],
+  "id": "300",
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "type": "spatialFeature",
+}
+`;
+
 exports[`Aggregate factories when attempting to build an instance of type: term from a DTO when the DTO is valid when the dto is valid should succeed 1`] = `
 Term {
   "audioFilename": undefined,

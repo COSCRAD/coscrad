@@ -1,7 +1,7 @@
 import { IBibliographicReference } from '../../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { BibliographicReferenceType } from '../../../domain/models/bibliographic-reference/types/BibliographicReferenceType';
 import { EdgeConnectionMemberRole } from '../../../domain/models/context/edge-connection.entity';
-import { ISpatialFeature } from '../../../domain/models/spatial-feature/ISpatialFeature';
+import { ISpatialFeature } from '../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
 import { GeometricFeatureType } from '../../../domain/models/spatial-feature/types/GeometricFeatureType';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';

@@ -1,4 +1,4 @@
-import { Line } from '../../domain/models/spatial-feature/line.entity';
+import { Line } from '../../domain/models/spatial-feature/entities/line.entity';
 import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { DTO } from '../../types/DTO';

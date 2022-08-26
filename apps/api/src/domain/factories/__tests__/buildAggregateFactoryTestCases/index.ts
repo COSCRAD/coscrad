@@ -8,6 +8,7 @@ import { buildBookAggregateFactoryTestCaseSet } from './book.aggregate-factory.t
 import { buildMediaItemFactoryTestCaseSet } from './media-item.aggregate-factory.test-cases';
 import { buildPhotographFactoryTestSet } from './photograph.aggregate-factory.test-cases';
 import { buildSongFactoryTestSet } from './song.aggregate-factory.test-cases';
+import { buildSpatialFeatureFactoryTestSet } from './spatial-feature.aggregate-factory.test-cases';
 import { buildTermAggregateFactoryTestCaseSet } from './term.aggregate-factory.test-cases';
 import { buildTranscribedAudioFactoryTestCaseSet } from './transcribed-audio.aggregate-factory.test-cases';
 import { buildVocabularyListAggregateFactoryTestCases } from './vocabulary-list.aggregate-factory.test-cases';
@@ -35,6 +36,7 @@ export default (): FactoryTestSuiteForAggregate[] => [
     buildMediaItemFactoryTestCaseSet(),
     buildPhotographFactoryTestSet(),
     buildSongFactoryTestSet(),
+    buildSpatialFeatureFactoryTestSet(),
     buildTermAggregateFactoryTestCaseSet(),
     buildTranscribedAudioFactoryTestCaseSet(),
     buildVocabularyListAggregateFactoryTestCases(),

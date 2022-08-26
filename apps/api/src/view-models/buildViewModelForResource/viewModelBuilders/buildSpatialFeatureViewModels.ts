@@ -1,4 +1,4 @@
-import { ISpatialFeature } from '../../../domain/models/spatial-feature/ISpatialFeature';
+import { ISpatialFeature } from '../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
 import IsPublished from '../../../domain/repositories/specifications/isPublished';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { isInternalError } from '../../../lib/errors/InternalError';

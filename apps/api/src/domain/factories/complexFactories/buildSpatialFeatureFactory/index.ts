@@ -3,7 +3,7 @@ import { DTO } from '../../../../types/DTO';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import NullOrUndefinedAggregateDTOError from '../../../domainModelValidators/errors/NullOrUndefinedAggregateDTOError';
 import { isValid } from '../../../domainModelValidators/Valid';
-import { ISpatialFeature } from '../../../models/spatial-feature/ISpatialFeature';
+import { ISpatialFeature } from '../../../models/spatial-feature/interfaces/spatial-feature.interface';
 import isGeometricFeatureType from '../../../models/spatial-feature/types/isGeometricFeatureType';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
