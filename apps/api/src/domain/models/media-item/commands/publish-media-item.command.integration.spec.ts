@@ -1,10 +1,10 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
+import getValidAggregateInstanceForTest from '../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../types/DTO';
-import getValidAggregateInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandPayloadTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { ResourceType } from '../../../types/ResourceType';

@@ -16,7 +16,13 @@ export const getAggregateCtor = <TAggregateType extends AggregateType>(
                 AggregateTypeToAggregateInstance[TAggregateType]
             >;
 
-        throw new NotImplementedException();
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/183109459]
+         * Support non-resource aggregates here.
+         */
+        throw new NotImplementedException(
+            `Getting a non-resource aggregate's ctor from its type discriminant is not yet supported`
+        );
     }
 
     return getAggregateCtorFromAggregateType(type);

@@ -3,15 +3,15 @@ import {
     AggregateTypeToAggregateInstance,
 } from '../../../../domain/types/AggregateType';
 import { DTO } from '../../../../types/DTO';
-import { buildBibliographicReferenceFactoryTestSet } from './bibliographic-reference.aggregate-factory.test-cases';
-import { buildBookAggregateFactoryTestCaseSet } from './book.aggregate-factory.test-cases';
-import { buildMediaItemFactoryTestCaseSet } from './media-item.aggregate-factory.test-cases';
-import { buildPhotographFactoryTestSet } from './photograph.aggregate-factory.test-cases';
-import { buildSongFactoryTestSet } from './song.aggregate-factory.test-cases';
-import { buildSpatialFeatureFactoryTestSet } from './spatial-feature.aggregate-factory.test-cases';
-import { buildTermAggregateFactoryTestCaseSet } from './term.aggregate-factory.test-cases';
-import { buildTranscribedAudioFactoryTestCaseSet } from './transcribed-audio.aggregate-factory.test-cases';
-import { buildVocabularyListAggregateFactoryTestCases } from './vocabulary-list.aggregate-factory.test-cases';
+import { buildBibliographicReferenceFactoryTestSet } from './bibliographic-reference.aggregate-factory.test-set';
+import { buildBookAggregateFactoryTestSet } from './book.aggregate-factory.test-set';
+import { buildMediaItemFactoryTestSet } from './media-item.aggregate-factory.test-set';
+import { buildPhotographFactoryTestSet } from './photograph.aggregate-factory.test-set';
+import { buildSongFactoryTestSet } from './song.aggregate-factory.test-set';
+import { buildSpatialFeatureFactoryTestSet } from './spatial-feature.aggregate-factory.test-set';
+import { buildTermAggregateFactoryTestSet } from './term.aggregate-factory.test-set';
+import { buildTranscribedAudioFactoryTestSet } from './transcribed-audio.aggregate-factory.test-set';
+import { buildVocabularyListAggregateFactoryTestSet } from './vocabulary-list.aggregate-factory.test-set';
 
 export type AggregateFactoryValidTestCase<TAggregateType extends AggregateType> = {
     dto: DTO<AggregateTypeToAggregateInstance[TAggregateType]>;
@@ -32,12 +32,12 @@ export type FactoryTestSuiteForAggregate<TAggregateType extends AggregateType = 
 
 export default (): FactoryTestSuiteForAggregate[] => [
     buildBibliographicReferenceFactoryTestSet(),
-    buildBookAggregateFactoryTestCaseSet(),
-    buildMediaItemFactoryTestCaseSet(),
+    buildBookAggregateFactoryTestSet(),
+    buildMediaItemFactoryTestSet(),
     buildPhotographFactoryTestSet(),
     buildSongFactoryTestSet(),
     buildSpatialFeatureFactoryTestSet(),
-    buildTermAggregateFactoryTestCaseSet(),
-    buildTranscribedAudioFactoryTestCaseSet(),
-    buildVocabularyListAggregateFactoryTestCases(),
+    buildTermAggregateFactoryTestSet(),
+    buildTranscribedAudioFactoryTestSet(),
+    buildVocabularyListAggregateFactoryTestSet(),
 ];

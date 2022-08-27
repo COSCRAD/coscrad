@@ -1,10 +1,10 @@
 import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
 import { Valid } from '../../domainModelValidators/Valid';
-import getValidAggregateInstanceForTest from '../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { AggregateType } from '../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import buildInMemorySnapshot from '../../utilities/buildInMemorySnapshot';
+import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
 import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
 import { dummyUuid } from '../__tests__/utilities/dummyUuid';

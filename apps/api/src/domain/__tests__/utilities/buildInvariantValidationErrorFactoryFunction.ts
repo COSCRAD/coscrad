@@ -1,7 +1,7 @@
-import { InternalError } from '../../../../../../lib/errors/InternalError';
-import { AggregateId } from '../../../../../types/AggregateId';
-import { AggregateType } from '../../../../../types/AggregateType';
-import InvariantValidationError from '../../../../errors/InvariantValidationError';
+import { InternalError } from '../../../lib/errors/InternalError';
+import InvariantValidationError from '../../domainModelValidators/errors/InvariantValidationError';
+import { AggregateId } from '../../types/AggregateId';
+import { AggregateType } from '../../types/AggregateType';
 
 type InvariantValidationErrorFactoryFunction = (
     id: AggregateId,

@@ -25,8 +25,9 @@ export class Line extends Resource implements ISpatialFeature {
         const { geometry: geometryDTO } = dto;
 
         /**
-         * Do we want a class instead of a type for this property? Either way,
-         * this should already have been validated at this point.
+         * We use a plain-old object here to minimize maintenance and readability
+         * issues that come with additional layers of OOP. Nonetheless, we deep
+         * clone to avoid shared references and hence unwanted side-effects.
          */
         this.geometry = cloneToPlainObject(
             geometryDTO as IGeometricFeature<typeof GeometricFeatureType.line, LineCoordinates>
@@ -40,7 +41,7 @@ export class Line extends Resource implements ISpatialFeature {
          * Note that **all** invariant validation rules are validated within
          * the following function. We opt-out of the decorator-based
          * 'simple-invariant' validation for geometric models because it is
-         * simpler to keep all coordinates as plain-old objects and not
+         * more transparent to keep all coordinates as plain-old objects and not
          * instances of nested classes.
          */
         return validateAllCoordinatesInLinearStructure(coordinates);

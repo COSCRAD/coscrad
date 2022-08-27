@@ -1,5 +1,5 @@
 import {
-    BiblographicSubjectCreatorType,
+    BibliographicSubjectCreatorType,
     CoscradEnum,
     Enum,
     NonEmptyString,
@@ -13,7 +13,7 @@ export default class BibliographicReferenceCreator extends BaseDomainModel {
     readonly name: string;
 
     @Enum(CoscradEnum.BibliographicSubjectCreatorType)
-    readonly type: BiblographicSubjectCreatorType;
+    readonly type: BibliographicSubjectCreatorType;
 
     constructor(dto: DTO<BibliographicReferenceCreator>) {
         super();

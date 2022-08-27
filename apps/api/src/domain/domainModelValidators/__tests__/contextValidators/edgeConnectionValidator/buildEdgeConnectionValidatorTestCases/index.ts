@@ -11,6 +11,7 @@ import { EdgeConnectionContextType } from '../../../../../models/context/types/E
 import { dummyUuid } from '../../../../../models/__tests__/utilities/dummyUuid';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { ResourceType } from '../../../../../types/ResourceType';
+import buildInvariantValidationErrorFactoryFunction from '../../../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import BothMembersInEdgeConnectionHaveSameRoleError from '../../../../errors/context/edgeConnections/BothMembersInEdgeConnectionHaveSameRoleError';
 import ContextTypeIsNotAllowedForGivenResourceTypeError from '../../../../errors/context/edgeConnections/ContextTypeIsNotAllowedForGivenResourceTypeError';
 import InvalidEdgeConnectionMemberRolesError from '../../../../errors/context/edgeConnections/InvalidEdgeConnectionMemberRolesError';
@@ -19,7 +20,6 @@ import IncompatibleIdentityConnectionMembersError from '../../../../errors/conte
 import InvalidEdgeConnectionContextModelError from '../../../../errors/context/InvalidEdgeConnectionContextModelError';
 import LonelyIdentityContextInEdgeconnectionError from '../../../../errors/context/LonelyIdentityContextInEdgeConnectionError';
 import SelfConnectionCannotUseIdentityContextError from '../../../../errors/context/SelfConnectionCannotUseIdentityContextError';
-import buildInvariantValidationErrorFactoryFunction from '../../../domainModelValidators/buildDomainModelValidatorTestCases/utils/buildInvariantValidationErrorFactoryFunction';
 import { EdgeConnectionValidatorTestCase } from '../types/EdgeConnectionValidatorTestCase';
 
 const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(AggregateType.note);

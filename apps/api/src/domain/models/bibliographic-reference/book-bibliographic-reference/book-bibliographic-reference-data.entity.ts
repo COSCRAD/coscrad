@@ -32,7 +32,7 @@ export default class BookBibliographicReferenceData
     // `abstractNote` is what Zotero calls this property
     readonly abstract?: string;
 
-    // TODO Support `Year` data type
+    // TODO [https://www.pivotaltracker.com/story/show/183109463] Support `Year` data type
     @IsOptional()
     @IsYear()
     readonly year?: number;
@@ -46,12 +46,12 @@ export default class BookBibliographicReferenceData
     @URL({ isOptional })
     readonly url?: string;
 
-    // TODO Support `PositiveInteger` data type
+    // TODO [https://www.pivotaltracker.com/story/show/183109466] Support `PositiveInteger` data type
     @IsOptional()
     @IsPositiveInteger()
     readonly numberOfPages?: number;
 
-    // TODO Support `ISBN` data type
+    // TODO [https://www.pivotaltracker.com/story/show/183109463] Support `ISBN` data type
     @IsOptional()
     @IsISBN()
     readonly isbn?: string;

@@ -1,7 +1,7 @@
-import { InternalError } from '../../../../../../lib/errors/InternalError';
-import buildTestData from '../../../../../../test-data/buildTestData';
-import { BibliographicReferenceTypeToInstance } from '../../../../../factories/complexFactories/buildBibliographicReferenceFactory/getCtorFromBibliographicReferenceType';
-import { BibliographicReferenceType } from '../../../../../models/bibliographic-reference/types/BibliographicReferenceType';
+import { InternalError } from '../../../lib/errors/InternalError';
+import buildTestData from '../../../test-data/buildTestData';
+import { BibliographicReferenceTypeToInstance } from '../../factories/complexFactories/buildBibliographicReferenceFactory/getCtorFromBibliographicReferenceType';
+import { BibliographicReferenceType } from '../../models/bibliographic-reference/types/BibliographicReferenceType';
 
 export default <TBibliographicReferenceType extends BibliographicReferenceType>(
     bibliographicReferenceType: TBibliographicReferenceType

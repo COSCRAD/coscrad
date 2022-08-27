@@ -24,8 +24,9 @@ export class Polygon extends Resource implements ISpatialFeature {
         const { geometry: geometryDTO } = dto;
 
         /**
-         * Do we want a class instead of a type for this property? Either way,
-         * this should already have been validated at this point.
+         * We use a plain-old object here to minimize maintenance and readability
+         * issues that come with additional layers of OOP. Nonetheless, we deep
+         * clone to avoid shared references and hence unwanted side-effects.
          */
         this.geometry = cloneToPlainObject(
             geometryDTO as IGeometricFeature<

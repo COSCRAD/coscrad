@@ -1,6 +1,7 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { MIMEType } from '@coscrad/data-types';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
+import getValidAggregateInstanceForTest from '../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../lib/types/not-available';
 import { NotFound } from '../../../../lib/types/not-found';
@@ -10,7 +11,6 @@ import TestRepositoryProvider from '../../../../persistence/repositories/__tests
 import { DTO } from '../../../../types/DTO';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
-import getValidAggregateInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandFailsDueToTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';

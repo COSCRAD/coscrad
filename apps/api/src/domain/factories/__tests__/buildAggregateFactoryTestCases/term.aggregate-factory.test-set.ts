@@ -1,10 +1,10 @@
+import { FactoryTestSuiteForAggregate } from '.';
 import { clonePlainObjectWithoutProperties } from '../../../../lib/utilities/clonePlainObjectWithoutProperties';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import TermHasNoTextInAnyLanguageError from '../../../domainModelValidators/errors/term/TermHasNoTextInAnyLanguageError';
-import getValidAggregateInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { AggregateType } from '../../../types/AggregateType';
-import { FactoryTestSuiteForAggregate } from './';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import buildNullAndUndefinedAggregateFactoryInvalidTestCases from './common/buildNullAndUndefinedAggregateFactoryInvalidTestCases';
 import { generateFuzzAggregateFactoryTestCases } from './utilities/generate-fuzz-aggregate-factory-test-cases';
 
@@ -12,7 +12,7 @@ const validTerm = getValidAggregateInstanceForTest(AggregateType.term);
 
 const validTermDto = validTerm.toDTO();
 
-export const buildTermAggregateFactoryTestCaseSet = (): FactoryTestSuiteForAggregate<
+export const buildTermAggregateFactoryTestSet = (): FactoryTestSuiteForAggregate<
     typeof AggregateType.term
 > => ({
     aggregateType: AggregateType.term,

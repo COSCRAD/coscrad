@@ -2,9 +2,9 @@ import { FuzzGenerator, getCoscradDataSchema } from '@coscrad/data-types';
 import { AggregateFactoryInalidTestCase } from '..';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import formatBibliographicReferenceType from '../../../../../view-models/presentation/formatBibliographicReferenceType';
-import getValidBibliographicReferenceInstanceForTest from '../../../../domainModelValidators/__tests__/domainModelValidators/buildDomainModelValidatorTestCases/utils/getValidBibliographicReferenceInstanceForTest';
 import { BibliographicReferenceType } from '../../../../models/bibliographic-reference/types/BibliographicReferenceType';
 import assertCoscradDataTypeError from '../../../../models/__tests__/invariant-validation-helpers/assertCoscradDataTypeError';
+import getValidBibliographicReferenceInstanceForTest from '../../../../__tests__/utilities/getValidBibliographicReferenceInstanceForTest';
 import { getDataCtorFromBibliographicReferenceType } from '../../../complexFactories/buildBibliographicReferenceFactory/getDataCtorFromBibliographicReferenceType';
 
 export const buildBibliographicReferenceSubtypeFuzzTestCases = (

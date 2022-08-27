@@ -335,3 +335,49 @@ TranscribedAudio {
   "type": "transcribedAudio",
 }
 `;
+
+exports[`Aggregate factories when attempting to build an instance of type: vocabularyList from a DTO when the DTO is valid valid vocabulary list should succeed 1`] = `
+VocabularyList {
+  "entries": Array [
+    Object {
+      "termId": "1",
+      "variableValues": Object {
+        "person": "11",
+      },
+    },
+    Object {
+      "termId": "2",
+      "variableValues": Object {
+        "person": "21",
+      },
+    },
+  ],
+  "eventHistory": Array [],
+  "getCompositeIdentifier": [Function],
+  "id": "1",
+  "name": "test VL 1 chil",
+  "nameEnglish": "test VL 1 engl",
+  "published": false,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "type": "vocabularyList",
+  "variables": Array [
+    Object {
+      "name": "person",
+      "type": "dropbox",
+      "validValues": Array [
+        Object {
+          "display": "I",
+          "value": "11",
+        },
+        Object {
+          "display": "We",
+          "value": "21",
+        },
+      ],
+    },
+  ],
+}
+`;

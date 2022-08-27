@@ -1,11 +1,11 @@
+import { FactoryTestSuiteForAggregate } from '.';
 import { clonePlainObjectWithoutProperties } from '../../../../lib/utilities/clonePlainObjectWithoutProperties';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import VocabularyListHasNoEntriesError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoEntriesError';
 import VocabularyListHasNoNameInAnyLanguageError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoNameInAnyLanguageError';
-import buildInvariantValidationErrorFactoryFunction from '../../../domainModelValidators/__tests__/domainModelValidators/buildDomainModelValidatorTestCases/utils/buildInvariantValidationErrorFactoryFunction';
-import getValidAggregateInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { AggregateType } from '../../../types/AggregateType';
-import { FactoryTestSuiteForAggregate } from './';
+import buildInvariantValidationErrorFactoryFunction from '../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import buildNullAndUndefinedAggregateFactoryInvalidTestCases from './common/buildNullAndUndefinedAggregateFactoryInvalidTestCases';
 import { generateFuzzAggregateFactoryTestCases } from './utilities/generate-fuzz-aggregate-factory-test-cases';
 
@@ -17,11 +17,16 @@ const validDto = validInstance.toDTO();
 
 const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(aggregateType);
 
-export const buildVocabularyListAggregateFactoryTestCases = (): FactoryTestSuiteForAggregate<
+export const buildVocabularyListAggregateFactoryTestSet = (): FactoryTestSuiteForAggregate<
     typeof aggregateType
 > => ({
     aggregateType: aggregateType,
-    validCases: [],
+    validCases: [
+        {
+            description: `valid vocabulary list`,
+            dto: validDto,
+        },
+    ],
     invalidCases: [
         {
             description: 'the vocabulary list has no name in either language',

@@ -2,7 +2,7 @@ import { buildSimpleValidationFunction } from '@coscrad/validation';
 import 'reflect-metadata';
 import { NonEmptyString, URL, UUID } from '../index';
 import { Enum, NestedDataType, NonNegativeFiniteNumber, RawDataObject } from '../lib/decorators';
-import { BiblographicSubjectCreatorType, CoscradEnum, MIMEType } from '../lib/enums';
+import { BibliographicSubjectCreatorType, CoscradEnum, MIMEType } from '../lib/enums';
 import { CoscradUserRole } from '../lib/enums/CoscradUserRole';
 import getCoscradDataSchema from '../lib/utilities/getCoscradDataSchema';
 
@@ -64,7 +64,7 @@ describe('NonEmptyString', () => {
         role = CoscradUserRole.viewer;
 
         @Enum(CoscradEnum.BibliographicSubjectCreatorType)
-        creatorType = BiblographicSubjectCreatorType.artist;
+        creatorType = BibliographicSubjectCreatorType.artist;
 
         constructor(dto: Widget) {
             Object.assign(this, dto);
@@ -102,7 +102,7 @@ describe('NonEmptyString', () => {
 
         role: CoscradUserRole.viewer,
 
-        creatorType: BiblographicSubjectCreatorType.artist,
+        creatorType: BibliographicSubjectCreatorType.artist,
     };
 
     it('should populate the appropriate metadata', () => {

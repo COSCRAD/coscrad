@@ -5,7 +5,6 @@ describe('clonePlainObjectWithoutProperty', () => {
      * Note that static type safety should prevent the user from calling
      * with a bogus property key.
      */
-
     describe('when the properties exist in the input object', () => {
         const inputsExpectedOutputsAndKeysToRemove: [
             Record<string, unknown>,

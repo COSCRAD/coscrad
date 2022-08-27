@@ -1,6 +1,6 @@
 import DisallowedContextTypeForResourceError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';
-import getValidEntityInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { ResourceType, ResourceTypeToResourceModel } from '../../../types/ResourceType';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import isContextAllowedForGivenResourceType from '../../allowedContexts/isContextAllowedForGivenResourceType';
 import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { ResourceModelContextStateValidatorInvalidTestCase } from '../resourceModelContextStateValidators.spec';
@@ -11,7 +11,7 @@ export default <TResourceType extends ResourceType = ResourceType>(
 ): ResourceModelContextStateValidatorInvalidTestCase<
     ResourceTypeToResourceModel[TResourceType]
 >[] => {
-    const resource = getValidEntityInstanceForTest(resourceType);
+    const resource = getValidAggregateInstanceForTest(resourceType);
 
     const result = Object.values(EdgeConnectionContextType)
         .filter((contextType) => !isContextAllowedForGivenResourceType(contextType, resourceType))

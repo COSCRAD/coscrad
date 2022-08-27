@@ -1,7 +1,7 @@
+import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
 import buildTestDataInFlatFormat from '../../../test-data/buildTestDataInFlatFormat';
 import { DTO } from '../../../types/DTO';
-import getValidAggregateInstanceForTest from '../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { AggregateType } from '../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { PartialSnapshot } from '../../types/PartialSnapshot';

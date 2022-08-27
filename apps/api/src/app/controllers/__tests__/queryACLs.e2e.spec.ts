@@ -1,7 +1,6 @@
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import getValidAggregateInstanceForTest from '../../../domain/domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import { Resource } from '../../../domain/models/resource.entity';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import getId from '../../../domain/models/shared/functional/getId';
@@ -9,6 +8,7 @@ import { CoscradUserWithGroups } from '../../../domain/models/user-management/us
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
+import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';

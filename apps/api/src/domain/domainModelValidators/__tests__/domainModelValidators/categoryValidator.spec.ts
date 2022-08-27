@@ -4,8 +4,8 @@ import { DTO } from '../../../../types/DTO';
 import { Category } from '../../../models/categories/entities/category.entity';
 import { AggregateType } from '../../../types/AggregateType';
 import { CategorizableType } from '../../../types/CategorizableType';
+import buildInvariantValidationErrorFactoryFunction from '../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import { Valid } from '../../Valid';
-import buildInvariantValidationErrorFactoryFunction from './buildDomainModelValidatorTestCases/utils/buildInvariantValidationErrorFactoryFunction';
 
 const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(AggregateType.category);
 

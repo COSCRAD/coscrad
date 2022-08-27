@@ -20,6 +20,7 @@ import { ITimeBoundable } from '../../interfaces/ITimeBoundable';
 import { Resource } from '../../resource.entity';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
+import newInstance from '../../shared/functional/newInstance';
 import { ContributorAndRole } from '../../song/ContributorAndRole';
 
 @RegisterIndexScopedCommands(['CREATE_MEDIA_ITEM'])
@@ -57,9 +58,7 @@ export class MediaItem extends Resource implements ITimeBoundable {
         this.titleEnglish = titleEnglish;
 
         this.contributorAndRoles = Array.isArray(contributorAndRoles)
-            ? contributorAndRoles.map(
-                  (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
-              )
+            ? contributorAndRoles.map(newInstance(ContributorAndRole))
             : null;
 
         this.url = url;

@@ -1,23 +1,22 @@
+import { FactoryTestSuiteForAggregate } from '.';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
-import buildInvariantValidationErrorFactoryFunction from '../../../domainModelValidators/__tests__/domainModelValidators/buildDomainModelValidatorTestCases/utils/buildInvariantValidationErrorFactoryFunction';
-import getValidAggregateInstanceForTest from '../../../domainModelValidators/__tests__/domainModelValidators/utilities/getValidAggregateInstanceForTest';
 import PublishedBookHasNoPagesError from '../../../models/book/entities/errors/PublishedBookHasNoPagesError';
-import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
-import { FactoryTestSuiteForAggregate } from './';
+import buildInvariantValidationErrorFactoryFunction from '../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import buildNullAndUndefinedAggregateFactoryInvalidTestCases from './common/buildNullAndUndefinedAggregateFactoryInvalidTestCases';
 import { generateFuzzAggregateFactoryTestCases } from './utilities/generate-fuzz-aggregate-factory-test-cases';
 
-const resourceType = ResourceType.book;
+const aggregateType = ResourceType.book;
 
-const validBookDTO = getValidAggregateInstanceForTest(resourceType).toDTO();
+const validBookDTO = getValidAggregateInstanceForTest(aggregateType).toDTO();
 
-const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(resourceType);
+const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(aggregateType);
 
-export const buildBookAggregateFactoryTestCaseSet = (): FactoryTestSuiteForAggregate<
-    typeof AggregateType.book
+export const buildBookAggregateFactoryTestSet = (): FactoryTestSuiteForAggregate<
+    typeof aggregateType
 > => ({
-    aggregateType: AggregateType.book,
+    aggregateType: aggregateType,
     validCases: [
         {
             description: 'valid book',
@@ -38,7 +37,7 @@ export const buildBookAggregateFactoryTestCaseSet = (): FactoryTestSuiteForAggre
                     buildTopLevelError(validBookDTO.id, [new PublishedBookHasNoPagesError()])
                 ),
         },
-        ...buildNullAndUndefinedAggregateFactoryInvalidTestCases(AggregateType.book),
-        ...generateFuzzAggregateFactoryTestCases(AggregateType.book, validBookDTO),
+        ...buildNullAndUndefinedAggregateFactoryInvalidTestCases(aggregateType),
+        ...generateFuzzAggregateFactoryTestCases(aggregateType, validBookDTO),
     ],
 });

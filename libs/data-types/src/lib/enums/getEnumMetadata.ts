@@ -1,5 +1,5 @@
 import { CoscradDataType } from '../types/CoscradDataType';
-import { BiblographicSubjectCreatorType } from './BibliographicSubjectCreatorType';
+import { BibliographicSubjectCreatorType } from './BibliographicSubjectCreatorType';
 import { CoscradEnum } from './CoscradEnum';
 import { CoscradUserRole } from './CoscradUserRole';
 import { MIMEType } from './MIMEType';
@@ -47,15 +47,15 @@ const enumNameToMetadata: { [K in CoscradEnum]: EnumMetadata } = {
         labelsAndValues: [
             {
                 label: 'artist',
-                value: BiblographicSubjectCreatorType.artist,
+                value: BibliographicSubjectCreatorType.artist,
             },
             {
                 label: 'author',
-                value: BiblographicSubjectCreatorType.author,
+                value: BibliographicSubjectCreatorType.author,
             },
             {
                 label: 'director',
-                value: BiblographicSubjectCreatorType.director,
+                value: BibliographicSubjectCreatorType.director,
             },
         ],
     },

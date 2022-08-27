@@ -5,13 +5,13 @@ import { InternalError, isInternalError } from '../../../../../../lib/errors/Int
 import { DomainModelCtor } from '../../../../../../lib/types/DomainModelCtor';
 import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
 import { DTO } from '../../../../../../types/DTO';
-import buildInvariantValidationErrorFactoryFunction from '../../../../../domainModelValidators/__tests__/domainModelValidators/buildDomainModelValidatorTestCases/utils/buildInvariantValidationErrorFactoryFunction';
 import { Aggregate } from '../../../../../models/aggregate.entity';
 import createInvalidAggregateFactory from '../../../../../models/__tests__/utilities/createInvalidAggregateFactory';
 import {
     AggregateType,
     AggregateTypeToAggregateInstance,
 } from '../../../../../types/AggregateType';
+import buildInvariantValidationErrorFactoryFunction from '../../../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
 import getInstanceFactoryForResource from '../../../../getInstanceFactoryForResource';
 import getAggregateCtorFromAggregateType from '../../../../utilities/getAggregateCtorFromAggregateType';
 
@@ -23,7 +23,7 @@ const getCtor = <TAggregateType extends AggregateType = AggregateType>(
         const result = getInstanceFactoryForResource(aggregateType)(validDTO);
 
         if (isInternalError(result))
-            throw new InternalError(`Failed tobuild an instance of: ${aggregateType}`);
+            throw new InternalError(`Failed to build an instance of: ${aggregateType}`);
 
         /**
          * TODO [hack] find a better way to get the Ctor from the subtype for a

@@ -4,8 +4,6 @@ import { AggregateType } from '../../../../types/AggregateType';
 
 export default class PublishedBookHasNoPagesError extends InternalError {
     constructor() {
-        super(
-            `A ${formatAggregateType(AggregateType.book)} cannot be published and yet have no pages`
-        );
+        super(`A ${formatAggregateType(AggregateType.book)} cannot be published without pages`);
     }
 }

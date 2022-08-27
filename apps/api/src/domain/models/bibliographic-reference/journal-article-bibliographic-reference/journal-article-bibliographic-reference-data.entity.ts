@@ -18,7 +18,10 @@ export default class JournalArticleBibliographicReferenceData
     @IsStringWithNonzeroLength()
     readonly title: string;
 
-    // TODO Support non-empty array based on `isOptional`
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/183109468]
+     * Support non-empty array based on `isOptional`.
+     */
     @IsNonEmptyArray()
     @NestedDataType(BibliographicReferenceCreator, { isArray: true })
     readonly creators: BibliographicReferenceCreator[];
