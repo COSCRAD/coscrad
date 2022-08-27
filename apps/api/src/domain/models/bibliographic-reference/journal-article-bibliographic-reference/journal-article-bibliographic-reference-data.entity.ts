@@ -29,9 +29,15 @@ export default class JournalArticleBibliographicReferenceData
     @NonEmptyString({ isOptional })
     readonly abstract?: string;
 
-    @NonEmptyString()
+    /**
+     * Note that in some instances, this data is not present in Zotero. In some
+     * cases, Zotero represents the missing `issueDate` as an empty string.
+     * Within our system, we will ommit the property instead of allowing empty strings.
+     * So the property is optional, but if provided, it must be a non-empty string.
+     */
+    @NonEmptyString({ isOptional })
     // WARNING: this is unstructured data from Zotero
-    readonly issueDate: string;
+    readonly issueDate?: string;
 
     @NonEmptyString({ isOptional })
     readonly publicationTitle?: string;

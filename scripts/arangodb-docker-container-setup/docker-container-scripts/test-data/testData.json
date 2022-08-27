@@ -786,6 +786,55 @@
             },
             {
                 "type": "bibliographicReference",
+                "_key": "2",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "data": {
+                    "type": "book",
+                    "title": "The Shuswap. Memoirs of the AMNH ; v. 4, pt. 7; Publications of the Jesup North Pacific Expedition ; v. 2, pt. 7.",
+                    "creators": [
+                        {
+                            "name": "James Alexander Teit",
+                            "type": "author"
+                        }
+                    ],
+                    "abstract": "x, p. [443]-813. illus. pl. 13-14 35 cm.",
+                    "year": 1909,
+                    "url": "https://digitallibrary.amnh.org/handle/2246/38"
+                }
+            },
+            {
+                "type": "bibliographicReference",
+                "_key": "3",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "data": {
+                    "type": "book",
+                    "title": "The archive of place: unearthing the pasts of the Chilcotin Plateau",
+                    "creators": [
+                        {
+                            "name": "William J. Turkel",
+                            "type": "author"
+                        }
+                    ],
+                    "year": 2007,
+                    "publisher": "UBC Press",
+                    "place": "Vancouver",
+                    "url": "https://vpl.bibliocommons.com/v2/record/S38C1549002",
+                    "isbn": "978-0-7748-1376-1",
+                    "numberOfPages": 322
+                }
+            },
+            {
+                "type": "bibliographicReference",
                 "_key": "23",
                 "eventHistory": [],
                 "published": true,
@@ -813,7 +862,58 @@
             },
             {
                 "type": "bibliographicReference",
-                "_key": "3",
+                "_key": "24",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "data": {
+                    "type": "journalArticle",
+                    "title": "\"INTO THAT COUNTRY TO WORK\": Aboriginal Economic Activities during Barkerville's Gold Rush *",
+                    "creators": [
+                        {
+                            "name": "Mica Jorgenson",
+                            "type": "author"
+                        }
+                    ],
+                    "abstract": "Drawing on Ken Martin and Mike Robinson's 1972 surveys of pre-contact sites and on a broad reading of secondary literature, including the work of Diamond Jenness, Adrien-Gabriel Morice, and G.R. Willey, Condrashoff argues that pit houses and salmon storage pits on Bowron Lake and at the headwaters of the Bowron River indicate \"considerable use of the area\" and yearround occupation rather than simply seasonal use for salmon fishing.13 Projectile points found near the storage pits appear to show attributes of the Kamloops Phase, dated approximately 1250 to 1800 CE, which suggests occupation of the site during the contact period and fur trade era and its possible abandonment shortly before or during the gold rush.",
+                    "issueDate": "Spring 2015",
+                    "publicationTitle": "BC Studies",
+                    "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+                    "pages": "109-113,115-136,240",
+                    "issn": "00052949"
+                }
+            },
+            {
+                "type": "bibliographicReference",
+                "_key": "25",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "data": {
+                    "type": "journalArticle",
+                    "title": "KWONG LEE & COMPANY AND EARLY TRANS-PACIFIC TRADE: From Canton, Hong Kong, to Victoria and Barkerville",
+                    "creators": [
+                        {
+                            "name": "Tzu-I. Chung",
+                            "type": "author"
+                        }
+                    ],
+                    "abstract": "[...]of the Opium Wars, Chinese use of opium became widespread, and opium became an integral (and increasingly strong) thread in the \"web of empire.\" [...]of the gold rushes, Chinese migrants informed the cultures of the trans-Pacific world.",
+                    "publicationTitle": "BC Studies",
+                    "url": "https://search.proquest.com/docview/1682229425/abstract/CD9031FDCDF4B48PQ/1",
+                    "pages": "137-151,153-154,157-158,160,239",
+                    "issn": "00052949"
+                }
+            },
+            {
+                "type": "bibliographicReference",
+                "_key": "44",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -829,6 +929,45 @@
                     "court": "Supreme Court of British Columbia",
                     "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
                     "pages": "Pages 1-6"
+                }
+            },
+            {
+                "type": "bibliographicReference",
+                "_key": "45",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "data": {
+                    "type": "courtCase",
+                    "caseName": "2003-07-29_ElizaWilliam_affidavit",
+                    "creators": [],
+                    "abstract": "William, Eliza\n- Affidavit #2",
+                    "dateDecided": "Sworn 2003-07-29",
+                    "court": "Supreme Court of British Columbia",
+                    "url": "https://mysecurelink.com/another-bogus-link.cfm",
+                    "pages": "Pages 1 - 73"
+                }
+            },
+            {
+                "type": "bibliographicReference",
+                "_key": "46",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "data": {
+                    "type": "courtCase",
+                    "caseName": "IN THE SUPREME COURT OF BRITISH COLUMBIA",
+                    "creators": [],
+                    "abstract": "Roger William, on his own behalf, on behalf of all other members of the Xeni Gwet’in First Nations Government and on behalf of all other members of the Tsilhqot’in Nation\n\nAppellant\n\nV.\n\nHer Majesty The Queen in Right of the Province of British Columbia, Regional Manager of the Cariboo Forest Region and Attorney General of Canada Respondents\n\nAnd\n\nAttorney General of Quebec, Attorney General of Manitoba, Attorney General for Saskatchewan, Attorney General of Alberta, Te’mexw Treaty Association, Business Council of British Columbia, Council of Forest Industries, Coast Forest Products Association, Mining Association of British Columbia, Association for Mineral Exploration British Columbia, Assembly of First Nations, Gitanyow Hereditary Chiefs of Gwass Hlaam, Gamlaxyeltxw, Malii, Gwinuu, Haizimsque, Watakhayetsxw, Luuxhon and Wii’litswx, on their own behalf and on behalf of all Gitanyow, Hul’qumi’num Treaty Group, Council of the Haida Nation, Office of the Wet’suwet’en Chiefs, Indigenous Bar Association in Canada, First Nations Summit, Tsawout First Nation, Tsartlip First Nation, Snuneymuxw First Nation, Kwakiutl First Nation, Coalition of Union of British Columbia Indian Chiefs, Okanagan Nation Alliance, Shuswap Nation Tribal Council and their member communities, Okanagan, Adams Lake, Neskonlith and Splatsin Indian Bands, Amnesty International, Canadian Friends Service Committee, Gitxaala Nation, Chilko Resorts and Community Association and Council of Canadians\n\nInterveners\n\nIndexed as:  Tsilhqot’in Nation v. British Columbia\n2014 SCC 44\nFile No.:  34986.\n2013:  November 7; 2014:  June 26.\nPresent:  McLachlin C.J. and LeBel, Abella, Rothstein, Cromwell, Moldaver, Karakatsanis and Wagner JJ.",
+                    "dateDecided": "2007-11-20",
+                    "court": "Supreme Court of British Columbia",
+                    "url": "https://www.bccourts.ca/Jdb-txt/SC/07/17/2007BCSC1700.pdf"
                 }
             }
         ],

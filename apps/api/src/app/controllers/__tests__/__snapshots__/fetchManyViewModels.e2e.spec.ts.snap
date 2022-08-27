@@ -73,6 +73,90 @@ Object {
       ],
       "data": Object {
         "data": Object {
+          "abstract": "x, p. [443]-813. illus. pl. 13-14 35 cm.",
+          "creators": Array [
+            Object {
+              "name": "James Alexander Teit",
+              "type": "author",
+            },
+          ],
+          "title": "The Shuswap. Memoirs of the AMNH ; v. 4, pt. 7; Publications of the Jesup North Pacific Expedition ; v. 2, pt. 7.",
+          "type": "book",
+          "url": "https://digitallibrary.amnh.org/handle/2246/38",
+          "year": 1909,
+        },
+        "id": "2",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
+          "creators": Array [
+            Object {
+              "name": "William J. Turkel",
+              "type": "author",
+            },
+          ],
+          "isbn": "978-0-7748-1376-1",
+          "numberOfPages": 322,
+          "place": "Vancouver",
+          "publisher": "UBC Press",
+          "title": "The archive of place: unearthing the pasts of the Chilcotin Plateau",
+          "type": "book",
+          "url": "https://vpl.bibliocommons.com/v2/record/S38C1549002",
+          "year": 2007,
+        },
+        "id": "3",
+        "tags": Array [
+          Object {
+            "id": "6",
+            "label": "law",
+          },
+        ],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
           "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
           "creators": Array [
             Object {
@@ -115,6 +199,87 @@ Object {
       ],
       "data": Object {
         "data": Object {
+          "abstract": "Drawing on Ken Martin and Mike Robinson's 1972 surveys of pre-contact sites and on a broad reading of secondary literature, including the work of Diamond Jenness, Adrien-Gabriel Morice, and G.R. Willey, Condrashoff argues that pit houses and salmon storage pits on Bowron Lake and at the headwaters of the Bowron River indicate \\"considerable use of the area\\" and yearround occupation rather than simply seasonal use for salmon fishing.13 Projectile points found near the storage pits appear to show attributes of the Kamloops Phase, dated approximately 1250 to 1800 CE, which suggests occupation of the site during the contact period and fur trade era and its possible abandonment shortly before or during the gold rush.",
+          "creators": Array [
+            Object {
+              "name": "Mica Jorgenson",
+              "type": "author",
+            },
+          ],
+          "issn": "00052949",
+          "issueDate": "Spring 2015",
+          "pages": "109-113,115-136,240",
+          "publicationTitle": "BC Studies",
+          "title": "\\"INTO THAT COUNTRY TO WORK\\": Aboriginal Economic Activities during Barkerville's Gold Rush *",
+          "type": "journalArticle",
+          "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+        },
+        "id": "24",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
+          "abstract": "[...]of the Opium Wars, Chinese use of opium became widespread, and opium became an integral (and increasingly strong) thread in the \\"web of empire.\\" [...]of the gold rushes, Chinese migrants informed the cultures of the trans-Pacific world.",
+          "creators": Array [
+            Object {
+              "name": "Tzu-I. Chung",
+              "type": "author",
+            },
+          ],
+          "issn": "00052949",
+          "pages": "137-151,153-154,157-158,160,239",
+          "publicationTitle": "BC Studies",
+          "title": "KWONG LEE & COMPANY AND EARLY TRANS-PACIFIC TRADE: From Canton, Hong Kong, to Victoria and Barkerville",
+          "type": "journalArticle",
+          "url": "https://search.proquest.com/docview/1682229425/abstract/CD9031FDCDF4B48PQ/1",
+        },
+        "id": "25",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
           "abstract": "William, June
 - Nemiah Valley
 - Qualifying as an expert in Tsilhqot'in written language",
@@ -126,13 +291,96 @@ Object {
           "type": "courtCase",
           "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
         },
-        "id": "3",
-        "tags": Array [
-          Object {
-            "id": "6",
-            "label": "law",
+        "id": "44",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
           },
-        ],
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
+          "abstract": "William, Eliza
+- Affidavit #2",
+          "caseName": "2003-07-29_ElizaWilliam_affidavit",
+          "court": "Supreme Court of British Columbia",
+          "creators": Array [],
+          "dateDecided": "Sworn 2003-07-29",
+          "pages": "Pages 1 - 73",
+          "type": "courtCase",
+          "url": "https://mysecurelink.com/another-bogus-link.cfm",
+        },
+        "id": "45",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
+          "abstract": "Roger William, on his own behalf, on behalf of all other members of the Xeni Gwet’in First Nations Government and on behalf of all other members of the Tsilhqot’in Nation
+
+Appellant
+
+V.
+
+Her Majesty The Queen in Right of the Province of British Columbia, Regional Manager of the Cariboo Forest Region and Attorney General of Canada Respondents
+
+And
+
+Attorney General of Quebec, Attorney General of Manitoba, Attorney General for Saskatchewan, Attorney General of Alberta, Te’mexw Treaty Association, Business Council of British Columbia, Council of Forest Industries, Coast Forest Products Association, Mining Association of British Columbia, Association for Mineral Exploration British Columbia, Assembly of First Nations, Gitanyow Hereditary Chiefs of Gwass Hlaam, Gamlaxyeltxw, Malii, Gwinuu, Haizimsque, Watakhayetsxw, Luuxhon and Wii’litswx, on their own behalf and on behalf of all Gitanyow, Hul’qumi’num Treaty Group, Council of the Haida Nation, Office of the Wet’suwet’en Chiefs, Indigenous Bar Association in Canada, First Nations Summit, Tsawout First Nation, Tsartlip First Nation, Snuneymuxw First Nation, Kwakiutl First Nation, Coalition of Union of British Columbia Indian Chiefs, Okanagan Nation Alliance, Shuswap Nation Tribal Council and their member communities, Okanagan, Adams Lake, Neskonlith and Splatsin Indian Bands, Amnesty International, Canadian Friends Service Committee, Gitxaala Nation, Chilko Resorts and Community Association and Council of Canadians
+
+Interveners
+
+Indexed as:  Tsilhqot’in Nation v. British Columbia
+2014 SCC 44
+File No.:  34986.
+2013:  November 7; 2014:  June 26.
+Present:  McLachlin C.J. and LeBel, Abella, Rothstein, Cromwell, Moldaver, Karakatsanis and Wagner JJ.",
+          "caseName": "IN THE SUPREME COURT OF BRITISH COLUMBIA",
+          "court": "Supreme Court of British Columbia",
+          "creators": Array [],
+          "dateDecided": "2007-11-20",
+          "type": "courtCase",
+          "url": "https://www.bccourts.ca/Jdb-txt/SC/07/17/2007BCSC1700.pdf",
+        },
+        "id": "46",
+        "tags": Array [],
       },
     },
   ],
@@ -212,6 +460,90 @@ Object {
       ],
       "data": Object {
         "data": Object {
+          "abstract": "x, p. [443]-813. illus. pl. 13-14 35 cm.",
+          "creators": Array [
+            Object {
+              "name": "James Alexander Teit",
+              "type": "author",
+            },
+          ],
+          "title": "The Shuswap. Memoirs of the AMNH ; v. 4, pt. 7; Publications of the Jesup North Pacific Expedition ; v. 2, pt. 7.",
+          "type": "book",
+          "url": "https://digitallibrary.amnh.org/handle/2246/38",
+          "year": 1909,
+        },
+        "id": "2",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
+          "creators": Array [
+            Object {
+              "name": "William J. Turkel",
+              "type": "author",
+            },
+          ],
+          "isbn": "978-0-7748-1376-1",
+          "numberOfPages": 322,
+          "place": "Vancouver",
+          "publisher": "UBC Press",
+          "title": "The archive of place: unearthing the pasts of the Chilcotin Plateau",
+          "type": "book",
+          "url": "https://vpl.bibliocommons.com/v2/record/S38C1549002",
+          "year": 2007,
+        },
+        "id": "3",
+        "tags": Array [
+          Object {
+            "id": "6",
+            "label": "law",
+          },
+        ],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
           "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
           "creators": Array [
             Object {
@@ -254,6 +586,87 @@ Object {
       ],
       "data": Object {
         "data": Object {
+          "abstract": "Drawing on Ken Martin and Mike Robinson's 1972 surveys of pre-contact sites and on a broad reading of secondary literature, including the work of Diamond Jenness, Adrien-Gabriel Morice, and G.R. Willey, Condrashoff argues that pit houses and salmon storage pits on Bowron Lake and at the headwaters of the Bowron River indicate \\"considerable use of the area\\" and yearround occupation rather than simply seasonal use for salmon fishing.13 Projectile points found near the storage pits appear to show attributes of the Kamloops Phase, dated approximately 1250 to 1800 CE, which suggests occupation of the site during the contact period and fur trade era and its possible abandonment shortly before or during the gold rush.",
+          "creators": Array [
+            Object {
+              "name": "Mica Jorgenson",
+              "type": "author",
+            },
+          ],
+          "issn": "00052949",
+          "issueDate": "Spring 2015",
+          "pages": "109-113,115-136,240",
+          "publicationTitle": "BC Studies",
+          "title": "\\"INTO THAT COUNTRY TO WORK\\": Aboriginal Economic Activities during Barkerville's Gold Rush *",
+          "type": "journalArticle",
+          "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+        },
+        "id": "24",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
+          "abstract": "[...]of the Opium Wars, Chinese use of opium became widespread, and opium became an integral (and increasingly strong) thread in the \\"web of empire.\\" [...]of the gold rushes, Chinese migrants informed the cultures of the trans-Pacific world.",
+          "creators": Array [
+            Object {
+              "name": "Tzu-I. Chung",
+              "type": "author",
+            },
+          ],
+          "issn": "00052949",
+          "pages": "137-151,153-154,157-158,160,239",
+          "publicationTitle": "BC Studies",
+          "title": "KWONG LEE & COMPANY AND EARLY TRANS-PACIFIC TRADE: From Canton, Hong Kong, to Victoria and Barkerville",
+          "type": "journalArticle",
+          "url": "https://search.proquest.com/docview/1682229425/abstract/CD9031FDCDF4B48PQ/1",
+        },
+        "id": "25",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
           "abstract": "William, June
 - Nemiah Valley
 - Qualifying as an expert in Tsilhqot'in written language",
@@ -265,13 +678,96 @@ Object {
           "type": "courtCase",
           "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
         },
-        "id": "3",
-        "tags": Array [
-          Object {
-            "id": "6",
-            "label": "law",
+        "id": "44",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
           },
-        ],
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
+          "abstract": "William, Eliza
+- Affidavit #2",
+          "caseName": "2003-07-29_ElizaWilliam_affidavit",
+          "court": "Supreme Court of British Columbia",
+          "creators": Array [],
+          "dateDecided": "Sworn 2003-07-29",
+          "pages": "Pages 1 - 73",
+          "type": "courtCase",
+          "url": "https://mysecurelink.com/another-bogus-link.cfm",
+        },
+        "id": "45",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "label": "Grant Read Access to User",
+          "schema": Object {
+            "resourceCompositeIdentifier": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "COMPOSITE_IDENTIFIER",
+            },
+            "userId": Object {
+              "isArray": false,
+              "isOptional": false,
+              "type": "UUID",
+            },
+          },
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "data": Object {
+          "abstract": "Roger William, on his own behalf, on behalf of all other members of the Xeni Gwet’in First Nations Government and on behalf of all other members of the Tsilhqot’in Nation
+
+Appellant
+
+V.
+
+Her Majesty The Queen in Right of the Province of British Columbia, Regional Manager of the Cariboo Forest Region and Attorney General of Canada Respondents
+
+And
+
+Attorney General of Quebec, Attorney General of Manitoba, Attorney General for Saskatchewan, Attorney General of Alberta, Te’mexw Treaty Association, Business Council of British Columbia, Council of Forest Industries, Coast Forest Products Association, Mining Association of British Columbia, Association for Mineral Exploration British Columbia, Assembly of First Nations, Gitanyow Hereditary Chiefs of Gwass Hlaam, Gamlaxyeltxw, Malii, Gwinuu, Haizimsque, Watakhayetsxw, Luuxhon and Wii’litswx, on their own behalf and on behalf of all Gitanyow, Hul’qumi’num Treaty Group, Council of the Haida Nation, Office of the Wet’suwet’en Chiefs, Indigenous Bar Association in Canada, First Nations Summit, Tsawout First Nation, Tsartlip First Nation, Snuneymuxw First Nation, Kwakiutl First Nation, Coalition of Union of British Columbia Indian Chiefs, Okanagan Nation Alliance, Shuswap Nation Tribal Council and their member communities, Okanagan, Adams Lake, Neskonlith and Splatsin Indian Bands, Amnesty International, Canadian Friends Service Committee, Gitxaala Nation, Chilko Resorts and Community Association and Council of Canadians
+
+Interveners
+
+Indexed as:  Tsilhqot’in Nation v. British Columbia
+2014 SCC 44
+File No.:  34986.
+2013:  November 7; 2014:  June 26.
+Present:  McLachlin C.J. and LeBel, Abella, Rothstein, Cromwell, Moldaver, Karakatsanis and Wagner JJ.",
+          "caseName": "IN THE SUPREME COURT OF BRITISH COLUMBIA",
+          "court": "Supreme Court of British Columbia",
+          "creators": Array [],
+          "dateDecided": "2007-11-20",
+          "type": "courtCase",
+          "url": "https://www.bccourts.ca/Jdb-txt/SC/07/17/2007BCSC1700.pdf",
+        },
+        "id": "46",
+        "tags": Array [],
       },
     },
   ],
