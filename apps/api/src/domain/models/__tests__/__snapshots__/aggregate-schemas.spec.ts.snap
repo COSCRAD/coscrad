@@ -1,0 +1,664 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a BibliographicReference match the snapshot 1`] = `
+Object {
+  "data": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": Object {
+      "abstract": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "creators": Object {
+        "isArray": true,
+        "isOptional": false,
+        "type": Object {
+          "name": Object {
+            "isArray": false,
+            "isOptional": false,
+            "type": "NON_EMPTY_STRING",
+          },
+          "type": Object {
+            "enumLabel": "Creator Type",
+            "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
+            "isArray": false,
+            "isOptional": false,
+            "labelsAndValues": Array [
+              Object {
+                "label": "artist",
+                "value": "artist",
+              },
+              Object {
+                "label": "author",
+                "value": "author",
+              },
+              Object {
+                "label": "director",
+                "value": "director",
+              },
+            ],
+            "type": "Enum",
+          },
+        },
+      },
+      "place": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "publisher": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "title": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+      "url": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "URL",
+      },
+    },
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a BibliographicReference match the snapshot 2`] = `
+Object {
+  "data": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": Object {
+      "abstract": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "creators": Object {
+        "isArray": true,
+        "isOptional": false,
+        "type": Object {
+          "name": Object {
+            "isArray": false,
+            "isOptional": false,
+            "type": "NON_EMPTY_STRING",
+          },
+          "type": Object {
+            "enumLabel": "Creator Type",
+            "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
+            "isArray": false,
+            "isOptional": false,
+            "labelsAndValues": Array [
+              Object {
+                "label": "artist",
+                "value": "artist",
+              },
+              Object {
+                "label": "author",
+                "value": "author",
+              },
+              Object {
+                "label": "director",
+                "value": "director",
+              },
+            ],
+            "type": "Enum",
+          },
+        },
+      },
+      "doi": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "issn": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "issueDate": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+      "pages": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "publicationTitle": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "url": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "URL",
+      },
+    },
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a BibliographicReference match the snapshot 3`] = `
+Object {
+  "data": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": Object {
+      "abstract": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "caseName": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+      "court": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "dateDecided": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "pages": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "NON_EMPTY_STRING",
+      },
+      "url": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "URL",
+      },
+    },
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Book match the snapshot 1`] = `
+Object {
+  "author": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "pages": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": Object {
+      "identifier": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+      "text": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+      "translation": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+    },
+  },
+  "publicationDate": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "subtitle": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "title": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Category match the snapshot 1`] = `
+Object {
+  "childrenIDs": Object {
+    "isArray": true,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "label": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Media Item match the snapshot 1`] = `
+Object {
+  "contributorAndRoles": Object {
+    "isArray": true,
+    "isOptional": false,
+    "type": Object {
+      "contributorId": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+      "role": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+    },
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "mimeType": Object {
+    "enumLabel": "MIME Type",
+    "enumName": "MIME_TYPE",
+    "isArray": false,
+    "isOptional": false,
+    "labelsAndValues": Array [
+      Object {
+        "label": "mp3",
+        "value": "audio/mpeg",
+      },
+      Object {
+        "label": "mp4",
+        "value": "video/mp4",
+      },
+    ],
+    "type": "Enum",
+  },
+  "title": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "titleEnglish": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "url": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "URL",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Note match the snapshot 1`] = `
+Object {
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "note": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Photograph match the snapshot 1`] = `
+Object {
+  "dimensions": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": Object {
+      "heightPX": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_NEGATIVE_FINITE_NUMBER",
+      },
+      "widthPX": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_NEGATIVE_FINITE_NUMBER",
+      },
+    },
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "photographer": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Song match the snapshot 1`] = `
+Object {
+  "audioURL": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "URL",
+  },
+  "contributions": Object {
+    "isArray": true,
+    "isOptional": false,
+    "type": Object {
+      "contributorId": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+      "role": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+    },
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "lengthMilliseconds": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_NEGATIVE_FINITE_NUMBER",
+  },
+  "lyrics": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "startMilliseconds": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_NEGATIVE_FINITE_NUMBER",
+  },
+  "title": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "titleEnglish": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Spatial Feature match the snapshot 1`] = `
+Object {
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Spatial Feature match the snapshot 2`] = `
+Object {
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Spatial Feature match the snapshot 3`] = `
+Object {
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Tag match the snapshot 1`] = `
+Object {
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Term match the snapshot 1`] = `
+Object {
+  "audioFilename": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "contributorId": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "sourceProject": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "term": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+  "termEnglish": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Transcribed Audio Item match the snapshot 1`] = `
+Object {
+  "audioFilename": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "lengthMilliseconds": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_NEGATIVE_FINITE_NUMBER",
+  },
+  "startMilliseconds": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_NEGATIVE_FINITE_NUMBER",
+  },
+  "transcript": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": Object {
+      "timeRanges": Object {
+        "isArray": true,
+        "isOptional": false,
+        "type": Object {
+          "data": Object {
+            "isArray": false,
+            "isOptional": true,
+            "type": "NON_EMPTY_STRING",
+          },
+          "inPoint": Object {
+            "isArray": false,
+            "isOptional": false,
+            "type": "NON_NEGATIVE_FINITE_NUMBER",
+          },
+          "outPoint": Object {
+            "isArray": false,
+            "isOptional": false,
+            "type": "NON_NEGATIVE_FINITE_NUMBER",
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a User Group match the snapshot 1`] = `
+Object {
+  "description": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "label": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "userIds": Object {
+    "isArray": true,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a User match the snapshot 1`] = `
+Object {
+  "authProviderUserId": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+  "profile": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": Object {
+      "email": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": "NON_EMPTY_STRING",
+      },
+      "name": Object {
+        "isArray": false,
+        "isOptional": false,
+        "type": Object {
+          "firstName": Object {
+            "isArray": false,
+            "isOptional": false,
+            "type": "NON_EMPTY_STRING",
+          },
+          "lastName": Object {
+            "isArray": false,
+            "isOptional": false,
+            "type": "NON_EMPTY_STRING",
+          },
+        },
+      },
+    },
+  },
+  "roles": Object {
+    "enumLabel": "User Role",
+    "enumName": "COSCRAD_USER_ROLE",
+    "isArray": true,
+    "isOptional": false,
+    "labelsAndValues": Array [
+      Object {
+        "label": "admin",
+        "value": "projectAdmin",
+      },
+      Object {
+        "label": "viewer",
+        "value": "viewer",
+      },
+      Object {
+        "label": "COSCRAD admin",
+        "value": "superAdmin",
+      },
+    ],
+    "type": "Enum",
+  },
+  "username": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;
+
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data shcmea for a Vocabulary List match the snapshot 1`] = `
+Object {
+  "id": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "NON_EMPTY_STRING",
+  },
+}
+`;

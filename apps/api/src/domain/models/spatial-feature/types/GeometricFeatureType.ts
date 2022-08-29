@@ -1,4 +1,7 @@
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
 import { CtorToInstance } from '../../../../lib/types/InstanceToCtor';
+import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { Line } from '../entities/line.entity';
 import { Point } from '../entities/point.entity';
 import { Polygon } from '../entities/polygon.entity';
@@ -29,4 +32,18 @@ export type GeometricFeatureTypeToSpatialFeatureInstance = {
     [K in keyof GeometricFeatureTypeToSpatialFeatureCtor]: CtorToInstance<
         GeometricFeatureTypeToSpatialFeatureCtor[K]
     >;
+};
+
+export const getSpatialFeatureCtorFromGeometricFeatureType = <T extends GeometricFeatureType>(
+    geometricFeatureType: T
+): DomainModelCtor<GeometricFeatureTypeToSpatialFeatureInstance[T]> => {
+    const lookupResult = geometricFeatureTypeToSpatialFeatureCtor[geometricFeatureType];
+
+    if (isNullOrUndefined(lookupResult)) {
+        throw new InternalError(
+            `There is no Spatial Feature constructor registered for Geometric Feature Type: ${geometricFeatureType}`
+        );
+    }
+
+    return lookupResult as DomainModelCtor<GeometricFeatureTypeToSpatialFeatureInstance[T]>;
 };
