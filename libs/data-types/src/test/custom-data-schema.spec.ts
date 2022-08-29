@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import { NonEmptyString, URL, UUID } from '../index';
 import {
     Enum,
+    ISBN,
     NestedDataType,
     NonNegativeFiniteNumber,
     PositiveInteger,
@@ -87,6 +88,12 @@ describe('NonEmptyString', () => {
         @PositiveInteger({ isOptional })
         numberOfDownvotes = 2;
 
+        @ISBN()
+        requiredISBN = `978-3-16-148410-0`;
+
+        @ISBN({ isOptional })
+        optionalISBN = `979-3-16-148410-0`;
+
         constructor(dto: Widget) {
             Object.assign(this, dto);
         }
@@ -132,6 +139,10 @@ describe('NonEmptyString', () => {
         numberOfLikes: 2,
 
         numberOfDownvotes: 501,
+
+        requiredISBN: `978-3-16-148410-0`,
+
+        optionalISBN: `978-3-16-148410-0`,
     };
 
     it('should populate the appropriate metadata', () => {

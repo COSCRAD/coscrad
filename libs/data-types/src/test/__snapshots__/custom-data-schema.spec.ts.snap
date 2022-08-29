@@ -82,6 +82,11 @@ Object {
     "isOptional": false,
     "type": "POSITIVE_INTEGER",
   },
+  "optionalISBN": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "ISBN",
+  },
   "optionalRawData": Object {
     "isArray": false,
     "isOptional": true,
@@ -122,6 +127,11 @@ Object {
     "coscradDataType": "RAW_DATA",
     "isArray": false,
     "isOptional": false,
+  },
+  "requiredISBN": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "ISBN",
   },
   "requiredISBN": Object {
     "isArray": false,

@@ -54,7 +54,6 @@ Object {
         "value": "video/mp4",
       },
     ],
-    "type": "ENUM",
   },
   "rawData": Object {
     "coscradDataType": "RAW_DATA",
@@ -172,7 +171,6 @@ Object {
         "value": "superAdmin",
       },
     ],
-    "type": "ENUM",
   },
   "userId": Object {
     "coscradDataType": "UUID",
