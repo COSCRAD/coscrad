@@ -28,6 +28,8 @@ const fuzzData = {
     undefined: undefined,
     compositeIdentifier: { type: 'widget', id: '123' },
     year: 2002,
+    isbn10: ` 0-940016-73-7`,
+    isbn13: `978-3-16-148410-0`,
 } as const;
 
 type FuzzDataType = keyof typeof fuzzData;
@@ -35,7 +37,7 @@ type FuzzDataType = keyof typeof fuzzData;
 type DataTypeToFuzz = { [K in CoscradDataType]: FuzzDataType[] };
 
 const dataTypeToValidFuzz: DataTypeToFuzz = {
-    [CoscradDataType.NonEmptyString]: ['url', 'randomString', 'uuid'],
+    [CoscradDataType.NonEmptyString]: ['url', 'randomString', 'uuid', 'isbn10', 'isbn13'],
     [CoscradDataType.Enum]: [],
     [CoscradDataType.NonNegativeFiniteNumber]: [
         'positiveInteger',
@@ -49,6 +51,7 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.CompositeIdentifier]: ['compositeIdentifier'],
     [CoscradDataType.Year]: ['year', 'positiveInteger', 'zero'],
     [CoscradDataType.PositiveInteger]: ['year', 'positiveInteger'],
+    [CoscradDataType.ISBN]: ['isbn10', 'isbn13'],
 };
 
 export const generateValidValuesOfType = ({

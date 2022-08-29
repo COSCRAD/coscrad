@@ -19,6 +19,7 @@ enum CoscradDataType {
     Enum = 'ENUM',
     Year = 'YEAR',
     PositiveInteger = 'POSITIVE_INTEGER',
+    ISBN = 'ISBN',
 }
 
 export { CoscradDataType };

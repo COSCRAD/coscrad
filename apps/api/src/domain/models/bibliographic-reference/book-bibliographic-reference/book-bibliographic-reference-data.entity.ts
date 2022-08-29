@@ -1,5 +1,12 @@
-import { NestedDataType, NonEmptyString, PositiveInteger, URL, Year } from '@coscrad/data-types';
-import { IsISBN, IsNonEmptyArray, IsOptional } from '@coscrad/validation';
+import {
+    ISBN,
+    NestedDataType,
+    NonEmptyString,
+    PositiveInteger,
+    URL,
+    Year,
+} from '@coscrad/data-types';
+import { IsNonEmptyArray } from '@coscrad/validation';
 import { DTO } from '../../../../types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
@@ -41,9 +48,7 @@ export default class BookBibliographicReferenceData
     @PositiveInteger({ isOptional })
     readonly numberOfPages?: number;
 
-    // TODO [https://www.pivotaltracker.com/story/show/183109463] Support `ISBN` data type
-    @IsOptional()
-    @IsISBN()
+    @ISBN({ isOptional })
     readonly isbn?: string;
 
     constructor(dto: DTO<BookBibliographicReferenceData>) {
