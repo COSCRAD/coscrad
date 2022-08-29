@@ -43,6 +43,11 @@ Object {
           },
         },
       },
+      "isbn": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "ISBN",
+      },
       "numberOfPages": Object {
         "isArray": false,
         "isOptional": true,
