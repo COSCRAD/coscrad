@@ -80,6 +80,11 @@ Object {
     "isOptional": false,
     "type": "POSITIVE_INTEGER",
   },
+  "optionalISBN": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "ISBN",
+  },
   "optionalRawData": Object {
     "isArray": false,
     "isOptional": true,
@@ -105,6 +110,11 @@ Object {
     "isArray": false,
     "isOptional": false,
     "type": "RAW_DATA",
+  },
+  "requiredISBN": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "ISBN",
   },
   "role": Object {
     "enumLabel": "User Role",
