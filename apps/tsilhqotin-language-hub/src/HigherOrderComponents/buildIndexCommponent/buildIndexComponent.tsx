@@ -1,4 +1,4 @@
-import { Card, createTheme, ThemeProvider } from '@mui/material';
+import { Card, createTheme } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -98,28 +98,26 @@ const buildIndexComponent = <T extends Record<string, unknown>>(
         }));
 
         return (
-            <ThemeProvider theme={theme}>
-                <div className="page">
-                    <div id="heading">
-                        <div id="container">
-                            <h1 id="pageTitle">Songs</h1>
-                        </div>
+            <div className="page">
+                <div id="heading">
+                    <div id="container">
+                        <h1 id="pageTitle">Songs</h1>
                     </div>
-                    <Card className="pageContent">
-                        <DataGrid
-                            sx={{ minHeight: '60vh', padding: '10px' }}
-                            rows={rows}
-                            columns={columns}
-                            rowsPerPageOptions={[10, 50, 100]}
-                            initialState={{
-                                pagination: {
-                                    pageSize: 10,
-                                },
-                            }}
-                        />
-                    </Card>
                 </div>
-            </ThemeProvider>
+                <Card className="pageContent">
+                    <DataGrid
+                        className="dataGrid"
+                        rows={rows}
+                        columns={columns}
+                        rowsPerPageOptions={[10, 50, 100]}
+                        initialState={{
+                            pagination: {
+                                pageSize: 10,
+                            },
+                        }}
+                    />
+                </Card>
+            </div>
         );
     };
 };
