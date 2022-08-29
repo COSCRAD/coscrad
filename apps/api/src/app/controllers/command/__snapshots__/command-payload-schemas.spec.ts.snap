@@ -53,7 +53,7 @@ Object {
         "value": "video/mp4",
       },
     ],
-    "type": "Enum",
+    "type": "ENUM",
   },
   "rawData": Object {
     "isArray": false,
@@ -170,7 +170,7 @@ Object {
         "value": "superAdmin",
       },
     ],
-    "type": "Enum",
+    "type": "ENUM",
   },
   "userId": Object {
     "isArray": false,

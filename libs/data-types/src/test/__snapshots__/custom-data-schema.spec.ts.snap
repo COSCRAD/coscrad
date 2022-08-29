@@ -31,7 +31,7 @@ Object {
         "value": "director",
       },
     ],
-    "type": "Enum",
+    "type": "ENUM",
   },
   "iconUrl": Object {
     "isArray": false,
@@ -68,7 +68,7 @@ Object {
         "value": "video/mp4",
       },
     ],
-    "type": "Enum",
+    "type": "ENUM",
   },
   "optionalRawData": Object {
     "isArray": false,
@@ -115,7 +115,7 @@ Object {
         "value": "superAdmin",
       },
     ],
-    "type": "Enum",
+    "type": "ENUM",
   },
   "secondaryWhatsit": Object {
     "isArray": false,
@@ -147,6 +147,16 @@ Object {
     "isArray": false,
     "isOptional": false,
     "type": "NON_NEGATIVE_FINITE_NUMBER",
+  },
+  "year": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "YEAR",
+  },
+  "yearUploaded": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "YEAR",
   },
 }
 `;
