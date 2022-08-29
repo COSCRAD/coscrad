@@ -43,6 +43,11 @@ Object {
           },
         },
       },
+      "numberOfPages": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "POSITIVE_INTEGER",
+      },
       "place": Object {
         "isArray": false,
         "isOptional": true,

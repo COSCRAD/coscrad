@@ -48,6 +48,7 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.UUID]: ['uuid'],
     [CoscradDataType.CompositeIdentifier]: ['compositeIdentifier'],
     [CoscradDataType.Year]: ['year', 'positiveInteger', 'zero'],
+    [CoscradDataType.PositiveInteger]: ['year', 'positiveInteger'],
 };
 
 export const generateValidValuesOfType = ({
