@@ -52,6 +52,11 @@ Object {
         "isArray": false,
         "isOptional": true,
       },
+      "numberOfPages": Object {
+        "isArray": false,
+        "isOptional": true,
+        "type": "POSITIVE_INTEGER",
+      },
       "place": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,

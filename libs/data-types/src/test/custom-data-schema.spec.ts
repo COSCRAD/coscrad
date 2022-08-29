@@ -5,6 +5,7 @@ import {
     Enum,
     NestedDataType,
     NonNegativeFiniteNumber,
+    PositiveInteger,
     RawDataObject,
     Year,
 } from '../lib/decorators';
@@ -12,9 +13,11 @@ import { BibliographicSubjectCreatorType, CoscradEnum, MIMEType } from '../lib/e
 import { CoscradUserRole } from '../lib/enums/CoscradUserRole';
 import getCoscradDataSchema from '../lib/utilities/getCoscradDataSchema';
 
+const isOptional = true;
+
 describe('NonEmptyString', () => {
     class Whatsit {
-        @NonEmptyString({ isOptional: true })
+        @NonEmptyString({ isOptional })
         whatsitName = 'whatsit 1';
 
         @UUID()
@@ -25,7 +28,7 @@ describe('NonEmptyString', () => {
         @NonEmptyString()
         widgetName = 'Machine';
 
-        @NonEmptyString({ isOptional: true })
+        @NonEmptyString({ isOptional })
         locationName = 'Back Red Room 12';
 
         // @IsString({ each: true })
@@ -36,31 +39,31 @@ describe('NonEmptyString', () => {
         @UUID()
         id = '25c5824f-6b4b-4341-bb60-3145d8109568';
 
-        @UUID({ isOptional: true })
+        @UUID({ isOptional })
         locationId = '25c5824f-6b4b-4341-bb60-3145d8109568';
 
         @URL()
         iconUrl = 'https://www.mylink.com/uploads/123.png';
 
-        @URL({ isOptional: true })
+        @URL({ isOptional })
         specSheetUrl = undefined;
 
         @NonNegativeFiniteNumber()
         width = 134.5;
 
-        @NonNegativeFiniteNumber({ isOptional: true })
+        @NonNegativeFiniteNumber({ isOptional })
         averageRating = 3.5;
 
         @NestedDataType(Whatsit)
         primaryWhatsit = {};
 
-        @NestedDataType(Whatsit, { isOptional: true })
+        @NestedDataType(Whatsit, { isOptional })
         secondaryWhatsit = {};
 
         @RawDataObject()
         rawDataObject = { foo: 72 };
 
-        @RawDataObject({ isOptional: true })
+        @RawDataObject({ isOptional })
         optionalRawData = undefined;
 
         @Enum(CoscradEnum.MIMEType)
@@ -75,8 +78,14 @@ describe('NonEmptyString', () => {
         @Year()
         year = 1998;
 
-        @Year({ isOptional: true })
+        @Year({ isOptional })
         yearUploaded = 2002;
+
+        @PositiveInteger()
+        numberOfLikes = 22;
+
+        @PositiveInteger({ isOptional })
+        numberOfDownvotes = 2;
 
         constructor(dto: Widget) {
             Object.assign(this, dto);
@@ -119,6 +128,10 @@ describe('NonEmptyString', () => {
         year: 1945,
 
         yearUploaded: 1999,
+
+        numberOfLikes: 2,
+
+        numberOfDownvotes: 501,
     };
 
     it('should populate the appropriate metadata', () => {

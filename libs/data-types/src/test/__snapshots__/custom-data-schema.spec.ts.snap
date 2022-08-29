@@ -82,6 +82,16 @@ Object {
     "isOptional": false,
     "type": "POSITIVE_INTEGER",
   },
+  "optionalRawData": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "POSITIVE_INTEGER",
+  },
+  "numberOfLikes": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "POSITIVE_INTEGER",
+  },
   "optionalISBN": Object {
     "isArray": false,
     "isOptional": true,
