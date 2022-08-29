@@ -1,11 +1,5 @@
-import { NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
-import {
-    IsISBN,
-    IsNonEmptyArray,
-    IsOptional,
-    IsPositiveInteger,
-    IsYear,
-} from '@coscrad/validation';
+import { NestedDataType, NonEmptyString, URL, Year } from '@coscrad/data-types';
+import { IsISBN, IsNonEmptyArray, IsOptional, IsPositiveInteger } from '@coscrad/validation';
 import { DTO } from '../../../../types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
@@ -32,9 +26,7 @@ export default class BookBibliographicReferenceData
     // `abstractNote` is what Zotero calls this property
     readonly abstract?: string;
 
-    // TODO [https://www.pivotaltracker.com/story/show/183109463] Support `Year` data type
-    @IsOptional()
-    @IsYear()
+    @Year({ isOptional })
     readonly year?: number;
 
     @NonEmptyString({ isOptional })

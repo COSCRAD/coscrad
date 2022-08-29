@@ -6,3 +6,4 @@ export * from './NonNegativeFiniteNumber';
 export * from './RawData';
 export * from './URL';
 export * from './UUID';
+export * from './Year';

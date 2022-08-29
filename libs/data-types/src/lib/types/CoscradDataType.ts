@@ -16,7 +16,8 @@ enum CoscradDataType {
      * type provides the client with the info required to render this. It is important
      * that you register user-facing labels for each custom enum.
      */
-    Enum = 'Enum',
+    Enum = 'ENUM',
+    Year = 'YEAR',
 }
 
 export { CoscradDataType };

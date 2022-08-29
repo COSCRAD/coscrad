@@ -181,5 +181,15 @@ Object {
     "isOptional": true,
     "type": "YEAR",
   },
+  "year": Object {
+    "isArray": false,
+    "isOptional": false,
+    "type": "YEAR",
+  },
+  "yearUploaded": Object {
+    "isArray": false,
+    "isOptional": true,
+    "type": "YEAR",
+  },
 }
 `;

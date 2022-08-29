@@ -36,6 +36,7 @@ Object {
                 "value": "director",
               },
             ],
+            "type": "ENUM",
           },
         },
         "isArray": true,
@@ -72,13 +73,11 @@ Object {
         "isOptional": true,
       },
       "year": Object {
-        "coscradDataType": "YEAR",
         "isArray": false,
         "isOptional": true,
+        "type": "YEAR",
       },
     },
-    "isArray": false,
-    "isOptional": false,
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -170,6 +169,7 @@ Object {
                 "value": "director",
               },
             ],
+            "type": "ENUM",
           },
         },
         "isArray": true,
@@ -327,6 +327,7 @@ Object {
         "value": "video/mp4",
       },
     ],
+    "type": "ENUM",
   },
   "title": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -649,6 +650,7 @@ Object {
         "value": "superAdmin",
       },
     ],
+    "type": "ENUM",
   },
   "username": Object {
     "coscradDataType": "NON_EMPTY_STRING",
