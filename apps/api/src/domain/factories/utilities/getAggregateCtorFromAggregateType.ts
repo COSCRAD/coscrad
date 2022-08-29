@@ -2,6 +2,7 @@ import { InternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { Aggregate } from '../../models/aggregate.entity';
 import { Book } from '../../models/book/entities/book.entity';
+import { Category } from '../../models/categories/entities/category.entity';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { Photograph } from '../../models/photograph/entities/photograph.entity';
@@ -14,11 +15,7 @@ import { CoscradUser } from '../../models/user-management/user/entities/user/cos
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
 import { AggregateType, AggregateTypeToAggregateInstance } from '../../types/AggregateType';
 
-const specialCases = [
-    AggregateType.bibliographicReference,
-    AggregateType.spatialFeature,
-    AggregateType.category,
-] as const;
+const specialCases = [AggregateType.bibliographicReference, AggregateType.spatialFeature] as const;
 
 type SpecialCaseType = typeof specialCases[number];
 
@@ -39,6 +36,7 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.term]: Term,
     [AggregateType.transcribedAudio]: TranscribedAudio,
     [AggregateType.vocabularyList]: VocabularyList,
+    [AggregateType.category]: Category,
 };
 
 export default <T extends AggregateType>(
