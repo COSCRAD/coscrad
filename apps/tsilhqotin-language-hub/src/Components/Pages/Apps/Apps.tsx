@@ -1,10 +1,20 @@
-import './Apps.module.css';
 import { AppsDisplay } from './AppsDisplay';
+import getAppInfos from './data/getAppInfos';
 
-/* eslint-disable-next-line */
-export interface AppsProps {}
+const appInfosReadResult = getAppInfos();
 
-export function Apps(props: AppsProps) {
+export function Apps() {
+
+    if(appInfosReadResult instanceof Error) return (
+        <div>
+            <h1>Error Boundary</h1>
+            <p>
+                The application has encountered the following error:
+                {appInfosReadResult.message}
+            </p>
+        </div>
+    )
+
     return (
         <div className="pages">
             <div id="heading">
@@ -15,7 +25,7 @@ export function Apps(props: AppsProps) {
                 </div>
             </div>
 
-            <AppsDisplay />
+            <AppsDisplay appInfos={appInfosReadResult} />
         </div>
     );
 }

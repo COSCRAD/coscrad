@@ -1,6 +1,6 @@
 import { Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import { AppLinkDisplay } from './AppLinkDisplay';
-import { AppInfo } from './AppsDisplay';
+import AppInfo from './data/AppInfo';
 
 export function AppInfoDisplay({ name, image, meta, description, links }: AppInfo) {
     return (

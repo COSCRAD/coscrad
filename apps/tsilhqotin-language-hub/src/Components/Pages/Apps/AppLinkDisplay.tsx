@@ -1,4 +1,6 @@
-import { AppLink, AppPlatform } from './AppsDisplay';
+import AppLink from './data/AppLink';
+import { AppPlatform } from './data/AppPlatform';
+
 
 type ImageInfo = {
     alt: string;
