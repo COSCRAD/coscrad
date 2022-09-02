@@ -486,9 +486,8 @@ a {
     padding-bottom: 35px;
     padding-top: 50px;
     background: linear-gradient(
-        -155deg,
-        rgba(255, 0, 0, 0) -30%,
-        rgba(13, 16, 66, 0.85) 60%,
+        270deg,
+        rgba(121, 9, 9, 0.65) 20%,
         rgba(13, 16, 66, 1) 100%
     ) !important;
     background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg');
