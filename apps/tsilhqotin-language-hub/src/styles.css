@@ -533,6 +533,8 @@ a {
 .appImage {
     max-width: 135px;
     border-radius: 12px;
+    width: 50% !important;
+    margin: 0 auto !important;
 }
 
 .appLink {
@@ -625,11 +627,6 @@ h2 {
 .downloadApp {
     font-size: 1.6;
     padding: 0;
-}
-
-.appImage {
-    width: 50% !important;
-    margin: 0 auto !important;
 }
 
 .cardLink {
