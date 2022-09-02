@@ -427,7 +427,7 @@ a {
 
 #container {
     width: 100%;
-    background-image: url(https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg)
+    background: url('https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg')
         no-repeat center center;
     background-position: 100% 30%;
     -webkit-background-size: cover;
@@ -495,11 +495,6 @@ a {
     background-position: 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
-}
-
-#container {
-    background: url('https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg');
-    background-position-y: -450px;
 }
 
 .appCard {
