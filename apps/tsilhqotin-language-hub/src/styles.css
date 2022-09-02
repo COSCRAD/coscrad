@@ -717,3 +717,12 @@ h2 {
         transform: translateY(0px);
     }
 }
+
+.appLinkImage {
+    border-radius: 10px;
+}
+
+.appLinkDisplay {
+    margin: auto;
+    text-align: center;
+}

@@ -1,5 +1,5 @@
 import './Apps.module.css';
-import { AppsDetail } from './AppsDetail';
+import { AppsDisplay } from './AppsDisplay';
 
 /* eslint-disable-next-line */
 export interface AppsProps {}
@@ -15,7 +15,7 @@ export function Apps(props: AppsProps) {
                 </div>
             </div>
 
-            <AppsDetail />
+            <AppsDisplay />
         </div>
     );
 }

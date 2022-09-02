@@ -1,17 +1,41 @@
-import { Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import { AppInfoDisplay } from './AppInfoDisplay';
 
-export function AppsDetail() {
-    const appData = [
+export enum AppPlatform {
+    google = 'google',
+    web = 'web',
+}
+
+export type AppLink = {
+    url: string;
+    platform: AppPlatform;
+};
+
+export type AppInfo = {
+    name: string;
+    image: string;
+    meta: string;
+    description: string;
+    links: AppLink[];
+};
+
+export function AppsDisplay() {
+    const appInfos: AppInfo[] = [
         {
             name: 'Digital Phrasebook v1.0',
             image: 'https://www.tsilhqotin.ca/wp-content/uploads/2022/08/dpb_logo8.png',
             meta: 'released 2022',
             description:
                 "Tŝilhqot'in Dictionary Project contains over 10,000 words and paradigms. *Logo is a prototype",
-            links: {
-                google: 'https://play.google.com/tsilhqotin',
-                web: 'https://weblink.com/tsilhqotin',
-            },
+            links: [
+                {
+                    platform: AppPlatform.google,
+                    url: 'https://play.google.com/tsilhqotin',
+                },
+                {
+                    platform: AppPlatform.web,
+                    url: 'https://weblink.com/tsilhqotin',
+                },
+            ],
         },
         {
             name: 'Digital Verb Book',
@@ -19,10 +43,16 @@ export function AppsDetail() {
             meta: 'released 2018',
             description:
                 'Version 1.0 is currently published and contains "Third Person Singular Paradigms" completed Bella Alphonse. These are really helpful for semi-speakers who need practice with verb stem alternations. To date over 100,000 phrases have been recorded, with about 50,000 named and organized. Version 2.0 of this app will allow us to present this material to learners. This is the main focus of the tech team for 2021-2022. ',
-            links: {
-                google: 'https://play.google.com/tsilhqotin',
-                web: 'https://weblink.com/tsilhqotin',
-            },
+            links: [
+                {
+                    platform: AppPlatform.google,
+                    url: 'https://play.google.com/tsilhqotin',
+                },
+                {
+                    platform: AppPlatform.web,
+                    url: 'https://weblink.com/tsilhqotin',
+                },
+            ],
         },
         {
             name: 'Tŝilhqotin Memory Match',
@@ -30,10 +60,16 @@ export function AppsDetail() {
             meta: 'released 2018',
             description:
                 'The Memory Match game is one of Bella’s favourite activities to bring to the schools. That inspired this digital app where you can build your vocabulary as you look for matches. The current version features Bella Alphonse’s original 6 rounds (also found on the web version) and an additional 6 rounds completed by Maria Myers. Aaron picked a collection of pictures for Maria to describe that included many common or interesting verbs. We hope more speakers will contribute additional rounds in the future. This app is a favourite among Tŝilhqot’in children. ',
-            links: {
-                google: 'https://play.google.com/tsilhqotin',
-                web: 'https://weblink.com/tsilhqotin',
-            },
+            links: [
+                {
+                    platform: AppPlatform.google,
+                    url: 'https://play.google.com/tsilhqotin',
+                },
+                {
+                    platform: AppPlatform.web,
+                    url: 'https://weblink.com/tsilhqotin',
+                },
+            ],
         },
         {
             name: 'Tŝilhqotin Alphabet',
@@ -41,10 +77,16 @@ export function AppsDetail() {
             meta: 'released 2018',
             description:
                 'This app goes along with the modernized Tŝilhqot’in Alphabet Poster. It can be used as a ’cheat sheet’ for the poster. ',
-            links: {
-                google: 'https://play.google.com/tsilhqotin',
-                web: 'https://weblink.com/tsilhqotin',
-            },
+            links: [
+                {
+                    platform: AppPlatform.google,
+                    url: 'https://play.google.com/tsilhqotin',
+                },
+                {
+                    platform: AppPlatform.web,
+                    url: 'https://weblink.com/tsilhqotin',
+                },
+            ],
         },
         {
             name: 'Qungh ʔAnaghunt’in',
@@ -52,50 +94,20 @@ export function AppsDetail() {
             meta: 'released 2022',
             description:
                 'This is a prototype for an interactive language learning game. We hope to expand upon this someday. ',
-            links: {
-                google: 'https://play.google.com/tsilhqotin',
-                web: 'https://weblink.com/tsilhqotin',
-            },
+            links: [
+                {
+                    platform: AppPlatform.google,
+                    url: 'https://play.google.com/tsilhqotin',
+                },
+                {
+                    platform: AppPlatform.web,
+                    url: 'https://weblink.com/tsilhqotin',
+                },
+            ],
         },
     ];
 
-    const listItems = appData.map((d) => (
-        <Card variant="outlined" className="appCard" key={d.name}>
-            <CardContent>
-                <Typography color={'white'} variant="h5" component="div">
-                    {d.name}
-                </Typography>
-                <Typography className="appMeta" color="red">
-                    {d.meta}
-                </Typography>
-
-                <CardMedia className="appImage" component={'img'} image={d.image} />
-
-                <Typography className="appDescription" variant="body2" color={'white'}>
-                    {d.description}
-                </Typography>
-                <CardActions className="cardLink">
-                    <a className="appLink" href={d.links.google}>
-                        <img
-                            id="googlePlay"
-                            alt="Get it on Google Play"
-                            src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-                            width="200px"
-                        />
-                    </a>
-                </CardActions>
-                <CardActions className="cardLink">
-                    <img
-                        className="webLink"
-                        id="googlePlay"
-                        alt="web version"
-                        src="https://www.tsilhqotin.ca/wp-content/uploads/2021/01/web_verson_icon.png"
-                        width="160px"
-                    />
-                </CardActions>
-            </CardContent>
-        </Card>
-    ));
+    const listItems = appInfos.map((appInfo) => <AppInfoDisplay {...appInfo} />);
 
     return <div>{listItems}</div>;
 }
