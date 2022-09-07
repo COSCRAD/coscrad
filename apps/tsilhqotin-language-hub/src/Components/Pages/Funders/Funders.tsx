@@ -1,4 +1,4 @@
-import { Card, Divider } from '@mui/material';
+import { Divider } from '@mui/material';
 import ScrollToTop from '../../Widgets/ScrollButton/ScrollToTop';
 
 /* eslint-disable-next-line */
@@ -14,7 +14,7 @@ export function Funders(props: FundersProps) {
                     <h1 id="pageTitle">Funders</h1>
                 </div>
             </div>
-            <Card className="pageContent">
+            <div className="pageContent">
                 <h2 className="language">Language Program</h2>
                 <Divider />
 
@@ -109,7 +109,7 @@ export function Funders(props: FundersProps) {
                         2017-2018.
                     </a>
                 </p>
-            </Card>
+            </div>
         </div>
     );
 }
