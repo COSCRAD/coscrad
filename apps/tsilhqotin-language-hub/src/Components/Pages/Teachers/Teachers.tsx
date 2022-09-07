@@ -1,4 +1,3 @@
-import { Card } from '@mui/material';
 import './Teachers.module.css';
 
 /* eslint-disable-next-line */
@@ -12,7 +11,7 @@ export function Teachers(props: TeachersProps) {
                     <h1 id="pageTitle">Teachers</h1>
                 </div>
             </div>
-            <Card className="pageContent">
+            <div className="pageContent">
                 <p>
                     Here is a modernized version of the Tŝilhqot’in Alphabet. The word list and
                     pictures were compiled by Bella Alphonse with assistance from Aaron Plahn and
@@ -49,7 +48,7 @@ export function Teachers(props: TeachersProps) {
                     </a>
                     .
                 </p>
-            </Card>
+            </div>
         </div>
     );
 }

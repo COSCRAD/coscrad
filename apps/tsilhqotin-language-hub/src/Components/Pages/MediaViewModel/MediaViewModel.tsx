@@ -80,20 +80,21 @@ export function MediaViewModel(props: MediaViewModelProps) {
                 <div id="container">
                     <h1 id="pageTitle">Videos</h1>
                 </div>
-                <Card className="pageContent">
-                    <DataGrid
-                        sx={{ minHeight: '60vh', padding: '10px' }}
-                        rows={rows}
-                        columns={columns}
-                        rowsPerPageOptions={[10, 50, 100]}
-                        initialState={{
-                            pagination: {
-                                pageSize: 10,
-                            },
-                        }}
-                    />
-                </Card>
             </div>
+
+            <Card className="pageContent">
+                <DataGrid
+                    className="dataGrid"
+                    rows={rows}
+                    columns={columns}
+                    rowsPerPageOptions={[10, 50, 100]}
+                    initialState={{
+                        pagination: {
+                            pageSize: 10,
+                        },
+                    }}
+                />
+            </Card>
         </div>
     );
 }

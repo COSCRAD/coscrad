@@ -1,5 +1,3 @@
-export interface AboutProps {}
-
 export function Dropdown() {
     return (
         <div>
