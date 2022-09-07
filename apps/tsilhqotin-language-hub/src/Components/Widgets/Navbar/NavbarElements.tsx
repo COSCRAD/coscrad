@@ -3,51 +3,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink as Link } from 'react-router-dom';
 
 export const Nav = styled.nav`
-    background-image: repeating-linear-gradient(
-            0deg,
-            hsla(284, 43%, 48%, 0.05) 0px,
-            hsla(284, 43%, 48%, 0.05) 1px,
-            transparent 1px,
-            transparent 11px,
-            hsla(284, 43%, 48%, 0.05) 11px,
-            hsla(284, 43%, 48%, 0.05) 12px,
-            transparent 12px,
-            transparent 32px
-        ),
-        repeating-linear-gradient(
-            135deg,
-            hsla(284, 43%, 48%, 0.05) 0px,
-            hsla(284, 43%, 48%, 0.05) 1px,
-            transparent 1px,
-            transparent 11px,
-            hsla(284, 43%, 48%, 0.05) 11px,
-            hsla(284, 43%, 48%, 0.05) 12px,
-            transparent 12px,
-            transparent 32px
-        ),
-        repeating-linear-gradient(
-            0deg,
-            hsla(284, 43%, 48%, 0.05) 0px,
-            hsla(284, 43%, 48%, 0.05) 1px,
-            transparent 1px,
-            transparent 11px,
-            hsla(284, 43%, 48%, 0.05) 11px,
-            hsla(284, 43%, 48%, 0.05) 12px,
-            transparent 12px,
-            transparent 32px
-        ),
-        repeating-linear-gradient(
-            45deg,
-            hsla(284, 43%, 48%, 0.05) 0px,
-            hsla(284, 43%, 48%, 0.05) 1px,
-            transparent 1px,
-            transparent 11px,
-            hsla(284, 43%, 48%, 0.05) 11px,
-            hsla(284, 43%, 48%, 0.05) 12px,
-            transparent 12px,
-            transparent 32px
-        ),
-        linear-gradient(90deg, rgb(0, 0, 0), rgb(42, 49, 172));
+    background: rgb(236, 236, 236);
     height: 80px;
     display: flex;
     justify-content: space-between;
@@ -58,7 +14,7 @@ export const Nav = styled.nav`
 `;
 
 export const NavLink = styled(Link)`
-    color: #fff;
+    color: black;
     display: flex;
     align-items: center;
     text-decoration: none;
