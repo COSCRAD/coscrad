@@ -1,56 +1,31 @@
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import './Apps.module.css';
+import { AppsDisplay } from './AppsDisplay';
+import getAppInfos from './data/getAppInfos';
 
-/* eslint-disable-next-line */
-export interface AppsProps {}
+const appInfosReadResult = getAppInfos();
 
-export function Apps(props: AppsProps) {
-    const bull = (
-        <Box component="span" sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}>
-            •
-        </Box>
-    );
+export function Apps() {
+    if (appInfosReadResult instanceof Error)
+        return (
+            <div>
+                <h1>Error Boundary</h1>
+                <p>
+                    The application has encountered the following error:
+                    {appInfosReadResult.message}
+                </p>
+            </div>
+        );
+
     return (
-        <div className="page">
+        <div className="pages">
             <div id="heading">
                 <div id="container">
-                    <h1 id="pageTitle">Apps</h1>
+                    <div id="pageTitle">
+                        <h1>Apps</h1>
+                    </div>
                 </div>
             </div>
-            <Card className="pageContent">
-                <Card variant="outlined" className="appCard">
-                    <CardContent>
-                        <Typography variant="h5" component="div">
-                            Digital Phrasebook v1.0
-                        </Typography>
 
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            released 2022
-                        </Typography>
-                        <Typography variant="body2" color="Highlight">
-                            Version 1.0 is currently published and contains 'Third Person Singular
-                            Paradigms' completed Bella Alphonse. These are really helpful for
-                            semi-speakers who need practice with verb stem alternations. To date
-                            over 100,000 phrases have been recorded, with about 50,000 named and
-                            organized. Version 2.0 of this app will allow us to present this
-                            material to learners. This is the main focus of the tech team for
-                            2021-2022.
-                        </Typography>
-                    </CardContent>
-                    <CardActions sx={{ alignContent: 'center', textAlign: 'center' }}>
-                        <img
-                            id="googlePlay"
-                            alt="Get it on Google Play"
-                            src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-                            width="200px"
-                        />
-                    </CardActions>
-                </Card>
-            </Card>
+            <AppsDisplay appInfos={appInfosReadResult} />
         </div>
     );
 }
