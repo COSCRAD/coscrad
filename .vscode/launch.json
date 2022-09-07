@@ -51,6 +51,21 @@
             "port": 3131,
             "request": "attach",
             "type": "pwa-node"
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Jest test tsilhqotin-language-hub",
+            "program": "${workspaceFolder}/node_modules/nx/bin/nx.js",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "test",
+                "tsilhqotin-language-hub",
+                "--testFile=${file}",
+                "--runInBand",
+            ],
+            "console": "internalConsole",
+            "internalConsoleOptions": "neverOpen"
+        },
     ]
 }
