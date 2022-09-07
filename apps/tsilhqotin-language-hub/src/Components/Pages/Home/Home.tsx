@@ -13,8 +13,8 @@ function App(): JSX.Element {
                 <div className="topDiv">
                     <div className="backdrop">
                         <div className="title">
-                            <div style={{ paddingBottom: '18px' }}>
-                                <b style={{ color: 'white' }}>Tŝilhqot’in Ch’ih Yaltɨg</b>
+                            <div>
+                                <b>Tŝilhqot’in Ch’ih Yaltɨg</b>
                                 <p className="heroTitle">We’re speaking the Tŝilhqot’in language</p>
                             </div>
                             <div>
@@ -33,7 +33,7 @@ function App(): JSX.Element {
                     <div className="flex-child1">Cell Phone Image</div>
 
                     <div className="flex-child2">
-                        <div style={{ width: '60%', textAlign: 'center' }}>
+                        <div id="downloadApps">
                             <h1 className="download">DOWNLOAD</h1>
                             <h2 className="downloadApp">Tsilhqot'in Digital Phrasebook</h2>
                             <br />

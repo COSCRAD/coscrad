@@ -116,6 +116,10 @@ a {
     z-index: 1;
 }
 
+.title div {
+    padding-bottom: 18px;
+}
+
 .navTitle {
     font-size: 2vw;
     padding-left: 5vw;
@@ -179,6 +183,11 @@ a {
     padding: 2px;
     margin: 0;
     font-size: 24px;
+}
+
+#downloadApps {
+    width: 60%;
+    text-align: center;
 }
 
 /*Pixel 5*/
@@ -494,6 +503,10 @@ a {
     background-position: 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
+}
+
+#pageTitle h1 {
+    margin: 0;
 }
 
 .appCard {
