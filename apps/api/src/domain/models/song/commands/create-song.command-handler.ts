@@ -9,7 +9,7 @@ import { RepositoryProvider } from '../../../../persistence/repositories/reposit
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForEntity from '../../../factories/getInstanceFactoryForResource';
+import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
@@ -51,7 +51,7 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         };
 
         // Attempt state mutation - Result or Error (Invariant violation in our case- could also be invalid state transition in other cases)
-        return getInstanceFactoryForEntity<Song>(ResourceType.song)(songDTO);
+        return getInstanceFactoryForResource<Song>(ResourceType.song)(songDTO);
     }
 
     actOnInstance(song: Song): ResultOrError<Song> {

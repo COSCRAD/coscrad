@@ -1,14 +1,15 @@
 import { NestedDataType } from '@coscrad/data-types';
-import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../../lib/errors/InternalError';
-import { DTO } from '../../../../types/DTO';
-import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
-import { ResourceType } from '../../../types/ResourceType';
-import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import { Resource } from '../../resource.entity';
-import { IBibliographicReference } from '../interfaces/bibliographic-reference.interface';
-import BookBibliographicReferenceData from './book-bibliographic-reference-data.entity';
-@RegisterIndexScopedCommands([])
+import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { InternalError } from '../../../../../lib/errors/InternalError';
+import { DTO } from '../../../../../types/DTO';
+import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
+import { ResourceType } from '../../../../types/ResourceType';
+import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
+import { Resource } from '../../../resource.entity';
+import { IBibliographicReference } from '../../interfaces/bibliographic-reference.interface';
+import BookBibliographicReferenceData from '../entities/book-bibliographic-reference-data.entity';
+
+@RegisterIndexScopedCommands(['CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE'])
 export class BookBibliographicReference
     extends Resource
     implements IBibliographicReference<BookBibliographicReferenceData>

@@ -1,4 +1,5 @@
 import { getCoscradDataSchema } from '@coscrad/data-types';
+import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { PublishSong } from '../../../domain/models/song/commands/publish-song.command';
@@ -24,6 +25,7 @@ const getAllCommandSchemas = () =>
         ['CREATE_USER_GROUP', CreateGroup],
         ['ADD_USER_TO_GROUP', AddUserToGroup],
         ['GRANT_USER_ROLE', GrantUserRole],
+        ['CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE', CreateBookBibliographicReference],
     ].map(([commandType, Ctor]) => [commandType, getCoscradDataSchema(Ctor)]);
 
 describe('command payload schemas', () => {

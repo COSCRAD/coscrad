@@ -2,7 +2,7 @@ import { lookup } from 'dns';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import { BookBibliographicReference } from '../book-bibliographic-reference/book-bibliographic-reference.entity';
+import { BookBibliographicReference } from '../book-bibliographic-reference/entities/book-bibliographic-reference.entity';
 import { CourtCaseBibliographicReference } from '../court-case-bibliographic-reference/court-case-bibliographic-reference.entity';
 import { IBibliographicReference } from '../interfaces/bibliographic-reference.interface';
 import { JournalArticleBibliographicReference } from '../journal-article-bibliographic-reference/journal-article-bibliographic-reference.entity';

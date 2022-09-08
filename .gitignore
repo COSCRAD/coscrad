@@ -48,3 +48,4 @@ Thumbs.db
 # front-end configs
 auth_config.json
 config.json
+*.config.json
