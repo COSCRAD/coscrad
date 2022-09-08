@@ -14,8 +14,8 @@ else {
 
 const testData = require('./test-data/testData.json');
 
-for (collectionType in testData) {
-  for (collectionName in testData[collectionType]) {
+for (let collectionType in testData) {
+  for (let collectionName in testData[collectionType]) {
     addCollectionAndData(collectionName, collectionType, testData[collectionType][collectionName]);
   }
 }
