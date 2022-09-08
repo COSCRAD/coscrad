@@ -9,7 +9,6 @@
     "start:db:dev": "nx run api:test --skip-nx-cache --testFile 'validateTestData.spec.ts' && ./scripts/arangodb-docker-container-setup/arangodb-docker-container-setup.sh development",
     "start:db:staging": "./scripts/arangodb-docker-container-setup/start-arango-db.sh staging",
     "start:db:production": "./scripts/arangodb-docker-container-setup/start-arango-db.sh production",
-    "custom-env:load-db-test-data": "./scripts/arangodb-bash-setup/arangodb-bash-setup.sh development",
     "lint:coscrad": "nx lint api && nx lint coscrad-frontend && nx lint validation && nx lint commands",
     "test:coscrad": "nx test api && nx test coscrad-frontend && nx test validation && nx test commands",
     "build:coscrad:prod": "nx build api --prod && nx build coscrad-frontend --prod",
