@@ -8,6 +8,7 @@ import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { Aggregate } from '../../aggregate.entity';
+import UuidNotAvailableForUseError from '../common-command-errors/UuidNotAvailableForUseError';
 import UuidNotGeneratedInternallyError from '../common-command-errors/UuidNotGeneratedInternallyError';
 import { BaseCommandHandler } from './base-command-handler';
 import { ICreateCommand } from './interfaces/create-command.interface';
@@ -84,9 +85,7 @@ export abstract class BaseCreateCommandHandler<
 
         if (isNotAvailable(idStatus))
             // Consider throwing as this is a system error (i.e. exception) adn not necessarily a user error
-            return new InternalError(
-                `The id: ${newId} is already in use by another resource in our system.`
-            );
+            return new UuidNotAvailableForUseError(newId);
 
         if (!isOK(idStatus)) {
             // This is out of an abundance of caution. We shouldn't hit this.

@@ -82,7 +82,7 @@ Object {
   "rawData": Object {
     "coscradDataType": "RAW_DATA",
     "isArray": false,
-    "isOptional": false,
+    "isOptional": true,
   },
   "title": Object {
     "coscradDataType": "NON_EMPTY_STRING",
