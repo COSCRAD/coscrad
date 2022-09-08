@@ -5,6 +5,34 @@ set -e
 # IMPORTANT: Consult sample.env in apps/api/src/app/config for 
 # environment configuration prior to running this script
 
+# Check if this bash setup script is being run within it's own directory
+VALID_EXECUTE_DIRECTORY="coscrad/scripts/arangodb-bash-setup"
+CURRENT_PATH="$PWD";
+echo $'\nCURRENT_PATH: '$CURRENT_PATH;
+
+
+# Split path on /
+OLDIFS="$IFS";
+IFS='/';
+read -a strarr <<< $CURRENT_PATH;
+IFS="$OLDIFS";
+length=${#strarr[@]};
+p1=${strarr[$(($length-3))]};
+p2=${strarr[$(($length-2))]};
+p3=${strarr[$(($length-1))]};
+current_directory="${p1}/${p2}/${p3}";
+echo $'\nCurrent Directory: '$current_directory;
+
+if  [ $current_directory != $VALID_EXECUTE_DIRECTORY ];
+then
+  echo $'\n >> Please execute this script within its enclosing directory';
+  echo $'\nEXITING SETUP';
+  echo $'\n';
+  exit;
+else
+  echo $'\n Current directory is valid for executing COSCRAD setup script';
+fi
+
 # Register COSCRAD_ENVIRONMENT mode
 if [ $1 ]; then
   COSCRAD_ENVIRONMENT=$1
@@ -17,67 +45,19 @@ fi
 echo $'\n';
 printenv | grep "COSCRAD_ENVIRONMENT";
 
-ARANGO_DB_SERVER="arangodbserver";
+COSCRAD_APP_ENV_FILE="../../apps/api/src/app/config/$COSCRAD_ENVIRONMENT.env";
 
-# Derive project root path and confirm with user
-SCRIPTS_PATH="$PWD";
-SUGGESTED_SCRIPTS_ROOT_PATH=$SCRIPTS_PATH;
-
-echo $'\nPlease confirm if this is the correct scripts root path for loading test data into Arango?: '$SUGGESTED_SCRIPTS_ROOT_PATH' (y/n)';
-
-while [ -z "$SCRIPTS_ROOT_PATH" ];
-do
-  read scripts_path_answer;
-  if [ $scripts_path_answer = "y" ];
-  then
-      SCRIPTS_ROOT_PATH=$SUGGESTED_SCRIPTS_ROOT_PATH;
-  elif [ $scripts_path_answer = "n" ];
-  then
-      while [ -z "$SCRIPTS_ROOT_PATH" ]; do
-          read -p $'Please enter the correct absolute path for the scripts root path\n' new_scripts_path_answer
-          if [ -d "$new_scripts_path_answer" ];
-          then
-              SCRIPTS_ROOT_PATH=${new_scripts_path_answer%/};
-          else
-              echo $'Please enter a valid path\n'
-          fi
-      done
-  else
-    echo "Bad Input: Please enter y or n";
-  fi
-done
-
-echo $'\n>> SCRIPTS_ROOT_PATH set to:' $SCRIPTS_ROOT_PATH $'\n';
-
-SUGGESTED_APP_ENV_FILE="$SCRIPTS_ROOT_PATH/$COSCRAD_ENVIRONMENT.env";
-
-echo $'\nPlease confirm the correct .env file: '$SUGGESTED_APP_ENV_FILE' (y/n)';
-
-read project_env_file_answer;
-
-if [ $project_env_file_answer = "y" ];
+if [ -f "$COSCRAD_APP_ENV_FILE" ];
 then
-    if [ -f "$SUGGESTED_APP_ENV_FILE" ];
-    then
-      COSCRAD_APP_ENV_FILE=$SUGGESTED_APP_ENV_FILE;
-    else
-      echo $'\n>> COSCRAD_APP_ENV_FILE:' $SUGGESTED_APP_ENV_FILE $'does not exist.\n'
-      echo $'PLEASE CREATE' $SUGGESTED_APP_ENV_FILE $'and populate with environment variables based on "sample.env".\n';
-      echo $'Unable to continue, exiting COSCRAD setup script.\n';
-      exit;
-    fi
-elif [ $project_env_file_answer = "n" ];
-then
-    while [ -z "$COSCRAD_APP_ENV_FILE" ]; do
-        read -p $'Please enter the correct absolute path for the project .env file for COSCRAD\n' new_project_env_file_answer
-        if [ -f "$new_project_env_file_answer" ];
-        then
-            COSCRAD_APP_ENV_FILE=${new_project_env_file_answer};
-        else
-            echo $'Please enter a valid .env file location\n'
-        fi
-    done
+  echo $'\nLoading env var from '$COSCRAD_APP_ENV_FILE;
+else
+  echo $'\n>> COSCRAD_APP_ENV_FILE:' $SUGGESTED_APP_ENV_FILE $'does not exist.\n'
+  echo $'PLEASE CREATE' $SUGGESTED_APP_ENV_FILE $'and populate with environment variables based on "sample.env".\n';
+  echo $'Unable to continue, exiting COSCRAD setup script.\n';
+  exit;
 fi
+
+echo $'\n';
 
 # Get .env variables from app configuration
 # source $COSCRAD_APP_ENV_FILE; set -a;
@@ -116,9 +96,9 @@ ARANGO_RUNNING_CMD=`systemctl status arangodb3.service`;
 
 if [ -z "${ARANGO_RUNNING_CMD##*Active: active (running)*}" ];
 then
-  echo "ArangoDB is running";
+  echo $'\nArangoDB is running';
 else
-  echo "ArangoDB is not running, please make sure the Arango instance is up."
+  echo $'\nArangoDB is not running, please make sure the Arango instance is up.';
   echo "";
   echo "EXITING SETUP";
   echo "";
@@ -150,3 +130,4 @@ arangosh \
 echo $'\n>> ArangoDB setup complete.  To login to the dashboard, go to:';
 echo $'\n'$ARANGO_DB_HOST_SCHEME'://'$ARANGO_DB_HOST_DOMAIN;
 echo $'\n\n';
+
