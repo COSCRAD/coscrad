@@ -1,4 +1,4 @@
-import { IsPositiveInteger } from '../../../../validation/src';
+import { IsPositiveInteger } from '@coscrad/validation';
 import { CoscradDataType } from '../types';
 import appendMetadata from '../utilities/appendMetadata';
 import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
