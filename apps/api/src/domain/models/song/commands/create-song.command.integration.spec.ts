@@ -126,6 +126,7 @@ describe('CreateSong', () => {
     });
 
     describe('when the payload has an invalid type', () => {
+        // TODO: Use the fuzz generator here
         describe('when the id property has an invalid type (number[])', () => {
             it('should return an error', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {

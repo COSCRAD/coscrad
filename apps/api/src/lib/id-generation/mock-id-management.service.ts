@@ -27,8 +27,6 @@ const buildId = (sequentialId: number) => {
 };
 
 export class MockIdManagementService extends IdManagementService {
-    private uuidStatusMap: Map<AggregateId, boolean> = new Map();
-
     private currentIndex = 0;
 
     override async generate(): Promise<AggregateId> {

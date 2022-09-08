@@ -27,6 +27,11 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         await this.forResource<TResource>(resourceType).createMany(entities);
     }
 
+    /**
+     *
+     * TODO Do this in a way that is extensible to adding new aggregate types.
+     * `DeluxeInMemoryStore` \ `InMemorySnapshotInFlatFormat` may help with this.
+     */
     public async addFullSnapshot({
         resources,
         category: categoryTree,
@@ -34,6 +39,7 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         note: connections,
         user: users,
         userGroup: userGroups,
+        uuid: uuidDocuments,
     }: InMemorySnapshot): Promise<void> {
         await this.addResourcesOfManyTypes(resources);
 
@@ -46,6 +52,14 @@ export default class TestRepositoryProvider extends RepositoryProvider {
         await this.getUserRepository().createMany(users);
 
         await this.getUserGroupRepository().createMany(userGroups);
+
+        await Promise.all(
+            (uuidDocuments || []).flatMap(({ id, isAvailable }) => [
+                this.getIdRepository().create(id),
+                // TODO [Hack] Find a more elegent way to load initial UUID documents based on requested state
+                isAvailable ? Promise.resolve(undefined) : this.getIdRepository().reserve(id),
+            ])
+        );
     }
 
     // TODO fix types

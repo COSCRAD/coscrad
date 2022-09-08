@@ -1,5 +1,5 @@
 import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
-import { BookBibliographicReference } from '../../domain/models/bibliographic-reference/book-bibliographic-reference/book-bibliographic-reference.entity';
+import { BookBibliographicReference } from '../../domain/models/bibliographic-reference/book-bibliographic-reference/entities/book-bibliographic-reference.entity';
 import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { BibliographicReferenceType } from '../../domain/models/bibliographic-reference/types/BibliographicReferenceType';
 import { ResourceType } from '../../domain/types/ResourceType';

@@ -26,7 +26,7 @@ export class CreateBookBibliographicReference implements ICreateCommand {
     @UUID()
     readonly id: AggregateId;
 
-    @RawDataObject()
+    @RawDataObject({ isOptional })
     readonly rawData?: Record<string, unknown>;
 
     /**
