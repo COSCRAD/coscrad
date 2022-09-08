@@ -1,0 +1,1781 @@
+{
+    "document": {
+        "tags": [
+            {
+                "type": "tag",
+                "_key": "1",
+                "eventHistory": [],
+                "label": "plants",
+                "members": [
+                    {
+                        "type": "term",
+                        "id": "1"
+                    },
+                    {
+                        "type": "book",
+                        "id": "23"
+                    },
+                    {
+                        "type": "book",
+                        "id": "24"
+                    },
+                    {
+                        "type": "vocabularyList",
+                        "id": "1"
+                    },
+                    {
+                        "type": "spatialFeature",
+                        "id": "100"
+                    },
+                    {
+                        "type": "note",
+                        "id": "2005"
+                    },
+                    {
+                        "type": "note",
+                        "id": "9"
+                    },
+                    {
+                        "type": "note",
+                        "id": "11"
+                    }
+                ]
+            },
+            {
+                "type": "tag",
+                "_key": "2",
+                "eventHistory": [],
+                "label": "animals",
+                "members": [
+                    {
+                        "type": "term",
+                        "id": "2"
+                    },
+                    {
+                        "type": "term",
+                        "id": "3"
+                    },
+                    {
+                        "type": "spatialFeature",
+                        "id": "102"
+                    },
+                    {
+                        "type": "note",
+                        "id": "2004"
+                    },
+                    {
+                        "type": "note",
+                        "id": "7"
+                    },
+                    {
+                        "type": "bibliographicReference",
+                        "id": "1"
+                    }
+                ]
+            },
+            {
+                "type": "tag",
+                "_key": "3",
+                "eventHistory": [],
+                "label": "placenames",
+                "members": [
+                    {
+                        "type": "photograph",
+                        "id": "0"
+                    },
+                    {
+                        "type": "transcribedAudio",
+                        "id": "110"
+                    },
+                    {
+                        "type": "note",
+                        "id": "2003"
+                    },
+                    {
+                        "type": "note",
+                        "id": "5"
+                    }
+                ]
+            },
+            {
+                "type": "tag",
+                "_key": "4",
+                "eventHistory": [],
+                "label": "songs",
+                "members": [
+                    {
+                        "type": "photograph",
+                        "id": "1"
+                    },
+                    {
+                        "type": "note",
+                        "id": "2002"
+                    },
+                    {
+                        "type": "note",
+                        "id": "3"
+                    }
+                ]
+            },
+            {
+                "type": "tag",
+                "_key": "5",
+                "eventHistory": [],
+                "label": "legends",
+                "members": [
+                    {
+                        "type": "vocabularyList",
+                        "id": "2"
+                    },
+                    {
+                        "type": "spatialFeature",
+                        "id": "101"
+                    },
+                    {
+                        "type": "note",
+                        "id": "2001"
+                    },
+                    {
+                        "type": "note",
+                        "id": "1"
+                    },
+                    {
+                        "type": "mediaItem",
+                        "id": "1"
+                    },
+                    {
+                        "type": "song",
+                        "id": "1"
+                    }
+                ]
+            },
+            {
+                "type": "tag",
+                "_key": "6",
+                "eventHistory": [],
+                "label": "law",
+                "members": [
+                    {
+                        "type": "bibliographicReference",
+                        "id": "3"
+                    }
+                ]
+            }
+        ],
+        "categories": [
+            {
+                "_key": "0",
+                "label": "tree of knowledge",
+                "members": [],
+                "type": "category"
+            },
+            {
+                "_key": "1",
+                "label": "animals",
+                "members": [
+                    {
+                        "type": "vocabularyList",
+                        "id": "1"
+                    }
+                ],
+                "type": "category"
+            },
+            {
+                "_key": "2",
+                "label": "mammals",
+                "members": [
+                    {
+                        "type": "term",
+                        "id": "1"
+                    },
+                    {
+                        "type": "book",
+                        "id": "23"
+                    },
+                    {
+                        "type": "song",
+                        "id": "1"
+                    }
+                ],
+                "type": "category"
+            },
+            {
+                "_key": "3",
+                "label": "birds",
+                "members": [],
+                "type": "category"
+            },
+            {
+                "_key": "4",
+                "label": "canines",
+                "members": [
+                    {
+                        "type": "term",
+                        "id": "2"
+                    }
+                ],
+                "type": "category"
+            },
+            {
+                "_key": "5",
+                "label": "felines",
+                "members": [],
+                "type": "category"
+            },
+            {
+                "_key": "6",
+                "label": "big cats",
+                "members": [],
+                "type": "category"
+            },
+            {
+                "_key": "7",
+                "label": "domestic cats",
+                "members": [
+                    {
+                        "type": "vocabularyList",
+                        "id": "2"
+                    },
+                    {
+                        "type": "photograph",
+                        "id": "0"
+                    }
+                ],
+                "type": "category"
+            },
+            {
+                "_key": "8",
+                "label": "wolves",
+                "members": [
+                    {
+                        "type": "spatialFeature",
+                        "id": "101"
+                    }
+                ],
+                "type": "category"
+            },
+            {
+                "_key": "9",
+                "label": "songs",
+                "members": [
+                    {
+                        "type": "term",
+                        "id": "3"
+                    },
+                    {
+                        "type": "spatialFeature",
+                        "id": "102"
+                    },
+                    {
+                        "type": "bibliographicReference",
+                        "id": "1"
+                    },
+                    {
+                        "type": "mediaItem",
+                        "id": "1"
+                    }
+                ],
+                "type": "category"
+            },
+            {
+                "_key": "10",
+                "label": "domestic dogs",
+                "members": [
+                    {
+                        "type": "photograph",
+                        "id": "1"
+                    }
+                ],
+                "type": "category"
+            },
+            {
+                "_key": "11",
+                "label": "rodents",
+                "members": [
+                    {
+                        "type": "book",
+                        "id": "24"
+                    }
+                ],
+                "type": "category"
+            },
+            {
+                "_key": "12",
+                "label": "film",
+                "members": [],
+                "type": "category"
+            },
+            {
+                "_key": "13",
+                "label": "props",
+                "members": [],
+                "type": "category"
+            },
+            {
+                "_key": "14",
+                "label": "wardrobe",
+                "members": [],
+                "type": "category"
+            },
+            {
+                "_key": "15",
+                "label": "tools",
+                "members": [
+                    {
+                        "type": "transcribedAudio",
+                        "id": "110"
+                    }
+                ],
+                "type": "category"
+            },
+            {
+                "_key": "16",
+                "label": "adornments",
+                "members": [],
+                "type": "category"
+            },
+            {
+                "_key": "17",
+                "label": "clothing",
+                "members": [
+                    {
+                        "type": "note",
+                        "id": "1"
+                    }
+                ],
+                "type": "category"
+            },
+            {
+                "_key": "18",
+                "label": "tools",
+                "members": [],
+                "type": "category"
+            }
+        ],
+        "uuids": [],
+        "users": [
+            {
+                "type": "user",
+                "_key": "1",
+                "eventHistory": [],
+                "profile": {
+                    "email": "llcj1985@aol.com",
+                    "name": {
+                        "firstName": "James",
+                        "lastName": "Jones"
+                    }
+                },
+                "username": "cool-james",
+                "roles": [
+                    "viewer"
+                ],
+                "authProviderUserId": "auth0|123"
+            }
+        ],
+        "groups": [
+            {
+                "type": "userGroup",
+                "_key": "1",
+                "eventHistory": [],
+                "label": "community members",
+                "userIds": [
+                    "1"
+                ],
+                "description": "This group is for members of the community only."
+            }
+        ],
+        "terms": [
+            {
+                "type": "term",
+                "_key": "1",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "Chil-term-1",
+                "termEnglish": "Engl-term-1",
+                "contributorId": "John Doe"
+            },
+            {
+                "type": "term",
+                "_key": "2",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "Chil-term-2",
+                "termEnglish": "Engl-term-2",
+                "contributorId": "John Doe"
+            },
+            {
+                "type": "term",
+                "_key": "3",
+                "eventHistory": [],
+                "published": false,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "Chil-term-no-english",
+                "contributorId": "Jane Deer"
+            }
+        ],
+        "vocabulary_lists": [
+            {
+                "type": "vocabularyList",
+                "_key": "1",
+                "eventHistory": [],
+                "published": false,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "name": "test VL 1 chil",
+                "nameEnglish": "test VL 1 engl",
+                "entries": [
+                    {
+                        "termId": "1",
+                        "variableValues": {
+                            "person": "11"
+                        }
+                    },
+                    {
+                        "termId": "2",
+                        "variableValues": {
+                            "person": "21"
+                        }
+                    }
+                ],
+                "variables": [
+                    {
+                        "name": "person",
+                        "type": "dropbox",
+                        "validValues": [
+                            {
+                                "display": "I",
+                                "value": "11"
+                            },
+                            {
+                                "display": "We",
+                                "value": "21"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "vocabularyList",
+                "_key": "2",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "name": "test VL 2 CHIL- no engl name",
+                "entries": [
+                    {
+                        "termId": "2",
+                        "variableValues": {
+                            "person": "23"
+                        }
+                    }
+                ],
+                "variables": []
+            }
+        ],
+        "transcribed_audio": [
+            {
+                "type": "transcribedAudio",
+                "_key": "110",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "audioFilename": "123.mp3",
+                "lengthMilliseconds": 20000,
+                "startMilliseconds": 0,
+                "transcript": {
+                    "timeRanges": [
+                        {
+                            "inPoint": 12000,
+                            "outPoint": 15550,
+                            "data": "There once was a little wooden boy."
+                        },
+                        {
+                            "inPoint": 18300,
+                            "outPoint": 19240,
+                            "data": "His name was Pinocchio."
+                        }
+                    ]
+                }
+            }
+        ],
+        "books": [
+            {
+                "type": "book",
+                "_key": "23",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "Three Little Pigs",
+                "subtitle": "The wolf's revenge",
+                "author": "John Doeburg",
+                "publicationDate": "2002",
+                "pages": [
+                    {
+                        "identifier": "1",
+                        "text": "foo",
+                        "translation": "dee foo"
+                    },
+                    {
+                        "identifier": "2",
+                        "text": "blah blah blah",
+                        "translation": "blahas"
+                    }
+                ]
+            },
+            {
+                "type": "book",
+                "_key": "24",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "An Adventure Story",
+                "author": "Jane Donnaldson",
+                "publicationDate": "2011",
+                "pages": [
+                    {
+                        "identifier": "ix",
+                        "text": "blah blah blah",
+                        "translation": "blahas"
+                    }
+                ]
+            },
+            {
+                "type": "book",
+                "_key": "25",
+                "eventHistory": [],
+                "published": false,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "An Adventure Story II",
+                "author": "Jane Donnaldson",
+                "publicationDate": "2012",
+                "pages": [
+                    {
+                        "identifier": "ix",
+                        "text": "blah blah blah",
+                        "translation": "blahas"
+                    }
+                ]
+            }
+        ],
+        "photographs": [
+            {
+                "type": "photograph",
+                "_key": "0",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "filename": "cat",
+                "photographer": "Susie McRealart",
+                "dimensions": {
+                    "widthPX": 300,
+                    "heightPX": 400
+                }
+            },
+            {
+                "type": "photograph",
+                "_key": "1",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "filename": "dog",
+                "photographer": "Robert McRealart",
+                "dimensions": {
+                    "widthPX": 420,
+                    "heightPX": 285
+                }
+            },
+            {
+                "type": "photograph",
+                "_key": "2",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "filename": "wildflower",
+                "photographer": "Kenny Tree-Huggens",
+                "dimensions": {
+                    "widthPX": 1200,
+                    "heightPX": 1500
+                }
+            }
+        ],
+        "spatial_features": [
+            {
+                "type": "spatialFeature",
+                "_key": "100",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        100,
+                        0
+                    ]
+                }
+            },
+            {
+                "type": "spatialFeature",
+                "_key": "101",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        20,
+                        10
+                    ]
+                }
+            },
+            {
+                "type": "spatialFeature",
+                "_key": "102",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        70.5,
+                        23.5
+                    ]
+                }
+            },
+            {
+                "type": "spatialFeature",
+                "_key": "1",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                        [
+                            1,
+                            2
+                        ],
+                        [
+                            1,
+                            3
+                        ],
+                        [
+                            1.5,
+                            3.5
+                        ],
+                        [
+                            3,
+                            4.2
+                        ]
+                    ]
+                }
+            },
+            {
+                "type": "spatialFeature",
+                "_key": "300",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [
+                                1,
+                                3
+                            ],
+                            [
+                                2,
+                                5
+                            ],
+                            [
+                                1.5,
+                                3.7
+                            ],
+                            [
+                                1.2,
+                                3.3
+                            ],
+                            [
+                                1,
+                                3
+                            ]
+                        ]
+                    ]
+                }
+            }
+        ],
+        "bibliographic_references": [
+            {
+                "type": "bibliographicReference",
+                "_key": "1",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "data": {
+                    "type": "book",
+                    "title": "A Day in the Life",
+                    "creators": [
+                        {
+                            "name": "Alana Duvernay",
+                            "type": "author"
+                        }
+                    ],
+                    "abstract": "This is the abstract, NOT a general note!",
+                    "year": 1999,
+                    "publisher": "Atlantic Publishing",
+                    "place": "Kennebunk Port, Maine",
+                    "url": "https://atlanticpublishing.com",
+                    "isbn": "978-1-895811-34-6",
+                    "numberOfPages": 455
+                }
+            },
+            {
+                "type": "bibliographicReference",
+                "_key": "23",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "data": {
+                    "type": "journalArticle",
+                    "title": "Report on the Cariboo Chilcotin Justice inquiry",
+                    "creators": [
+                        {
+                            "name": "Sigurd Purcell",
+                            "type": "author"
+                        }
+                    ],
+                    "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
+                    "issueDate": "Spring 2013",
+                    "publicationTitle": "Journal of History",
+                    "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+                    "pages": "109-113,115-136,240",
+                    "issn": "00052949",
+                    "doi": "10.14288/bcs.v0i19.784"
+                }
+            },
+            {
+                "type": "bibliographicReference",
+                "_key": "3",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "data": {
+                    "type": "courtCase",
+                    "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+                    "abstract": "William, June\n- Nemiah Valley\n- Qualifying as an expert in Tsilhqot'in written language",
+                    "dateDecided": "Recorded 2002-07-08",
+                    "court": "Supreme Court of British Columbia",
+                    "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
+                    "pages": "Pages 1-6"
+                }
+            }
+        ],
+        "songs": [
+            {
+                "type": "song",
+                "_key": "1",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "Song title in language",
+                "titleEnglish": "Mary had a little lamb",
+                "contributions": [
+                    {
+                        "contributorId": "1",
+                        "role": "performer"
+                    }
+                ],
+                "lyrics": "Mary had a little lamb, little lamb.",
+                "audioURL": "https://www.myaudio.com/lamb.mp3",
+                "lengthMilliseconds": 3500,
+                "startMilliseconds": 0
+            },
+            {
+                "type": "song",
+                "_key": "2",
+                "eventHistory": [],
+                "published": false,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "Unpublished Song Title (lang)",
+                "titleEnglish": "Unpublished Song Title (Engl)",
+                "contributions": [
+                    {
+                        "contributorId": "33",
+                        "role": "author"
+                    }
+                ],
+                "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+                "audioURL": "https://www.myaudio.com/badsong.wav",
+                "lengthMilliseconds": 33000,
+                "startMilliseconds": 0
+            }
+        ],
+        "media_items": [
+            {
+                "type": "mediaItem",
+                "_key": "1",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "episode title (in language)",
+                "titleEnglish": "Metal Mondays episode 1",
+                "contributorAndRoles": [
+                    {
+                        "contributorId": "2",
+                        "role": "host"
+                    }
+                ],
+                "url": "https://www.metalmondays.com/1.mp3",
+                "mimeType": "audio/mpeg",
+                "lengthMilliseconds": 2500
+            }
+        ]
+    },
+    "edge": {
+        "category_edges": [
+            {
+                "_to": "categories/1",
+                "_from": "categories/0"
+            },
+            {
+                "_to": "categories/12",
+                "_from": "categories/0"
+            },
+            {
+                "_to": "categories/2",
+                "_from": "categories/1"
+            },
+            {
+                "_to": "categories/3",
+                "_from": "categories/1"
+            },
+            {
+                "_to": "categories/4",
+                "_from": "categories/2"
+            },
+            {
+                "_to": "categories/5",
+                "_from": "categories/2"
+            },
+            {
+                "_to": "categories/11",
+                "_from": "categories/2"
+            },
+            {
+                "_to": "categories/8",
+                "_from": "categories/4"
+            },
+            {
+                "_to": "categories/10",
+                "_from": "categories/4"
+            },
+            {
+                "_to": "categories/6",
+                "_from": "categories/5"
+            },
+            {
+                "_to": "categories/7",
+                "_from": "categories/5"
+            },
+            {
+                "_to": "categories/13",
+                "_from": "categories/12"
+            },
+            {
+                "_to": "categories/14",
+                "_from": "categories/12"
+            },
+            {
+                "_to": "categories/16",
+                "_from": "categories/13"
+            },
+            {
+                "_to": "categories/17",
+                "_from": "categories/13"
+            },
+            {
+                "_to": "categories/18",
+                "_from": "categories/13"
+            },
+            {
+                "_to": "categories/15",
+                "_from": "categories/16"
+            }
+        ],
+        "resource_edge_connections": [
+            {
+                "_to": "terms/2",
+                "_from": "terms/2",
+                "type": "note",
+                "_key": "1",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "textField",
+                            "target": "term",
+                            "charRange": [
+                                0,
+                                3
+                            ]
+                        }
+                    }
+                ],
+                "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
+            },
+            {
+                "_to": "books/24",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "2",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    }
+                ],
+                "note": "This page is about bears"
+            },
+            {
+                "_to": "vocabulary_lists/2",
+                "_from": "vocabulary_lists/2",
+                "type": "note",
+                "_key": "3",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "textField",
+                            "target": "name",
+                            "charRange": [
+                                0,
+                                1
+                            ]
+                        }
+                    }
+                ],
+                "note": "This is the first letter of the list name"
+            },
+            {
+                "_to": "spatial_features/300",
+                "_from": "spatial_features/300",
+                "type": "note",
+                "_key": "4",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "there is a placename for this point at the base of the mountain"
+            },
+            {
+                "_to": "transcribed_audio/110",
+                "_from": "transcribed_audio/110",
+                "type": "note",
+                "_key": "5",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 11000,
+                                "outPoint": 12950
+                            }
+                        }
+                    }
+                ],
+                "note": "this clip talks about songs"
+            },
+            {
+                "_to": "photographs/2",
+                "_from": "photographs/2",
+                "type": "note",
+                "_key": "6",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "freeMultiline",
+                            "lines": [
+                                [
+                                    [
+                                        0,
+                                        200
+                                    ],
+                                    [
+                                        100,
+                                        300
+                                    ],
+                                    [
+                                        200,
+                                        400
+                                    ],
+                                    [
+                                        250,
+                                        475
+                                    ]
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "note": "this is the stem of the flower"
+            },
+            {
+                "_to": "photographs/2",
+                "_from": "photographs/2",
+                "type": "note",
+                "_key": "7",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "point2D",
+                            "point": [
+                                0,
+                                200
+                            ]
+                        }
+                    }
+                ],
+                "note": "this is the base of the flower"
+            },
+            {
+                "_to": "books/24",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "8",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    }
+                ],
+                "note": "this section is the best part of an illustrated book about birds"
+            },
+            {
+                "_to": "bibliographic_references/1",
+                "_from": "bibliographic_references/1",
+                "type": "note",
+                "_key": "9",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "found this in the archives"
+            },
+            {
+                "_to": "songs/1",
+                "_from": "songs/1",
+                "type": "note",
+                "_key": "10",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 300,
+                                "outPoint": 500
+                            }
+                        }
+                    }
+                ],
+                "note": "this is a song"
+            },
+            {
+                "_to": "media_items/1",
+                "_from": "media_items/1",
+                "type": "note",
+                "_key": "11",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "textField",
+                            "target": "title",
+                            "charRange": [
+                                0,
+                                2
+                            ]
+                        }
+                    }
+                ],
+                "note": "this is an awesome show"
+            },
+            {
+                "_to": "media_items/1",
+                "_from": "media_items/1",
+                "type": "note",
+                "_key": "12",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 650,
+                                "outPoint": 1230
+                            }
+                        }
+                    }
+                ],
+                "note": "important clip from the show"
+            },
+            {
+                "_to": "bibliographic_references/1",
+                "_from": "bibliographic_references/1",
+                "type": "note",
+                "_key": "13",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this book is hard to track down"
+            },
+            {
+                "_to": "terms/2",
+                "_from": "terms/2",
+                "type": "note",
+                "_key": "14",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
+            },
+            {
+                "_to": "books/24",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "15",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "This page is about bears"
+            },
+            {
+                "_to": "vocabulary_lists/2",
+                "_from": "vocabulary_lists/2",
+                "type": "note",
+                "_key": "16",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "This is the first letter of the list name"
+            },
+            {
+                "_to": "transcribed_audio/110",
+                "_from": "transcribed_audio/110",
+                "type": "note",
+                "_key": "17",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this clip talks about songs"
+            },
+            {
+                "_to": "photographs/2",
+                "_from": "photographs/2",
+                "type": "note",
+                "_key": "18",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this is the stem of the flower"
+            },
+            {
+                "_to": "photographs/2",
+                "_from": "photographs/2",
+                "type": "note",
+                "_key": "19",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this is the base of the flower"
+            },
+            {
+                "_to": "books/24",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "20",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this section is the best part of an illustrated book about birds"
+            },
+            {
+                "_to": "songs/1",
+                "_from": "songs/1",
+                "type": "note",
+                "_key": "21",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this is a song"
+            },
+            {
+                "_to": "media_items/1",
+                "_from": "media_items/1",
+                "type": "note",
+                "_key": "22",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this is an awesome show"
+            },
+            {
+                "_to": "media_items/1",
+                "_from": "media_items/1",
+                "type": "note",
+                "_key": "23",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "important clip from the show"
+            },
+            {
+                "_to": "terms/2",
+                "_from": "vocabulary_lists/2",
+                "type": "note",
+                "_key": "2000",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "textField",
+                            "target": "term",
+                            "charRange": [
+                                0,
+                                3
+                            ]
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "textField",
+                            "target": "name",
+                            "charRange": [
+                                0,
+                                1
+                            ]
+                        }
+                    }
+                ],
+                "note": "That is why term/2 is related to vocabularyList/2"
+            },
+            {
+                "_to": "vocabulary_lists/2",
+                "_from": "transcribed_audio/110",
+                "type": "note",
+                "_key": "2001",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "textField",
+                            "target": "name",
+                            "charRange": [
+                                0,
+                                1
+                            ]
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 11000,
+                                "outPoint": 12950
+                            }
+                        }
+                    }
+                ],
+                "note": "That is why vocabularyList/2 is related to transcribedAudio/110"
+            },
+            {
+                "_to": "transcribed_audio/110",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "2002",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 11000,
+                                "outPoint": 12950
+                            }
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    }
+                ],
+                "note": "That is why transcribedAudio/110 is related to book/24"
+            },
+            {
+                "_to": "books/24",
+                "_from": "photographs/2",
+                "type": "note",
+                "_key": "2003",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "freeMultiline",
+                            "lines": [
+                                [
+                                    [
+                                        0,
+                                        200
+                                    ],
+                                    [
+                                        100,
+                                        300
+                                    ],
+                                    [
+                                        200,
+                                        400
+                                    ],
+                                    [
+                                        250,
+                                        475
+                                    ]
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "note": "That is why book/24 is related to photograph/2"
+            },
+            {
+                "_to": "photographs/2",
+                "_from": "spatial_features/300",
+                "type": "note",
+                "_key": "2004",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "freeMultiline",
+                            "lines": [
+                                [
+                                    [
+                                        0,
+                                        200
+                                    ],
+                                    [
+                                        100,
+                                        300
+                                    ],
+                                    [
+                                        200,
+                                        400
+                                    ],
+                                    [
+                                        250,
+                                        475
+                                    ]
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "That is why photograph/2 is related to spatialFeature/300"
+            },
+            {
+                "_to": "spatial_features/300",
+                "_from": "songs/1",
+                "type": "note",
+                "_key": "2005",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 300,
+                                "outPoint": 500
+                            }
+                        }
+                    }
+                ],
+                "note": "That is why spatialFeature/300 is related to song/1"
+            },
+            {
+                "_to": "songs/1",
+                "_from": "terms/2",
+                "type": "note",
+                "_key": "2006",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 300,
+                                "outPoint": 500
+                            }
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "textField",
+                            "target": "term",
+                            "charRange": [
+                                0,
+                                3
+                            ]
+                        }
+                    }
+                ],
+                "note": "That is why song/1 is related to term/2"
+            },
+            {
+                "_from": "media_items/1",
+                "_to": "terms/2",
+                "type": "note",
+                "_key": "3001",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 100,
+                                "outPoint": 1200
+                            }
+                        }
+                    },
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "textField",
+                            "target": "term",
+                            "charRange": [
+                                1,
+                                4
+                            ]
+                        }
+                    }
+                ],
+                "note": "this media item mentions a word in the term"
+            },
+            {
+                "_from": "bibliographic_references/1",
+                "_to": "books/24",
+                "type": "note",
+                "_key": "3002",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "identity"
+                        }
+                    },
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "identity"
+                        }
+                    }
+                ],
+                "note": "here is the digital version of the book!"
+            },
+            {
+                "_to": "media_items/1",
+                "_from": "books/24",
+                "type": "note",
+                "_key": "3101",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 300,
+                                "outPoint": 1800
+                            }
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    }
+                ],
+                "note": "this selection from the media item portrays the events in the book"
+            },
+            {
+                "_to": "bibliographic_references/1",
+                "_from": "songs/1",
+                "type": "note",
+                "_key": "3102",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 500,
+                                "outPoint": 778.4
+                            }
+                        }
+                    }
+                ],
+                "note": "this library book has the lyrics from the song, but we do not have access to the book"
+            }
+        ]
+    }
+}
