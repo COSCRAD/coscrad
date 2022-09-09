@@ -34,6 +34,8 @@ export class CreateBookBibliographicReference implements ICreateCommand {
      * We define them independently, however, to avoid coupling the domain model
      * to the command payload. Amongst other concerns, this forces us to be
      * explicit about changes.
+     *
+     * This is why we ignore command.ts files in Sonar Cloud.
      */
     @NonEmptyString()
     readonly title: string;

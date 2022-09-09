@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
-import getInstanceFactoryForEntity from '../../domain/factories/getInstanceFactoryForResource';
+import getInstanceFactoryForResource from '../../domain/factories/getInstanceFactoryForResource';
 import { Resource } from '../../domain/models/resource.entity';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
@@ -103,7 +103,7 @@ describe('Repository provider > repositoryForEntity', () => {
                         id: 'BRAND-NEW-ENTITY-ID',
                     };
 
-                    const entityFactory = getInstanceFactoryForEntity(resourceType);
+                    const entityFactory = getInstanceFactoryForResource(resourceType);
 
                     const newEntityInstance = entityFactory(dtoForEntityToCreate);
 
@@ -132,7 +132,7 @@ describe('Repository provider > repositoryForEntity', () => {
 
             describe('createMany', () => {
                 it('should successfully create all new entities', async () => {
-                    const entityFactory = getInstanceFactoryForEntity(resourceType);
+                    const entityFactory = getInstanceFactoryForResource(resourceType);
 
                     const newEntitiesToCreateOrErrors = testData[resourceType]
                         .map((oldEntity, index) => ({

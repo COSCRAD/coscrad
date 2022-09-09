@@ -5,7 +5,7 @@ import { RepositoryProvider } from '../../../../persistence/repositories/reposit
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForEntity from '../../../factories/getInstanceFactoryForResource';
+import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
@@ -53,7 +53,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             lengthMilliseconds: 0,
         };
 
-        return getInstanceFactoryForEntity<MediaItem>(ResourceType.mediaItem)(createDto);
+        return getInstanceFactoryForResource<MediaItem>(ResourceType.mediaItem)(createDto);
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

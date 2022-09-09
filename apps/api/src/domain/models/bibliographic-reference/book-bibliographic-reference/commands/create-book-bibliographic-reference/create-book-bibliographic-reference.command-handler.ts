@@ -53,6 +53,7 @@ export class CreateBookBibliographicReferenceCommandHandler extends BaseCreateCo
             id,
             type: ResourceType.bibliographicReference,
             // A separate `publish` command must be executed
+            // TODO [https://www.pivotaltracker.com/story/show/183227484] add this command
             published: false,
             data: {
                 type: BibliographicReferenceType.book,

@@ -236,6 +236,21 @@ Object {
 }
 `;
 
+exports[`command payload schemas The schema for command GRANT_RESOURCE_READ_ACCESS_TO_USER should have the expected value 1`] = `
+Object {
+  "resourceCompositeIdentifier": Object {
+    "coscradDataType": "COMPOSITE_IDENTIFIER",
+    "isArray": false,
+    "isOptional": false,
+  },
+  "userId": Object {
+    "coscradDataType": "UUID",
+    "isArray": false,
+    "isOptional": false,
+  },
+}
+`;
+
 exports[`command payload schemas The schema for command GRANT_USER_ROLE should have the expected value 1`] = `
 Object {
   "role": Object {
@@ -260,6 +275,16 @@ Object {
     ],
   },
   "userId": Object {
+    "coscradDataType": "UUID",
+    "isArray": false,
+    "isOptional": false,
+  },
+}
+`;
+
+exports[`command payload schemas The schema for command PUBLISH_MEDIA_ITEM should have the expected value 1`] = `
+Object {
+  "id": Object {
     "coscradDataType": "UUID",
     "isArray": false,
     "isOptional": false,

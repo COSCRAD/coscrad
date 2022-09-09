@@ -11,7 +11,10 @@ import { DTO } from '../../../../types/DTO';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import MissingSongTitleError from '../../../domainModelValidators/errors/song/MissingSongTitleError';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
-import { assertCommandPayloadTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
+import {
+    assertCommandFailsDueToTypeError,
+    assertCommandPayloadTypeError,
+} from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
@@ -20,6 +23,7 @@ import InvalidCommandPayloadTypeError from '../../shared/common-command-errors/I
 import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
 import { assertEventRecordPersisted } from '../../__tests__/command-helpers/assert-event-record-persisted';
+import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { Song } from '../song.entity';
@@ -123,6 +127,22 @@ describe('CreateSong', () => {
                 },
             });
         });
+    });
+
+    describe('when the payload has an invalid type', () => {
+        generateCommandFuzzTestCases(CreateSong).forEach(
+            ({ description, propertyName, invalidValue }) => {
+                describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
+                    it('should fail with the appropriate error', async () => {
+                        await assertCommandFailsDueToTypeError(
+                            assertionHelperDependencies,
+                            { propertyName, invalidValue },
+                            buildValidCommandFSA('unused-id')
+                        );
+                    });
+                });
+            }
+        );
     });
 
     describe('when the payload has an invalid type', () => {
