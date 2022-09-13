@@ -200,6 +200,11 @@ Object {
         "isArray": false,
         "isOptional": true,
       },
+      "title": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
       "url": Object {
         "coscradDataType": "URL",
         "isArray": false,

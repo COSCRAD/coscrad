@@ -1,6 +1,6 @@
 import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
 import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
-import { JournalArticleBibliographicReference } from '../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/journal-article-bibliographic-reference.entity';
+import { JournalArticleBibliographicReference } from '../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference.entity';
 import { BibliographicReferenceType } from '../../domain/models/bibliographic-reference/types/BibliographicReferenceType';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { DTO } from '../../types/DTO';

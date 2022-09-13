@@ -112,7 +112,7 @@ describe(`The command: ${commandType}`, () => {
     });
 
     describe('when the command is valid', () => {
-        it('should succeed', async () => {
+        it('should succeed with appropriate updates to the database', async () => {
             await assertCreateCommandSuccess(assertionHelperDependencies, {
                 buildValidCommandFSA,
                 initialState,

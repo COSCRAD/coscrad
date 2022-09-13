@@ -4,7 +4,7 @@ import { CtorToInstance } from '../../../../lib/types/InstanceToCtor';
 import { BookBibliographicReference } from '../../../models/bibliographic-reference/book-bibliographic-reference/entities/book-bibliographic-reference.entity';
 import { CourtCaseBibliographicReference } from '../../../models/bibliographic-reference/court-case-bibliographic-reference/court-case-bibliographic-reference.entity';
 import { IBibliographicReference } from '../../../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
-import { JournalArticleBibliographicReference } from '../../../models/bibliographic-reference/journal-article-bibliographic-reference/journal-article-bibliographic-reference.entity';
+import { JournalArticleBibliographicReference } from '../../../models/bibliographic-reference/journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference.entity';
 import { BibliographicReferenceType } from '../../../models/bibliographic-reference/types/BibliographicReferenceType';
 
 const bibliographicReferenceTypeToModel: {
