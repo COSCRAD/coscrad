@@ -9,8 +9,7 @@ import { CreateSongCommandHandler } from '../../../domain/models/song/commands/c
 import { PublishSongCommandHandler } from '../../../domain/models/song/commands/publish-song.command-handler';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
 import { isInternalError } from '../../../lib/errors/InternalError';
-import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
-import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
@@ -18,11 +17,9 @@ import buildViewModelPathForRe from '../utilities/buildViewModelPathForResourceT
 import setUpIntegrationTest from './setUpIntegrationTest';
 
 describe('GET /resources (fetch view models)', () => {
-    const testDatabaseName = generateRandomTestDatabaseName();
+    const testDatabaseName = generateDatabaseNameForTestSuite();
 
     let app: INestApplication;
-
-    let arangoConnectionProvider: ArangoConnectionProvider;
 
     let testRepositoryProvider: TestRepositoryProvider;
 
@@ -49,16 +46,11 @@ describe('GET /resources (fetch view models)', () => {
     );
 
     beforeAll(async () => {
-        ({
-            app,
-            arangoConnectionProvider,
-            testRepositoryProvider,
-            idManager,
-            commandHandlerService,
-        } = await setUpIntegrationTest({
-            ARANGO_DB_NAME: testDatabaseName,
-            BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
-        }));
+        ({ app, testRepositoryProvider, idManager, commandHandlerService } =
+            await setUpIntegrationTest({
+                ARANGO_DB_NAME: testDatabaseName,
+                BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
+            }));
 
         /**
          * TODO [https://www.pivotaltracker.com/story/show/182576828]
@@ -184,8 +176,6 @@ describe('GET /resources (fetch view models)', () => {
     });
 
     afterAll(async () => {
-        await arangoConnectionProvider.dropDatabaseIfExists();
-
         await app.close();
     });
 });

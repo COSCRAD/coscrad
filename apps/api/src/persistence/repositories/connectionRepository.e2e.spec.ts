@@ -5,11 +5,11 @@ import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import buildTestData from '../../test-data/buildTestData';
-import generateRandomTestDatabaseName from './__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 
 describe('Repository provider > getEdgeConnectionRepository', () => {
-    const testDatabaseName = generateRandomTestDatabaseName();
+    const testDatabaseName = generateDatabaseNameForTestSuite();
 
     const testData = buildTestData();
 
@@ -24,8 +24,6 @@ describe('Repository provider > getEdgeConnectionRepository', () => {
     });
 
     afterAll(async () => {
-        await testRepositoryProvider.testTeardown();
-
         await app.close();
     });
 

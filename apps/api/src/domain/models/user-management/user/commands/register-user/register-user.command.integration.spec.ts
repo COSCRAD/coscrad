@@ -1,9 +1,9 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { CoscradUserRole, FuzzGenerator, getCoscradDataSchema } from '@coscrad/data-types';
+import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { assertExternalStateError } from '../../../../../../domain/models/__tests__/command-helpers/assert-external-state-error';
-import { ArangoConnectionProvider } from '../../../../../../persistence/database/arango-connection.provider';
-import generateRandomTestDatabaseName from '../../../../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../../../types/DTO';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
@@ -71,16 +71,16 @@ describe('RegisterUser', () => {
 
     let commandHandlerService: CommandHandlerService;
 
-    let arangoConnectionProvider: ArangoConnectionProvider;
+    let app: INestApplication;
 
     let idManager: IIdManager;
 
     let commandAssertionDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, arangoConnectionProvider } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
             await setUpIntegrationTest({
-                ARANGO_DB_NAME: generateRandomTestDatabaseName(),
+                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }));
 
         commandHandlerService.registerHandler(
@@ -96,7 +96,7 @@ describe('RegisterUser', () => {
     });
 
     afterAll(async () => {
-        await arangoConnectionProvider.dropDatabaseIfExists();
+        await app.close();
     });
 
     beforeEach(async () => {

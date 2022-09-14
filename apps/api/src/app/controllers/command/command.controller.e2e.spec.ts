@@ -10,7 +10,7 @@ import { CoscradUserWithGroups } from '../../../domain/models/user-management/us
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import { DTO } from '../../../types/DTO';
@@ -61,7 +61,7 @@ describe('The Command Controller', () => {
         ({ testRepositoryProvider, app, commandHandlerService, idManager } =
             await setUpIntegrationTest(
                 {
-                    ARANGO_DB_NAME: generateRandomTestDatabaseName(),
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
                 },
                 { shouldMockIdGenerator: true, testUserWithGroups }
             ));

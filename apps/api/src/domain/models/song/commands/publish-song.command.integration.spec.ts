@@ -1,9 +1,9 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
+import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { InternalError } from '../../../../lib/errors/InternalError';
-import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
-import generateRandomTestDatabaseName from '../../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../types/DTO';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
@@ -47,16 +47,16 @@ describe('PublishSong', () => {
 
     let commandHandlerService: CommandHandlerService;
 
-    let arangoConnectionProvider: ArangoConnectionProvider;
+    let app: INestApplication;
 
     let idManager: IIdManager;
 
     let commandAssertionDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, arangoConnectionProvider } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
             await setUpIntegrationTest({
-                ARANGO_DB_NAME: generateRandomTestDatabaseName(),
+                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }));
 
         commandHandlerService.registerHandler(
@@ -72,7 +72,7 @@ describe('PublishSong', () => {
     });
 
     afterAll(async () => {
-        await arangoConnectionProvider.dropDatabaseIfExists();
+        await app.close();
     });
 
     beforeEach(async () => {

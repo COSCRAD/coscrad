@@ -1,20 +1,17 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { ResourceType } from '../../../domain/types/ResourceType';
-import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
-import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ResourceDescription } from '../../../view-models/resourceDescriptions/buildAllResourceDescriptions';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
 describe('GET /resources', () => {
-    const testDatabaseName = generateRandomTestDatabaseName();
+    const testDatabaseName = generateDatabaseNameForTestSuite();
 
     let app: INestApplication;
 
-    let arangoConnectionProvider: ArangoConnectionProvider;
-
     beforeAll(async () => {
-        ({ app, arangoConnectionProvider } = await setUpIntegrationTest({
+        ({ app } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
             GLOBAL_PREFIX: 'testApiPrefix',
         }));
@@ -51,7 +48,5 @@ describe('GET /resources', () => {
 
     afterAll(async () => {
         await app.close();
-
-        await arangoConnectionProvider.dropDatabaseIfExists();
     });
 });
