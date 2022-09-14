@@ -6,6 +6,7 @@ import Funders from '../Components/Pages/Funders/Funders';
 import Greetings from '../Components/Pages/Greetings/Greetings';
 import Home from '../Components/Pages/Home/Home';
 import Links from '../Components/Pages/Links/Links';
+import { MediaDetail } from '../Components/Pages/MediaDetail/MediaDetail';
 import Videos from '../Components/Pages/MediaViewModel/MediaViewModel';
 import SongDetail from '../Components/Pages/SongDetail/SongDetail';
 import Songs from '../Components/Pages/SongIndex/SongIndex';
@@ -24,6 +25,7 @@ export function App() {
                     <Route path="/Songs" element={<Songs />} />
                     <Route path="/Songs/:id" element={<SongDetail />} />
                     <Route path="/Videos" element={<Videos />} />
+                    <Route path="/Videos/:id" element={<MediaDetail />} />
                     <Route path="/Links" element={<Links />} />
                     <Route path="/Teachers" element={<Teachers />} />
                     <Route path="/Funders" element={<Funders />} />
