@@ -4,8 +4,7 @@ import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUp
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../../lib/types/not-found';
-import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
-import generateRandomTestDatabaseName from '../../../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../../../test-data/buildTestData';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
@@ -60,24 +59,17 @@ describe('GrantResourceReadAccesstoUser', () => {
 
     let commandHandlerService: CommandHandlerService;
 
-    let arangoConnectionProvider: ArangoConnectionProvider;
-
     let idManager: IIdManager;
 
     let commandAssertionDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({
-            testRepositoryProvider,
-            commandHandlerService,
-            idManager,
-            arangoConnectionProvider,
-            app,
-        } = await setUpIntegrationTest({
-            ARANGO_DB_NAME: generateRandomTestDatabaseName(),
-        }).catch((error) => {
-            throw error;
-        }));
+        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+            await setUpIntegrationTest({
+                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+            }).catch((error) => {
+                throw error;
+            }));
 
         commandHandlerService.registerHandler(
             commandType,
@@ -92,8 +84,6 @@ describe('GrantResourceReadAccesstoUser', () => {
     });
 
     afterAll(async () => {
-        await arangoConnectionProvider.dropDatabaseIfExists();
-
         await app.close();
     });
 

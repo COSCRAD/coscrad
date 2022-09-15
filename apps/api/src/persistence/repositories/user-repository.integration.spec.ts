@@ -8,12 +8,11 @@ import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import buildTestData from '../../test-data/buildTestData';
-import { ArangoConnectionProvider } from '../database/arango-connection.provider';
-import generateRandomTestDatabaseName from './__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 
 describe('Arango Repository Provider > getUserRepository', () => {
-    const testDatabaseName = generateRandomTestDatabaseName();
+    const testDatabaseName = generateDatabaseNameForTestSuite();
 
     const testData = buildTestData();
 
@@ -34,14 +33,12 @@ describe('Arango Repository Provider > getUserRepository', () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
-    let arangoConnectionProvider: ArangoConnectionProvider;
-
     let app: INestApplication;
 
     let userRepository: IUserRepository;
 
     beforeAll(async () => {
-        ({ app, testRepositoryProvider, arangoConnectionProvider } = await setUpIntegrationTest({
+        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
 
@@ -49,8 +46,6 @@ describe('Arango Repository Provider > getUserRepository', () => {
     });
 
     afterAll(async () => {
-        await arangoConnectionProvider.dropDatabaseIfExists();
-
         await app.close();
     });
 

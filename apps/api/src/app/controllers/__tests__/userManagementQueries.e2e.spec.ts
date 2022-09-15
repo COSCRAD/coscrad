@@ -4,8 +4,7 @@ import * as request from 'supertest';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { dummySystemUserId } from '../../../domain/models/__tests__/utilities/dummySystemUserId';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
-import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
-import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
@@ -66,28 +65,23 @@ describe('User Management Queries', () => {
             ] as const
         ).forEach(([adminUserWithGroups, description]) => {
             describe(description, () => {
-                const testDatabaseName = generateRandomTestDatabaseName();
+                const testDatabaseName = generateDatabaseNameForTestSuite();
 
                 let app: INestApplication;
 
-                let arangoConnectionProvider: ArangoConnectionProvider;
-
                 let testRepositoryProvider: TestRepositoryProvider;
                 beforeAll(async () => {
-                    ({ app, arangoConnectionProvider, testRepositoryProvider } =
-                        await setUpIntegrationTest(
-                            {
-                                ARANGO_DB_NAME: testDatabaseName,
-                            },
-                            {
-                                testUserWithGroups: adminUserWithGroups,
-                            }
-                        ));
+                    ({ app, testRepositoryProvider } = await setUpIntegrationTest(
+                        {
+                            ARANGO_DB_NAME: testDatabaseName,
+                        },
+                        {
+                            testUserWithGroups: adminUserWithGroups,
+                        }
+                    ));
                 });
 
                 afterAll(async () => {
-                    await arangoConnectionProvider.dropDatabaseIfExists();
-
                     await app.close();
                 });
 
@@ -203,28 +197,23 @@ describe('User Management Queries', () => {
             ] as const
         ).forEach(([unauthorizedSystemUserWithGroups, description]) => {
             describe(description, () => {
-                const testDatabaseName = generateRandomTestDatabaseName();
+                const testDatabaseName = generateDatabaseNameForTestSuite();
 
                 let app: INestApplication;
 
-                let arangoConnectionProvider: ArangoConnectionProvider;
-
                 let testRepositoryProvider: TestRepositoryProvider;
                 beforeAll(async () => {
-                    ({ app, arangoConnectionProvider, testRepositoryProvider } =
-                        await setUpIntegrationTest(
-                            {
-                                ARANGO_DB_NAME: testDatabaseName,
-                            },
-                            {
-                                testUserWithGroups: unauthorizedSystemUserWithGroups,
-                            }
-                        ));
+                    ({ app, testRepositoryProvider } = await setUpIntegrationTest(
+                        {
+                            ARANGO_DB_NAME: testDatabaseName,
+                        },
+                        {
+                            testUserWithGroups: unauthorizedSystemUserWithGroups,
+                        }
+                    ));
                 });
 
                 afterAll(async () => {
-                    await arangoConnectionProvider.dropDatabaseIfExists();
-
                     await app.close();
                 });
 

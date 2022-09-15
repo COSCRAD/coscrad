@@ -6,19 +6,16 @@ import { InternalError } from '../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../lib/types/not-available';
 import { NotFound } from '../../../lib/types/not-found';
 import { OK } from '../../../lib/types/ok';
-import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../persistence/database/collection-references/ArangoCollectionId';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
-import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import setUpIntegrationTest from './setUpIntegrationTest';
 
 describe('When generating a new ID (POST /ids)', () => {
-    const testDatabaseName = generateRandomTestDatabaseName();
+    const testDatabaseName = generateDatabaseNameForTestSuite();
 
     let app: INestApplication;
-
-    let arangoConnectionProvider: ArangoConnectionProvider;
 
     let databaseProvider: DatabaseProvider;
 
@@ -27,15 +24,16 @@ describe('When generating a new ID (POST /ids)', () => {
     let idManager: IIdManager;
 
     beforeAll(async () => {
-        ({ app, databaseProvider, testRepositoryProvider, idManager, arangoConnectionProvider } =
-            await setUpIntegrationTest({
-                ARANGO_DB_NAME: testDatabaseName,
-                BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
-            }));
+        ({ app, databaseProvider, testRepositoryProvider, idManager } = await setUpIntegrationTest({
+            ARANGO_DB_NAME: testDatabaseName,
+            BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
+        }));
+
+        await testRepositoryProvider.testSetup();
     });
 
     afterAll(async () => {
-        await arangoConnectionProvider.dropDatabaseIfExists();
+        await app.close();
     });
 
     describe(`before generating any IDs`, () => {

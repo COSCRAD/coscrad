@@ -8,9 +8,7 @@ import ArangoDatabaseConfiguration from './ArangoDatabaseConfiguration';
 import { getAllArangoCollectionIDs } from './collection-references/ArangoCollectionId';
 import { isArangoEdgeCollectionCollectionID } from './collection-references/ArangoEdgeCollectionId';
 import DatabaseAlreadyInitializedError from './errors/DatabaseAlreadyInitializedError';
-import DatabaseCannotBeDroppedError from './errors/DatabaseCannotBeDroppedError';
 import DatabaseNotYetInitializedError from './errors/DatabaseNotYetInitializedError';
-import canDatabaseBeDropped from './utilities/canDatabaseBeDropped';
 
 // Alias for more clarity from the outside; TODO wrap `Database` with simpler API?
 export type ArangoConnection = Database;
@@ -184,22 +182,4 @@ export class ArangoConnectionProvider {
 
         return doesDatabaseExist;
     };
-
-    /**
-     * **CAUTION** This method is only to be used in tests.
-     */
-    async dropDatabaseIfExists(): Promise<void> {
-        const dbName = this.databaseConfiguration.dbName;
-
-        const doesDatabaseExist = await this.#doesDatabaseExist(dbName);
-
-        if (!doesDatabaseExist) return;
-
-        // for safety, you can only drop a db whose name matches the test db name pattern
-        if (!canDatabaseBeDropped(dbName)) throw new DatabaseCannotBeDroppedError(dbName);
-
-        await this.#getAdminDBConnection({
-            shouldConnectToSystemDatabase: true,
-        }).dropDatabase(dbName);
-    }
 }

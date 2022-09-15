@@ -1,12 +1,12 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
+import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { assertResourcePersistedProperly } from '../../../../../../domain/models/__tests__/command-helpers/assert-resource-persisted-properly';
 import getValidBibliographicReferenceInstanceForTest from '../../../../../../domain/__tests__/utilities/getValidBibliographicReferenceInstanceForTest';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
-import { ArangoConnectionProvider } from '../../../../../../persistence/database/arango-connection.provider';
-import generateRandomTestDatabaseName from '../../../../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../../../types/DTO';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
@@ -43,7 +43,7 @@ const existingInstance = getValidBibliographicReferenceInstanceForTest(
     id: dummyUuid,
 });
 
-const testDatabaseName = generateRandomTestDatabaseName();
+const testDatabaseName = generateDatabaseNameForTestSuite();
 
 const buildValidCommandFSA = (
     id: AggregateId
@@ -75,14 +75,14 @@ describe(`The command: ${commandType}`, () => {
 
     let commandHandlerService: CommandHandlerService;
 
-    let arangoConnectionProvider: ArangoConnectionProvider;
+    let app: INestApplication;
 
     let idManager: IIdManager;
 
     let assertionHelperDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, arangoConnectionProvider } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: testDatabaseName,
             }));
@@ -100,7 +100,7 @@ describe(`The command: ${commandType}`, () => {
     });
 
     afterAll(async () => {
-        await arangoConnectionProvider.dropDatabaseIfExists();
+        await app.close();
     });
 
     beforeEach(async () => {

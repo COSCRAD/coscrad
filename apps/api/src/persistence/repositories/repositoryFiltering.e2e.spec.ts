@@ -4,11 +4,11 @@ import { Term } from '../../domain/models/term/entities/term.entity';
 import TermEnglishEquals from '../../domain/repositories/specifications/TermEnglishEquals';
 import { ResourceType } from '../../domain/types/ResourceType';
 import buildTestData from '../../test-data/buildTestData';
-import generateRandomTestDatabaseName from './__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 
 describe('Repository for entity (with filters)', () => {
-    const testDatabaseName = generateRandomTestDatabaseName();
+    const testDatabaseName = generateDatabaseNameForTestSuite();
 
     const testData = buildTestData().resources;
 
@@ -23,8 +23,6 @@ describe('Repository for entity (with filters)', () => {
     });
 
     afterAll(async () => {
-        await testRepositoryProvider.testTeardown();
-
         await app.close();
     });
 

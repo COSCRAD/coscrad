@@ -6,7 +6,7 @@ import { Resource } from '../../../domain/models/resource.entity';
 import { isAggregateCompositeIdentifier } from '../../../domain/types/AggregateCompositeIdentifier';
 import { InMemorySnapshot, ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
-import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
@@ -14,7 +14,7 @@ import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
 
 describe('When querying for edge connections', () => {
-    const testDatabaseName = generateRandomTestDatabaseName();
+    const testDatabaseName = generateDatabaseNameForTestSuite();
 
     let app: INestApplication;
 
@@ -47,14 +47,10 @@ describe('When querying for edge connections', () => {
         ({ app, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
-    });
 
-    beforeEach(async () => {
         await testRepositoryProvider.testSetup();
-    });
 
-    afterEach(async () => {
-        await testRepositoryProvider.testTeardown();
+        await testRepositoryProvider.addFullSnapshot(fullSnapshot);
     });
 
     describe(`GET /connections/`, () => {
@@ -62,8 +58,6 @@ describe('When querying for edge connections', () => {
             const expectedResult = {
                 count: connections.length,
             };
-
-            await testRepositoryProvider.addFullSnapshot(fullSnapshot);
 
             const result = await request(app.getHttpServer()).get(`/connections`);
 
@@ -75,8 +69,6 @@ describe('When querying for edge connections', () => {
 
     describe(`GET /connections/notes`, () => {
         it('should return the expected result', async () => {
-            await testRepositoryProvider.addFullSnapshot(fullSnapshot);
-
             const result = await request(app.getHttpServer()).get('/connections/notes');
 
             expect(result.status).toBe(httpStatusCodes.ok);
@@ -92,8 +84,6 @@ describe('When querying for edge connections', () => {
             Object.values(ResourceType).forEach((resourceType) =>
                 describe(`for a resource of type: ${resourceType}`, () => {
                     it(`should return the expected result`, async () => {
-                        await testRepositoryProvider.addFullSnapshot(fullSnapshot);
-
                         const selfConnections = connections.filter(
                             ({ connectionType: type }) => type === EdgeConnectionType.self
                         );
@@ -196,8 +186,6 @@ describe('When querying for edge connections', () => {
             Object.values(ResourceType).forEach((resourceType) =>
                 describe(`for a resource of type: ${resourceType}`, () => {
                     it(`should return the expected result`, async () => {
-                        await testRepositoryProvider.addFullSnapshot(fullSnapshot);
-
                         const dualConnections = connections.filter(
                             ({ connectionType: type }) => type === EdgeConnectionType.dual
                         );

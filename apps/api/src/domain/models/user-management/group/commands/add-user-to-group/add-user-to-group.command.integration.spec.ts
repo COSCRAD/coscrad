@@ -3,8 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError, isInternalError } from '../../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../../lib/types/not-found';
-import { ArangoConnectionProvider } from '../../../../../../persistence/database/arango-connection.provider';
-import generateRandomTestDatabaseName from '../../../../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../../../../test-data/buildTestData';
 import { DTO } from '../../../../../../types/DTO';
@@ -68,24 +67,17 @@ describe('AddUserToGroup', () => {
 
     let commandHandlerService: CommandHandlerService;
 
-    let arangoConnectionProvider: ArangoConnectionProvider;
-
     let idManager: IIdManager;
 
     let commandAssertionDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({
-            testRepositoryProvider,
-            commandHandlerService,
-            idManager,
-            arangoConnectionProvider,
-            app,
-        } = await setUpIntegrationTest({
-            ARANGO_DB_NAME: generateRandomTestDatabaseName(),
-        }).catch((error) => {
-            throw error;
-        }));
+        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+            await setUpIntegrationTest({
+                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+            }).catch((error) => {
+                throw error;
+            }));
 
         commandHandlerService.registerHandler(
             commandType,
@@ -100,8 +92,6 @@ describe('AddUserToGroup', () => {
     });
 
     afterAll(async () => {
-        await arangoConnectionProvider.dropDatabaseIfExists();
-
         await app.close();
     });
 

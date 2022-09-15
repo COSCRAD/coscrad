@@ -5,19 +5,16 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import buildTestData from '../../test-data/buildTestData';
-import { ArangoConnectionProvider } from '../database/arango-connection.provider';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { DatabaseProvider } from '../database/database.provider';
 import mapCategoryDTOToArangoDocument from '../database/utilities/category/mapCategoryDTOToArangoDocument';
-import generateRandomTestDatabaseName from './__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 
 describe('Repository provider > getCategoryRepository', () => {
-    const testDatabaseName = generateRandomTestDatabaseName();
+    const testDatabaseName = generateDatabaseNameForTestSuite();
 
     const testData = buildTestData();
-
-    let arangoConnectionProvider: ArangoConnectionProvider;
 
     let databaseProvider: DatabaseProvider;
 
@@ -28,15 +25,12 @@ describe('Repository provider > getCategoryRepository', () => {
     const { category: categoryTree } = testData;
 
     beforeAll(async () => {
-        ({ app, arangoConnectionProvider, databaseProvider, testRepositoryProvider } =
-            await setUpIntegrationTest({
-                ARANGO_DB_NAME: testDatabaseName,
-            }));
+        ({ app, databaseProvider, testRepositoryProvider } = await setUpIntegrationTest({
+            ARANGO_DB_NAME: testDatabaseName,
+        }));
     });
 
     afterAll(async () => {
-        await arangoConnectionProvider.dropDatabaseIfExists();
-
         await app.close();
     });
 

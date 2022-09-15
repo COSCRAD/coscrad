@@ -1,8 +1,8 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
+import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { InternalError } from '../../../../lib/errors/InternalError';
-import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../types/DTO';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
@@ -54,17 +54,17 @@ describe('PublishMediaItem', () => {
 
     let commandHandlerService: CommandHandlerService;
 
-    let arangoConnectionProvider: ArangoConnectionProvider;
+    let app: INestApplication;
 
     let idManager: IIdManager;
 
     let assertionHelperDependencies: Omit<CommandAssertionDependencies, 'idManager'>;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, arangoConnectionProvider } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: 'testonly-333',
-                // generateRandomTestDatabaseName(),
+                // generateDatabaseNameForTestSuite(),
             }));
 
         commandHandlerService.registerHandler(
@@ -79,7 +79,7 @@ describe('PublishMediaItem', () => {
     });
 
     afterAll(async () => {
-        await arangoConnectionProvider.dropDatabaseIfExists();
+        await app.close();
     });
 
     beforeEach(async () => {

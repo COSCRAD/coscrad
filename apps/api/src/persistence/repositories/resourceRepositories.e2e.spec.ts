@@ -6,11 +6,11 @@ import { ResourceType } from '../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { NotFound } from '../../lib/types/not-found';
 import buildTestData from '../../test-data/buildTestData';
-import generateRandomTestDatabaseName from './__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
 
 describe('Repository provider > repositoryForEntity', () => {
-    const testDatabaseName = generateRandomTestDatabaseName();
+    const testDatabaseName = generateDatabaseNameForTestSuite();
 
     const testData = buildTestData().resources;
 
@@ -25,8 +25,6 @@ describe('Repository provider > repositoryForEntity', () => {
     });
 
     afterAll(async () => {
-        await testRepositoryProvider.testTeardown();
-
         await app.close();
     });
 

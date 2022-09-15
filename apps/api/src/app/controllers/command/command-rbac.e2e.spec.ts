@@ -6,16 +6,17 @@ import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { PublishSong } from '../../../domain/models/song/commands/publish-song.command';
 import { PublishSongCommandHandler } from '../../../domain/models/song/commands/publish-song.command-handler';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
-import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
+import { dummyUuid } from '../../../domain/models/__tests__/utilities/dummyUuid';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
-import generateRandomTestDatabaseName from '../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
+
+const databaseName = generateDatabaseNameForTestSuite();
 
 /**
  * This is a high level test that checks the Role Base Access Control for
@@ -32,10 +33,8 @@ describe('Role Based Access Control for commands', () => {
 
     let idManager: IIdManager;
 
-    let arangoConnectionProvider: ArangoConnectionProvider;
-
     const existingSong = getValidAggregateInstanceForTest(ResourceType.song).clone({
-        id: buildDummyUuid(),
+        id: dummyUuid,
         published: false,
     });
 
@@ -58,23 +57,20 @@ describe('Role Based Access Control for commands', () => {
         const testUserWithGroups = new CoscradUserWithGroups(ordinaryUser, [userGroup]);
 
         beforeAll(async () => {
-            ({
-                testRepositoryProvider,
-                app,
-                commandHandlerService,
-                idManager,
-                arangoConnectionProvider,
-            } = await setUpIntegrationTest(
-                {
-                    ARANGO_DB_NAME: generateRandomTestDatabaseName(),
-                },
-                { shouldMockIdGenerator: true, testUserWithGroups }
-            ));
+            ({ testRepositoryProvider, app, commandHandlerService, idManager } =
+                await setUpIntegrationTest(
+                    {
+                        ARANGO_DB_NAME: databaseName,
+                    },
+                    { shouldMockIdGenerator: true, testUserWithGroups }
+                ));
 
             commandHandlerService.registerHandler(
                 'PUBLISH_SONG',
                 new PublishSongCommandHandler(testRepositoryProvider, idManager)
             );
+
+            await testRepositoryProvider.testSetup();
 
             await testRepositoryProvider.addFullSnapshot(
                 buildInMemorySnapshot({
@@ -90,7 +86,7 @@ describe('Role Based Access Control for commands', () => {
         afterAll(async () => {
             await app.close();
 
-            await arangoConnectionProvider.dropDatabaseIfExists();
+            await testRepositoryProvider.testTeardown();
         });
         it('should return an unauthroized error', async () => {
             await request(app.getHttpServer())
@@ -106,7 +102,7 @@ describe('Role Based Access Control for commands', () => {
             ({ testRepositoryProvider, app, commandHandlerService, idManager } =
                 await setUpIntegrationTest(
                     {
-                        ARANGO_DB_NAME: generateRandomTestDatabaseName(),
+                        ARANGO_DB_NAME: databaseName,
                     },
                     { shouldMockIdGenerator: true }
                 ));
@@ -123,12 +119,12 @@ describe('Role Based Access Control for commands', () => {
                     },
                 })
             );
+
+            await testRepositoryProvider.testSetup();
         });
 
         afterAll(async () => {
             await app.close();
-
-            await arangoConnectionProvider.dropDatabaseIfExists();
         });
         it('should return an unauthroized error', async () => {
             await request(app.getHttpServer())
@@ -160,7 +156,7 @@ describe('Role Based Access Control for commands', () => {
                 ({ testRepositoryProvider, app, commandHandlerService, idManager } =
                     await setUpIntegrationTest(
                         {
-                            ARANGO_DB_NAME: generateRandomTestDatabaseName(),
+                            ARANGO_DB_NAME: databaseName,
                         },
                         { shouldMockIdGenerator: true, testUserWithGroups }
                     ));
@@ -169,6 +165,8 @@ describe('Role Based Access Control for commands', () => {
                     'PUBLISH_SONG',
                     new PublishSongCommandHandler(testRepositoryProvider, idManager)
                 );
+
+                await testRepositoryProvider.testSetup();
 
                 await testRepositoryProvider.addFullSnapshot(
                     buildInMemorySnapshot({
@@ -183,14 +181,11 @@ describe('Role Based Access Control for commands', () => {
 
             afterAll(async () => {
                 await app.close();
-
-                await arangoConnectionProvider.dropDatabaseIfExists();
             });
             it('should return ok', async () => {
-                await request(app.getHttpServer())
-                    .post(`/commands`)
-                    .send(validCommandFSA)
-                    .expect(httpStatusCodes.ok);
+                const result = request(app.getHttpServer()).post(`/commands`).send(validCommandFSA);
+
+                result.expect(httpStatusCodes.ok);
             });
         });
     });

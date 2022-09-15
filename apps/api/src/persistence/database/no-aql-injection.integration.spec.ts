@@ -2,11 +2,11 @@ import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrati
 import { Book } from '../../domain/models/book/entities/book.entity';
 import { QueryOperator } from '../../domain/repositories/interfaces/QueryOperator';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
-import generateRandomTestDatabaseName from '../repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoDatabase } from './arango-database';
 import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
 
-const dummyDbName = generateRandomTestDatabaseName();
+const dummyDbName = generateDatabaseNameForTestSuite();
 
 describe(`Arango Database`, () => {
     let dbInstance: ArangoDatabase;
