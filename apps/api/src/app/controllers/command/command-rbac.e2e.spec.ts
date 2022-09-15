@@ -166,6 +166,8 @@ describe('Role Based Access Control for commands', () => {
                     new PublishSongCommandHandler(testRepositoryProvider, idManager)
                 );
 
+                await testRepositoryProvider.testSetup();
+
                 await testRepositoryProvider.addFullSnapshot(
                     buildInMemorySnapshot({
                         user: [adminUser],
@@ -175,20 +177,15 @@ describe('Role Based Access Control for commands', () => {
                         },
                     })
                 );
-
-                await testRepositoryProvider.testSetup();
             });
 
             afterAll(async () => {
                 await app.close();
-
-                await testRepositoryProvider.testTeardown();
             });
             it('should return ok', async () => {
-                await request(app.getHttpServer())
-                    .post(`/commands`)
-                    .send(validCommandFSA)
-                    .expect(httpStatusCodes.ok);
+                const result = request(app.getHttpServer()).post(`/commands`).send(validCommandFSA);
+
+                result.expect(httpStatusCodes.ok);
             });
         });
     });
