@@ -70,6 +70,8 @@ describe('Role Based Access Control for commands', () => {
                 new PublishSongCommandHandler(testRepositoryProvider, idManager)
             );
 
+            await testRepositoryProvider.testSetup();
+
             await testRepositoryProvider.addFullSnapshot(
                 buildInMemorySnapshot({
                     user: [ordinaryUser],
@@ -79,8 +81,6 @@ describe('Role Based Access Control for commands', () => {
                     },
                 })
             );
-
-            await testRepositoryProvider.testSetup();
         });
 
         afterAll(async () => {
