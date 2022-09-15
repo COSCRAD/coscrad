@@ -102,6 +102,93 @@ Object {
 }
 `;
 
+exports[`command payload schemas The schema for command CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE should have the expected value 1`] = `
+Object {
+  "abstract": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": true,
+  },
+  "creators": Object {
+    "coscradDataType": Object {
+      "name": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "type": Object {
+        "coscradDataType": "ENUM",
+        "enumLabel": "Creator Type",
+        "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
+        "isArray": false,
+        "isOptional": false,
+        "labelsAndValues": Array [
+          Object {
+            "label": "artist",
+            "value": "artist",
+          },
+          Object {
+            "label": "author",
+            "value": "author",
+          },
+          Object {
+            "label": "director",
+            "value": "director",
+          },
+        ],
+      },
+    },
+    "isArray": true,
+    "isOptional": false,
+  },
+  "doi": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": true,
+  },
+  "id": Object {
+    "coscradDataType": "UUID",
+    "isArray": false,
+    "isOptional": false,
+  },
+  "issn": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": true,
+  },
+  "issueDate": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": false,
+  },
+  "pages": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": true,
+  },
+  "publicationTitle": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": true,
+  },
+  "rawData": Object {
+    "coscradDataType": "RAW_DATA",
+    "isArray": false,
+    "isOptional": true,
+  },
+  "title": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": false,
+  },
+  "url": Object {
+    "coscradDataType": "URL",
+    "isArray": false,
+    "isOptional": true,
+  },
+}
+`;
+
 exports[`command payload schemas The schema for command CREATE_MEDIA_ITEM should have the expected value 1`] = `
 Object {
   "contributions": Object {

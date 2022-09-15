@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IBibliographicReferenceData } from '../../../../domain/models/bibliographic-reference/interfaces/bibliographic-reference-data.interface';
 import { IBibliographicReference } from '../../../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from '../base.view-model';
 
 export class BibliographicReferenceViewModel extends BaseViewModel {
@@ -11,6 +12,6 @@ export class BibliographicReferenceViewModel extends BaseViewModel {
     constructor({ id, data }: IBibliographicReference) {
         super({ id });
 
-        this.data = data;
+        this.data = cloneToPlainObject(data);
     }
 }

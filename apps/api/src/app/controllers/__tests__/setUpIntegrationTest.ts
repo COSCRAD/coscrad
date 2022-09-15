@@ -11,7 +11,6 @@ import { EnvironmentVariables } from '../../config/env.validation';
 import createTestModule from './createTestModule';
 
 type TestModuleInstances = {
-    arangoConnectionProvider: ArangoConnectionProvider;
     databaseProvider: DatabaseProvider;
     testRepositoryProvider: TestRepositoryProvider;
     commandHandlerService: CommandHandlerService;
@@ -49,18 +48,11 @@ export default async (
 
     const idManager = moduleRef.get<IIdManager>('ID_MANAGER');
 
-    if (
-        !arangoConnectionProvider ||
-        !databaseProvider ||
-        !testRepositoryProvider ||
-        !app ||
-        !idManager
-    ) {
+    if (!databaseProvider || !testRepositoryProvider || !app || !idManager) {
         throw new InternalError(`Failed to initialize a testing module.`);
     }
 
     return {
-        arangoConnectionProvider,
         databaseProvider,
         testRepositoryProvider,
         commandHandlerService,

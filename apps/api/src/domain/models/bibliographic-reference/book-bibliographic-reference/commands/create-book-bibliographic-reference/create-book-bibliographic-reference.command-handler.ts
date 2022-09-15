@@ -9,8 +9,8 @@ import getInstanceFactoryForResource from '../../../../../factories/getInstanceF
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateType } from '../../../../../types/AggregateType';
+import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceType';
-import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
 import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import { validAggregateOrThrow } from '../../../../shared/functional';
@@ -81,15 +81,14 @@ export class CreateBookBibliographicReferenceCommandHandler extends BaseCreateCo
             .forResource<BookBibliographicReference>(ResourceType.bibliographicReference)
             .fetchMany();
 
+        // Do we really need to filter here?
         const preExistingBookBibliographicReferences = searchResult
             .filter(validAggregateOrThrow)
             .filter(({ data: { type } }) => type === BibliographicReferenceType.book);
 
-        return buildInMemorySnapshot({
-            resources: {
-                bibliographicReference: preExistingBookBibliographicReferences,
-            },
-        });
+        return new DeluxeInMemoryStore({
+            bibliographicReference: preExistingBookBibliographicReferences,
+        }).fetchFullSnapshotInLegacyFormat();
     }
 
     protected validateExternalState(

@@ -5,7 +5,7 @@ import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-unde
 import { BookBibliographicReference } from '../book-bibliographic-reference/entities/book-bibliographic-reference.entity';
 import { CourtCaseBibliographicReference } from '../court-case-bibliographic-reference/court-case-bibliographic-reference.entity';
 import { IBibliographicReference } from '../interfaces/bibliographic-reference.interface';
-import { JournalArticleBibliographicReference } from '../journal-article-bibliographic-reference/journal-article-bibliographic-reference.entity';
+import { JournalArticleBibliographicReference } from '../journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference.entity';
 import { BibliographicReferenceType } from '../types/BibliographicReferenceType';
 
 const bibliographicReferenceTypeToCtor: {

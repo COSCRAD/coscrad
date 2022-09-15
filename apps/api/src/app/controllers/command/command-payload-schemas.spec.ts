@@ -1,5 +1,7 @@
+import { ICommand } from '@coscrad/commands';
 import { getCoscradDataSchema } from '@coscrad/data-types';
 import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
+import { CreateJournalArticleBibliographicReference } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
 import { PublishMediaItem } from '../../../domain/models/media-item/commands/publish-media-item.command';
 import { GrantResourceReadAccessToUser } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
@@ -9,6 +11,23 @@ import { AddUserToGroup } from '../../../domain/models/user-management/group/com
 import { CreateGroup } from '../../../domain/models/user-management/group/commands/create-group/create-group.command';
 import { GrantUserRole } from '../../../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { RegisterUser } from '../../../domain/models/user-management/user/commands/register-user/register-user.command';
+import { Ctor } from '../../../lib/types/Ctor';
+
+type CommandTypeAndCtor = [string, Ctor<ICommand>];
+
+const commandTypesAndCtors: CommandTypeAndCtor[] = [
+    ['CREATE_SONG', CreateSong],
+    ['PUBLISH_SONG', PublishSong],
+    ['CREATE_MEDIA_ITEM', CreateMediaItem],
+    ['REGISTER_USER', RegisterUser],
+    ['CREATE_USER_GROUP', CreateGroup],
+    ['ADD_USER_TO_GROUP', AddUserToGroup],
+    ['GRANT_RESOURCE_READ_ACCESS_TO_USER', GrantResourceReadAccessToUser],
+    ['GRANT_USER_ROLE', GrantUserRole],
+    ['CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE', CreateBookBibliographicReference],
+    ['PUBLISH_MEDIA_ITEM', PublishMediaItem],
+    ['CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE', CreateJournalArticleBibliographicReference],
+];
 
 /**
  * TODO [https://www.pivotaltracker.com/story/show/182576828]
@@ -19,18 +38,7 @@ import { RegisterUser } from '../../../domain/models/user-management/user/comman
  * That will make this test completely dynamic.
  */
 const getAllCommandSchemas = () =>
-    [
-        ['CREATE_SONG', CreateSong],
-        ['PUBLISH_SONG', PublishSong],
-        ['CREATE_MEDIA_ITEM', CreateMediaItem],
-        ['REGISTER_USER', RegisterUser],
-        ['CREATE_USER_GROUP', CreateGroup],
-        ['ADD_USER_TO_GROUP', AddUserToGroup],
-        ['GRANT_RESOURCE_READ_ACCESS_TO_USER', GrantResourceReadAccessToUser],
-        ['GRANT_USER_ROLE', GrantUserRole],
-        ['CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE', CreateBookBibliographicReference],
-        ['PUBLISH_MEDIA_ITEM', PublishMediaItem],
-    ].map(([commandType, Ctor]) => [commandType, getCoscradDataSchema(Ctor)]);
+    commandTypesAndCtors.map(([commandType, Ctor]) => [commandType, getCoscradDataSchema(Ctor)]);
 
 describe('command payload schemas', () => {
     getAllCommandSchemas().forEach(([commandType, schema]) => {
