@@ -1,4 +1,4 @@
-import { CourtCaseBibliographicReference } from '../../domain/models/bibliographic-reference/court-case-bibliographic-reference/court-case-bibliographic-reference.entity';
+import { CourtCaseBibliographicReference } from '../../domain/models/bibliographic-reference/court-case-bibliographic-reference/entities/court-case-bibliographic-reference.entity';
 import { IBibliographicReference } from '../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { BibliographicReferenceType } from '../../domain/models/bibliographic-reference/types/BibliographicReferenceType';
 import { ResourceType } from '../../domain/types/ResourceType';

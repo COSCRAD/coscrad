@@ -163,7 +163,7 @@ echo "Copied new ArangoDB Docker Container setup scripts directory to local Dock
 ARANGO_LOCAL_VOLUME_PATH_CMD=" -v $ARANGODB_LOCAL_DOCKER_SHARED_VOLUME_PATH:$ARANGODB_DESTINATION_CONTAINER_DOCKER_SHARED_VOLUME_PATH";
 
 echo "Check for existing instance of arango server"
-DOCKER_PS=`sudo -u root docker ps`;
+DOCKER_PS=`sudo docker container ls -a`;
 
 if [ -z "${DOCKER_PS##*$ARANGO_DB_SERVER*}" ];
 then

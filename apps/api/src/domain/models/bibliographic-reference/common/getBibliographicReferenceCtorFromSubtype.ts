@@ -3,7 +3,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { BookBibliographicReference } from '../book-bibliographic-reference/entities/book-bibliographic-reference.entity';
-import { CourtCaseBibliographicReference } from '../court-case-bibliographic-reference/court-case-bibliographic-reference.entity';
+import { CourtCaseBibliographicReference } from '../court-case-bibliographic-reference/entities/court-case-bibliographic-reference.entity';
 import { IBibliographicReference } from '../interfaces/bibliographic-reference.interface';
 import { JournalArticleBibliographicReference } from '../journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference.entity';
 import { BibliographicReferenceType } from '../types/BibliographicReferenceType';
