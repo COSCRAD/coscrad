@@ -1,10 +1,12 @@
 import { InternalError } from '../../../lib/errors/InternalError';
 import isStringWithNonzeroLength from '../../../lib/utilities/isStringWithNonzeroLength';
 
-const separator = '/';
+const filePathSeparator = '/';
+
+const fileNameSeparator = '.';
 
 export default (filePath: string): string => {
-    const directoriesAndFileName = filePath.split(separator);
+    const directoriesAndFileName = filePath.split(filePathSeparator);
 
     const fileName = directoriesAndFileName[directoriesAndFileName.length - 1];
 
@@ -12,5 +14,5 @@ export default (filePath: string): string => {
         throw new InternalError(`failed to parse file name from path: ${filePath}`);
     }
 
-    return fileName.split('.')[0];
+    return fileName.split(fileNameSeparator)[0];
 };
