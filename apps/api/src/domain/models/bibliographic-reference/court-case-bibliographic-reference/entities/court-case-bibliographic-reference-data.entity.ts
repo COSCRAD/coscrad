@@ -1,9 +1,9 @@
 import { NonEmptyString, URL } from '@coscrad/data-types';
-import { DTO } from '../../../../types/DTO';
-import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import BaseDomainModel from '../../BaseDomainModel';
-import { IBibliographicReferenceData } from '../interfaces/bibliographic-reference-data.interface';
-import { BibliographicReferenceType } from '../types/BibliographicReferenceType';
+import { DTO } from '../../../../../types/DTO';
+import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
+import BaseDomainModel from '../../../BaseDomainModel';
+import { IBibliographicReferenceData } from '../../interfaces/bibliographic-reference-data.interface';
+import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 
 export class CourtCaseBibliographicReferenceData
     extends BaseDomainModel
