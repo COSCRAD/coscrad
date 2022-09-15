@@ -13,7 +13,7 @@ import { IBibliographicReferenceData } from '../../interfaces/bibliographic-refe
 import { IBibliographicReference } from '../../interfaces/bibliographic-reference.interface';
 
 export abstract class BaseCreateBibliographicReference extends BaseCreateCommandHandler<IBibliographicReference> {
-    aggregateType: ResourceType = AggregateType.bibliographicReference;
+    protected aggregateType: ResourceType = AggregateType.bibliographicReference;
 
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<
         IBibliographicReference<IBibliographicReferenceData>

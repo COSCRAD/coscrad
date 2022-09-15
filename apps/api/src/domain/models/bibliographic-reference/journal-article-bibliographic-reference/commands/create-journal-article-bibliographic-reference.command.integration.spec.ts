@@ -4,8 +4,7 @@ import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUp
 import { assertResourcePersistedProperly } from '../../../../../domain/models/__tests__/command-helpers/assert-resource-persisted-properly';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
-import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
-import generateRandomTestDatabaseName from '../../../../../persistence/repositories/__tests__/generateRandomTestDatabaseName';
+import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../../types/DTO';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -33,15 +32,15 @@ const commandType = 'CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE';
 
 const initialState = new DeluxeInMemoryStore().fetchFullSnapshotInLegacyFormat();
 
-const dummyNewUuid = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dc002';
+const newUuidToUse = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dc002';
 
-const existingInstance = getValidBibliographicReferenceInstanceForTest(
+const existingJournalArticleBibliographicReference = getValidBibliographicReferenceInstanceForTest(
     BibliographicReferenceType.journalArticle
 ).clone({
     id: dummyUuid,
 });
 
-const testDatabaseName = generateRandomTestDatabaseName();
+const testDatabaseName = generateDatabaseNameForTestSuite();
 
 const buildValidCommandFSA = (
     id: AggregateId
@@ -70,24 +69,21 @@ const buildValidCommandFSA = (
     },
 });
 
-const dummyCommandFSAFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
+const dummyFSAFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
 
 describe(`The command: ${commandType}`, () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
     let commandHandlerService: CommandHandlerService;
 
-    let arangoConnectionProvider: ArangoConnectionProvider;
-
     let idManager: IIdManager;
 
     let assertionHelperDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, arangoConnectionProvider } =
-            await setUpIntegrationTest({
-                ARANGO_DB_NAME: testDatabaseName,
-            }));
+        ({ testRepositoryProvider, commandHandlerService, idManager } = await setUpIntegrationTest({
+            ARANGO_DB_NAME: testDatabaseName,
+        }));
 
         assertionHelperDependencies = {
             testRepositoryProvider,
@@ -102,10 +98,6 @@ describe(`The command: ${commandType}`, () => {
                 idManager
             )
         );
-    });
-
-    afterAll(async () => {
-        await arangoConnectionProvider.dropDatabaseIfExists();
     });
 
     beforeEach(async () => {
@@ -148,16 +140,23 @@ describe(`The command: ${commandType}`, () => {
                 }
             );
         });
+
+        /**
+         * TODO Ideally, we would remove duplication with other CreateBibliographicReference
+         * test cases. However, there is currently some uncertainty as to our
+         * modelling of the research subdomain, so we should wait to invest
+         * time in this until we are certain we have it right.
+         */
         describe('when there is already a Book Bibliographic Reference with the same ID', () => {
             it('should fail with the expected error', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: (_: AggregateId) =>
-                        dummyCommandFSAFactory.build(_, {
-                            id: existingInstance.id,
+                        dummyFSAFactory.build(_, {
+                            id: existingJournalArticleBibliographicReference.id,
                         }),
                     initialState: new DeluxeInMemoryStore({
-                        bibliographicReference: [existingInstance],
+                        bibliographicReference: [existingJournalArticleBibliographicReference],
                     }).fetchFullSnapshotInLegacyFormat(),
                     checkError: (error: InternalError) => {
                         assertErrorAsExpected(
@@ -166,7 +165,7 @@ describe(`The command: ${commandType}`, () => {
                                 new InvalidExternalStateError([
                                     new AggregateIdAlreadyInUseError({
                                         type: ResourceType.bibliographicReference,
-                                        id: existingInstance.id,
+                                        id: existingJournalArticleBibliographicReference.id,
                                     }),
                                 ]),
                             ])
@@ -180,14 +179,13 @@ describe(`The command: ${commandType}`, () => {
             it('should fail with the expected error', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
-                    buildCommandFSA: (_: AggregateId) =>
-                        dummyCommandFSAFactory.build(dummyNewUuid, {}),
+                    buildCommandFSA: (_: AggregateId) => dummyFSAFactory.build(newUuidToUse, {}),
                     initialState,
                     checkError: (error: InternalError) =>
                         assertErrorAsExpected(
                             error,
                             new CommandExecutionError([
-                                new UuidNotGeneratedInternallyError(dummyNewUuid),
+                                new UuidNotGeneratedInternallyError(newUuidToUse),
                             ])
                         ),
                 });

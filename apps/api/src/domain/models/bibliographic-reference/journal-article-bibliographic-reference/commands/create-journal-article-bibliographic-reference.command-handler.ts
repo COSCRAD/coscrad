@@ -38,7 +38,6 @@ export class CreateJournalArticleBibliographicReferenceCommandHandler extends Ba
         issueDate,
         publicationTitle,
         url,
-        pages,
         issn,
         doi,
     }: CreateJournalArticleBibliographicReference): ResultOrError<JournalArticleBibliographicReference> {
@@ -55,7 +54,6 @@ export class CreateJournalArticleBibliographicReferenceCommandHandler extends Ba
                 issueDate,
                 publicationTitle,
                 url,
-                pages,
                 issn,
                 doi,
             },

@@ -190,11 +190,6 @@ Object {
         "isArray": false,
         "isOptional": false,
       },
-      "pages": Object {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "isArray": false,
-        "isOptional": true,
-      },
       "publicationTitle": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,

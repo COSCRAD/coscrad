@@ -6,6 +6,9 @@ const emptySnapshot = buildEmptyInMemorySnapshot();
 
 const emptySnapshotOfResources = emptySnapshot.resources;
 
+/**
+ * @deprecated Use `DeluxeInMemoryStore` instead.
+ */
 export default ({
     resources,
     tag: tags,
