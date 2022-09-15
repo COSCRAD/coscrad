@@ -10,7 +10,7 @@ import { Resource } from '../../../resource.entity';
 import { IBibliographicReference } from '../../interfaces/bibliographic-reference.interface';
 import { CourtCaseBibliographicReferenceData } from './court-case-bibliographic-reference-data.entity';
 
-@RegisterIndexScopedCommands([])
+@RegisterIndexScopedCommands(['CREATE_COURT_CASE_BIBLIOGRAPHIC_REFERENCE'])
 export class CourtCaseBibliographicReference
     extends Resource
     implements IBibliographicReference<CourtCaseBibliographicReferenceData>

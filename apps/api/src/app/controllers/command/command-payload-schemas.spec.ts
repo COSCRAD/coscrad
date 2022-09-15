@@ -1,6 +1,7 @@
 import { ICommand } from '@coscrad/commands';
 import { getCoscradDataSchema } from '@coscrad/data-types';
 import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
+import { CreateCourtCaseBibliographicReference } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command';
 import { CreateJournalArticleBibliographicReference } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
 import { PublishMediaItem } from '../../../domain/models/media-item/commands/publish-media-item.command';
@@ -27,6 +28,7 @@ const commandTypesAndCtors: CommandTypeAndCtor[] = [
     ['CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE', CreateBookBibliographicReference],
     ['PUBLISH_MEDIA_ITEM', PublishMediaItem],
     ['CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE', CreateJournalArticleBibliographicReference],
+    ['CREATE_COURT_CASE_BIBLIOGRAPHIC_REFERENCE', CreateCourtCaseBibliographicReference],
 ];
 
 /**
