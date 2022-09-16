@@ -1,7 +1,4 @@
-import {
-    CommandHandlerService,
-    FluxStandardAction,
-} from '../../../../../../../../libs/commands/src';
+import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
@@ -91,97 +88,97 @@ describe(`The command: ${commandType}`, () => {
                 idManager
             )
         );
+    });
 
-        beforeEach(async () => {
-            await testRepositoryProvider.testSetup();
+    beforeEach(async () => {
+        await testRepositoryProvider.testSetup();
+    });
+
+    afterEach(async () => {
+        await testRepositoryProvider.testTeardown();
+    });
+
+    describe('when the command is valid', () => {
+        it('should succeed with appropriate updates to the database', async () => {
+            await assertCreateCommandSuccess(assertionHelperDependencies, {
+                buildValidCommandFSA,
+                initialState,
+                systemUserId: dummySystemUserId,
+                checkStateOnSuccess: async ({ id }: CreateCourtCaseBibliographicReference) => {
+                    await assertResourcePersistedProperly(idManager, testRepositoryProvider, {
+                        id,
+                        type: ResourceType.bibliographicReference,
+                    });
+                },
+            });
         });
+    });
 
-        afterEach(async () => {
-            await testRepositoryProvider.testTeardown();
-        });
-
-        describe('when the command is valid', () => {
-            it('should succeed with appropriate updates to the database', async () => {
-                await assertCreateCommandSuccess(assertionHelperDependencies, {
-                    buildValidCommandFSA,
-                    initialState,
-                    systemUserId: dummySystemUserId,
-                    checkStateOnSuccess: async ({ id }: CreateCourtCaseBibliographicReference) => {
-                        await assertResourcePersistedProperly(idManager, testRepositoryProvider, {
-                            id,
-                            type: ResourceType.bibliographicReference,
+    describe('when the command is invalid', () => {
+        describe('when the payload has an invalid type', () => {
+            generateCommandFuzzTestCases(CreateCourtCaseBibliographicReference).forEach(
+                ({ description, propertyName, invalidValue }) => {
+                    describe(`when the property: ${propertyName} has the invalid value: ${invalidValue} ${description}`, () => {
+                        it('should fail with the appropriate error', async () => {
+                            await assertCommandFailsDueToTypeError(
+                                assertionHelperDependencies,
+                                { propertyName, invalidValue },
+                                buildValidCommandFSA('unused-id')
+                            );
                         });
-                    },
-                });
+                    });
+                }
+            );
+        });
+    });
+
+    /**
+     * TODO Ideally, we would remove duplication with other CreateBibliographicReference
+     * test cases. However, there is currently some uncertainty as to our
+     * modelling of the research subdomain, so we should wait to invest
+     * time in this until we are certain we have it right.
+     */
+    describe('when there is already a Court Case Bibliographic Reference withthe same ID', () => {
+        it('should fail with the expected error', async () => {
+            await assertCreateCommandError(assertionHelperDependencies, {
+                systemUserId: dummySystemUserId,
+                buildCommandFSA: (_: AggregateId) =>
+                    dummyFSAFactory.build(_, {
+                        id: existingCourtCaseBibliographicReference.id,
+                    }),
+                initialState: new DeluxeInMemoryStore({
+                    bibliographicReference: [existingCourtCaseBibliographicReference],
+                }).fetchFullSnapshotInLegacyFormat(),
+                checkError: (error: InternalError) => {
+                    assertErrorAsExpected(
+                        error,
+                        new CommandExecutionError([
+                            new InvalidExternalStateError([
+                                new AggregateIdAlreadyInUseError({
+                                    type: ResourceType.bibliographicReference,
+                                    id: existingCourtCaseBibliographicReference.id,
+                                }),
+                            ]),
+                        ])
+                    );
+                },
             });
         });
+    });
 
-        describe('when the command is invalid', () => {
-            describe('when the payload has an invalid type', () => {
-                generateCommandFuzzTestCases(CreateCourtCaseBibliographicReference).forEach(
-                    ({ description, propertyName, invalidValue }) => {
-                        describe(`when the property: ${propertyName} has the invalid value: ${invalidValue} ${description}`, () => {
-                            it('should fail with the appropriate error', async () => {
-                                await assertCommandFailsDueToTypeError(
-                                    assertionHelperDependencies,
-                                    { propertyName, invalidValue },
-                                    buildValidCommandFSA('unused-id')
-                                );
-                            });
-                        });
-                    }
-                );
-            });
-        });
-
-        /**
-         * TODO Ideally, we would remove duplication with other CreateBibliographicReference
-         * test cases. However, there is currently some uncertainty as to our
-         * modelling of the research subdomain, so we should wait to invest
-         * time in this until we are certain we have it right.
-         */
-        describe('when there is already a Court Case Bibliographic Reference withthe same ID', () => {
-            it('should fail with the expected error', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    systemUserId: dummySystemUserId,
-                    buildCommandFSA: (_: AggregateId) =>
-                        dummyFSAFactory.build(_, {
-                            id: existingCourtCaseBibliographicReference.id,
-                        }),
-                    initialState: new DeluxeInMemoryStore({
-                        bibliographicReference: [existingCourtCaseBibliographicReference],
-                    }).fetchFullSnapshotInLegacyFormat(),
-                    checkError: (error: InternalError) => {
-                        assertErrorAsExpected(
-                            error,
-                            new CommandExecutionError([
-                                new InvalidExternalStateError([
-                                    new AggregateIdAlreadyInUseError({
-                                        type: ResourceType.bibliographicReference,
-                                        id: existingCourtCaseBibliographicReference.id,
-                                    }),
-                                ]),
-                            ])
-                        );
-                    },
-                });
-            });
-        });
-
-        describe('when the id has a valid UUID format, but was not generated with our system', () => {
-            it('should fail with the expected error', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    systemUserId: dummySystemUserId,
-                    buildCommandFSA: (_: AggregateId) => dummyFSAFactory.build(newUuidToUse, {}),
-                    initialState,
-                    checkError: (error: InternalError) =>
-                        assertErrorAsExpected(
-                            error,
-                            new CommandExecutionError([
-                                new UuidNotGeneratedInternallyError(newUuidToUse),
-                            ])
-                        ),
-                });
+    describe('when the id has a valid UUID format, but was not generated with our system', () => {
+        it('should fail with the expected error', async () => {
+            await assertCreateCommandError(assertionHelperDependencies, {
+                systemUserId: dummySystemUserId,
+                buildCommandFSA: (_: AggregateId) => dummyFSAFactory.build(newUuidToUse, {}),
+                initialState,
+                checkError: (error: InternalError) =>
+                    assertErrorAsExpected(
+                        error,
+                        new CommandExecutionError([
+                            new UuidNotGeneratedInternallyError(newUuidToUse),
+                        ])
+                    ),
             });
         });
     });
