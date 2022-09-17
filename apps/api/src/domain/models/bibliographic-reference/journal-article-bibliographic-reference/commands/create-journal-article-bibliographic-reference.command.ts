@@ -22,7 +22,7 @@ export class CreateJournalArticleBibliographicReference implements ICreateComman
     readonly rawData?: Record<string, unknown>;
 
     /**
-     * The following props are essentially a `JounralArticleBibliographicReferenceData`
+     * The following props are essentially a `JournalArticleBibliographicReferenceData`
      * DTO. We define them independently, however, to avoid coupling the domain
      * model to the command payload. Amongst other concerns, this forces us to be
      * explicit about changes.

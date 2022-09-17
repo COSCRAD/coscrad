@@ -5,7 +5,7 @@ import { AggregateType } from '../../../../types/AggregateType';
 import assertTypeErrorsFromInvalidFuzz from '../../../__tests__/invariant-validation-helpers/assertTypeErrorsFromInvalidFuzz';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
-import { CourtCaseBibliographicReference } from '../court-case-bibliographic-reference.entity';
+import { CourtCaseBibliographicReference } from '../entities/court-case-bibliographic-reference.entity';
 
 const validDto: DTO<CourtCaseBibliographicReference> = {
     type: AggregateType.bibliographicReference,
