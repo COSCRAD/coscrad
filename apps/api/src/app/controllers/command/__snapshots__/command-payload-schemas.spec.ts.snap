@@ -102,6 +102,51 @@ Object {
 }
 `;
 
+exports[`command payload schemas The schema for command CREATE_COURT_CASE_BIBLIOGRAPHIC_REFERENCE should have the expected value 1`] = `
+Object {
+  "abstract": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": true,
+  },
+  "caseName": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": false,
+  },
+  "court": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": true,
+  },
+  "dateDecided": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": true,
+  },
+  "id": Object {
+    "coscradDataType": "UUID",
+    "isArray": false,
+    "isOptional": false,
+  },
+  "pages": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": true,
+  },
+  "rawData": Object {
+    "coscradDataType": "RAW_DATA",
+    "isArray": false,
+    "isOptional": true,
+  },
+  "url": Object {
+    "coscradDataType": "URL",
+    "isArray": false,
+    "isOptional": true,
+  },
+}
+`;
+
 exports[`command payload schemas The schema for command CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE should have the expected value 1`] = `
 Object {
   "abstract": Object {
