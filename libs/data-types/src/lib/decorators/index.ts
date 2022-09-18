@@ -1,5 +1,6 @@
 export * from './CompositeIdentifier';
 export * from './Enum';
+export * from './FromDomainModel';
 export * from './ISBN';
 export * from './NestedDataType';
 export * from './NonEmptyString';

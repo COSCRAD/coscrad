@@ -1,3 +1,4 @@
+import { FromDomainModel, NonEmptyString, URL } from '@coscrad/data-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import { BaseViewModel } from './base.view-model';
@@ -16,24 +17,29 @@ export class TermViewModel extends BaseViewModel {
         example: 'Jane Doe',
         description: 'The language speaker who contributed the term',
     })
+    @NonEmptyString()
     readonly contributor: string;
 
+    // We should wrap the API Property using the View Model Schemas!
     @ApiProperty({
         example: 'word, phrase, or sentence in the language',
         description: '',
     })
+    @FromDomainModel(Term)
     readonly term: string;
 
     @ApiPropertyOptional({
         example: 'He usually tells stories.',
         description: 'translation into colonial language \\ gloss of the term',
     })
+    @FromDomainModel(Term)
     readonly termEnglish?: string;
 
     @ApiPropertyOptional({
         example: 'https://www.mysound.org/audio/hetellsstories.mp3',
         description: 'a url for an audio recording of the given term in the language',
     })
+    @URL()
     readonly audioURL?: string;
 
     @ApiPropertyOptional({
@@ -41,6 +47,7 @@ export class TermViewModel extends BaseViewModel {
         description:
             'the name of the project through which this term was documented (if applicable)',
     })
+    @FromDomainModel(Term)
     readonly sourceProject?: string;
 
     readonly #baseAudioURL: string;
