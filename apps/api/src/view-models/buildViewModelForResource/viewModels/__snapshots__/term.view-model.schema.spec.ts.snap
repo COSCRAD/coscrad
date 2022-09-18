@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Term View Model's schema should match the snapshot 1`] = `
+Object {
+  "term": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": true,
+  },
+}
+`;
