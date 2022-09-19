@@ -7,54 +7,281 @@ Array [
     "label": "Term",
     "link": "/testApiPrefix/resources/terms",
     "resourceType": "term",
+    "schema": Object {
+      "audioURL": Object {
+        "coscradDataType": "URL",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "contributor": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "sourceProject": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+      "term": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+      "termEnglish": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+    },
   },
   Object {
     "description": "A vocabulary list gathers terms with filters that apply within the context of the vocabulary list.",
     "label": "Vocabulary List",
     "link": "/testApiPrefix/resources/vocabularyLists",
     "resourceType": "vocabularyList",
+    "schema": Object {
+      "entries": Object {
+        "coscradDataType": Object {
+          "termId": Object {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "isArray": false,
+            "isOptional": false,
+          },
+        },
+        "isArray": false,
+        "isOptional": false,
+      },
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "name": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+      "nameEnglish": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+    },
   },
   Object {
     "description": "A transcribed audio item includes a link to an audio recording and the associated transcript.",
     "label": "Transcribed Audio Item",
     "link": "/testApiPrefix/resources/transcribedAudioItems",
     "resourceType": "transcribedAudio",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+    },
   },
   Object {
     "description": "A book is a digital representation of a text, organized into pages.",
     "label": "Book",
     "link": "/testApiPrefix/resources/books",
     "resourceType": "book",
+    "schema": Object {
+      "author": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "publicationDate": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+      "subtitle": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+      "title": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+    },
   },
   Object {
     "description": "A photograph is a digital representation of an analog photograph and its metadata.",
     "label": "Photograph",
     "link": "/testApiPrefix/resources/photographs",
     "resourceType": "photograph",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "imageURL": Object {
+        "coscradDataType": "URL",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "photographer": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+    },
   },
   Object {
     "description": "A spatial feature may be a point, line, or polygon on the map.",
     "label": "Spatial Feature",
     "link": "/testApiPrefix/resources/spatialFeatures",
     "resourceType": "spatialFeature",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+    },
   },
   Object {
     "description": "A bibliographic reference is a reference to, but not a digital representation of, a research resource.",
     "label": "BibliographicReference",
     "link": "/testApiPrefix/resources/bibliographicReferences",
     "resourceType": "bibliographicReference",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+    },
   },
   Object {
     "description": "A song includes a link to an audio recording along with metadata and lyrics (when available).",
     "label": "Song",
     "link": "/testApiPrefix/resources/songs",
     "resourceType": "song",
+    "schema": Object {
+      "audioURL": Object {
+        "coscradDataType": "URL",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "contributions": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": true,
+        "isOptional": false,
+      },
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "lengthMilliseconds": Object {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "lyrics": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+      "startMilliseconds": Object {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "title": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+      "titleEnglish": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+    },
   },
   Object {
     "description": "A media item is a digital representation of an audio or video recording.",
     "label": "Media Item",
     "link": "/testApiPrefix/resources/mediaItems",
     "resourceType": "mediaItem",
+    "schema": Object {
+      "contributorAndRoles": Object {
+        "coscradDataType": Object {
+          "contributorId": Object {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "isArray": false,
+            "isOptional": false,
+          },
+          "role": Object {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "isArray": false,
+            "isOptional": false,
+          },
+        },
+        "isArray": true,
+        "isOptional": false,
+      },
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "lengthMilliseconds": Object {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "mimeType": Object {
+        "coscradDataType": "ENUM",
+        "enumLabel": "MIME Type",
+        "enumName": "MIME_TYPE",
+        "isArray": false,
+        "isOptional": false,
+        "labelsAndValues": Array [
+          Object {
+            "label": "mp3",
+            "value": "audio/mpeg",
+          },
+          Object {
+            "label": "mp4",
+            "value": "video/mp4",
+          },
+        ],
+      },
+      "title": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+      "titleEnglish": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": true,
+      },
+      "url": Object {
+        "coscradDataType": "URL",
+        "isArray": false,
+        "isOptional": false,
+      },
+    },
   },
 ]
 `;

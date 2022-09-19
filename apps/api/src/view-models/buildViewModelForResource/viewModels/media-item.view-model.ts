@@ -1,34 +1,30 @@
-import { MIMEType } from '@coscrad/data-types';
+import { FromDomainModel, MIMEType } from '@coscrad/data-types';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { ContributorAndRole } from '../../../domain/models/song/ContributorAndRole';
 import { BaseViewModel } from './base.view-model';
 
 export class MediaItemViewModel extends BaseViewModel {
-    readonly published: boolean;
-
+    @FromDomainModel(MediaItem)
     readonly title: string;
 
+    @FromDomainModel(MediaItem)
     readonly titleEnglish: string;
 
+    @FromDomainModel(MediaItem)
     readonly contributorAndRoles: ContributorAndRole[];
 
+    @FromDomainModel(MediaItem)
     readonly url: string;
 
+    @FromDomainModel(MediaItem)
     readonly mimeType: MIMEType;
 
+    @FromDomainModel(MediaItem)
     readonly lengthMilliseconds: number;
 
     constructor(mediaItem: MediaItem) {
-        const {
-            id,
-            title,
-            titleEnglish,
-            contributorAndRoles,
-            url,
-            mimeType,
-            lengthMilliseconds,
-            published,
-        } = mediaItem;
+        const { id, title, titleEnglish, contributorAndRoles, url, mimeType, lengthMilliseconds } =
+            mediaItem;
 
         super({ id });
 
@@ -45,7 +41,5 @@ export class MediaItemViewModel extends BaseViewModel {
         this.mimeType = mimeType;
 
         this.lengthMilliseconds = lengthMilliseconds;
-
-        this.published = published;
     }
 }

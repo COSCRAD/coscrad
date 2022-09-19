@@ -1,3 +1,4 @@
+import { FromDomainModel, URL } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Photograph } from '../../../domain/models/photograph/entities/photograph.entity';
 import { BaseViewModel } from './base.view-model';
@@ -8,12 +9,14 @@ export class PhotographViewModel extends BaseViewModel {
         example: 'https://www.myimages.com/mountains.png',
         description: 'a url where the client can fetch a digital version of the photograph',
     })
+    @URL()
     readonly imageURL: string;
 
     @ApiProperty({
         example: 'Justin Winters',
         description: 'the name of the photographer who took the photograph',
     })
+    @FromDomainModel(Photograph)
     readonly photographer: string;
 
     /**

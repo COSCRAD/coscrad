@@ -1,4 +1,4 @@
-import { IsCompositeIdentifier, TypeGuard } from '@coscrad/validation';
+import { IsCompositeIdentifier, TypeGuard, ValidateNested } from '@coscrad/validation';
 import { CoscradDataType } from '../types';
 import appendMetadata from '../utilities/appendMetadata';
 import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
@@ -12,6 +12,8 @@ export function CompositeIdentifier(
 ): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol) => {
         const options = { ...mixinDefaultTypeDecoratorOptions(userOptions) };
+
+        ValidateNested({ each: true })(target, propertyKey);
 
         WithValidation(
             IsCompositeIdentifier(AllowedTypesEnum, idTypeGuard, { each: options.isArray }),

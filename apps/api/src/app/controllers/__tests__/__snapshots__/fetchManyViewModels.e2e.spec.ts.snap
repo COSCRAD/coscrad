@@ -514,7 +514,6 @@ Object {
         "id": "1",
         "lengthMilliseconds": 2500,
         "mimeType": "audio/mpeg",
-        "published": true,
         "tags": Array [
           Object {
             "id": "5",
@@ -564,7 +563,6 @@ Object {
         "id": "1",
         "lengthMilliseconds": 2500,
         "mimeType": "audio/mpeg",
-        "published": true,
         "tags": Array [
           Object {
             "id": "5",
