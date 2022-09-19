@@ -3,6 +3,7 @@ import {
     NestedDataType,
     NonEmptyString,
     PositiveInteger,
+    UnionMember,
     URL,
     Year,
 } from '@coscrad/data-types';
@@ -16,6 +17,7 @@ import { BibliographicReferenceType } from '../../types/BibliographicReferenceTy
 
 const isOptional = true;
 
+@UnionMember(BibliographicReferenceType.book)
 export default class BookBibliographicReferenceData
     extends BaseDomainModel
     implements IBibliographicReferenceData

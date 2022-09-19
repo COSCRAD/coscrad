@@ -32,7 +32,35 @@ Object {
         "value": "director",
       },
     ],
-    "type": "ENUM",
+  },
+  "data": Object {
+    "coscradDataType": Object {
+      "discriminantPath": "data.type",
+      "schemaDefinitions": Array [
+        Object {
+          "discriminant": "one",
+          "schema": Object {
+            "strength": Object {
+              "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+              "isArray": false,
+              "isOptional": false,
+            },
+          },
+        },
+        Object {
+          "discriminant": "two",
+          "schema": Object {
+            "rating": Object {
+              "coscradDataType": "POSITIVE_INTEGER",
+              "isArray": false,
+              "isOptional": false,
+            },
+          },
+        },
+      ],
+    },
+    "isArray": false,
+    "isOptional": false,
   },
   "iconUrl": Object {
     "coscradDataType": "URL",
@@ -70,37 +98,21 @@ Object {
         "value": "video/mp4",
       },
     ],
-    "type": "ENUM",
   },
   "numberOfDownvotes": Object {
+    "coscradDataType": "POSITIVE_INTEGER",
     "isArray": false,
     "isOptional": true,
-    "type": "POSITIVE_INTEGER",
   },
   "numberOfLikes": Object {
+    "coscradDataType": "POSITIVE_INTEGER",
     "isArray": false,
     "isOptional": false,
-    "type": "POSITIVE_INTEGER",
   },
   "optionalISBN": Object {
+    "coscradDataType": "ISBN",
     "isArray": false,
     "isOptional": true,
-    "type": "ISBN",
-  },
-  "optionalRawData": Object {
-    "isArray": false,
-    "isOptional": true,
-    "type": "POSITIVE_INTEGER",
-  },
-  "numberOfLikes": Object {
-    "isArray": false,
-    "isOptional": false,
-    "type": "POSITIVE_INTEGER",
-  },
-  "optionalISBN": Object {
-    "isArray": false,
-    "isOptional": true,
-    "type": "ISBN",
   },
   "optionalRawData": Object {
     "coscradDataType": "RAW_DATA",
@@ -129,14 +141,9 @@ Object {
     "isOptional": false,
   },
   "requiredISBN": Object {
+    "coscradDataType": "ISBN",
     "isArray": false,
     "isOptional": false,
-    "type": "ISBN",
-  },
-  "requiredISBN": Object {
-    "isArray": false,
-    "isOptional": false,
-    "type": "ISBN",
   },
   "role": Object {
     "coscradDataType": "ENUM",
@@ -158,7 +165,6 @@ Object {
         "value": "superAdmin",
       },
     ],
-    "type": "ENUM",
   },
   "secondaryWhatsit": Object {
     "coscradDataType": Object {
@@ -192,24 +198,14 @@ Object {
     "isOptional": false,
   },
   "year": Object {
+    "coscradDataType": "YEAR",
     "isArray": false,
     "isOptional": false,
-    "type": "YEAR",
   },
   "yearUploaded": Object {
+    "coscradDataType": "YEAR",
     "isArray": false,
     "isOptional": true,
-    "type": "YEAR",
-  },
-  "year": Object {
-    "isArray": false,
-    "isOptional": false,
-    "type": "YEAR",
-  },
-  "yearUploaded": Object {
-    "isArray": false,
-    "isOptional": true,
-    "type": "YEAR",
   },
 }
 `;
