@@ -1,5 +1,7 @@
+import { getCoscradDataSchema } from '@coscrad/data-types';
 import buildViewModelPathForResourceType from '../../app/controllers/utilities/buildViewModelPathForResourceType';
 import { ResourceType } from '../../domain/types/ResourceType';
+import { getViewModelCtorFromResourceType } from '../buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType/getViewModelCtorFromResourceType';
 import formatResourceType from '../presentation/formatAggregateType';
 
 type ResourceTypeAndDescription = {
@@ -61,10 +63,14 @@ const resourceDescriptions: ResourceTypeAndDescription[] = [
     },
 ];
 
+const getViewModelSchema = (resourceType: ResourceType) =>
+    getCoscradDataSchema(getViewModelCtorFromResourceType(resourceType));
+
 export const buildAllResourceDescriptions = (baseResourcesPath: string): ResourceDescription[] =>
     resourceDescriptions.map(({ resourceType, description }) => ({
         resourceType,
         description,
         label: formatResourceType(resourceType),
         link: `${baseResourcesPath}/${buildViewModelPathForResourceType(resourceType)}`,
+        schema: getViewModelSchema(resourceType),
     }));

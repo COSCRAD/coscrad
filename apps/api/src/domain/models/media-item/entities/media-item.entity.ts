@@ -4,9 +4,10 @@ import {
     MIMEType,
     NestedDataType,
     NonEmptyString,
+    NonNegativeFiniteNumber,
     URL,
 } from '@coscrad/data-types';
-import { IsNonNegativeFiniteNumber, isStringWithNonzeroLength } from '@coscrad/validation';
+import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
@@ -42,7 +43,7 @@ export class MediaItem extends Resource implements ITimeBoundable {
     @Enum(CoscradEnum.MIMEType)
     readonly mimeType: MIMEType;
 
-    @IsNonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber()
     readonly lengthMilliseconds: number;
 
     constructor(dto: DTO<MediaItem>) {

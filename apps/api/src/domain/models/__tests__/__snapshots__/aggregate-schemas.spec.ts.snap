@@ -285,6 +285,11 @@ Object {
     "isArray": false,
     "isOptional": false,
   },
+  "members": Object {
+    "coscradDataType": "COMPOSITE_IDENTIFIER",
+    "isArray": true,
+    "isOptional": false,
+  },
 }
 `;
 
@@ -308,6 +313,11 @@ Object {
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "isArray": false,
+    "isOptional": false,
+  },
+  "lengthMilliseconds": Object {
+    "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
     "isArray": false,
     "isOptional": false,
   },

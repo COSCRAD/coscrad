@@ -9,6 +9,7 @@ import { Resource } from '../../../resource.entity';
 import { IBibliographicReference } from '../../interfaces/bibliographic-reference.interface';
 import BookBibliographicReferenceData from '../entities/book-bibliographic-reference-data.entity';
 
+// TODO Make sure the decorator breaks if there is no such command or else use enum
 @RegisterIndexScopedCommands(['CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE'])
 export class BookBibliographicReference
     extends Resource

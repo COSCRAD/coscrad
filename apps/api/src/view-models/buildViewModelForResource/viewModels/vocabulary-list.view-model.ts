@@ -1,3 +1,4 @@
+import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import { VocabularyListVariable } from '../../../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
@@ -14,6 +15,7 @@ class VocabularyListEntryViewModel {
     @ApiProperty({
         type: TermViewModel,
     })
+    @NestedDataType(TermViewModel)
     term: TermViewModel;
 
     @ApiProperty({
@@ -34,12 +36,14 @@ export class VocabularyListViewModel extends BaseViewModel {
         example: 'Vocabulary List Name (in the language)',
         description: 'name of the vocabulary list, in the language',
     })
+    @FromDomainModel(VocabularyList)
     readonly name?: string;
 
     @ApiPropertyOptional({
         example: 'To pick up <Object>',
         description: 'name of the vocabulary list, in the translation language',
     })
+    @FromDomainModel(VocabularyList)
     readonly nameEnglish?: string;
 
     @ApiProperty({
@@ -49,6 +53,7 @@ export class VocabularyListViewModel extends BaseViewModel {
         description:
             'an entry combines a term with a set of "variable values" parametrizing it within the given vocabulary list',
     })
+    @FromDomainModel(VocabularyList)
     readonly entries: VocabularyListEntryViewModel[];
 
     @ApiProperty({

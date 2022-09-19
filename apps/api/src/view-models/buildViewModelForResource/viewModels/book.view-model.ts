@@ -1,3 +1,4 @@
+import { FromDomainModel } from '@coscrad/data-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Book } from '../../../domain/models/book/entities/book.entity';
 import { BaseViewModel } from './base.view-model';
@@ -7,24 +8,28 @@ export class BookViewModel extends BaseViewModel {
         example: 'How I won the Lottery',
         description: 'the title of the book',
     })
+    @FromDomainModel(Book)
     readonly title: string;
 
     @ApiPropertyOptional({
         example: "A Fool's Tale",
         description: 'subtitle of the book',
     })
+    @FromDomainModel(Book)
     readonly subtitle?: string;
 
     @ApiProperty({
         example: 'Susan Deer',
         description: 'the author who wrote this book',
     })
+    @FromDomainModel(Book)
     readonly author: string;
 
     @ApiPropertyOptional({
         example: '1998',
         description: 'the date the book was published',
     })
+    @FromDomainModel(Book)
     readonly publicationDate?: string;
 
     // TODO Add Pages

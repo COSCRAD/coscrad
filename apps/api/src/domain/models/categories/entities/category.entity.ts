@@ -1,6 +1,6 @@
-import { NonEmptyString } from '@coscrad/data-types';
+import { CompositeIdentifier, NonEmptyString } from '@coscrad/data-types';
 import { Type } from 'class-transformer';
-import { IsEnum, ValidateNested } from 'class-validator';
+import { IsEnum } from 'class-validator';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
@@ -9,7 +9,7 @@ import { HasLabel } from '../../../interfaces/HasAggregateIdAndLabel';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
-import { CategorizableType } from '../../../types/CategorizableType';
+import { CategorizableType, isCategorizableType } from '../../../types/CategorizableType';
 import { Aggregate } from '../../aggregate.entity';
 
 class CategorizableCompositeIdentifier {
@@ -24,14 +24,11 @@ class CategorizableCompositeIdentifier {
 export class Category extends Aggregate implements HasLabel {
     readonly type = AggregateType.category;
 
-    readonly id: AggregateId;
-
     @NonEmptyString()
     readonly label: string;
 
-    // TODO abstract this into our data-types lib
     @Type(() => CategorizableCompositeIdentifier)
-    @ValidateNested({ each: true })
+    @CompositeIdentifier(CategorizableType, isCategorizableType, { isArray: true })
     readonly members: CategorizableCompositeIdentifier[];
 
     // These are `Category` IDs for the children categories of this category
@@ -44,9 +41,7 @@ export class Category extends Aggregate implements HasLabel {
 
         if (!dto) return;
 
-        const { id, label, members, childrenIDs } = dto;
-
-        this.id = id;
+        const { label, members, childrenIDs } = dto;
 
         this.label = label;
 

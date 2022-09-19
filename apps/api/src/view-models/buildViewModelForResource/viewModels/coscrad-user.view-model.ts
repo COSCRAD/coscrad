@@ -1,22 +1,16 @@
-import {
-    CoscradEnum,
-    CoscradUserRole,
-    Enum,
-    NestedDataType,
-    NonEmptyString,
-} from '@coscrad/data-types';
+import { CoscradUserRole, FromDomainModel } from '@coscrad/data-types';
 import { CoscradUserProfile } from '../../../domain/models/user-management/user/entities/user/coscrad-user-profile.entity';
 import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { BaseViewModel } from './base.view-model';
 
 export class CoscradUserViewModel extends BaseViewModel {
-    @NestedDataType(CoscradUserProfile)
+    @FromDomainModel(CoscradUser)
     readonly profile: CoscradUserProfile;
 
-    @NonEmptyString()
+    @FromDomainModel(CoscradUser)
     readonly username: string;
 
-    @Enum(CoscradEnum.CoscradUserRole, { isArray: true })
+    @FromDomainModel(CoscradUser)
     readonly roles: CoscradUserRole[];
 
     constructor({ id, profile, username, roles }: CoscradUser) {
