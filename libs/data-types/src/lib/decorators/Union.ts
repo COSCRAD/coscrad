@@ -6,7 +6,8 @@ import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecorator
 import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
 
 /**
- * TODO We should have a test that validates the `discriminantPath` or else
+ * TODO  [https://www.pivotaltracker.com/n/projects/2536370/stories/183320394]
+ * We should have a test that validates the `discriminantPath` or else
  * we should validate the path here.
  */
 export function Union(

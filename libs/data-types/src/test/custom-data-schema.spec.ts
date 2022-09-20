@@ -2,6 +2,7 @@ import { buildSimpleValidationFunction } from '@coscrad/validation';
 import 'reflect-metadata';
 import { NonEmptyString, URL, UUID } from '../index';
 import {
+    DiscriminatedBy,
     Enum,
     ISBN,
     NestedDataType,
@@ -9,7 +10,6 @@ import {
     PositiveInteger,
     RawDataObject,
     Union,
-    UnionMember,
     Year,
 } from '../lib/decorators';
 import { BibliographicSubjectCreatorType, CoscradEnum, MIMEType } from '../lib/enums';
@@ -27,7 +27,7 @@ describe('NonEmptyString', () => {
         whatsitId = '25c5824f-6b4b-4341-bb60-3145d8109568';
     }
 
-    @UnionMember('one')
+    @DiscriminatedBy('one')
     class ThingDataOne {
         type = 'one';
 
@@ -35,7 +35,7 @@ describe('NonEmptyString', () => {
         strength = 99.5;
     }
 
-    @UnionMember('two')
+    @DiscriminatedBy('two')
     class ThingDataTwo {
         type = 'two';
 

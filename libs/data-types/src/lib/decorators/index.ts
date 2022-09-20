@@ -1,4 +1,5 @@
 export * from './CompositeIdentifier';
+export * from './DiscriminatedBy';
 export * from './Enum';
 export * from './FromDomainModel';
 export * from './ISBN';
@@ -8,7 +9,6 @@ export * from './NonNegativeFiniteNumber';
 export * from './PositiveInteger';
 export * from './RawData';
 export * from './Union';
-export * from './UnionMember';
 export * from './URL';
 export * from './UUID';
 export * from './Year';
