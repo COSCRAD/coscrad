@@ -3,23 +3,25 @@ import { MediaItem } from '../../../domain/models/media-item/entities/media-item
 import { ContributorAndRole } from '../../../domain/models/song/ContributorAndRole';
 import { BaseViewModel } from './base.view-model';
 
+const FromMediaItem = FromDomainModel(MediaItem);
+
 export class MediaItemViewModel extends BaseViewModel {
-    @FromDomainModel(MediaItem)
+    @FromMediaItem
     readonly title: string;
 
-    @FromDomainModel(MediaItem)
+    @FromMediaItem
     readonly titleEnglish: string;
 
-    @FromDomainModel(MediaItem)
+    @FromMediaItem
     readonly contributorAndRoles: ContributorAndRole[];
 
-    @FromDomainModel(MediaItem)
+    @FromMediaItem
     readonly url: string;
 
-    @FromDomainModel(MediaItem)
+    @FromMediaItem
     readonly mimeType: MIMEType;
 
-    @FromDomainModel(MediaItem)
+    @FromMediaItem
     readonly lengthMilliseconds: number;
 
     constructor(mediaItem: MediaItem) {

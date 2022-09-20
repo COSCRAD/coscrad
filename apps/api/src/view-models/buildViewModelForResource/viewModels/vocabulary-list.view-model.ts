@@ -31,19 +31,21 @@ class VocabularyListEntryViewModel {
     variableValues: VariableValues;
 }
 
+const FromVocabularyList = FromDomainModel(VocabularyList);
+
 export class VocabularyListViewModel extends BaseViewModel {
     @ApiPropertyOptional({
         example: 'Vocabulary List Name (in the language)',
         description: 'name of the vocabulary list, in the language',
     })
-    @FromDomainModel(VocabularyList)
+    @FromVocabularyList
     readonly name?: string;
 
     @ApiPropertyOptional({
         example: 'To pick up <Object>',
         description: 'name of the vocabulary list, in the translation language',
     })
-    @FromDomainModel(VocabularyList)
+    @FromVocabularyList
     readonly nameEnglish?: string;
 
     @ApiProperty({
@@ -53,7 +55,7 @@ export class VocabularyListViewModel extends BaseViewModel {
         description:
             'an entry combines a term with a set of "variable values" parametrizing it within the given vocabulary list',
     })
-    @FromDomainModel(VocabularyList)
+    @FromVocabularyList
     readonly entries: VocabularyListEntryViewModel[];
 
     @ApiProperty({

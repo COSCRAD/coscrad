@@ -4,14 +4,16 @@ import { CoscradUser } from '../../../domain/models/user-management/user/entitie
 import { BaseViewModel } from './base.view-model';
 import { CoscradUserViewModel } from './coscrad-user.view-model';
 
+const FromUserGroup = FromDomainModel(CoscradUserGroup);
+
 export class CoscradUserGroupViewModel extends BaseViewModel {
-    @FromDomainModel(CoscradUserGroup)
+    @FromUserGroup
     readonly label: string;
 
     @NestedDataType(CoscradUserViewModel, { isArray: true })
     readonly users: CoscradUserViewModel[];
 
-    @FromDomainModel(CoscradUserGroup)
+    @FromUserGroup
     readonly description: string;
 
     constructor({ id, label, userIds, description }: CoscradUserGroup, allUsers: CoscradUser[]) {

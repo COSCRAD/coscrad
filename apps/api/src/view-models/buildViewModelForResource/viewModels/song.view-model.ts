@@ -3,26 +3,28 @@ import { Song } from '../../../domain/models/song/song.entity';
 import formatContributorAndRole from '../../presentation/formatContributorAndRole';
 import { BaseViewModel } from './base.view-model';
 
+const FromSong = FromDomainModel(Song);
+
 export class SongViewModel extends BaseViewModel {
-    @FromDomainModel(Song)
+    @FromSong
     readonly title?: string;
 
-    @FromDomainModel(Song)
+    @FromSong
     readonly titleEnglish?: string;
 
     @NonEmptyString({ isArray: true })
     readonly contributions: string[];
 
-    @FromDomainModel(Song)
+    @FromSong
     readonly lyrics?: string;
 
     @URL()
     readonly audioURL: string;
 
-    @FromDomainModel(Song)
+    @FromSong
     readonly lengthMilliseconds: number;
 
-    @FromDomainModel(Song)
+    @FromSong
     readonly startMilliseconds: number;
 
     constructor({
