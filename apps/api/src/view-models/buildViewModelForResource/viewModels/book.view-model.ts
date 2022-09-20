@@ -3,33 +3,35 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Book } from '../../../domain/models/book/entities/book.entity';
 import { BaseViewModel } from './base.view-model';
 
+const FromBook = FromDomainModel(Book);
+
 export class BookViewModel extends BaseViewModel {
     @ApiProperty({
         example: 'How I won the Lottery',
         description: 'the title of the book',
     })
-    @FromDomainModel(Book)
+    @FromBook
     readonly title: string;
 
     @ApiPropertyOptional({
         example: "A Fool's Tale",
         description: 'subtitle of the book',
     })
-    @FromDomainModel(Book)
+    @FromBook
     readonly subtitle?: string;
 
     @ApiProperty({
         example: 'Susan Deer',
         description: 'the author who wrote this book',
     })
-    @FromDomainModel(Book)
+    @FromBook
     readonly author: string;
 
     @ApiPropertyOptional({
         example: '1998',
         description: 'the date the book was published',
     })
-    @FromDomainModel(Book)
+    @FromBook
     readonly publicationDate?: string;
 
     // TODO Add Pages

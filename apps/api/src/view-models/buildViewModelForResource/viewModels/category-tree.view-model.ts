@@ -5,11 +5,13 @@ import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from './base.view-model';
 import buildTreeFromNodes from './utilities/graph/buildTreeFromNodes';
 
+const FromCategory = FromDomainModel(Category);
+
 export class CateogryTreeViewModel extends BaseViewModel {
-    @FromDomainModel(Category)
+    @FromCategory
     readonly label: string;
 
-    @FromDomainModel(Category)
+    @FromCategory
     readonly members: CategorizableCompositeIdentifier[];
 
     /**

@@ -112,7 +112,7 @@ describe('NonEmptyString', () => {
         @ISBN({ isOptional })
         optionalISBN = `979-3-16-148410-0`;
 
-        @Union([ThingDataOne, ThingDataTwo], 'data.type')
+        @Union([ThingDataOne, ThingDataTwo], 'type')
         data: ThingDataOne | ThingDataTwo = {
             type: 'one',
 

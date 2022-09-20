@@ -3,14 +3,16 @@ import { CoscradUserProfile } from '../../../domain/models/user-management/user/
 import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { BaseViewModel } from './base.view-model';
 
+const FromUser = FromDomainModel(CoscradUser);
+
 export class CoscradUserViewModel extends BaseViewModel {
-    @FromDomainModel(CoscradUser)
+    @FromUser
     readonly profile: CoscradUserProfile;
 
-    @FromDomainModel(CoscradUser)
+    @FromUser
     readonly username: string;
 
-    @FromDomainModel(CoscradUser)
+    @FromUser
     readonly roles: CoscradUserRole[];
 
     constructor({ id, profile, username, roles }: CoscradUser) {

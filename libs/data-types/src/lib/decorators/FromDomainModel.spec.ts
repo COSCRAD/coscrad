@@ -60,7 +60,7 @@ describe(`@FromDomainModel`, () => {
             },
         };
 
-        it('should have the expected schmea', () => {
+        it('should have the expected schema', () => {
             checkSchema(MyViewModel, expectedSchema);
         });
     });

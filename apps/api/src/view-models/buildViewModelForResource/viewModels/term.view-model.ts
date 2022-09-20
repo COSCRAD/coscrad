@@ -12,6 +12,8 @@ const contributors = {
 
 const getContributorNameFromId = (id: string): string => contributors[id] || '';
 
+const FromTerm = FromDomainModel(Term);
+
 export class TermViewModel extends BaseViewModel {
     @ApiProperty({
         example: 'Jane Doe',
@@ -25,14 +27,14 @@ export class TermViewModel extends BaseViewModel {
         example: 'word, phrase, or sentence in the language',
         description: '',
     })
-    @FromDomainModel(Term)
+    @FromTerm
     readonly term: string;
 
     @ApiPropertyOptional({
         example: 'He usually tells stories.',
         description: 'translation into colonial language \\ gloss of the term',
     })
-    @FromDomainModel(Term)
+    @FromTerm
     readonly termEnglish?: string;
 
     @ApiPropertyOptional({
@@ -47,7 +49,7 @@ export class TermViewModel extends BaseViewModel {
         description:
             'the name of the project through which this term was documented (if applicable)',
     })
-    @FromDomainModel(Term)
+    @FromTerm
     readonly sourceProject?: string;
 
     readonly #baseAudioURL: string;
