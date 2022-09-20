@@ -14,13 +14,14 @@ import { CoscradUserGroupQueryService } from '../../domain/services/query-servic
 import { CoscradUserQueryService } from '../../domain/services/query-services/coscrad-user-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
+import { AdminController } from '../controllers/admin.controller';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { CoscradUserGroupController } from '../controllers/coscrad-user-group.controller';
 import { CoscradUserController } from '../controllers/coscrad-user.controller';
 
 @Module({
     imports: [PersistenceModule, CommandModule, IdGenerationModule],
-    controllers: [CoscradUserController, CoscradUserGroupController],
+    controllers: [CoscradUserController, CoscradUserGroupController, AdminController],
     providers: [
         CoscradUserQueryService,
         CoscradUserGroupQueryService,

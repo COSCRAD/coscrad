@@ -13,6 +13,8 @@ import assertDetailQueryOkResponse from './sharedAssertions/assertDetailQueryOkR
 import assertIndexQueryOkResponse from './sharedAssertions/assertIndexQueryOkResponse';
 
 describe('User Management Queries', () => {
+    const testDatabaseName = generateDatabaseNameForTestSuite();
+
     const userGroupIndexEndpoint = '/userGroups';
 
     const userIndexEndpoint = '/users';
@@ -49,6 +51,32 @@ describe('User Management Queries', () => {
             })
         ),
         user: users,
+    });
+
+    describe(`when fetching schemas (/admin/)`, () => {
+        let app: INestApplication;
+
+        let testRepositoryProvider: TestRepositoryProvider;
+        beforeAll(async () => {
+            ({ app, testRepositoryProvider } = await setUpIntegrationTest({
+                ARANGO_DB_NAME: testDatabaseName,
+            }));
+        });
+
+        afterAll(async () => {
+            await app.close();
+        });
+
+        beforeEach(async () => {
+            await testRepositoryProvider.testSetup();
+        });
+        it('should return the expected result', async () => {
+            const result = await request(app.getHttpServer()).get('/admin');
+
+            expect(result.status).toBe(httpStatusCodes.ok);
+
+            expect(result.body).toMatchSnapshot();
+        });
     });
 
     describe('when the system user issuing the command is authorized', () => {
@@ -197,8 +225,6 @@ describe('User Management Queries', () => {
             ] as const
         ).forEach(([unauthorizedSystemUserWithGroups, description]) => {
             describe(description, () => {
-                const testDatabaseName = generateDatabaseNameForTestSuite();
-
                 let app: INestApplication;
 
                 let testRepositoryProvider: TestRepositoryProvider;
