@@ -2,6 +2,7 @@ import { CoscradDataType } from '../types/CoscradDataType';
 import { BibliographicSubjectCreatorType } from './BibliographicSubjectCreatorType';
 import { CoscradEnum } from './CoscradEnum';
 import { CoscradUserRole } from './CoscradUserRole';
+import { EdgeConnectionMemberRole } from './EdgeConnectionMemberRole';
 import { MIMEType } from './MIMEType';
 import { EnumMetadata } from './types/EnumMetadata';
 
@@ -58,6 +59,25 @@ const enumNameToMetadata: { [K in CoscradEnum]: EnumMetadata } = {
             {
                 label: 'director',
                 value: BibliographicSubjectCreatorType.director,
+            },
+        ],
+    },
+    [CoscradEnum.EdgeConnectionMemberRole]: {
+        coscradDataType,
+        enumName: CoscradEnum.EdgeConnectionMemberRole,
+        enumLabel: 'Edge Connection Member Role',
+        labelsAndValues: [
+            {
+                label: 'from',
+                value: EdgeConnectionMemberRole.from,
+            },
+            {
+                label: 'to',
+                value: EdgeConnectionMemberRole.to,
+            },
+            {
+                label: 'self',
+                value: EdgeConnectionMemberRole.self,
             },
         ],
     },

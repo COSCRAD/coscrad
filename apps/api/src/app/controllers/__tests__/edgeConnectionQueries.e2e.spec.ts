@@ -54,16 +54,12 @@ describe('When querying for edge connections', () => {
     });
 
     describe(`GET /connections/`, () => {
-        it('should return the correct count', async () => {
-            const expectedResult = {
-                count: connections.length,
-            };
-
+        it('should return the correct schema', async () => {
             const result = await request(app.getHttpServer()).get(`/connections`);
 
             expect(result.status).toBe(httpStatusCodes.ok);
 
-            expect(result.body).toEqual(expectedResult);
+            expect(result.body).toMatchSnapshot();
         });
     });
 

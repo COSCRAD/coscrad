@@ -1,5 +1,92 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`When querying for edge connections GET /connections/ should return the correct schema 1`] = `
+Object {
+  "schema": Object {
+    "id": Object {
+      "coscradDataType": "NON_EMPTY_STRING",
+      "isArray": false,
+      "isOptional": false,
+    },
+    "note": Object {
+      "coscradDataType": "NON_EMPTY_STRING",
+      "isArray": false,
+      "isOptional": false,
+    },
+    "relatedResources": Object {
+      "coscradDataType": Object {
+        "compositeIdentifier": Object {
+          "coscradDataType": "COMPOSITE_IDENTIFIER",
+          "isArray": false,
+          "isOptional": false,
+        },
+        "context": Object {
+          "coscradDataType": Object {
+            "discriminantPath": "type",
+            "schemaDefinitions": Array [
+              Object {
+                "discriminant": "freeMultiline",
+                "schema": Object {},
+              },
+              Object {
+                "discriminant": "general",
+                "schema": Object {},
+              },
+              Object {
+                "discriminant": "identity",
+                "schema": Object {},
+              },
+              Object {
+                "discriminant": "pageRange",
+                "schema": Object {},
+              },
+              Object {
+                "discriminant": "general",
+                "schema": Object {},
+              },
+              Object {
+                "discriminant": "general",
+                "schema": Object {},
+              },
+              Object {
+                "discriminant": "general",
+                "schema": Object {},
+              },
+            ],
+          },
+          "isArray": false,
+          "isOptional": false,
+        },
+        "role": Object {
+          "coscradDataType": "ENUM",
+          "enumLabel": "Edge Connection Member Role",
+          "enumName": "EDGE_CONNECTION_MEMBER_ROLE",
+          "isArray": false,
+          "isOptional": false,
+          "labelsAndValues": Array [
+            Object {
+              "label": "from",
+              "value": "from",
+            },
+            Object {
+              "label": "to",
+              "value": "to",
+            },
+            Object {
+              "label": "self",
+              "value": "self",
+            },
+          ],
+        },
+      },
+      "isArray": true,
+      "isOptional": false,
+    },
+  },
+  "type": "note",
+}
+`;
+
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: bibliographicReference should return the expected result 1`] = `
 Array [
   Object {

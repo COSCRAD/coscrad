@@ -1,3 +1,4 @@
+import { getCoscradDataSchema } from '@coscrad/data-types';
 import { Controller, Get, Query, Res } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { isDeepStrictEqual } from 'util';
@@ -28,11 +29,10 @@ export class EdgeConnectionController {
     constructor(private readonly repositoryProvider: RepositoryProvider) {}
 
     @Get('')
-    async getStats() {
-        const count = await this.repositoryProvider.getEdgeConnectionRepository().getCount();
-
+    async getSchema() {
         return {
-            count,
+            type: 'note',
+            schema: getCoscradDataSchema(NoteViewModel),
         };
     }
 

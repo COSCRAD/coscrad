@@ -1,3 +1,4 @@
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import {
     EdgeConnection,
@@ -11,8 +12,10 @@ export class NoteViewModel extends BaseViewModel {
         example: 'this part is about horses',
         description: 'a note about a resource or the connection between two resources',
     })
+    @NonEmptyString()
     readonly note: string;
 
+    @NestedDataType(EdgeConnectionMember, { isArray: true })
     readonly relatedResources?: EdgeConnectionMember[] = [];
 
     constructor({ id, note, members }: EdgeConnection) {
