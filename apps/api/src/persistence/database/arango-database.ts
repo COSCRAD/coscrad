@@ -171,10 +171,26 @@ export class ArangoDatabase {
             '@collectionName': collectionName,
         };
 
-        await this.#db.query({
-            query,
-            bindVars,
-        });
+        /**
+         * Apparently, this is a leaky abstraction from Arango's implementation
+         * of RocksDB.  Note that this only currently seems to affect `createMany`,
+         * which is only used in test setup. We may need to use this option for
+         * other queries if we hit this problem elsewhere. The tell-tale sign is
+         * a `write-write conflict` error from Arango.
+         *
+         * For more information see [here](https://github.com/arangodb/arangodb/issues/9702).
+         */
+        const MAX_NUMBER_OF_RETRIES = 10;
+
+        await this.#db.query(
+            {
+                query,
+                bindVars,
+            },
+            {
+                retryOnConflict: MAX_NUMBER_OF_RETRIES,
+            }
+        );
     };
 
     update = async <TUpdateEntityDTO>(
