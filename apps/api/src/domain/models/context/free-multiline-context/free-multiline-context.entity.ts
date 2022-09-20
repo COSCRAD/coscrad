@@ -1,3 +1,4 @@
+import { DiscriminatedBy } from '@coscrad/data-types';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { Line2D } from '../../spatial-feature/types/Coordinates/Line2d';
@@ -10,6 +11,8 @@ import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
  * lines are subject to no topological constraints. Figure eights, spirographs,
  * zig-zags, and so on are allowed.
  */
+
+@DiscriminatedBy(EdgeConnectionContextType.freeMultiline)
 export class FreeMultilineContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.freeMultiline;
 

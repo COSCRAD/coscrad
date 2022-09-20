@@ -1,7 +1,9 @@
+import { DiscriminatedBy } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
+@DiscriminatedBy(EdgeConnectionContextType.general)
 export class TextFieldContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.textField;
 

@@ -1,3 +1,4 @@
+import { DiscriminatedBy } from '@coscrad/data-types';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { MediaTimeRange } from '../../transcribed-audio/entities/MediaTimeRange';
@@ -8,6 +9,7 @@ import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 // TODO Improve the naming
 export type TimeRangeWithoutData = Pick<MediaTimeRange, 'inPoint' | 'outPoint'>;
 
+@DiscriminatedBy(EdgeConnectionContextType.general)
 export class TimeRangeContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.timeRange;
 

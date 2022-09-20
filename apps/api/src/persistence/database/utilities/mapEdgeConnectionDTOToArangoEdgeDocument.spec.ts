@@ -46,7 +46,7 @@ const validPageRangeContext = new PageRangeContext({
 
 const buildValidBookEdgeConnectionMember = (
     role: EdgeConnectionMemberRole
-): EdgeConnectionMember<PageRangeContext> => ({
+): DTO<EdgeConnectionMember<PageRangeContext>> => ({
     compositeIdentifier: {
         type: ResourceType.book,
         id: '1123',
@@ -66,7 +66,7 @@ const validTimeRangeContext = new TimeRangeContext({
 
 const buildValidTranscribedAudioConnectionMember = (
     role: EdgeConnectionMemberRole
-): EdgeConnectionMember<TimeRangeContext> => ({
+): DTO<EdgeConnectionMember<TimeRangeContext>> => ({
     compositeIdentifier: {
         type: ResourceType.transcribedAudio,
         id: '15',

@@ -1,4 +1,4 @@
-import { NonEmptyString } from '@coscrad/data-types';
+import { CompositeIdentifier, CoscradEnum, Enum, NonEmptyString, Union } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
@@ -9,13 +9,21 @@ import { isValid, Valid } from '../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../types/AggregateType';
 import { ResourceCompositeIdentifier } from '../../types/ResourceCompositeIdentifier';
-import { InMemorySnapshot } from '../../types/ResourceType';
+import { InMemorySnapshot, isResourceType, ResourceType } from '../../types/ResourceType';
 import { Aggregate } from '../aggregate.entity';
+import BaseDomainModel from '../BaseDomainModel';
 import { Resource } from '../resource.entity';
 import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
 import idEquals from '../shared/functional/idEquals';
 import { EdgeConnectionContext } from './context.entity';
+import { FreeMultilineContext } from './free-multiline-context/free-multiline-context.entity';
+import { GeneralContext } from './general-context/general-context.entity';
+import { IdentityContext } from './identity-context.entity/identity-context.entity';
+import { PageRangeContext } from './page-range-context/page-range.context.entity';
+import { PointContext } from './point-context/point-context.entity';
+import { TextFieldContext } from './text-field-context/text-field-context.entity';
+import { TimeRangeContext } from './time-range-context/time-range-context.entity';
 
 export enum EdgeConnectionType {
     self = 'self',
@@ -31,19 +39,48 @@ export enum EdgeConnectionMemberRole {
     self = 'self',
 }
 
-// Consider using a class for this
-export type EdgeConnectionMember<
-    TContextModel extends EdgeConnectionContext = EdgeConnectionContext
-> = {
-    compositeIdentifier: ResourceCompositeIdentifier;
-    context: TContextModel;
-    role: EdgeConnectionMemberRole;
-};
+export class EdgeConnectionMember<
+    T extends EdgeConnectionContext = EdgeConnectionContext
+> extends BaseDomainModel {
+    @CompositeIdentifier(ResourceType, isResourceType)
+    readonly compositeIdentifier: ResourceCompositeIdentifier;
 
-/**
- * TODO [https://www.pivotaltracker.com/story/show/183122742]
- * Decorate all class properties with `CoscradDataTypes`
- */
+    @Union(
+        [
+            FreeMultilineContext,
+            GeneralContext,
+            IdentityContext,
+            PageRangeContext,
+            PointContext,
+            TextFieldContext,
+            TimeRangeContext,
+        ],
+        'type'
+    )
+    context: T;
+
+    @Enum(CoscradEnum.EdgeConnectionMemberRole)
+    role: EdgeConnectionMemberRole;
+
+    constructor(dto: DTO<EdgeConnectionMember>) {
+        super();
+
+        if (!dto) return;
+
+        const { compositeIdentifier, context, role } = dto;
+
+        this.compositeIdentifier = cloneToPlainObject(compositeIdentifier);
+
+        /**
+         * TODO Do we need this to be an instance instead of a DTO? If so, we
+         * need a context factory.
+         */
+        this.context = cloneToPlainObject(context);
+
+        this.role = role;
+    }
+}
+
 @RegisterIndexScopedCommands([])
 export class EdgeConnection extends Aggregate {
     type = AggregateType.note;
@@ -61,10 +98,10 @@ export class EdgeConnection extends Aggregate {
         if (!dto) return;
 
         const { members, note, connectionType: type } = dto;
+
         this.connectionType = type;
 
-        // avoid side effects
-        this.members = cloneToPlainObject(members);
+        this.members = members.map((dto) => new EdgeConnectionMember(dto));
 
         this.note = note;
     }
@@ -100,6 +137,10 @@ export class EdgeConnection extends Aggregate {
          * will need to validate that the sub-type of BibliographicReference
          * in a `from` member for an identity connection is consistent with the
          * `ResourceType` of the `to` member.
+         *
+         * Further note that we may remove this behaviour. It seems a bit odd
+         * to use an edge connection to mark identity in this way and it may
+         * be that we need to improve our representation of the domain.
          */
     }
 

@@ -9,6 +9,7 @@ import { EdgeConnectionContextType } from '../../../domain/models/context/types/
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
+import { DTO } from '../../../types/DTO';
 import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import buildOneSelfEdgeConnectionForEachResourceType from '../buildSelfConnectionTestData/buildOneSelfEdgeConnectionForEachResourceType';
 import buildOneDualEdgeConnectionForEveryContextType from './buildOneDualEdgeConnectionForEveryContextType';
@@ -16,8 +17,8 @@ import buildOneFromConnectionForInstanceOfEachResourceType from './buildOneFromC
 import buildOneToConnectionForInstanceOfEachResourceType from './buildOneToConnectionForInstanceOfEachResourceType';
 
 const buildDummyNoteForDualConnection = (
-    toMember: EdgeConnectionMember,
-    fromMember: EdgeConnectionMember
+    toMember: DTO<EdgeConnectionMember>,
+    fromMember: DTO<EdgeConnectionMember>
 ): string =>
     [
         `That is why`,

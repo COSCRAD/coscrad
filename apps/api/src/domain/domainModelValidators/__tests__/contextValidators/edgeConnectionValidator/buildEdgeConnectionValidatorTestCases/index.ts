@@ -1,3 +1,4 @@
+import { DTO } from '../../../../../../types/DTO';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -29,9 +30,9 @@ const validPageRangeContext = new PageRangeContext({
     pageIdentifiers: ['1', '2', '3', 'iv'],
 });
 
-const buildValidBookEdgeConnectionMember = (
+const buildValidBookEdgeConnectionMemberDto = (
     role: EdgeConnectionMemberRole
-): EdgeConnectionMember<PageRangeContext> => ({
+): DTO<EdgeConnectionMember<PageRangeContext>> => ({
     compositeIdentifier: {
         type: ResourceType.book,
         id: '1123',
@@ -48,9 +49,9 @@ const validTimeRangeContext = new TimeRangeContext({
     },
 });
 
-const buildValidTranscribedAudioConnectionMember = (
+const buildValidTranscribedAudioConnectionMemberDto = (
     role: EdgeConnectionMemberRole
-): EdgeConnectionMember<TimeRangeContext> => ({
+): DTO<EdgeConnectionMember<TimeRangeContext>> => ({
     compositeIdentifier: {
         type: ResourceType.transcribedAudio,
         id: '15',
@@ -64,29 +65,30 @@ const validBookSelfConnection = new EdgeConnection({
     connectionType: EdgeConnectionType.self,
     id: '12345',
     note: 'This is an awesome note',
-    members: [buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.self)],
+    members: [buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.self)],
 });
 
 const validBookToTranscribedAudioDualConnection = new EdgeConnection({
     type: AggregateType.note,
     connectionType: EdgeConnectionType.dual,
     members: [
-        buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.from),
-        buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
+        buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.from),
+        buildValidTranscribedAudioConnectionMemberDto(EdgeConnectionMemberRole.to),
     ],
     id: dummyUuid,
     note: 'These are both about bears',
 }).toDTO();
 
-const validBookBibliographicReferenceMemberWithIdentityContext: EdgeConnectionMember<IdentityContext> =
-    {
-        compositeIdentifier: {
-            type: ResourceType.bibliographicReference,
-            id: dummyUuid,
-        },
-        context: new IdentityContext(),
-        role: EdgeConnectionMemberRole.from,
-    };
+const validBookBibliographicReferenceMemberWithIdentityContext: DTO<
+    EdgeConnectionMember<IdentityContext>
+> = {
+    compositeIdentifier: {
+        type: ResourceType.bibliographicReference,
+        id: dummyUuid,
+    },
+    context: new IdentityContext(),
+    role: EdgeConnectionMemberRole.from,
+};
 
 export default (): EdgeConnectionValidatorTestCase[] => [
     {
@@ -133,8 +135,8 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 invalidDTO: {
                     ...validBookSelfConnection,
                     members: [
-                        buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.self),
-                        buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.self),
+                        buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.self),
+                        buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.self),
                     ],
                 },
                 expectedError: buildTopLevelError(validBookSelfConnection.id, [
@@ -160,7 +162,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 invalidDTO: {
                     ...validBookToTranscribedAudioDualConnection,
                     members: [
-                        buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
+                        buildValidTranscribedAudioConnectionMemberDto(EdgeConnectionMemberRole.to),
                     ],
                 },
                 expectedError: buildTopLevelError(validBookToTranscribedAudioDualConnection.id, [
@@ -182,12 +184,12 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 invalidDTO: {
                     ...validBookSelfConnection,
                     members: [
-                        buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
+                        buildValidTranscribedAudioConnectionMemberDto(EdgeConnectionMemberRole.to),
                     ],
                 },
                 expectedError: buildTopLevelError(validBookSelfConnection.id, [
                     new InvalidEdgeConnectionMemberRolesError(EdgeConnectionType.self, [
-                        buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
+                        buildValidTranscribedAudioConnectionMemberDto(EdgeConnectionMemberRole.to),
                     ]),
                 ]),
             },
@@ -196,12 +198,16 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 invalidDTO: {
                     ...validBookSelfConnection,
                     members: [
-                        buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.from),
+                        buildValidTranscribedAudioConnectionMemberDto(
+                            EdgeConnectionMemberRole.from
+                        ),
                     ],
                 },
                 expectedError: buildTopLevelError(validBookSelfConnection.id, [
                     new InvalidEdgeConnectionMemberRolesError(EdgeConnectionType.self, [
-                        buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.from),
+                        buildValidTranscribedAudioConnectionMemberDto(
+                            EdgeConnectionMemberRole.from
+                        ),
                     ]),
                 ]),
             },
@@ -214,14 +220,16 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                     id: dummyUuid,
 
                     members: [
-                        buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.self),
-                        buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.from),
+                        buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.self),
+                        buildValidTranscribedAudioConnectionMemberDto(
+                            EdgeConnectionMemberRole.from
+                        ),
                     ],
                     note: 'This is the note',
                 },
                 expectedError: buildTopLevelError(dummyUuid, [
                     new InvalidEdgeConnectionMemberRolesError(EdgeConnectionType.dual, [
-                        buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.self),
+                        buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.self),
                     ]),
                 ]),
             },
@@ -231,8 +239,8 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 invalidDTO: {
                     ...validBookToTranscribedAudioDualConnection,
                     members: [
-                        buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.to),
-                        buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
+                        buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.to),
+                        buildValidTranscribedAudioConnectionMemberDto(EdgeConnectionMemberRole.to),
                     ],
                 },
                 expectedError: buildTopLevelError(validBookToTranscribedAudioDualConnection.id, [
@@ -245,8 +253,10 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 invalidDTO: {
                     ...validBookToTranscribedAudioDualConnection,
                     members: [
-                        buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.from),
-                        buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.from),
+                        buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.from),
+                        buildValidTranscribedAudioConnectionMemberDto(
+                            EdgeConnectionMemberRole.from
+                        ),
                     ],
                 },
                 expectedError: buildTopLevelError(validBookToTranscribedAudioDualConnection.id, [
@@ -273,7 +283,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                                 id: '345',
                             },
                         },
-                        buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.from),
+                        buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.from),
                     ],
                 },
                 expectedError: buildTopLevelError(validBookToTranscribedAudioDualConnection.id, [
@@ -289,9 +299,9 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 invalidDTO: {
                     ...validBookToTranscribedAudioDualConnection,
                     members: [
-                        buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.from),
+                        buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.from),
                         {
-                            ...buildValidTranscribedAudioConnectionMember(
+                            ...buildValidTranscribedAudioConnectionMemberDto(
                                 EdgeConnectionMemberRole.to
                             ),
                             context: new TimeRangeContext({
@@ -331,7 +341,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                             context: new IdentityContext(),
                             role: EdgeConnectionMemberRole.from,
                         },
-                        buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.to),
+                        buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.to),
                     ],
                 },
                 expectedError: buildTopLevelError(dummyUuid, [

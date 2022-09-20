@@ -1,9 +1,10 @@
 import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
+import { DTO } from '../../../types/DTO';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
 import { Valid } from '../../domainModelValidators/Valid';
 import { AggregateType } from '../../types/AggregateType';
+import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import buildInMemorySnapshot from '../../utilities/buildInMemorySnapshot';
 import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
 import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
@@ -17,8 +18,6 @@ import {
 import { GeneralContext } from './general-context/general-context.entity';
 import { PageRangeContext } from './page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from './types/EdgeConnectionContextType';
-
-// const testData = buildTestData();
 
 const dummyBook = getValidAggregateInstanceForTest(ResourceType.book).clone({
     pages: [
@@ -38,7 +37,7 @@ const dummySong = getValidAggregateInstanceForTest(ResourceType.song);
 
 const generalContext = new GeneralContext();
 
-const validSongFromMember: EdgeConnectionMember = {
+const validSongFromMemberDTO: DTO<EdgeConnectionMember> = {
     role: EdgeConnectionMemberRole.from,
     compositeIdentifier: dummySong.getCompositeIdentifier(),
     context: generalContext,
@@ -53,19 +52,16 @@ const validDualConnection: EdgeConnection = new EdgeConnection({
             compositeIdentifier: dummyBook.getCompositeIdentifier(),
             context: validPageRangeContextForDummyBook,
         },
-        validSongFromMember,
+        validSongFromMemberDTO,
     ],
     id: dummyUuid,
     note: 'this dual connection is legit',
 });
 
-const validExternalStateForDualConnection: InMemorySnapshot = buildInMemorySnapshot({
-    resources: {
-        book: [dummyBook],
-        song: [dummySong],
-    },
-    // Note that we don't add the connection, as we want its **external state**
-});
+const validExternalStateForDualConnection: InMemorySnapshot = new DeluxeInMemoryStore({
+    book: [dummyBook],
+    song: [dummySong],
+}).fetchFullSnapshotInLegacyFormat();
 
 describe('EdgeConnection.validateExternalState', () => {
     describe('when the edge connection type is "dual"', () => {
@@ -110,7 +106,7 @@ describe('EdgeConnection.validateExternalState', () => {
                 const result = validDualConnection
                     .clone({
                         members: [
-                            validSongFromMember,
+                            validSongFromMemberDTO,
                             {
                                 role: EdgeConnectionMemberRole.to,
                                 compositeIdentifier: dummyBook.getCompositeIdentifier(),

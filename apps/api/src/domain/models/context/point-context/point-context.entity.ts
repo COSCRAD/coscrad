@@ -1,8 +1,10 @@
+import { DiscriminatedBy } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import { Position2D } from '../../spatial-feature/types/Coordinates/Position2D';
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
+@DiscriminatedBy(EdgeConnectionContextType.general)
 export class PointContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.point2D;
 
