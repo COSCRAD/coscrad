@@ -2,12 +2,14 @@ import { buildSimpleValidationFunction } from '@coscrad/validation';
 import 'reflect-metadata';
 import { NonEmptyString, URL, UUID } from '../index';
 import {
+    DiscriminatedBy,
     Enum,
     ISBN,
     NestedDataType,
     NonNegativeFiniteNumber,
     PositiveInteger,
     RawDataObject,
+    Union,
     Year,
 } from '../lib/decorators';
 import { BibliographicSubjectCreatorType, CoscradEnum, MIMEType } from '../lib/enums';
@@ -23,6 +25,22 @@ describe('NonEmptyString', () => {
 
         @UUID()
         whatsitId = '25c5824f-6b4b-4341-bb60-3145d8109568';
+    }
+
+    @DiscriminatedBy('one')
+    class ThingDataOne {
+        type = 'one';
+
+        @NonNegativeFiniteNumber()
+        strength = 99.5;
+    }
+
+    @DiscriminatedBy('two')
+    class ThingDataTwo {
+        type = 'two';
+
+        @PositiveInteger()
+        rating = 5;
     }
 
     class Widget {
@@ -94,6 +112,13 @@ describe('NonEmptyString', () => {
         @ISBN({ isOptional })
         optionalISBN = `979-3-16-148410-0`;
 
+        @Union([ThingDataOne, ThingDataTwo], 'data.type')
+        data: ThingDataOne | ThingDataTwo = {
+            type: 'one',
+
+            strength: 67.3,
+        };
+
         constructor(dto: Widget) {
             Object.assign(this, dto);
         }
@@ -143,6 +168,11 @@ describe('NonEmptyString', () => {
         requiredISBN: `978-3-16-148410-0`,
 
         optionalISBN: `978-3-16-148410-0`,
+
+        data: {
+            type: 'one',
+            strength: 85,
+        },
     };
 
     it('should populate the appropriate metadata', () => {

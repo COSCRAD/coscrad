@@ -1,4 +1,4 @@
-import { NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
+import { DiscriminatedBy, NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
 import { IsNonEmptyArray } from '@coscrad/validation';
 import { DTO } from '../../../../../types/DTO';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
@@ -9,6 +9,7 @@ import { BibliographicReferenceType } from '../../types/BibliographicReferenceTy
 
 const isOptional = true;
 
+@DiscriminatedBy(BibliographicReferenceType.journalArticle)
 export default class JournalArticleBibliographicReferenceData
     extends BaseDomainModel
     implements IBibliographicReferenceData
