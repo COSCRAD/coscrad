@@ -52,6 +52,7 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.Year]: ['year', 'positiveInteger', 'zero'],
     [CoscradDataType.PositiveInteger]: ['year', 'positiveInteger'],
     [CoscradDataType.ISBN]: ['isbn10', 'isbn13'],
+    [CoscradDataType.Union]: [],
 };
 
 export const generateValidValuesOfType = ({

@@ -20,6 +20,10 @@ enum CoscradDataType {
     Year = 'YEAR',
     PositiveInteger = 'POSITIVE_INTEGER',
     ISBN = 'ISBN',
+    Union = 'UNION',
 }
+
+export const isCoscradDataType = (input: unknown): input is CoscradDataType =>
+    Object.values(CoscradDataType).includes(input as CoscradDataType);
 
 export { CoscradDataType };

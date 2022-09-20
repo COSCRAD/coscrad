@@ -1,4 +1,5 @@
 import {
+    DiscriminatedBy,
     ISBN,
     NestedDataType,
     NonEmptyString,
@@ -16,6 +17,7 @@ import { BibliographicReferenceType } from '../../types/BibliographicReferenceTy
 
 const isOptional = true;
 
+@DiscriminatedBy(BibliographicReferenceType.book)
 export default class BookBibliographicReferenceData
     extends BaseDomainModel
     implements IBibliographicReferenceData

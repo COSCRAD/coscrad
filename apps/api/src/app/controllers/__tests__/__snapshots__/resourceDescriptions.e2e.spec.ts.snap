@@ -162,6 +162,199 @@ Array [
     "link": "/testApiPrefix/resources/bibliographicReferences",
     "resourceType": "bibliographicReference",
     "schema": Object {
+      "data": Object {
+        "coscradDataType": Object {
+          "discriminantPath": "type",
+          "schemaDefinitions": Array [
+            Object {
+              "discriminant": "book",
+              "schema": Object {
+                "abstract": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "creators": Object {
+                  "coscradDataType": Object {
+                    "name": Object {
+                      "coscradDataType": "NON_EMPTY_STRING",
+                      "isArray": false,
+                      "isOptional": false,
+                    },
+                    "type": Object {
+                      "coscradDataType": "ENUM",
+                      "enumLabel": "Creator Type",
+                      "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
+                      "isArray": false,
+                      "isOptional": false,
+                      "labelsAndValues": Array [
+                        Object {
+                          "label": "artist",
+                          "value": "artist",
+                        },
+                        Object {
+                          "label": "author",
+                          "value": "author",
+                        },
+                        Object {
+                          "label": "director",
+                          "value": "director",
+                        },
+                      ],
+                    },
+                  },
+                  "isArray": true,
+                  "isOptional": false,
+                },
+                "isbn": Object {
+                  "coscradDataType": "ISBN",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "numberOfPages": Object {
+                  "coscradDataType": "POSITIVE_INTEGER",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "place": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "publisher": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "title": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": false,
+                },
+                "url": Object {
+                  "coscradDataType": "URL",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "year": Object {
+                  "coscradDataType": "YEAR",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+              },
+            },
+            Object {
+              "discriminant": "courtCase",
+              "schema": Object {
+                "abstract": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "caseName": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": false,
+                },
+                "court": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "dateDecided": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "pages": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "url": Object {
+                  "coscradDataType": "URL",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+              },
+            },
+            Object {
+              "discriminant": "journalArticle",
+              "schema": Object {
+                "abstract": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "creators": Object {
+                  "coscradDataType": Object {
+                    "name": Object {
+                      "coscradDataType": "NON_EMPTY_STRING",
+                      "isArray": false,
+                      "isOptional": false,
+                    },
+                    "type": Object {
+                      "coscradDataType": "ENUM",
+                      "enumLabel": "Creator Type",
+                      "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
+                      "isArray": false,
+                      "isOptional": false,
+                      "labelsAndValues": Array [
+                        Object {
+                          "label": "artist",
+                          "value": "artist",
+                        },
+                        Object {
+                          "label": "author",
+                          "value": "author",
+                        },
+                        Object {
+                          "label": "director",
+                          "value": "director",
+                        },
+                      ],
+                    },
+                  },
+                  "isArray": true,
+                  "isOptional": false,
+                },
+                "doi": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "issn": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "issueDate": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": false,
+                },
+                "publicationTitle": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+                "title": Object {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "isArray": false,
+                  "isOptional": false,
+                },
+                "url": Object {
+                  "coscradDataType": "URL",
+                  "isArray": false,
+                  "isOptional": true,
+                },
+              },
+            },
+          ],
+        },
+        "isArray": false,
+        "isOptional": false,
+      },
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,
