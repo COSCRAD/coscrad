@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { ResourceDescription } from '../../../view-models/resourceDescriptions/buildAllResourceDescriptions';
+import { AggregateInfo } from '../../../view-models/resourceDescriptions/types/AggregateInfo';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
 describe('GET /resources', () => {
@@ -26,15 +26,12 @@ describe('GET /resources', () => {
     it('should return one description for each resource type', async () => {
         const result = await request(app.getHttpServer()).get('/resources');
 
-        const body = result.body as ResourceDescription[];
+        const body = result.body as AggregateInfo[];
 
         // TODO [optimization]: avoid loop within loop here
         const isThereAnEntryForEveryResourceType = Object.values(ResourceType).every(
             (resourceType) =>
-                body.some(
-                    ({ resourceType: responseResourceType }) =>
-                        resourceType === responseResourceType
-                )
+                body.some(({ type: responseResourceType }) => resourceType === responseResourceType)
         );
 
         expect(isThereAnEntryForEveryResourceType).toBe(true);

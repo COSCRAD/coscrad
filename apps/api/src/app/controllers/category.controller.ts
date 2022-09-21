@@ -7,8 +7,10 @@ import { RepositoryProvider } from '../../persistence/repositories/repository.pr
 import { CateogryTreeViewModel } from '../../view-models/buildViewModelForResource/viewModels/category-tree.view-model';
 import httpStatusCodes from '../constants/httpStatusCodes';
 
+export const CATEGORY_TREE_INDEX_ROUTE = 'treeOfKnowledge';
+
 @ApiTags('tree of knowledge (categories)')
-@Controller('treeOfKnowledge')
+@Controller(CATEGORY_TREE_INDEX_ROUTE)
 export class CategoryController {
     constructor(private readonly repositoryProvider: RepositoryProvider) {}
 

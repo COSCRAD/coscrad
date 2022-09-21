@@ -1,76 +1,60 @@
 import { getCoscradDataSchema } from '@coscrad/data-types';
-import buildViewModelPathForResourceType from '../../app/controllers/utilities/buildViewModelPathForResourceType';
 import { ResourceType } from '../../domain/types/ResourceType';
-import { getViewModelCtorFromResourceType } from '../buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType/getViewModelCtorFromResourceType';
+import { getViewModelCtorFromAggregateType } from '../buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType/getViewModelCtorFromAggregateType';
 import formatResourceType from '../presentation/formatAggregateType';
+import { AggregateInfo } from './types/AggregateInfo';
+import { AggregateTypeAndDescription } from './types/AggregateTypeAndDescription';
 
-type ResourceTypeAndDescription = {
-    resourceType: ResourceType;
-
-    description: string;
-};
-
-export type ResourceDescription = ResourceTypeAndDescription & {
-    link: string;
-
-    // User-facing
-    label: string;
-};
-
-const resourceDescriptions: ResourceTypeAndDescription[] = [
+const resourceDescriptions: AggregateTypeAndDescription[] = [
     {
-        resourceType: ResourceType.term,
+        type: ResourceType.term,
         description: 'A term is a word, phrase, or sentence.',
     },
     {
-        resourceType: ResourceType.vocabularyList,
+        type: ResourceType.vocabularyList,
         description: [
             'A vocabulary list gathers terms with filters that apply',
             'within the context of the vocabulary list.',
         ].join(' '),
     },
     {
-        resourceType: ResourceType.transcribedAudio,
+        type: ResourceType.transcribedAudio,
         description:
             'A transcribed audio item includes a link to an audio recording and the associated transcript.',
     },
     {
-        resourceType: ResourceType.book,
+        type: ResourceType.book,
         description: 'A book is a digital representation of a text, organized into pages.',
     },
     {
-        resourceType: ResourceType.photograph,
+        type: ResourceType.photograph,
         description:
             'A photograph is a digital representation of an analog photograph and its metadata.',
     },
     {
-        resourceType: ResourceType.spatialFeature,
+        type: ResourceType.spatialFeature,
         description: 'A spatial feature may be a point, line, or polygon on the map.',
     },
     {
-        resourceType: ResourceType.bibliographicReference,
+        type: ResourceType.bibliographicReference,
         description:
             'A bibliographic reference is a reference to, but not a digital representation of, a research resource.',
     },
     {
-        resourceType: ResourceType.song,
+        type: ResourceType.song,
         description:
             'A song includes a link to an audio recording along with metadata and lyrics (when available).',
     },
     {
-        resourceType: ResourceType.mediaItem,
+        type: ResourceType.mediaItem,
         description: 'A media item is a digital representation of an audio or video recording.',
     },
 ];
 
-const getViewModelSchema = (resourceType: ResourceType) =>
-    getCoscradDataSchema(getViewModelCtorFromResourceType(resourceType));
-
-export const buildAllResourceDescriptions = (baseResourcesPath: string): ResourceDescription[] =>
-    resourceDescriptions.map(({ resourceType, description }) => ({
-        resourceType,
+export const buildAllResourceDescriptions = (): AggregateInfo[] =>
+    resourceDescriptions.map(({ type: resourceType, description }) => ({
+        type: resourceType,
         description,
         label: formatResourceType(resourceType),
-        link: `${baseResourcesPath}/${buildViewModelPathForResourceType(resourceType)}`,
-        schema: getViewModelSchema(resourceType),
+        schema: getCoscradDataSchema(getViewModelCtorFromAggregateType(resourceType)),
     }));

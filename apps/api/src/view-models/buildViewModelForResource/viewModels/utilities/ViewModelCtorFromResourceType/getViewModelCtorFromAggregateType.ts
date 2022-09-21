@@ -1,14 +1,12 @@
-import {
-    ResourceType,
-    ResourceTypeToResourceModel,
-} from '../../../../../domain/types/ResourceType';
+import { AggregateType } from '../../../../../domain/types/AggregateType';
 import { isNullOrUndefined } from '../../../../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { aggregateTypeToViewModelCtor } from './aggregateTypeToViewModelCtor';
+import { AggregateTypeToViewModelCtor } from './types';
 
-export const getViewModelCtorFromResourceType = <T extends ResourceType>(
+export const getViewModelCtorFromAggregateType = <T extends AggregateType>(
     resourceType: T
-): ResourceTypeToResourceModel[T] => {
+): AggregateTypeToViewModelCtor[T] => {
     const lookupResult = aggregateTypeToViewModelCtor[resourceType];
 
     if (isNullOrUndefined(lookupResult)) {
@@ -17,5 +15,5 @@ export const getViewModelCtorFromResourceType = <T extends ResourceType>(
         );
     }
 
-    return lookupResult as unknown as ResourceTypeToResourceModel[T];
+    return lookupResult as AggregateTypeToViewModelCtor[T];
 };

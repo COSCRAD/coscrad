@@ -9,7 +9,7 @@ import generateDatabaseNameForTestSuite from '../../../persistence/repositories/
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
+import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import setUpIntegrationTest from './setUpIntegrationTest';
 
 describe('When fetching multiple resources', () => {

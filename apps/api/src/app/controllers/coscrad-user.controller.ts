@@ -6,8 +6,10 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { ADMIN_BASE_ROUTE, SWAGGER_TAG_ADMIN } from './admin.controller';
 import { AdminJwtGuard } from './command/command.controller';
 import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
+
+export const USER_INDEX_ROUTE = `${ADMIN_BASE_ROUTE}/users`;
 @ApiTags(SWAGGER_TAG_ADMIN)
-@Controller(`${ADMIN_BASE_ROUTE}/users`)
+@Controller(USER_INDEX_ROUTE)
 export class CoscradUserController {
     constructor(private readonly userQueryService: CoscradUserQueryService) {}
 

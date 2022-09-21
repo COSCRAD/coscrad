@@ -9,8 +9,10 @@ import { RepositoryProvider } from '../../persistence/repositories/repository.pr
 import { TagViewModel } from '../../view-models/buildViewModelForResource/viewModels';
 import httpStatusCodes from '../constants/httpStatusCodes';
 
+export const TAG_INDEX_ROUTE = 'tags';
+
 @ApiTags('tags')
-@Controller('tags')
+@Controller(TAG_INDEX_ROUTE)
 export class TagController {
     constructor(private readonly repositoryProvider: RepositoryProvider) {}
 

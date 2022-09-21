@@ -7,8 +7,10 @@ import { ADMIN_BASE_ROUTE, SWAGGER_TAG_ADMIN } from './admin.controller';
 import { AdminJwtGuard } from './command/command.controller';
 import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
 
+export const USER_GROUP_INDEX_ROUTE = `${ADMIN_BASE_ROUTE}/userGroups`;
+
 @ApiTags(SWAGGER_TAG_ADMIN)
-@Controller(`${ADMIN_BASE_ROUTE}/userGroups`)
+@Controller(USER_GROUP_INDEX_ROUTE)
 export class CoscradUserGroupController {
     constructor(private readonly userGroupQueryService: CoscradUserGroupQueryService) {}
 

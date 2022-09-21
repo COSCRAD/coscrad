@@ -13,7 +13,7 @@ import generateDatabaseNameForTestSuite from '../../../persistence/repositories/
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import buildViewModelPathForRe from '../utilities/buildViewModelPathForResourceType';
+import buildViewModelPathForRe from '../utilities/buildIndexPathForResourceType';
 import setUpIntegrationTest from './setUpIntegrationTest';
 
 describe('GET /resources (fetch view models)', () => {
