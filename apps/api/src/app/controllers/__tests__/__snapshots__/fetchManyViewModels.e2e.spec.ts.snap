@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`When fetching multiple resources GET /bibliographicReferences when all of the resources are published should fetch multiple resources of type bibliographicReference 1`] = `
+exports[`When fetching multiple resources GET /resources/bibliographicReferences when all of the resources are published should fetch multiple resources of type bibliographicReference 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -137,7 +137,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /bibliographicReferences when some of the resources are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /resources/bibliographicReferences when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -274,7 +274,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /books when all of the resources are published should fetch multiple resources of type book 1`] = `
+exports[`When fetching multiple resources GET /resources/books when all of the resources are published should fetch multiple resources of type book 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -377,7 +377,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /books when some of the resources are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /resources/books when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -480,7 +480,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /mediaItems when all of the resources are published should fetch multiple resources of type mediaItem 1`] = `
+exports[`When fetching multiple resources GET /resources/mediaItems when all of the resources are published should fetch multiple resources of type mediaItem 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -529,7 +529,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /mediaItems when some of the resources are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /resources/mediaItems when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -578,7 +578,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /photographs when all of the resources are published should fetch multiple resources of type photograph 1`] = `
+exports[`When fetching multiple resources GET /resources/photographs when all of the resources are published should fetch multiple resources of type photograph 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -677,7 +677,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /photographs when some of the resources are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /resources/photographs when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -776,7 +776,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /songs when all of the resources are published should fetch multiple resources of type song 1`] = `
+exports[`When fetching multiple resources GET /resources/songs when all of the resources are published should fetch multiple resources of type song 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -857,7 +857,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /songs when some of the resources are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /resources/songs when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -938,7 +938,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /spatialFeatures when all of the resources are published should fetch multiple resources of type spatialFeature 1`] = `
+exports[`When fetching multiple resources GET /resources/spatialFeatures when all of the resources are published should fetch multiple resources of type spatialFeature 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -1155,7 +1155,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /spatialFeatures when some of the resources are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /resources/spatialFeatures when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -1372,7 +1372,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /terms when all of the resources are published should fetch multiple resources of type term 1`] = `
+exports[`When fetching multiple resources GET /resources/terms when all of the resources are published should fetch multiple resources of type term 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -1478,7 +1478,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /terms when some of the resources are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /resources/terms when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -1584,7 +1584,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /transcribedAudioItems when all of the resources are published should fetch multiple resources of type transcribedAudio 1`] = `
+exports[`When fetching multiple resources GET /resources/transcribedAudioItems when all of the resources are published should fetch multiple resources of type transcribedAudio 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -1628,7 +1628,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /transcribedAudioItems when some of the resources are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /resources/transcribedAudioItems when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -1672,7 +1672,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /vocabularyLists when all of the resources are published should fetch multiple resources of type vocabularyList 1`] = `
+exports[`When fetching multiple resources GET /resources/vocabularyLists when all of the resources are published should fetch multiple resources of type vocabularyList 1`] = `
 Object {
   "actions": Array [],
   "data": Array [
@@ -1797,7 +1797,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /vocabularyLists when some of the resources are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /resources/vocabularyLists when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
   "actions": Array [],
   "data": Array [

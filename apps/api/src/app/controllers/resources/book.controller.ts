@@ -4,7 +4,7 @@ import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-g
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { BookViewModel } from '../../../view-models/buildViewModelForResource/viewModels/book.view-model';
-import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
+import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
 import { RESOURCES_ROUTE_PREFIX } from './constants';

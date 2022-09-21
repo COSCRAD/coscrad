@@ -4,7 +4,7 @@ import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-g
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { SongViewModel } from '../../../view-models/buildViewModelForResource/viewModels/song.view-model';
-import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
+import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
 import { RESOURCES_ROUTE_PREFIX } from './constants';

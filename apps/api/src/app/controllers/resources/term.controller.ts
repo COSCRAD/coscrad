@@ -4,7 +4,7 @@ import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-g
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { TermViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
-import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
+import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
 import { RESOURCES_ROUTE_PREFIX } from './constants';

@@ -30,6 +30,7 @@ import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
 import { EnvironmentVariables } from '../../config/env.validation';
 import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
+import { AdminController } from '../admin.controller';
 import { CategoryController } from '../category.controller';
 import { AdminJwtGuard, CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
@@ -235,6 +236,7 @@ export default async (
             CommandController,
             IdGenerationController,
             CoscradUserController,
+            AdminController,
         ],
     })
         .overrideGuard(OptionalJwtAuthGuard)

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /bibliographicReferences/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /resources/bibliographicReferences/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [
     Object {
@@ -50,7 +50,7 @@ Object {
 }
 `;
 
-exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /books/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /resources/books/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [
     Object {
@@ -87,7 +87,7 @@ Object {
 }
 `;
 
-exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /mediaItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /resources/mediaItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [
     Object {
@@ -131,7 +131,7 @@ Object {
 }
 `;
 
-exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /photographs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /resources/photographs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [
     Object {
@@ -166,7 +166,7 @@ Object {
 }
 `;
 
-exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /songs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /resources/songs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [
     Object {
@@ -208,7 +208,7 @@ Object {
 }
 `;
 
-exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /spatialFeatures/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /resources/spatialFeatures/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [
     Object {
@@ -248,7 +248,7 @@ Object {
 }
 `;
 
-exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /terms/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /resources/terms/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [
     Object {
@@ -284,7 +284,7 @@ Object {
 }
 `;
 
-exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /transcribedAudioItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /resources/transcribedAudioItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [
     Object {
@@ -323,7 +323,7 @@ Object {
 }
 `;
 
-exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /vocabularyLists/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET /resources (fetch view models) When querying for a single View Model by ID GET /resources/vocabularyLists/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [
     Object {

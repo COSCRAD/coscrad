@@ -2,6 +2,9 @@
 
 exports[`When querying for edge connections GET /connections/ should return the correct schema 1`] = `
 Object {
+  "description": "A note contextualizes a resource in itself or in relation to another resource",
+  "label": "Note",
+  "link": "/api/connections",
   "schema": Object {
     "id": Object {
       "coscradDataType": "NON_EMPTY_STRING",

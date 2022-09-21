@@ -6,9 +6,10 @@ import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
 import { CateogryTreeViewModel } from '../../view-models/buildViewModelForResource/viewModels/category-tree.view-model';
 import httpStatusCodes from '../constants/httpStatusCodes';
+import { CATEGORY_TREE_INDEX_ROUTE } from './constants';
 
 @ApiTags('tree of knowledge (categories)')
-@Controller('treeOfKnowledge')
+@Controller(CATEGORY_TREE_INDEX_ROUTE)
 export class CategoryController {
     constructor(private readonly repositoryProvider: RepositoryProvider) {}
 

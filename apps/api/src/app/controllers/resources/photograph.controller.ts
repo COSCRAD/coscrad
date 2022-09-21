@@ -4,7 +4,7 @@ import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-g
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { PhotographViewModel } from '../../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
-import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
+import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
 import { RESOURCES_ROUTE_PREFIX } from './constants';

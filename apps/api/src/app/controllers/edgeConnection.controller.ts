@@ -1,5 +1,5 @@
-import { getCoscradDataSchema } from '@coscrad/data-types';
 import { Controller, Get, Query, Res } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { isDeepStrictEqual } from 'util';
 import {
@@ -9,8 +9,10 @@ import {
 import { Resource } from '../../domain/models/resource.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import { isAggregateId } from '../../domain/types/AggregateId';
+import { AggregateType } from '../../domain/types/AggregateType';
 import { CategorizableType } from '../../domain/types/CategorizableType';
 import { isResourceType, ResourceType } from '../../domain/types/ResourceType';
+import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
@@ -19,21 +21,36 @@ import { RepositoryProvider } from '../../persistence/repositories/repository.pr
 import { ResultOrError } from '../../types/ResultOrError';
 import { NoteViewModel } from '../../view-models/edgeConnectionViewModels/note.view-model';
 import formatResourceCompositeIdentifier from '../../view-models/presentation/formatAggregateCompositeIdentifier';
+import { buildAllAggregateDescriptions } from '../../view-models/resourceDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
+import { NOTE_INDEX_ROUTE } from './constants';
 import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
+import { mixLinkIntoViewModelDescription } from './utilities/mixLinkIntoViewModelDescription';
 import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';
 
 @ApiTags('web of knowledge (edge connections)')
-@Controller('connections')
+@Controller(NOTE_INDEX_ROUTE)
 export class EdgeConnectionController {
-    constructor(private readonly repositoryProvider: RepositoryProvider) {}
+    constructor(
+        private readonly repositoryProvider: RepositoryProvider,
+        private configService: ConfigService
+    ) {}
 
     @Get('')
     async getSchema() {
-        return {
-            type: 'note',
-            schema: getCoscradDataSchema(NoteViewModel),
-        };
+        const searchResult = buildAllAggregateDescriptions().find(
+            ({ type }) => type === AggregateType.note
+        );
+
+        if (isNullOrUndefined(searchResult)) {
+            throw new InternalError(`Failed to find a view model description for the note model`);
+        }
+
+        const result = mixLinkIntoViewModelDescription(
+            this.configService.get<string>('GLOBAL_PREFIX')
+        )(searchResult);
+
+        return result;
     }
 
     @Get('notes')

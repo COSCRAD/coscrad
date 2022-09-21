@@ -4,9 +4,11 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CoscradUserQueryService } from '../../domain/services/query-services/coscrad-user-query.service';
 import { InternalError } from '../../lib/errors/InternalError';
 import { AdminJwtGuard } from './command/command.controller';
+import { SWAGGER_TAG_ADMIN, USER_INDEX_ROUTE } from './constants';
 import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
-@ApiTags('user management')
-@Controller('users')
+
+@ApiTags(SWAGGER_TAG_ADMIN)
+@Controller(USER_INDEX_ROUTE)
 export class CoscradUserController {
     constructor(private readonly userQueryService: CoscradUserQueryService) {}
 

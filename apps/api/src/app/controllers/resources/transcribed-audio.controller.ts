@@ -4,7 +4,7 @@ import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-g
 import { TranscribedAudioQueryService } from '../../../domain/services/query-services/transribed-audio-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { TranscribedAudioViewModel } from '../../../view-models/buildViewModelForResource/viewModels/transcribed-audio/transcribed-audio.view-model';
-import buildViewModelPathForResourceType from '../utilities/buildViewModelPathForResourceType';
+import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
 import { RESOURCES_ROUTE_PREFIX } from './constants';

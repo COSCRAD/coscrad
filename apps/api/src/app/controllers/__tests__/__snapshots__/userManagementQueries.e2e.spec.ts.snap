@@ -1,5 +1,166 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`User Management Queries when fetching schemas (/admin) should return the expected result 1`] = `
+Array [
+  Object {
+    "description": "A tag is used to group related resources or notes in a non-hierarchical manner",
+    "label": "Tag",
+    "link": "/api/tags",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "label": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+    },
+    "type": "tag",
+  },
+  Object {
+    "description": "A category tree provides a hierarchical organization of resources",
+    "label": "Category",
+    "link": "/api/treeOfKnowledge",
+    "schema": Object {
+      "children": Object {
+        "coscradDataType": Object {
+          "id": Object {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "isArray": false,
+            "isOptional": false,
+          },
+          "label": Object {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "isArray": false,
+            "isOptional": false,
+          },
+          "members": Object {
+            "coscradDataType": "COMPOSITE_IDENTIFIER",
+            "isArray": true,
+            "isOptional": false,
+          },
+        },
+        "isArray": false,
+        "isOptional": false,
+      },
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "label": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "members": Object {
+        "coscradDataType": "COMPOSITE_IDENTIFIER",
+        "isArray": true,
+        "isOptional": false,
+      },
+    },
+    "type": "category",
+  },
+  Object {
+    "description": "A user may belong to groups and have privileges to access data",
+    "label": "User",
+    "link": "/api/admin/users",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "profile": Object {
+        "coscradDataType": Object {
+          "email": Object {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "isArray": false,
+            "isOptional": false,
+          },
+          "name": Object {
+            "coscradDataType": Object {
+              "firstName": Object {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "isArray": false,
+                "isOptional": false,
+              },
+              "lastName": Object {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "isArray": false,
+                "isOptional": false,
+              },
+            },
+            "isArray": false,
+            "isOptional": false,
+          },
+        },
+        "isArray": false,
+        "isOptional": true,
+      },
+      "roles": Object {
+        "coscradDataType": "ENUM",
+        "enumLabel": "User Role",
+        "enumName": "COSCRAD_USER_ROLE",
+        "isArray": true,
+        "isOptional": false,
+        "labelsAndValues": Array [
+          Object {
+            "label": "admin",
+            "value": "projectAdmin",
+          },
+          Object {
+            "label": "viewer",
+            "value": "viewer",
+          },
+          Object {
+            "label": "COSCRAD admin",
+            "value": "superAdmin",
+          },
+        ],
+      },
+      "username": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+    },
+    "type": "user",
+  },
+  Object {
+    "description": "A user group serves to organize users based on shared privileges to access data",
+    "label": "User Group",
+    "link": "/api/admin/userGroups",
+    "schema": Object {
+      "description": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "label": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "userIds": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": true,
+        "isOptional": false,
+      },
+    },
+    "type": "userGroup",
+  },
+]
+`;
+
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a coscrad admin when querying for user groups when fetching a group by ID when there is a group with the given ID should find the group 1`] = `
 Object {
   "actions": Array [],

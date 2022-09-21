@@ -1,1 +1,1 @@
-export * from './buildAllResourceDescriptions';
+export * from './buildAllAggregateDescriptions';
