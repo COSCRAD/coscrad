@@ -1,7 +1,7 @@
 import { getConfig } from '../../../config';
 import buildIndexComponent from '../../../HigherOrderComponents/buildIndexCommponent/buildIndexComponent';
 
-const SongIndex = buildIndexComponent(
+const VideoIndex = buildIndexComponent(
     [
         {
             propertyKey: 'title',
@@ -17,8 +17,8 @@ const SongIndex = buildIndexComponent(
         },
     ],
     (id: string) => `${id}`,
-    `${getConfig().apiBaseUrl}/api/resources/songs`,
-    'Songs'
+    `${getConfig().apiBaseUrl}/api/resources/mediaItems`,
+    'Videos'
 );
 
-export default SongIndex;
+export default VideoIndex;
