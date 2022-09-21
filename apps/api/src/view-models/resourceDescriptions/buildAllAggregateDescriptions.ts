@@ -1,4 +1,6 @@
 import { getCoscradDataSchema } from '@coscrad/data-types';
+import { AggregateType } from '../../domain/types/AggregateType';
+import { CategorizableType } from '../../domain/types/CategorizableType';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { getViewModelCtorFromAggregateType } from '../buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType/getViewModelCtorFromAggregateType';
 import formatResourceType from '../presentation/formatAggregateType';
@@ -49,9 +51,32 @@ const resourceDescriptions: AggregateTypeAndDescription[] = [
         type: ResourceType.mediaItem,
         description: 'A media item is a digital representation of an audio or video recording.',
     },
+    {
+        type: CategorizableType.note,
+        description:
+            'A note contextualizes a resource in itself or in relation to another resource',
+    },
+    {
+        type: AggregateType.tag,
+        description:
+            'A tag is used to group related resources or notes in a non-hierarchical manner',
+    },
+    {
+        type: AggregateType.category,
+        description: 'A category tree provides a hierarchical organization of resources',
+    },
+    {
+        type: AggregateType.user,
+        description: 'A user may belong to groups and have privileges to access data',
+    },
+    {
+        type: AggregateType.userGroup,
+        description:
+            'A user group serves to organize users based on shared privileges to access data',
+    },
 ];
 
-export const buildAllResourceDescriptions = (): AggregateInfo[] =>
+export const buildAllAggregateDescriptions = (): AggregateInfo[] =>
     resourceDescriptions.map(({ type: resourceType, description }) => ({
         type: resourceType,
         description,
