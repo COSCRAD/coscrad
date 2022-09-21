@@ -17,7 +17,8 @@ const VideoIndex = buildIndexComponent(
         },
     ],
     (id: string) => `${id}`,
-    `${getConfig().apiBaseUrl}/api/resources/mediaItems`
+    `${getConfig().apiBaseUrl}/api/resources/mediaItems`,
+    'Videos'
 );
 
 export default VideoIndex;

@@ -1,5 +1,6 @@
 import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import { Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import buildBilingualTitle from '../../../app/utilities/buildBilingualTitle';
 
 export type MediaData = {
     id: string;
@@ -11,20 +12,12 @@ export type MediaData = {
     url: string;
 };
 
-export interface MediasDetailComponentProps {
-    mediaData: MediaData;
-}
-
-export function Media(props: MediasDetailComponentProps) {
-    const { mediaData } = props;
-
-    const { id, title, titleEnglish, url } = mediaData;
-
+export function Media({ id, title, titleEnglish, url }: MediaData) {
     return (
         <div>
             <div id="heading">
                 <div id="container">
-                    <h1 id="pageTitle"> {`${title || titleEnglish}`}</h1>
+                    <h1 id="pageTitle"> {buildBilingualTitle(title, titleEnglish)}</h1>
                 </div>
             </div>
             <Card variant="outlined" className="appCard">
@@ -49,5 +42,3 @@ export function Media(props: MediasDetailComponentProps) {
         </div>
     );
 }
-
-export default MediaData;

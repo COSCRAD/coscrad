@@ -23,7 +23,7 @@ const Navbar = () => {
             <ul className="menu__box">
                 <Dropdown />
             </ul>
-            <Typography sx={{ margin: '15px', padding: '15px' }}>
+            <Typography component={'span'} sx={{ margin: '15px', padding: '15px' }}>
                 <NavMenu className="navLinks">
                     <NavLink to="/About">About</NavLink>
                     <NavLink to="/Apps">Apps</NavLink>

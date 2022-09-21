@@ -1,6 +1,7 @@
 import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import { Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import buildBilingualTitle from '../../../app/utilities/buildBilingualTitle';
 
 export type SongData = {
     id: string;
@@ -30,15 +31,12 @@ export function Song(props: SongsDetailComponentProps) {
         <div>
             <div id="heading">
                 <div id="container">
-                    <h1 id="pageTitle"> {`${title || titleEnglish}`}</h1>
+                    <h1 id="pageTitle"> {buildBilingualTitle(title, titleEnglish)}</h1>
                 </div>
             </div>
             <Card variant="outlined" className="appCard">
                 <MusicNoteIcon className="songIcon" />
                 <CardContent>
-                    <CardMedia className="audioPlayer">
-                        <audio className="audioPlayer" src={`${audioURL}`} controls></audio>
-                    </CardMedia>
                     <Typography className="cardDetail" color={'white'} component="div">
                         <div>Title: {title}</div>
                         <div>English: {titleEnglish}</div>
@@ -46,6 +44,9 @@ export function Song(props: SongsDetailComponentProps) {
                         <div>Lyrics: {`${lyrics || ''}`}</div>
                         <div>ID: {`${id}`} </div>
                     </Typography>
+                    <CardMedia>
+                        <audio className="audioPlayer" src={`${audioURL}`} controls></audio>
+                    </CardMedia>
                     <Button href={audioURL} className="downloadMedia">
                         Download
                         <FileDownloadRoundedIcon />

@@ -17,7 +17,8 @@ const SongIndex = buildIndexComponent(
         },
     ],
     (id: string) => `${id}`,
-    `${getConfig().apiBaseUrl}/api/resources/songs`
+    `${getConfig().apiBaseUrl}/api/resources/songs`,
+    'Songs'
 );
 
 export default SongIndex;

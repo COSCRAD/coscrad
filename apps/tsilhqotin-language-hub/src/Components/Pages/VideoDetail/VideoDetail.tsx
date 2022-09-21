@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Media, MediaData } from '../Media/Media';
-
-export interface MediaViewModel {}
+import { getConfig } from '../../../config';
+import { Media, MediaData } from '../../Widgets/Media/Media';
 
 type ComponentState = {
     mediaData: null | MediaData;
 };
 
-export function MediaDetail(props: MediaViewModel) {
+export default function MediaDetail() {
     const [componentState, setComponentState] = useState<ComponentState>({
         mediaData: null,
     });
@@ -18,7 +17,7 @@ export function MediaDetail(props: MediaViewModel) {
     useEffect(() => {
         setComponentState({ mediaData: null });
 
-        const apiUrl = `http://localhost:3131/api/resources/mediaItems/${id}`;
+        const apiUrl = `${getConfig().apiBaseUrl}/api/resources/mediaItems/${id}`;
         fetch(apiUrl, { mode: 'cors' })
             .then((res) => res.json())
             .then((media) => {
@@ -29,5 +28,5 @@ export function MediaDetail(props: MediaViewModel) {
 
     if (!componentState.mediaData) return <div>LOADING!</div>;
 
-    return <Media mediaData={componentState.mediaData}></Media>;
+    return <Media {...componentState.mediaData}></Media>;
 }

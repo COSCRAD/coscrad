@@ -46,7 +46,8 @@ const buildStreamlinedViewmodelForTable = <T extends Record<string, unknown>, U 
 const buildIndexComponent = <T extends Record<string, unknown>>(
     propertyKeysAndHeadings: PropertyKeyAndHeading<keyof T>[],
     renderDetailLink: DetailPageLinkRenderer,
-    fetchManyEndpoint: string
+    fetchManyEndpoint: string,
+    pageTitle: string
 ) => {
     return () => {
         const [appState, setAppState] = useState<IndexComponentState<T>>({
@@ -102,7 +103,7 @@ const buildIndexComponent = <T extends Record<string, unknown>>(
                 <div id="heading">
                     <div id="container">
                         {/* #TODO set title dynamically for different indexes/indicies */}
-                        <h1 id="pageTitle">Songs/Video</h1>
+                        <h1 id="pageTitle">{pageTitle}</h1>
                     </div>
                 </div>
                 <div id="indexPage">
