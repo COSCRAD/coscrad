@@ -6,7 +6,7 @@ export interface AppsDisplayProps {
 }
 
 export function AppsDisplay({ appInfos }: AppsDisplayProps) {
-    const listItems = appInfos.map((appInfo) => <AppInfoDisplay {...appInfo} />);
+    const listItems = appInfos.map((appInfo ,index) => <AppInfoDisplay {...appInfo} key={index.toString()} />);
 
     return <div>{listItems}</div>;
 }
