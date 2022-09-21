@@ -20,10 +20,9 @@ export function AppInfoDisplay({ name, image, meta, description, links }: AppInf
                     <Typography className="appDescription" variant="body2" color={'white'}>
                         {description}
                     </Typography>
-                    {links.map((link) => (
-                        <CardActions>
-                            {' '}
-                            <AppLinkDisplay {...link} />{' '}
+                    {links.map((link, index) => (
+                        <CardActions key={index.toString()}>
+                            <AppLinkDisplay {...link} />
                         </CardActions>
                     ))}
                 </CardContent>

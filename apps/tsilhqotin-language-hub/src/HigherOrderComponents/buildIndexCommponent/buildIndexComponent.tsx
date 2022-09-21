@@ -1,4 +1,3 @@
-import { Card, createTheme } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -47,7 +46,8 @@ const buildStreamlinedViewmodelForTable = <T extends Record<string, unknown>, U 
 const buildIndexComponent = <T extends Record<string, unknown>>(
     propertyKeysAndHeadings: PropertyKeyAndHeading<keyof T>[],
     renderDetailLink: DetailPageLinkRenderer,
-    fetchManyEndpoint: string
+    fetchManyEndpoint: string,
+    pageTitle: string
 ) => {
     return () => {
         const [appState, setAppState] = useState<IndexComponentState<T>>({
@@ -91,20 +91,22 @@ const buildIndexComponent = <T extends Record<string, unknown>>(
             field: propertyKey as string,
             headerName: heading,
             renderCell: (param: GridRenderCellParams<string>) => (
-                <Link className="link" to={renderDetailLink(param.row.id)}>
+                <Link className="links" to={renderDetailLink(param.row.id)}>
                     <p>{param.value}</p>
                 </Link>
             ),
+            flex: 1,
         }));
 
         return (
             <div className="page">
                 <div id="heading">
                     <div id="container">
-                        <h1 id="pageTitle">Songs</h1>
+                        {/* #TODO set title dynamically for different indexes/indicies */}
+                        <h1 id="pageTitle">{pageTitle}</h1>
                     </div>
                 </div>
-                <Card className="pageContent">
+                <div id="indexPage">
                     <DataGrid
                         className="dataGrid"
                         rows={rows}
@@ -116,18 +118,10 @@ const buildIndexComponent = <T extends Record<string, unknown>>(
                             },
                         }}
                     />
-                </Card>
+                </div>
             </div>
         );
     };
 };
-
-const theme = createTheme({
-    palette: {
-        primary: {
-            main: 'rgb(168,4,4)',
-        },
-    },
-});
 
 export default buildIndexComponent;
