@@ -5,7 +5,7 @@ Array [
   Object {
     "description": "A tag is used to group related resources or notes in a non-hierarchical manner",
     "label": "Tag",
-    "link": "api/tags",
+    "link": "/api/tags",
     "schema": Object {
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -23,7 +23,7 @@ Array [
   Object {
     "description": "A category tree provides a hierarchical organization of resources",
     "label": "Category",
-    "link": "api/treeOfKnowledge",
+    "link": "/api/treeOfKnowledge",
     "schema": Object {
       "children": Object {
         "coscradDataType": Object {
@@ -67,7 +67,7 @@ Array [
   Object {
     "description": "A user may belong to groups and have privileges to access data",
     "label": "User",
-    "link": "api/admin/users",
+    "link": "/api/admin/users",
     "schema": Object {
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -133,7 +133,7 @@ Array [
   Object {
     "description": "A user group serves to organize users based on shared privileges to access data",
     "label": "User Group",
-    "link": "api/admin/userGroups",
+    "link": "/api/admin/userGroups",
     "schema": Object {
       "description": Object {
         "coscradDataType": "NON_EMPTY_STRING",

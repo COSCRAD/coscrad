@@ -2,8 +2,12 @@ import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { isResourceType, ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
-import { CATEGORY_TREE_INDEX_ROUTE } from '../category.controller';
-import { NOTE_INDEX_ROUTE, USER_GROUP_INDEX_ROUTE, USER_INDEX_ROUTE } from '../constants';
+import {
+    CATEGORY_TREE_INDEX_ROUTE,
+    NOTE_INDEX_ROUTE,
+    USER_GROUP_INDEX_ROUTE,
+    USER_INDEX_ROUTE,
+} from '../constants';
 import { TAG_INDEX_ROUTE } from '../tag.controller';
 import buildIndexPathForResourceType from './buildIndexPathForResourceType';
 
