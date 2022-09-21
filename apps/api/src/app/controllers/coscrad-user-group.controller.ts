@@ -3,12 +3,12 @@ import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CoscradUserGroupQueryService } from '../../domain/services/query-services/coscrad-user-group-query.service';
 import { InternalError } from '../../lib/errors/InternalError';
-import { SWAGGER_TAG_ADMIN } from './admin.controller';
+import { ADMIN_BASE_ROUTE, SWAGGER_TAG_ADMIN } from './admin.controller';
 import { AdminJwtGuard } from './command/command.controller';
 import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
 
 @ApiTags(SWAGGER_TAG_ADMIN)
-@Controller(`userGroups`)
+@Controller(`${ADMIN_BASE_ROUTE}/userGroups`)
 export class CoscradUserGroupController {
     constructor(private readonly userGroupQueryService: CoscradUserGroupQueryService) {}
 

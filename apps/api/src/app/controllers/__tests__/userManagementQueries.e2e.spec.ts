@@ -15,9 +15,9 @@ import assertIndexQueryOkResponse from './sharedAssertions/assertIndexQueryOkRes
 describe('User Management Queries', () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
-    const userGroupIndexEndpoint = '/userGroups';
+    const userGroupIndexEndpoint = '/admin/userGroups';
 
-    const userIndexEndpoint = '/users';
+    const userIndexEndpoint = '/admin/users';
 
     const { userGroup: userGroups, user: users } = buildTestData();
 
@@ -53,7 +53,7 @@ describe('User Management Queries', () => {
         user: users,
     });
 
-    describe(`when fetching schemas (/admin/)`, () => {
+    describe(`when fetching schemas (/admin)`, () => {
         let app: INestApplication;
 
         let testRepositoryProvider: TestRepositoryProvider;
