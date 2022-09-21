@@ -3,11 +3,10 @@ import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CoscradUserQueryService } from '../../domain/services/query-services/coscrad-user-query.service';
 import { InternalError } from '../../lib/errors/InternalError';
-import { ADMIN_BASE_ROUTE, SWAGGER_TAG_ADMIN } from './admin.controller';
 import { AdminJwtGuard } from './command/command.controller';
+import { SWAGGER_TAG_ADMIN, USER_INDEX_ROUTE } from './constants';
 import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
 
-export const USER_INDEX_ROUTE = `${ADMIN_BASE_ROUTE}/users`;
 @ApiTags(SWAGGER_TAG_ADMIN)
 @Controller(USER_INDEX_ROUTE)
 export class CoscradUserController {

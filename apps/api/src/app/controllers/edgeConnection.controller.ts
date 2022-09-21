@@ -23,11 +23,10 @@ import { NoteViewModel } from '../../view-models/edgeConnectionViewModels/note.v
 import formatResourceCompositeIdentifier from '../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { buildAllAggregateDescriptions } from '../../view-models/resourceDescriptions';
 import httpStatusCodes from '../constants/httpStatusCodes';
+import { NOTE_INDEX_ROUTE } from './constants';
 import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
 import { mixLinkIntoViewModelDescription } from './utilities/mixLinkIntoViewModelDescription';
 import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';
-
-export const NOTE_INDEX_ROUTE = 'connections';
 
 @ApiTags('web of knowledge (edge connections)')
 @Controller(NOTE_INDEX_ROUTE)
@@ -47,9 +46,11 @@ export class EdgeConnectionController {
             throw new InternalError(`Failed to find a view model description for the note model`);
         }
 
-        return mixLinkIntoViewModelDescription(this.configService.get<string>('GLOBAL_PREFIX'))(
-            searchResult
-        );
+        const result = mixLinkIntoViewModelDescription(
+            this.configService.get<string>('GLOBAL_PREFIX')
+        )(searchResult);
+
+        return result;
     }
 
     @Get('notes')

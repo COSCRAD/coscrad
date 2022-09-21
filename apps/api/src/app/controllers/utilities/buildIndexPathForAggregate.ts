@@ -3,9 +3,7 @@ import { AggregateType } from '../../../domain/types/AggregateType';
 import { isResourceType, ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { CATEGORY_TREE_INDEX_ROUTE } from '../category.controller';
-import { USER_GROUP_INDEX_ROUTE } from '../coscrad-user-group.controller';
-import { USER_INDEX_ROUTE } from '../coscrad-user.controller';
-import { NOTE_INDEX_ROUTE } from '../edgeConnection.controller';
+import { NOTE_INDEX_ROUTE, USER_GROUP_INDEX_ROUTE, USER_INDEX_ROUTE } from '../constants';
 import { TAG_INDEX_ROUTE } from '../tag.controller';
 import buildIndexPathForResourceType from './buildIndexPathForResourceType';
 
