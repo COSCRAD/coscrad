@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import SongData, { Song } from '../Song/Song';
+import { getConfig } from '../../../config';
+import SongData, { Song } from '../../Widgets/Song/Song';
 import './SongDetail.module.css';
 
 /* eslint-disable-next-line */
@@ -20,7 +21,7 @@ export function SongDetail(props: SongViewModel) {
     useEffect(() => {
         setComponentState({ songData: null });
 
-        const apiUrl = `http://localhost:3131/api/resources/songs/${id}`;
+        const apiUrl = `${getConfig().apiBaseUrl}/api/resources/songs/${id}`;
         fetch(apiUrl, { mode: 'cors' })
             .then((res) => res.json())
             .then((song) => {

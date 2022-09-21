@@ -1,13 +1,13 @@
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import SongIndex from './SongDetail';
+import Videos from './VideoIndex';
 
-describe('SongIndex', () => {
+describe('Videos', () => {
     it('should render successfully', () => {
         const { baseElement } = render(
             <MemoryRouter>
-                <SongIndex />
+                <Videos />
             </MemoryRouter>
         );
         expect(baseElement).toBeTruthy();
