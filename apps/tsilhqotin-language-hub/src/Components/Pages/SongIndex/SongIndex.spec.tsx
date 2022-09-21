@@ -1,10 +1,15 @@
 import { render } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
-import Songs from './SongViewModel';
+import SongIndex from './SongIndex';
 
-describe('Songs', () => {
+describe('SongIndex', () => {
     it('should render successfully', () => {
-        const { baseElement } = render(<Songs />);
+        const { baseElement } = render(
+            <MemoryRouter>
+                <SongIndex />
+            </MemoryRouter>
+        );
         expect(baseElement).toBeTruthy();
     });
 });
