@@ -75,7 +75,7 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^12.1.0",
+    "@angular-devkit/build-angular": "^12.1.4",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
     "@nrwl/cli": "12.6.3",
@@ -85,9 +85,9 @@
     "@nrwl/linter": "12.6.3",
     "@nrwl/nest": "^12.6.3",
     "@nrwl/node": "12.6.3",
-    "@nrwl/react": "13.4.3",
+    "@nrwl/react": "13.10.6",
     "@nrwl/tao": "12.6.3",
-    "@nrwl/web": "13.4.3",
+    "@nrwl/web": "13.10.6",
     "@nrwl/workspace": "12.6.3",
     "@testing-library/cypress": "^8.0.2",
     "@testing-library/react": "12.1.2",
