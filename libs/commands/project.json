@@ -5,14 +5,13 @@
     "projectType": "library",
     "targets": {
         "build": {
-            "executor": "@nrwl/node:package",
+            "executor": "@nrwl/node:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/libs/commands",
                 "tsConfig": "libs/commands/tsconfig.lib.json",
                 "packageJson": "libs/commands/package.json",
-                "main": "libs/commands/src/index.ts",
-                "assets": ["libs/commands/*.md"]
+                "main": "libs/commands/src/index.ts"
             }
         },
         "lint": {
