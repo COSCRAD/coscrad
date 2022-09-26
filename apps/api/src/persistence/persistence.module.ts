@@ -9,7 +9,7 @@ import { RepositoryProvider } from './repositories/repository.provider';
 export class PersistenceModule {
     static forRootAsync(): DynamicModule {
         const arangoConnectionProvider = {
-            provide: 'ArangoConnectionProvider',
+            provide: ArangoConnectionProvider,
             useFactory: async (configService: ConfigService) => {
                 const arangoConnectionProvider = new ArangoConnectionProvider(configService);
 
@@ -21,7 +21,7 @@ export class PersistenceModule {
         };
 
         const repositoryProvider = {
-            provide: `RepositoryProvider`,
+            provide: RepositoryProvider,
             useFactory: async (arangoConnectionProvider: ArangoConnectionProvider) => {
                 const repositoryProvider = new RepositoryProvider(
                     new DatabaseProvider(arangoConnectionProvider)
