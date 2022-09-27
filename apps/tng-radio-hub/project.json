@@ -1,10 +1,10 @@
 {
-    "root": "apps/tng-radio-hub",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "apps/tng-radio-hub/src",
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/web:webpack",
+            "executor": "@nrwl/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "defaultConfiguration": "production",
             "options": {
@@ -34,11 +34,17 @@
                     "namedChunks": false,
                     "extractLicenses": true,
                     "vendorChunk": false
+                },
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
                 }
             }
         },
         "serve": {
-            "executor": "@nrwl/web:dev-server",
+            "executor": "@nrwl/webpack:dev-server",
             "options": {
                 "buildTarget": "tng-radio-hub:build",
                 "hmr": true
@@ -47,20 +53,25 @@
                 "production": {
                     "buildTarget": "tng-radio-hub:build:production",
                     "hmr": false
+                },
+                "development": {
+                    "buildTarget": "tng-radio-hub:build:development"
                 }
-            }
+            },
+            "defaultConfiguration": "development"
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
             "options": {
                 "lintFilePatterns": ["apps/tng-radio-hub/**/*.{ts,tsx,js,jsx}"]
-            }
+            },
+            "outputs": ["{options.outputFile}"]
         },
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": ["coverage/apps/tng-radio-hub"],
             "options": {
-                "jestConfig": "apps/tng-radio-hub/jest.config.js",
+                "jestConfig": "apps/tng-radio-hub/jest.config.ts",
                 "passWithNoTests": true
             }
         }

@@ -1,5 +1,5 @@
 {
-    "root": "apps/api",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "apps/api/src",
     "projectType": "application",
     "targets": {
@@ -11,12 +11,14 @@
                 "main": "apps/api/src/main.ts",
                 "tsConfig": "apps/api/tsconfig.app.json",
                 "assets": ["apps/api/src/assets"],
-                "tsPlugins": [{
-                    "name": "@nestjs/swagger/plugin",
-                    "options": {
-                        "dtoFilenameSuffix": [".entity.ts",".view-model.ts"]
+                "tsPlugins": [
+                    {
+                        "name": "@nestjs/swagger/plugin",
+                        "options": {
+                            "dtoFilenameSuffix": [".entity.ts", ".view-model.ts"]
+                        }
                     }
-                }]
+                ]
             },
             "configurations": {
                 "production": {
@@ -33,7 +35,7 @@
             }
         },
         "serve": {
-            "executor": "@nrwl/node:execute",
+            "executor": "@nrwl/node:node",
             "options": {
                 "buildTarget": "api:build"
             }
@@ -42,13 +44,14 @@
             "executor": "@nrwl/linter:eslint",
             "options": {
                 "lintFilePatterns": ["apps/api/**/*.ts"]
-            }
+            },
+            "outputs": ["{options.outputFile}"]
         },
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": ["coverage/apps/api"],
             "options": {
-                "jestConfig": "apps/api/jest.config.js",
+                "jestConfig": "apps/api/jest.config.ts",
                 "passWithNoTests": true
             }
         }

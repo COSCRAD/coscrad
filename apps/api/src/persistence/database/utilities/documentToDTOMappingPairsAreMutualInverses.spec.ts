@@ -5,6 +5,7 @@ import {
 } from '../../../domain/models/context/edge-connection.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { Resource } from '../../../domain/models/resource.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { ResourceType } from '../../../domain/types/ResourceType';
@@ -12,7 +13,7 @@ import buildTestData from '../../../test-data/buildTestData';
 import { DTO } from '../../../types/DTO';
 import { ArangoEdgeDocument } from '../types/ArangoEdgeDocument';
 import mapArangoEdgeDocumentToEdgeConnectionDTO from './mapArangoEdgeDocumentToEdgeConnectionDTO';
-import mapDatabaseDTOToEntityDTO from './mapDatabaseDocumentToAggregateDTO';
+import mapDatabaseDTOToAggregateDTO from './mapDatabaseDocumentToAggregateDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from './mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO, { DatabaseDTO } from './mapEntityDTOToDatabaseDTO';
 
@@ -53,7 +54,7 @@ const edgeConnections: DTO<EdgeConnection>[] = [
 ];
 
 const resourceDTOs = Object.values(testData.resources).flatMap((instances) =>
-    instances.map((instance) => instance.toDTO())
+    instances.map((instance: Resource) => instance.toDTO())
 );
 
 const edgeDocumentToDTOTestCase: TestCase<ArangoEdgeDocument, DTO<EdgeConnection>> = {
@@ -75,7 +76,7 @@ const resourceDocumentToDTOTestCase: TestCase<DatabaseDTO, DTO<HasAggregateId>> 
     description: 'when mapping an Arango resource document to a Resource DTO',
     forwardLabel: 'document => DTO',
     reverseLabel: 'DTO => document',
-    forward: mapDatabaseDTOToEntityDTO,
+    forward: mapDatabaseDTOToAggregateDTO,
     reverse: mapEntityDTOToDatabaseDTO,
     /**
      * Let's omit this direction. Building up dummy documents requires either
@@ -94,7 +95,10 @@ testCases.forEach(
             describe(`when mapping: ${forwardLabel}`, () => {
                 inputs.forEach((input) =>
                     it('applying the forward then reverse mapping should leave the input unchanged', () => {
-                        const result = reverse(forward(input));
+                        const forwardResult = forward(input);
+
+                        // @ts-expect-error TODO fix type error
+                        const result = reverse(forwardResult);
 
                         expect(result).toBe(input);
                     })
@@ -104,6 +108,7 @@ testCases.forEach(
             describe(`when mapping: ${reverseLabel}`, () => {
                 outputs.forEach((output) =>
                     it('applying the reverse then forward mapping should leave the input unchanged', () => {
+                        // @ts-expect-error TODO fix type error
                         const result = forward(reverse(output));
 
                         expect(result).toEqual(output);

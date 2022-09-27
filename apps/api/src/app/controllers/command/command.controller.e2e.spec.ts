@@ -7,6 +7,7 @@ import { CreateSong } from '../../../domain/models/song/commands/create-song.com
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import { Song } from '../../../domain/models/song/song.entity';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { buildFakeTimersConfig } from '../../../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
@@ -71,7 +72,7 @@ describe('The Command Controller', () => {
             new CreateSongCommandHandler(testRepositoryProvider, idManager)
         );
 
-        jest.useFakeTimers().setSystemTime(new Date('2020-04-05'));
+        jest.useFakeTimers(buildFakeTimersConfig());
     });
 
     beforeEach(async () => {

@@ -1,10 +1,10 @@
 {
-    "root": "apps/tng-dictionary",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "apps/tng-dictionary/src",
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/web:webpack",
+            "executor": "@nrwl/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "defaultConfiguration": "production",
             "options": {
@@ -15,10 +15,7 @@
                 "main": "apps/tng-dictionary/src/main.tsx",
                 "polyfills": "apps/tng-dictionary/src/polyfills.ts",
                 "tsConfig": "apps/tng-dictionary/tsconfig.app.json",
-                "assets": [
-                    "apps/tng-dictionary/src/favicon.ico",
-                    "apps/tng-dictionary/src/assets"
-                ],
+                "assets": ["apps/tng-dictionary/src/favicon.ico", "apps/tng-dictionary/src/assets"],
                 "styles": ["apps/tng-dictionary/src/styles.css"],
                 "scripts": [],
                 "webpackConfig": "@nrwl/react/plugins/webpack"
@@ -37,11 +34,17 @@
                     "namedChunks": false,
                     "extractLicenses": true,
                     "vendorChunk": false
+                },
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
                 }
             }
         },
         "serve": {
-            "executor": "@nrwl/web:dev-server",
+            "executor": "@nrwl/webpack:dev-server",
             "options": {
                 "buildTarget": "tng-dictionary:build",
                 "hmr": true
@@ -50,20 +53,25 @@
                 "production": {
                     "buildTarget": "tng-dictionary:build:production",
                     "hmr": false
+                },
+                "development": {
+                    "buildTarget": "tng-dictionary:build:development"
                 }
-            }
+            },
+            "defaultConfiguration": "development"
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
             "options": {
                 "lintFilePatterns": ["apps/tng-dictionary/**/*.{ts,tsx,js,jsx}"]
-            }
+            },
+            "outputs": ["{options.outputFile}"]
         },
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": ["coverage/apps/tng-dictionary"],
             "options": {
-                "jestConfig": "apps/tng-dictionary/jest.config.js",
+                "jestConfig": "apps/tng-dictionary/jest.config.ts",
                 "passWithNoTests": true
             }
         }
