@@ -1,5 +1,5 @@
 {
-    "root": "libs/data-types",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "libs/data-types/src",
     "projectType": "library",
     "targets": {
@@ -24,7 +24,7 @@
             "executor": "@nrwl/jest:jest",
             "outputs": ["coverage/libs/data-types"],
             "options": {
-                "jestConfig": "libs/data-types/jest.config.js",
+                "jestConfig": "libs/data-types/jest.config.ts",
                 "passWithNoTests": true
             }
         }

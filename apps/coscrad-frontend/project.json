@@ -1,10 +1,10 @@
 {
-    "root": "apps/coscrad-frontend",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "apps/coscrad-frontend/src",
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/web:webpack",
+            "executor": "@nrwl/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "defaultConfiguration": "production",
             "options": {
@@ -37,11 +37,17 @@
                     "namedChunks": false,
                     "extractLicenses": true,
                     "vendorChunk": false
+                },
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
                 }
             }
         },
         "serve": {
-            "executor": "@nrwl/web:dev-server",
+            "executor": "@nrwl/webpack:dev-server",
             "options": {
                 "buildTarget": "coscrad-frontend:build",
                 "hmr": true
@@ -50,22 +56,25 @@
                 "production": {
                     "buildTarget": "coscrad-frontend:build:production",
                     "hmr": false
+                },
+                "development": {
+                    "buildTarget": "coscrad-frontend:build:development"
                 }
-            }
+            },
+            "defaultConfiguration": "development"
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
             "options": {
-                "lintFilePatterns": [
-                    "apps/coscrad-frontend/**/*.{ts,tsx,js,jsx}"
-                ]
-            }
+                "lintFilePatterns": ["apps/coscrad-frontend/**/*.{ts,tsx,js,jsx}"]
+            },
+            "outputs": ["{options.outputFile}"]
         },
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": ["coverage/apps/coscrad-frontend"],
             "options": {
-                "jestConfig": "apps/coscrad-frontend/jest.config.js",
+                "jestConfig": "apps/coscrad-frontend/jest.config.ts",
                 "passWithNoTests": true
             }
         }

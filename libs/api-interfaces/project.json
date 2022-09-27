@@ -1,5 +1,5 @@
 {
-    "root": "libs/api-interfaces",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "libs/api-interfaces/src",
     "projectType": "library",
     "targets": {
@@ -7,7 +7,8 @@
             "executor": "@nrwl/linter:eslint",
             "options": {
                 "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
-            }
+            },
+            "outputs": ["{options.outputFile}"]
         }
     },
     "tags": []

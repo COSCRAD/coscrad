@@ -2,6 +2,7 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { assertExternalStateError } from '../../../../../../domain/models/__tests__/command-helpers/assert-external-state-error';
+import { buildFakeTimersConfig } from '../../../../../../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../../../lib/types/not-available';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -22,6 +23,7 @@ import { generateCommandFuzzTestCases } from '../../../../__tests__/command-help
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
+import { dummyUuid } from '../../../../__tests__/utilities/dummyUuid';
 import { CoscradUserGroup } from '../../entities/coscrad-user-group.entity';
 import { UserGroupLabelAlreadyInUseError } from '../../errors/external-state-errors/UserGroupLabelAlreadyInUseError';
 import { CreateGroup } from './create-group.command';
@@ -47,7 +49,7 @@ const buildInvalidFSA = (id, payloadOverrides) => fsaFactory.build(id, payloadOv
 
 const existingUserGroupDto: DTO<CoscradUserGroup> = {
     type: AggregateType.userGroup,
-    id: buildDummyUuid(),
+    id: dummyUuid,
     label: 'existing users',
     description: 'this group already exists before running the command',
     userIds: [],
@@ -86,7 +88,7 @@ describe('CreateGroup', () => {
             commandHandlerService,
         };
 
-        jest.useFakeTimers().setSystemTime(new Date('2020-04-05'));
+        jest.useFakeTimers(buildFakeTimersConfig());
     });
 
     afterAll(async () => {

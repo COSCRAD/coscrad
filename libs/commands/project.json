@@ -1,5 +1,5 @@
 {
-    "root": "libs/commands",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "libs/commands/src",
     "entryFile": "index",
     "projectType": "library",
@@ -18,13 +18,14 @@
             "executor": "@nrwl/linter:eslint",
             "options": {
                 "lintFilePatterns": ["libs/commands/**/*.ts"]
-            }
+            },
+            "outputs": ["{options.outputFile}"]
         },
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": ["coverage/libs/commands"],
             "options": {
-                "jestConfig": "libs/commands/jest.config.js",
+                "jestConfig": "libs/commands/jest.config.ts",
                 "passWithNoTests": true
             }
         }
