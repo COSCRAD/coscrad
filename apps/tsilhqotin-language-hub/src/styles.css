@@ -78,6 +78,13 @@ a {
     text-decoration: underline;
 }
 
+.linkName,
+.linkName:active,
+.linkName:visited {
+    color: white !important;
+    text-decoration: none;
+}
+
 .tool {
     margin-right: 15px;
     vertical-align: bottom;
@@ -85,26 +92,9 @@ a {
 
 .topDiv {
     background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2020/12/IMG_2516-scaled-e1607038804272.jpg');
-    background-position: bottom;
     background-size: cover;
     background-position: center;
     height: calc(100vh - 95px);
-}
-
-.midDiv {
-    /* background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_hillside-scaled.jpg');
-   */
-    background-image: linear-gradient(3deg, rgb(249, 144, 110), rgb(225, 14, 225));
-    height: 100vh;
-    background-position: center;
-}
-
-.bottomDiv {
-    background-image: url('https://www.tsilhqotin.ca/wp-content/uploads/2021/08/tsilhqotin_dried_salmon-scaled.jpg');
-    background-position: center;
-    background-size: cover;
-    background-position: left;
-    height: 100vh;
 }
 
 .Language {
@@ -179,14 +169,26 @@ a {
 
     transition: 1s;
     transition-duration: 1s;
-    border-color: red;
-    box-shadow: 0px 0px 12px 2px red;
 }
 
 .heroTitle {
-    padding: 2px;
+    padding: 0px 0px 8px 0;
     margin: 0;
-    font-size: 24px;
+    font-size: 30px;
+    color: rgb(104, 106, 149);
+}
+
+.heroTitle {
+    background: -webkit-linear-gradient(
+        200deg,
+        rgb(167, 157, 218) 0%,
+
+        rgb(195, 151, 151) 100%
+    ) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    -moz-background-clip: inherit;
+    background-clip: inherit;
 }
 
 #downloadApps {
@@ -194,53 +196,76 @@ a {
     text-align: center;
 }
 
-/*Pixel 5*/
+.siteTitle {
+    font-size: 44px;
+}
 
 @media only screen and (max-width: 500px) {
-    .navTitle {
-        font-size: 6vw !important;
+    .heroTitle {
+        font-size: 22px;
+    }
+
+    .siteTitle {
+        font-size: 30px;
+    }
+
+    .dialect {
+        font-size: 20px;
+        padding: 12px;
     }
 
     .title {
-        font-size: 4vh !important;
+        margin-top: 40vh;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .heroTitle {
+        font-size: 22px;
+    }
+
+    .siteTitle {
+        font-size: 30px;
+    }
+
+    .dialect {
+        font-size: 20px;
+        padding: 12px;
     }
 }
 
 /*Samsung s10*/
 
 @media only screen and (max-width: 600px) {
-    .navTitle {
-        font-size: 5vw;
+    .heroTitle {
+        font-size: 18px;
     }
-
-    .title {
-        font-size: 3vh !important;
-    }
-}
-
-@media only screen and (max-width: 800px) {
-    .navTitle {
-        font-size: 3vh;
-    }
-
-    .title {
-        font-size: 3vh !important;
+    .siteTitle {
+        font-size: 30px;
     }
 }
 
-@media only screen and (min-width: 800px) {
-    .navTitle {
-        font-size: 4vh;
-    }
-
+@media only screen and (max-width: 700px) {
     .title {
-        font-size: 5vh !important;
+        margin-top: 45vh;
     }
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 889px) {
     .menu__btn {
         display: none !important;
+    }
+
+    .siteTitle {
+        font-size: 40px;
+    }
+
+    .heroTitle {
+        font-size: 30px;
     }
 }
 
@@ -283,7 +308,6 @@ a {
     width: 30px;
     height: 30px;
     cursor: pointer;
-    z-index: 10;
     display: flex;
     -ms-flex-align: center;
     -webkit-align-items: center;
@@ -323,51 +347,28 @@ a {
     margin: 0;
     padding: 80px 0;
     list-style: none;
+    background-color: rgba(13, 16, 66, 1) !important;
+    background-image: linear-gradient(
+        -155deg,
+        rgb(255, 0, 0) -30%,
+        rgba(13, 16, 66, 0.85) 60%,
+        rgba(13, 16, 66, 1) 100%
+    ) !important;
     background-image: repeating-linear-gradient(
-            0deg,
-            hsla(284, 43%, 48%, 0.05) 0px,
-            hsla(284, 43%, 48%, 0.05) 1px,
+            284deg,
+            transparent 0px,
             transparent 1px,
-            transparent 11px,
-            hsla(284, 43%, 48%, 0.05) 11px,
-            hsla(284, 43%, 48%, 0.05) 12px,
-            transparent 12px,
-            transparent 32px
+            rgb(251, 251, 251) 1px,
+            rgb(251, 251, 251) 3px
         ),
         repeating-linear-gradient(
-            135deg,
-            hsla(284, 43%, 48%, 0.05) 0px,
-            hsla(284, 43%, 48%, 0.05) 1px,
+            14deg,
+            transparent 0px,
             transparent 1px,
-            transparent 11px,
-            hsla(284, 43%, 48%, 0.05) 11px,
-            hsla(284, 43%, 48%, 0.05) 12px,
-            transparent 12px,
-            transparent 32px
+            rgb(251, 251, 251) 1px,
+            rgb(251, 251, 251) 3px
         ),
-        repeating-linear-gradient(
-            0deg,
-            hsla(284, 43%, 48%, 0.05) 0px,
-            hsla(284, 43%, 48%, 0.05) 1px,
-            transparent 1px,
-            transparent 11px,
-            hsla(284, 43%, 48%, 0.05) 11px,
-            hsla(284, 43%, 48%, 0.05) 12px,
-            transparent 12px,
-            transparent 32px
-        ),
-        repeating-linear-gradient(
-            45deg,
-            hsla(284, 43%, 48%, 0.05) 0px,
-            hsla(284, 43%, 48%, 0.05) 1px,
-            transparent 1px,
-            transparent 11px,
-            hsla(284, 43%, 48%, 0.05) 11px,
-            hsla(284, 43%, 48%, 0.05) 12px,
-            transparent 12px,
-            transparent 32px
-        ),
-        linear-gradient(90deg, rgb(0, 0, 0), rgb(42, 49, 172));
+        linear-gradient(90deg, rgb(222, 222, 222), rgb(222, 222, 222));
     transition-duration: 0.75s;
     z-index: 1 !important;
 }
@@ -451,7 +452,8 @@ a {
 }
 
 .page {
-    min-height: calc(100vh - 96px);
+    min-height: calc(100vh - 116px);
+    padding-bottom: 20px;
 }
 
 .backdrop {
@@ -552,6 +554,21 @@ a {
     margin: 0 auto;
 }
 
+.appLinkImage {
+    margin-bottom: -10px;
+    margin-top: -10px;
+}
+
+.funderLink {
+    color: rgb(255, 255, 255);
+    text-shadow: 0px 0px 12px #ff0000 !important;
+}
+
+.funderCategory {
+    text-align: center;
+    color: rgb(255, 255, 255);
+}
+
 .webLink {
     border-radius: 20px;
     border: 2px solid black;
@@ -588,27 +605,6 @@ h2 {
         linear-gradient(90deg, rgb(222, 222, 222), rgb(222, 222, 222));
     background-repeat: no-repeat;
     background-attachment: fixed;
-}
-
-.flex-container {
-    display: flex !important;
-    height: 100vh;
-    color: white;
-}
-
-.flex-child1 {
-    width: 50vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.flex-child2 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    flex: 1;
 }
 
 .button {
@@ -775,4 +771,12 @@ h2 {
     padding: 10px !important;
     border-radius: 8px !important;
     width: 160px;
+}
+
+h2 {
+    text-shadow: 0px 0px 12px #ff0000 !important;
+}
+
+.presenterParagraph {
+    color: rgb(225, 225, 225);
 }

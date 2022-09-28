@@ -1,7 +1,6 @@
 import AppLink from './data/AppLink';
 import { AppPlatform } from './data/AppPlatform';
 
-
 type ImageInfo = {
     alt: string;
     src: string;
@@ -30,7 +29,7 @@ export function AppLinkDisplay({ platform, url }: AppLink) {
     const imageInfo = getImageInfoForPlatform(platform);
     return (
         <div className="appLinkDisplay">
-            <a className="appLink" href={url}>
+            <a className="appLink" href={url} target={'_blank'} rel={'noopener noreferrer'}>
                 <img
                     className="appLinkImage"
                     alt={imageInfo.alt}

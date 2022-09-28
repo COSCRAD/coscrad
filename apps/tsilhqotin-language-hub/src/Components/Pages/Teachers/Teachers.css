@@ -1,0 +1,11 @@
+.alphabetPoster {
+    height: 100vh;
+    width: 50vw;
+    text-align: center;
+}
+
+@media only screen and (max-width: 800px) {
+    .alphabetPoster {
+        width: 90vw;
+    }
+}
