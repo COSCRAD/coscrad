@@ -1,36 +1,32 @@
+import { Link } from 'react-router-dom';
+
 export function Dropdown() {
     return (
         <div>
-            <a className="menu__item" href="/About">
+            <Link className="menu__item" to="/About" reloadDocument={true}>
                 About
-            </a>
-
-            <a className="menu__item" href="/Apps">
+            </Link>
+            <Link className="menu__item" to="/Apps" reloadDocument={true}>
                 Apps
-            </a>
-
-            <a className="menu__item" href="/Songs">
+            </Link>
+            <Link className="menu__item" to="/Songs" reloadDocument={true}>
                 Songs
-            </a>
-
-            <a className="menu__item" href="/Videos">
+            </Link>
+            <Link className="menu__item" to="/Videos" reloadDocument={true}>
                 Videos
-            </a>
-
-            <a className="menu__item" href="/Teachers">
+            </Link>
+            <Link className="menu__item" to="/Teachers" reloadDocument={true}>
                 Teachers
-            </a>
-
-            <a className="menu__item" href="/Funders">
+            </Link>
+            <Link className="menu__item" to="/Funders" reloadDocument={true}>
                 Funders
-            </a>
-
-            <a className="menu__item" href="/Greetings">
-                Greetings
-            </a>
-            <a className="menu__item" href="/Links">
+            </Link>
+            <Link className="menu__item" to="/Links" reloadDocument={true}>
                 Links
-            </a>
+            </Link>
+            <Link className="menu__item" to="/Contact" reloadDocument={true}>
+                Contact
+            </Link>
         </div>
     );
 }

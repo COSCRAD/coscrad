@@ -14,7 +14,7 @@ export type MediaData = {
 
 export function Media({ id, title, titleEnglish, url }: MediaData) {
     return (
-        <div>
+        <div className="page">
             <div id="heading">
                 <div id="container">
                     <h1 id="pageTitle"> {buildBilingualTitle(title, titleEnglish)}</h1>

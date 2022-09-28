@@ -11,10 +11,6 @@ const SongIndex = buildIndexComponent(
             propertyKey: 'titleEnglish',
             heading: 'Title (English)',
         },
-        {
-            propertyKey: 'id',
-            heading: 'ID',
-        },
     ],
     (id: string) => `${id}`,
     `${getConfig().apiBaseUrl}/api/resources/songs`,

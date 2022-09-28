@@ -31,8 +31,8 @@ const Navbar = () => {
                     <NavLink to="/Videos">Videos</NavLink>
                     <NavLink to="/Teachers">Teachers</NavLink>
                     <NavLink to="/Funders">Funders</NavLink>
-                    <NavLink to="/Greetings">Greetings</NavLink>
                     <NavLink to="/Links">Links</NavLink>
+                    <NavLink to="/Contact">Contact</NavLink>
                     {/* Second Nav */}
                     {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
                 </NavMenu>

@@ -1,0 +1,127 @@
+  .featured {
+    margin: 0px;
+    border-radius: 0 !important;
+    border-style: none;
+    background: none;
+    box-shadow: none;
+  }
+
+  .featuredSection {
+    padding: 40px 0 0px 0;
+  }
+
+  #featuredHeading {
+    margin: 0 0 0 40px;
+    font-size: 34px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+  }
+  
+  .cardBlock {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 28px;
+    color: white;
+    width: 33vw;
+    height: 70vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  .center {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  #phraseBook2 {
+    background-image:url('https://www.tsilhqotin.ca/wp-content/uploads/2022/08/dpb_logo8.png') !important;
+    background-repeat: no-repeat;
+    background-size: 90%;
+    background-position: center;
+  }
+
+  #phraseBook3 {
+    background: none;
+    padding: 0;
+    text-decoration: none;
+  }
+
+  #playstoreTag {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .skillCard {
+      display: block;
+      width: 100vw;
+    }
+    .cardBlock {
+      width: 100vw;
+    }
+    #hero {
+     // font-size: 7vw;
+      width: 100vw;
+  }
+  }
+  
+  @media only screen and (max-width: 780px) {
+    #hero {
+    //  font-size: 7vw;
+      width: 100vw;
+  }
+  #alphabet2 {
+    background-size: 70% !important;
+  }
+
+  }
+  
+  @media only screen and (min-width: 600px) {
+    .skillCard {
+      display: flex;
+    }
+  }
+
+  #alphabet {
+    background-image: url('https://api.tsilhqotinlanguage.ca/uploads/app_icon_qa_c3241de386.png') !important;
+    background-color: #7c2ff755 !important;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  #alphabet2 {
+    background-image:url('https://www.tsilhqotin.ca/wp-content/uploads/2022/10/tsilhqotin-alphabet.png') !important;
+    background-repeat: no-repeat;
+    background-size: 50%;
+    background-position: center;
+  }
+
+  .playStore {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color:rgb(255, 0, 0);
+    font-size: smaller;
+  }
+
+ 
+
+  #featuredApps:hover {
+    .playStore {
+      color: rgba(255, 0, 0, 0.633);
+    }
+    .center {
+      color: rgb(191, 191, 191);
+    }
+  }
+
+  .arrow {
+    display: none !important;
+  }
+
+  #phraseBook2:hover, #alphabet2:hover {
+    opacity: 50% !important;
+    filter: grayscale(100%) !important;
+  }
+
+
