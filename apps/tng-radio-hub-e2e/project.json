@@ -6,8 +6,9 @@
         "e2e": {
             "executor": "@nrwl/cypress:cypress",
             "options": {
-                "cypressConfig": "apps/tng-radio-hub-e2e/cypress.json",
-                "devServerTarget": "tng-radio-hub:serve"
+                "cypressConfig": "apps/tng-radio-hub-e2e/cypress.config.ts",
+                "devServerTarget": "tng-radio-hub:serve",
+                "testingType": "e2e"
             },
             "configurations": {
                 "production": {
