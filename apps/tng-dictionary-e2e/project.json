@@ -6,8 +6,9 @@
         "e2e": {
             "executor": "@nrwl/cypress:cypress",
             "options": {
-                "cypressConfig": "apps/tng-dictionary-e2e/cypress.json",
-                "devServerTarget": "tng-dictionary:serve"
+                "cypressConfig": "apps/tng-dictionary-e2e/cypress.config.ts",
+                "devServerTarget": "tng-dictionary:serve",
+                "testingType": "e2e"
             },
             "configurations": {
                 "production": {

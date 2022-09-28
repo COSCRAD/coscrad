@@ -6,8 +6,9 @@
         "e2e": {
             "executor": "@nrwl/cypress:cypress",
             "options": {
-                "cypressConfig": "apps/coscrad-frontend-e2e/cypress.json",
-                "devServerTarget": "coscrad-frontend:serve"
+                "cypressConfig": "apps/coscrad-frontend-e2e/cypress.config.ts",
+                "devServerTarget": "coscrad-frontend:serve",
+                "testingType": "e2e"
             },
             "configurations": {
                 "production": {
