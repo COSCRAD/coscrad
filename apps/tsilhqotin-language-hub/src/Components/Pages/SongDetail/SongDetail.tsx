@@ -30,7 +30,7 @@ export function SongDetail(props: SongViewModel) {
             .catch((rej) => console.log(rej));
     }, [setComponentState]);
 
-    if (!componentState.songData) return <div>LOADING!</div>;
+    if (!componentState.songData) return <div className="page">LOADING!</div>;
 
     return <Song songData={componentState.songData}></Song>;
 }

@@ -28,7 +28,7 @@ export function Song(props: SongsDetailComponentProps) {
     const { id, title, titleEnglish, contributions, lyrics, audioURL } = songData;
 
     return (
-        <div>
+        <div className="page">
             <div id="heading">
                 <div id="container">
                     <h1 id="pageTitle"> {buildBilingualTitle(title, titleEnglish)}</h1>

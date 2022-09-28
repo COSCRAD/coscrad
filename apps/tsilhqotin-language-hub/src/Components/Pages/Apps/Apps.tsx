@@ -1,3 +1,4 @@
+import ScrollToTop from '../../Widgets/ScrollButton/ScrollToTop';
 import { AppsDisplay } from './AppsDisplay';
 import getAppInfos from './data/getAppInfos';
 
@@ -16,7 +17,8 @@ export function Apps() {
         );
 
     return (
-        <div className="pages">
+        <div style={{ paddingBottom: '30px' }} className="pages">
+            <ScrollToTop />
             <div id="heading">
                 <div id="container">
                     <div id="pageTitle">

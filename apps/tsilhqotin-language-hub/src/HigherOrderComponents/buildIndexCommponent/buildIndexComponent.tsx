@@ -30,12 +30,19 @@ type IndexComponentState<T extends Record<string, unknown>> = {
     searchContext: keyof T;
 };
 
-const buildStreamlinedViewmodelForTable = <T extends Record<string, unknown>, U extends keyof T>(
+type HasId = {
+    id: string;
+};
+
+const buildStreamlinedViewmodelForTable = <
+    T extends Record<string, unknown> & HasId,
+    U extends keyof T
+>(
     viewModel: T,
     keysToKeep: U[]
 ): Omit<T, U> =>
     Object.entries(viewModel).reduce((acc: Omit<T, U>, [key, value]: [keyof T, unknown]) => {
-        if (!keysToKeep.includes(key as any)) return acc;
+        if (!keysToKeep.concat('id' as U).includes(key as any)) return acc;
 
         // @ts-expect-error fix this later
         acc[key] = value;

@@ -1,0 +1,100 @@
+.footer {
+    color: rgb(255, 255, 255);
+    background: white;
+    text-align: center;
+    height: auto;
+}
+
+.footerDivider {
+    width: 90vw;
+    margin: auto;
+}
+
+.socialLinks {
+    color: rgba(13, 16, 66, 1);
+    font-size: 48px !important;
+}
+
+.socialContainer {
+    padding: 20px 0 10px 0;
+}
+
+#facebook:hover {
+    color: rgb(66, 103, 178);
+}
+
+#twitter:hover {
+    color: rgb(29, 161, 242);
+}
+
+#github:hover {
+    color: rgba(13, 16, 66, 0.307);
+}
+
+#instagram:hover {
+    color: rgb(193, 53, 132);
+}
+
+#youtube:hover {
+    color: rgb(255, 0, 0);
+}
+
+.copyright {
+    color: rgba(13, 16, 66, 1);
+    margin-left: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.copyrightContainer {
+    padding: 20px 0 25px 0;
+}
+
+#tngIcon {
+    margin-right: 8px;
+    vertical-align: baseline;
+    padding-bottom: 2px;
+}
+
+#tngLogo {
+    display: inline-block;
+}
+
+#onhover {
+    display: none;
+}
+#tngLogo:hover span[id='initial'] {
+    display: none;
+}
+#tngLogo:hover span[id='onhover'] {
+    display: block;
+}
+
+@media only screen and (max-width: 800px) {
+    .copyright {
+        margin-left: 0;
+        padding: 0;
+    }
+    #rights {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .copyright {
+        font-size: 14px;
+    }
+    #rights {
+        display: none;
+    }
+
+    .socialLinks {
+        font-size: 36px !important;
+        padding: 2px;
+    }
+
+    #tngIcon {
+        height: 34px !important;
+    }
+}
