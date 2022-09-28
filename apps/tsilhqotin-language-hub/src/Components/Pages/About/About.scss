@@ -1,0 +1,40 @@
+.pageContent {
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0 0 20px 0;
+}
+
+#aboutContent {
+    width: 50vw;
+    font-size: 19px !important;
+}
+
+.dialectAudio {
+    text-align: center;
+    padding: 10px 0px 10px 0;
+}
+
+.divTitle {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    text-decoration: underline;
+    padding-bottom: 8px;
+}
+
+@media only screen and (max-width: 800px) {
+   #aboutContent {
+    width: 90vw;
+   }
+  }
+
+#tsilhqotin {
+    text-align: center;
+    margin: 0;
+
+}
+
+#translation {
+    text-align: center;
+    margin: 0;
+    font-style: italic;
+    color: rgb(194, 194, 194);
+}

@@ -26,7 +26,7 @@ export default function MediaDetail() {
             .catch((rej) => console.log(rej));
     }, [setComponentState]);
 
-    if (!componentState.mediaData) return <div>LOADING!</div>;
+    if (!componentState.mediaData) return <div className="page">LOADING!</div>;
 
     return <Media {...componentState.mediaData}></Media>;
 }

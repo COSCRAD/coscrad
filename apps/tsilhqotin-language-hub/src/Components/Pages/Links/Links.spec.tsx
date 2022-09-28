@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import Links from './Links';
+import Links from './Links.presenter';
 
 describe('Links', () => {
     it('should render successfully', () => {
