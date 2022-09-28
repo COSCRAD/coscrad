@@ -36,11 +36,11 @@ export default class DiscriminatedUnionValidator {
         }
 
         discrimantAndValidationFunctionPairs.forEach(([discriminant, validation]) =>
-            this.#registerValidationFunction(discriminant, validation)
+            this.registerValidationFunction(discriminant, validation)
         );
 
         const discriminantsWithoutValidationFunction =
-            this.#getDiscriminantsThatAreMissingAValidationFunction();
+            this.getDiscriminantsThatAreMissingAValidationFunction();
 
         if (discriminantsWithoutValidationFunction.length > 0) {
             throw new Error(
@@ -66,7 +66,7 @@ export default class DiscriminatedUnionValidator {
                 ),
             ];
 
-        if (!this.#isAllowedDiscriminant(discriminantForInput)) {
+        if (!this.isAllowedDiscriminant(discriminantForInput)) {
             return [
                 buildValidationError(
                     [
@@ -88,7 +88,7 @@ export default class DiscriminatedUnionValidator {
         return executeValidation(input);
     }
 
-    #registerValidationFunction(
+    private registerValidationFunction(
         discriminant: string,
         validationFunction: SimpleValidationFunction
     ) {
@@ -109,13 +109,13 @@ export default class DiscriminatedUnionValidator {
         this.#discriminantToValidationFunction.set(discriminant, validationFunction);
     }
 
-    #getDiscriminantsThatAreMissingAValidationFunction(): string[] {
+    private getDiscriminantsThatAreMissingAValidationFunction(): string[] {
         return this.#allDiscriminants.filter(
             (discriminant) => !this.#discriminantToValidationFunction.has(discriminant)
         );
     }
 
-    #isAllowedDiscriminant(input: string): boolean {
+    private isAllowedDiscriminant(input: string): boolean {
         return this.#allDiscriminants.includes(input);
     }
 }
