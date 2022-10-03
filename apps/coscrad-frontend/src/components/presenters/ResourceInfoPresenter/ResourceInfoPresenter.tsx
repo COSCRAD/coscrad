@@ -33,11 +33,5 @@ export default ({
         </Link>
 
         <div>{description}</div>
-
-        <h2>Schema:</h2>
-        <div>{JSON.stringify(schema)}</div>
-
-        <h2>Index API Endpoint:</h2>
-        <div>{apiIndexRoute}</div>
     </>
 );

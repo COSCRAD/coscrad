@@ -5,12 +5,14 @@ import { getConfig } from '../../../config';
 import DynamicIndexPresenter from './DynamicIndexPresenter';
 
 type DynamicIndexPageState = {
-    data: [];
+    detailDataAndActions: [];
+    actions: [];
 };
 
 export default () => {
     const [pageState, setPageState] = useState<DynamicIndexPageState>({
-        data: [],
+        detailDataAndActions: [],
+        actions: [],
     });
 
     const location = useLocation();
@@ -24,7 +26,7 @@ export default () => {
     }
 
     useEffect(() => {
-        setPageState({ data: [] });
+        setPageState({ detailDataAndActions: [], actions: [] });
 
         fetch(apiLink, { mode: 'cors' })
             // .then((res) => {
@@ -37,7 +39,8 @@ export default () => {
             .then((response) =>
                 setPageState({
                     // We should improve the naming of our index query response params
-                    data: response.data.map(({ data }) => data),
+                    detailDataAndActions: response.data,
+                    actions: response.actions,
                 })
             )
             .catch((rej) => {
@@ -47,7 +50,15 @@ export default () => {
             });
     }, []);
 
-    if (pageState.data.length === 0) return <div>Loading...</div>;
+    if (pageState.detailDataAndActions.length === 0) return <div>Loading...</div>;
 
-    return <DynamicIndexPresenter schema={schema} data={pageState.data}></DynamicIndexPresenter>;
+    return (
+        <div>
+            <DynamicIndexPresenter
+                schema={schema}
+                data={pageState.detailDataAndActions}
+                actions={pageState.actions}
+            ></DynamicIndexPresenter>
+        </div>
+    );
 };

@@ -149,6 +149,11 @@ exports[`buildPresenterFromDataSchema should render successfully 1`] = `
         {"type":"one","strength":85}
       </div>
     </div>
+    <div>
+      <h1>
+        Commands
+      </h1>
+    </div>
   </div>
 </body>
 `;

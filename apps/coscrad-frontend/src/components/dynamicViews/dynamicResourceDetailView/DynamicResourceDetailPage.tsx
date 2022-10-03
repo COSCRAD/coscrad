@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { CommandInfo } from '../commands';
 import { buildViewModelComponentFromCoscradDataDefinition } from './buildViewModelComponentFromCoscradDataDefinition';
 
 export const DynamicResourceDetailPage = () => {
@@ -8,7 +9,12 @@ export const DynamicResourceDetailPage = () => {
 
     const data = location.state?.data;
 
-    const DetailPresenter = buildViewModelComponentFromCoscradDataDefinition(schema);
+    const actions = location.state?.actions;
+
+    const DetailPresenter = buildViewModelComponentFromCoscradDataDefinition(
+        schema,
+        actions as CommandInfo[]
+    );
 
     return DetailPresenter(data);
 };

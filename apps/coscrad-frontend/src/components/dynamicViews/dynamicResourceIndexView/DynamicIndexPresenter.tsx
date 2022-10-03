@@ -1,9 +1,16 @@
 import { ClassDataTypeMetadata } from '@coscrad/data-types';
 import { Link } from 'react-router-dom';
+import { CommandInfo, CommandPanel } from '../commands';
+
+export type DetailDataAndActions = {
+    data: unknown[];
+    actions: unknown[];
+};
 
 export type IndexProps = {
     schema: ClassDataTypeMetadata;
-    data: Record<string, unknown>[];
+    data: DetailDataAndActions[];
+    actions: unknown[];
 };
 
 /**
@@ -11,9 +18,9 @@ export type IndexProps = {
  * data of said type to a readable string (presentation). JSON.stringify is
  * being used as a catch-all. This logic should exist in a separate lib.
  */
-const getFormatterForDataType = (dataType: string) => (data: unknown) => JSON.stringify(data);
+const getFormatterForDataType = (_dataType: string) => (data: unknown) => JSON.stringify(data);
 
-export default ({ data, schema }: IndexProps): JSX.Element => {
+export default ({ data, schema, actions }: IndexProps): JSX.Element => {
     if (!Array.isArray(data))
         return (
             <div>
@@ -33,14 +40,18 @@ export default ({ data, schema }: IndexProps): JSX.Element => {
                 </thead>
 
                 <tbody>
-                    {data.map((viewData) => {
+                    {data.map(({ data: viewData, actions }) => {
                         return (
                             <tr>
                                 {Object.entries(schema).map(([key, dataSchema]) => (
                                     <td>
                                         <Link
                                             to="/ResourceDetail"
-                                            state={{ schema, data: viewData }}
+                                            state={{
+                                                schema,
+                                                data: viewData,
+                                                actions,
+                                            }}
                                         >
                                             {getFormatterForDataType(dataSchema.coscradDataType)(
                                                 (viewData as any)[key]
@@ -53,6 +64,9 @@ export default ({ data, schema }: IndexProps): JSX.Element => {
                     })}
                 </tbody>
             </table>
+            <div>
+                <CommandPanel actions={actions as CommandInfo[]}></CommandPanel>
+            </div>
         </div>
     );
 };
