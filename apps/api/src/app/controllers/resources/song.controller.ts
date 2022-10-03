@@ -10,7 +10,7 @@ import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpR
 import { RESOURCES_ROUTE_PREFIX } from './constants';
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
-@Controller(`${RESOURCES_ROUTE_PREFIX}/${buildViewModelPathForResourceType(ResourceType.song)}`)
+@Controller(buildViewModelPathForResourceType(ResourceType.song))
 export class SongController {
     constructor(private readonly songQueryService: SongQueryService) {}
 

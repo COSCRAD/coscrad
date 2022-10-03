@@ -21,15 +21,15 @@ export default ({
     description,
     label,
     schema,
-    link,
+    link: apiIndexRoute,
 }: ResourceInfo): JSX.Element => (
     <>
         <h1>
             {label} ({resourceType})
         </h1>
 
-        <Link to="/ResourceIndex" state={{ schema, data: resourceType, link }}>
-            CLICK ME HARDDDDDDD!
+        <Link to="/ResourceIndex" state={{ schema, data: resourceType, link: apiIndexRoute }}>
+            View Resources of type {label}
         </Link>
 
         <div>{description}</div>
@@ -38,6 +38,6 @@ export default ({
         <div>{JSON.stringify(schema)}</div>
 
         <h2>Index API Endpoint:</h2>
-        <div>{link}</div>
+        <div>{apiIndexRoute}</div>
     </>
 );
