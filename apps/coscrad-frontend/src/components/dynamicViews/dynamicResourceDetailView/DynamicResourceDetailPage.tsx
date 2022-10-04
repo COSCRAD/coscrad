@@ -1,5 +1,5 @@
+import { ICommandInfo } from '@coscrad/api-interfaces';
 import { useLocation } from 'react-router-dom';
-import { CommandInfo } from '../commands';
 import { buildViewModelComponentFromCoscradDataDefinition } from './buildViewModelComponentFromCoscradDataDefinition';
 
 export const DynamicResourceDetailPage = () => {
@@ -13,7 +13,7 @@ export const DynamicResourceDetailPage = () => {
 
     const DetailPresenter = buildViewModelComponentFromCoscradDataDefinition(
         schema,
-        actions as CommandInfo[]
+        actions as ICommandInfo[]
     );
 
     return DetailPresenter(data);
