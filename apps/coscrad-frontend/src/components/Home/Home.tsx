@@ -7,7 +7,7 @@ export function Home() {
         <div>
             <h1>Welcome to coscrad</h1>
             <Link to="/About">About</Link>
-            <Link to="/AllEntities">All Entities</Link>
+            <Link to="/AllResources">Browse Resources</Link>
             <Link to="/MembersOnly">Members Only</Link>
 
             <AuthenticationButton></AuthenticationButton>
