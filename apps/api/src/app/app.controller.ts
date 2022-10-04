@@ -1,11 +1,13 @@
-import { MediaItem } from '@coscrad/api-interfaces';
 import { Controller, Get, Request, Response, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { OptionalJwtAuthGuard } from '../authorization/optional-jwt-auth-guard';
 import { CoscradUserWithGroups } from '../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { NotFound } from '../lib/types/not-found';
 import sendInternalResultAsHttpResponse from './controllers/resources/common/sendInternalResultAsHttpResponse';
-import { Message } from './message.entity';
+
+class Message {
+    readonly message: string;
+}
 
 /**
  * These endpoints are strictly for experimentation.
@@ -17,7 +19,7 @@ export class AppController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
     @Get('hello')
-    getData(@Request() req, @Response() res): MediaItem {
+    getData(@Request() req, @Response() res) {
         if (!(req.user instanceof CoscradUserWithGroups)) {
             return sendInternalResultAsHttpResponse(res, NotFound);
         }

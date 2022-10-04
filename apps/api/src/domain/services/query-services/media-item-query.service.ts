@@ -1,5 +1,5 @@
+import { ICommandInfo } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
-import { CommandInfo } from '../../../app/controllers/command/services/command-info-service';
 import { MediaItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { ResourceType } from '../../types/ResourceType';
@@ -13,7 +13,7 @@ export class MediaItemQueryService extends BaseQueryService<MediaItem, MediaItem
         return new MediaItemViewModel(mediaItem);
     }
 
-    getInfoForIndexScopedCommands(): CommandInfo[] {
+    getInfoForIndexScopedCommands(): ICommandInfo[] {
         return this.commandInfoService.getCommandInfo(MediaItem);
     }
 }

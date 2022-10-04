@@ -1,3 +1,4 @@
+import { IDetailQueryResult, IIndexQueryResult } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { isInternalError } from '../../../lib/errors/InternalError';
@@ -14,7 +15,6 @@ import { ISpecification } from '../../repositories/interfaces/specification.inte
 import { AggregateId } from '../../types/AggregateId';
 import { InMemorySnapshot } from '../../types/ResourceType';
 import buildInMemorySnapshot from '../../utilities/buildInMemorySnapshot';
-import { AggregateByIdQueryResult, AggregateIndexQueryResult } from './base-query.service';
 
 export class CoscradUserGroupQueryService {
     private readonly userGroupRepository: IRepositoryForAggregate<CoscradUserGroup>;
@@ -32,7 +32,7 @@ export class CoscradUserGroupQueryService {
 
     async fetchById(
         groupId: AggregateId
-    ): Promise<Maybe<AggregateByIdQueryResult<CoscradUserGroupViewModel>>> {
+    ): Promise<Maybe<IDetailQueryResult<CoscradUserGroupViewModel>>> {
         const [userGroupSearchResult, userSearchResult] = await Promise.all([
             this.userGroupRepository.fetchById(groupId),
             this.userRepository.fetchMany(),
@@ -49,12 +49,12 @@ export class CoscradUserGroupQueryService {
 
         const externalState = buildInMemorySnapshot({ user: allUsers });
 
-        return this.buildDetailResponse(userGroupSearchResult, externalState);
+        return this.buildDetailResult(userGroupSearchResult, externalState);
     }
 
     async fetchMany(
         specification?: ISpecification<CoscradUserGroup>
-    ): Promise<AggregateIndexQueryResult<CoscradUserGroupViewModel>> {
+    ): Promise<IIndexQueryResult<CoscradUserGroupViewModel>> {
         const [allResults, allUsers] = await Promise.all([
             this.userGroupRepository.fetchMany(specification),
             this.userRepository.fetchMany(),
@@ -66,7 +66,7 @@ export class CoscradUserGroupQueryService {
 
         const viewModelsAndActions = allResults
             .filter(validAggregateOrThrow)
-            .map((userGroup) => this.buildDetailResponse(userGroup, externalState));
+            .map((userGroup) => this.buildDetailResult(userGroup, externalState));
 
         return {
             data: viewModelsAndActions,
@@ -74,10 +74,10 @@ export class CoscradUserGroupQueryService {
         };
     }
 
-    private buildDetailResponse(
+    private buildDetailResult(
         userGroup: CoscradUserGroup,
         { user: allUsers }: InMemorySnapshot
-    ): AggregateByIdQueryResult<CoscradUserGroupViewModel> {
+    ): IDetailQueryResult<CoscradUserGroupViewModel> {
         return {
             data: new CoscradUserGroupViewModel(userGroup, allUsers),
             actions: this.commandInfoService.getCommandInfo(userGroup),

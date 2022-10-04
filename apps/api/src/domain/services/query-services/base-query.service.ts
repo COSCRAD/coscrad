@@ -1,3 +1,4 @@
+import { IDetailQueryResult, IIndexQueryResult } from '@coscrad/api-interfaces';
 import { CoscradUserRole } from '@coscrad/data-types';
 import { Inject } from '@nestjs/common';
 import {
@@ -22,16 +23,6 @@ import { AggregateId, isAggregateId } from '../../types/AggregateId';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import buildInMemorySnapshot from '../../utilities/buildInMemorySnapshot';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
-
-export type AggregateByIdQueryResult<UViewModel extends BaseViewModel> = {
-    data: UViewModel;
-    actions: CommandInfo[];
-};
-
-export type AggregateIndexQueryResult<UViewModel extends BaseViewModel> = {
-    data: AggregateByIdQueryResult<UViewModel>[];
-    actions: CommandInfo[];
-};
 
 type ViewModelWithTags<T> = T & { tags: TagViewModel[] };
 
@@ -110,7 +101,7 @@ export abstract class BaseQueryService<
     public async fetchById(
         id: unknown,
         userWithGroups?: CoscradUserWithGroups
-    ): Promise<ResultOrError<Maybe<AggregateByIdQueryResult<ViewModelWithTags<UViewModel>>>>> {
+    ): Promise<ResultOrError<Maybe<IDetailQueryResult<ViewModelWithTags<UViewModel>>>>> {
         if (!isAggregateId(id))
             return new InternalError(
                 `Invalid id: ${id} for resource of type: ${formatResourceType(this.type)}`
@@ -149,7 +140,7 @@ export abstract class BaseQueryService<
 
     public async fetchMany(
         userWithGroups?: CoscradUserWithGroups
-    ): Promise<AggregateIndexQueryResult<ViewModelWithTags<UViewModel>>> {
+    ): Promise<IIndexQueryResult<ViewModelWithTags<UViewModel>>> {
         const searchResult = await this.fetchManyDomainModels();
 
         const requiredExternalState = await this.fetchRequiredExternalState();
@@ -170,6 +161,6 @@ export abstract class BaseQueryService<
         return {
             data,
             actions: this.getInfoForIndexScopedCommands(),
-        } as unknown as AggregateIndexQueryResult<ViewModelWithTags<UViewModel>>;
+        } as unknown as IIndexQueryResult<ViewModelWithTags<UViewModel>>;
     }
 }

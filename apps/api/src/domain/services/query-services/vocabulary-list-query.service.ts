@@ -1,9 +1,7 @@
+import { ICommandInfo } from '@coscrad/api-interfaces';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-    CommandInfo,
-    CommandInfoService,
-} from '../../../app/controllers/command/services/command-info-service';
+import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { VocabularyListViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
@@ -11,8 +9,8 @@ import { Tag } from '../../models/tag/tag.entity';
 import { Term } from '../../models/term/entities/term.entity';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
 import IsPublished from '../../repositories/specifications/isPublished';
+import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import buildInMemorySnapshot from '../../utilities/buildInMemorySnapshot';
 import { BaseQueryService } from './base-query.service';
 
 @Injectable()
@@ -57,15 +55,15 @@ export class VocabularyListQueryService extends BaseQueryService<
                 ),
         ]);
 
-        return buildInMemorySnapshot({
+        return new DeluxeInMemoryStore({
             tag: allTags,
             resources: {
                 term: allTerms,
             },
-        });
+        }).fetchFullSnapshotInLegacyFormat();
     }
 
-    getInfoForIndexScopedCommands(): CommandInfo[] {
+    getInfoForIndexScopedCommands(): ICommandInfo[] {
         return this.commandInfoService.getCommandInfo(VocabularyList);
     }
 }
