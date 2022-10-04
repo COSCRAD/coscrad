@@ -13,10 +13,10 @@ import generateDatabaseNameForTestSuite from '../../../persistence/repositories/
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
-import buildViewModelPathForRe from '../utilities/buildIndexPathForResourceType';
+import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import setUpIntegrationTest from './setUpIntegrationTest';
 
-describe('GET /resources (fetch view models)', () => {
+describe('GET  (fetch view models)', () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
     let app: INestApplication;
@@ -73,7 +73,7 @@ describe('GET /resources (fetch view models)', () => {
     });
 
     Object.values(ResourceType).forEach((resourceType) => {
-        const endpointUnderTest = `/${buildViewModelPathForRe(resourceType)}`;
+        const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
 
         const buildFullPathFromId = (id: string): string => `${endpointUnderTest}/${id}`;
 
@@ -98,7 +98,7 @@ describe('GET /resources (fetch view models)', () => {
 
                         it(`should return not found`, () => {
                             return request(app.getHttpServer())
-                                .get(`/resources${buildFullPathFromId('bogus-id')}`)
+                                .get(`${buildFullPathFromId('bogus-id')}`)
                                 .expect(httpStatusCodes.notFound);
                         });
                     });
@@ -117,7 +117,7 @@ describe('GET /resources (fetch view models)', () => {
                                 testDataWithAllResourcesPublished[resourceType][0];
 
                             const res = await request(app.getHttpServer()).get(
-                                `/resources${buildFullPathFromId(resourceToFind.id)}`
+                                `${buildFullPathFromId(resourceToFind.id)}`
                             );
 
                             expect(res.status).toBe(httpStatusCodes.ok);
@@ -167,7 +167,7 @@ describe('GET /resources (fetch view models)', () => {
                         expect(isUnpublishedresourceIdInDB).toBe(true);
 
                         return request(app.getHttpServer())
-                            .get(`/resources${buildFullPathFromId(unpublishedId)}`)
+                            .get(`${buildFullPathFromId(unpublishedId)}`)
                             .expect(httpStatusCodes.notFound);
                     });
                 });

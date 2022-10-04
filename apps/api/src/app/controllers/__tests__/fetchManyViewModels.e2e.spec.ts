@@ -80,9 +80,7 @@ describe('When fetching multiple resources', () => {
                 });
 
                 it(`should fetch multiple resources of type ${resourceType}`, async () => {
-                    const res = await request(app.getHttpServer()).get(
-                        `/resources${endpointUnderTest}`
-                    );
+                    const res = await request(app.getHttpServer()).get(endpointUnderTest);
 
                     expect(res.status).toBe(httpStatusCodes.ok);
 
@@ -126,9 +124,7 @@ describe('When fetching multiple resources', () => {
                 });
 
                 it('should return the expected number of results', async () => {
-                    const res = await request(app.getHttpServer()).get(
-                        `/resources${endpointUnderTest}`
-                    );
+                    const res = await request(app.getHttpServer()).get(endpointUnderTest);
 
                     expect(res.body.data.length).toBe(publishedResourcesToAdd.length);
 
