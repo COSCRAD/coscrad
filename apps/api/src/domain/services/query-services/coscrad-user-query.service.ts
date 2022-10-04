@@ -1,3 +1,4 @@
+import { IDetailQueryResult, IIndexQueryResult } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { isInternalError } from '../../../lib/errors/InternalError';
@@ -8,7 +9,6 @@ import { ResultOrError } from '../../../types/ResultOrError';
 import { CoscradUserViewModel } from '../../../view-models/buildViewModelForResource/viewModels/coscrad-user.view-model';
 import { CoscradUser } from '../../models/user-management/user/entities/user/coscrad-user.entity';
 import { ISpecification } from '../../repositories/interfaces/specification.interface';
-import { AggregateByIdQueryResult, AggregateIndexQueryResult } from './base-query.service';
 
 export class CoscradUserQueryService {
     constructor(
@@ -18,7 +18,7 @@ export class CoscradUserQueryService {
 
     async fetchById(
         id: string
-    ): Promise<ResultOrError<Maybe<AggregateByIdQueryResult<CoscradUserViewModel>>>> {
+    ): Promise<ResultOrError<Maybe<IDetailQueryResult<CoscradUserViewModel>>>> {
         const searchResult = await this.repositoryProvider.getUserRepository().fetchById(id);
 
         if (isInternalError(searchResult)) return searchResult;
@@ -33,7 +33,7 @@ export class CoscradUserQueryService {
 
     async fetchMany(
         specification?: ISpecification<CoscradUser>
-    ): Promise<AggregateIndexQueryResult<CoscradUserViewModel>> {
+    ): Promise<IIndexQueryResult<CoscradUserViewModel>> {
         const allResults = await this.repositoryProvider
             .getUserRepository()
             .fetchMany(specification);

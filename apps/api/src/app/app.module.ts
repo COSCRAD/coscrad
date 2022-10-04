@@ -7,7 +7,6 @@ import { DatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { RepositoryProvider } from '../persistence/repositories/repository.provider';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import buildConfigFilePath from './config/buildConfigFilePath';
 import { validate } from './config/env.validation';
 import { CategoryController } from './controllers/category.controller';
@@ -28,7 +27,7 @@ import { UserManagementModule } from './domain-modules/user-management.module';
 import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
 
 @Module({
-    providers: [AppService, DatabaseProvider, RepositoryProvider, CommandInfoService],
+    providers: [DatabaseProvider, RepositoryProvider, CommandInfoService],
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,

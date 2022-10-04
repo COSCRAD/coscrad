@@ -1,9 +1,7 @@
+import { ICommandInfo } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-    CommandInfo,
-    CommandInfoService,
-} from '../../../app/controllers/command/services/command-info-service';
+import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { PhotographViewModel } from '../../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
 import { Photograph } from '../../models/photograph/entities/photograph.entity';
@@ -28,7 +26,7 @@ export class PhotographQueryService extends BaseQueryService<Photograph, Photogr
         );
     }
 
-    getInfoForIndexScopedCommands(): CommandInfo[] {
+    getInfoForIndexScopedCommands(): ICommandInfo[] {
         return this.commandInfoService.getCommandInfo(Photograph);
     }
 }
