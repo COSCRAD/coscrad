@@ -20,7 +20,7 @@ export type IndexProps = {
  */
 const getFormatterForDataType = (_dataType: string) => (data: unknown) => JSON.stringify(data);
 
-export default ({ data, schema, actions }: IndexProps): JSX.Element => {
+export const DynamicIndexPresenter = ({ data, schema, actions }: IndexProps): JSX.Element => {
     if (!Array.isArray(data))
         return (
             <div>

@@ -1,1 +1,4 @@
-export const defaultPresenter = (data: unknown) => <div>{JSON.stringify(data)}</div>;
+export const defaultPresenter = (data: unknown) => (
+    // Iterate on this as needed
+    <div>{JSON.stringify(data).replace(/"/g, '')}</div>
+);
