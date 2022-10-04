@@ -79,8 +79,28 @@ Array [
     "label": "Transcribed Audio Item",
     "link": "/testApiPrefix/resources/transcribedAudioItems",
     "schema": Object {
+      "audioURL": Object {
+        "coscradDataType": "URL",
+        "isArray": false,
+        "isOptional": false,
+      },
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "length": Object {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "plainText": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "isArray": false,
+        "isOptional": false,
+      },
+      "start": Object {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "isArray": false,
         "isOptional": false,
       },

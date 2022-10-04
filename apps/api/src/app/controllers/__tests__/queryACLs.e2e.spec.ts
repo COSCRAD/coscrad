@@ -81,7 +81,7 @@ describe('Access Control List and Role Based filtering in resource queries', () 
     Object.values(ResourceType).forEach((resourceType) => {
         const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
 
-        const indexEndpoint = `/resources${endpointUnderTest}`;
+        const indexEndpoint = endpointUnderTest;
 
         const buildDetailEndpoint = (idToQuery: string) => `${indexEndpoint}/${idToQuery}`;
 
