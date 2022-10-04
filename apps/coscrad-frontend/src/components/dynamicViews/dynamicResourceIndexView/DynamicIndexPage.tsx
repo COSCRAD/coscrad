@@ -1,3 +1,4 @@
+import { ICommandInfo, IDetailQueryResult, IIndexQueryResult } from '@coscrad/api-interfaces';
 import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -5,8 +6,45 @@ import { getConfig } from '../../../config';
 import { DynamicIndexPresenter } from './DynamicIndexPresenter';
 
 type DynamicIndexPageState = {
-    detailDataAndActions: [];
-    actions: [];
+    detailDataAndActions: IDetailQueryResult[];
+    actions: ICommandInfo[];
+};
+
+const isCommandInfo = (input: unknown): input is ICommandInfo => {
+    const { type, label, description } = input as ICommandInfo;
+
+    if (!isStringWithNonzeroLength(type)) return false;
+
+    if (!isStringWithNonzeroLength(label)) return false;
+
+    if (!isStringWithNonzeroLength(description)) return false;
+
+    // TODO Validate schema type
+    return true;
+};
+
+const isDetailQueryResult = (input: unknown): input is IDetailQueryResult => {
+    const { data, actions } = input as IDetailQueryResult;
+
+    if (!Array.isArray(data)) return false;
+
+    if (!actions.every(isCommandInfo)) return false;
+
+    return true;
+};
+
+const isIndexQueryResult = (input: unknown): input is IIndexQueryResult => {
+    const test = input as IIndexQueryResult;
+
+    const { data, actions } = test;
+
+    if (!Array.isArray(data)) return false;
+
+    if (!data.every(isDetailQueryResult)) return false;
+
+    if (!actions.every(isCommandInfo)) return false;
+
+    return true;
 };
 
 export const DynamicIndexPage = () => {
@@ -31,6 +69,13 @@ export const DynamicIndexPage = () => {
         fetch(apiLink, { mode: 'cors' })
             // TODO We need error handling for network errors or non-200 responses.
             .then((res) => res.json())
+            .then((rawResult) => {
+                if (!isIndexQueryResult(rawResult)) {
+                    throw new Error(`Invalid response from the resource index endpoint`);
+                }
+
+                return rawResult;
+            })
             .then((response) =>
                 setPageState({
                     /**

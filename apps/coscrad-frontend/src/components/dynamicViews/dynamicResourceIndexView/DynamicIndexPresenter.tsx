@@ -1,16 +1,12 @@
+import { ICommandInfo, IDetailQueryResult } from '@coscrad/api-interfaces';
 import { ClassDataTypeMetadata } from '@coscrad/data-types';
 import { Link } from 'react-router-dom';
 import { CommandInfo, CommandPanel } from '../commands';
 
-export type DetailDataAndActions = {
-    data: unknown[];
-    actions: unknown[];
-};
-
 export type IndexProps = {
     schema: ClassDataTypeMetadata;
-    data: DetailDataAndActions[];
-    actions: unknown[];
+    data: IDetailQueryResult[];
+    actions: ICommandInfo[];
 };
 
 /**
