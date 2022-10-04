@@ -10,9 +10,7 @@ import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpR
 import { RESOURCES_ROUTE_PREFIX } from './constants';
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
-@Controller(
-    `${RESOURCES_ROUTE_PREFIX}/${buildViewModelPathForResourceType(ResourceType.photograph)}`
-)
+@Controller(buildViewModelPathForResourceType(ResourceType.photograph))
 export class PhotographController {
     constructor(private readonly photographQueryService: PhotographQueryService) {}
 
