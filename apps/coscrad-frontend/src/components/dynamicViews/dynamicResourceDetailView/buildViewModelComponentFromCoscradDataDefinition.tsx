@@ -1,16 +1,18 @@
-import { ClassDataTypeMetadata } from '@coscrad/data-types';
-import { isNullOrUndefined } from '@coscrad/validation';
+import { CommandInfo, CommandPanel } from '../commands';
 import { buildPresenterForPropertyFromDataType } from './DataPresenters';
 
+// TODO Share types with CoscradDataType lib to avoid using `any` here
 export const buildViewModelComponentFromCoscradDataDefinition =
-    (fullSchema: ClassDataTypeMetadata) => (data: any) =>
+    (fullSchema: any, actions: CommandInfo[] = []) =>
+    (data: any) =>
         (
             <>
                 <h1>Dynamic View</h1>
-                {Object.entries(fullSchema).map(([propertyKey, dataSchema]) => {
+                {Object.entries(fullSchema).map(([propertyKey, dataSchema]: [string, any]) => {
                     const propertyValue = data[propertyKey];
 
-                    if (isNullOrUndefined(propertyValue)) return <div key={propertyKey}></div>;
+                    if (propertyValue === null || typeof propertyValue === 'undefined')
+                        return <div key={propertyKey}></div>;
 
                     return (
                         <div key={propertyKey}>
@@ -21,5 +23,6 @@ export const buildViewModelComponentFromCoscradDataDefinition =
                         </div>
                     );
                 })}
+                <CommandPanel actions={actions}></CommandPanel>
             </>
         );

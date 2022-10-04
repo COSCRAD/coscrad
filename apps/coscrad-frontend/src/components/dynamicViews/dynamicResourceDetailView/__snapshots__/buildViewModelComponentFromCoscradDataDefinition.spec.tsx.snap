@@ -10,42 +10,42 @@ exports[`buildPresenterFromDataSchema should render successfully 1`] = `
       widgetName
       :
       <div>
-        "Machine"
+        Machine
       </div>
     </div>
     <div>
       locationName
       :
       <div>
-        "Back Red Room 12"
+        Back Red Room 12
       </div>
     </div>
     <div>
       aliases
       :
       <div>
-        ["super machine","widget king"]
+        [super machine,widget king]
       </div>
     </div>
     <div>
       id
       :
       <div>
-        "25c5824f-6b4b-4341-bb60-3145d8109568"
+        25c5824f-6b4b-4341-bb60-3145d8109568
       </div>
     </div>
     <div>
       locationId
       :
       <div>
-        "25c5824f-6b4b-4341-bb60-3145d8109568"
+        25c5824f-6b4b-4341-bb60-3145d8109568
       </div>
     </div>
     <div>
       iconUrl
       :
       <div>
-        "https://www.mylink.com/uploads/123.png"
+        https://www.mylink.com/uploads/123.png
       </div>
     </div>
     <div />
@@ -67,7 +67,7 @@ exports[`buildPresenterFromDataSchema should render successfully 1`] = `
       primaryWhatsit
       :
       <div>
-        {"whatsitName":"whatsit 1","whatsitId":"25c5824f-6b4b-4341-bb60-3145d8109568"}
+        {whatsitName:whatsit 1,whatsitId:25c5824f-6b4b-4341-bb60-3145d8109568}
       </div>
     </div>
     <div />
@@ -75,7 +75,7 @@ exports[`buildPresenterFromDataSchema should render successfully 1`] = `
       rawDataObject
       :
       <div>
-        {"foo":72}
+        {foo:72}
       </div>
     </div>
     <div />
@@ -83,21 +83,21 @@ exports[`buildPresenterFromDataSchema should render successfully 1`] = `
       mimeType
       :
       <div>
-        "audio/mpeg"
+        audio/mpeg
       </div>
     </div>
     <div>
       role
       :
       <div>
-        "viewer"
+        viewer
       </div>
     </div>
     <div>
       creatorType
       :
       <div>
-        "artist"
+        artist
       </div>
     </div>
     <div>
@@ -132,22 +132,27 @@ exports[`buildPresenterFromDataSchema should render successfully 1`] = `
       requiredISBN
       :
       <div>
-        "978-3-16-148410-0"
+        978-3-16-148410-0
       </div>
     </div>
     <div>
       optionalISBN
       :
       <div>
-        "978-3-16-148410-0"
+        978-3-16-148410-0
       </div>
     </div>
     <div>
       data
       :
       <div>
-        {"type":"one","strength":85}
+        {type:one,strength:85}
       </div>
+    </div>
+    <div>
+      <h1>
+        Commands
+      </h1>
     </div>
   </div>
 </body>
