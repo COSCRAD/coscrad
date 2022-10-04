@@ -1,9 +1,7 @@
+import { ICommandInfo } from '@coscrad/api-interfaces';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-    CommandInfo,
-    CommandInfoService,
-} from '../../../app/controllers/command/services/command-info-service';
+import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { TermViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { Term } from '../../models/term/entities/term.entity';
@@ -28,7 +26,7 @@ export class TermQueryService extends BaseQueryService<Term, TermViewModel> {
         return new TermViewModel(term, baseAudioURL);
     }
 
-    getInfoForIndexScopedCommands(): CommandInfo[] {
+    getInfoForIndexScopedCommands(): ICommandInfo[] {
         return this.commandInfoService.getCommandInfo(Term);
     }
 }

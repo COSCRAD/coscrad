@@ -1,4 +1,4 @@
-import { CommandInfo } from '../../../app/controllers/command/services/command-info-service';
+import { ICommandInfo } from '@coscrad/api-interfaces';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { SpatialFeatureViewModel } from '../../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import { Line } from '../../models/spatial-feature/entities/line.entity';
@@ -18,7 +18,7 @@ export class SpatialFeatureQueryService extends BaseQueryService<
         return new SpatialFeatureViewModel(spatialFeatureInstance);
     }
 
-    getInfoForIndexScopedCommands(): CommandInfo[] {
+    getInfoForIndexScopedCommands(): ICommandInfo[] {
         return ([Line, Point, Polygon] as DomainModelCtor[]).flatMap(
             (Ctor) => this.commandInfoService.getCommandInfo(Ctor) || []
         );

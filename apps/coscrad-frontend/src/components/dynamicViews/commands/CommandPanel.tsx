@@ -1,3 +1,4 @@
+import { ICommandInfo } from '@coscrad/api-interfaces';
 import { ClassDataTypeMetadata } from '@coscrad/data-types';
 import { CommandButton } from './CommandButton';
 
@@ -9,7 +10,7 @@ export type CommandInfo = {
 };
 
 interface CommandProps {
-    actions: CommandInfo[];
+    actions: ICommandInfo[];
 }
 
 export const CommandPanel = ({ actions }: CommandProps) => (
