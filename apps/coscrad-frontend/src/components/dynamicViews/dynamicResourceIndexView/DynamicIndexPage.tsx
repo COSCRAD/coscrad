@@ -13,6 +13,8 @@ type DynamicIndexPageState = {
 const isCommandInfo = (input: unknown): input is ICommandInfo => {
     const { type, label, description } = input as ICommandInfo;
 
+    console.log(`isCommandInfo? ${JSON.stringify(input)}`);
+
     if (!isStringWithNonzeroLength(type)) return false;
 
     if (!isStringWithNonzeroLength(label)) return false;
@@ -26,7 +28,9 @@ const isCommandInfo = (input: unknown): input is ICommandInfo => {
 const isDetailQueryResult = (input: unknown): input is IDetailQueryResult => {
     const { data, actions } = input as IDetailQueryResult;
 
-    if (!Array.isArray(data)) return false;
+    console.log(`isDetailQueryResult? ${JSON.stringify(input)}`);
+
+    if (data === null || typeof data === 'undefined') return false;
 
     if (!actions.every(isCommandInfo)) return false;
 
@@ -37,6 +41,8 @@ const isIndexQueryResult = (input: unknown): input is IIndexQueryResult => {
     const test = input as IIndexQueryResult;
 
     const { data, actions } = test;
+
+    console.log(`isIndexQueryResult? ${JSON.stringify(input)}`);
 
     if (!Array.isArray(data)) return false;
 
@@ -71,10 +77,14 @@ export const DynamicIndexPage = () => {
             .then((res) => res.json())
             .then((rawResult) => {
                 if (!isIndexQueryResult(rawResult)) {
-                    throw new Error(`Invalid response from the resource index endpoint`);
+                    throw new Error(
+                        `Invalid response from the resource index endpoint: \n ${JSON.stringify(
+                            rawResult
+                        )}`
+                    );
                 }
 
-                return rawResult;
+                return rawResult as IIndexQueryResult;
             })
             .then((response) =>
                 setPageState({
