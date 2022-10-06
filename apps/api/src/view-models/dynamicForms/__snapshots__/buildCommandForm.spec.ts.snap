@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildCommandForm should return the expected result 1`] = `
+Object {
+  "fields": Array [
+    Object {
+      "description": "add description",
+      "label": "add label",
+      "name": "id",
+      "type": "TEXT_FIELD",
+    },
+    Object {
+      "description": "add description",
+      "label": "add label",
+      "name": "title",
+      "type": "TEXT_FIELD",
+    },
+    Object {
+      "description": "add description",
+      "label": "add label",
+      "name": "titleEnglish",
+      "type": "TEXT_FIELD",
+    },
+    Object {
+      "description": "add description",
+      "label": "add label",
+      "name": "contributions",
+      "type": "JSON_INPUT",
+    },
+    Object {
+      "description": "add description",
+      "label": "add label",
+      "name": "url",
+      "type": "TEXT_FIELD",
+    },
+    Object {
+      "description": "Add property description",
+      "label": "MIME Type",
+      "name": "MIME_TYPE",
+      "options": Array [
+        Object {
+          "label": "mp3",
+          "value": "audio/mpeg",
+        },
+        Object {
+          "label": "mp4",
+          "value": "video/mp4",
+        },
+      ],
+      "type": "STATIC_SELECt",
+    },
+    Object {
+      "description": "add description",
+      "label": "add label",
+      "name": "rawData",
+      "type": "JSON_INPUT",
+    },
+  ],
+  "meta": Object {
+    "commandType": "CREATE_MEDIA_ITEM",
+  },
+}
+`;

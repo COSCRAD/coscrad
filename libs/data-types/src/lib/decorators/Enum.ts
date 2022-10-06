@@ -2,6 +2,8 @@ import { IsEnum } from 'class-validator';
 import { CoscradEnum } from '../enums';
 import getCoscradEnumFromName from '../enums/getCoscradEnumFromName';
 import getEnumMetadata from '../enums/getEnumMetadata';
+import { ComplexCoscradDataType } from '../types/ComplexDataTypes/ComplexCoscradDataType';
+import { EnumTypeDefinition } from '../types/ComplexDataTypes/EnumTypeDefinition';
 import appendMetadata from '../utilities/appendMetadata';
 import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
 import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
@@ -19,6 +21,11 @@ export function Enum(
             options
         )(target, propertyKey);
 
-        appendMetadata(target, propertyKey, getEnumMetadata(enumName), options);
+        const enumDataTypeDefinition: EnumTypeDefinition = {
+            type: ComplexCoscradDataType.enum,
+            ...getEnumMetadata(enumName),
+        };
+
+        appendMetadata(target, propertyKey, enumDataTypeDefinition, options);
     };
 }

@@ -1,8 +1,10 @@
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { CommandHandlerService, CommandMetadataBase } from '@coscrad/commands';
-import { getCoscradDataSchema } from '@coscrad/data-types';
+import { ClassSchema, getCoscradDataSchema } from '@coscrad/data-types';
 import { Injectable } from '@nestjs/common';
 import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
+import { buildCommandForm } from '../../../../view-models/dynamicForms/buildCommandForm';
 import { INDEX_SCOPED_COMMANDS } from '../command-info/constants';
 
 type CommandTypeFilter = (commandType: string) => boolean;
@@ -23,7 +25,7 @@ const buildCommandTypeFilter = (
 export type CommandInfo = CommandMetadataBase & {
     label: string;
     description: string;
-    schema: Record<string, unknown>;
+    schema: ClassSchema;
 };
 
 interface CommandWriteContext {
@@ -38,10 +40,10 @@ export class CommandInfoService {
     constructor(private readonly commandHandlerService: CommandHandlerService) {}
 
     // TODO Unit test the filtering logic
-    getCommandInfo(): CommandInfo[];
-    getCommandInfo(context: DomainModelCtor): CommandInfo[];
-    getCommandInfo(context: CommandWriteContext): CommandInfo[];
-    getCommandInfo(context?: DomainModelCtor | CommandWriteContext): CommandInfo[] {
+    getCommandInfo(): ICommandFormAndLabels[];
+    getCommandInfo(context: DomainModelCtor): ICommandFormAndLabels[];
+    getCommandInfo(context: CommandWriteContext): ICommandFormAndLabels[];
+    getCommandInfo(context?: DomainModelCtor | CommandWriteContext): ICommandFormAndLabels[] {
         const commandTypeFilter = buildCommandTypeFilter(context);
 
         const allCommandsAndMeta = this.commandHandlerService.getAllCommandCtorsAndMetadata();
@@ -51,6 +53,13 @@ export class CommandInfoService {
             schema: getCoscradDataSchema(ctor),
         })) as CommandInfo[];
 
-        return allCommandInfo.filter(({ type }) => commandTypeFilter(type));
+        return allCommandInfo
+            .filter(({ type }) => commandTypeFilter(type))
+            .map(({ label, description, schema, type }) => ({
+                label,
+                description,
+                type,
+                form: buildCommandForm(type, schema),
+            }));
     }
 }

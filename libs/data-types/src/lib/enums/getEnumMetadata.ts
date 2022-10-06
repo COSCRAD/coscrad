@@ -1,4 +1,4 @@
-import { CoscradDataType } from '../types/CoscradDataType';
+import { ComplexCoscradDataType } from '../types';
 import { BibliographicSubjectCreatorType } from './BibliographicSubjectCreatorType';
 import { CoscradEnum } from './CoscradEnum';
 import { CoscradUserRole } from './CoscradUserRole';
@@ -6,11 +6,11 @@ import { EdgeConnectionMemberRole } from './EdgeConnectionMemberRole';
 import { MIMEType } from './MIMEType';
 import { EnumMetadata } from './types/EnumMetadata';
 
-const coscradDataType = CoscradDataType.Enum;
+const complexDataType = ComplexCoscradDataType.enum;
 
 const enumNameToMetadata: { [K in CoscradEnum]: EnumMetadata } = {
     [CoscradEnum.MIMEType]: {
-        coscradDataType,
+        complexDataType: complexDataType,
         enumName: CoscradEnum.MIMEType,
         enumLabel: 'MIME Type',
         labelsAndValues: [
@@ -25,7 +25,7 @@ const enumNameToMetadata: { [K in CoscradEnum]: EnumMetadata } = {
         ],
     },
     [CoscradEnum.CoscradUserRole]: {
-        coscradDataType,
+        complexDataType: complexDataType,
         enumName: CoscradEnum.CoscradUserRole,
         enumLabel: 'User Role',
         labelsAndValues: [
@@ -44,7 +44,7 @@ const enumNameToMetadata: { [K in CoscradEnum]: EnumMetadata } = {
         ],
     },
     [CoscradEnum.BibliographicSubjectCreatorType]: {
-        coscradDataType,
+        complexDataType: complexDataType,
         enumName: CoscradEnum.BibliographicSubjectCreatorType,
         enumLabel: 'Creator Type',
         labelsAndValues: [
@@ -63,7 +63,7 @@ const enumNameToMetadata: { [K in CoscradEnum]: EnumMetadata } = {
         ],
     },
     [CoscradEnum.EdgeConnectionMemberRole]: {
-        coscradDataType,
+        complexDataType: complexDataType,
         enumName: CoscradEnum.EdgeConnectionMemberRole,
         enumLabel: 'Edge Connection Member Role',
         labelsAndValues: [

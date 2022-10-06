@@ -1,7 +1,7 @@
 import { isNonEmptyObject } from '@coscrad/validation';
 import { FailedToGenerateFuzzForUnsupportedDataTypeException } from '../exceptions';
 import { CoscradDataType } from '../types';
-import { CoscradDataSchema } from '../types/CoscradDataSchema';
+import { SimpleCoscradPropertyTypeDefinition } from '../types/SimpleCoscradPropertyTypeDefinition';
 
 type ValueAndDescription<T = unknown> = {
     value: T;
@@ -38,7 +38,6 @@ type DataTypeToFuzz = { [K in CoscradDataType]: FuzzDataType[] };
 
 const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.NonEmptyString]: ['url', 'randomString', 'uuid', 'isbn10', 'isbn13'],
-    [CoscradDataType.Enum]: [],
     [CoscradDataType.NonNegativeFiniteNumber]: [
         'positiveInteger',
         'positiveDecimal',
@@ -52,14 +51,13 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.Year]: ['year', 'positiveInteger', 'zero'],
     [CoscradDataType.PositiveInteger]: ['year', 'positiveInteger'],
     [CoscradDataType.ISBN]: ['isbn10', 'isbn13'],
-    [CoscradDataType.Union]: [],
 };
 
 export const generateValidValuesOfType = ({
     coscradDataType: type,
     isArray,
     isOptional,
-}: CoscradDataSchema): unknown[] => {
+}: SimpleCoscradPropertyTypeDefinition): unknown[] => {
     const validValues = dataTypeToValidFuzz[type];
 
     if (!Array.isArray(validValues)) {
@@ -81,7 +79,7 @@ export default ({
     coscradDataType: type,
     isArray,
     isOptional,
-}: CoscradDataSchema): ValueAndDescription[] => {
+}: SimpleCoscradPropertyTypeDefinition): ValueAndDescription[] => {
     /**
      * TODO [https://www.pivotaltracker.com/story/show/182715254]
      *

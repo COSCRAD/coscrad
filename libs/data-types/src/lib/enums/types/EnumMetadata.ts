@@ -1,4 +1,5 @@
-import { ClassDataTypeMetadata } from '../../types';
+import { ClassSchema } from '../../types';
+import { ComplexCoscradDataType } from '../../types/ComplexDataTypes/ComplexCoscradDataType';
 import { CoscradDataType } from '../../types/CoscradDataType';
 import { CoscradEnum } from '../CoscradEnum';
 import { LabelAndValue } from './LabelAndValue';
@@ -6,7 +7,7 @@ import { UnionMetadata } from './UnionMetadata';
 
 export type EnumMetadata = {
     // TODO We need a single source of truth for the following key
-    coscradDataType: CoscradDataType.Enum;
+    complexDataType: ComplexCoscradDataType.enum;
 
     enumName: CoscradEnum;
 
@@ -16,6 +17,6 @@ export type EnumMetadata = {
 };
 
 export const isEnumMetadata = (
-    input: CoscradDataType | ClassDataTypeMetadata | EnumMetadata | UnionMetadata
+    input: CoscradDataType | ClassSchema | EnumMetadata | UnionMetadata
 ): input is EnumMetadata =>
-    input && (input as EnumMetadata).coscradDataType === CoscradDataType.Enum;
+    input && (input as EnumMetadata).complexDataType === ComplexCoscradDataType.enum;
