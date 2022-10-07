@@ -58,6 +58,9 @@ export class ArangoConnectionProvider {
             ),
         });
 
+        console.log(`dbName: ${this.databaseConfiguration.dbName}, dbRootPass: ${this.databaseConfiguration.dbRootPass}, dbUser: ${this.databaseConfiguration.dbUser}, dbPass: ${this.databaseConfiguration.dbPass}, dbHostUrl: ${this.databaseConfiguration.dbHostUrl}`);
+        
+
         const systemDB = this.#getAdminDBConnection({
             shouldConnectToSystemDatabase: true,
         });
