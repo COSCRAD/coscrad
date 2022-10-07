@@ -2,37 +2,6 @@
 
 set -e
 
-# IMPORTANT: Consult sample.env in apps/api/src/app/config for 
-# environment configuration prior to running this script
-
-# Check if this bash setup script is being run within it's own directory
-VALID_EXECUTE_DIRECTORY="coscrad/scripts/arangodb-bash-setup"
-CURRENT_PATH="$PWD";
-echo $'\nCURRENT_PATH: '$CURRENT_PATH;
-
-
-# Split path on /
-OLDIFS="$IFS";
-IFS='/';
-read -a strarr <<< $CURRENT_PATH;
-IFS="$OLDIFS";
-length=${#strarr[@]};
-p1=${strarr[$(($length-3))]};
-p2=${strarr[$(($length-2))]};
-p3=${strarr[$(($length-1))]};
-current_directory="${p1}/${p2}/${p3}";
-echo $'\nCurrent Directory: '$current_directory;
-
-if  [ $current_directory != $VALID_EXECUTE_DIRECTORY ];
-then
-  echo $'\n >> Please execute this script within its enclosing directory';
-  echo $'\nEXITING SETUP';
-  echo $'\n';
-  exit;
-else
-  echo $'\n Current directory is valid for executing COSCRAD setup script';
-fi
-
 # Register COSCRAD_ENVIRONMENT mode
 if [ $1 ]; then
   COSCRAD_ENVIRONMENT=$1
@@ -45,7 +14,8 @@ fi
 echo $'\n';
 printenv | grep "COSCRAD_ENVIRONMENT";
 
-COSCRAD_APP_ENV_FILE="../../apps/api/src/app/config/$COSCRAD_ENVIRONMENT.env";
+# COSCRAD_APP_ENV_FILE="../../apps/api/src/app/config/$COSCRAD_ENVIRONMENT.env";
+COSCRAD_APP_ENV_FILE="./apps/api/src/app/config/$COSCRAD_ENVIRONMENT.env";
 
 if [ -f "$COSCRAD_APP_ENV_FILE" ];
 then
@@ -73,12 +43,15 @@ echo $'Load test data? (y/n)';
 
 read test_data_answer;
 
+SCRIPT_DIR="./scripts/arangodb-bash-setup";
+
 if [ $test_data_answer = "y" ];
 then
     export ARANGO_DB_RUN_WITH_TEST_DATA=yes;
     JSON_URL="https://raw.githubusercontent.com/COSCRAD/coscrad/integration/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.json";
-    (cd ./test-data && curl -O $JSON_URL);
-    JSON_FILE="./test-data/testData.json";
+    # (cd ./test-data && curl -O $JSON_URL);
+    (cd $SCRIPT_DIR/test-data && curl -O $JSON_URL);
+    JSON_FILE="$SCRIPT_DIR/test-data/testData.json";
     if [ -f "$JSON_FILE" ];
       then
         echo $'\n Test data file: '$JSON_FILE' loaded';
@@ -92,7 +65,7 @@ else
 fi
 
 echo "Check for running instance of arango server"
-ARANGO_RUNNING_CMD=`systemctl status arangodb3.service`;
+ARANGO_RUNNING_CMD=`sudo systemctl status arangodb3.service`;
 
 if [ -z "${ARANGO_RUNNING_CMD##*Active: active (running)*}" ];
 then
@@ -105,7 +78,7 @@ else
   exit;
 fi
 
-ARANGOSH_DB_SETUP_SCRIPT="js/db_setup.js";
+ARANGOSH_DB_SETUP_SCRIPT="$SCRIPT_DIR/js/db_setup.js";
 
 arangosh \
 --server.authentication true \
@@ -117,7 +90,7 @@ arangosh \
 
 wait;
 
-ARANGOSH_COLLECTIONS_AND_DATA_SCRIPT="js/collections_data_setup.js";
+ARANGOSH_COLLECTIONS_AND_DATA_SCRIPT="$SCRIPT_DIR/js/collections_data_setup.js";
 
 arangosh \
 --server.authentication true \
@@ -128,6 +101,12 @@ arangosh \
 --javascript.execute $ARANGOSH_COLLECTIONS_AND_DATA_SCRIPT
 
 echo $'\n>> ArangoDB setup complete.  To login to the dashboard, go to:';
-echo $'\n'$ARANGO_DB_HOST_SCHEME'://'$ARANGO_DB_HOST_DOMAIN;
+if [ $ARANGO_DB_HOST_SCHEME = "https" ];
+then
+  PORT="";
+else
+  PORT=":$ARANGO_DB_HOST_PORT";
+fi
+echo $'\n'$ARANGO_DB_HOST_SCHEME'://'$ARANGO_DB_HOST_DOMAIN$PORT;
 echo $'\n\n';
 
