@@ -12,7 +12,7 @@ else {
   print("Loading empty collections\n");
 }
 
-const testData = require('./test-data/testData.json');
+const testData = require('./scripts/arangodb-bash-setup/test-data/testData.json');
 
 for (let collectionType in testData) {
   for (let collectionName in testData[collectionType]) {
