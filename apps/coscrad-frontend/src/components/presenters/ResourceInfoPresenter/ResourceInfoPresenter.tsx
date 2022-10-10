@@ -1,4 +1,4 @@
-import { ClassDataTypeMetadata } from '@coscrad/data-types';
+import { ClassSchema } from '@coscrad/data-types';
 import { Link } from 'react-router-dom';
 
 /**
@@ -11,7 +11,7 @@ export type ResourceInfo = {
 
     label: string;
 
-    schema: ClassDataTypeMetadata;
+    schema: ClassSchema;
 
     link: string;
 };

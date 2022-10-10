@@ -1,12 +1,15 @@
 import 'reflect-metadata';
-import { CoscradDataSchema, CoscradDataType } from '../types';
+import { CoscradDataType, SimpleCoscradPropertyTypeDefinition } from '../types';
 import { getCoscradDataSchema } from '../utilities';
 import { FromDomainModel } from './FromDomainModel';
 import { NonEmptyString } from './NonEmptyString';
 import { PositiveInteger } from './PositiveInteger';
 import { URL } from './URL';
 
-const checkSchema = (ViewModel: Object, expectedSchema: Record<string, CoscradDataSchema>) => {
+const checkSchema = (
+    ViewModel: Object,
+    expectedSchema: Record<string, SimpleCoscradPropertyTypeDefinition>
+) => {
     const viewModelSchema = getCoscradDataSchema(ViewModel);
 
     expect(viewModelSchema).toEqual(expectedSchema);
@@ -42,7 +45,7 @@ describe(`@FromDomainModel`, () => {
             readonly uniqueToViewModel: string;
         }
 
-        const expectedSchema: Record<string, CoscradDataSchema> = {
+        const expectedSchema: Record<string, SimpleCoscradPropertyTypeDefinition> = {
             numberOfStars: {
                 coscradDataType: CoscradDataType.PositiveInteger,
                 isArray: false,

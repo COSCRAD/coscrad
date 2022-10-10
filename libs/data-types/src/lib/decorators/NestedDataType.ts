@@ -1,6 +1,8 @@
 import { ValidateNested } from '@coscrad/validation';
 import { Type } from 'class-transformer';
 import { IsDefined } from 'class-validator';
+import { ComplexCoscradDataType } from '../types/ComplexDataTypes/ComplexCoscradDataType';
+import { NestedTypeDefinition } from '../types/ComplexDataTypes/NestedTypeDefinition';
 import { getCoscradDataSchema } from '../utilities';
 import appendMetadata from '../utilities/appendMetadata';
 import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
@@ -32,6 +34,11 @@ export function NestedDataType(
          */
         Type(() => NestedDataClass as Function)(target, propertyKey);
 
-        appendMetadata(target, propertyKey, getCoscradDataSchema(NestedDataClass), options);
+        const nestedDataTypeDefinition: NestedTypeDefinition = {
+            complexDataType: ComplexCoscradDataType.nested,
+            schema: getCoscradDataSchema(NestedDataClass),
+        };
+
+        appendMetadata(target, propertyKey, nestedDataTypeDefinition, options);
     };
 }
