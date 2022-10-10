@@ -21,8 +21,8 @@ import { Tag } from '../../models/tag/tag.entity';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { ISpecification } from '../../repositories/interfaces/specification.interface';
 import { AggregateId, isAggregateId } from '../../types/AggregateId';
+import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import buildInMemorySnapshot from '../../utilities/buildInMemorySnapshot';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
 
 type ViewModelWithTags<T> = T & { tags: TagViewModel[] };
@@ -75,9 +75,9 @@ export abstract class BaseQueryService<
             (result): result is Tag => !isInternalError(result)
         );
 
-        return buildInMemorySnapshot({
+        return new DeluxeInMemoryStore({
             tag: tags,
-        });
+        }).fetchFullSnapshotInLegacyFormat();
     }
 
     protected fetchDomainModelById(id: AggregateId): Promise<ResultOrError<Maybe<TDomainModel>>> {
@@ -151,7 +151,7 @@ export abstract class BaseQueryService<
         const validInstances = searchResult.filter(validAggregateOrThrow).filter(accessFilter);
 
         const data = validInstances.map((instance) => ({
-            data: mixTagsIntoViewModel(
+            data: mixTagsIntoViewModel<UViewModel>(
                 this.buildViewModel(instance, requiredExternalState),
                 requiredExternalState.tag,
                 this.type
@@ -162,6 +162,6 @@ export abstract class BaseQueryService<
         return {
             data,
             actions: this.getInfoForIndexScopedCommands(),
-        } as unknown as IIndexQueryResult<ViewModelWithTags<UViewModel>>;
+        };
     }
 }

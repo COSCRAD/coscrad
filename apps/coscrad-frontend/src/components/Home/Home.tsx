@@ -6,7 +6,7 @@ export function Home() {
     return (
         <div>
             <h1>Welcome to coscrad</h1>
-            <Link to="/About">About</Link> |<Link to="/AllResources">Browse Resources</Link> |
+            <Link to="/About">About</Link> | <Link to="/AllResources">Browse Resources</Link> |
             <Link to="/MembersOnly">Members Only</Link>
             <div>
                 <AuthenticationButton></AuthenticationButton>
