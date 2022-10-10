@@ -35,7 +35,7 @@ export function NestedDataType(
         Type(() => NestedDataClass as Function)(target, propertyKey);
 
         const nestedDataTypeDefinition: NestedTypeDefinition = {
-            type: ComplexCoscradDataType.nested,
+            complexDataType: ComplexCoscradDataType.nested,
             schema: getCoscradDataSchema(NestedDataClass),
         };
 

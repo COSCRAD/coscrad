@@ -62,7 +62,7 @@ export const buildFormFieldForCommandPayloadProp = (
         return buildSimpleFormField(lookupResult, nameLabelAndDescription);
     }
 
-    const { type: complexDataType } = propertyTypeDefinition;
+    const { complexDataType } = propertyTypeDefinition;
 
     if (complexDataType === ComplexCoscradDataType.enum) {
         const { enumLabel, enumName, labelsAndValues } =

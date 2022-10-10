@@ -20,7 +20,7 @@ export function Union(
 
     return (target: Object, propertyKey: string | symbol) => {
         const unionDataTypeDefinition: UnionDataTypeDefinition = {
-            type: ComplexCoscradDataType.union,
+            complexDataType: ComplexCoscradDataType.union,
             discriminantPath,
             schemaDefinitions: memberClasses.map((MemberClass) => ({
                 discriminant: getDiscriminantForUnionMember(MemberClass),

@@ -1,7 +1,9 @@
-import { isNonEmptyObject } from '@coscrad/validation';
 import { FailedToGenerateFuzzForUnsupportedDataTypeException } from '../exceptions';
-import { CoscradDataType } from '../types';
-import { SimpleCoscradPropertyTypeDefinition } from '../types/SimpleCoscradPropertyTypeDefinition';
+import { CoscradDataType, CoscradPropertyTypeDefinition } from '../types';
+import {
+    isSimpleCoscradPropertyTypeDefinition,
+    SimpleCoscradPropertyTypeDefinition,
+} from '../types/SimpleCoscradPropertyTypeDefinition';
 
 type ValueAndDescription<T = unknown> = {
     value: T;
@@ -53,15 +55,23 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.ISBN]: ['isbn10', 'isbn13'],
 };
 
-export const generateValidValuesOfType = ({
-    coscradDataType: type,
-    isArray,
-    isOptional,
-}: SimpleCoscradPropertyTypeDefinition): unknown[] => {
-    const validValues = dataTypeToValidFuzz[type];
+export const generateValidValuesOfType = (
+    propertyTypeDefinition: CoscradPropertyTypeDefinition
+): unknown[] => {
+    if (!isSimpleCoscradPropertyTypeDefinition(propertyTypeDefinition)) {
+        /**
+         * TODO[https://www.pivotaltracker.com/story/show/182715254]
+         * Generate values for complex property types.
+         */
+        return [];
+    }
+
+    const { coscradDataType, isArray, isOptional } = propertyTypeDefinition;
+
+    const validValues = dataTypeToValidFuzz[coscradDataType];
 
     if (!Array.isArray(validValues)) {
-        throw new FailedToGenerateFuzzForUnsupportedDataTypeException(type);
+        throw new FailedToGenerateFuzzForUnsupportedDataTypeException(coscradDataType);
     }
 
     if (isOptional) validValues.push(null, undefined);
@@ -75,22 +85,25 @@ export const generateValidValuesOfType = ({
     return validValues;
 };
 
-export default ({
-    coscradDataType: type,
-    isArray,
-    isOptional,
-}: SimpleCoscradPropertyTypeDefinition): ValueAndDescription[] => {
+export default (
+    propertyTypeDefinition: SimpleCoscradPropertyTypeDefinition
+): ValueAndDescription[] => {
+    // if(!isSimpleCoscradPropertyTypeDefinition(propertyTypeDefinition))
+
     /**
      * TODO [https://www.pivotaltracker.com/story/show/182715254]
      *
-     * The condition checks if the property is itself a custom `Coscrad Data Type`.
-     * It may be better to recurse here, but for now we get shallow type safety from
-     * assigning any of the fuzz values.
+     * The condition checks if the property is a complex type (nested, union, or enum).
+     * We need to generate appropriate fuzz for these cases as well.
      */
-    const validFuzzKeys = isNonEmptyObject(type) ? [] : dataTypeToValidFuzz[type];
+    const validFuzzKeys = isSimpleCoscradPropertyTypeDefinition(propertyTypeDefinition)
+        ? dataTypeToValidFuzz[propertyTypeDefinition.coscradDataType]
+        : [];
+
+    const { coscradDataType, isOptional, isArray } = propertyTypeDefinition;
 
     if (!Array.isArray(validFuzzKeys)) {
-        throw new FailedToGenerateFuzzForUnsupportedDataTypeException(type);
+        throw new FailedToGenerateFuzzForUnsupportedDataTypeException(coscradDataType);
     }
 
     if (isOptional) {

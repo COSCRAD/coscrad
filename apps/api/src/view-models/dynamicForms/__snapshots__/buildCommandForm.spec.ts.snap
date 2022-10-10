@@ -56,8 +56,5 @@ Object {
       "type": "JSON_INPUT",
     },
   ],
-  "meta": Object {
-    "commandType": "CREATE_MEDIA_ITEM",
-  },
 }
 `;

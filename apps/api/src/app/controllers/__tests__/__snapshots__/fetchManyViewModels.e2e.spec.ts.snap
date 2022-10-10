@@ -8,19 +8,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -55,19 +59,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -96,19 +104,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -145,19 +157,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -192,19 +208,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -233,19 +253,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -282,19 +306,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -316,19 +344,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -349,19 +381,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -385,19 +421,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -419,19 +459,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -452,19 +496,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -488,19 +536,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -537,19 +589,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -586,19 +642,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -618,19 +678,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -650,19 +714,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -685,19 +753,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -717,19 +789,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -749,19 +825,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -784,19 +864,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -823,19 +907,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -865,19 +953,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -904,19 +996,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -946,19 +1042,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -983,19 +1083,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1020,19 +1124,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1057,19 +1165,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1103,19 +1215,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1163,19 +1279,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1200,19 +1320,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1237,19 +1361,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1274,19 +1402,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1320,19 +1452,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1380,19 +1516,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1413,19 +1553,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1446,19 +1590,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1486,19 +1634,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1519,19 +1671,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1552,19 +1708,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1592,19 +1752,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1636,19 +1800,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1680,19 +1848,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1752,19 +1924,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1805,19 +1981,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
@@ -1854,19 +2034,23 @@ Object {
       "actions": Array [
         Object {
           "description": "Allow a user to view (but not edit) a given resource",
-          "label": "Grant Read Access to User",
-          "schema": Object {
-            "resourceCompositeIdentifier": Object {
-              "coscradDataType": "COMPOSITE_IDENTIFIER",
-              "isArray": false,
-              "isOptional": false,
-            },
-            "userId": Object {
-              "coscradDataType": "UUID",
-              "isArray": false,
-              "isOptional": false,
-            },
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
           },
+          "label": "Grant Read Access to User",
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],

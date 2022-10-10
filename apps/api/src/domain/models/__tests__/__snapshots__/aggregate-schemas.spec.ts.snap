@@ -3,21 +3,27 @@
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: book match the snapshot 1`] = `
 Object {
   "data": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "isArray": false,
+    "isOptional": false,
+    "schema": Object {
       "abstract": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,
         "isOptional": true,
       },
       "creators": Object {
-        "coscradDataType": Object {
+        "complexDataType": "NESTED_TYPE",
+        "isArray": true,
+        "isOptional": false,
+        "schema": Object {
           "name": Object {
             "coscradDataType": "NON_EMPTY_STRING",
             "isArray": false,
             "isOptional": false,
           },
           "type": Object {
-            "coscradDataType": "ENUM",
+            "complexDataType": "ENUM",
             "enumLabel": "Creator Type",
             "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
             "isArray": false,
@@ -38,8 +44,6 @@ Object {
             ],
           },
         },
-        "isArray": true,
-        "isOptional": false,
       },
       "isbn": Object {
         "coscradDataType": "ISBN",
@@ -77,8 +81,6 @@ Object {
         "isOptional": true,
       },
     },
-    "isArray": false,
-    "isOptional": false,
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -91,7 +93,10 @@ Object {
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: courtCase match the snapshot 1`] = `
 Object {
   "data": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "isArray": false,
+    "isOptional": false,
+    "schema": Object {
       "abstract": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,
@@ -123,8 +128,6 @@ Object {
         "isOptional": true,
       },
     },
-    "isArray": false,
-    "isOptional": false,
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -137,21 +140,27 @@ Object {
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: journalArticle match the snapshot 1`] = `
 Object {
   "data": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "isArray": false,
+    "isOptional": false,
+    "schema": Object {
       "abstract": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,
         "isOptional": true,
       },
       "creators": Object {
-        "coscradDataType": Object {
+        "complexDataType": "NESTED_TYPE",
+        "isArray": true,
+        "isOptional": false,
+        "schema": Object {
           "name": Object {
             "coscradDataType": "NON_EMPTY_STRING",
             "isArray": false,
             "isOptional": false,
           },
           "type": Object {
-            "coscradDataType": "ENUM",
+            "complexDataType": "ENUM",
             "enumLabel": "Creator Type",
             "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
             "isArray": false,
@@ -172,8 +181,6 @@ Object {
             ],
           },
         },
-        "isArray": true,
-        "isOptional": false,
       },
       "doi": Object {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -206,8 +213,6 @@ Object {
         "isOptional": true,
       },
     },
-    "isArray": false,
-    "isOptional": false,
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -230,7 +235,10 @@ Object {
     "isOptional": false,
   },
   "pages": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "isArray": false,
+    "isOptional": false,
+    "schema": Object {
       "identifier": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,
@@ -247,8 +255,6 @@ Object {
         "isOptional": false,
       },
     },
-    "isArray": false,
-    "isOptional": false,
   },
   "publicationDate": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -296,7 +302,10 @@ Object {
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Media Item  match the snapshot 1`] = `
 Object {
   "contributorAndRoles": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "isArray": true,
+    "isOptional": false,
+    "schema": Object {
       "contributorId": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,
@@ -308,8 +317,6 @@ Object {
         "isOptional": false,
       },
     },
-    "isArray": true,
-    "isOptional": false,
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -322,7 +329,7 @@ Object {
     "isOptional": false,
   },
   "mimeType": Object {
-    "coscradDataType": "ENUM",
+    "complexDataType": "ENUM",
     "enumLabel": "MIME Type",
     "enumName": "MIME_TYPE",
     "isArray": false,
@@ -374,7 +381,10 @@ Object {
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Photograph  match the snapshot 1`] = `
 Object {
   "dimensions": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "isArray": false,
+    "isOptional": false,
+    "schema": Object {
       "heightPX": Object {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "isArray": false,
@@ -386,8 +396,6 @@ Object {
         "isOptional": false,
       },
     },
-    "isArray": false,
-    "isOptional": false,
   },
   "filename": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -415,7 +423,10 @@ Object {
     "isOptional": false,
   },
   "contributions": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "isArray": true,
+    "isOptional": false,
+    "schema": Object {
       "contributorId": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,
@@ -427,8 +438,6 @@ Object {
         "isOptional": false,
       },
     },
-    "isArray": true,
-    "isOptional": false,
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -571,9 +580,15 @@ Object {
     "isOptional": false,
   },
   "transcript": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "isArray": false,
+    "isOptional": false,
+    "schema": Object {
       "timeRanges": Object {
-        "coscradDataType": Object {
+        "complexDataType": "NESTED_TYPE",
+        "isArray": true,
+        "isOptional": false,
+        "schema": Object {
           "data": Object {
             "coscradDataType": "NON_EMPTY_STRING",
             "isArray": false,
@@ -590,12 +605,8 @@ Object {
             "isOptional": false,
           },
         },
-        "isArray": true,
-        "isOptional": false,
       },
     },
-    "isArray": false,
-    "isOptional": false,
   },
 }
 `;
@@ -613,14 +624,20 @@ Object {
     "isOptional": false,
   },
   "profile": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "isArray": false,
+    "isOptional": true,
+    "schema": Object {
       "email": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,
         "isOptional": false,
       },
       "name": Object {
-        "coscradDataType": Object {
+        "complexDataType": "NESTED_TYPE",
+        "isArray": false,
+        "isOptional": false,
+        "schema": Object {
           "firstName": Object {
             "coscradDataType": "NON_EMPTY_STRING",
             "isArray": false,
@@ -632,15 +649,11 @@ Object {
             "isOptional": false,
           },
         },
-        "isArray": false,
-        "isOptional": false,
       },
     },
-    "isArray": false,
-    "isOptional": true,
   },
   "roles": Object {
-    "coscradDataType": "ENUM",
+    "complexDataType": "ENUM",
     "enumLabel": "User Role",
     "enumName": "COSCRAD_USER_ROLE",
     "isArray": true,
@@ -696,15 +709,16 @@ Object {
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Vocabulary List  match the snapshot 1`] = `
 Object {
   "entries": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "isArray": false,
+    "isOptional": false,
+    "schema": Object {
       "termId": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,
         "isOptional": false,
       },
     },
-    "isArray": false,
-    "isOptional": false,
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -722,15 +736,16 @@ Object {
     "isOptional": true,
   },
   "variables": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "isArray": true,
+    "isOptional": false,
+    "schema": Object {
       "name": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "isArray": false,
         "isOptional": false,
       },
     },
-    "isArray": true,
-    "isOptional": false,
   },
 }
 `;

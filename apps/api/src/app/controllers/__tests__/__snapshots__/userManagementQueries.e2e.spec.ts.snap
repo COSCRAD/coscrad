@@ -26,7 +26,10 @@ Array [
     "link": "/api/treeOfKnowledge",
     "schema": Object {
       "children": Object {
-        "coscradDataType": Object {
+        "complexDataType": "NESTED_TYPE",
+        "isArray": false,
+        "isOptional": false,
+        "schema": Object {
           "id": Object {
             "coscradDataType": "NON_EMPTY_STRING",
             "isArray": false,
@@ -43,8 +46,6 @@ Array [
             "isOptional": false,
           },
         },
-        "isArray": false,
-        "isOptional": false,
       },
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -75,14 +76,20 @@ Array [
         "isOptional": false,
       },
       "profile": Object {
-        "coscradDataType": Object {
+        "complexDataType": "NESTED_TYPE",
+        "isArray": false,
+        "isOptional": true,
+        "schema": Object {
           "email": Object {
             "coscradDataType": "NON_EMPTY_STRING",
             "isArray": false,
             "isOptional": false,
           },
           "name": Object {
-            "coscradDataType": Object {
+            "complexDataType": "NESTED_TYPE",
+            "isArray": false,
+            "isOptional": false,
+            "schema": Object {
               "firstName": Object {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "isArray": false,
@@ -94,15 +101,11 @@ Array [
                 "isOptional": false,
               },
             },
-            "isArray": false,
-            "isOptional": false,
           },
         },
-        "isArray": false,
-        "isOptional": true,
       },
       "roles": Object {
-        "coscradDataType": "ENUM",
+        "complexDataType": "ENUM",
         "enumLabel": "User Role",
         "enumName": "COSCRAD_USER_ROLE",
         "isArray": true,
