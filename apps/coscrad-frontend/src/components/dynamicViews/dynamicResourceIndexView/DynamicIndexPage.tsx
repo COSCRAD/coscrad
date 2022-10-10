@@ -1,5 +1,9 @@
-import { ICommandInfo, IDetailQueryResult, IIndexQueryResult } from '@coscrad/api-interfaces';
-import { isStringWithNonzeroLength } from '@coscrad/validation';
+import {
+    ICommandFormAndLabels,
+    IDetailQueryResult,
+    IIndexQueryResult,
+} from '@coscrad/api-interfaces';
+import { isNullOrUndefined, isStringWithNonzeroLength } from '@coscrad/validation';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getConfig } from '../../../config';
@@ -8,22 +12,16 @@ import { DynamicIndexPresenter } from './DynamicIndexPresenter';
 
 type DynamicIndexPageState = {
     detailDataAndActions: IDetailQueryResult[];
-    actions: ICommandInfo[];
+    actions: ICommandFormAndLabels[];
     isLoading: boolean;
 };
 
-const isCommandInfo = (input: unknown): input is ICommandInfo => {
-    const { type, label, description } = input as ICommandInfo;
+const isCommandFormData = (input: unknown): input is ICommandFormAndLabels => {
+    const { form, label, description, type } = input as ICommandFormAndLabels;
 
-    console.log(`isCommandInfo? ${JSON.stringify(input)}`);
+    // This is a sanity check. We have a certain level of trust provided we get a 200.
+    if ([form, label, description, type].some(isNullOrUndefined)) return false;
 
-    if (!isStringWithNonzeroLength(type)) return false;
-
-    if (!isStringWithNonzeroLength(label)) return false;
-
-    if (!isStringWithNonzeroLength(description)) return false;
-
-    // TODO Validate schema type
     return true;
 };
 
@@ -34,7 +32,7 @@ const isDetailQueryResult = (input: unknown): input is IDetailQueryResult => {
 
     if (data === null || typeof data === 'undefined') return false;
 
-    if (!actions.every(isCommandInfo)) return false;
+    if (!actions.every(isCommandFormData)) return false;
 
     return true;
 };
@@ -50,7 +48,7 @@ const isIndexQueryResult = (input: unknown): input is IIndexQueryResult => {
 
     if (!data.every(isDetailQueryResult)) return false;
 
-    if (!actions.every(isCommandInfo)) return false;
+    if (!actions.every(isCommandFormData)) return false;
 
     return true;
 };
@@ -101,7 +99,7 @@ export const DynamicIndexPage = () => {
                      */
                     detailDataAndActions: response.data,
                     // TODO consume dynamic forms with new API on frontend
-                    actions: [], //response.actions,
+                    actions: response.actions,
                     isLoading: false,
                 })
             )

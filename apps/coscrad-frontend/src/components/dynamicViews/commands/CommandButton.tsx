@@ -1,9 +1,11 @@
-import { ICommandInfo } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { Link } from 'react-router-dom';
 
 const log = (data: unknown): void => console.log(JSON.stringify(data));
 
-export const CommandButton = ({ label, schema }: ICommandInfo) => (
-    <button key={label} onClick={() => log(schema)}>
-        {label}
-    </button>
+export const CommandButton = (commandFormAndLabels: ICommandFormAndLabels) => (
+    // TODO use MUI Button
+    <Link to="/CommandExecution" state={{ commandFormAndLabels }}>
+        {commandFormAndLabels.label}
+    </Link>
 );

@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import About from '../components/About/About';
 import { AllResources } from '../components/AllResources/AllResources';
+import { CommandExecutionPage } from '../components/dynamicViews/commands/CommandExecutionPage';
 import { DynamicResourceDetailPage } from '../components/dynamicViews/dynamicResourceDetailView/DynamicResourceDetailPage';
 import { DynamicIndexPage } from '../components/dynamicViews/dynamicResourceIndexView';
 import Home from '../components/Home/Home';
@@ -16,6 +17,7 @@ export function App() {
                 <Route path="MembersOnly" element={<MembersOnly />} />
                 <Route path="ResourceIndex" element={<DynamicIndexPage />} />
                 <Route path="ResourceDetail" element={<DynamicResourceDetailPage />} />
+                <Route path="CommandExecution" element={<CommandExecutionPage />} />
             </Routes>
         </div>
     );

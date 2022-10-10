@@ -1,4 +1,4 @@
-import { ICommandInfo } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { useLocation } from 'react-router-dom';
 import { buildViewModelComponentFromCoscradDataDefinition } from './buildViewModelComponentFromCoscradDataDefinition';
 
@@ -13,7 +13,7 @@ export const DynamicResourceDetailPage = () => {
 
     const DetailPresenter = buildViewModelComponentFromCoscradDataDefinition(
         schema,
-        actions as ICommandInfo[]
+        actions as ICommandFormAndLabels[]
     );
 
     return DetailPresenter(data);
