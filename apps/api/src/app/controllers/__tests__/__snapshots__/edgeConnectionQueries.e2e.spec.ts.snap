@@ -17,51 +17,53 @@ Object {
       "isOptional": false,
     },
     "relatedResources": Object {
-      "coscradDataType": Object {
+      "complexDataType": "NESTED_TYPE",
+      "isArray": true,
+      "isOptional": false,
+      "schema": Object {
         "compositeIdentifier": Object {
           "coscradDataType": "COMPOSITE_IDENTIFIER",
           "isArray": false,
           "isOptional": false,
         },
         "context": Object {
-          "coscradDataType": Object {
-            "discriminantPath": "type",
-            "schemaDefinitions": Array [
-              Object {
-                "discriminant": "freeMultiline",
-                "schema": Object {},
-              },
-              Object {
-                "discriminant": "general",
-                "schema": Object {},
-              },
-              Object {
-                "discriminant": "identity",
-                "schema": Object {},
-              },
-              Object {
-                "discriminant": "pageRange",
-                "schema": Object {},
-              },
-              Object {
-                "discriminant": "general",
-                "schema": Object {},
-              },
-              Object {
-                "discriminant": "general",
-                "schema": Object {},
-              },
-              Object {
-                "discriminant": "general",
-                "schema": Object {},
-              },
-            ],
-          },
+          "complexDataType": "UNION_TYPE",
+          "discriminantPath": "type",
           "isArray": false,
           "isOptional": false,
+          "schemaDefinitions": Array [
+            Object {
+              "discriminant": "freeMultiline",
+              "schema": Object {},
+            },
+            Object {
+              "discriminant": "general",
+              "schema": Object {},
+            },
+            Object {
+              "discriminant": "identity",
+              "schema": Object {},
+            },
+            Object {
+              "discriminant": "pageRange",
+              "schema": Object {},
+            },
+            Object {
+              "discriminant": "general",
+              "schema": Object {},
+            },
+            Object {
+              "discriminant": "general",
+              "schema": Object {},
+            },
+            Object {
+              "discriminant": "general",
+              "schema": Object {},
+            },
+          ],
         },
         "role": Object {
-          "coscradDataType": "ENUM",
+          "complexDataType": "ENUM",
           "enumLabel": "Edge Connection Member Role",
           "enumName": "EDGE_CONNECTION_MEMBER_ROLE",
           "isArray": false,
@@ -82,8 +84,6 @@ Object {
           ],
         },
       },
-      "isArray": true,
-      "isOptional": false,
     },
   },
   "type": "note",

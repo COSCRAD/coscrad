@@ -1,10 +1,11 @@
-import { IDetailQueryResult, IIndexQueryResult } from '@coscrad/api-interfaces';
+import {
+    ICommandFormAndLabels,
+    IDetailQueryResult,
+    IIndexQueryResult,
+} from '@coscrad/api-interfaces';
 import { CoscradUserRole } from '@coscrad/data-types';
 import { Inject } from '@nestjs/common';
-import {
-    CommandInfo,
-    CommandInfoService,
-} from '../../../app/controllers/command/services/command-info-service';
+import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import mixTagsIntoViewModel from '../../../app/controllers/utilities/mixTagsIntoViewModel';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
@@ -96,7 +97,7 @@ export abstract class BaseQueryService<
         externalState: InMemorySnapshot
     ): UViewModel;
 
-    abstract getInfoForIndexScopedCommands(): CommandInfo[];
+    abstract getInfoForIndexScopedCommands(): ICommandFormAndLabels[];
 
     public async fetchById(
         id: unknown,
