@@ -1,12 +1,12 @@
 import { ICommandInfo } from '@coscrad/api-interfaces';
-import { ClassDataTypeMetadata } from '@coscrad/data-types';
+import { ClassSchema } from '@coscrad/data-types';
 import { CommandButton } from './CommandButton';
 
 export type CommandInfo = {
     type: string;
     label: string;
     description: string;
-    schema: ClassDataTypeMetadata;
+    schema: ClassSchema;
 };
 
 interface CommandProps {

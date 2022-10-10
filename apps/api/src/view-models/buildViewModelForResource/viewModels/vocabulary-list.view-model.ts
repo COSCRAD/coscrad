@@ -55,7 +55,7 @@ export class VocabularyListViewModel extends BaseViewModel {
         description:
             'an entry combines a term with a set of "variable values" parametrizing it within the given vocabulary list',
     })
-    @FromVocabularyList
+    @NestedDataType(VocabularyListEntryViewModel, { isArray: true })
     readonly entries: VocabularyListEntryViewModel[];
 
     @ApiProperty({

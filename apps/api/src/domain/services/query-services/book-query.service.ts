@@ -1,4 +1,4 @@
-import { ICommandInfo } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { BookViewModel } from '../../../view-models/buildViewModelForResource/viewModels/book.view-model';
 import { Book } from '../../models/book/entities/book.entity';
 import { ResourceType } from '../../types/ResourceType';
@@ -10,7 +10,7 @@ export class BookQueryService extends BaseQueryService<Book, BookViewModel> {
     buildViewModel(book: Book): BookViewModel {
         return new BookViewModel(book);
     }
-    getInfoForIndexScopedCommands(): ICommandInfo[] {
+    getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
         return this.commandInfoService.getCommandInfo(Book);
     }
 }

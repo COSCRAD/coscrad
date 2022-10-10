@@ -1,4 +1,4 @@
-import { ICommandInfo } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
 import { SongViewModel } from '../../../view-models/buildViewModelForResource/viewModels/song.view-model';
 import { Song } from '../../models/song/song.entity';
@@ -13,7 +13,7 @@ export class SongQueryService extends BaseQueryService<Song, SongViewModel> {
         return new SongViewModel(song);
     }
 
-    getInfoForIndexScopedCommands(): ICommandInfo[] {
+    getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
         return this.commandInfoService.getCommandInfo(Song);
     }
 }

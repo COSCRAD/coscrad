@@ -1,6 +1,6 @@
 import { COSCRAD_UNION_MEMBER_METADATA } from '../constants';
 import { NoDiscriminantRegisteredForUnionModelException } from '../exceptions';
-import { isUnionClassMetadata } from '../types';
+import { isUnionClassMetadata } from '../types/UnionClassMetadata';
 
 export default (MemberClass: object): string => {
     const rawMetadata = Reflect.getMetadata(COSCRAD_UNION_MEMBER_METADATA, MemberClass);

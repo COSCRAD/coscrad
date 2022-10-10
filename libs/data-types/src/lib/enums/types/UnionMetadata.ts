@@ -1,8 +1,8 @@
-import { ClassDataTypeMetadata } from '../../types';
+import { ClassSchema } from '../../types';
 
 type UnionMemberSchemaDefinition = {
     discriminant: string;
-    schema: ClassDataTypeMetadata;
+    schema: ClassSchema;
 };
 
 export type UnionMetadata = {
