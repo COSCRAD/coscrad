@@ -4,7 +4,7 @@ import { ClassSchema, getCoscradDataSchema } from '@coscrad/data-types';
 import { Injectable } from '@nestjs/common';
 import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
-import { buildCommandForm } from '../../../../view-models/dynamicForms/buildCommandForm';
+import { buildCommandForm } from '../../../../view-models/dynamicForms';
 import { INDEX_SCOPED_COMMANDS } from '../command-info/constants';
 
 type CommandTypeFilter = (commandType: string) => boolean;
@@ -22,7 +22,7 @@ const buildCommandTypeFilter = (
         Reflect.getMetadata(INDEX_SCOPED_COMMANDS, context).includes(commandType);
 };
 
-export type CommandInfo = CommandMetadataBase & {
+type CommandInfo = CommandMetadataBase & {
     label: string;
     description: string;
     schema: ClassSchema;
