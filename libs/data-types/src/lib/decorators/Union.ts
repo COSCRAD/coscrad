@@ -1,4 +1,5 @@
-import { UnionMetadata } from '../enums/types/UnionMetadata';
+import { ComplexCoscradDataType } from '../types/ComplexDataTypes/ComplexCoscradDataType';
+import { UnionDataTypeDefinition } from '../types/ComplexDataTypes/UnionDataTypeDefinition';
 import { getCoscradDataSchema } from '../utilities';
 import appendMetadata from '../utilities/appendMetadata';
 import getDiscriminantForUnionMember from '../utilities/getDiscriminantForUnionMember';
@@ -18,7 +19,8 @@ export function Union(
     const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
     return (target: Object, propertyKey: string | symbol) => {
-        const unionMetadata: UnionMetadata = {
+        const unionDataTypeDefinition: UnionDataTypeDefinition = {
+            complexDataType: ComplexCoscradDataType.union,
             discriminantPath,
             schemaDefinitions: memberClasses.map((MemberClass) => ({
                 discriminant: getDiscriminantForUnionMember(MemberClass),
@@ -26,6 +28,6 @@ export function Union(
             })),
         };
 
-        appendMetadata(target, propertyKey, unionMetadata, options);
+        appendMetadata(target, propertyKey, unionDataTypeDefinition, options);
     };
 }

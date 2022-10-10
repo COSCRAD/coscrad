@@ -1,4 +1,4 @@
-import { ICommandInfo } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { IBibliographicReferenceData } from '../../models/bibliographic-reference/interfaces/bibliographic-reference-data.interface';
 import { IBibliographicReference } from '../../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
@@ -17,7 +17,7 @@ export class BibliographicReferenceQueryService extends BaseQueryService<
         return new BibliographicReferenceViewModel(bibliographicReferenceInstance);
     }
 
-    getInfoForIndexScopedCommands(): ICommandInfo[] {
+    getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
         return [];
         // TODO Get available index scoped commands from Ctors
         // return [BookBibliographicReference, JournalArticleBibliographicReference].flatMap((Ctor) =>

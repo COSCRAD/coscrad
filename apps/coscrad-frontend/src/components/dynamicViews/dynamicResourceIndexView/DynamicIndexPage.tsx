@@ -94,7 +94,8 @@ export const DynamicIndexPage = () => {
                      * params.
                      */
                     detailDataAndActions: response.data,
-                    actions: response.actions,
+                    // TODO consume dynamic forms with new API on frontend
+                    actions: [], //response.actions,
                 })
             )
             // TODO improve error handling

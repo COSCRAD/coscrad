@@ -1,14 +1,16 @@
 import { isBoolean } from '@coscrad/validation';
 import { CoscradDataType, isCoscradDataType } from './CoscradDataType';
 
-export type CoscradDataSchema = {
+export type SimpleCoscradPropertyTypeDefinition = {
     coscradDataType: CoscradDataType;
     isArray: boolean;
     isOptional: boolean;
 };
 
-export const isCoscradDataSchema = (input: unknown): input is CoscradDataSchema => {
-    const { coscradDataType, isArray, isOptional } = input as CoscradDataSchema;
+export const isSimpleCoscradPropertyTypeDefinition = (
+    input: unknown
+): input is SimpleCoscradPropertyTypeDefinition => {
+    const { coscradDataType, isArray, isOptional } = input as SimpleCoscradPropertyTypeDefinition;
 
     return isCoscradDataType(coscradDataType) && isBoolean(isArray) && isBoolean(isOptional);
 };

@@ -1,5 +1,5 @@
 import { COSCRAD_DATA_TYPE_METADATA } from '../constants';
-import { ClassDataTypeMetadata } from '../types';
+import { ClassSchema } from '../types';
 
 export type Ctor<T> = new (...args: unknown[]) => T;
 
@@ -8,7 +8,7 @@ export type Ctor<T> = new (...args: unknown[]) => T;
  * empty schema ({}) if no metadata is found.
  */
 // eslint-disable-next-line
-export default <T extends Record<string, unknown>>(target: Object): ClassDataTypeMetadata<T> => {
+export default <T extends Record<string, unknown>>(target: Object): ClassSchema<T> => {
     const metadata = Reflect.getMetadata(COSCRAD_DATA_TYPE_METADATA, target);
 
     return metadata || {};

@@ -1,4 +1,4 @@
-import { ICommandInfo } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
@@ -32,7 +32,7 @@ export class TranscribedAudioQueryService extends BaseQueryService<
         );
     }
 
-    getInfoForIndexScopedCommands(): ICommandInfo[] {
+    getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
         return this.commandInfoService.getCommandInfo(TranscribedAudio);
     }
 }
