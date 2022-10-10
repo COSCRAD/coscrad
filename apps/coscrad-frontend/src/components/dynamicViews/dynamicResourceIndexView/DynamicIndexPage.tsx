@@ -3,11 +3,13 @@ import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getConfig } from '../../../config';
+import { Loading } from '../../Loading';
 import { DynamicIndexPresenter } from './DynamicIndexPresenter';
 
 type DynamicIndexPageState = {
     detailDataAndActions: IDetailQueryResult[];
     actions: ICommandInfo[];
+    isLoading: boolean;
 };
 
 const isCommandInfo = (input: unknown): input is ICommandInfo => {
@@ -57,6 +59,7 @@ export const DynamicIndexPage = () => {
     const [pageState, setPageState] = useState<DynamicIndexPageState>({
         detailDataAndActions: [],
         actions: [],
+        isLoading: false,
     });
 
     const location = useLocation();
@@ -70,10 +73,13 @@ export const DynamicIndexPage = () => {
     }
 
     useEffect(() => {
-        setPageState({ detailDataAndActions: [], actions: [] });
+        setPageState({ detailDataAndActions: [], actions: [], isLoading: true });
 
         fetch(apiLink, { mode: 'cors' })
-            // TODO We need error handling for network errors or non-200 responses.
+            /**
+             * TODO [https://www.pivotaltracker.com/story/show/183504753]
+             * We need error handling for network errors or non-200 responses.
+             */
             .then((res) => res.json())
             .then((rawResult) => {
                 if (!isIndexQueryResult(rawResult)) {
@@ -96,6 +102,7 @@ export const DynamicIndexPage = () => {
                     detailDataAndActions: response.data,
                     // TODO consume dynamic forms with new API on frontend
                     actions: [], //response.actions,
+                    isLoading: false,
                 })
             )
             // TODO improve error handling
@@ -106,7 +113,7 @@ export const DynamicIndexPage = () => {
             });
     }, []);
 
-    if (pageState.detailDataAndActions.length === 0) return <div>Loading...</div>;
+    if (pageState.isLoading) return <Loading></Loading>;
 
     return (
         <div>
