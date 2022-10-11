@@ -83,7 +83,6 @@ fi
 
 # Get .env variables from app configuration
 source $COSCRAD_APP_ENV_FILE; set +a;
-# env $(cat $COSCRAD_APP_ENV_FILE | sed 's/#.*//g' | xargs)
 echo "ARANGO_DB_HOST_SCHEME: $ARANGO_DB_HOST_SCHEME";
 echo "ARANGO_DB_HOST_DOMAIN: $ARANGO_DB_HOST_DOMAIN";
 echo "ARANGO_DB_HOST_PORT: $ARANGO_DB_HOST_PORT";
