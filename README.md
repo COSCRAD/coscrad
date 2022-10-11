@@ -66,7 +66,7 @@ to be consistent with the environment variables used by the script.
 
 Install Nx globally
 
-> > npm install -g @nrwl/cli
+> > npm install -g nx@latest
 
 Clone this repo
 
