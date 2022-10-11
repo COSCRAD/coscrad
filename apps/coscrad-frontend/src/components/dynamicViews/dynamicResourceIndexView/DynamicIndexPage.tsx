@@ -16,6 +16,8 @@ export const DynamicIndexPage = () => {
     });
 
     const location = useLocation();
+    console.log(location.state.schema);
+
 
     const schema = location.state?.schema;
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getConfig } from '../../config';
 import ResourceInfoPresenter, {
-    ResourceInfo,
+    ResourceInfo
 } from '../presenters/ResourceInfoPresenter/ResourceInfoPresenter';
 import './AllEntities.module.scss';
 
@@ -17,7 +17,7 @@ export function AllResources() {
     useEffect(() => {
         setAppState({ resourceInfos: [] });
 
-        const apiUrl = `${getConfig().apiUrl}/api/resources/`;
+        const apiUrl = `${getConfig().apiUrl}/resources/`;
 
         fetch(apiUrl, { mode: 'cors' })
             .then((res) => {
