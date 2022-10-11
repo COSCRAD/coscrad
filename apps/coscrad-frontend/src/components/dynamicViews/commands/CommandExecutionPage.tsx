@@ -1,6 +1,6 @@
 import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { useLocation } from 'react-router-dom';
-import { ComamndForm } from './CommandForm';
+import { ComamndForm } from './CommandForm/CommandForm';
 
 export const CommandExecutionPage = (): JSX.Element => {
     const location = useLocation();

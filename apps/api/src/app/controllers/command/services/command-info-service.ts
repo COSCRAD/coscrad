@@ -1,4 +1,4 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { FormFieldType, ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { CommandHandlerService, CommandMetadataBase } from '@coscrad/commands';
 import { ClassSchema, getCoscradDataSchema } from '@coscrad/data-types';
 import { Injectable } from '@nestjs/common';
@@ -58,7 +58,8 @@ export class CommandInfoService {
             .map(({ label, description, schema, type }) => ({
                 label,
                 description,
-                type,
+                // TODO use typeguard
+                type: type as FormFieldType,
                 form: buildCommandForm(type, schema),
             }));
     }
