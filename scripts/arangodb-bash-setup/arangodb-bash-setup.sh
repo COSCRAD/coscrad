@@ -49,7 +49,7 @@ if [ $test_data_answer = "y" ];
 then
     export ARANGO_DB_RUN_WITH_TEST_DATA=yes;
     JSON_URL="https://raw.githubusercontent.com/COSCRAD/coscrad/integration/scripts/arangodb-docker-container-setup/docker-container-scripts/test-data/testData.json";
-    # (cd ./test-data && curl -O $JSON_URL);
+    echo "Attempting download: $JSON_URL"
     (cd $SCRIPT_DIR/test-data && curl -O $JSON_URL);
     JSON_FILE="$SCRIPT_DIR/test-data/testData.json";
     if [ -f "$JSON_FILE" ];
@@ -57,6 +57,7 @@ then
         echo $'\n Test data file: '$JSON_FILE' loaded';
       else
         echo $'\n Test data file: '$JSON_FILE' failed to load';
+        exit;
       fi
     echo $'\n>> Run with test data loaded\n';
 else
@@ -78,7 +79,7 @@ else
   exit;
 fi
 
-ARANGOSH_DB_SETUP_SCRIPT="$SCRIPT_DIR/js/db_setup.js";
+ARANGOSH_DB_SETUP_SCRIPT="$SCRIPT_DIR/js/db-setup.js";
 
 arangosh \
 --server.authentication true \
