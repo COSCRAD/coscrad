@@ -25,7 +25,7 @@ export function AllResources() {
 
     return (
         <div>
-            <h1>Available Resources</h1>
+            <h2>Available Resources</h2>
             <div>
                 {resourceInfos.map((info) => (
                     <ResourceInfoPresenter {...info} key={info.type}></ResourceInfoPresenter>

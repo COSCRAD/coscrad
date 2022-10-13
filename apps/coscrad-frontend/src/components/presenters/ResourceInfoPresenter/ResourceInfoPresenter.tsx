@@ -1,5 +1,6 @@
 import { ClassSchema } from '@coscrad/data-types';
 import { Link } from 'react-router-dom';
+import './ResourceInfoPresenter.module.scss';
 
 /**
  * TODO Share this type with the backend.
@@ -24,14 +25,16 @@ export default ({
     link: apiIndexRoute,
 }: ResourceInfo): JSX.Element => (
     <>
-        <h1>
+        <h3>
             {label} ({resourceType})
-        </h1>
+        </h3>
 
-        <Link to="/ResourceIndex" state={{ schema, data: resourceType, link: apiIndexRoute }}>
-            View Resources of type {label}
-        </Link>
+        <div className='resource-meta'>
+            <Link to="/ResourceIndex" state={{ schema, data: resourceType, link: apiIndexRoute }}>
+                View Resources of type {label}
+            </Link>
 
-        <div>{description}</div>
+            <div>{description}</div>
+        </div>
     </>
 );

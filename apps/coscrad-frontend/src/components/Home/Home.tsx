@@ -1,16 +1,14 @@
-import { Link } from 'react-router-dom';
-import AuthenticationButton from '../AuthenticationButton/AuthenticationButton';
+import FrontMatter from '../../app/configurable-front-matter/frontMatterData/FrontMatter';
 import './Home.module.scss';
 
-export function Home() {
+export interface HomeProps {
+    frontMatter: FrontMatter;
+}
+
+export function Home({ frontMatter }: HomeProps) {
     return (
         <div>
-            <h1>Welcome to coscrad</h1>
-            <Link to="/About">About</Link> | <Link to="/AllResources">Browse Resources</Link> |
-            <Link to="/MembersOnly">Members Only</Link>
-            <div>
-                <AuthenticationButton></AuthenticationButton>
-            </div>
+            {frontMatter.siteDescription}
         </div>
     );
 }

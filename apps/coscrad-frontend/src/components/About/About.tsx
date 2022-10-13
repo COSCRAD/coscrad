@@ -1,9 +1,14 @@
+import FrontMatter from '../../app/configurable-front-matter/frontMatterData/FrontMatter';
 import './About.module.scss';
 
-export function About() {
+export interface AboutProps {
+    frontMatter: FrontMatter;
+}
+
+export function About({ frontMatter }: AboutProps) {
     return (
         <div>
-            <h1>Welcome to About!</h1>
+            {frontMatter.about}
         </div>
     );
 }
