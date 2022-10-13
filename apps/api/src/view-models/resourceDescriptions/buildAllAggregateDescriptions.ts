@@ -5,9 +5,8 @@ import { ResourceType } from '../../domain/types/ResourceType';
 import { getViewModelCtorFromAggregateType } from '../buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType/getViewModelCtorFromAggregateType';
 import formatResourceType from '../presentation/formatAggregateType';
 import { AggregateInfo } from './types/AggregateInfo';
-import { AggregateTypeAndDescription } from './types/AggregateTypeAndDescription';
 
-const resourceDescriptions: AggregateTypeAndDescription[] = [
+const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
     {
         type: ResourceType.term,
         description: 'A term is a word, phrase, or sentence.',
@@ -76,7 +75,7 @@ const resourceDescriptions: AggregateTypeAndDescription[] = [
     },
 ];
 
-export const buildAllAggregateDescriptions = (): AggregateInfo[] =>
+export const buildAllAggregateDescriptions = (): Omit<AggregateInfo, 'link'>[] =>
     resourceDescriptions.map(({ type: resourceType, description }) => ({
         type: resourceType,
         description,

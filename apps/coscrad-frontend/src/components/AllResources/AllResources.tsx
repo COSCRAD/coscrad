@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { getConfig } from '../../config';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { Loading } from '../Loading';
 import ResourceInfoPresenter, {
     ResourceInfo,
 } from '../presenters/ResourceInfoPresenter/ResourceInfoPresenter';
@@ -10,46 +11,18 @@ type ComponentState = {
 };
 
 export function AllResources() {
-    const [appState, setAppState] = useState<ComponentState>({
-        resourceInfos: [],
-    });
+    const resourceInfos = useSelector((state: RootState) => state.resources.infos);
 
-    useEffect(() => {
-        setAppState({ resourceInfos: [] });
+    const isLoading = useSelector((state: RootState) => state.resources.isLoading);
 
-        const apiUrl = `${getConfig().apiUrl}/api/resources/`;
-
-        fetch(apiUrl, { mode: 'cors' })
-            .then((res) => {
-                const result = res.json();
-
-                return result;
-            })
-            .then((resourceInfos) => {
-                console.log({
-                    apiResult: resourceInfos,
-                });
-                setAppState({ ...appState, resourceInfos: resourceInfos });
-            })
-            .catch((rej) => console.log(rej));
-    }, []);
-
-    if (appState.resourceInfos.length === 0) return <div>Loading...</div>;
-
-    if (!Array.isArray(appState.resourceInfos))
-        return (
-            <div>
-                ERROR: Resource infos is not an array. Resource infos:
-                {JSON.stringify(appState.resourceInfos)}
-            </div>
-        );
+    if (isLoading) return <Loading></Loading>;
 
     return (
         <div>
             <h1>Available Resources</h1>
             <div>
-                {appState.resourceInfos.map((info) => (
-                    <ResourceInfoPresenter {...info}></ResourceInfoPresenter>
+                {resourceInfos.map((info) => (
+                    <ResourceInfoPresenter {...info} key={info.type}></ResourceInfoPresenter>
                 ))}
             </div>
         </div>

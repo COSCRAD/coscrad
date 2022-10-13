@@ -7,7 +7,7 @@ import { buildIndexPathForAggregate } from './buildIndexPathForAggregate';
  */
 export const mixLinkIntoViewModelDescription =
     (globalPrefix: string) =>
-    (aggregateInfo: AggregateInfo): AggregateInfo & { link: string } => ({
+    (aggregateInfo: Omit<AggregateInfo, 'link'>): AggregateInfo => ({
         ...aggregateInfo,
         link: `/${globalPrefix}/${buildIndexPathForAggregate(aggregateInfo.type)}`,
     });

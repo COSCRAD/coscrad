@@ -1,6 +1,4 @@
-import { AggregateTypeAndDescription } from './AggregateTypeAndDescription';
+import { IAggregateInfo } from '@coscrad/api-interfaces';
+import { AggregateType } from '../../../domain/types/AggregateType';
 
-export type AggregateInfo = AggregateTypeAndDescription & {
-    // User-facing
-    label: string;
-};
+export type AggregateInfo = IAggregateInfo<AggregateType>;

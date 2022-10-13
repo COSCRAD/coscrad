@@ -1,3 +1,4 @@
+export * from './aggregate-views';
 export * from './command-info.interface';
 export * from './commands';
 export * from './detail-query-result.interface';
