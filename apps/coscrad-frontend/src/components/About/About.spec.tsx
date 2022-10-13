@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import getFrontMatter from '../../app/configurable-front-matter/getFrontMatter';
+import getFrontMatter from '../../configurable-front-matter/getFrontMatter';
 
 import About from './About';
 

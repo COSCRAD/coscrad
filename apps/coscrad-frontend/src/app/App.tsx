@@ -3,11 +3,11 @@ import About from '../components/About/About';
 import { AllResources } from '../components/AllResources/AllResources';
 import { DynamicResourceDetailPage } from '../components/dynamicViews/dynamicResourceDetailView/DynamicResourceDetailPage';
 import { DynamicIndexPage } from '../components/dynamicViews/dynamicResourceIndexView';
+import Header from '../components/Header/Header ';
 import Home from '../components/Home/Home';
 import MembersOnly from '../components/MembersOnly/MembersOnly';
-import { NavBar } from '../components/NavBar/NavBar';
+import getFrontMatter from '../configurable-front-matter/getFrontMatter';
 import './App.module.scss';
-import getFrontMatter from './configurable-front-matter/getFrontMatter';
 
 const frontMatterReadResult = getFrontMatter();
 
@@ -24,17 +24,7 @@ export function App() {
         );
     return (
         <div className='main'>
-            <header>
-                <h1>
-                    {frontMatterReadResult.siteTitle}
-                </h1>
-                <h2>
-                    {frontMatterReadResult.subTitle}
-                </h2>
-                <nav>
-                    <NavBar></NavBar>
-                </nav>
-            </header>
+            <Header frontMatter={frontMatterReadResult}></Header>
             <div>
                 <Routes>
                     <Route path="/" element={<Home frontMatter={frontMatterReadResult} />} />

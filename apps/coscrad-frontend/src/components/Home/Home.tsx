@@ -1,4 +1,4 @@
-import FrontMatter from '../../app/configurable-front-matter/frontMatterData/FrontMatter';
+import FrontMatter from '../../configurable-front-matter/frontMatterData/FrontMatter';
 import './Home.module.scss';
 
 export interface HomeProps {
