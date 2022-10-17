@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import App from './app/App';
+import { AppContainer } from './app/App.container';
 import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
 import { store } from './store';
 
@@ -12,7 +12,7 @@ root.render(
         <Provider store={store}>
             <BrowserRouter>
                 <Auth0ProviderWithHistory>
-                    <App />
+                    <AppContainer />
                 </Auth0ProviderWithHistory>
             </BrowserRouter>
         </Provider>

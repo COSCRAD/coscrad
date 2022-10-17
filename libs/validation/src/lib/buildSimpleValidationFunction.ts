@@ -33,6 +33,10 @@ export default (
             : {};
 
         return validateSync(instanceToValidate, {
+            validationError: {
+                target: true,
+                value: true,
+            },
             skipMissingProperties: false,
             ...additionalOptions,
         });

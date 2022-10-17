@@ -1,17 +1,19 @@
-import rawData from './frontMatterData/configurable-front-matter.config.json';
-import FrontMatter from './frontMatterData/FrontMatter';
-import validateFrontMatter, { isErrorArray } from './validation/validateFrontMatter';
+import { ConfigurableContent } from './data/configSchema';
+import rawData from './data/configurable-front-matter.json';
+import { validateConfigurableContent } from './validation/validateConfigurableContent';
 
-export default (): FrontMatter | Error => {
+export default (): ConfigurableContent => {
+    const validationResult = validateConfigurableContent(rawData);
 
-    const validationResult = validateFrontMatter(rawData);
+    if (validationResult.length > 0) {
+        const msg = `Invalid front matter data encountered. \n Error: ${validationResult}`;
 
-    if (isErrorArray(validationResult)) {
-        const msg = `Invalid front matter data encountered. Error: `
-                    + `${validationResult}`;
-
-        return new Error(msg);
+        /**
+         * This is not a returned error. We want to fail fast if the system is
+         * using an invalid config.
+         */
+        throw new Error(msg);
     }
 
-    return rawData as FrontMatter;
+    return rawData as ConfigurableContent;
 };
