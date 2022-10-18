@@ -3,11 +3,11 @@ import About from '../components/About/About';
 import { AllResources } from '../components/AllResources/AllResources';
 import { DynamicResourceDetailPage } from '../components/dynamicViews/dynamicResourceDetailView/DynamicResourceDetailPage';
 import { DynamicIndexPage } from '../components/dynamicViews/dynamicResourceIndexView';
-import Header from '../components/Header/Header ';
+import Header from '../components/Header/Header';
 import Home from '../components/Home/Home';
 import MembersOnly from '../components/MembersOnly/MembersOnly';
 import { ConfigurableContent } from '../configurable-front-matter/data/configurableContentSchema';
-import './App.module.scss';
+import './App.css';
 
 type AppProps = {
     content: ConfigurableContent;
