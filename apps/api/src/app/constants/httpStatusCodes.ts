@@ -1,14 +1,9 @@
-import { ValueType } from '../../lib/types/valueType';
+import { HttpStatusCode } from '@coscrad/api-interfaces';
 
-const httpStatusCodes = {
-    ok: 200,
-    badRequest: 400,
-    unauthorized: 401,
-    forbidden: 403,
-    notFound: 404,
-    internalError: 500,
-};
+const httpStatusCodes = HttpStatusCode;
 
+// @deprecated use `HttpStatusCode` as a value and a type instead
 export default httpStatusCodes;
 
-export type HttpStatusCode = ValueType<typeof httpStatusCodes>;
+// Note that this was previously only a type
+export { HttpStatusCode };
