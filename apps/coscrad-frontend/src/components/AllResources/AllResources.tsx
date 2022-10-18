@@ -5,7 +5,6 @@ import { fetchResourceInfos } from '../../store/slices/resourceInfoSlice';
 import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
 import { Loading } from '../Loading';
 import ResourceInfoPresenter from '../presenters/ResourceInfoPresenter/ResourceInfoPresenter';
-import './AllEntities.module.scss';
 
 export function AllResources() {
     const resourceInfos = useSelector((state: RootState) => state.resources.infos);
