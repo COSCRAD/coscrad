@@ -5,7 +5,6 @@ import { fetchResourceInfos } from '../../store/slices/resourceInfoSlice';
 import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
 import { Loading } from '../Loading';
 import ResourceInfoPresenter from '../presenters/ResourceInfoPresenter/ResourceInfoPresenter';
-import './AllEntities.module.scss';
 
 export function AllResources() {
     const resourceInfos = useSelector((state: RootState) => state.resources.infos);
@@ -25,7 +24,7 @@ export function AllResources() {
 
     return (
         <div>
-            <h1>Available Resources</h1>
+            <h2>Available Resources</h2>
             <div>
                 {resourceInfos.map((info) => (
                     <ResourceInfoPresenter {...info} key={info.type}></ResourceInfoPresenter>

@@ -3,20 +3,30 @@ import About from '../components/About/About';
 import { AllResources } from '../components/AllResources/AllResources';
 import { DynamicResourceDetailPage } from '../components/dynamicViews/dynamicResourceDetailView/DynamicResourceDetailPage';
 import { DynamicIndexPage } from '../components/dynamicViews/dynamicResourceIndexView';
+import Header from '../components/Header/Header';
 import Home from '../components/Home/Home';
 import MembersOnly from '../components/MembersOnly/MembersOnly';
+import { ConfigurableContent } from '../configurable-front-matter/data/configurableContentSchema';
+import './App.css';
 
-export function App() {
+type AppProps = {
+    content: ConfigurableContent;
+};
+
+export function App({ content }: AppProps) {
     return (
-        <div>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="About" element={<About />} />
-                <Route path="AllResources" element={<AllResources />} />
-                <Route path="MembersOnly" element={<MembersOnly />} />
-                <Route path="ResourceIndex" element={<DynamicIndexPage />} />
-                <Route path="ResourceDetail" element={<DynamicResourceDetailPage />} />
-            </Routes>
+        <div className="main">
+            <Header {...content}></Header>
+            <div>
+                <Routes>
+                    <Route path="/" element={<Home {...content} />} />
+                    <Route path="About" element={<About {...content} />} />
+                    <Route path="AllResources" element={<AllResources />} />
+                    <Route path="MembersOnly" element={<MembersOnly />} />
+                    <Route path="ResourceIndex" element={<DynamicIndexPage />} />
+                    <Route path="ResourceDetail" element={<DynamicResourceDetailPage />} />
+                </Routes>
+            </div>
         </div>
     );
 }

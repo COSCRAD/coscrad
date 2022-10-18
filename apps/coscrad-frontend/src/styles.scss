@@ -1,1 +1,19 @@
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode',
+        Geneva, Verdana, sans-serif;
+}
 
+a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+a:hover {
+    color: rgb(56, 56, 56);
+}
+
+.main {
+    margin: 0 auto;
+    width: 95%;
+}

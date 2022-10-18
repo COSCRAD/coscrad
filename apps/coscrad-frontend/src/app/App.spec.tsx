@@ -4,12 +4,26 @@ import { MemoryRouter } from 'react-router-dom';
 import { store } from '../store';
 import App from './App';
 
+import ConfigurableContent from '../configurable-front-matter/ConfigurableContent';
+
+export const getDummyConfigurableContent = (): ConfigurableContent => ({
+    siteTitle: 'My Site',
+
+    subTitle: 'Where it all Happens',
+
+    about: 'Just a Test',
+
+    siteDescription: 'This is my testing site',
+
+    copyrightHolder: 'ME',
+});
+
 describe('App', () => {
     it('should render successfully', () => {
         const { baseElement } = render(
             <MemoryRouter>
                 <Provider store={store}>
-                    <App />
+                    <App content={getDummyConfigurableContent()} />
                 </Provider>
             </MemoryRouter>
         );
