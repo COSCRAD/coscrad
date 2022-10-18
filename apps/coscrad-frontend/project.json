@@ -75,9 +75,14 @@
             "outputs": ["coverage/apps/coscrad-frontend"],
             "options": {
                 "jestConfig": "apps/coscrad-frontend/jest.config.ts",
-                "passWithNoTests": true
+                "passWithNoTests": false
             }
         }
     },
-    "tags": []
+    "tags": [],
+    "jest": {
+        "transform": {
+            "^.+\\.(ts|tsx|js|jsx)$": "ts-jest"
+         }
+    }
 }
