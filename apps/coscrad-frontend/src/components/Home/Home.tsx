@@ -1,12 +1,11 @@
-import { ConfigurableContent } from '../../configurable-front-matter/data/configSchema';
 import './Home.module.scss';
 
 export interface HomeProps {
-    frontMatter: ConfigurableContent;
+    siteDescription: string;
 }
 
-export function Home({ frontMatter }: HomeProps) {
-    return <div>{frontMatter.siteDescription}</div>;
+export function Home({ siteDescription }: HomeProps) {
+    return <div>{siteDescription}</div>;
 }
 
 export default Home;

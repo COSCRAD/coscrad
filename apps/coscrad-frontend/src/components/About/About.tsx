@@ -1,12 +1,11 @@
-import { ConfigurableContent } from '../../configurable-front-matter/data/configSchema';
 import './About.module.scss';
 
 export interface AboutProps {
-    frontMatter: ConfigurableContent;
+    about: string;
 }
 
-export function About({ frontMatter }: AboutProps) {
-    return <div>{frontMatter.about}</div>;
+export function About({ about }: AboutProps) {
+    return <div>{about}</div>;
 }
 
 export default About;

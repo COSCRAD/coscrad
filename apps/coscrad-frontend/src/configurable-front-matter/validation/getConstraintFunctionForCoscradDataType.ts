@@ -1,4 +1,4 @@
-import { NON_EMPTY_STRING } from '../data/configSchema';
+import { CoscradDataType } from '@coscrad/api-interfaces';
 
 type ConstraintFunction = (input: unknown) => boolean;
 
@@ -9,16 +9,16 @@ const isStringWithNonzeroLength = (input: unknown): input is string =>
     typeof input === 'string' && input.length > 0;
 
 const lookupTable: LookupTable = {
-    // ['COMPOSITE_IDENTIFIER']: isStringWithNonzeroLength,
-    // ['ISBN']: isStringWithNonzeroLength,
-    [NON_EMPTY_STRING]: isStringWithNonzeroLength,
-    // [CoscradDataType.NonEmptyString]: isStringWithNonzeroLength,
-    // [CoscradDataType.NonNegativeFiniteNumber]: isStringWithNonzeroLength,
-    // [CoscradDataType.PositiveInteger]: isStringWithNonzeroLength,
-    // [CoscradDataType.RawData]: isStringWithNonzeroLength,
-    // [CoscradDataType.URL]: isStringWithNonzeroLength,
-    // [CoscradDataType.UUID]: isStringWithNonzeroLength,
-    // [CoscradDataType.Year]: isStringWithNonzeroLength,
+    [CoscradDataType.CompositeIdentifier]: isStringWithNonzeroLength,
+    [CoscradDataType.ISBN]: isStringWithNonzeroLength,
+    [CoscradDataType.NonEmptyString]: isStringWithNonzeroLength,
+    [CoscradDataType.NonEmptyString]: isStringWithNonzeroLength,
+    [CoscradDataType.NonNegativeFiniteNumber]: isStringWithNonzeroLength,
+    [CoscradDataType.PositiveInteger]: isStringWithNonzeroLength,
+    [CoscradDataType.RawData]: isStringWithNonzeroLength,
+    [CoscradDataType.URL]: isStringWithNonzeroLength,
+    [CoscradDataType.UUID]: isStringWithNonzeroLength,
+    [CoscradDataType.Year]: isStringWithNonzeroLength,
 };
 
 export const getConstraintFunctionForCoscradDataType = (dataType: string): ConstraintFunction => {

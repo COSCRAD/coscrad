@@ -1,15 +1,9 @@
+import { ConfigurableContentSchema } from '../data/configurableContentSchema';
 import { InvalidConfigurationPropertyError } from '../errorHandling/errors/InvalidConfigurationPropertyError';
 import { getConstraintFunctionForCoscradDataType } from './getConstraintFunctionForCoscradDataType';
 
-export type ConfigSchema<TPropertyNames extends string | symbol | number = string> = Record<
-    TPropertyNames,
-    string
->;
-
 export const buildConfigValidationFunction =
-    <TConfigType extends Record<string | symbol, unknown>>(
-        schema: ConfigSchema<keyof TConfigType>
-    ) =>
+    (schema: ConfigurableContentSchema) =>
     (instance: unknown): Error[] =>
         Object.entries(schema).reduce(
             (accumulatedErrors: Error[], [propertyName, propertyType]) => {

@@ -1,5 +1,10 @@
-import { CoscradDataType } from '@coscrad/data-types';
-import { ConfigurableContent } from '../data/configSchema';
+import { CoscradDataType } from '@coscrad/api-interfaces';
+import { FuzzGenerator } from '@coscrad/data-types';
+import {
+    ConfigurableContent,
+    ConfigurableContentSchema,
+    configurableContentSchema,
+} from '../data/configurableContentSchema';
 import { InvalidConfigurationPropertyError } from '../errorHandling/errors/InvalidConfigurationPropertyError';
 import { validateConfigurableContent } from './validateConfigurableContent';
 
@@ -29,43 +34,32 @@ const buildInvalidContentConfig = (
     ...overrides,
 });
 
-/**
- * TODO Refactor to use our fuzz-generator lib for this.
- */
-const invalidProps: [keyof ConfigurableContent, unknown][] = [
-    ['siteTitle', 77],
-    ['about', []],
-    ['copyrightHolder', { foo: 65 }],
-    ['siteDescription', false],
-    ['siteTitle', [999]],
-    ['subTitle', [{}]],
-];
+const invalidProps: [keyof ConfigurableContent, unknown][] = Object.entries(
+    configurableContentSchema
+).flatMap(([propertyName, coscradDataType]) =>
+    new FuzzGenerator({
+        coscradDataType,
+        isOptional: false,
+        isArray: false,
+    })
+        .generateInvalidValues()
+        .map(
+            (invalidValue: unknown) =>
+                [propertyName, invalidValue] as [keyof ConfigurableContentSchema, unknown]
+        )
+);
 
-const buildMissingProps = (valueToUse: null | undefined): [keyof ConfigurableContent, unknown][] =>
-    Object.keys(validContentConfig).reduce(
-        // The extra set of [] are required for concat to concate a tuple-valued element
-        (acc, nextKey) => acc.concat([[nextKey, valueToUse]]),
-        []
-    );
-
-const undefinedProps: [keyof ConfigurableContent, unknown][] = buildMissingProps(null);
-
-const nullProps: [keyof ConfigurableContent, unknown][] = buildMissingProps(undefined);
-
-const invalidConfigsAndExpectedErrors: [Overrides<ConfigurableContent>, Error[]][] = [
-    ...invalidProps,
-    ...undefinedProps,
-    ...nullProps,
-].map(([propertyName, invalidValue]) => [
-    buildInvalidContentConfig({ [propertyName]: invalidValue }),
-    [
-        new InvalidConfigurationPropertyError({
-            propertyName,
-            propertyType,
-            invalidReceivedValue: invalidValue,
-        }),
-    ],
-]);
+const invalidConfigsAndExpectedErrors: [Overrides<ConfigurableContent>, Error[]][] =
+    invalidProps.map(([propertyName, invalidValue]) => [
+        buildInvalidContentConfig({ [propertyName]: invalidValue }),
+        [
+            new InvalidConfigurationPropertyError({
+                propertyName,
+                propertyType,
+                invalidReceivedValue: invalidValue,
+            }),
+        ],
+    ]);
 
 describe('validateFrontMatterData', () => {
     describe('when the content config is valid', () => {
