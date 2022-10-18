@@ -4,7 +4,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
 Object {
   "description": "A note contextualizes a resource in itself or in relation to another resource",
   "label": "Note",
-  "link": "/api/connections",
+  "link": "/connections",
   "schema": Object {
     "id": Object {
       "coscradDataType": "NON_EMPTY_STRING",
