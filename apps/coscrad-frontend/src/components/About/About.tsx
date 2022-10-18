@@ -1,11 +1,11 @@
 import './About.module.scss';
 
-export function About() {
-    return (
-        <div>
-            <h1>Welcome to About!</h1>
-        </div>
-    );
+export interface AboutProps {
+    about: string;
+}
+
+export function About({ about }: AboutProps) {
+    return <div>{about}</div>;
 }
 
 export default About;

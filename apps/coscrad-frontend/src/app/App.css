@@ -1,0 +1,19 @@
+.main {
+    margin: 0 auto;
+    width: 95%;
+}
+
+nav {
+    text-align: right;
+    margin-bottom: 40px;
+}
+
+header h1 {
+    margin-bottom: 3px;
+}
+
+header h2 {
+    font-size: medium;
+    margin-top: 0px;
+    margin-left: 7px;
+}
