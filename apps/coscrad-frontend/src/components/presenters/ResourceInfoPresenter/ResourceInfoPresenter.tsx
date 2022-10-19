@@ -29,7 +29,7 @@ export default ({
             {label} ({resourceType})
         </h3>
 
-        <div className="resource-meta">
+        <div className="resource-meta" data-testid={label}>
             <Link to="/ResourceIndex" state={{ schema, data: resourceType, link: apiIndexRoute }}>
                 View Resources of type {label}
             </Link>

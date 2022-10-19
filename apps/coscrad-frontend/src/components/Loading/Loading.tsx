@@ -17,5 +17,5 @@ export const Loading = (): JSX.Element => {
         }, DOT_RATE);
     }, [numberOfDots]);
 
-    return <div>Loading {DOT_CHAR.repeat(numberOfDots)}</div>;
+    return <div data-testid="loading">Loading {DOT_CHAR.repeat(numberOfDots)}</div>;
 };
