@@ -8,6 +8,9 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
     store?: AppStore;
 }
 
+/**
+ * See these [docs](https://redux.js.org/usage/writing-tests)
+ */
 export const renderWithProviders = (
     ui: React.ReactElement,
     {

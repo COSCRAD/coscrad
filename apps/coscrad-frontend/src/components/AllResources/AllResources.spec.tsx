@@ -137,6 +137,7 @@ describe('AllResources', () => {
         afterAll(() => {
             responseType = null;
         });
+
         it('should render the loading component', async () => {
             renderWithProviders(
                 <MemoryRouter>

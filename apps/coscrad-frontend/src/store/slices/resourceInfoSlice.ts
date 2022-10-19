@@ -63,7 +63,6 @@ export const resourceInfoSlice = createSlice({
         });
 
         builder.addCase(fetchResourceInfos.fulfilled, (state: ResourceInfosState, action) => {
-            // call set infos action
             state.infos = action.payload;
             state.isLoading = false;
         });
