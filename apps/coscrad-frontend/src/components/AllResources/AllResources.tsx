@@ -7,11 +7,11 @@ import { Loading } from '../Loading';
 import ResourceInfoPresenter from '../presenters/ResourceInfoPresenter/ResourceInfoPresenter';
 
 export function AllResources() {
-    const resourceInfos = useSelector((state: RootState) => state.resources.infos);
+    const resourceInfos = useSelector((state: RootState) => state.resourceInfo.infos);
 
-    const isLoading = useSelector((state: RootState) => state.resources.isLoading);
+    const isLoading = useSelector((state: RootState) => state.resourceInfo.isLoading);
 
-    const errorInfo = useSelector((state: RootState) => state.resources.errorInfo);
+    const errorInfo = useSelector((state: RootState) => state.resourceInfo.errorInfo);
 
     const dispatch = useAppDispatch();
 
