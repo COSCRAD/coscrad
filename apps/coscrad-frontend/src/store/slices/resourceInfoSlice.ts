@@ -2,7 +2,7 @@ import { HttpStatusCode, IAggregateInfo, IHttpErrorInfo } from '@coscrad/api-int
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getConfig } from '../../config';
 
-const RESOURCES = 'resources';
+export const RESOURCE_INFO = 'resourceInfo';
 
 export type ResourceInfosState = {
     infos: IAggregateInfo[];
@@ -11,14 +11,13 @@ export type ResourceInfosState = {
 };
 
 const initialState: ResourceInfosState = {
-    // We may want a separate resourceInfoSlice
     infos: [],
     isLoading: false,
     errorInfo: null,
 };
 
 export const fetchResourceInfos = createAsyncThunk(
-    `${RESOURCES}/fetchInfos`,
+    `${RESOURCE_INFO}/fetchInfos`,
     async (_, thunkApi) => {
         const baseUrl = getConfig().apiUrl;
 
@@ -55,7 +54,7 @@ export const fetchResourceInfos = createAsyncThunk(
  * available actions.
  */
 export const resourceInfoSlice = createSlice({
-    name: RESOURCES,
+    name: RESOURCE_INFO,
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -64,7 +63,6 @@ export const resourceInfoSlice = createSlice({
         });
 
         builder.addCase(fetchResourceInfos.fulfilled, (state: ResourceInfosState, action) => {
-            // call set infos action
             state.infos = action.payload;
             state.isLoading = false;
         });
@@ -81,3 +79,5 @@ export const resourceInfoSlice = createSlice({
         });
     },
 });
+
+export const resourceInfoReducer = resourceInfoSlice.reducer;
