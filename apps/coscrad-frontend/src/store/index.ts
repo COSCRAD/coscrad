@@ -1,15 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { resourceInfoSlice } from './slices/resourceInfoSlice';
+import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
+import { resourceInfoReducer, RESOURCE_INFO } from './slices/resourceInfoSlice';
 
-export const store = configureStore({
-    reducer: {
-        resources: resourceInfoSlice.reducer,
-    },
+export const rootReducer = combineReducers({
+    [RESOURCE_INFO]: resourceInfoReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
+    configureStore({
+        reducer: rootReducer,
+        preloadedState,
+    });
+
+export type RootState = ReturnType<typeof rootReducer>;
 
 // ReturnType<typeof setupStore> if currying to inject additional setup
-export type AppStore = typeof store;
+export type AppStore = ReturnType<typeof setupStore>;
 
 export type AppDispatch = AppStore['dispatch'];

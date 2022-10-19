@@ -1,10 +1,7 @@
-import { render } from '@testing-library/react';
-import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import { store } from '../store';
+import { ConfigurableContent } from '../configurable-front-matter/data/configurableContentSchema';
+import { renderWithProviders } from '../utils/test-utils';
 import App from './App';
-
-import ConfigurableContent from '../configurable-front-matter/ConfigurableContent';
 
 export const getDummyConfigurableContent = (): ConfigurableContent => ({
     siteTitle: 'My Site',
@@ -20,11 +17,9 @@ export const getDummyConfigurableContent = (): ConfigurableContent => ({
 
 describe('App', () => {
     it('should render successfully', () => {
-        const { baseElement } = render(
+        const { baseElement } = renderWithProviders(
             <MemoryRouter>
-                <Provider store={store}>
-                    <App content={getDummyConfigurableContent()} />
-                </Provider>
+                <App content={getDummyConfigurableContent()} />
             </MemoryRouter>
         );
 

@@ -1,18 +1,14 @@
-import { render } from '@testing-library/react';
-import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { getDummyConfigurableContent } from '../../app/App.spec';
-import { store } from '../../store';
+import { renderWithProviders } from '../../utils/test-utils';
 
 import Home from './Home';
 
 describe('Home', () => {
     it('should render successfully', () => {
-        const { baseElement } = render(
+        const { baseElement } = renderWithProviders(
             <MemoryRouter>
-                <Provider store={store}>
-                    <Home {...getDummyConfigurableContent()} />
-                </Provider>
+                <Home {...getDummyConfigurableContent()} />
             </MemoryRouter>
         );
         expect(baseElement).toBeTruthy();
