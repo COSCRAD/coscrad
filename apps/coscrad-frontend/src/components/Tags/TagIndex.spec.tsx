@@ -1,13 +1,11 @@
 import { ITag } from '@coscrad/api-interfaces';
 import { screen, waitFor } from '@testing-library/react';
-import { rest } from 'msw';
-import { setupServer } from 'msw/node';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
-import { renderWithProviders } from '../../utils/test-utils';
+import { buildGetHandlers } from '../../utils/test-utils/buildGetHandlers';
+import { renderWithProviders } from '../../utils/test-utils/renderWithProviders';
+import { setupTestServer } from '../../utils/test-utils/setupTestServer';
 import { TagIndexContainer } from './TagIndex.container';
-
-const ARTIFICIAL_DELAY = 150;
 
 const dummyTags: ITag[] = [
     {
@@ -24,20 +22,19 @@ const dummyTags: ITag[] = [
     },
 ];
 
-const handlers = [
-    rest.get(`${getConfig().apiUrl}/tags`, (_, res, ctx) => {
-        return res(ctx.json(dummyTags), ctx.delay(ARTIFICIAL_DELAY));
-    }),
-];
+// TODO We need to inject a dummy config.
+const endpoint = `${getConfig().apiUrl}/tags`;
 
-const server = setupServer(...handlers);
+// Would exposing a `buildGetHandler` (singular) make more sense? We can always map over an array.
+const handlers = buildGetHandlers([
+    {
+        endpoint,
+        response: dummyTags,
+    },
+]);
 
 describe(`Tag Index`, () => {
-    beforeAll(() => server.listen());
-
-    afterEach(() => server.resetHandlers());
-
-    afterAll(() => server.close());
+    setupTestServer(...handlers);
 
     describe('when the API request is valid', () => {
         it('should display the tags', async () => {

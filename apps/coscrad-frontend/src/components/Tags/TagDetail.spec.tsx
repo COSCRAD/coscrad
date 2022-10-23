@@ -1,13 +1,11 @@
 import { ITag } from '@coscrad/api-interfaces';
 import { screen, waitFor } from '@testing-library/react';
-import { rest } from 'msw';
-import { setupServer } from 'msw/node';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../config';
 import { renderWithProviders } from '../../utils/test-utils';
+import { buildGetHandlers } from '../../utils/test-utils/buildGetHandlers';
+import { setupTestServer } from '../../utils/test-utils/setupTestServer';
 import { TagDetailContainer } from './TagDetail.container';
-
-const ARTIFICIAL_DELAY = 150;
 
 const allTags: ITag[] = [
     {
@@ -20,27 +18,18 @@ const allTags: ITag[] = [
     },
 ];
 
-const handlers = [
-    rest.get(`${getConfig().apiUrl}/tags`, (_, res, ctx) => {
-        return res(ctx.json(allTags), ctx.delay(ARTIFICIAL_DELAY));
-    }),
-];
+// TODO We need to inject a dummy config.
+const endpoint = `${getConfig().apiUrl}/tags`;
 
-const server = setupServer(...handlers);
+const handlers = buildGetHandlers([
+    {
+        endpoint,
+        response: allTags,
+    },
+]);
 
-/**
- * This is still WIP. I need to deal with the route param
- * in order to get this test to pass.
- *
- * [This article](https://medium.com/@aarling/mocking-a-react-router-match-object-in-your-component-tests-fa95904dcc55)
- * looks helpful.
- */
 describe(`Tag Detail`, () => {
-    beforeAll(() => server.listen());
-
-    afterEach(() => server.resetHandlers());
-
-    afterAll(() => server.close());
+    setupTestServer(...handlers);
 
     describe('when the API request is valid', () => {
         it('should display the tags', async () => {
