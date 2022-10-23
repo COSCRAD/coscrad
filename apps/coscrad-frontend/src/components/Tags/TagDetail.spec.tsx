@@ -2,31 +2,27 @@ import { ITag } from '@coscrad/api-interfaces';
 import { screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../config';
 import { renderWithProviders } from '../../utils/test-utils';
 import { TagDetailContainer } from './TagDetail.container';
 
 const ARTIFICIAL_DELAY = 150;
 
-const dummyTags: ITag[] = [
+const allTags: ITag[] = [
     {
-        label: 'trees',
-        id: '101',
+        label: 'birds',
+        id: '201',
     },
     {
-        label: 'animals',
-        id: '102',
-    },
-    {
-        label: 'plants',
-        id: '103',
+        label: 'reptiles',
+        id: '202',
     },
 ];
 
 const handlers = [
     rest.get(`${getConfig().apiUrl}/tags`, (_, res, ctx) => {
-        return res(ctx.json(dummyTags), ctx.delay(ARTIFICIAL_DELAY));
+        return res(ctx.json(allTags), ctx.delay(ARTIFICIAL_DELAY));
     }),
 ];
 
@@ -48,13 +44,21 @@ describe(`Tag Detail`, () => {
 
     describe('when the API request is valid', () => {
         it('should display the tags', async () => {
+            const tagToFind = allTags[0];
+
+            const idToFind = tagToFind.id;
+
+            const initialRoute = `/Tags/${idToFind}`;
+
             renderWithProviders(
-                <MemoryRouter>
-                    <TagDetailContainer></TagDetailContainer>
+                <MemoryRouter initialEntries={[initialRoute]}>
+                    <Routes>
+                        <Route path="/Tags/:id" element={<TagDetailContainer />}></Route>
+                    </Routes>
                 </MemoryRouter>
             );
 
-            await waitFor(() => expect(screen.getByText(dummyTags[0].label)).toBeTruthy());
+            await waitFor(() => expect(screen.getByTestId(idToFind)).toBeTruthy());
         });
     });
 });

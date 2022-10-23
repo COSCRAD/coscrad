@@ -6,6 +6,7 @@ import { AppStore, RootState, setupStore } from '../store';
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
     preloadedState?: PreloadedState<RootState>;
     store?: AppStore;
+    route?: string;
 }
 
 /**
