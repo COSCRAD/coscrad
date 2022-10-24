@@ -1,4 +1,4 @@
-export interface ITag {
+export interface ITagViewModel {
     id: string;
     label: string;
 }

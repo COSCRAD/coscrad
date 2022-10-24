@@ -1,4 +1,4 @@
-import { ITag } from '@coscrad/api-interfaces';
+import { ITagViewModel } from '@coscrad/api-interfaces';
 import { screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
@@ -7,7 +7,7 @@ import { renderWithProviders } from '../../utils/test-utils/renderWithProviders'
 import { setupTestServer } from '../../utils/test-utils/setupTestServer';
 import { TagIndexContainer } from './TagIndex.container';
 
-const dummyTags: ITag[] = [
+const dummyTags: ITagViewModel[] = [
     {
         label: 'trees',
         id: '101',
@@ -22,7 +22,11 @@ const dummyTags: ITag[] = [
     },
 ];
 
-// TODO We need to inject a dummy config.
+/**
+ * TODO[https://www.pivotaltracker.com/story/show/183618729]
+ * We need to inject a dummy config. This test should not be dependent upon
+ * environment.
+ */
 const endpoint = `${getConfig().apiUrl}/tags`;
 
 // Would exposing a `buildGetHandler` (singular) make more sense? We can always map over an array.

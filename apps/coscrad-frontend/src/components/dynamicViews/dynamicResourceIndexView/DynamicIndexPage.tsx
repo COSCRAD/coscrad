@@ -60,6 +60,10 @@ export const DynamicIndexPage = () => {
 
     const schema = location.state?.schema;
 
+    /**
+     * TODO[https://www.pivotaltracker.com/story/show/183618729]
+     * We need to read the config from context \ a provider.
+     */
     const apiLink = `${getConfig().apiUrl}${location.state?.link}`;
 
     if (!isStringWithNonzeroLength(apiLink)) {

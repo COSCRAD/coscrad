@@ -1,4 +1,4 @@
-import { ITag } from '@coscrad/api-interfaces';
+import { ITagViewModel } from '@coscrad/api-interfaces';
 import { screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../config';
@@ -7,7 +7,7 @@ import { buildGetHandlers } from '../../utils/test-utils/buildGetHandlers';
 import { setupTestServer } from '../../utils/test-utils/setupTestServer';
 import { TagDetailContainer } from './TagDetail.container';
 
-const allTags: ITag[] = [
+const allTags: ITagViewModel[] = [
     {
         label: 'birds',
         id: '201',
@@ -18,7 +18,11 @@ const allTags: ITag[] = [
     },
 ];
 
-// TODO We need to inject a dummy config.
+/**
+ * TODO[https://www.pivotaltracker.com/story/show/183618729]
+ * We need to inject a dummy config. This test should not be dependent upon
+ * environment.
+ */
 const endpoint = `${getConfig().apiUrl}/tags`;
 
 const handlers = buildGetHandlers([

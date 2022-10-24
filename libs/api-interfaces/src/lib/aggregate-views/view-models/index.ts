@@ -1,1 +1,1 @@
-export * from './tag.interface';
+export * from './tag.view-model.interface';

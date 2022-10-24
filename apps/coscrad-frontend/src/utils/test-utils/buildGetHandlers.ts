@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 
-const ARTIFICIAL_DELAY = 150;
+const DEFAULT_ARTIFICIAL_DELAY = 150;
 
 export type EndpointAndResponse<T = unknown> = {
     endpoint: string;
@@ -9,7 +9,7 @@ export type EndpointAndResponse<T = unknown> = {
 
 export const buildGetHandlers = (
     mockEndpointsAndResponses: EndpointAndResponse[],
-    delay = ARTIFICIAL_DELAY
+    delay = DEFAULT_ARTIFICIAL_DELAY
 ) =>
     mockEndpointsAndResponses.map(({ endpoint, response }) =>
         rest.get(endpoint, (_, res, ctx) => {

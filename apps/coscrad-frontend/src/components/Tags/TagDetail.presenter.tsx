@@ -1,6 +1,10 @@
-import { ITag } from '@coscrad/api-interfaces';
+import { ITagViewModel } from '@coscrad/api-interfaces';
 
-export const TagDetailPresenter = ({ id, label }: ITag): JSX.Element => (
+/**
+ * TODO[https://www.pivotaltracker.com/story/show/183618856]
+ * We need to expose Tag commands through Tag queries.
+ */
+export const TagDetailPresenter = ({ id, label }: ITagViewModel): JSX.Element => (
     <div data-testid={id}>
         {label} (id: {id})
     </div>
