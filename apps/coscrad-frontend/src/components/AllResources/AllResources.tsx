@@ -6,8 +6,8 @@ import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
 import { Loading } from '../Loading';
 import ResourceInfoPresenter from '../presenters/ResourceInfoPresenter/ResourceInfoPresenter';
 
-export function AllResources() {
-    const resourceInfos = useSelector((state: RootState) => state.resourceInfo.infos);
+export function AllResources(): JSX.Element {
+    const resourceInfos = useSelector((state: RootState) => state.resourceInfo.data);
 
     const isLoading = useSelector((state: RootState) => state.resourceInfo.isLoading);
 
