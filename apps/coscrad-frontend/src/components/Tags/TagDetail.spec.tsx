@@ -3,7 +3,8 @@ import { screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../config';
 import { renderWithProviders } from '../../utils/test-utils';
-import { buildGetHandlers } from '../../utils/test-utils/buildGetHandlers';
+import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/buildMockSuccessfulGETHandler';
+import { testContainerComponentErrorHandling } from '../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../utils/test-utils/setupTestServer';
 import { TagDetailContainer } from './TagDetail.container';
 
@@ -25,33 +26,38 @@ const allTags: ITagViewModel[] = [
  */
 const endpoint = `${getConfig().apiUrl}/tags`;
 
-const handlers = buildGetHandlers([
-    {
-        endpoint,
-        response: allTags,
-    },
-]);
+const tagToFind = allTags[0];
+
+const idToFind = tagToFind.id;
+
+const initialRoute = `/Tags/${idToFind}`;
+
+const act = () =>
+    renderWithProviders(
+        <MemoryRouter initialEntries={[initialRoute]}>
+            <Routes>
+                <Route path="/Tags/:id" element={<TagDetailContainer />}></Route>
+            </Routes>
+        </MemoryRouter>
+    );
 
 describe(`Tag Detail`, () => {
-    setupTestServer(...handlers);
-
     describe('when the API request is valid', () => {
+        setupTestServer(
+            buildMockSuccessfulGETHandler({
+                endpoint,
+                response: allTags,
+            })
+        );
+
         it('should display the tags', async () => {
-            const tagToFind = allTags[0];
-
-            const idToFind = tagToFind.id;
-
-            const initialRoute = `/Tags/${idToFind}`;
-
-            renderWithProviders(
-                <MemoryRouter initialEntries={[initialRoute]}>
-                    <Routes>
-                        <Route path="/Tags/:id" element={<TagDetailContainer />}></Route>
-                    </Routes>
-                </MemoryRouter>
-            );
+            act();
 
             await waitFor(() => expect(screen.getByTestId(idToFind)).toBeTruthy());
         });
+    });
+
+    describe('when the API request is invalid', () => {
+        testContainerComponentErrorHandling(act, endpoint);
     });
 });

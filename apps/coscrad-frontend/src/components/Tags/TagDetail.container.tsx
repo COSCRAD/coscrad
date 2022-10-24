@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../store';
 import { fetchTags } from '../../store/slices/tagSlice/thunks';
+import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
 import { Loading } from '../Loading';
 import { TagDetailPresenter } from './TagDetail.presenter';
 
@@ -14,6 +16,16 @@ export const TagDetailContainer = (): JSX.Element => {
     const isLoading = useSelector((state: RootState) => state.tags.isLoading);
 
     const allTags = useSelector((state: RootState) => state.tags.data);
+
+    const errorInfo = useSelector((state: RootState) => state.tags.errorInfo);
+
+    useEffect(() => {
+        if (allTags === null) {
+            dispatch(fetchTags());
+        }
+    }, [allTags, dispatch]);
+
+    if (errorInfo) return <ErrorDisplay {...errorInfo}></ErrorDisplay>;
 
     if (isLoading) return <Loading></Loading>;
 

@@ -2,7 +2,8 @@ import { ITagViewModel } from '@coscrad/api-interfaces';
 import { screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
-import { buildGetHandlers } from '../../utils/test-utils/buildGetHandlers';
+import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/buildMockSuccessfulGETHandler';
+import { testContainerComponentErrorHandling } from '../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { renderWithProviders } from '../../utils/test-utils/renderWithProviders';
 import { setupTestServer } from '../../utils/test-utils/setupTestServer';
 import { TagIndexContainer } from './TagIndex.container';
@@ -29,26 +30,30 @@ const dummyTags: ITagViewModel[] = [
  */
 const endpoint = `${getConfig().apiUrl}/tags`;
 
-// Would exposing a `buildGetHandler` (singular) make more sense? We can always map over an array.
-const handlers = buildGetHandlers([
-    {
-        endpoint,
-        response: dummyTags,
-    },
-]);
+const act = () =>
+    renderWithProviders(
+        <MemoryRouter>
+            <TagIndexContainer></TagIndexContainer>
+        </MemoryRouter>
+    );
 
 describe(`Tag Index`, () => {
-    setupTestServer(...handlers);
-
     describe('when the API request is valid', () => {
+        setupTestServer(
+            buildMockSuccessfulGETHandler({
+                endpoint,
+                response: dummyTags,
+            })
+        );
+
         it('should display the tags', async () => {
-            renderWithProviders(
-                <MemoryRouter>
-                    <TagIndexContainer></TagIndexContainer>
-                </MemoryRouter>
-            );
+            act();
 
             await waitFor(() => expect(screen.getByTestId(dummyTags[0].id)).toBeTruthy());
         });
+    });
+
+    describe('when the API request is invalid or in progress', () => {
+        testContainerComponentErrorHandling(act, endpoint);
     });
 });

@@ -16,8 +16,8 @@
         "**/*.spec.jsx",
         "**/*.d.ts",
         "jest.config.ts",
-        "**/test-utils/*.ts",
-        "**/test-utils/*.tsx"
+        "**/test-utils/**/*.ts",
+        "**/test-utils/**/*.tsx"
 ,    ],
     "files": [
         "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
