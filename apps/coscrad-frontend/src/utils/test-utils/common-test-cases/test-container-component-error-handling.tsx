@@ -6,6 +6,11 @@ import {
 import { ERROR_TEST_ID, LOADING_TEST_ID } from '../constants';
 import { setupTestServer } from '../setupTestServer';
 
+/**
+ * TODO we need to update the checks here to identify specific error codes. Otherwise,
+ * the tests will pass when the route is not overridden and there is a network
+ * error as a result.
+ */
 export const testContainerComponentErrorHandling = (act: () => void, endpoint: string) => {
     describe(`when the request resturns a 'Not Found' (404)`, () => {
         setupTestServer(buildMockGETHandlerWithError(MockErrorResponseType.notFound, endpoint));
