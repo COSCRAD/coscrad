@@ -1,6 +1,6 @@
 import { MemoryRouter } from 'react-router-dom';
 import { ConfigurableContent } from '../configurable-front-matter/data/configurableContentSchema';
-import { renderWithProviders } from '../utils/test-utils';
+import { renderWithProviders } from '../utils/test-utils/renderWithProviders';
 import App from './App';
 
 export const getDummyConfigurableContent = (): ConfigurableContent => ({

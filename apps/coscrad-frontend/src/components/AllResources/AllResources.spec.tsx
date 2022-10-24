@@ -4,7 +4,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
-import { renderWithProviders } from '../../utils/test-utils';
+import { renderWithProviders } from '../../utils/test-utils/renderWithProviders';
 import { AllResources } from './AllResources';
 
 const ARTIFICIAL_DELAY = 150;
@@ -32,6 +32,11 @@ enum ResponseType {
 let responseType: ResponseType;
 
 const handlers = [
+    /**
+     * TODO[https://www.pivotaltracker.com/story/show/183618729]
+     * We need to inject a dummy config. This test should not be dependent upon
+     * environment.
+     */
     rest.get(`${getConfig().apiUrl}/resources`, (_, res, ctx) => {
         if (!responseType) {
             throw new Error(`You must set a dummy response status in your test case`);

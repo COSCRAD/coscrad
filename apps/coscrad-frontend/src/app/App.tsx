@@ -6,6 +6,8 @@ import { DynamicIndexPage } from '../components/dynamicViews/dynamicResourceInde
 import Header from '../components/Header/Header';
 import Home from '../components/Home/Home';
 import MembersOnly from '../components/MembersOnly/MembersOnly';
+import { TagDetailContainer } from '../components/Tags/TagDetail.container';
+import { TagIndexContainer } from '../components/Tags/TagIndex.container';
 import { ConfigurableContent } from '../configurable-front-matter/data/configurableContentSchema';
 import './App.css';
 
@@ -25,6 +27,8 @@ export function App({ content }: AppProps) {
                     <Route path="MembersOnly" element={<MembersOnly />} />
                     <Route path="ResourceIndex" element={<DynamicIndexPage />} />
                     <Route path="ResourceDetail" element={<DynamicResourceDetailPage />} />
+                    <Route path="Tags" element={<TagIndexContainer />} />
+                    <Route path="Tags/:id" element={<TagDetailContainer />} />
                 </Routes>
             </div>
         </div>
