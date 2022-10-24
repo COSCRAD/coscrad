@@ -1,50 +1,23 @@
-import { HttpStatusCode, IAggregateInfo, IHttpErrorInfo } from '@coscrad/api-interfaces';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { IAggregateInfo } from '@coscrad/api-interfaces';
+import { createSlice } from '@reduxjs/toolkit';
 import { getConfig } from '../../config';
+import { ILoadable } from './interfaces/loadable.interface';
+import { buildReducersForThunk } from './utils/buildReducersForThunk';
+import { createFetchThunk } from './utils/createFetchThunk';
 
 export const RESOURCE_INFO = 'resourceInfo';
 
-export type ResourceInfosState = {
-    infos: IAggregateInfo[];
-    isLoading: boolean;
-    errorInfo: null | IHttpErrorInfo;
-};
+export type ResourceInfosState = ILoadable<IAggregateInfo[]>;
 
 const initialState: ResourceInfosState = {
-    infos: [],
+    data: [],
     isLoading: false,
     errorInfo: null,
 };
 
-export const fetchResourceInfos = createAsyncThunk(
+export const fetchResourceInfos = createFetchThunk<IAggregateInfo[]>(
     `${RESOURCE_INFO}/fetchInfos`,
-    async (_, thunkApi) => {
-        const baseUrl = getConfig().apiUrl;
-
-        // Should we include "api" here?
-        const endpoint = `${baseUrl}/resources`;
-
-        const response = await fetch(endpoint);
-
-        const responseJson = await response.json();
-
-        if (response.status !== HttpStatusCode.ok)
-            /**
-             * TODO We need more specific error handling that considers the format of
-             * and difference between a returned error, a system error (backend runtime exception),
-             * and other errors (e.g. not found, not authroized).
-             *
-             * Further, we need to break this logic out into a utility so we
-             * can reuse it across all API requests.
-             */
-            return thunkApi.rejectWithValue({
-                code: responseJson.statusCode,
-                message: responseJson.error,
-            } as IHttpErrorInfo);
-
-        // Trust the backend. Cypress can give us more confidence.
-        return responseJson as Promise<IAggregateInfo[]>;
-    }
+    `${getConfig().apiUrl}/resources`
 );
 
 /**
@@ -58,25 +31,7 @@ export const resourceInfoSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(fetchResourceInfos.pending, (state: ResourceInfosState, _) => {
-            state.isLoading = true;
-        });
-
-        builder.addCase(fetchResourceInfos.fulfilled, (state: ResourceInfosState, action) => {
-            state.infos = action.payload;
-            state.isLoading = false;
-        });
-
-        builder.addCase(fetchResourceInfos.rejected, (state: ResourceInfosState, action) => {
-            if (action.payload) {
-                state.errorInfo = action.payload as IHttpErrorInfo;
-            } else {
-                state.errorInfo = {
-                    code: HttpStatusCode.internalError,
-                    message: action.error.message,
-                };
-            }
-        });
+        buildReducersForThunk(builder, fetchResourceInfos);
     },
 });
 

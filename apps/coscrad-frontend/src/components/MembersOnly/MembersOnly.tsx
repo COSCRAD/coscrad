@@ -1,5 +1,5 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getConfig } from '../../config';
 
 type ComponentState = {
@@ -14,6 +14,10 @@ function MembersOnly() {
     useEffect(() => {
         setAppState({ message: 'Loading' });
 
+        /**
+         * TODO[https://www.pivotaltracker.com/story/show/183618729]
+         * We need to read the config from context \ a provider.
+         */
         const endpoint = `${getConfig().apiUrl}/hello`;
 
         fetch(endpoint, { mode: 'cors' })
@@ -23,8 +27,6 @@ function MembersOnly() {
                 return result;
             })
             .then((message) => {
-                console.log({ message });
-
                 setAppState({
                     message,
                 });

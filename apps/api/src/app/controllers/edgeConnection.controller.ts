@@ -28,6 +28,12 @@ import sendInternalResultAsHttpResponse from './resources/common/sendInternalRes
 import { mixLinkIntoViewModelDescription } from './utilities/mixLinkIntoViewModelDescription';
 import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';
 
+/**
+ * TODO We need to return standardized query resuponses here (`IIndexQueryResult`
+ * and `IDetailQueryResult`). Further, we need to use a query service to
+ * extract the internal logic from the controller. The controller should
+ * simply adapt to HTTP.
+ */
 @ApiTags('web of knowledge (edge connections)')
 @Controller(NOTE_INDEX_ROUTE)
 export class EdgeConnectionController {
