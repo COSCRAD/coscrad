@@ -1,4 +1,6 @@
 import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
+import { noteReducer, NOTES } from './slices/noteSlice';
+
 import { resourceInfoReducer, RESOURCE_INFO } from './slices/resourceInfoSlice';
 import { tagReducer } from './slices/tagSlice';
 import { TAGS } from './slices/tagSlice/constants';
@@ -6,6 +8,7 @@ import { TAGS } from './slices/tagSlice/constants';
 export const rootReducer = combineReducers({
     [RESOURCE_INFO]: resourceInfoReducer,
     [TAGS]: tagReducer,
+    [NOTES]: noteReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>

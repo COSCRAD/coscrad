@@ -1,28 +1,45 @@
-import { Link } from 'react-router-dom';
-import AuthenticationButton from '../AuthenticationButton/AuthenticationButton';
 import './NavBar.css';
+import { NavBarItem } from './NavBarItem';
+
+export type NavItemInfo = {
+    link: string;
+    label: string;
+};
+
+// We may want an enum \ constants for our routes
+const navItemInfos: NavItemInfo[] = [
+    {
+        link: '/',
+        label: 'Home',
+    },
+    {
+        link: '/About',
+        label: 'About',
+    },
+    {
+        link: '/AllResources',
+        label: 'Browse Resources',
+    },
+    {
+        link: '/MembersOnly',
+        label: 'Members Only',
+    },
+    {
+        link: '/Tags',
+        label: 'Tags',
+    },
+    {
+        link: '/Notes',
+        label: 'Notes',
+    },
+];
 
 export function NavBar() {
     return (
         <ul>
-            <li>
-                <Link to="/">Home</Link>
-            </li>
-            <li>
-                <Link to="/About">About</Link>
-            </li>
-            <li>
-                <Link to="/AllResources">Browse Resources</Link>
-            </li>
-            <li>
-                <Link to="/MembersOnly">Members Only</Link>
-            </li>
-            <li>
-                <Link to="/Tags">Tags</Link>
-            </li>
-            <li>
-                <AuthenticationButton></AuthenticationButton>
-            </li>
+            {navItemInfos.map((info, index) => (
+                <NavBarItem {...info} key={index} />
+            ))}
         </ul>
     );
 }
