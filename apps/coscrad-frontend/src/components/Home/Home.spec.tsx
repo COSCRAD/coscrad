@@ -1,6 +1,6 @@
 import { MemoryRouter } from 'react-router-dom';
 import { getDummyConfigurableContent } from '../../app/App.spec';
-import { renderWithProviders } from '../../utils/test-utils';
+import { renderWithProviders } from '../../utils/test-utils/renderWithProviders';
 
 import Home from './Home';
 

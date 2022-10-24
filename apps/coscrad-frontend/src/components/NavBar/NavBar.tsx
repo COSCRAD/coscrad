@@ -18,6 +18,9 @@ export function NavBar() {
                 <Link to="/MembersOnly">Members Only</Link>
             </li>
             <li>
+                <Link to="/Tags">Tags</Link>
+            </li>
+            <li>
                 <AuthenticationButton></AuthenticationButton>
             </li>
         </ul>
