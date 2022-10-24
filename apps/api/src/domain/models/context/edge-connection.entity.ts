@@ -25,23 +25,19 @@ import { PointContext } from './point-context/point-context.entity';
 import { TextFieldContext } from './text-field-context/text-field-context.entity';
 import { TimeRangeContext } from './time-range-context/time-range-context.entity';
 
-export enum EdgeConnectionType {
-    self = 'self',
-    dual = 'dual',
-}
+export { isEdgeConnectionType } from '@coscrad/api-interfaces';
+export { EdgeConnectionMemberRole, EdgeConnectionType, IEdgeConnectionMember };
 
-export const isEdgeConnectionType = (input: unknown): input is EdgeConnectionType =>
-    Object.values(EdgeConnectionType).includes(input as EdgeConnectionType);
+import {
+    EdgeConnectionMemberRole,
+    EdgeConnectionType,
+    IEdgeConnectionMember,
+} from '@coscrad/api-interfaces';
 
-export enum EdgeConnectionMemberRole {
-    to = 'to',
-    from = 'from',
-    self = 'self',
-}
-
-export class EdgeConnectionMember<
-    T extends EdgeConnectionContext = EdgeConnectionContext
-> extends BaseDomainModel {
+export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
+    extends BaseDomainModel
+    implements IEdgeConnectionMember
+{
     @CompositeIdentifier(ResourceType, isResourceType)
     readonly compositeIdentifier: ResourceCompositeIdentifier;
 

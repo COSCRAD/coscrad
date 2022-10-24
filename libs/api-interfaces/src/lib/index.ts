@@ -1,6 +1,7 @@
 export * from './aggregate-views';
 export * from './command-info.interface';
 export * from './commands';
+export * from './composite-identifier.interface';
 export * from './data-types';
 export * from './detail-query-result.interface';
 export * from './flux-standard-action.interface';
