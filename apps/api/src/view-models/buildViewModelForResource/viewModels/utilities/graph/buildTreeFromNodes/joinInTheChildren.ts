@@ -1,8 +1,8 @@
 import { Category } from '../../../../../../domain/models/categories/entities/category.entity';
 import idEquals from '../../../../../../domain/models/shared/functional/idEquals';
-import { CateogryTreeViewModel } from '../../../category-tree.view-model';
+import { CategoryTreeViewModel } from '../../../category-tree.view-model';
 
-const joinInTheChildren = (node: Category, allNodes: Category[]): CateogryTreeViewModel => ({
+const joinInTheChildren = (node: Category, allNodes: Category[]): CategoryTreeViewModel => ({
     id: node.id,
     label: node.label,
     members: node.members,

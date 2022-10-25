@@ -32,6 +32,10 @@ const navItemInfos: NavItemInfo[] = [
         link: '/Notes',
         label: 'Notes',
     },
+    {
+        link: '/TreeOfKnowledge',
+        label: 'Tree of Knowledge',
+    },
 ];
 
 export function NavBar() {
