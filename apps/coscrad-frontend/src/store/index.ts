@@ -1,4 +1,6 @@
 import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
+import { categoryTreeReducer } from './slices/categorySlice';
+import { CATEGORY_TREE } from './slices/categorySlice/constants';
 import { noteReducer, NOTES } from './slices/noteSlice';
 
 import { resourceInfoReducer, RESOURCE_INFO } from './slices/resourceInfoSlice';
@@ -9,6 +11,7 @@ export const rootReducer = combineReducers({
     [RESOURCE_INFO]: resourceInfoReducer,
     [TAGS]: tagReducer,
     [NOTES]: noteReducer,
+    [CATEGORY_TREE]: categoryTreeReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
