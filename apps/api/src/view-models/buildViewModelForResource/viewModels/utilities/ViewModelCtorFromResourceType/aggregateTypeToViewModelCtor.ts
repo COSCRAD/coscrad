@@ -7,7 +7,7 @@ import { NoteViewModel } from '../../../../edgeConnectionViewModels/note.view-mo
 import { BaseViewModel } from '../../base.view-model';
 import { BibliographicReferenceViewModel } from '../../bibliographic-reference/bibliographic-reference.view-model';
 import { BookViewModel } from '../../book.view-model';
-import { CateogryTreeViewModel } from '../../category-tree.view-model';
+import { CategoryTreeViewModel } from '../../category-tree.view-model';
 import { CoscradUserViewModel } from '../../coscrad-user.view-model';
 import { MediaItemViewModel } from '../../media-item.view-model';
 import { PhotographViewModel } from '../../photograph.view-model';
@@ -29,7 +29,7 @@ export const aggregateTypeToViewModelCtor: { [K in AggregateType]: Ctor<BaseView
     [ResourceType.transcribedAudio]: TranscribedAudioViewModel,
     [ResourceType.vocabularyList]: VocabularyListViewModel,
     [CategorizableType.note]: NoteViewModel,
-    [AggregateType.category]: CateogryTreeViewModel,
+    [AggregateType.category]: CategoryTreeViewModel,
     [AggregateType.tag]: TagViewModel,
     [AggregateType.user]: CoscradUserViewModel,
     [AggregateType.userGroup]: CoscradUserGroup,

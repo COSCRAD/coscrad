@@ -1,24 +1,24 @@
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../store';
 import { fetchNotes } from '../../store/slices/noteSlice/thunks';
-import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
-import { Loading } from '../Loading';
+import { useLoadable } from '../../utils/custom-hooks/useLoadable';
+import { wrapArrayProps } from '../../utils/prop-manipulation/wrap-array-props';
+import { displayLoadableWithErrorsAndLoading } from '../higher-order-components/displayLoadableWithErrorsAndLoading';
 import { NoteIndexPresenter } from './NoteIndex.presenter';
 
 export const NoteIndexContainer = (): JSX.Element => {
-    const { data: notes, isLoading, errorInfo } = useSelector((state: RootState) => state.notes);
+    const selector = (state: RootState) => state.notes;
 
-    const dispatch = useAppDispatch();
+    const [loadableNotes] = useLoadable({
+        selector,
+        fetchThunk: fetchNotes,
+    });
 
-    useEffect(() => {
-        if (notes === null) dispatch(fetchNotes());
-    }, [notes, dispatch]);
+    // wrap the presenter with handling for errors and pending state
+    const LoadableNotePresenter = displayLoadableWithErrorsAndLoading(
+        NoteIndexPresenter,
+        // wrap the loaded array in a nested prop
+        wrapArrayProps
+    );
 
-    if (errorInfo) return <ErrorDisplay {...errorInfo} />;
-
-    if (isLoading || notes === null) return <Loading></Loading>;
-
-    return <NoteIndexPresenter notes={notes} />;
+    return <LoadableNotePresenter {...loadableNotes} />;
 };
