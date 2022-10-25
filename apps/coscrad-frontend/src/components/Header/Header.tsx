@@ -1,13 +1,12 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { NavBar } from '../NavBar/NavBar';
 import './Header.css';
 
-export interface HeaderProps {
-    siteTitle: string;
-    subTitle: string;
-}
+export function Header() {
+    const { siteTitle, subTitle } = useContext(ConfigurableContentContext);
 
-export function Header({ siteTitle, subTitle }: HeaderProps) {
     return (
         <header>
             <h1>
