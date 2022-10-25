@@ -1,10 +1,10 @@
+import { useContext } from 'react';
+import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import './Home.module.scss';
 
-export interface HomeProps {
-    siteDescription: string;
-}
+export function Home() {
+    const { siteDescription } = useContext(ConfigurableContentContext);
 
-export function Home({ siteDescription }: HomeProps) {
     return <div>{siteDescription}</div>;
 }
 
