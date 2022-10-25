@@ -1,15 +1,15 @@
 import { ITagViewModel } from '@coscrad/api-interfaces';
 import { Link } from 'react-router-dom';
 
-interface HasTags {
-    tags: ITagViewModel[];
-}
+type HasViewModels<TViewModel> = {
+    data: TViewModel[];
+};
 
 /**
  * TODO[https://www.pivotaltracker.com/story/show/183618856]
  * We need to expose Tag commands through Tag queries.
  */
-export const TagIndexPresenter = ({ tags }: HasTags): JSX.Element => (
+export const TagIndexPresenter = ({ data: tags }: HasViewModels<ITagViewModel>): JSX.Element => (
     <div>
         {tags.map((tag) => (
             // TODO Format as table

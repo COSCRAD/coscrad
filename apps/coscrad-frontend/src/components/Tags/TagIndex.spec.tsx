@@ -33,7 +33,7 @@ const endpoint = `${getConfig().apiUrl}/tags`;
 const act = () =>
     renderWithProviders(
         <MemoryRouter>
-            <TagIndexContainer></TagIndexContainer>
+            <TagIndexContainer />
         </MemoryRouter>
     );
 
