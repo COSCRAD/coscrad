@@ -4,7 +4,7 @@ import { Category } from '../../domain/models/categories/entities/category.entit
 import { isInternalError } from '../../lib/errors/InternalError';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
-import { CateogryTreeViewModel } from '../../view-models/buildViewModelForResource/viewModels/category-tree.view-model';
+import { CategoryTreeViewModel } from '../../view-models/buildViewModelForResource/viewModels/category-tree.view-model';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import { CATEGORY_TREE_INDEX_ROUTE } from './constants';
 
@@ -28,7 +28,7 @@ export class CategoryController {
 
         const tree = result as Category[];
 
-        const treeViewModel = new CateogryTreeViewModel(tree);
+        const treeViewModel = new CategoryTreeViewModel(tree);
 
         return res.status(httpStatusCodes.ok).send(cloneToPlainObject(treeViewModel));
     }
