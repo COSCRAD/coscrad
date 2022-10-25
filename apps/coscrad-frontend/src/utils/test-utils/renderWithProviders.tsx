@@ -2,11 +2,15 @@ import { PreloadedState } from '@reduxjs/toolkit';
 import { render, RenderOptions } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
+import { getDummyConfigurableContent } from '../../app/App.spec';
+import { ConfigurableContentProvider } from '../../configurable-front-matter/configurable-content-provider';
+import { ConfigurableContent } from '../../configurable-front-matter/data/configurableContentSchema';
 import { AppStore, RootState, setupStore } from '../../store';
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
     preloadedState?: PreloadedState<RootState>;
     store?: AppStore;
     route?: string;
+    contentConfig?: ConfigurableContent;
 }
 
 /**
@@ -17,12 +21,17 @@ export const renderWithProviders = (
     {
         preloadedState = {},
         store = setupStore(preloadedState),
+        contentConfig = getDummyConfigurableContent(),
         ...renderOptions
     }: ExtendedRenderOptions = {}
 ) => {
     // eslint-disable-next-line @typescript-eslint/ban-types
     const Wrapper = ({ children }: PropsWithChildren<{}>): JSX.Element => (
-        <Provider store={store}>{children}</Provider>
+        <Provider store={store}>
+            <ConfigurableContentProvider value={contentConfig}>
+                {children}
+            </ConfigurableContentProvider>
+        </Provider>
     );
 
     return {
