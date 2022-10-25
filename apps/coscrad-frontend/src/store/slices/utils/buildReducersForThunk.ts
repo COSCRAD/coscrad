@@ -13,7 +13,6 @@ export const buildReducersForThunk = <TState extends ILoadable<unknown>, URespon
     });
 
     // @ts-expect-error fix types
-
     builder.addCase(thunk.fulfilled, (state: TState, action) => {
         state.data = action.payload;
         state.isLoading = false;
