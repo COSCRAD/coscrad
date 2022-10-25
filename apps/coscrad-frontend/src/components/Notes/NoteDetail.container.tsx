@@ -21,16 +21,11 @@ export const NoteDetailContainer = (): JSX.Element => {
 
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;
 
-    if (isLoading) return <Loading />;
-
-    if (allNotes === null) {
-        dispatch(fetchNotes());
-
-        return <Loading />;
-    }
+    if (isLoading || allNotes === null) return <Loading />;
 
     const note = allNotes.find(({ id }) => id === idFromLocation);
 
+    // Make this render a <NotFound />
     if (!note) return <div>Not Found</div>;
 
     return <NoteDetailPresenter {...note} />;

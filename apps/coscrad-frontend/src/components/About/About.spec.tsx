@@ -1,11 +1,10 @@
-import { render } from '@testing-library/react';
-import { getDummyConfigurableContent } from '../../app/App.spec';
+import { renderWithProviders } from '../../utils/test-utils';
 
 import About from './About';
 
 describe('About', () => {
     it('should render successfully', () => {
-        const { baseElement } = render(<About frontMatter={getDummyConfigurableContent()} />);
+        const { baseElement } = renderWithProviders(<About />);
         expect(baseElement).toBeTruthy();
     });
 });
