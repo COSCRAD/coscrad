@@ -2,8 +2,10 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { AppContainer } from './app/App.container';
+import App from './app/App';
 import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
+import { getConfigurableContent } from './configurable-front-matter';
+import { ConfigurableContentProvider } from './configurable-front-matter/configurable-content-provider';
 import { setupStore } from './store';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -12,7 +14,10 @@ root.render(
         <Provider store={setupStore()}>
             <BrowserRouter>
                 <Auth0ProviderWithHistory>
-                    <AppContainer />
+                    {/* The following will throw (fail fast) if the content config is invalid */}
+                    <ConfigurableContentProvider value={getConfigurableContent()}>
+                        <App />
+                    </ConfigurableContentProvider>
                 </Auth0ProviderWithHistory>
             </BrowserRouter>
         </Provider>

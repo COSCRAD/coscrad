@@ -30,8 +30,6 @@ export const TagDetailContainer = (): JSX.Element => {
     if (isLoading) return <Loading></Loading>;
 
     if (allTags === null) {
-        dispatch(fetchTags());
-
         return <Loading></Loading>;
     }
 

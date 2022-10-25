@@ -10,21 +10,16 @@ import { NoteDetailContainer } from '../components/Notes/NoteDetail.container';
 import { NoteIndexContainer } from '../components/Notes/NoteIndex.container';
 import { TagDetailContainer } from '../components/Tags/TagDetail.container';
 import { TagIndexContainer } from '../components/Tags/TagIndex.container';
-import { ConfigurableContent } from '../configurable-front-matter/data/configurableContentSchema';
 import './App.css';
 
-type AppProps = {
-    content: ConfigurableContent;
-};
-
-export function App({ content }: AppProps) {
+export function App() {
     return (
         <div className="main">
-            <Header {...content}></Header>
+            <Header />
             <div>
                 <Routes>
-                    <Route path="/" element={<Home {...content} />} />
-                    <Route path="About" element={<About {...content} />} />
+                    <Route path="/" element={<Home />} />
+                    <Route path="About" element={<About />} />
                     <Route path="AllResources" element={<AllResources />} />
                     <Route path="MembersOnly" element={<MembersOnly />} />
                     <Route path="ResourceIndex" element={<DynamicIndexPage />} />
