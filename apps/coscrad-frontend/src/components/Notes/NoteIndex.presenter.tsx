@@ -1,11 +1,8 @@
 import { INoteViewModel } from '@coscrad/api-interfaces';
 import { Link } from 'react-router-dom';
+import { HasData } from '../higher-order-components';
 
-type HasNotes = {
-    notes: INoteViewModel[];
-};
-
-export const NoteIndexPresenter = ({ notes }: HasNotes): JSX.Element => (
+export const NoteIndexPresenter = ({ data: notes }: HasData<INoteViewModel[]>): JSX.Element => (
     <div>
         {notes.map((note) => (
             <div key={note.id} data-testid={note.id}>
