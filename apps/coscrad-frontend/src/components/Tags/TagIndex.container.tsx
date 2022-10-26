@@ -1,8 +1,8 @@
 import { RootState } from '../../store';
 import { fetchTags } from '../../store/slices/tagSlice/thunks';
 import { useLoadable } from '../../utils/custom-hooks/useLoadable';
-import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
-import { Loading } from '../Loading';
+import { wrapArrayProps } from '../../utils/prop-manipulation/wrap-array-props';
+import { displayLoadableWithErrorsAndLoading } from '../higher-order-components';
 import { TagIndexPresenter } from './TagIndex.presenter';
 
 export const TagIndexContainer = (): JSX.Element => {
@@ -11,11 +11,12 @@ export const TagIndexContainer = (): JSX.Element => {
         fetchThunk: fetchTags,
     });
 
-    const { data: tagsData, isLoading, errorInfo } = loadableTags;
+    // wrap the presenter with handling for errors and pending state
+    const LoadableTagPresenter = displayLoadableWithErrorsAndLoading(
+        TagIndexPresenter,
+        // wrap the loaded array in a nested prop
+        wrapArrayProps
+    );
 
-    if (errorInfo) return <ErrorDisplay {...errorInfo}></ErrorDisplay>;
-
-    if (isLoading || tagsData === null) return <Loading></Loading>;
-
-    return <TagIndexPresenter viewModels={tagsData}></TagIndexPresenter>;
+    return <LoadableTagPresenter {...loadableTags} />;
 };

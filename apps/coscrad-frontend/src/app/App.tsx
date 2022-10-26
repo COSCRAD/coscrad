@@ -10,6 +10,7 @@ import { NoteDetailContainer } from '../components/Notes/NoteDetail.container';
 import { NoteIndexContainer } from '../components/Notes/NoteIndex.container';
 import { TagDetailContainer } from '../components/Tags/TagDetail.container';
 import { TagIndexContainer } from '../components/Tags/TagIndex.container';
+import { CategoryTreeContainer } from '../components/TreeOfKnowledge/CategoryTree.container';
 import './App.css';
 
 export function App() {
@@ -28,6 +29,7 @@ export function App() {
                     <Route path="Notes/:id" element={<NoteDetailContainer />} />
                     <Route path="Tags" element={<TagIndexContainer />} />
                     <Route path="Tags/:id" element={<TagDetailContainer />} />
+                    <Route path="TreeOfKnowledge" element={<CategoryTreeContainer />} />
                 </Routes>
             </div>
         </div>
