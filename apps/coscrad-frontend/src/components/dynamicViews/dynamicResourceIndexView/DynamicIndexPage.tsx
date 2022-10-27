@@ -1,4 +1,9 @@
-import { ICommandInfo, IDetailQueryResult, IIndexQueryResult } from '@coscrad/api-interfaces';
+import {
+    ICommandFormAndLabels,
+    ICommandInfo,
+    IDetailQueryResult,
+    IIndexQueryResult,
+} from '@coscrad/api-interfaces';
 import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -8,7 +13,7 @@ import { DynamicIndexPresenter } from './DynamicIndexPresenter';
 
 type DynamicIndexPageState = {
     detailDataAndActions: IDetailQueryResult[];
-    actions: ICommandInfo[];
+    actions: ICommandFormAndLabels[];
     isLoading: boolean;
 };
 

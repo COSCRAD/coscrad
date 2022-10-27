@@ -1,12 +1,12 @@
-import { ICommandInfo, IDetailQueryResult } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels, IDetailQueryResult } from '@coscrad/api-interfaces';
 import { ClassSchema } from '@coscrad/data-types';
 import { Link } from 'react-router-dom';
-import { CommandInfo, CommandPanel } from '../commands';
+import { CommandPanel } from '../commands';
 
 export type IndexProps = {
     schema: ClassSchema;
     data: IDetailQueryResult[];
-    actions: ICommandInfo[];
+    actions: ICommandFormAndLabels[];
 };
 
 /**
@@ -38,7 +38,7 @@ export const DynamicIndexPresenter = ({ data, schema, actions }: IndexProps): JS
                 <tbody>
                     {data.map(({ data: viewData, actions }) => {
                         return (
-                            <tr>
+                            <tr key={viewData.id}>
                                 {Object.entries(schema).map(([key, dataSchema]) => (
                                     <td>
                                         <Link
@@ -61,7 +61,7 @@ export const DynamicIndexPresenter = ({ data, schema, actions }: IndexProps): JS
                 </tbody>
             </table>
             <div>
-                <CommandPanel actions={actions as CommandInfo[]}></CommandPanel>
+                <CommandPanel actions={actions}></CommandPanel>
             </div>
         </div>
     );
