@@ -1,3 +1,4 @@
+import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../utils/test-utils';
 import { NavItemInfo } from './NavBar';
 import { NavBarItem } from './NavBarItem';
@@ -9,7 +10,11 @@ const dummyNavBarItemProps: NavItemInfo = {
 
 describe('NavBarItem', () => {
     it('should render successfully', () => {
-        const { baseElement } = renderWithProviders(<NavBarItem {...dummyNavBarItemProps} />);
+        const { baseElement } = renderWithProviders(
+            <MemoryRouter>
+                <NavBarItem {...dummyNavBarItemProps} />
+            </MemoryRouter>
+        );
         expect(baseElement).toBeTruthy();
     });
 });
