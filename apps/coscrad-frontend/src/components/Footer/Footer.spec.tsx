@@ -1,10 +1,9 @@
 import { renderWithProviders } from '../../utils/test-utils';
+import { Footer } from './Footer';
 
-import { About } from './About';
-
-describe('About', () => {
+describe('Footer', () => {
     it('should render successfully', () => {
-        const { baseElement } = renderWithProviders(<About />);
+        const { baseElement } = renderWithProviders(<Footer />);
         expect(baseElement).toBeTruthy();
     });
 });

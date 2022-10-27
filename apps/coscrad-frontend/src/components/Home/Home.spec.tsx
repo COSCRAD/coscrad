@@ -1,7 +1,7 @@
 import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../utils/test-utils/renderWithProviders';
 
-import Home from './Home';
+import { Home } from './Home';
 
 describe('Home', () => {
     it('should render successfully', () => {

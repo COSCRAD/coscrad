@@ -1,10 +1,9 @@
 import { renderWithProviders } from '../../utils/test-utils';
+import { NavBar } from './NavBar';
 
-import { About } from './About';
-
-describe('About', () => {
+describe('NavBar', () => {
     it('should render successfully', () => {
-        const { baseElement } = renderWithProviders(<About />);
+        const { baseElement } = renderWithProviders(<NavBar />);
         expect(baseElement).toBeTruthy();
     });
 });

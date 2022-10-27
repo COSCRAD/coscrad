@@ -1,10 +1,9 @@
 import { renderWithProviders } from '../../utils/test-utils';
+import { Header } from './Header';
 
-import { About } from './About';
-
-describe('About', () => {
+describe('Header', () => {
     it('should render successfully', () => {
-        const { baseElement } = renderWithProviders(<About />);
+        const { baseElement } = renderWithProviders(<Header />);
         expect(baseElement).toBeTruthy();
     });
 });
