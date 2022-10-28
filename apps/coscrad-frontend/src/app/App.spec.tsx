@@ -12,14 +12,18 @@ export const getDummyConfigurableContent = (): ConfigurableContent => ({
 
     siteDescription: 'This is my testing site',
 
+    siteHomeImageUrl: 'https://mysite.com/image.png',
+
     copyrightHolder: 'ME',
+
+    organizationLogoUrl: 'https://mysite.com/logo.png',
 });
 
 describe('App', () => {
     it('should render successfully', () => {
         const { baseElement } = renderWithProviders(
             <MemoryRouter>
-                <App content={getDummyConfigurableContent()} />
+                <App />
             </MemoryRouter>
         );
 

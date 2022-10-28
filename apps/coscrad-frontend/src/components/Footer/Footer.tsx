@@ -4,7 +4,7 @@ import { COSCRADByline } from '../COSCRADByline/COSCRADByline';
 import { TenantLogo } from '../TenantLogo/TenantLogo';
 
 export const Footer = (): JSX.Element => {
-    const { copyrightHolder, organizationLogoUrl } = useContext(ConfigurableContentContext);
+    const { copyrightHolder } = useContext(ConfigurableContentContext);
 
     return (
         <footer>
