@@ -5,6 +5,7 @@ type UnionMemberSchemaDefinition = {
     schema: ClassSchema;
 };
 
+// TODO consolidate with api-interfaces
 export type UnionMetadata = {
     discriminantPath: string;
     schemaDefinitions: UnionMemberSchemaDefinition[];
