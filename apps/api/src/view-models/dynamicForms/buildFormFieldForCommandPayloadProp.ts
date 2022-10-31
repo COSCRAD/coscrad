@@ -66,7 +66,7 @@ export const buildFormFieldForCommandPayloadProp = (
 
     if (complexDataType === ComplexCoscradDataType.enum) {
         const { enumLabel, enumName, labelsAndValues } =
-            propertyTypeDefinition as EnumTypeDefinition;
+            propertyTypeDefinition as unknown as EnumTypeDefinition;
 
         return {
             type: FormFieldType.staticSelect,

@@ -1,16 +1,8 @@
-import { ICommandInfo } from '@coscrad/api-interfaces';
-import { ClassSchema } from '@coscrad/data-types';
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { CommandButton } from './CommandButton';
 
-export type CommandInfo = {
-    type: string;
-    label: string;
-    description: string;
-    schema: ClassSchema;
-};
-
 interface CommandProps {
-    actions: ICommandInfo[];
+    actions: ICommandFormAndLabels[];
 }
 
 export const CommandPanel = ({ actions }: CommandProps) => (
