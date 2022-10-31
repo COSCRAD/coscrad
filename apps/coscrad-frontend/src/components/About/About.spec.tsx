@@ -10,7 +10,7 @@ describe('About', () => {
         expect(baseElement).toBeTruthy();
     });
 
-    it('should load configurable content', async () => {
+    it('should load configurable content', () => {
         const dummyConfigurableContent = getDummyConfigurableContent();
         const about = 'About my website';
         const myConfigurableContent = { ...dummyConfigurableContent, about };

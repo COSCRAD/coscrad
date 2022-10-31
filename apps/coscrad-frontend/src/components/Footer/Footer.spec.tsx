@@ -1,9 +1,20 @@
+import { screen } from '@testing-library/react';
+import { getDummyConfigurableContent } from '../../app/App.spec';
 import { renderWithProviders } from '../../utils/test-utils';
 import { Footer } from './Footer';
 
 describe('Footer', () => {
-    it('should render successfully', () => {
-        const { baseElement } = renderWithProviders(<Footer />);
-        expect(baseElement).toBeTruthy();
+    it('should load configurable content', () => {
+        const dummyConfigurableContent = getDummyConfigurableContent();
+        const copyrightHolder = 'Copy Right Holder';
+        const myConfigurableContent = { ...dummyConfigurableContent, copyrightHolder };
+
+        const { baseElement } = renderWithProviders(<Footer />, {
+            contentConfig: myConfigurableContent,
+        });
+
+        const searchPattern = new RegExp(copyrightHolder);
+        const screenRes = screen.getByText(searchPattern);
+        expect(screenRes).toBeTruthy();
     });
 });
