@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { getDummyConfigurableContent } from '../../app/App.spec';
 import { renderWithProviders } from '../../utils/test-utils';
 
@@ -10,7 +10,7 @@ describe('About', () => {
         expect(baseElement).toBeTruthy();
     });
 
-    it('should load configurable content', () => {
+    it('should load configurable content', async () => {
         const dummyConfigurableContent = getDummyConfigurableContent();
         const about = 'About my website';
         const myConfigurableContent = { ...dummyConfigurableContent, about };
@@ -19,6 +19,8 @@ describe('About', () => {
             contentConfig: myConfigurableContent,
         });
 
-        waitFor(() => expect(screen.getByText(about)).toBeTruthy());
+        const searchPattern = new RegExp(about);
+        const screenRes = screen.getByText(searchPattern);
+        expect(screenRes).toBeTruthy();
     });
 });
