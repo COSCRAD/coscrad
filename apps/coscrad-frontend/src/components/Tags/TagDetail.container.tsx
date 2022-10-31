@@ -6,6 +6,7 @@ import { RootState } from '../../store';
 import { fetchTags } from '../../store/slices/tagSlice/thunks';
 import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
 import { Loading } from '../Loading';
+import { NotFound } from '../NotFound';
 import { TagDetailPresenter } from './TagDetail.presenter';
 
 export const TagDetailContainer = (): JSX.Element => {
@@ -35,7 +36,7 @@ export const TagDetailContainer = (): JSX.Element => {
 
     const tag = allTags.find(({ id }) => id === idFromLocation);
 
-    if (!tag) return <div>Not Found</div>;
+    if (!tag) return <NotFound />;
 
     return <TagDetailPresenter {...tag}></TagDetailPresenter>;
 };

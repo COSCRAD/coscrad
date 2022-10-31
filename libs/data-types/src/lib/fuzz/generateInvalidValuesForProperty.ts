@@ -1,9 +1,6 @@
 import { FailedToGenerateFuzzForUnsupportedDataTypeException } from '../exceptions';
 import { CoscradDataType, CoscradPropertyTypeDefinition } from '../types';
-import {
-    isSimpleCoscradPropertyTypeDefinition,
-    SimpleCoscradPropertyTypeDefinition,
-} from '../types/SimpleCoscradPropertyTypeDefinition';
+import { isSimpleCoscradPropertyTypeDefinition } from '../types/SimpleCoscradPropertyTypeDefinition';
 
 type ValueAndDescription<T = unknown> = {
     value: T;
@@ -71,7 +68,7 @@ export const generateValidValuesOfType = (
     const validValues = dataTypeToValidFuzz[coscradDataType];
 
     if (!Array.isArray(validValues)) {
-        throw new FailedToGenerateFuzzForUnsupportedDataTypeException(coscradDataType);
+        throw new FailedToGenerateFuzzForUnsupportedDataTypeException(propertyTypeDefinition);
     }
 
     if (isOptional) validValues.push(null, undefined);
@@ -85,11 +82,7 @@ export const generateValidValuesOfType = (
     return validValues;
 };
 
-export default (
-    propertyTypeDefinition: SimpleCoscradPropertyTypeDefinition
-): ValueAndDescription[] => {
-    // if(!isSimpleCoscradPropertyTypeDefinition(propertyTypeDefinition))
-
+export default (propertyTypeDefinition: CoscradPropertyTypeDefinition): ValueAndDescription[] => {
     /**
      * TODO [https://www.pivotaltracker.com/story/show/182715254]
      *
@@ -100,10 +93,10 @@ export default (
         ? dataTypeToValidFuzz[propertyTypeDefinition.coscradDataType]
         : [];
 
-    const { coscradDataType, isOptional, isArray } = propertyTypeDefinition;
+    const { isOptional, isArray } = propertyTypeDefinition;
 
     if (!Array.isArray(validFuzzKeys)) {
-        throw new FailedToGenerateFuzzForUnsupportedDataTypeException(coscradDataType);
+        throw new FailedToGenerateFuzzForUnsupportedDataTypeException(propertyTypeDefinition);
     }
 
     if (isOptional) {
