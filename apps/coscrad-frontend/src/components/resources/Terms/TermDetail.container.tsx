@@ -19,7 +19,7 @@ export const TermDetailContainer = (): JSX.Element => {
 
     const { data: allTerms, isLoading, errorInfo } = loadableTerms;
 
-    if (isLoading || errorInfo) return <Presenter {...loadableTerms} />;
+    if (isLoading || errorInfo || allTerms === null) return <Presenter {...loadableTerms} />;
 
     // We need some serious renaming of properties here!
     const searchResult = allTerms.data

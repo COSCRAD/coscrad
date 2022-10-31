@@ -43,6 +43,7 @@ const act = () =>
 
 describe(`Tag Detail`, () => {
     describe('when the API request is valid', () => {
+        // TODO Also test when the route param is invalid (see TermDetail.spec.tsx for an example)
         setupTestServer(
             buildMockSuccessfulGETHandler({
                 endpoint,
@@ -50,7 +51,7 @@ describe(`Tag Detail`, () => {
             })
         );
 
-        it('should display the tags', async () => {
+        it('should display the tag', async () => {
             act();
 
             await waitFor(() => expect(screen.getByTestId(idToFind)).toBeTruthy());
