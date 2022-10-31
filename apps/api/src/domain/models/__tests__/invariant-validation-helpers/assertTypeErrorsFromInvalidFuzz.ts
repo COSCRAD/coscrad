@@ -1,4 +1,8 @@
-import { FuzzGenerator, getCoscradDataSchema } from '@coscrad/data-types';
+import {
+    FuzzGenerator,
+    getCoscradDataSchema,
+    SimpleCoscradPropertyTypeDefinition,
+} from '@coscrad/data-types';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Ctor } from '../../../../lib/types/Ctor';
 import { DTO } from '../../../../types/DTO';
@@ -17,7 +21,9 @@ export default <TAggregate extends Aggregate>(
 
     Object.entries(userGroupDataSchema).forEach(([propertyName, propertySchema]) => {
         describe(`when the property: ${propertyName} is invalid`, () => {
-            const invalidValuesToUse = new FuzzGenerator(propertySchema).generateInvalidValues();
+            const invalidValuesToUse = new FuzzGenerator(
+                propertySchema as SimpleCoscradPropertyTypeDefinition
+            ).generateInvalidValues();
 
             invalidValuesToUse.forEach(({ value, description }): void => {
                 describe(`when given the invalid value: ${JSON.stringify(

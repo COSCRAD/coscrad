@@ -13,7 +13,7 @@ import getCoscradDataSchemaFromPrototype from '../utilities/getCoscradDataSchema
  * view model.
  */
 export function FromDomainModel(DomainModelDataClass: Object): PropertyDecorator {
-    return (target: Object, propertyKey: string | symbol) => {
+    return (target: Object, propertyKey: string) => {
         const fullDataSchema = getCoscradDataSchema(DomainModelDataClass);
 
         const dataSchemaForProp = fullDataSchema[propertyKey];

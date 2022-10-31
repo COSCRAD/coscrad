@@ -1,10 +1,10 @@
-import { SimpleCoscradPropertyTypeDefinition } from '../types/SimpleCoscradPropertyTypeDefinition';
+import { CoscradPropertyTypeDefinition } from '../types';
 import generateInvalidValuesForProperty, {
     generateValidValuesOfType,
 } from './generateInvalidValuesForProperty';
 
 export class FuzzGenerator {
-    constructor(private readonly schema: SimpleCoscradPropertyTypeDefinition) {}
+    constructor(private readonly schema: CoscradPropertyTypeDefinition) {}
 
     generateInvalidValues() {
         return generateInvalidValuesForProperty(this.schema);

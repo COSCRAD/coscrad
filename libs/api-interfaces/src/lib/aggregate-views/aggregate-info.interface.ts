@@ -1,4 +1,4 @@
-import { ClassSchema } from '@coscrad/data-types';
+import { ICoscradModelSchema } from './coscrad-data-types/';
 
 /**
  * We may want to move our `AggregateType` enum definition into the api-interfaces
@@ -9,6 +9,6 @@ export interface IAggregateInfo<TAggregateType extends string = string> {
     type: TAggregateType;
     description: string;
     label: string;
-    schema: ClassSchema;
+    schema: ICoscradModelSchema;
     link: string;
 }
