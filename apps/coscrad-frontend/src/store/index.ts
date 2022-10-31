@@ -4,6 +4,8 @@ import { CATEGORY_TREE } from './slices/categorySlice/constants';
 import { noteReducer, NOTES } from './slices/noteSlice';
 
 import { resourceInfoReducer, RESOURCE_INFO } from './slices/resourceInfoSlice';
+import { termReducer } from './slices/resources';
+import { TERMS } from './slices/resources/termSlice/constants';
 import { tagReducer } from './slices/tagSlice';
 import { TAGS } from './slices/tagSlice/constants';
 
@@ -12,6 +14,7 @@ export const rootReducer = combineReducers({
     [TAGS]: tagReducer,
     [NOTES]: noteReducer,
     [CATEGORY_TREE]: categoryTreeReducer,
+    [TERMS]: termReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
