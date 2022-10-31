@@ -1,3 +1,4 @@
+import { CoscradComplexDataType } from './coscrad-complex-data-type.enum';
 import { ICoscradModelSchema } from './coscrad-model-schema';
 
 export interface IUnionMemberSchemaDefinition {
@@ -6,7 +7,7 @@ export interface IUnionMemberSchemaDefinition {
 }
 
 export interface ICoscradUnionDataTypeDefinition {
-    complexDataType: 'UNION';
+    complexDataType: CoscradComplexDataType.union;
     discriminantPath: string;
     schemaDefinitions: IUnionMemberSchemaDefinition[];
 }

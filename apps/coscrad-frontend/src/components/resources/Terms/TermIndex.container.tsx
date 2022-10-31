@@ -1,3 +1,4 @@
+import { IIndexQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
 import { RootState } from '../../../store';
 import { fetchTerms } from '../../../store/slices/resources';
 import { useLoadable } from '../../../utils/custom-hooks/useLoadable';
@@ -10,8 +11,10 @@ export const TermIndexContainer = (): JSX.Element => {
         fetchThunk: fetchTerms,
     });
 
-    // Double check typesafety in places like this
-    const LoadableTermPresenter = displayLoadableWithErrorsAndLoading(TermIndexPresenter);
+    const LoadableTermPresenter = displayLoadableWithErrorsAndLoading<
+        IIndexQueryResult<ITermViewModel>,
+        IIndexQueryResult<ITermViewModel>
+    >(TermIndexPresenter);
 
     return <LoadableTermPresenter {...loadableTerms} />;
 };

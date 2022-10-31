@@ -1,1 +1,1 @@
-export * from './ResourceInfoPresenter';
+export * from './ResourceInfo.presenter';

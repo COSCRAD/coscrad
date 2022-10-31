@@ -1,4 +1,4 @@
-import { IBaseViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
+import { IIndexQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../../interfaces/loadable.interface';
 
-export type TermSliceState = ILoadable<IIndexQueryResult<IBaseViewModel>>;
+export type TermSliceState = ILoadable<IIndexQueryResult<ITermViewModel>>;

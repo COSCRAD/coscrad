@@ -1,3 +1,5 @@
+import { CoscradComplexDataType } from './coscrad-complex-data-type.enum';
+
 // TODO break out and share across codebase
 type LabelAndValue = {
     label: string;
@@ -5,7 +7,7 @@ type LabelAndValue = {
 };
 
 export interface ICoscradEnumTypeDefinition {
-    complexDataType: 'ENUM';
+    complexDataType: CoscradComplexDataType.enum;
     enumName: string;
     labelsAndValues: LabelAndValue[];
 }

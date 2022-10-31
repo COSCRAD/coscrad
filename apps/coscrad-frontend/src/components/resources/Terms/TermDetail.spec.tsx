@@ -1,10 +1,12 @@
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../../config';
-import { renderWithProviders } from '../../../utils/test-utils';
-import { assertElementWithTestIdOnScreen } from '../../../utils/test-utils/assertions/assertElementWithTestIdOnScreen';
+import {
+    assertElementWithTestIdOnScreen,
+    assertNotFound,
+    renderWithProviders,
+} from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/buildMockSuccessfulGETHandler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
-import { NOT_FOUND_TEST_ID } from '../../../utils/test-utils/constants';
 import { setupTestServer } from '../../../utils/test-utils/setupTestServer';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { TermDetailContainer } from './TermDetail.container';
@@ -55,7 +57,7 @@ describe('Term Detail', () => {
             it('should render not found', async () => {
                 act('totally-bogus-id-125');
 
-                await assertElementWithTestIdOnScreen(NOT_FOUND_TEST_ID);
+                await assertNotFound();
             });
         });
     });

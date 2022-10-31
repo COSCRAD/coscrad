@@ -1,6 +1,6 @@
-import { ComplexCoscradDataTypeDefinition } from './complex-coscrad-data-type-definition';
+import { CoscradComplexDataTypeDefinition } from './coscrad-complex-data-type-definition';
 import { ISimpleCoscradPropertyTypeDefinition } from './simple-coscrad-property-type-definition.interface';
 
-export type CoscradPropertyTypeDefinition =
-    | ISimpleCoscradPropertyTypeDefinition
-    | ComplexCoscradDataTypeDefinition;
+export type CoscradPropertyTypeDefinition<TDataTypeEnum extends string = string> =
+    | ISimpleCoscradPropertyTypeDefinition<TDataTypeEnum>
+    | CoscradComplexDataTypeDefinition;

@@ -1,7 +1,6 @@
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../../config';
-import { renderWithProviders } from '../../../utils/test-utils';
-import { assertElementWithTestIdOnScreen } from '../../../utils/test-utils/assertions/assertElementWithTestIdOnScreen';
+import { assertElementWithTestIdOnScreen, renderWithProviders } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/buildMockSuccessfulGETHandler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setupTestServer';
@@ -41,6 +40,7 @@ describe(`Term Index`, () => {
                 ),
             })
         );
+
         it('should display the tags', async () => {
             act();
 

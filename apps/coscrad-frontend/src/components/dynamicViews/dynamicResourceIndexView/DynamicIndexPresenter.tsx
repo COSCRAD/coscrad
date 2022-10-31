@@ -1,12 +1,27 @@
-import { ICommandFormAndLabels, IDetailQueryResult } from '@coscrad/api-interfaces';
-import { ClassSchema } from '@coscrad/data-types';
+import {
+    ICommandFormAndLabels,
+    ICoscradModelSchema,
+    IDetailQueryResult,
+} from '@coscrad/api-interfaces';
 import { Link } from 'react-router-dom';
 import { CommandPanel } from '../commands';
 
 export type IndexProps = {
-    schema: ClassSchema;
+    schema: ICoscradModelSchema;
     data: IDetailQueryResult[];
     actions: ICommandFormAndLabels[];
+};
+
+type HasCoscradDataType = {
+    coscradDataType: string;
+};
+
+const isSimpleCoscradPropertyTypeDefinition = (input: unknown): input is HasCoscradDataType => {
+    const coscradDataType = (input as HasCoscradDataType)?.coscradDataType;
+
+    if (coscradDataType === null || typeof coscradDataType === 'undefined') return false;
+
+    return true;
 };
 
 /**
@@ -49,9 +64,12 @@ export const DynamicIndexPresenter = ({ data, schema, actions }: IndexProps): JS
                                                 actions,
                                             }}
                                         >
-                                            {getFormatterForDataType(dataSchema.coscradDataType)(
-                                                (viewData as any)[key]
-                                            )}
+                                            {getFormatterForDataType(
+                                                isSimpleCoscradPropertyTypeDefinition(dataSchema)
+                                                    ? dataSchema.coscradDataType
+                                                    : // TODO remove this hack
+                                                      'COMPLEX'
+                                            )((viewData as any)[key])}
                                         </Link>
                                     </td>
                                 ))}

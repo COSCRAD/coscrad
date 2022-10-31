@@ -2,7 +2,11 @@ import { ICoscradEnumTypeDefinition } from './coscrad-enum-type-definition.inter
 import { ICoscradNestedTypeDefinition } from './coscrad-nested-type-definition.interface';
 import { ICoscradUnionDataTypeDefinition } from './coscrad-union-data-type-definition.interface';
 
-export type ComplexCoscradDataTypeDefinition =
+export type CoscradComplexDataTypeDefinition = (
     | ICoscradEnumTypeDefinition
     | ICoscradNestedTypeDefinition
-    | ICoscradUnionDataTypeDefinition;
+    | ICoscradUnionDataTypeDefinition
+) & {
+    isOptional: boolean;
+    isArray: boolean;
+};

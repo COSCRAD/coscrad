@@ -1,8 +1,8 @@
-import { SimpleCoscradPropertyTypeDefinition } from './SimpleCoscradPropertyTypeDefinition';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { CoscradDataType, ICoscradModelSchema } from '@coscrad/api-interfaces';
 
-// TODO consolidate with api-interfaces
 // eslint-disable-next-line
-export type ClassSchema<T extends Record<string, unknown> = any> = Record<
-    keyof T,
-    SimpleCoscradPropertyTypeDefinition
+export type ClassSchema<T extends Record<string, unknown> = any> = ICoscradModelSchema<
+    T,
+    CoscradDataType
 >;

@@ -1,4 +1,3 @@
-import { IBaseViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
 import { useParams } from 'react-router-dom';
 import { RootState } from '../../../store';
 import { fetchTerms } from '../../../store/slices/resources';
@@ -10,7 +9,7 @@ import { TermDetailPresenter } from './TermDetail.presenter';
 export const TermDetailContainer = (): JSX.Element => {
     const { id: idFromLocation } = useParams();
 
-    const [loadableTerms] = useLoadable<IIndexQueryResult<IBaseViewModel>>({
+    const [loadableTerms] = useLoadable({
         selector: (state: RootState) => state.terms,
         fetchThunk: fetchTerms,
     });

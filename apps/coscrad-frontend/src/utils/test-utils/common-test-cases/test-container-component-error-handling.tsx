@@ -1,9 +1,9 @@
-import { assertElementWithTestIdOnScreen } from '../assertions/assertElementWithTestIdOnScreen';
+import { assertElementWithTestIdOnScreen } from '../assertions/assert-element-with-test-id-on-screen';
 import {
     buildMockGETHandlerWithError,
     MockErrorResponseType,
 } from '../buildMockGETHandlerWithError';
-import { ERROR_TEST_ID, LOADING_TEST_ID } from '../constants';
+import { TestId } from '../constants';
 import { setupTestServer } from '../setupTestServer';
 
 /**
@@ -18,7 +18,7 @@ export const testContainerComponentErrorHandling = (act: () => void, endpoint: s
         it('should render an error', async () => {
             act();
 
-            await assertElementWithTestIdOnScreen(ERROR_TEST_ID);
+            await assertElementWithTestIdOnScreen(TestId.error);
         });
     });
 
@@ -30,7 +30,7 @@ export const testContainerComponentErrorHandling = (act: () => void, endpoint: s
         it('should render an error', async () => {
             act();
 
-            await assertElementWithTestIdOnScreen(ERROR_TEST_ID);
+            await assertElementWithTestIdOnScreen(TestId.error);
         });
     });
 
@@ -40,7 +40,7 @@ export const testContainerComponentErrorHandling = (act: () => void, endpoint: s
         it('should render an error', async () => {
             act();
 
-            await assertElementWithTestIdOnScreen(ERROR_TEST_ID);
+            await assertElementWithTestIdOnScreen(TestId.error);
         });
     });
 
@@ -50,7 +50,7 @@ export const testContainerComponentErrorHandling = (act: () => void, endpoint: s
         it('should render an error', async () => {
             act();
 
-            await assertElementWithTestIdOnScreen(ERROR_TEST_ID);
+            await assertElementWithTestIdOnScreen(TestId.error);
         });
     });
 
@@ -60,7 +60,7 @@ export const testContainerComponentErrorHandling = (act: () => void, endpoint: s
         it('should render the loading message', async () => {
             act();
 
-            await assertElementWithTestIdOnScreen(LOADING_TEST_ID);
+            await assertElementWithTestIdOnScreen(TestId.loading);
         });
     });
 };

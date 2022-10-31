@@ -1,6 +1,6 @@
 import { IAggregateInfo } from '@coscrad/api-interfaces';
 import { Link } from 'react-router-dom';
-import './ResourceInfoPresenter.css';
+import './ResourceInfo.presenter.css';
 
 export const ResourceInfoPresenter = ({
     type: resourceType,

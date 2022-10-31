@@ -1,6 +1,5 @@
 import {
     ICommandFormAndLabels,
-    ICommandInfo,
     IDetailQueryResult,
     IIndexQueryResult,
 } from '@coscrad/api-interfaces';
@@ -17,25 +16,10 @@ type DynamicIndexPageState = {
     isLoading: boolean;
 };
 
-const isCommandInfo = (input: unknown): input is ICommandInfo => {
-    const { type, label, description } = input as ICommandInfo;
-
-    if (!isStringWithNonzeroLength(type)) return false;
-
-    if (!isStringWithNonzeroLength(label)) return false;
-
-    if (!isStringWithNonzeroLength(description)) return false;
-
-    // TODO Validate schema type
-    return true;
-};
-
 const isDetailQueryResult = (input: unknown): input is IDetailQueryResult => {
-    const { data, actions } = input as IDetailQueryResult;
+    const { data } = input as IDetailQueryResult;
 
     if (data === null || typeof data === 'undefined') return false;
-
-    if (!actions.every(isCommandInfo)) return false;
 
     return true;
 };
@@ -43,17 +27,18 @@ const isDetailQueryResult = (input: unknown): input is IDetailQueryResult => {
 const isIndexQueryResult = (input: unknown): input is IIndexQueryResult => {
     const test = input as IIndexQueryResult;
 
-    const { data, actions } = test;
+    const { data } = test;
 
     if (!Array.isArray(data)) return false;
 
     if (!data.every(isDetailQueryResult)) return false;
 
-    if (!actions.every(isCommandInfo)) return false;
-
     return true;
 };
 
+/**
+ * TODO Get state from Redux; no need to validate here.
+ */
 export const DynamicIndexPage = () => {
     const [pageState, setPageState] = useState<DynamicIndexPageState>({
         detailDataAndActions: [],

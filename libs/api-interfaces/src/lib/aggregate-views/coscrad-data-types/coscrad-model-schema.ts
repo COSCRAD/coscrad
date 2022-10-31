@@ -2,7 +2,10 @@
 
 import { CoscradPropertyTypeDefinition } from './coscrad-property-type-definition';
 
-// eslint-disable-next-line
-export type ICoscradModelSchema<T extends Record<string, unknown> = any> = {
-    [K in keyof T]: CoscradPropertyTypeDefinition;
+export type ICoscradModelSchema<
+    // eslint-disable-next-line
+    T extends Record<string, unknown> = any,
+    UDataTypes extends string = string
+> = {
+    [K in keyof T]: CoscradPropertyTypeDefinition<UDataTypes>;
 };
