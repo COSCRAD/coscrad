@@ -1,11 +1,4 @@
-import { ClassSchema } from '../../types';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { ICoscradUnionDataTypeDefinition } from '@coscrad/api-interfaces';
 
-type UnionMemberSchemaDefinition = {
-    discriminant: string;
-    schema: ClassSchema;
-};
-
-export type UnionMetadata = {
-    discriminantPath: string;
-    schemaDefinitions: UnionMemberSchemaDefinition[];
-};
+export type UnionMetadata = ICoscradUnionDataTypeDefinition;
