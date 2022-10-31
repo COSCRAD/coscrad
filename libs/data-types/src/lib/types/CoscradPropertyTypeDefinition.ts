@@ -1,6 +1,6 @@
-import { ComplexCoscradDataTypeDefinition } from './ComplexDataTypes';
+import { CoscradComplexDataTypeDefinition } from './ComplexDataTypes';
 import { SimpleCoscradPropertyTypeDefinition } from './SimpleCoscradPropertyTypeDefinition';
 
 export type CoscradPropertyTypeDefinition =
     | SimpleCoscradPropertyTypeDefinition
-    | ComplexCoscradDataTypeDefinition;
+    | CoscradComplexDataTypeDefinition;
