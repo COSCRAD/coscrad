@@ -1,11 +1,10 @@
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { CoscradDataType, ISimpleCoscradPropertyTypeDefinition } from '@coscrad/api-interfaces';
 import { isBoolean } from '@coscrad/validation';
-import { CoscradDataType, isCoscradDataType } from './CoscradDataType';
+import { isCoscradDataType } from './CoscradDataType';
 
-export type SimpleCoscradPropertyTypeDefinition = {
-    coscradDataType: CoscradDataType;
-    isArray: boolean;
-    isOptional: boolean;
-};
+export type SimpleCoscradPropertyTypeDefinition =
+    ISimpleCoscradPropertyTypeDefinition<CoscradDataType>;
 
 export const isSimpleCoscradPropertyTypeDefinition = (
     input: unknown
