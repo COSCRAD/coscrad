@@ -9,6 +9,7 @@ import MembersOnly from '../components/MembersOnly/MembersOnly';
 import { NoteDetailContainer } from '../components/Notes/NoteDetail.container';
 import { NoteIndexContainer } from '../components/Notes/NoteIndex.container';
 import { TermIndexContainer } from '../components/resources/Terms';
+import { TermDetailContainer } from '../components/resources/Terms/TermDetail.container';
 import { TagDetailContainer } from '../components/Tags/TagDetail.container';
 import { TagIndexContainer } from '../components/Tags/TagIndex.container';
 import { CategoryTreeContainer } from '../components/TreeOfKnowledge/CategoryTree.container';
@@ -32,6 +33,7 @@ export function App() {
                     <Route path="Tags/:id" element={<TagDetailContainer />} />
                     <Route path="TreeOfKnowledge" element={<CategoryTreeContainer />} />
                     <Route path="Resources/Terms" element={<TermIndexContainer />} />
+                    <Route path="Resources/Terms/:id" element={<TermDetailContainer />} />
                 </Routes>
             </div>
         </div>

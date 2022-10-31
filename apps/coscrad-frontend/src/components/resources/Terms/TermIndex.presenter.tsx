@@ -1,4 +1,5 @@
 import { IBaseViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
+import { Link } from 'react-router-dom';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 
 export const TermIndexPresenter: FunctionalComponent<IIndexQueryResult<IBaseViewModel>> = ({
@@ -10,9 +11,9 @@ export const TermIndexPresenter: FunctionalComponent<IIndexQueryResult<IBaseView
     return (
         <div>
             {terms.map((term) => (
-                <div key={term.id} data-testid={term.id}>
-                    {JSON.stringify(term)}
-                </div>
+                <Link to={term.id} key={term.id}>
+                    <div data-testid={term.id}>{JSON.stringify(term)}</div>
+                </Link>
             ))}
         </div>
     );
