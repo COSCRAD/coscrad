@@ -1,10 +1,10 @@
-import { ICommandInfo, IViewModel } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels, IViewModel } from '@coscrad/api-interfaces';
 import { CommandPanel } from '../commands';
 import { buildPresenterForPropertyFromDataType } from './DataPresenters';
 
 // TODO Share types with CoscradDataType lib to avoid using `any` here
 export const buildViewModelComponentFromCoscradDataDefinition =
-    (fullSchema: any, actions: ICommandInfo[] = []) =>
+    (fullSchema: any, actions: ICommandFormAndLabels[] = []) =>
     (data: IViewModel[]) =>
         (
             <>

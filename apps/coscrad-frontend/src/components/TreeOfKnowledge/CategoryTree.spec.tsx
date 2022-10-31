@@ -1,10 +1,9 @@
 import { ICategoryTreeViewModel } from '@coscrad/api-interfaces';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
-import { renderWithProviders } from '../../utils/test-utils';
-import { assertElementWithTestIdOnScreen } from '../../utils/test-utils/assertions/assertElementWithTestIdOnScreen';
+import { assertElementWithTestIdOnScreen, renderWithProviders } from '../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/buildMockSuccessfulGETHandler';
-import { CATEGORY_TREE_TEST_ID } from '../../utils/test-utils/constants';
+import { TestId } from '../../utils/test-utils/constants';
 import { setupTestServer } from '../../utils/test-utils/setupTestServer';
 import { CategoryTreeContainer } from './CategoryTree.container';
 
@@ -95,7 +94,7 @@ describe('Category Tree', () => {
             // Add this back when rendering individual nodes
             // await assertElementWithTestIdOnScreen(childCategory2.id);
 
-            await assertElementWithTestIdOnScreen(CATEGORY_TREE_TEST_ID);
+            await assertElementWithTestIdOnScreen(TestId.categoryTree);
         });
     });
 });
