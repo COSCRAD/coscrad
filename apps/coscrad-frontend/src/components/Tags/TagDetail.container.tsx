@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../store';
 import { fetchTags } from '../../store/slices/tagSlice/thunks';
+import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
 import { Loading } from '../Loading';
 import { NotFound } from '../NotFound';
 import { TagDetailPresenter } from './TagDetail.presenter';
 
 export const TagDetailContainer = (): JSX.Element => {
-    const { id: idFromLocation } = useParams();
+    const [idFromLocation] = useIdFromLocation();
 
     const dispatch = useAppDispatch();
 

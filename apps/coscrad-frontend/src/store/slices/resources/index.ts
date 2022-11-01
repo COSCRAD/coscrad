@@ -1,1 +1,1 @@
-export * from './termSlice';
+export * from './terms';

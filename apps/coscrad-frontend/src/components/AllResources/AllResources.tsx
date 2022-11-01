@@ -1,5 +1,5 @@
 import { RootState } from '../../store';
-import { fetchResourceInfos } from '../../store/slices/resourceInfoSlice';
+import { fetchResourceInfos } from '../../store/slices/resourceInfo';
 import { useLoadable } from '../../utils/custom-hooks/useLoadable';
 import { wrapArrayProps } from '../../utils/prop-manipulation/wrap-array-props';
 import { displayLoadableWithErrorsAndLoading } from '../higher-order-components';
