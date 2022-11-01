@@ -1,3 +1,4 @@
+import { ResourceType } from '@coscrad/api-interfaces';
 import { Route, Routes } from 'react-router-dom';
 import About from '../components/About/About';
 import { AllResources } from '../components/AllResources/AllResources';
@@ -14,6 +15,7 @@ import { TagDetailContainer } from '../components/Tags/TagDetail.container';
 import { TagIndexContainer } from '../components/Tags/TagIndex.container';
 import { CategoryTreeContainer } from '../components/TreeOfKnowledge/CategoryTree.container';
 import './App.css';
+import { routes } from './routes/routes';
 
 export function App() {
     return (
@@ -21,19 +23,26 @@ export function App() {
             <Header />
             <div>
                 <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="About" element={<About />} />
-                    <Route path="AllResources" element={<AllResources />} />
+                    <Route path={routes.home} element={<Home />} />
+                    <Route path={routes.about} element={<About />} />
+                    <Route path={routes.resources.info} element={<AllResources />} />
+                    <Route path={routes.notes.index} element={<NoteIndexContainer />} />
+                    <Route path={routes.notes.detail()} element={<NoteDetailContainer />} />
+                    <Route path={routes.tags.index} element={<TagIndexContainer />} />
+                    <Route path={routes.tags.detail()} element={<TagDetailContainer />} />
+                    <Route path={routes.treeOfKnowledge} element={<CategoryTreeContainer />} />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.term).index}
+                        element={<TermIndexContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.term).detail()}
+                        element={<TermDetailContainer />}
+                    />
+                    {/* The following are temporary or experimental */}
                     <Route path="MembersOnly" element={<MembersOnly />} />
                     <Route path="ResourceIndex" element={<DynamicIndexPage />} />
                     <Route path="ResourceDetail" element={<DynamicResourceDetailPage />} />
-                    <Route path="Notes" element={<NoteIndexContainer />} />
-                    <Route path="Notes/:id" element={<NoteDetailContainer />} />
-                    <Route path="Tags" element={<TagIndexContainer />} />
-                    <Route path="Tags/:id" element={<TagDetailContainer />} />
-                    <Route path="TreeOfKnowledge" element={<CategoryTreeContainer />} />
-                    <Route path="Resources/Terms" element={<TermIndexContainer />} />
-                    <Route path="Resources/Terms/:id" element={<TermDetailContainer />} />
                 </Routes>
             </div>
         </div>

@@ -1,5 +1,5 @@
 import { RootState } from '../../store';
-import { fetchCategoryTree } from '../../store/slices/categorySlice';
+import { fetchCategoryTree } from '../../store/slices/categories';
 import { useLoadable } from '../../utils/custom-hooks/useLoadable';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { displayLoadableWithErrorsAndLoading } from '../higher-order-components';

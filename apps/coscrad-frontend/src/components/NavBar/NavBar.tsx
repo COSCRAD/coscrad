@@ -1,3 +1,4 @@
+import { routes } from '../../app/routes/routes';
 import './NavBar.css';
 import { NavBarItem } from './NavBarItem';
 
@@ -9,31 +10,32 @@ export type NavItemInfo = {
 // We may want an enum \ constants for our routes
 const navItemInfos: NavItemInfo[] = [
     {
-        link: '/',
+        link: routes.home,
         label: 'Home',
     },
     {
-        link: '/About',
+        link: routes.about,
         label: 'About',
     },
     {
-        link: '/AllResources',
+        link: routes.resources.info,
         label: 'Browse Resources',
     },
+    // This is experimental only
     {
         link: '/MembersOnly',
         label: 'Members Only',
     },
     {
-        link: '/Tags',
+        link: routes.tags.index,
         label: 'Tags',
     },
     {
-        link: '/Notes',
+        link: routes.notes.index,
         label: 'Notes',
     },
     {
-        link: '/TreeOfKnowledge',
+        link: routes.treeOfKnowledge,
         label: 'Tree of Knowledge',
     },
 ];
