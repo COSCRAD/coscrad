@@ -1,10 +1,11 @@
+import { IPhotographViewModel } from '@coscrad/api-interfaces';
 import { FromDomainModel, URL } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Photograph } from '../../../domain/models/photograph/entities/photograph.entity';
 import { BaseViewModel } from './base.view-model';
 import buildFullDigitalAssetURL from './utilities/buildFullDigitalAssetURL';
 
-export class PhotographViewModel extends BaseViewModel {
+export class PhotographViewModel extends BaseViewModel implements IPhotographViewModel {
     @ApiProperty({
         example: 'https://www.myimages.com/mountains.png',
         description: 'a url where the client can fetch a digital version of the photograph',
