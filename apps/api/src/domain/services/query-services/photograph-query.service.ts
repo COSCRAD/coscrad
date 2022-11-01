@@ -1,4 +1,4 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels, IPhotographViewModel } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
@@ -8,7 +8,7 @@ import { Photograph } from '../../models/photograph/entities/photograph.entity';
 import { ResourceType } from '../../types/ResourceType';
 import { BaseQueryService } from './base-query.service';
 
-export class PhotographQueryService extends BaseQueryService<Photograph, PhotographViewModel> {
+export class PhotographQueryService extends BaseQueryService<Photograph, IPhotographViewModel> {
     protected readonly type = ResourceType.photograph;
 
     constructor(
@@ -19,7 +19,7 @@ export class PhotographQueryService extends BaseQueryService<Photograph, Photogr
         super(repositoryProvider, commandInfoService);
     }
 
-    buildViewModel(photo: Photograph): PhotographViewModel {
+    buildViewModel(photo: Photograph): IPhotographViewModel {
         return new PhotographViewModel(
             photo,
             this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
