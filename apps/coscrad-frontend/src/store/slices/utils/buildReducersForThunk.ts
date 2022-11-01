@@ -21,8 +21,10 @@ export const buildReducersForThunk = <TState extends ILoadable<unknown>, URespon
     // @ts-expect-error fix types
     builder.addCase(thunk.rejected, (state: TState, action) => {
         if (action.payload) {
+            state.isLoading = false;
             state.errorInfo = action.payload as IHttpErrorInfo;
         } else {
+            state.isLoading = false;
             state.errorInfo = {
                 code: HttpStatusCode.internalError,
                 message: action.error.message,

@@ -10,8 +10,10 @@ import { Home } from '../components/Home/Home';
 import MembersOnly from '../components/MembersOnly/MembersOnly';
 import { NoteDetailContainer } from '../components/Notes/NoteDetail.container';
 import { NoteIndexContainer } from '../components/Notes/NoteIndex.container';
-import { TermIndexContainer } from '../components/resources/Terms';
-import { TermDetailContainer } from '../components/resources/Terms/TermDetail.container';
+import { PhotographDetailContainer } from '../components/resources/photographs/photograph-detail.container';
+import { PhotographIndexContainer } from '../components/resources/photographs/photograph-index.container';
+import { TermIndexContainer } from '../components/resources/terms';
+import { TermDetailContainer } from '../components/resources/terms/TermDetail.container';
 import { TagDetailContainer } from '../components/Tags/TagDetail.container';
 import { TagIndexContainer } from '../components/Tags/TagIndex.container';
 import { CategoryTreeContainer } from '../components/TreeOfKnowledge/CategoryTree.container';
@@ -39,6 +41,14 @@ export function App() {
                     <Route
                         path={routes.resources.ofType(ResourceType.term).detail()}
                         element={<TermDetailContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.photograph).index}
+                        element={<PhotographIndexContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.photograph).detail()}
+                        element={<PhotographDetailContainer />}
                     />
                     {/* The following are temporary or experimental */}
                     <Route path="MembersOnly" element={<MembersOnly />} />
