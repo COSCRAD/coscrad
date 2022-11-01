@@ -1,10 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
-import About from '../components/About/About';
+import { About } from '../components/About/About';
 import { AllResources } from '../components/AllResources/AllResources';
 import { DynamicResourceDetailPage } from '../components/dynamicViews/dynamicResourceDetailView/DynamicResourceDetailPage';
 import { DynamicIndexPage } from '../components/dynamicViews/dynamicResourceIndexView';
-import Header from '../components/Header/Header';
-import Home from '../components/Home/Home';
+import { Footer } from '../components/Footer/Footer';
+import { Header } from '../components/Header/Header';
+import { Home } from '../components/Home/Home';
 import MembersOnly from '../components/MembersOnly/MembersOnly';
 import { NoteDetailContainer } from '../components/Notes/NoteDetail.container';
 import { NoteIndexContainer } from '../components/Notes/NoteIndex.container';
@@ -17,9 +18,9 @@ import './App.css';
 
 export function App() {
     return (
-        <div className="main">
+        <div className="app">
             <Header />
-            <div>
+            <div className="main-content">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="About" element={<About />} />
@@ -36,6 +37,7 @@ export function App() {
                     <Route path="Resources/Terms/:id" element={<TermDetailContainer />} />
                 </Routes>
             </div>
+            <Footer></Footer>
         </div>
     );
 }

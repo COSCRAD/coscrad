@@ -38,7 +38,8 @@ const navItemInfos: NavItemInfo[] = [
     },
 ];
 
-export function NavBar() {
+// TODO: We should have a NavBar container and presenter
+export const NavBar = (): JSX.Element => {
     return (
         <ul>
             {navItemInfos.map((info, index) => (
@@ -46,4 +47,4 @@ export function NavBar() {
             ))}
         </ul>
     );
-}
+};
