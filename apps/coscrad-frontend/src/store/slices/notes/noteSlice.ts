@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../utils';
 import { buildReducersForThunk } from '../utils/buildReducersForThunk';
 import { NOTES } from './constants';
-import { fetchNotes } from './thunks/';
+import { fetchNotes } from './thunks';
 import { NoteSliceState } from './types';
 
 const initialState: NoteSliceState = buildInitialLoadableState<INoteViewModel[]>();

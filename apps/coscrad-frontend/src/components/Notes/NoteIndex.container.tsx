@@ -1,5 +1,5 @@
 import { RootState } from '../../store';
-import { fetchNotes } from '../../store/slices/noteSlice/thunks';
+import { fetchNotes } from '../../store/slices/notes/thunks';
 import { useLoadable } from '../../utils/custom-hooks/useLoadable';
 import { wrapArrayProps } from '../../utils/prop-manipulation/wrap-array-props';
 import { displayLoadableWithErrorsAndLoading } from '../higher-order-components/displayLoadableWithErrorsAndLoading';
