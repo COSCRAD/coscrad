@@ -15,17 +15,9 @@ import { CoscradUser } from '../models/user-management/user/entities/user/coscra
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
 import { AggregateId } from './AggregateId';
 
-export enum ResourceType {
-    term = 'term',
-    vocabularyList = 'vocabularyList',
-    transcribedAudio = 'transcribedAudio',
-    book = 'book',
-    photograph = 'photograph',
-    spatialFeature = 'spatialFeature',
-    bibliographicReference = 'bibliographicReference',
-    song = 'song',
-    mediaItem = 'mediaItem',
-}
+import { ResourceType } from '@coscrad/api-interfaces';
+
+export { ResourceType };
 
 export const isResourceType = (input: unknown): input is ResourceType =>
     Object.values(ResourceType).includes(input as ResourceType);
