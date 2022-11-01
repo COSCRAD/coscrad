@@ -4,7 +4,7 @@ import { ConfigurableContentContext } from '../../configurable-front-matter/conf
 import { NavBar } from '../NavBar/NavBar';
 import './Header.css';
 
-export function Header() {
+export const Header = (): JSX.Element => {
     const { siteTitle, subTitle } = useContext(ConfigurableContentContext);
 
     return (
@@ -18,6 +18,4 @@ export function Header() {
             </nav>
         </header>
     );
-}
-
-export default Header;
+};

@@ -1,6 +1,7 @@
 body {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode',
         Geneva, Verdana, sans-serif;
+    margin: 0;
 }
 
 a {
@@ -13,7 +14,32 @@ a:hover {
     color: rgb(56, 56, 56);
 }
 
-.main {
+header,
+.main-content,
+footer {
     margin: 0 auto;
-    width: 95%;
+    width: 80%;
+}
+
+.main-content {
+    position: relative;
+}
+
+.main-content img {
+    width: 30%;
+    height: auto;
+    float: right;
+    position: relative;
+    margin: 7px;
+}
+
+footer {
+    text-align: center;
+    padding-top: 130px;
+    clear: both;
+    position: relative;
+}
+
+footer img {
+    padding: 10px;
 }
