@@ -1,13 +1,13 @@
-import { useParams } from 'react-router-dom';
 import { RootState } from '../../../store';
 import { fetchTerms } from '../../../store/slices/resources';
+import { useIdFromLocation } from '../../../utils/custom-hooks/use-id-from-location';
 import { useLoadable } from '../../../utils/custom-hooks/useLoadable';
 import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
 import { NotFound } from '../../NotFound';
 import { TermDetailPresenter } from './TermDetail.presenter';
 
 export const TermDetailContainer = (): JSX.Element => {
-    const { id: idFromLocation } = useParams();
+    const [idFromLocation] = useIdFromLocation();
 
     const [loadableTerms] = useLoadable({
         selector: (state: RootState) => state.terms,
