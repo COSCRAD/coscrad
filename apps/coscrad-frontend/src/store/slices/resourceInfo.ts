@@ -1,4 +1,4 @@
-import { IAggregateInfo } from '@coscrad/api-interfaces';
+import { IAggregateInfo, ResourceType } from '@coscrad/api-interfaces';
 import { createSlice } from '@reduxjs/toolkit';
 import { getConfig } from '../../config';
 import { ILoadable } from './interfaces/loadable.interface';
@@ -8,9 +8,10 @@ import { createFetchThunk } from './utils/createFetchThunk';
 
 export const RESOURCE_INFO = 'resourceInfo';
 
-export type ResourceInfosState = ILoadable<IAggregateInfo[]>;
+export type ResourceInfosState = ILoadable<IAggregateInfo<ResourceType>[]>;
 
-const initialState: ResourceInfosState = buildInitialLoadableState<IAggregateInfo[]>();
+const initialState: ResourceInfosState =
+    buildInitialLoadableState<IAggregateInfo<ResourceType>[]>();
 
 export const fetchResourceInfos = createFetchThunk<IAggregateInfo[]>(
     `${RESOURCE_INFO}/fetchInfos`,
