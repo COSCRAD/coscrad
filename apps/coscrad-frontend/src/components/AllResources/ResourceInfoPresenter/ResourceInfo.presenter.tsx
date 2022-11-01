@@ -1,5 +1,6 @@
-import { IAggregateInfo } from '@coscrad/api-interfaces';
+import { IAggregateInfo, ResourceType } from '@coscrad/api-interfaces';
 import { Link } from 'react-router-dom';
+import { routes } from '../../../app/routes/routes';
 import './ResourceInfo.presenter.css';
 
 export const ResourceInfoPresenter = ({
@@ -8,15 +9,16 @@ export const ResourceInfoPresenter = ({
     label,
     schema,
     link: apiIndexRoute,
-}: IAggregateInfo): JSX.Element => {
-    const resourceIndexLink =
-        resourceType !== 'term' ? (
-            <Link to="/ResourceIndex" state={{ schema, data: resourceType, link: apiIndexRoute }}>
-                View Resources of type {label}
-            </Link>
-        ) : (
-            <Link to="/Resources/Terms">View Terms</Link>
-        );
+}: IAggregateInfo<ResourceType>): JSX.Element => {
+    const resourceIndexLink = (
+        [ResourceType.term, ResourceType.photograph] as ResourceType[]
+    ).includes(resourceType) ? (
+        <Link to={`/${routes.resources.ofType(resourceType).index}`}>View {label}s</Link>
+    ) : (
+        <Link to="/ResourceIndex" state={{ schema, data: resourceType, link: apiIndexRoute }}>
+            View Resources of type {label}
+        </Link>
+    );
 
     return (
         <>
