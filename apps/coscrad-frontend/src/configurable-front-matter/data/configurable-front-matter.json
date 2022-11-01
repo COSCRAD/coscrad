@@ -2,6 +2,8 @@
     "siteTitle": "Cultural Research Web of Knowledge",
     "subTitle": "A Testing Instance of the COSCRAD Platform",
     "about": "This is a test instance of the COSCRAD web of knowledge UI.  COSCRAD stands for Collective of Open Source Cultural Research and Development and is a team of creatives, software engineers and developers who are building this Web of Knowledge Platform to support different forms of community-based cultural research and archiving.  For more information please contact coscrad@gmail.com",
-    "siteDescription": "The COSCRAD Cultural Research Platform is a tool for community-based research that enables flexible connections between distinct types of content and media.",
-    "copyrightHolder": "COSCRAD"
+    "siteDescription": "This is a sample implementation of the COSCRAD Web of Knowledge for a member of the COSCRAD Cultural Research Platform which is a tool for community-based research that enables flexible connections between distinct types of content and media.",
+    "siteHomeImageUrl": "https://guujaaw.info/images/SinxiiganguSkidegate.jpg",
+    "copyrightHolder": "A COSCRAD Organization: Collective of Open Source Cultural Research and Development",
+    "organizationLogoUrl": "https://guujaaw.info/images/coscrad-org-logo.png"
 }

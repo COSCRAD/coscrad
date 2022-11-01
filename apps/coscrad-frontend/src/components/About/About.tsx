@@ -6,10 +6,8 @@ export interface AboutProps {
     about: string;
 }
 
-export function About() {
+export const About = (): JSX.Element => {
     const { about } = useContext(ConfigurableContentContext);
 
     return <div>{about}</div>;
-}
-
-export default About;
+};

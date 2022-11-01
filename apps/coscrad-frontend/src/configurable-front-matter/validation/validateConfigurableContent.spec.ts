@@ -19,7 +19,11 @@ const validContentConfig: ConfigurableContent = {
 
     siteDescription: 'This is my testing site',
 
+    siteHomeImageUrl: 'https://mysite.com/image.png',
+
     copyrightHolder: 'ME',
+
+    organizationLogoUrl: 'https://mysite.com/logo.png',
 };
 
 // TODO Break this into utility types lib
