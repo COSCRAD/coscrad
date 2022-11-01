@@ -14,7 +14,7 @@ export const TagIndexPresenter = ({ data: tags }: HasViewModels<ITagViewModel>):
         {tags.map((tag) => (
             // TODO Format as table
             <div key={tag.id} data-testid={tag.id}>
-                <Link to={`/Tags/${tag.id}`}>
+                <Link to={tag.id}>
                     {tag.label} (id: {tag.id})
                 </Link>
             </div>
