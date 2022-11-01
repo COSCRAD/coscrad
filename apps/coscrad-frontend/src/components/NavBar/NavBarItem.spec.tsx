@@ -4,7 +4,7 @@ import { NavItemInfo } from './NavBar';
 import { NavBarItem } from './NavBarItem';
 
 const dummyNavBarItemProps: NavItemInfo = {
-    link: 'http://samplesite.com',
+    link: 'https://samplesite.com',
     label: 'Sample Label',
 };
 
@@ -15,6 +15,7 @@ describe('NavBarItem', () => {
                 <NavBarItem {...dummyNavBarItemProps} />
             </MemoryRouter>
         );
+
         expect(baseElement).toBeTruthy();
     });
 });

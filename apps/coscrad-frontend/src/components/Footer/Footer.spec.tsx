@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
-import { getDummyConfigurableContent } from '../../app/App.spec';
 import { renderWithProviders } from '../../utils/test-utils';
+import { getDummyConfigurableContent } from '../../utils/test-utils/getDummyConfigurableContent';
 import { Footer } from './Footer';
 
 describe('Footer', () => {
@@ -15,6 +15,7 @@ describe('Footer', () => {
 
         const searchPattern = new RegExp(copyrightHolder);
         const screenRes = screen.getByText(searchPattern);
+
         expect(screenRes).toBeTruthy();
     });
 });

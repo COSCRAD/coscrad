@@ -38,6 +38,7 @@ const navItemInfos: NavItemInfo[] = [
     },
 ];
 
+// TODO: We should have a NavBar container and presenter
 export const NavBar = (): JSX.Element => {
     return (
         <ul>

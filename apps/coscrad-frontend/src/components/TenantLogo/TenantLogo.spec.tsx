@@ -1,5 +1,5 @@
-import { getDummyConfigurableContent } from '../../app/App.spec';
 import { renderWithProviders } from '../../utils/test-utils';
+import { getDummyConfigurableContent } from '../../utils/test-utils/getDummyConfigurableContent';
 import { TenantLogo } from './TenantLogo';
 
 describe('Tenant Logo', () => {
