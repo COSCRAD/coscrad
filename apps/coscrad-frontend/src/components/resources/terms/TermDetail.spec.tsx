@@ -62,7 +62,7 @@ describe('Term Detail', () => {
         });
     });
 
-    describe('when the API request is invalid', () => {
+    describe('when the API request is invalid or pending', () => {
         testContainerComponentErrorHandling(() => act(idOfTermToFind), endpoint);
     });
 });
