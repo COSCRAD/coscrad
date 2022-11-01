@@ -2,10 +2,10 @@ import { PreloadedState } from '@reduxjs/toolkit';
 import { render, RenderOptions } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
-import { getDummyConfigurableContent } from '../../app/App.spec';
 import { ConfigurableContentProvider } from '../../configurable-front-matter/configurable-content-provider';
 import { ConfigurableContent } from '../../configurable-front-matter/data/configurableContentSchema';
 import { AppStore, RootState, setupStore } from '../../store';
+import { getDummyConfigurableContent } from './getDummyConfigurableContent';
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
     preloadedState?: PreloadedState<RootState>;
     store?: AppStore;

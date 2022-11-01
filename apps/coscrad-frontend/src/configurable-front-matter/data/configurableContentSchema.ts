@@ -10,7 +10,9 @@ export const configurableContentSchema = {
     subTitle: CoscradDataType.NonEmptyString,
     about: CoscradDataType.NonEmptyString,
     siteDescription: CoscradDataType.NonEmptyString,
+    siteHomeImageUrl: CoscradDataType.NonEmptyString,
     copyrightHolder: CoscradDataType.NonEmptyString,
+    organizationLogoUrl: CoscradDataType.NonEmptyString,
 } as const;
 
 export type ConfigurableContentSchema = typeof configurableContentSchema;
