@@ -5,16 +5,16 @@ import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../store';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 
-interface UseLoadableArgs<TIndexState> {
-    selector: (state: RootState) => ILoadable<TIndexState>;
+interface UseLoadableArgs<TSelectedState, UIndexState> {
+    selector: (state: RootState) => ILoadable<TSelectedState>;
     // eslint-disable-next-line @typescript-eslint/ban-types
-    fetchThunk: AsyncThunk<TIndexState, void, {}>;
+    fetchThunk: AsyncThunk<UIndexState, void, {}>;
 }
 
-export const useLoadable = <TIndexState>({
+export const useLoadable = <TSelectedState, UIndexState>({
     selector,
     fetchThunk,
-}: UseLoadableArgs<TIndexState>) => {
+}: UseLoadableArgs<TSelectedState, UIndexState>): [ILoadable<TSelectedState>] => {
     const loadable = useSelector(selector);
 
     const { data } = loadable;
