@@ -7,7 +7,7 @@ export const NoteIndexPresenter = ({ data: notes }: HasData<INoteViewModel[]>): 
         {notes.map((note) => (
             <div key={note.id} data-testid={note.id}>
                 <h1>
-                    note: <Link to={`/Notes/${note.id}`}>{note.id}</Link>
+                    note: <Link to={note.id}>{note.id}</Link>
                 </h1>
                 <p>{note.note}</p>
                 <h2>Full Props (stringified):</h2>
