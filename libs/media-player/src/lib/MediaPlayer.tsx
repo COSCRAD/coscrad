@@ -30,10 +30,11 @@ export interface MediaPlayerProps {
 
 export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
     const [playing, toggle] = useAudio(audioUrl);
+
     return (
         <div className={styles['container']}>
             <Button id={styles['radioButton']} variant="contained" onClick={toggle}>
-                Listen Live!
+                {playing ? <div>Now Playing!</div> : <div>Listen Live!</div>}
                 {playing ? (
                     <PauseIcon className={styles['actionButton']} />
                 ) : (

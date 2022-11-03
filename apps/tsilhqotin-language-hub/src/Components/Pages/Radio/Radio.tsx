@@ -4,7 +4,7 @@ import { MediaPlayer } from '../../../../../../libs/media-player/src';
 import { getRadioConfig } from '../../../Configs/Radio/radio.config';
 import ScrollToTop from '../../Widgets/ScrollButton/ScrollToTop';
 
-export function Radio() {
+export const Radio = (): JSX.Element => {
     return (
         <div className="page">
             <ScrollToTop />
@@ -28,6 +28,4 @@ export function Radio() {
             </div>
         </div>
     );
-}
-
-export default Radio;
+};

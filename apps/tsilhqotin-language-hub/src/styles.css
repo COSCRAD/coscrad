@@ -256,16 +256,18 @@ a {
 }
 
 @media only screen and (min-width: 889px) {
-    .menu__btn {
-        display: none !important;
-    }
-
     .siteTitle {
         font-size: 40px;
     }
 
     .heroTitle {
         font-size: 30px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .menu__btn {
+        display: none !important;
     }
 }
 
@@ -787,11 +789,15 @@ h2 {
     background: rgba(13, 16, 66, 1) !important;
     box-shadow: 0px 0px 12px 2px red !important;
     border-radius: 20px !important;
-    padding: 20px;
+    padding: 10px 10px 25px 10px;
     width: 300px;
 }
 
 .radioPlayer {
     margin: 0 auto;
     text-align: center;
+}
+
+#radioNav {
+    white-space: nowrap !important;
 }
