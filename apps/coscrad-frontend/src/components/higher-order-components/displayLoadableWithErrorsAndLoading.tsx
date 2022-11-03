@@ -2,18 +2,15 @@ import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
 import { Loading } from '../Loading';
+import { MapLoadedDataToProps } from './types';
 
 export type HasData<T> = {
     data: T;
 };
 
-type MapLoadedDataToProps<T, UProps> = (loadable: T) => UProps;
-
-type Presenter<T> = FunctionalComponent<T>;
-
 export const displayLoadableWithErrorsAndLoading =
     <T, U>(
-        WrappedPresenterComponent: Presenter<U>,
+        WrappedPresenterComponent: FunctionalComponent<U>,
         /**
          * This "Inversion of Control" provides flexibility. For example,
          * we typically prefer to nest array data within an object. In case no
