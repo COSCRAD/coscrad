@@ -3,7 +3,7 @@ import { useIdFromLocation } from '../../../../../utils/custom-hooks/use-id-from
 import { ILoadable } from '../../../interfaces/loadable.interface';
 import { IMaybeLoadable, NOT_FOUND } from '../../../interfaces/maybe-loadable.interface';
 
-export const useMaybeLoadableByRouteParamsId = <T extends IBaseViewModel>(
+export const useMaybeLoadableFromRouteParamsId = <T extends IBaseViewModel>(
     useLoadableItems: () => [ILoadable<IIndexQueryResult<T>>]
 ): IMaybeLoadable<IDetailQueryResult<T>> => {
     const [idFromLocation] = useIdFromLocation();
