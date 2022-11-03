@@ -11,7 +11,11 @@ export const ResourceInfoPresenter = ({
     link: apiIndexRoute,
 }: IAggregateInfo<ResourceType>): JSX.Element => {
     const resourceIndexLink = (
-        [ResourceType.term, ResourceType.photograph] as ResourceType[]
+        [
+            ResourceType.term,
+            ResourceType.photograph,
+            ResourceType.transcribedAudio,
+        ] as ResourceType[]
     ).includes(resourceType) ? (
         <Link to={`/${routes.resources.ofType(resourceType).index}`}>View {label}s</Link>
     ) : (
