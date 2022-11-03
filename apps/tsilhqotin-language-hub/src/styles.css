@@ -780,3 +780,18 @@ h2 {
 .presenterParagraph {
     color: rgb(225, 225, 225);
 }
+
+.tsilhqotinRadio {
+    margin: 0 auto;
+    text-align: center;
+    background: rgba(13, 16, 66, 1) !important;
+    box-shadow: 0px 0px 12px 2px red !important;
+    border-radius: 20px !important;
+    padding: 20px;
+    width: 360px;
+}
+
+.radioPlayer {
+    margin: 0 auto;
+    text-align: center;
+}

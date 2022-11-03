@@ -26,6 +26,7 @@ const Navbar = () => {
             <Typography component={'span'} sx={{ margin: '15px', padding: '15px' }}>
                 <NavMenu className="navLinks">
                     <NavLink to="/About">About</NavLink>
+                    <NavLink to="/Radio">Radio</NavLink>
                     <NavLink to="/Apps">Apps</NavLink>
                     <NavLink to="/Songs">Songs</NavLink>
                     <NavLink to="/Videos">Videos</NavLink>

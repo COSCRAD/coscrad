@@ -7,6 +7,7 @@ import { FundersContainer } from '../Components/Pages/Funders/Funders.container'
 import Greetings from '../Components/Pages/Greetings/Greetings';
 import Home from '../Components/Pages/Home/Home';
 import { LinksContainer } from '../Components/Pages/Links/Links.container';
+import Radio from '../Components/Pages/Radio/Radio';
 import SongDetail from '../Components/Pages/SongDetail/SongDetail';
 import Songs from '../Components/Pages/SongIndex/SongIndex';
 import Teachers from '../Components/Pages/Teachers/Teachers';
@@ -33,6 +34,7 @@ export function App() {
                     <Route path="/Funders" element={<FundersContainer />} />
                     <Route path="/Greetings" element={<Greetings />} />
                     <Route path="/Contact" element={<Contact />} />
+                    <Route path="/Radio" element={<Radio />} />
                     <Route
                         path="*"
                         element={
