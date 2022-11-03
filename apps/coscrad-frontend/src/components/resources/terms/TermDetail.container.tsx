@@ -1,7 +1,7 @@
 import { RootState } from '../../../store';
 import { fetchTerms } from '../../../store/slices/resources';
+import { useLoadable } from '../../../store/slices/resources/shared/hooks';
 import { useIdFromLocation } from '../../../utils/custom-hooks/use-id-from-location';
-import { useLoadable } from '../../../utils/custom-hooks/useLoadable';
 import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
 import { NotFound } from '../../NotFound';
 import { TermDetailPresenter } from './TermDetail.presenter';
