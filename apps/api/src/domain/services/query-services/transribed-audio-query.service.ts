@@ -1,4 +1,4 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels, ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
@@ -10,7 +10,7 @@ import { BaseQueryService } from './base-query.service';
 
 export class TranscribedAudioQueryService extends BaseQueryService<
     TranscribedAudio,
-    TranscribedAudioViewModel
+    ITranscribedAudioViewModel
 > {
     protected readonly type = ResourceType.transcribedAudio;
 
@@ -25,7 +25,7 @@ export class TranscribedAudioQueryService extends BaseQueryService<
     buildViewModel(
         transcribedAudioInstance: TranscribedAudio,
         _: InMemorySnapshot
-    ): TranscribedAudioViewModel {
+    ): ITranscribedAudioViewModel {
         return new TranscribedAudioViewModel(
             transcribedAudioInstance,
             this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
