@@ -6,6 +6,9 @@ export function Dropdown() {
             <Link className="menu__item" to="/About" reloadDocument={true}>
                 About
             </Link>
+            <Link className="menu__item" to="/Radio" reloadDocument={true}>
+                Radio
+            </Link>
             <Link className="menu__item" to="/Apps" reloadDocument={true}>
                 Apps
             </Link>

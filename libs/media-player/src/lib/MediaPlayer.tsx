@@ -4,9 +4,7 @@ import { Button } from '@mui/material';
 import { MouseEventHandler, useEffect, useState } from 'react';
 import styles from './MediaPlayer.module.scss';
 
-const audioUrl = 'http://datsan.openbroadcaster.pro:8000/datsan';
-
-const useAudio = (): [boolean, MouseEventHandler<HTMLButtonElement>] => {
+const useAudio = (audioUrl: string): [boolean, MouseEventHandler<HTMLButtonElement>] => {
     const [audio] = useState(new Audio(audioUrl));
     const [playing, setPlaying] = useState(false);
 
@@ -26,8 +24,12 @@ const useAudio = (): [boolean, MouseEventHandler<HTMLButtonElement>] => {
     return [playing, toggle];
 };
 
-export function MediaPlayer() {
-    const [playing, toggle] = useAudio();
+export interface MediaPlayerProps {
+    audioUrl: string;
+}
+
+export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
+    const [playing, toggle] = useAudio(audioUrl);
     return (
         <div className={styles['container']}>
             <Button id={styles['radioButton']} variant="contained" onClick={toggle}>
