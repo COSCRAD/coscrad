@@ -1,0 +1,23 @@
+/*
+ * Replace this with your own classes
+ *
+ * e.g.
+ * .container {
+ * }
+*/
+#radioButton {
+    background: rgb(255, 255, 255);
+    height: 50px;
+    width: 170px;
+    border-radius: 20px;
+    color: black;
+}
+
+#radioButton:hover {
+    background: rgb(212, 212, 212);
+}
+
+.actionButton {
+    color: red;
+    font-size: 28px !important;
+}

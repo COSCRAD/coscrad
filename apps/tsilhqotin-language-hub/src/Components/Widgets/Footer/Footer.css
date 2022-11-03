@@ -7,7 +7,7 @@
 
 .footerDivider {
     width: 90vw;
-    margin: auto;
+    margin: 0 auto !important;
 }
 
 .socialLinks {
