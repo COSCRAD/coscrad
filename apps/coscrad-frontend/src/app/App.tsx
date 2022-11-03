@@ -10,6 +10,10 @@ import { Home } from '../components/Home/Home';
 import MembersOnly from '../components/MembersOnly/MembersOnly';
 import { NoteDetailContainer } from '../components/Notes/NoteDetail.container';
 import { NoteIndexContainer } from '../components/Notes/NoteIndex.container';
+import {
+    TranscribedAudioDetailContainer,
+    TranscribedAudioIndexContainer,
+} from '../components/resources';
 import { PhotographDetailContainer } from '../components/resources/photographs/photograph-detail.container';
 import { PhotographIndexContainer } from '../components/resources/photographs/photograph-index.container';
 import { TermIndexContainer } from '../components/resources/terms';
@@ -49,6 +53,14 @@ export function App() {
                     <Route
                         path={routes.resources.ofType(ResourceType.photograph).detail()}
                         element={<PhotographDetailContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.transcribedAudio).index}
+                        element={<TranscribedAudioIndexContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.transcribedAudio).detail()}
+                        element={<TranscribedAudioDetailContainer />}
                     />
                     {/* The following are temporary or experimental */}
                     <Route path="MembersOnly" element={<MembersOnly />} />
