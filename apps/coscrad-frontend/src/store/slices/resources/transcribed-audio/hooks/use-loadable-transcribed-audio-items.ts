@@ -1,4 +1,4 @@
-import { useLoadable } from '../../../../../utils/custom-hooks/useLoadable';
+import { useLoadable } from '../../shared/hooks';
 import { selectLoadableTranscribedAudioItems } from '../selectors';
 import { fetchTranscribedAudioItems } from '../thunks/fetch-transcribed-audio-items';
 
