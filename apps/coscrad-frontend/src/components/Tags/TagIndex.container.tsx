@@ -1,6 +1,6 @@
 import { RootState } from '../../store';
+import { useLoadable } from '../../store/slices/resources/shared/hooks';
 import { fetchTags } from '../../store/slices/tagSlice/thunks';
-import { useLoadable } from '../../utils/custom-hooks/useLoadable';
 import { wrapArrayProps } from '../../utils/prop-manipulation/wrap-array-props';
 import { displayLoadableWithErrorsAndLoading } from '../higher-order-components';
 import { TagIndexPresenter } from './TagIndex.presenter';
