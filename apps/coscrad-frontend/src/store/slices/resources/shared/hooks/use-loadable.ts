@@ -1,9 +1,9 @@
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useAppDispatch } from '../../app/hooks';
-import { RootState } from '../../store';
-import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
+import { RootState } from '../../../..';
+import { useAppDispatch } from '../../../../../app/hooks';
+import { ILoadable } from '../../../interfaces/loadable.interface';
 
 interface UseLoadableArgs<TSelectedState, UIndexState> {
     selector: (state: RootState) => ILoadable<TSelectedState>;

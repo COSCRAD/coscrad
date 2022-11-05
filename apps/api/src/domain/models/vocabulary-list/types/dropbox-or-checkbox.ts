@@ -1,1 +1,1 @@
-export type DropboxOrCheckbox = 'dropbox' | 'checkbox';
+export { DropboxOrCheckbox } from '@coscrad/api-interfaces';

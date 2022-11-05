@@ -1,3 +1,4 @@
+import { ITermViewModel } from '@coscrad/api-interfaces';
 import { FromDomainModel, NonEmptyString, URL } from '@coscrad/data-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Term } from '../../../domain/models/term/entities/term.entity';
@@ -14,7 +15,7 @@ const getContributorNameFromId = (id: string): string => contributors[id] || '';
 
 const FromTerm = FromDomainModel(Term);
 
-export class TermViewModel extends BaseViewModel {
+export class TermViewModel extends BaseViewModel implements ITermViewModel {
     @ApiProperty({
         example: 'Jane Doe',
         description: 'The language speaker who contributed the term',
