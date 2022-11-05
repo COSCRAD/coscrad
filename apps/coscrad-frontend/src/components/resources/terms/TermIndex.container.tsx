@@ -1,7 +1,7 @@
 import { IIndexQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
 import { RootState } from '../../../store';
 import { fetchTerms } from '../../../store/slices/resources';
-import { useLoadable } from '../../../utils/custom-hooks/useLoadable';
+import { useLoadable } from '../../../store/slices/resources/shared/hooks';
 import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
 import { TermIndexPresenter } from './TermIndex.presenter';
 
