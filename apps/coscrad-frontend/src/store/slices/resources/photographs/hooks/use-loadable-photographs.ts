@@ -1,4 +1,4 @@
-import { useLoadable } from '../../../../../utils/custom-hooks/useLoadable';
+import { useLoadable } from '../../shared/hooks';
 import { selectLoadablePhotographs } from '../selectors';
 import { fetchPhotographs } from '../thunks';
 
