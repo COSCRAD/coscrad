@@ -1,3 +1,4 @@
+import { IVocabularyListVariable } from '@coscrad/api-interfaces';
 import { NonEmptyString } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { DropboxOrCheckbox } from '../../vocabulary-list/types/dropbox-or-checkbox';
@@ -11,7 +12,8 @@ import { ValueAndDisplay } from './value-and-display.entity';
  */
 export class VocabularyListVariable<
     TVariableType extends VocabularyListVariableValue = VocabularyListVariableValue
-> {
+> implements IVocabularyListVariable<TVariableType>
+{
     @ApiProperty({
         example: 'person',
         description: 'name of a property that parametrizes terms in the list',

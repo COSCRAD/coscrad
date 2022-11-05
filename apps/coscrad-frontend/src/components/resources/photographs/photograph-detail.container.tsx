@@ -1,7 +1,7 @@
 import { selectLoadablePhotographs } from '../../../store/slices/resources/photographs';
 import { fetchPhotographs } from '../../../store/slices/resources/photographs/thunks';
+import { useLoadable } from '../../../store/slices/resources/shared/hooks';
 import { useIdFromLocation } from '../../../utils/custom-hooks/use-id-from-location';
-import { useLoadable } from '../../../utils/custom-hooks/useLoadable';
 import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
 import { NotFound } from '../../NotFound';
 import { PhotographDetailPresenter } from './photograph-detail.presenter';
