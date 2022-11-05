@@ -1,3 +1,4 @@
+import { IVocabularyListEntry } from '@coscrad/api-interfaces';
 import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Term } from '../../../domain/models/term/entities/term.entity';
@@ -11,7 +12,7 @@ import { TermViewModel } from './term.view-model';
 
 type VariableValues = Record<string, VocabularyListVariableValue>;
 
-class VocabularyListEntryViewModel {
+class VocabularyListEntryViewModel implements IVocabularyListEntry<VocabularyListVariableValue> {
     @ApiProperty({
         type: TermViewModel,
     })

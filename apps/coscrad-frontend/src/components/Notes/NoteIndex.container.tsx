@@ -1,6 +1,6 @@
 import { RootState } from '../../store';
 import { fetchNotes } from '../../store/slices/notes/thunks';
-import { useLoadable } from '../../utils/custom-hooks/useLoadable';
+import { useLoadable } from '../../store/slices/resources/shared/hooks';
 import { wrapArrayProps } from '../../utils/prop-manipulation/wrap-array-props';
 import { displayLoadableWithErrorsAndLoading } from '../higher-order-components/displayLoadableWithErrorsAndLoading';
 import { NoteIndexPresenter } from './NoteIndex.presenter';

@@ -1,6 +1,6 @@
 import { RootState } from '../../store';
 import { fetchCategoryTree } from '../../store/slices/categories';
-import { useLoadable } from '../../utils/custom-hooks/useLoadable';
+import { useLoadable } from '../../store/slices/resources/shared/hooks';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { displayLoadableWithErrorsAndLoading } from '../higher-order-components';
 import { CategoryTreePresenter } from './CateogryTree.presenter';
