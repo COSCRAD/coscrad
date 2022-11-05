@@ -13,6 +13,8 @@ import { NoteIndexContainer } from '../components/Notes/NoteIndex.container';
 import {
     TranscribedAudioDetailContainer,
     TranscribedAudioIndexContainer,
+    VocabularyListDetailContainer,
+    VocabularyListIndexContainer,
 } from '../components/resources';
 import { PhotographDetailContainer } from '../components/resources/photographs/photograph-detail.container';
 import { PhotographIndexContainer } from '../components/resources/photographs/photograph-index.container';
@@ -61,6 +63,14 @@ export function App() {
                     <Route
                         path={routes.resources.ofType(ResourceType.transcribedAudio).detail()}
                         element={<TranscribedAudioDetailContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.vocabularyList).index}
+                        element={<VocabularyListIndexContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.vocabularyList).detail()}
+                        element={<VocabularyListDetailContainer />}
                     />
                     {/* The following are temporary or experimental */}
                     <Route path="MembersOnly" element={<MembersOnly />} />
