@@ -4,7 +4,13 @@ import { CATEGORY_TREE } from './slices/categories/constants';
 import { noteReducer, NOTES } from './slices/notes';
 
 import { resourceInfoReducer, RESOURCE_INFO } from './slices/resourceInfo';
-import { termReducer, vocabularyListReducer, VOCABULARY_LIST } from './slices/resources';
+import {
+    bibliographicReferenceReducer,
+    termReducer,
+    vocabularyListReducer,
+    VOCABULARY_LIST,
+} from './slices/resources';
+import { BIBLIOGRAPHIC_REFERENCE } from './slices/resources/bibliographic-references/constants';
 import { photographReducer } from './slices/resources/photographs';
 import { PHOTOGRAPHS } from './slices/resources/photographs/constants';
 import { TERMS } from './slices/resources/terms/constants';
@@ -22,6 +28,7 @@ export const rootReducer = combineReducers({
     [PHOTOGRAPHS]: photographReducer,
     [TRANSCRIBED_AUDIO]: transcribedAudioReducer,
     [VOCABULARY_LIST]: vocabularyListReducer,
+    [BIBLIOGRAPHIC_REFERENCE]: bibliographicReferenceReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
