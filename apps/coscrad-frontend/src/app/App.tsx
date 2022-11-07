@@ -22,6 +22,10 @@ import {
 } from '../components/resources/bibliographic-references';
 import { PhotographDetailContainer } from '../components/resources/photographs/photograph-detail.container';
 import { PhotographIndexContainer } from '../components/resources/photographs/photograph-index.container';
+import {
+    SpatialFeatureDetailContainer,
+    SpatialFeatureIndexContainer,
+} from '../components/resources/spatial-features';
 import { TermIndexContainer } from '../components/resources/terms';
 import { TermDetailContainer } from '../components/resources/terms/TermDetail.container';
 import { TagDetailContainer } from '../components/Tags/TagDetail.container';
@@ -85,7 +89,14 @@ export function App() {
                         path={routes.resources.ofType(ResourceType.bibliographicReference).detail()}
                         element={<BibliographicReferenceDetailContainer />}
                     />
-
+                    <Route
+                        path={routes.resources.ofType(ResourceType.spatialFeature).index}
+                        element={<SpatialFeatureIndexContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.spatialFeature).detail()}
+                        element={<SpatialFeatureDetailContainer />}
+                    />
                     {/* The following are temporary or experimental */}
                     <Route path="MembersOnly" element={<MembersOnly />} />
                     <Route path="ResourceIndex" element={<DynamicIndexPage />} />
