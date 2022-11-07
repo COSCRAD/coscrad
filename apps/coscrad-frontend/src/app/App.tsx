@@ -16,6 +16,10 @@ import {
     VocabularyListDetailContainer,
     VocabularyListIndexContainer,
 } from '../components/resources';
+import {
+    BibliographicReferenceDetailContainer,
+    BibliographicReferenceIndexContainer,
+} from '../components/resources/bibliographic-references';
 import { PhotographDetailContainer } from '../components/resources/photographs/photograph-detail.container';
 import { PhotographIndexContainer } from '../components/resources/photographs/photograph-index.container';
 import { TermIndexContainer } from '../components/resources/terms';
@@ -40,6 +44,7 @@ export function App() {
                     <Route path={routes.tags.index} element={<TagIndexContainer />} />
                     <Route path={routes.tags.detail()} element={<TagDetailContainer />} />
                     <Route path={routes.treeOfKnowledge} element={<CategoryTreeContainer />} />
+                    {/* TODO Add helper to build the following routes for resources */}
                     <Route
                         path={routes.resources.ofType(ResourceType.term).index}
                         element={<TermIndexContainer />}
@@ -72,6 +77,15 @@ export function App() {
                         path={routes.resources.ofType(ResourceType.vocabularyList).detail()}
                         element={<VocabularyListDetailContainer />}
                     />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.bibliographicReference).index}
+                        element={<BibliographicReferenceIndexContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.bibliographicReference).detail()}
+                        element={<BibliographicReferenceDetailContainer />}
+                    />
+
                     {/* The following are temporary or experimental */}
                     <Route path="MembersOnly" element={<MembersOnly />} />
                     <Route path="ResourceIndex" element={<DynamicIndexPage />} />

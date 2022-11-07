@@ -5,3 +5,6 @@ export const IndexAndDetailSubrouteBuilder = (prefix: string) => ({
     index: IndexRouteBuilder(prefix),
     detail: IdRouteBuilder(prefix),
 });
+
+// Let's mimic Class-based OOP here
+export type IndexAndDetailSubrouteBuilder = ReturnType<typeof IndexAndDetailSubrouteBuilder>;
