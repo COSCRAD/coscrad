@@ -89,6 +89,7 @@ describe('vocabulary list detail', () => {
                 ),
             })
         );
+
         describe('when the ID in the route matches an existing vocabulary list', () => {
             it('should display the vocabulary list', async () => {
                 act(idToFind);
