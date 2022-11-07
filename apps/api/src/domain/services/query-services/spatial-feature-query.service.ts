@@ -1,4 +1,4 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { SpatialFeatureViewModel } from '../../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import { Line } from '../../models/spatial-feature/entities/line.entity';
@@ -10,11 +10,11 @@ import { BaseQueryService } from './base-query.service';
 
 export class SpatialFeatureQueryService extends BaseQueryService<
     ISpatialFeature,
-    SpatialFeatureViewModel
+    ISpatialFeatureViewModel
 > {
     protected readonly type = ResourceType.spatialFeature;
 
-    buildViewModel(spatialFeatureInstance: ISpatialFeature): SpatialFeatureViewModel {
+    buildViewModel(spatialFeatureInstance: ISpatialFeature): ISpatialFeatureViewModel {
         return new SpatialFeatureViewModel(spatialFeatureInstance);
     }
 
