@@ -1,4 +1,4 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { IBibliographicReferenceViewModel, ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { IBibliographicReferenceData } from '../../models/bibliographic-reference/interfaces/bibliographic-reference-data.interface';
 import { IBibliographicReference } from '../../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
@@ -7,13 +7,13 @@ import { BaseQueryService } from './base-query.service';
 
 export class BibliographicReferenceQueryService extends BaseQueryService<
     IBibliographicReference,
-    BibliographicReferenceViewModel
+    IBibliographicReferenceViewModel
 > {
     protected readonly type = ResourceType.bibliographicReference;
 
     buildViewModel(
         bibliographicReferenceInstance: IBibliographicReference<IBibliographicReferenceData>
-    ): BibliographicReferenceViewModel {
+    ): IBibliographicReferenceViewModel {
         return new BibliographicReferenceViewModel(bibliographicReferenceInstance);
     }
 
