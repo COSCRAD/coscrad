@@ -26,7 +26,7 @@ export const createFetchThunk = <TPayload>(
              *
              * We need more specific error handling that considers the format of
              * and difference between a returned error, a system error (backend runtime exception),
-             * and other errors (e.g. not found, not authroized).
+             * and other errors (e.g. not found, not authorized).
              */
             return thunkApi.rejectWithValue({
                 code: responseJson.statusCode,
