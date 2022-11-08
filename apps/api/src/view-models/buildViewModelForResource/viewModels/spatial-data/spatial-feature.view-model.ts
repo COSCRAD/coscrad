@@ -1,10 +1,10 @@
-import { ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
+import { GeometricFeatureType, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { ISpatialFeature } from '../../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from '../base.view-model';
 
 type GeometryViewModel = {
-    type: string;
+    type: GeometricFeatureType;
     coordinates: number[] | number[][] | number[][][];
 };
 
