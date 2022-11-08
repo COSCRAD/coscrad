@@ -19,6 +19,7 @@ export const ResourceInfoPresenter = ({
             ResourceType.bibliographicReference,
             ResourceType.spatialFeature,
             ResourceType.song,
+            ResourceType.book,
         ] as ResourceType[]
     ).includes(resourceType) ? (
         <Link to={`/${routes.resources.ofType(resourceType).index}`}>View {label}s</Link>
