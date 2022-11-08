@@ -1,6 +1,6 @@
 import { IBaseViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../types/functional-component';
-import './generic-detail-presenter.css';
+import './generic-index-presenter.css';
 import { GenericTableRowPresenter } from './tables';
 
 export const GenericIndexPresenter: FunctionalComponent<IIndexQueryResult<IBaseViewModel>> = ({
@@ -10,17 +10,25 @@ export const GenericIndexPresenter: FunctionalComponent<IIndexQueryResult<IBaseV
 
     return (
         <div>
-            <h3>JSON Data</h3>
-            <div className="json-data">{JSON.stringify(viewModels)}</div>
             <h3>Records</h3>
             <div className="records-table">
                 <table border={1} cellSpacing={0}>
                     <tbody>
+                        <tr>
+                            <th>Action</th>
+                            {Object.keys(viewModels[0]).map((propertyName) => (
+                                <th>{propertyName}</th>
+                            ))}
+                        </tr>
                         {viewModels.map((viewModel) => (
                             <GenericTableRowPresenter key={viewModel.id} {...viewModel} />
                         ))}
                     </tbody>
                 </table>
+            </div>
+            <h3>JSON Data</h3>
+            <div className="json-data">
+                <pre>{JSON.stringify(viewModels, null, 2)}</pre>
             </div>
         </div>
     );
