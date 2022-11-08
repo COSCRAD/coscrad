@@ -46,6 +46,7 @@ describe('Photograph Index', () => {
                 ),
             })
         );
+
         it('should display the photographs', async () => {
             act();
 

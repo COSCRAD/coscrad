@@ -14,6 +14,7 @@ import {
 import { BIBLIOGRAPHIC_REFERENCE } from './slices/resources/bibliographic-references/constants';
 import { photographReducer } from './slices/resources/photographs';
 import { PHOTOGRAPHS } from './slices/resources/photographs/constants';
+import { SONG, songReducer } from './slices/resources/songs';
 import { SPATIAL_FEATURE } from './slices/resources/spatial-features/constants';
 import { TERMS } from './slices/resources/terms/constants';
 import { transcribedAudioReducer } from './slices/resources/transcribed-audio';
@@ -32,6 +33,7 @@ export const rootReducer = combineReducers({
     [VOCABULARY_LIST]: vocabularyListReducer,
     [BIBLIOGRAPHIC_REFERENCE]: bibliographicReferenceReducer,
     [SPATIAL_FEATURE]: spatialFeatureReducer,
+    [SONG]: songReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
