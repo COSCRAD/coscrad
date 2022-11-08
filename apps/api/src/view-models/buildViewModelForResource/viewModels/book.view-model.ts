@@ -1,11 +1,13 @@
+import { IBookViewModel } from '@coscrad/api-interfaces';
 import { FromDomainModel } from '@coscrad/data-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Book } from '../../../domain/models/book/entities/book.entity';
+import BookPage from '../../../domain/models/book/entities/BookPage';
 import { BaseViewModel } from './base.view-model';
 
 const FromBook = FromDomainModel(Book);
 
-export class BookViewModel extends BaseViewModel {
+export class BookViewModel extends BaseViewModel implements IBookViewModel {
     @ApiProperty({
         example: 'How I won the Lottery',
         description: 'the title of the book',
@@ -34,9 +36,9 @@ export class BookViewModel extends BaseViewModel {
     @FromBook
     readonly publicationDate?: string;
 
-    // TODO Add Pages
+    readonly pages: BookPage[];
 
-    constructor({ id, title, subtitle, author, publicationDate }: Book) {
+    constructor({ id, title, subtitle, author, publicationDate, pages }: Book) {
         super({ id });
 
         this.title = title;
@@ -46,5 +48,8 @@ export class BookViewModel extends BaseViewModel {
         this.author = author;
 
         this.publicationDate = publicationDate;
+
+        // avoid shared references
+        this.pages = pages.map((page) => page.clone());
     }
 }
