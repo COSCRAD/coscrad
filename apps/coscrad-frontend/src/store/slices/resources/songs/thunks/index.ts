@@ -1,1 +1,1 @@
-export * from './fetchSongs';
+export * from './fetch-songs';
