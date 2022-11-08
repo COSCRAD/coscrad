@@ -20,6 +20,7 @@ import {
     BibliographicReferenceDetailContainer,
     BibliographicReferenceIndexContainer,
 } from '../components/resources/bibliographic-references';
+import { BookDetailContainer, BookIndexContainer } from '../components/resources/books';
 import { PhotographDetailContainer } from '../components/resources/photographs/photograph-detail.container';
 import { PhotographIndexContainer } from '../components/resources/photographs/photograph-index.container';
 import { SongIndexContainer } from '../components/resources/songs';
@@ -106,6 +107,14 @@ export function App() {
                     <Route
                         path={routes.resources.ofType(ResourceType.song).detail()}
                         element={<SongDetailContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.book).index}
+                        element={<BookIndexContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.book).detail()}
+                        element={<BookDetailContainer />}
                     />
                     {/* The following are temporary or experimental */}
                     <Route path="MembersOnly" element={<MembersOnly />} />

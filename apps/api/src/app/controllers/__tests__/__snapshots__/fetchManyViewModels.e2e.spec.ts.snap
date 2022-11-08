@@ -329,6 +329,18 @@ Object {
       "data": Object {
         "author": "John Doeburg",
         "id": "23",
+        "pages": Array [
+          Object {
+            "identifier": "1",
+            "text": "foo",
+            "translation": "dee foo",
+          },
+          Object {
+            "identifier": "2",
+            "text": "blah blah blah",
+            "translation": "blahas",
+          },
+        ],
         "publicationDate": "2002",
         "subtitle": "The wolf's revenge",
         "tags": Array [
@@ -367,6 +379,13 @@ Object {
       "data": Object {
         "author": "Jane Donnaldson",
         "id": "24",
+        "pages": Array [
+          Object {
+            "identifier": "ix",
+            "text": "blah blah blah",
+            "translation": "blahas",
+          },
+        ],
         "publicationDate": "2011",
         "tags": Array [
           Object {
@@ -404,6 +423,13 @@ Object {
       "data": Object {
         "author": "Jane Donnaldson",
         "id": "25",
+        "pages": Array [
+          Object {
+            "identifier": "ix",
+            "text": "blah blah blah",
+            "translation": "blahas",
+          },
+        ],
         "publicationDate": "2012",
         "tags": Array [],
         "title": "An Adventure Story II",
@@ -444,6 +470,18 @@ Object {
       "data": Object {
         "author": "John Doeburg",
         "id": "23",
+        "pages": Array [
+          Object {
+            "identifier": "1",
+            "text": "foo",
+            "translation": "dee foo",
+          },
+          Object {
+            "identifier": "2",
+            "text": "blah blah blah",
+            "translation": "blahas",
+          },
+        ],
         "publicationDate": "2002",
         "subtitle": "The wolf's revenge",
         "tags": Array [
@@ -482,6 +520,13 @@ Object {
       "data": Object {
         "author": "Jane Donnaldson",
         "id": "24",
+        "pages": Array [
+          Object {
+            "identifier": "ix",
+            "text": "blah blah blah",
+            "translation": "blahas",
+          },
+        ],
         "publicationDate": "2011",
         "tags": Array [
           Object {
@@ -519,6 +564,13 @@ Object {
       "data": Object {
         "author": "Jane Donnaldson",
         "id": "25",
+        "pages": Array [
+          Object {
+            "identifier": "ix",
+            "text": "blah blah blah",
+            "translation": "blahas",
+          },
+        ],
         "publicationDate": "2012",
         "tags": Array [],
         "title": "An Adventure Story II",

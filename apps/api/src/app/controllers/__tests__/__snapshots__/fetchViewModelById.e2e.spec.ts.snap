@@ -82,6 +82,18 @@ Object {
   "data": Object {
     "author": "John Doeburg",
     "id": "23",
+    "pages": Array [
+      Object {
+        "identifier": "1",
+        "text": "foo",
+        "translation": "dee foo",
+      },
+      Object {
+        "identifier": "2",
+        "text": "blah blah blah",
+        "translation": "blahas",
+      },
+    ],
     "publicationDate": "2002",
     "subtitle": "The wolf's revenge",
     "tags": Array [
