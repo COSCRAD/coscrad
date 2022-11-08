@@ -21,6 +21,10 @@ import {
     BibliographicReferenceIndexContainer,
 } from '../components/resources/bibliographic-references';
 import { BookDetailContainer, BookIndexContainer } from '../components/resources/books';
+import {
+    MediaItemDetailContainer,
+    MediaItemIndexContainer,
+} from '../components/resources/media-items';
 import { PhotographDetailContainer } from '../components/resources/photographs/photograph-detail.container';
 import { PhotographIndexContainer } from '../components/resources/photographs/photograph-index.container';
 import { SongIndexContainer } from '../components/resources/songs';
@@ -115,6 +119,14 @@ export function App() {
                     <Route
                         path={routes.resources.ofType(ResourceType.book).detail()}
                         element={<BookDetailContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.mediaItem).index}
+                        element={<MediaItemIndexContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.mediaItem).detail()}
+                        element={<MediaItemDetailContainer />}
                     />
                     {/* The following are temporary or experimental */}
                     <Route path="MembersOnly" element={<MembersOnly />} />

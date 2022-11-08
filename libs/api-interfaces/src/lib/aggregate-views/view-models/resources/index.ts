@@ -1,5 +1,6 @@
 export * from './bibliographic-reference';
 export * from './book';
+export * from './media-items';
 export * from './photograph.view-model.interface';
 export * from './resource-type.enum';
 export * from './song.view-model.interface';
