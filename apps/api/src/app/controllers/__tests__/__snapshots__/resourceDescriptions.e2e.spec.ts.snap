@@ -469,7 +469,7 @@ Array [
     "label": "Media Item",
     "link": "/resources/mediaItems",
     "schema": Object {
-      "contributorAndRoles": Object {
+      "contributions": Object {
         "complexDataType": "NESTED_TYPE",
         "isArray": true,
         "isOptional": false,

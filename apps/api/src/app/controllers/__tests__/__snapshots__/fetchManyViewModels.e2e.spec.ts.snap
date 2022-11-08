@@ -609,7 +609,7 @@ Object {
         },
       ],
       "data": Object {
-        "contributorAndRoles": Array [
+        "contributions": Array [
           Object {
             "contributorId": "2",
             "role": "host",
@@ -662,7 +662,7 @@ Object {
         },
       ],
       "data": Object {
-        "contributorAndRoles": Array [
+        "contributions": Array [
           Object {
             "contributorId": "2",
             "role": "host",
