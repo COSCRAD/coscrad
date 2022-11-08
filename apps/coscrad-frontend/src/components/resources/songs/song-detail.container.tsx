@@ -1,11 +1,12 @@
 import { useLoadableSongById } from '../../../store/slices/resources';
-import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
+import { displayLoadableSearchResult } from '../../higher-order-components/display-loadable-search-result';
 import { SongDetailPresenter } from './song-detail.presenter';
 
 export const SongDetailContainer = (): JSX.Element => {
     const loadableSong = useLoadableSongById();
 
-    const Presenter = displayLoadableWithErrorsAndLoading(SongDetailPresenter);
+    // Huge gotcha- if we accidentally use `displayLoadableWithErrorsAndLoading` here!
+    const Presenter = displayLoadableSearchResult(SongDetailPresenter);
 
     return <Presenter {...loadableSong} />;
 };
