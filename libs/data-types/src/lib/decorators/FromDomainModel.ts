@@ -12,11 +12,15 @@ import getCoscradDataSchemaFromPrototype from '../utilities/getCoscradDataSchema
  * In the future, we may want to provide flexibility to rename the property on the
  * view model.
  */
-export function FromDomainModel(DomainModelDataClass: Object): PropertyDecorator {
+export function FromDomainModel<T extends Object>(
+    DomainModelDataClass: T,
+    // TODO Constrain this to be a keyof an instance of the given class
+    propertyKeyOverride?: string
+): PropertyDecorator {
     return (target: Object, propertyKey: string) => {
         const fullDataSchema = getCoscradDataSchema(DomainModelDataClass);
 
-        const dataSchemaForProp = fullDataSchema[propertyKey];
+        const dataSchemaForProp = fullDataSchema[propertyKeyOverride || propertyKey];
 
         // TODO Make this a custom exception class instance
         if (dataSchemaForProp === null || typeof dataSchemaForProp === 'undefined')

@@ -1,3 +1,4 @@
+import { IMediaItemViewModel } from '@coscrad/api-interfaces';
 import { FromDomainModel, MIMEType } from '@coscrad/data-types';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { ContributorAndRole } from '../../../domain/models/song/ContributorAndRole';
@@ -5,15 +6,19 @@ import { BaseViewModel } from './base.view-model';
 
 const FromMediaItem = FromDomainModel(MediaItem);
 
-export class MediaItemViewModel extends BaseViewModel {
+export class MediaItemViewModel extends BaseViewModel implements IMediaItemViewModel {
     @FromMediaItem
-    readonly title: string;
+    readonly title?: string;
 
     @FromMediaItem
-    readonly titleEnglish: string;
+    readonly titleEnglish?: string;
 
-    @FromMediaItem
-    readonly contributorAndRoles: ContributorAndRole[];
+    /**
+     * TODO We'd like to name the property `constributions` on the domain model
+     * as well. That will require a migration.
+     */
+    @FromDomainModel(MediaItem, 'contributorAndRoles')
+    readonly contributions: ContributorAndRole[];
 
     @FromMediaItem
     readonly url: string;
@@ -34,7 +39,7 @@ export class MediaItemViewModel extends BaseViewModel {
 
         this.titleEnglish = titleEnglish;
 
-        this.contributorAndRoles = contributorAndRoles.map(
+        this.contributions = contributorAndRoles.map(
             (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
         );
 

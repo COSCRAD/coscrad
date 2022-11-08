@@ -1,4 +1,4 @@
-import { HttpStatusCode, IAggregateInfo } from '@coscrad/api-interfaces';
+import { HttpStatusCode, IAggregateInfo, ResourceType } from '@coscrad/api-interfaces';
 import { screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
@@ -13,7 +13,7 @@ const widgetLabel = 'Widget';
 
 const dummyResourceInfo: IAggregateInfo[] = [
     {
-        type: 'widget',
+        type: ResourceType.book,
         schema: {},
         link: '/widgets',
         description: 'A widget is a cool part',
