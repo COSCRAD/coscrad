@@ -1,4 +1,4 @@
-import { assertElementWithTestIdOnScreen } from './assert-element-with-test-id-on-screen';
+import { screen, waitFor } from '@testing-library/react';
 
 type HasId<T> = T & {
     id: string;
@@ -9,5 +9,11 @@ export const assertElementWithEveryIdRenderedForIndex = async <T>(models: HasId<
 
     expect(numberOfModelsForIndexAssertion).toBeGreaterThan(0);
 
-    models.forEach(async ({ id }) => await assertElementWithTestIdOnScreen(id));
+    // models.forEach(async ({ id }) => await assertElementWithTestIdOnScreen(id));
+
+    await waitFor(() =>
+        models.forEach(({ id }) => {
+            expect(screen.getByTestId(id)).toBeTruthy();
+        })
+    );
 };
