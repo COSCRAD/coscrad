@@ -1,4 +1,3 @@
-import { IPhotographViewModel } from '@coscrad/api-interfaces';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../../config';
 import {
@@ -10,56 +9,58 @@ import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/buildMo
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setupTestServer';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
-import { PhotographDetailContainer } from './photograph-detail.container';
+import { SongDetailContainer } from './song-detail.container';
+import { buildDummySongs } from './test-utils/build-dummy-songs';
 
-const idToFind = '123';
+const dummySongs = buildDummySongs();
 
-const photographToFind: IPhotographViewModel = {
-    id: idToFind,
-    photographer: 'Johnny Blue',
-    imageURL: 'https://jazzysnaps.images.com/doghouse.png',
-};
+const songToFind = dummySongs[0];
 
-// TODO we still need a dummy (system) config and its provider
-const endpoint = `${getConfig().apiUrl}/resources/photographs`;
+const { id: idToFind } = songToFind;
+
+const endpoint = `${getConfig().apiUrl}/resources/songs`;
+
+const dummyIndexResponse = buildMockIndexResponse(
+    dummySongs.map((song) => [song, []]),
+    []
+);
 
 const act = (idInLocation: string) =>
     renderWithProviders(
-        <MemoryRouter initialEntries={[`/Resources/Photographs/${idInLocation}`]}>
+        <MemoryRouter initialEntries={[`/Resources/Songs/${idInLocation}`]}>
             <Routes>
-                <Route path={`Resources/Photographs/:id`} element={<PhotographDetailContainer />} />
+                <Route path={`Resources/Songs/:id`} element={<SongDetailContainer />} />
             </Routes>
         </MemoryRouter>
     );
 
-describe('photograph detail', () => {
-    describe('when the API request is valid', () => {
+describe('song detail', () => {
+    describe('when the API request succeeds', () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({
                 endpoint,
-                // TODO add detail scoped actions and check that they are displayed
-                response: buildMockIndexResponse([[photographToFind, []]], []),
+                response: dummyIndexResponse,
             })
         );
 
-        describe('when the photograph ID in the route corresponds to an existing photograph', () => {
-            it('should display the photograph', async () => {
+        describe('when the ID in the route corresponds to an existing song', () => {
+            it('should display the song', async () => {
                 act(idToFind);
 
                 await assertElementWithTestIdOnScreen(idToFind);
             });
         });
 
-        describe('when there is no photograph that matches the ID in the route', () => {
+        describe('when there is no song that matches the ID in the route', () => {
             it('should render not found', async () => {
-                act('bogus-photo-id-1243');
+                act('bogus-id');
 
                 await assertNotFound();
             });
         });
     });
 
-    describe('when the API fails or is pending', () => {
+    describe('when the API request fails or is pending', () => {
         testContainerComponentErrorHandling(() => act(idToFind), endpoint);
     });
 });
