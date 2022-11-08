@@ -12,6 +12,7 @@ import {
     VOCABULARY_LIST,
 } from './slices/resources';
 import { BIBLIOGRAPHIC_REFERENCE } from './slices/resources/bibliographic-references/constants';
+import { BOOK, bookReducer } from './slices/resources/books';
 import { photographReducer } from './slices/resources/photographs';
 import { PHOTOGRAPHS } from './slices/resources/photographs/constants';
 import { SONG, songReducer } from './slices/resources/songs';
@@ -30,10 +31,12 @@ export const rootReducer = combineReducers({
     [TERMS]: termReducer,
     [PHOTOGRAPHS]: photographReducer,
     [TRANSCRIBED_AUDIO]: transcribedAudioReducer,
+    // For consistency, consider pluralizing the following identifiers (constants from each slice)
     [VOCABULARY_LIST]: vocabularyListReducer,
     [BIBLIOGRAPHIC_REFERENCE]: bibliographicReferenceReducer,
     [SPATIAL_FEATURE]: spatialFeatureReducer,
     [SONG]: songReducer,
+    [BOOK]: bookReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
