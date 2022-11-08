@@ -1,3 +1,4 @@
+import { ISongViewModel } from '@coscrad/api-interfaces';
 import { FromDomainModel, NonEmptyString, URL } from '@coscrad/data-types';
 import { Song } from '../../../domain/models/song/song.entity';
 import formatContributorAndRole from '../../presentation/formatContributorAndRole';
@@ -5,7 +6,7 @@ import { BaseViewModel } from './base.view-model';
 
 const FromSong = FromDomainModel(Song);
 
-export class SongViewModel extends BaseViewModel {
+export class SongViewModel extends BaseViewModel implements ISongViewModel {
     @FromSong
     readonly title?: string;
 
