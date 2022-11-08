@@ -22,6 +22,8 @@ import {
 } from '../components/resources/bibliographic-references';
 import { PhotographDetailContainer } from '../components/resources/photographs/photograph-detail.container';
 import { PhotographIndexContainer } from '../components/resources/photographs/photograph-index.container';
+import { SongIndexContainer } from '../components/resources/songs';
+import { SongDetailContainer } from '../components/resources/songs/song-detail.container';
 import {
     SpatialFeatureDetailContainer,
     SpatialFeatureIndexContainer,
@@ -96,6 +98,14 @@ export function App() {
                     <Route
                         path={routes.resources.ofType(ResourceType.spatialFeature).detail()}
                         element={<SpatialFeatureDetailContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.song).index}
+                        element={<SongIndexContainer />}
+                    />
+                    <Route
+                        path={routes.resources.ofType(ResourceType.song).detail()}
+                        element={<SongDetailContainer />}
                     />
                     {/* The following are temporary or experimental */}
                     <Route path="MembersOnly" element={<MembersOnly />} />
