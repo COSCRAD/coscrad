@@ -1,5 +1,4 @@
 import { IPhotographViewModel } from '@coscrad/api-interfaces';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../../config';
 import {
     assertElementWithTestIdOnScreen,
@@ -10,6 +9,7 @@ import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/buildMo
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setupTestServer';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
+import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { PhotographDetailContainer } from './photograph-detail.container';
 
 const idToFind = '123';
@@ -25,11 +25,7 @@ const endpoint = `${getConfig().apiUrl}/resources/photographs`;
 
 const act = (idInLocation: string) =>
     renderWithProviders(
-        <MemoryRouter initialEntries={[`/Resources/Photographs/${idInLocation}`]}>
-            <Routes>
-                <Route path={`Resources/Photographs/:id`} element={<PhotographDetailContainer />} />
-            </Routes>
-        </MemoryRouter>
+        withDetailRoute(idInLocation, `/Resources/Photographs/`, <PhotographDetailContainer />)
     );
 
 describe('photograph detail', () => {

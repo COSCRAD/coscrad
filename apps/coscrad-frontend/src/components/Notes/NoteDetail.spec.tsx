@@ -1,9 +1,9 @@
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../config';
 import { assertElementWithTestIdOnScreen, renderWithProviders } from '../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/buildMockSuccessfulGETHandler';
 import { testContainerComponentErrorHandling } from '../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../utils/test-utils/setupTestServer';
+import { withDetailRoute } from '../../utils/test-utils/with-detail-route';
 import { NoteDetailContainer } from './NoteDetail.container';
 import { buildDummyNotes } from './test-utils/buildDummyNotes';
 
@@ -18,16 +18,8 @@ const endpoint = `${getConfig().apiUrl}/connections/notes`;
 
 const noteToFind = dummyNotes[0];
 
-const initialRoute = `/Notes/${noteToFind.id}`;
-
 const act = () =>
-    renderWithProviders(
-        <MemoryRouter initialEntries={[initialRoute]}>
-            <Routes>
-                <Route path="/Notes/:id" element={<NoteDetailContainer />} />
-            </Routes>
-        </MemoryRouter>
-    );
+    renderWithProviders(withDetailRoute(noteToFind.id, `/Notes/`, <NoteDetailContainer />));
 
 describe(`Note detail flow`, () => {
     describe('when the API request is valid', () => {

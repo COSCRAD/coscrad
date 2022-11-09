@@ -1,4 +1,3 @@
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../../config';
 import {
     assertElementWithTestIdOnScreen,
@@ -9,6 +8,7 @@ import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/buildMo
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setupTestServer';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
+import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { TermDetailContainer } from './TermDetail.container';
 
 const idOfTermToFind = '123';
@@ -25,11 +25,7 @@ const endpoint = `${getConfig().apiUrl}/resources/terms`;
 
 const act = (idInLocation: string) =>
     renderWithProviders(
-        <MemoryRouter initialEntries={[`/Resources/Terms/${idInLocation}`]}>
-            <Routes>
-                <Route path={`Resources/Terms/:id`} element={<TermDetailContainer />} />
-            </Routes>
-        </MemoryRouter>
+        withDetailRoute(idInLocation, `/Resources/Terms/`, <TermDetailContainer />)
     );
 
 describe('Term Detail', () => {

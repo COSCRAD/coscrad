@@ -1,4 +1,3 @@
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../../config';
 import {
     assertElementWithTestIdOnScreen,
@@ -9,6 +8,7 @@ import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/buildMo
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setupTestServer';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
+import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { SpatialFeatureDetailContainer } from './spatial-feature-detail.container';
 import { buildDummySpatialFeatures } from './test-utils/build-dummy-spatial-features';
 
@@ -22,11 +22,7 @@ const endpoint = `${getConfig().apiUrl}/Resources/spatialFeatures`;
 
 const act = (idInLocation: string) =>
     renderWithProviders(
-        <MemoryRouter initialEntries={[`/Resources/Map/${idInLocation}`]}>
-            <Routes>
-                <Route path={`Resources/Map/:id`} element={<SpatialFeatureDetailContainer />} />
-            </Routes>
-        </MemoryRouter>
+        withDetailRoute(idInLocation, `/Resources/Map/`, <SpatialFeatureDetailContainer />)
     );
 
 describe('spaital feature detail', () => {

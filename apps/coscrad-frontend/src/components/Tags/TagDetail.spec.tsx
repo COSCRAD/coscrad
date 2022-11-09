@@ -1,11 +1,11 @@
 import { ITagViewModel } from '@coscrad/api-interfaces';
 import { screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../config';
 import { assertNotFound, renderWithProviders } from '../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/buildMockSuccessfulGETHandler';
 import { testContainerComponentErrorHandling } from '../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../utils/test-utils/setupTestServer';
+import { withDetailRoute } from '../../utils/test-utils/with-detail-route';
 import { TagDetailContainer } from './TagDetail.container';
 
 const allTags: ITagViewModel[] = [
@@ -31,13 +31,7 @@ const tagToFind = allTags[0];
 const idToFind = tagToFind.id;
 
 const act = (idInLocation: string) =>
-    renderWithProviders(
-        <MemoryRouter initialEntries={[`/Tags/${idInLocation}`]}>
-            <Routes>
-                <Route path={'/Tags/:id'} element={<TagDetailContainer />}></Route>
-            </Routes>
-        </MemoryRouter>
-    );
+    renderWithProviders(withDetailRoute(idInLocation, `/Tags/`, <TagDetailContainer />));
 
 describe(`Tag Detail`, () => {
     describe('when the API request is valid', () => {

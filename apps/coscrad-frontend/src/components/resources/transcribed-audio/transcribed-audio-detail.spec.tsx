@@ -1,5 +1,4 @@
 import { ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../../config';
 import {
     assertElementWithTestIdOnScreen,
@@ -10,6 +9,7 @@ import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/buildMo
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setupTestServer';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
+import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { TranscribedAudioDetailContainer } from './transcribed-audio-detail.container';
 
 const idToFind = '44';
@@ -37,14 +37,11 @@ const endpoint = `${getConfig().apiUrl}/resources/transcribedAudioItems`;
 
 const act = (idInLocation: string) =>
     renderWithProviders(
-        <MemoryRouter initialEntries={[`/Resources/Transcripts/${idInLocation}`]}>
-            <Routes>
-                <Route
-                    path={`Resources/Transcripts/:id`}
-                    element={<TranscribedAudioDetailContainer />}
-                />
-            </Routes>
-        </MemoryRouter>
+        withDetailRoute(
+            idInLocation,
+            `/Resources/Transcripts/`,
+            <TranscribedAudioDetailContainer />
+        )
     );
 
 describe('transribed audio detail', () => {

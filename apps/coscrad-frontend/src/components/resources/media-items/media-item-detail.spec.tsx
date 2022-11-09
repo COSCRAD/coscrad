@@ -1,4 +1,3 @@
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getApiResourcesBaseRoute } from '../../../store/slices/resources/shared';
 import {
     assertElementWithTestIdOnScreen,
@@ -9,6 +8,7 @@ import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/buildMo
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setupTestServer';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
+import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { MediaItemDetailContainer } from './media-item-detail.container';
 import { buildDummyMediaItems } from './test-utils/build-dummy-media-items';
 
@@ -26,11 +26,7 @@ const dummyIndexResponse = buildMockIndexResponse(
 
 const act = (idInLocation: string) =>
     renderWithProviders(
-        <MemoryRouter initialEntries={[`/Resources/MediaItems/${idInLocation}`]}>
-            <Routes>
-                <Route path={`Resources/MediaItems/:id`} element={<MediaItemDetailContainer />} />
-            </Routes>
-        </MemoryRouter>
+        withDetailRoute(idInLocation, `/Resources/MediaItems/`, <MediaItemDetailContainer />)
     );
 
 describe('media item detail', () => {
