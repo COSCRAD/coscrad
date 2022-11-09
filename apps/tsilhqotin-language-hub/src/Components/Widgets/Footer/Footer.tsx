@@ -102,9 +102,16 @@ export function Footer() {
             <Divider className="footerDivider" />
             <div className="copyrightContainer">
                 <div className="copyright">
-                    © 2022 Tŝilhqot’in National Government.{' '}
-                    <span id="rights">All Rights Reserved.</span>
+                    {' '}
+                    <img
+                        src="https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tl_logo_blue_transparent.png"
+                        alt="logo"
+                        className="footerLogo"
+                        width={30}
+                    />
+                    Tŝilhqot’in Language Hub
                 </div>
+                <div className="copyright">© 2022 Tŝilhqot’in National Government </div>
             </div>
         </div>
     );
