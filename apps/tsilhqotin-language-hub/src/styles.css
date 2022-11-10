@@ -14,12 +14,12 @@ html {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100vw !important;
-    background-color: rgba(13, 16, 66, 1) !important;
+    background-color: #0d1042 !important;
     background-image: linear-gradient(
         -155deg,
-        rgb(255, 0, 0) -30%,
+        #ff0000 -30%,
         rgba(13, 16, 66, 0.85) 60%,
-        rgba(13, 16, 66, 1) 100%
+        rgb(13, 16, 66) 100%
     ) !important;
     background-image: repeating-linear-gradient(
             284deg,
@@ -103,9 +103,9 @@ a {
 }
 
 .title {
-    padding-left: 7vw;
+    padding-left: 10vw;
     color: white;
-    margin-top: 50vh;
+    margin-top: 42.5vh;
     position: absolute;
     z-index: 1;
 }
@@ -124,7 +124,7 @@ a {
     border-style: solid;
     width: fit-content;
     font-size: 28px;
-    padding: 2vh 3.5vw 2.5vh 3.5vw;
+    padding: 2vh 3vw 2.5vh 3vw;
     background: rgb(121, 9, 9) !important;
     background: linear-gradient(
         270deg,
@@ -212,10 +212,12 @@ a {
     .dialect {
         font-size: 20px;
         padding: 12px;
+        border-width: medium;
     }
 
     .title {
-        margin-top: 40vh;
+        margin-top: 40vh !important;
+        padding-left: 7vw;
     }
 }
 
@@ -241,6 +243,9 @@ a {
 /*Samsung s10*/
 
 @media only screen and (max-width: 600px) {
+    body {
+        overflow-x: hidden;
+    }
     .heroTitle {
         font-size: 18px;
     }
@@ -305,7 +310,7 @@ a {
 
 .menu__btn {
     position: absolute !important;
-    top: 30px;
+    top: 55px;
     right: 30px;
     width: 30px;
     height: 30px;
@@ -461,7 +466,7 @@ a {
 .backdrop {
     background-image: linear-gradient(
         -155deg,
-        rgb(255, 0, 0) -30%,
+        #ff0000 -30%,
         rgba(13, 16, 66, 0.85) 60%,
         rgba(13, 16, 66, 1) 100%
     ) !important;
@@ -681,7 +686,7 @@ h2 {
 .bottomCenter {
     position: relative;
     text-align: center;
-    bottom: 80px;
+    bottom: 120px;
 }
 
 .icon-style {
@@ -800,4 +805,17 @@ h2 {
 
 #radioNav {
     white-space: nowrap !important;
+}
+.topNav {
+    font-family: Arial, Helvetica, sans-serif;
+    background-image: linear-gradient(
+        -155deg,
+        rgb(255, 0, 0) -30%,
+        rgba(13, 16, 66, 0.85) 80%,
+        rgba(13, 16, 66, 1) 100%
+    ) !important;
+    color: white;
+    padding: 2px 0 2px 10vw !important;
+    text-decoration: none;
+    display: block;
 }
