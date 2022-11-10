@@ -24,6 +24,53 @@ const partialDtos: DTO<Omit<TranscribedAudio, 'type'>>[] = [
             ],
         },
     },
+    {
+        id: '111',
+        audioFilename: '4859.mp3',
+        startMilliseconds: 0,
+        lengthMilliseconds: 23409,
+        published: true,
+        transcript: {
+            timeRanges: [
+                {
+                    inPoint: 3400,
+                    outPoint: 3670,
+                    data: 'While she went down to the river',
+                },
+                {
+                    inPoint: 3700,
+                    outPoint: 3980,
+                    data: 'someone had already filled the water tank.',
+                },
+                {
+                    inPoint: 4010,
+                    outPoint: 4290,
+                    data: 'These were the types of problems we had.',
+                },
+            ],
+        },
+    },
+    {
+        id: '113',
+        audioFilename: '3948.mp3',
+        startMilliseconds: 0,
+        lengthMilliseconds: 32989,
+        published: true,
+        transcript: {
+            timeRanges: [
+                {
+                    inPoint: 120,
+                    outPoint: 848,
+                    data: 'this type of spoon is used in ceremonies',
+                },
+                {
+                    inPoint: 930,
+                    outPoint: 1080,
+                    data: 'by members of the opposite clan of the house chief',
+                },
+            ],
+        },
+    },
 ];
 
 export default () =>

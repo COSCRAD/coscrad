@@ -21,11 +21,7 @@ export const GenericIndexPresenter: FunctionalComponent<IIndexQueryResult<IBaseV
                             ))}
                         </tr>
                         {viewModels.map((viewModel) => (
-                            <GenericTableRowPresenter
-                                key={viewModel.id}
-                                linkStatus={false}
-                                {...viewModel}
-                            />
+                            <GenericTableRowPresenter key={viewModel.id} {...viewModel} />
                         ))}
                     </tbody>
                 </table>
