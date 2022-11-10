@@ -1,31 +1,11 @@
-import { RootState } from '../../../store';
-import { fetchTerms } from '../../../store/slices/resources';
-import { useLoadable } from '../../../store/slices/resources/shared/hooks';
-import { useIdFromLocation } from '../../../utils/custom-hooks/use-id-from-location';
-import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
-import { NotFound } from '../../NotFound';
+import { useLoadableTermById } from '../../../store/slices/resources';
+import { displayLoadableSearchResult } from '../../higher-order-components/display-loadable-search-result';
 import { TermDetailPresenter } from './TermDetail.presenter';
 
 export const TermDetailContainer = (): JSX.Element => {
-    const [idFromLocation] = useIdFromLocation();
+    const searchResult = useLoadableTermById();
 
-    const [loadableTerms] = useLoadable({
-        selector: (state: RootState) => state.terms,
-        fetchThunk: fetchTerms,
-    });
+    const Presenter = displayLoadableSearchResult(TermDetailPresenter);
 
-    const Presenter = displayLoadableWithErrorsAndLoading(TermDetailPresenter);
-
-    const { data: allTerms, isLoading, errorInfo } = loadableTerms;
-
-    if (isLoading || errorInfo || allTerms === null) return <Presenter {...loadableTerms} />;
-
-    // We need some serious renaming of properties here!
-    const searchResult = allTerms.data
-        .map(({ data }) => data)
-        .find(({ id }) => id === idFromLocation);
-
-    if (!searchResult) return <NotFound></NotFound>;
-
-    return <TermDetailPresenter {...searchResult} />;
+    return <Presenter {...searchResult} />;
 };

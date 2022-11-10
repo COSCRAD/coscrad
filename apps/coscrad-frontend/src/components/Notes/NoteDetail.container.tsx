@@ -9,6 +9,10 @@ import { Loading } from '../Loading';
 import { NoteDetailPresenter } from './NoteDetail.presenter';
 
 export const NoteDetailContainer = (): JSX.Element => {
+    /**
+     * TODO Once Notes follow the standard `IIndexQueryResult` structure, refactor
+     * using the same abstractions as in resource index-to-detail flows.
+     */
     const [idFromLocation] = useIdFromLocation();
 
     const dispatch = useAppDispatch();

@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../../utils';
 import { buildReducersForThunk } from '../../utils/buildReducersForThunk';
-import { BOOK } from './constants';
+import { BOOKS } from './constants';
 import { fetchBooks } from './thunks';
 import { BookIndexState, BookSliceState } from './types';
 
 const initialState: BookSliceState = buildInitialLoadableState<BookIndexState>();
 
 const bookSlice = createSlice({
-    name: BOOK,
+    name: BOOKS,
     initialState,
     reducers: {},
     extraReducers: (builder) => {

@@ -9,18 +9,18 @@ import {
     spatialFeatureReducer,
     termReducer,
     vocabularyListReducer,
-    VOCABULARY_LIST,
+    VOCABULARY_LISTS,
 } from './slices/resources';
-import { BIBLIOGRAPHIC_REFERENCE } from './slices/resources/bibliographic-references/constants';
-import { BOOK, bookReducer } from './slices/resources/books';
+import { BIBLIOGRAPHIC_REFERENCES } from './slices/resources/bibliographic-references/constants';
+import { bookReducer, BOOKS } from './slices/resources/books';
 import { mediaItemReducer, MEDIA_ITEMS } from './slices/resources/media-items';
 import { photographReducer } from './slices/resources/photographs';
 import { PHOTOGRAPHS } from './slices/resources/photographs/constants';
-import { SONG, songReducer } from './slices/resources/songs';
-import { SPATIAL_FEATURE } from './slices/resources/spatial-features/constants';
+import { songReducer, SONGS } from './slices/resources/songs';
+import { SPATIAL_FEATURES } from './slices/resources/spatial-features/constants';
 import { TERMS } from './slices/resources/terms/constants';
 import { transcribedAudioReducer } from './slices/resources/transcribed-audio';
-import { TRANSCRIBED_AUDIO } from './slices/resources/transcribed-audio/constants';
+import { TRANSCRIBED_AUDIO_ITEMS } from './slices/resources/transcribed-audio/constants';
 import { tagReducer } from './slices/tagSlice';
 import { TAGS } from './slices/tagSlice/constants';
 
@@ -31,13 +31,13 @@ export const rootReducer = combineReducers({
     [CATEGORY_TREE]: categoryTreeReducer,
     [TERMS]: termReducer,
     [PHOTOGRAPHS]: photographReducer,
-    [TRANSCRIBED_AUDIO]: transcribedAudioReducer,
+    [TRANSCRIBED_AUDIO_ITEMS]: transcribedAudioReducer,
     // For consistency, consider pluralizing the following identifiers (constants from each slice)
-    [VOCABULARY_LIST]: vocabularyListReducer,
-    [BIBLIOGRAPHIC_REFERENCE]: bibliographicReferenceReducer,
-    [SPATIAL_FEATURE]: spatialFeatureReducer,
-    [SONG]: songReducer,
-    [BOOK]: bookReducer,
+    [VOCABULARY_LISTS]: vocabularyListReducer,
+    [BIBLIOGRAPHIC_REFERENCES]: bibliographicReferenceReducer,
+    [SPATIAL_FEATURES]: spatialFeatureReducer,
+    [SONGS]: songReducer,
+    [BOOKS]: bookReducer,
     [MEDIA_ITEMS]: mediaItemReducer,
 });
 

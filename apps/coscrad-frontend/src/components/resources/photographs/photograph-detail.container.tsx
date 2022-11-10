@@ -1,29 +1,11 @@
-import { selectLoadablePhotographs } from '../../../store/slices/resources/photographs';
-import { fetchPhotographs } from '../../../store/slices/resources/photographs/thunks';
-import { useLoadable } from '../../../store/slices/resources/shared/hooks';
-import { useIdFromLocation } from '../../../utils/custom-hooks/use-id-from-location';
-import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
-import { NotFound } from '../../NotFound';
+import { useLoadablePhotographById } from '../../../store/slices/resources/photographs/hooks';
+import { displayLoadableSearchResult } from '../../higher-order-components/display-loadable-search-result';
 import { PhotographDetailPresenter } from './photograph-detail.presenter';
 
 export const PhotographDetailContainer = (): JSX.Element => {
-    const [idFromLocation] = useIdFromLocation();
+    const loadablePhotographSearchResult = useLoadablePhotographById();
 
-    const [loadableTerms] = useLoadable({
-        selector: selectLoadablePhotographs,
-        fetchThunk: fetchPhotographs,
-    });
+    const Presenter = displayLoadableSearchResult(PhotographDetailPresenter);
 
-    const Presenter = displayLoadableWithErrorsAndLoading(PhotographDetailPresenter);
-
-    const { data: allTerms, isLoading, errorInfo } = loadableTerms;
-
-    if (isLoading || errorInfo || allTerms === null) return <Presenter {...loadableTerms} />;
-
-    // We need some serious renaming of properties here!
-    const searchResult = allTerms.data.find(({ data: { id } }) => id === idFromLocation);
-
-    if (!searchResult) return <NotFound></NotFound>;
-
-    return <PhotographDetailPresenter {...searchResult} />;
+    return <Presenter {...loadablePhotographSearchResult} />;
 };

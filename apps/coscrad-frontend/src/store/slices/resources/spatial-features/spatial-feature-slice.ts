@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../../utils';
 import { buildReducersForThunk } from '../../utils/buildReducersForThunk';
-import { SPATIAL_FEATURE } from './constants';
+import { SPATIAL_FEATURES } from './constants';
 import { fetchSpatialFeatures } from './thunks';
 import { SpatialFeatureIndexState, SpatialFeatureSliceState } from './types';
 
@@ -9,7 +9,7 @@ const initialState: SpatialFeatureSliceState =
     buildInitialLoadableState<SpatialFeatureIndexState>();
 
 export const spatialFeatureSlice = createSlice({
-    name: SPATIAL_FEATURE,
+    name: SPATIAL_FEATURES,
     initialState,
     reducers: {},
     extraReducers: (builder) => {

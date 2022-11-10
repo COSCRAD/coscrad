@@ -1,4 +1,4 @@
-import { useLoadablePhotographs } from '../../../store/slices/resources/photographs/hooks/use-loadable-photographs';
+import { useLoadablePhotographs } from '../../../store/slices/resources/photographs/hooks';
 import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
 import { PhotographIndexPresenter } from './photograph-index.presenter';
 

@@ -1,17 +1,10 @@
-import { RootState } from '../../store';
-import { fetchNotes } from '../../store/slices/notes/thunks';
-import { useLoadable } from '../../store/slices/resources/shared/hooks';
+import { useLoadableNotes } from '../../store/slices/notes/hooks';
 import { wrapArrayProps } from '../../utils/prop-manipulation/wrap-array-props';
 import { displayLoadableWithErrorsAndLoading } from '../higher-order-components/displayLoadableWithErrorsAndLoading';
 import { NoteIndexPresenter } from './NoteIndex.presenter';
 
 export const NoteIndexContainer = (): JSX.Element => {
-    const selector = (state: RootState) => state.notes;
-
-    const [loadableNotes] = useLoadable({
-        selector,
-        fetchThunk: fetchNotes,
-    });
+    const [loadableNotes] = useLoadableNotes();
 
     // wrap the presenter with handling for errors and pending state
     const LoadableNotePresenter = displayLoadableWithErrorsAndLoading(
