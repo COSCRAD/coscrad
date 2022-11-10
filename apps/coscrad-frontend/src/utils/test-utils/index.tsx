@@ -1,2 +1,2 @@
 export * from './assertions';
-export * from './renderWithProviders';
+export * from './render-with-providers';

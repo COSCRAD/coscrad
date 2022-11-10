@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../../utils';
-import { buildReducersForThunk } from '../../utils/buildReducersForThunk';
+import { buildReducersForThunk } from '../../utils/build-reducers-for-thunk';
 import { MEDIA_ITEMS } from './constants';
 import { fetchMediaItems } from './thunks';
 import { MediaItemIndexState } from './types';

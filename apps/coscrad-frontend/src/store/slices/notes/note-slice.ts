@@ -1,7 +1,7 @@
 import { INoteViewModel } from '@coscrad/api-interfaces';
 import { createSlice } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../utils';
-import { buildReducersForThunk } from '../utils/buildReducersForThunk';
+import { buildReducersForThunk } from '../utils/build-reducers-for-thunk';
 import { NOTES } from './constants';
 import { fetchNotes } from './thunks';
 import { NoteSliceState } from './types';

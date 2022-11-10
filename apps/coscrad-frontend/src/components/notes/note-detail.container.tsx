@@ -6,7 +6,7 @@ import { fetchNotes } from '../../store/slices/notes/thunks';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
 import { Loading } from '../Loading';
-import { NoteDetailPresenter } from './NoteDetail.presenter';
+import { NoteDetailPresenter } from './note-detail.presenter';
 
 export const NoteDetailContainer = (): JSX.Element => {
     /**

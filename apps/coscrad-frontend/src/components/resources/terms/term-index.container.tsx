@@ -1,7 +1,7 @@
 import { IIndexQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
 import { useLoadableTerms } from '../../../store/slices/resources';
 import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
-import { TermIndexPresenter } from './TermIndex.presenter';
+import { TermIndexPresenter } from './term-index.presenter';
 
 export const TermIndexContainer = (): JSX.Element => {
     const [loadableTerms] = useLoadableTerms();

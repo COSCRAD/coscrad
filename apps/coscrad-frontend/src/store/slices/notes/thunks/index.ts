@@ -1,1 +1,1 @@
-export * from './fetchNotes';
+export * from './fetch-notes';

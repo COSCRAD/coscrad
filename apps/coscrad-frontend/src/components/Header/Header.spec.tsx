@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../utils/test-utils';
-import { getDummyConfigurableContent } from '../../utils/test-utils/getDummyConfigurableContent';
+import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
 import { Header } from './Header';
 
 describe('Header', () => {

@@ -1,7 +1,7 @@
 import { useLoadableCategoryTree } from '../../store/slices/categories/hooks/use-loadable-category-tree';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { displayLoadableWithErrorsAndLoading } from '../higher-order-components';
-import { CategoryTreePresenter } from './CateogryTree.presenter';
+import { CategoryTreePresenter } from './category-tree.presenter';
 
 export const CategoryTreeContainer: FunctionalComponent = (): JSX.Element => {
     const [loadableCategoryTree] = useLoadableCategoryTree();

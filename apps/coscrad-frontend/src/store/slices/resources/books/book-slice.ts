@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../../utils';
-import { buildReducersForThunk } from '../../utils/buildReducersForThunk';
+import { buildReducersForThunk } from '../../utils/build-reducers-for-thunk';
 import { BOOKS } from './constants';
 import { fetchBooks } from './thunks';
 import { BookIndexState, BookSliceState } from './types';

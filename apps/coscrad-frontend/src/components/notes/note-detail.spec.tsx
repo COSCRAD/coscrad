@@ -1,11 +1,11 @@
 import { getConfig } from '../../config';
 import { assertElementWithTestIdOnScreen, renderWithProviders } from '../../utils/test-utils';
-import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/buildMockSuccessfulGETHandler';
+import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../utils/test-utils/common-test-cases/test-container-component-error-handling';
-import { setupTestServer } from '../../utils/test-utils/setupTestServer';
+import { setupTestServer } from '../../utils/test-utils/setup-test-server';
 import { withDetailRoute } from '../../utils/test-utils/with-detail-route';
-import { NoteDetailContainer } from './NoteDetail.container';
-import { buildDummyNotes } from './test-utils/buildDummyNotes';
+import { NoteDetailContainer } from './note-detail.container';
+import { buildDummyNotes } from './test-utils/build-dummy-notes';
 
 const dummyNotes = buildDummyNotes();
 

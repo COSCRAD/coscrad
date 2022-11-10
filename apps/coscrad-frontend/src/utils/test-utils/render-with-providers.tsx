@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { ConfigurableContentProvider } from '../../configurable-front-matter/configurable-content-provider';
 import { ConfigurableContent } from '../../configurable-front-matter/data/configurableContentSchema';
 import { AppStore, RootState, setupStore } from '../../store';
-import { getDummyConfigurableContent } from './getDummyConfigurableContent';
+import { getDummyConfigurableContent } from './get-dummy-configurable-content';
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
     preloadedState?: PreloadedState<RootState>;
     store?: AppStore;

@@ -1,5 +1,5 @@
-import { buildResourceFetchActionPrefix } from '../../utils/buildResourceFetchActionPrefix';
-import { createFetchThunk } from '../../utils/createFetchThunk';
+import { buildResourceFetchActionPrefix } from '../../utils/build-resource-fetch-action-prefix';
+import { createFetchThunk } from '../../utils/create-fetch-thunk';
 import { getApiResourcesBaseRoute } from '../shared';
 import { SPATIAL_FEATURES } from '../spatial-features';
 import { MediaItemIndexState } from './types';

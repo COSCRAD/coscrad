@@ -7,7 +7,7 @@ import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location
 import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
 import { Loading } from '../Loading';
 import { NotFound } from '../NotFound';
-import { TagDetailPresenter } from './TagDetail.presenter';
+import { TagDetailPresenter } from './tag-detail.presenter';
 
 export const TagDetailContainer = (): JSX.Element => {
     /**

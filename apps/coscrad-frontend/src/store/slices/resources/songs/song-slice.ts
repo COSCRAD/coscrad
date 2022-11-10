@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../../utils';
-import { buildReducersForThunk } from '../../utils/buildReducersForThunk';
+import { buildReducersForThunk } from '../../utils/build-reducers-for-thunk';
 import { SONGS } from './constants';
 import { fetchSongs } from './thunks';
 import { SongIndexState, SongSliceState } from './types';

@@ -1,3 +1,3 @@
 export * from './hooks';
-export * from './termSlice';
+export * from './term-slice';
 export * from './thunks';

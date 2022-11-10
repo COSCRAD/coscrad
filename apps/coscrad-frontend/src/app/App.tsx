@@ -8,8 +8,8 @@ import { Footer } from '../components/Footer/Footer';
 import { Header } from '../components/Header/Header';
 import { Home } from '../components/Home/Home';
 import MembersOnly from '../components/MembersOnly/MembersOnly';
-import { NoteDetailContainer } from '../components/Notes/NoteDetail.container';
-import { NoteIndexContainer } from '../components/Notes/NoteIndex.container';
+import { NoteDetailContainer } from '../components/notes/note-detail.container';
+import { NoteIndexContainer } from '../components/notes/note-index.container';
 import {
     TranscribedAudioDetailContainer,
     TranscribedAudioIndexContainer,
@@ -34,10 +34,10 @@ import {
     SpatialFeatureIndexContainer,
 } from '../components/resources/spatial-features';
 import { TermIndexContainer } from '../components/resources/terms';
-import { TermDetailContainer } from '../components/resources/terms/TermDetail.container';
-import { TagDetailContainer } from '../components/Tags/TagDetail.container';
-import { TagIndexContainer } from '../components/Tags/TagIndex.container';
-import { CategoryTreeContainer } from '../components/TreeOfKnowledge/CategoryTree.container';
+import { TermDetailContainer } from '../components/resources/terms/term-detail.container';
+import { TagDetailContainer } from '../components/tags/tag-detail.container';
+import { TagIndexContainer } from '../components/tags/tag-index.container';
+import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
 import './App.css';
 import { routes } from './routes/routes';
 

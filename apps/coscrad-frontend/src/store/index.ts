@@ -3,7 +3,7 @@ import { categoryTreeReducer } from './slices/categories';
 import { CATEGORY_TREE } from './slices/categories/constants';
 import { noteReducer, NOTES } from './slices/notes';
 
-import { resourceInfoReducer, RESOURCE_INFO } from './slices/resourceInfo';
+import { resourceInfoReducer, RESOURCE_INFO } from './slices/resource-info-slice';
 import {
     bibliographicReferenceReducer,
     spatialFeatureReducer,

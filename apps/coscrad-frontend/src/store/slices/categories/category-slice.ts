@@ -1,7 +1,7 @@
 import { ICategoryTreeViewModel } from '@coscrad/api-interfaces';
 import { createSlice } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../utils';
-import { buildReducersForThunk } from '../utils/buildReducersForThunk';
+import { buildReducersForThunk } from '../utils/build-reducers-for-thunk';
 import { CATEGORY_TREE } from './constants';
 import { fetchCategoryTree } from './thunks';
 import { CategorySliceState } from './types';

@@ -1,6 +1,6 @@
 import { ITagViewModel } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../../config';
-import { createFetchThunk } from '../../utils/createFetchThunk';
+import { createFetchThunk } from '../../utils/create-fetch-thunk';
 import { TAGS } from '../constants';
 
 /**

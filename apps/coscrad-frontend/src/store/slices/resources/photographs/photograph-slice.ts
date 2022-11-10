@@ -1,7 +1,7 @@
 import { IIndexQueryResult, IPhotographViewModel } from '@coscrad/api-interfaces';
 import { createSlice } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../../utils';
-import { buildReducersForThunk } from '../../utils/buildReducersForThunk';
+import { buildReducersForThunk } from '../../utils/build-reducers-for-thunk';
 import { PHOTOGRAPHS } from './constants';
 import { fetchPhotographs } from './thunks';
 import { PhotographSliceState } from './types';

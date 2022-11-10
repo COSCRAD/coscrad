@@ -1,1 +1,1 @@
-export * from './buildInitialLoadableState';
+export * from './build-initial-loadable-state';

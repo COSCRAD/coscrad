@@ -2,10 +2,10 @@ import { ICategoryTreeViewModel } from '@coscrad/api-interfaces';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
 import { assertElementWithTestIdOnScreen, renderWithProviders } from '../../utils/test-utils';
-import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/buildMockSuccessfulGETHandler';
+import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/build-mock-successful-get-handler';
 import { TestId } from '../../utils/test-utils/constants';
-import { setupTestServer } from '../../utils/test-utils/setupTestServer';
-import { CategoryTreeContainer } from './CategoryTree.container';
+import { setupTestServer } from '../../utils/test-utils/setup-test-server';
+import { CategoryTreeContainer } from './category-tree.container';
 
 const grandChildCategory: ICategoryTreeViewModel = {
     id: 'grandchild-1',

@@ -3,8 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getConfig } from '../../config';
 import { ILoadable } from './interfaces/loadable.interface';
 import { buildInitialLoadableState } from './utils';
-import { buildReducersForThunk } from './utils/buildReducersForThunk';
-import { createFetchThunk } from './utils/createFetchThunk';
+import { buildReducersForThunk } from './utils/build-reducers-for-thunk';
+import { createFetchThunk } from './utils/create-fetch-thunk';
 
 export const RESOURCE_INFO = 'resourceInfo';
 
