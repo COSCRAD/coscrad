@@ -1,10 +1,10 @@
+import { buildResourceFetchActionPrefix } from '../../utils/buildResourceFetchActionPrefix';
 import { createFetchThunk } from '../../utils/createFetchThunk';
-import { RESOURCES } from '../constants';
 import { getApiResourcesBaseRoute } from '../shared';
-import { MEDIA_ITEMS } from './constants';
+import { SPATIAL_FEATURE } from '../spatial-features';
 import { MediaItemIndexState } from './types';
 
 export const fetchMediaItems = createFetchThunk<MediaItemIndexState>(
-    `${RESOURCES}/${MEDIA_ITEMS}/fetch`,
+    buildResourceFetchActionPrefix(SPATIAL_FEATURE),
     `${getApiResourcesBaseRoute()}/mediaItems`
 );

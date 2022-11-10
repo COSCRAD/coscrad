@@ -1,9 +1,9 @@
+import { buildResourceFetchActionPrefix } from '../../../utils/buildResourceFetchActionPrefix';
 import { createFetchThunk } from '../../../utils/createFetchThunk';
-import { RESOURCES } from '../../constants';
 import { getApiResourcesBaseRoute } from '../../shared';
 import { SPATIAL_FEATURE } from '../constants';
 
 export const fetchSpatialFeatures = createFetchThunk(
-    `${RESOURCES}/${SPATIAL_FEATURE}/fetch`,
+    buildResourceFetchActionPrefix(SPATIAL_FEATURE),
     `${getApiResourcesBaseRoute()}/spatialFeatures`
 );
