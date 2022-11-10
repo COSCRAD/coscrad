@@ -25,7 +25,7 @@ const act = (idInLocation: string) =>
         withDetailRoute(idInLocation, `/Resources/Map/`, <SpatialFeatureDetailContainer />)
     );
 
-describe('spaital feature detail', () => {
+describe('spatial feature detail', () => {
     describe('when the API request succeeds', () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({

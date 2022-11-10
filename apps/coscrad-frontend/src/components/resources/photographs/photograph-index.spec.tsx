@@ -1,7 +1,8 @@
 import { IPhotographViewModel } from '@coscrad/api-interfaces';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../../config';
-import { assertElementWithTestIdOnScreen, renderWithProviders } from '../../../utils/test-utils';
+import { renderWithProviders } from '../../../utils/test-utils';
+import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/buildMockSuccessfulGETHandler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setupTestServer';
@@ -50,7 +51,7 @@ describe('Photograph Index', () => {
         it('should display the photographs', async () => {
             act();
 
-            await assertElementWithTestIdOnScreen(dummyPhotographs[2].id);
+            await assertElementWithEveryIdRenderedForIndex(dummyPhotographs);
         });
     });
 

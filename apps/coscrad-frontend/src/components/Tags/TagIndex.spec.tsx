@@ -1,7 +1,7 @@
 import { ITagViewModel } from '@coscrad/api-interfaces';
-import { screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
+import { assertElementWithEveryIdRenderedForIndex } from '../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/buildMockSuccessfulGETHandler';
 import { testContainerComponentErrorHandling } from '../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { renderWithProviders } from '../../utils/test-utils/renderWithProviders';
@@ -49,7 +49,7 @@ describe(`Tag Index`, () => {
         it('should display the tags', async () => {
             act();
 
-            await waitFor(() => expect(screen.getByTestId(dummyTags[0].id)).toBeTruthy());
+            await assertElementWithEveryIdRenderedForIndex(dummyTags);
         });
     });
 
