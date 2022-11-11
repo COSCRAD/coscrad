@@ -1,4 +1,8 @@
 import { IIndexQueryResult, IPhotographViewModel } from '@coscrad/api-interfaces';
+import {
+    GenericIndexTablePresenter,
+    HeadingLabel,
+} from 'apps/coscrad-frontend/src/utils/generic-components/presenters/tables/generic-index-table-presenter';
 
 export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotographViewModel>) => {
     /**
@@ -6,41 +10,21 @@ export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotogr
      * We may some day read the actions and allow for bulk command execution in
      * an index view.
      */
-    const { data } = indexResult;
-    const dataLabels = ['id', 'imageUrl', 'photographer'];
-    // pass dataLabels and photographs array into table component
-    const photographs = data
-        .map(({ data: photograph }) => photograph)
-        .map((photograph) => {
-            return {
-                id: photograph.id,
-                imageUrl: photograph.imageURL,
-                photographer: photograph.photographer,
-            };
-        });
+    const { data: detailResult } = indexResult;
+
+    const photographs = detailResult.map(({ data }) => data);
+
+    const headingLabels: HeadingLabel<IPhotographViewModel>[] = [
+        { propertyKey: 'id', headingLabel: 'ID' },
+        { propertyKey: 'imageURL', headingLabel: 'Image URL' },
+        { propertyKey: 'photographer', headingLabel: 'Photographer' },
+    ];
 
     return (
         <div>
             <h3>Photographs</h3>
             <div className="records-table">
-                <table border={0} cellSpacing={0} cellPadding={7}>
-                    <tbody>
-                        <tr>
-                            <th>Link</th>
-                            <th>Image File URL</th>
-                            <th>Photographer</th>
-                        </tr>
-                        {/* {photographs.map(({ data: photograph }) => (
-                            <tr>
-                                <td>
-                                    <Link to={photograph.id}>View ID {photograph.id}</Link>
-                                </td>
-                                <td>{photograph.imageURL}</td>
-                                <td>{photograph.photographer}</td>
-                            </tr>
-                        ))} */}
-                    </tbody>
-                </table>
+                <GenericIndexTablePresenter headingLabels={headingLabels} tableData={photographs} />
             </div>
             <h3>JSON Data</h3>
             <div className="json-data">
