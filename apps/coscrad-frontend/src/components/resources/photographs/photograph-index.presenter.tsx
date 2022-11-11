@@ -1,8 +1,10 @@
 import { IIndexQueryResult, IPhotographViewModel } from '@coscrad/api-interfaces';
+import { Link } from 'react-router-dom';
 import {
     GenericIndexTablePresenter,
     HeadingLabel,
-} from 'apps/coscrad-frontend/src/utils/generic-components/presenters/tables/generic-index-table-presenter';
+    Renderer,
+} from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter';
 
 export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotographViewModel>) => {
     /**
@@ -15,16 +17,29 @@ export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotogr
     const photographs = detailResult.map(({ data }) => data);
 
     const headingLabels: HeadingLabel<IPhotographViewModel>[] = [
-        { propertyKey: 'id', headingLabel: 'ID' },
+        { propertyKey: 'id', headingLabel: 'Link' },
         { propertyKey: 'imageURL', headingLabel: 'Image URL' },
         { propertyKey: 'photographer', headingLabel: 'Photographer' },
     ];
+
+    /**
+     * Note that for some reason we don't get type safety unless we use the
+     * generics on the Map. We might want an abstraction that takes in an array
+     * or object data structure (in a type safe way) and creates this map.
+     */
+    const cellRenderers = new Map<keyof IPhotographViewModel, Renderer<IPhotographViewModel>>()
+        .set('imageURL', ({ imageURL }: IPhotographViewModel) => `LINK: ${imageURL}`)
+        .set('id', ({ id }: IPhotographViewModel) => <Link to={id}>VIEW</Link>);
 
     return (
         <div>
             <h3>Photographs</h3>
             <div className="records-table">
-                <GenericIndexTablePresenter headingLabels={headingLabels} tableData={photographs} />
+                <GenericIndexTablePresenter
+                    headingLabels={headingLabels}
+                    tableData={photographs}
+                    cellRenderers={cellRenderers}
+                />
             </div>
             <h3>JSON Data</h3>
             <div className="json-data">
