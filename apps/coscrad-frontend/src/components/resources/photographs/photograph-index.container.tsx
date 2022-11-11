@@ -3,7 +3,7 @@ import { displayLoadableWithErrorsAndLoading } from '../../higher-order-componen
 import { PhotographIndexPresenter } from './photograph-index.presenter';
 
 export const PhotographIndexContainer = (): JSX.Element => {
-    const [loadablePhotographs] = useLoadablePhotographs();
+    const loadablePhotographs = useLoadablePhotographs();
 
     const Presenter = displayLoadableWithErrorsAndLoading(PhotographIndexPresenter);
 

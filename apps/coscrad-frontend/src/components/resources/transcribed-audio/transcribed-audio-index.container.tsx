@@ -3,7 +3,7 @@ import { displayLoadableWithErrorsAndLoading } from '../../higher-order-componen
 import { TranscribedAudioIndexPresenter } from './transcribed-audio-index.presenter';
 
 export const TranscribedAudioIndexContainer = (): JSX.Element => {
-    const [loadableItems] = useLoadableTranscribedAudioItems();
+    const loadableItems = useLoadableTranscribedAudioItems();
 
     const Presenter = displayLoadableWithErrorsAndLoading(TranscribedAudioIndexPresenter);
 

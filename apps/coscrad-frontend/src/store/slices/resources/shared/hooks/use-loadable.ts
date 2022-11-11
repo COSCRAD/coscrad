@@ -18,7 +18,7 @@ interface UseLoadableArgs<TSelectedState, UIndexState> {
 export const useLoadable = <TSelectedState, UIndexState>({
     selector,
     fetchThunk,
-}: UseLoadableArgs<TSelectedState, UIndexState>): [ILoadable<TSelectedState>] => {
+}: UseLoadableArgs<TSelectedState, UIndexState>): ILoadable<TSelectedState> => {
     const loadable = useSelector(selector);
 
     const { data } = loadable;
@@ -29,5 +29,5 @@ export const useLoadable = <TSelectedState, UIndexState>({
         if (data === null) dispatch(fetchThunk());
     }, [data, dispatch, fetchThunk]);
 
-    return [loadable];
+    return loadable;
 };

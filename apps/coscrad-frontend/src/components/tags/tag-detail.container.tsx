@@ -14,7 +14,7 @@ export const TagDetailContainer = (): JSX.Element => {
      * TODO Once tags follow the standard `IIndexQueryResult`, refactor this logic
      * and use the same hooks used in resource index-to-detail flows.
      */
-    const [idFromLocation] = useIdFromLocation();
+    const idFromLocation = useIdFromLocation();
 
     const dispatch = useAppDispatch();
 

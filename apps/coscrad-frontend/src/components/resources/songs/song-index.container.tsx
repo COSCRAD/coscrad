@@ -3,7 +3,7 @@ import { displayLoadableWithErrorsAndLoading } from '../../higher-order-componen
 import { SongIndexPresenter } from './song-index.presenter';
 
 export const SongIndexContainer = (): JSX.Element => {
-    const [loadableSongs] = useLoadableSongs();
+    const loadableSongs = useLoadableSongs();
 
     const Presenter = displayLoadableWithErrorsAndLoading(SongIndexPresenter);
 

@@ -20,7 +20,10 @@ const photographToFind: IPhotographViewModel = {
     imageURL: 'https://jazzysnaps.images.com/doghouse.png',
 };
 
-// TODO we still need a dummy (system) config and its provider
+/**
+ * TODO [https://www.pivotaltracker.com/story/show/183783946]
+ * We still need a dummy (system) config and its provider.
+ */
 const endpoint = `${getConfig().apiUrl}/resources/photographs`;
 
 const act = (idInLocation: string) =>

@@ -4,7 +4,7 @@ import { displayLoadableWithErrorsAndLoading } from '../higher-order-components/
 import { NoteIndexPresenter } from './note-index.presenter';
 
 export const NoteIndexContainer = (): JSX.Element => {
-    const [loadableNotes] = useLoadableNotes();
+    const loadableNotes = useLoadableNotes();
 
     // wrap the presenter with handling for errors and pending state
     const LoadableNotePresenter = displayLoadableWithErrorsAndLoading(

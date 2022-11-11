@@ -3,7 +3,7 @@ import { displayLoadableWithErrorsAndLoading } from '../../higher-order-componen
 import { SpatialFeatureIndexPresenter } from './spatial-feature-index.presenter';
 
 export const SpatialFeatureIndexContainer = (): JSX.Element => {
-    const [loadableSpatialFeatures] = useLoadableSpatialFeatures();
+    const loadableSpatialFeatures = useLoadableSpatialFeatures();
 
     const Presenter = displayLoadableWithErrorsAndLoading(SpatialFeatureIndexPresenter);
 

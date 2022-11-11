@@ -4,7 +4,7 @@ import { displayLoadableWithErrorsAndLoading } from '../../higher-order-componen
 import { TermIndexPresenter } from './term-index.presenter';
 
 export const TermIndexContainer = (): JSX.Element => {
-    const [loadableTerms] = useLoadableTerms();
+    const loadableTerms = useLoadableTerms();
 
     const LoadableTermPresenter = displayLoadableWithErrorsAndLoading<
         IIndexQueryResult<ITermViewModel>,

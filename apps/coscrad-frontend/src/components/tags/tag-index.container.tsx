@@ -4,7 +4,7 @@ import { displayLoadableWithErrorsAndLoading } from '../higher-order-components'
 import { TagIndexPresenter } from './tag-index.presenter';
 
 export const TagIndexContainer = (): JSX.Element => {
-    const [loadableTags] = useLoadableTags();
+    const loadableTags = useLoadableTags();
 
     // wrap the presenter with handling for errors and pending state
     const LoadableTagPresenter = displayLoadableWithErrorsAndLoading(

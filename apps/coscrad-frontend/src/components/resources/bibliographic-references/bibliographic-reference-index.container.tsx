@@ -3,7 +3,7 @@ import { displayLoadableWithErrorsAndLoading } from '../../higher-order-componen
 import { BibliographicReferenceIndexPresenter } from './bibliographic-reference-index.presenter';
 
 export const BibliographicReferenceIndexContainer = (): JSX.Element => {
-    const [loadableBibliographicReferences] = useLoadableBibliographicReferences();
+    const loadableBibliographicReferences = useLoadableBibliographicReferences();
 
     const Presenter = displayLoadableWithErrorsAndLoading(BibliographicReferenceIndexPresenter);
 

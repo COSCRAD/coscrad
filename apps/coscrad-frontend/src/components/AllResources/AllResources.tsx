@@ -6,7 +6,7 @@ import { displayLoadableWithErrorsAndLoading } from '../higher-order-components'
 import { ResourceInfosPresenter } from './ResourceInfos.presenter';
 
 export function AllResources(): JSX.Element {
-    const [loadableResourceInfos] = useLoadable({
+    const loadableResourceInfos = useLoadable({
         selector: (state: RootState) => state.resourceInfo,
         fetchThunk: fetchResourceInfos,
     });

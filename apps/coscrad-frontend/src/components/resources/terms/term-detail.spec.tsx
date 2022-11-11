@@ -34,7 +34,10 @@ describe('Term Detail', () => {
             buildMockSuccessfulGETHandler({
                 endpoint,
                 response: buildMockIndexResponse(
-                    // TODO add detail scoped actions and check they are displayed
+                    /**
+                     * TODO [https://www.pivotaltracker.com/story/show/183783911]
+                     * Add detail scoped actions and check they are displayed.
+                     */
                     allTerms.map((term) => [term, []]),
                     []
                 ),

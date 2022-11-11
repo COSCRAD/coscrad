@@ -3,7 +3,7 @@ import { displayLoadableWithErrorsAndLoading } from '../../higher-order-componen
 import { MediaItemIndexPresenter } from './media-item-index.presenter';
 
 export const MediaItemIndexContainer = (): JSX.Element => {
-    const [loadableMediaItems] = useLoadableMediaItems();
+    const loadableMediaItems = useLoadableMediaItems();
 
     const Presenter = displayLoadableWithErrorsAndLoading(MediaItemIndexPresenter);
 

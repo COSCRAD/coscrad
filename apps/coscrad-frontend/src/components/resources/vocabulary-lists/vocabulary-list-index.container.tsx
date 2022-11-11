@@ -3,7 +3,7 @@ import { displayLoadableWithErrorsAndLoading } from '../../higher-order-componen
 import { VocabularyListIndexPresenter } from './vocabulary-list-index.presenter';
 
 export const VocabularyListIndexContainer = (): JSX.Element => {
-    const [loadableVocabularyLists] = useLoadableVocabularyLists();
+    const loadableVocabularyLists = useLoadableVocabularyLists();
 
     const Presenter = displayLoadableWithErrorsAndLoading(VocabularyListIndexPresenter);
 
