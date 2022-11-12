@@ -13,6 +13,7 @@ export const AggregateIndexContainer = <T, U = T>({
 }: AggregateIndexContainerProps<T, U>): JSX.Element => {
     const loadableModels = useLoadableModels();
 
+    // Wrap in error and pending presentation
     const Presenter = displayLoadableWithErrorsAndLoading(IndexPresenter);
 
     return <Presenter {...loadableModels} />;

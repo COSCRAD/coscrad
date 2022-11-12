@@ -1,11 +1,10 @@
 import { useLoadableMediaItems } from '../../../store/slices/resources/media-items';
-import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
+import { AggregateIndexContainer } from '../../higher-order-components/aggregate-index-container';
 import { MediaItemIndexPresenter } from './media-item-index.presenter';
 
-export const MediaItemIndexContainer = (): JSX.Element => {
-    const loadableMediaItems = useLoadableMediaItems();
-
-    const Presenter = displayLoadableWithErrorsAndLoading(MediaItemIndexPresenter);
-
-    return <Presenter {...loadableMediaItems} />;
-};
+export const MediaItemIndexContainer = (): JSX.Element => (
+    <AggregateIndexContainer
+        useLoadableModels={useLoadableMediaItems}
+        IndexPresenter={MediaItemIndexPresenter}
+    />
+);

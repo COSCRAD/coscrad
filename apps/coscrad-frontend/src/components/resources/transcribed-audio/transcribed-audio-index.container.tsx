@@ -1,11 +1,10 @@
 import { useLoadableTranscribedAudioItems } from '../../../store/slices/resources/transcribed-audio/hooks/use-loadable-transcribed-audio-items';
-import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
+import { AggregateIndexContainer } from '../../higher-order-components/aggregate-index-container';
 import { TranscribedAudioIndexPresenter } from './transcribed-audio-index.presenter';
 
-export const TranscribedAudioIndexContainer = (): JSX.Element => {
-    const loadableItems = useLoadableTranscribedAudioItems();
-
-    const Presenter = displayLoadableWithErrorsAndLoading(TranscribedAudioIndexPresenter);
-
-    return <Presenter {...loadableItems} />;
-};
+export const TranscribedAudioIndexContainer = (): JSX.Element => (
+    <AggregateIndexContainer
+        useLoadableModels={useLoadableTranscribedAudioItems}
+        IndexPresenter={TranscribedAudioIndexPresenter}
+    />
+);

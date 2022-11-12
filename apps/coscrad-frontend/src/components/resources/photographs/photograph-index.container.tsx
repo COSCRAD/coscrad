@@ -1,11 +1,10 @@
 import { useLoadablePhotographs } from '../../../store/slices/resources/photographs/hooks';
-import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
+import { AggregateIndexContainer } from '../../higher-order-components/aggregate-index-container';
 import { PhotographIndexPresenter } from './photograph-index.presenter';
 
-export const PhotographIndexContainer = (): JSX.Element => {
-    const loadablePhotographs = useLoadablePhotographs();
-
-    const Presenter = displayLoadableWithErrorsAndLoading(PhotographIndexPresenter);
-
-    return <Presenter {...loadablePhotographs} />;
-};
+export const PhotographIndexContainer = (): JSX.Element => (
+    <AggregateIndexContainer
+        useLoadableModels={useLoadablePhotographs}
+        IndexPresenter={PhotographIndexPresenter}
+    />
+);

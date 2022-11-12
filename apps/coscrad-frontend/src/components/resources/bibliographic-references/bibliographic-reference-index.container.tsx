@@ -1,11 +1,10 @@
 import { useLoadableBibliographicReferences } from '../../../store/slices/resources';
-import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
+import { AggregateIndexContainer } from '../../higher-order-components/aggregate-index-container';
 import { BibliographicReferenceIndexPresenter } from './bibliographic-reference-index.presenter';
 
-export const BibliographicReferenceIndexContainer = (): JSX.Element => {
-    const loadableBibliographicReferences = useLoadableBibliographicReferences();
-
-    const Presenter = displayLoadableWithErrorsAndLoading(BibliographicReferenceIndexPresenter);
-
-    return <Presenter {...loadableBibliographicReferences} />;
-};
+export const BibliographicReferenceIndexContainer = (): JSX.Element => (
+    <AggregateIndexContainer
+        useLoadableModels={useLoadableBibliographicReferences}
+        IndexPresenter={BibliographicReferenceIndexPresenter}
+    />
+);

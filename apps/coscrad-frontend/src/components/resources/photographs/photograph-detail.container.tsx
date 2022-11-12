@@ -1,11 +1,10 @@
 import { useLoadablePhotographById } from '../../../store/slices/resources/photographs/hooks';
-import { displayLoadableSearchResult } from '../../higher-order-components/display-loadable-search-result';
+import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
 import { PhotographDetailPresenter } from './photograph-detail.presenter';
 
-export const PhotographDetailContainer = (): JSX.Element => {
-    const loadablePhotographSearchResult = useLoadablePhotographById();
-
-    const Presenter = displayLoadableSearchResult(PhotographDetailPresenter);
-
-    return <Presenter {...loadablePhotographSearchResult} />;
-};
+export const PhotographDetailContainer = (): JSX.Element => (
+    <AggregateDetailContainer
+        useLoadableSearchResult={useLoadablePhotographById}
+        DetailPresenter={PhotographDetailPresenter}
+    />
+);
