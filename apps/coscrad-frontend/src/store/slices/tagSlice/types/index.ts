@@ -1,1 +1,1 @@
-export * from './TagSliceState';
+export * from './tag-slice-state';

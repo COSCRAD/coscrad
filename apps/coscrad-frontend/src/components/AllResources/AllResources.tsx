@@ -1,12 +1,12 @@
 import { RootState } from '../../store';
-import { fetchResourceInfos } from '../../store/slices/resourceInfo';
+import { fetchResourceInfos } from '../../store/slices/resource-info-slice';
 import { useLoadable } from '../../store/slices/resources/shared/hooks';
 import { wrapArrayProps } from '../../utils/prop-manipulation/wrap-array-props';
 import { displayLoadableWithErrorsAndLoading } from '../higher-order-components';
 import { ResourceInfosPresenter } from './ResourceInfos.presenter';
 
 export function AllResources(): JSX.Element {
-    const [loadableResourceInfos] = useLoadable({
+    const loadableResourceInfos = useLoadable({
         selector: (state: RootState) => state.resourceInfo,
         fetchThunk: fetchResourceInfos,
     });

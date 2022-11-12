@@ -1,11 +1,10 @@
 import { useLoadableBibliographicReferenceById } from '../../../store/slices/resources';
-import { displayLoadableSearchResult } from '../../higher-order-components/display-loadable-search-result';
+import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
 import { BibliographicReferenceDetailPresenter } from './bibliographic-reference-detail.presenter';
 
-export const BibliographicReferenceDetailContainer = (): JSX.Element => {
-    const loadableSearchResult = useLoadableBibliographicReferenceById();
-
-    const Presenter = displayLoadableSearchResult(BibliographicReferenceDetailPresenter);
-
-    return <Presenter {...loadableSearchResult} />;
-};
+export const BibliographicReferenceDetailContainer = (): JSX.Element => (
+    <AggregateDetailContainer
+        useLoadableSearchResult={useLoadableBibliographicReferenceById}
+        DetailPresenter={BibliographicReferenceDetailPresenter}
+    />
+);

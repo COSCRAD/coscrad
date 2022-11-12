@@ -1,2 +1,2 @@
 export * from './constants';
-export * from './noteSlice';
+export * from './note-slice';
