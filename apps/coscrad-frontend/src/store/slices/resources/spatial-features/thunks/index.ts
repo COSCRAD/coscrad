@@ -1,1 +1,1 @@
-export * from './fetch-spaitial-features';
+export * from './fetch-spatial-features';

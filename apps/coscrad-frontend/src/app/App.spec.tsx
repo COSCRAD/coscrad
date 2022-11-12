@@ -1,5 +1,5 @@
 import { MemoryRouter } from 'react-router-dom';
-import { renderWithProviders } from '../utils/test-utils/renderWithProviders';
+import { renderWithProviders } from '../utils/test-utils/render-with-providers';
 import App from './App';
 
 describe('App', () => {
