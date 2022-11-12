@@ -1,11 +1,10 @@
 import { useLoadableVocabularyListById } from '../../../store/slices/resources/vocabulary-lists/hooks/useLoadableVocabularyListById';
-import { displayLoadableSearchResult } from '../../higher-order-components/display-loadable-search-result';
+import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
 import { VocabularyListDetailPresenter } from './vocabulary-list-detail.presenter';
 
-export const VocabularyListDetailContainer = (): JSX.Element => {
-    const loadableSearchResult = useLoadableVocabularyListById();
-
-    const Presenter = displayLoadableSearchResult(VocabularyListDetailPresenter);
-
-    return <Presenter {...loadableSearchResult} />;
-};
+export const VocabularyListDetailContainer = (): JSX.Element => (
+    <AggregateDetailContainer
+        useLoadableSearchResult={useLoadableVocabularyListById}
+        DetailPresenter={VocabularyListDetailPresenter}
+    />
+);
