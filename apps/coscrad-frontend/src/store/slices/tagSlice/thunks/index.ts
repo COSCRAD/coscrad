@@ -1,1 +1,1 @@
-export * from './fetchTags';
+export * from './fetch-tags';

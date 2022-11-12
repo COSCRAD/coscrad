@@ -1,10 +1,10 @@
-import { createFetchThunk } from '../../../utils/createFetchThunk';
-import { RESOURCES } from '../../constants';
+import { buildResourceFetchActionPrefix } from '../../../utils/build-resource-fetch-action-prefix';
+import { createFetchThunk } from '../../../utils/create-fetch-thunk';
 import { getApiResourcesBaseRoute } from '../../shared';
-import { BOOK } from '../constants';
+import { BOOKS } from '../constants';
 import { BookIndexState } from '../types';
 
 export const fetchBooks = createFetchThunk<BookIndexState>(
-    `${RESOURCES}/${BOOK}/fetch`,
+    buildResourceFetchActionPrefix(BOOKS),
     `${getApiResourcesBaseRoute()}/books`
 );

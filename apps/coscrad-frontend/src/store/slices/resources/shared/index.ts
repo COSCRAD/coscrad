@@ -1,1 +1,1 @@
-export * from './getApiResourcesBaseRoute';
+export * from './get-api-resources-base-route';

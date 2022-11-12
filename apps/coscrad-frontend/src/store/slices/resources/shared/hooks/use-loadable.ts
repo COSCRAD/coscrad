@@ -11,10 +11,14 @@ interface UseLoadableArgs<TSelectedState, UIndexState> {
     fetchThunk: AsyncThunk<UIndexState, void, {}>;
 }
 
+/**
+ * TODO Move this to a higher level since it used by all aggregates, not just
+ * resources.
+ */
 export const useLoadable = <TSelectedState, UIndexState>({
     selector,
     fetchThunk,
-}: UseLoadableArgs<TSelectedState, UIndexState>): [ILoadable<TSelectedState>] => {
+}: UseLoadableArgs<TSelectedState, UIndexState>): ILoadable<TSelectedState> => {
     const loadable = useSelector(selector);
 
     const { data } = loadable;
@@ -25,5 +29,5 @@ export const useLoadable = <TSelectedState, UIndexState>({
         if (data === null) dispatch(fetchThunk());
     }, [data, dispatch, fetchThunk]);
 
-    return [loadable];
+    return loadable;
 };

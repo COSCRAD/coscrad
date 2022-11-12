@@ -1,10 +1,10 @@
-import { createFetchThunk } from '../../../utils/createFetchThunk';
-import { RESOURCES } from '../../constants';
+import { buildResourceFetchActionPrefix } from '../../../utils/build-resource-fetch-action-prefix';
+import { createFetchThunk } from '../../../utils/create-fetch-thunk';
 import { getApiResourcesBaseRoute } from '../../shared';
-import { BIBLIOGRAPHIC_REFERENCE } from '../constants';
+import { BIBLIOGRAPHIC_REFERENCES } from '../constants';
 import { BibliographicReferenceIndexState } from '../types';
 
 export const fetchBibliographicReferences = createFetchThunk<BibliographicReferenceIndexState>(
-    `${RESOURCES}/${BIBLIOGRAPHIC_REFERENCE}/fetch`,
+    buildResourceFetchActionPrefix(BIBLIOGRAPHIC_REFERENCES),
     `${getApiResourcesBaseRoute()}/bibliographicReferences`
 );

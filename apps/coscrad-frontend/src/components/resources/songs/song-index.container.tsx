@@ -1,11 +1,10 @@
 import { useLoadableSongs } from '../../../store/slices/resources';
-import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
+import { AggregateIndexContainer } from '../../higher-order-components/aggregate-index-container';
 import { SongIndexPresenter } from './song-index.presenter';
 
-export const SongIndexContainer = (): JSX.Element => {
-    const [loadableSongs] = useLoadableSongs();
-
-    const Presenter = displayLoadableWithErrorsAndLoading(SongIndexPresenter);
-
-    return <Presenter {...loadableSongs} />;
-};
+export const SongIndexContainer = (): JSX.Element => (
+    <AggregateIndexContainer
+        useLoadableModels={useLoadableSongs}
+        IndexPresenter={SongIndexPresenter}
+    />
+);
