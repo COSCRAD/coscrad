@@ -1,5 +1,5 @@
 import { IBaseViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
-import { CommandPanel } from '../../../components/dynamicViews/commands';
+import { CommandPanel } from '../../../components/commands';
 import { NotFound } from '../../../components/NotFound';
 import { NOT_FOUND } from '../../../store/slices/interfaces/maybe-loadable.interface';
 

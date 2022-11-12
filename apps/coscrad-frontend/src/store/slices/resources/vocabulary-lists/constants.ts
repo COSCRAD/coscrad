@@ -1,1 +1,1 @@
-export const VOCABULARY_LIST = 'vocabularyList';
+export const VOCABULARY_LISTS = 'vocabularyLists';

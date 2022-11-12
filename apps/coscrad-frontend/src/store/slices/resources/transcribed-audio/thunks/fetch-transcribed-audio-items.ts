@@ -1,9 +1,9 @@
-import { createFetchThunk } from '../../../utils/createFetchThunk';
-import { RESOURCES } from '../../constants';
+import { buildResourceFetchActionPrefix } from '../../../utils/build-resource-fetch-action-prefix';
+import { createFetchThunk } from '../../../utils/create-fetch-thunk';
 import { getApiResourcesBaseRoute } from '../../shared';
-import { TRANSCRIBED_AUDIO } from '../constants';
+import { TRANSCRIBED_AUDIO_ITEMS } from '../constants';
 
 export const fetchTranscribedAudioItems = createFetchThunk(
-    `${RESOURCES}/${TRANSCRIBED_AUDIO}/fetch`,
+    buildResourceFetchActionPrefix(TRANSCRIBED_AUDIO_ITEMS),
     `${getApiResourcesBaseRoute()}/transcribedAudioItems`
 );

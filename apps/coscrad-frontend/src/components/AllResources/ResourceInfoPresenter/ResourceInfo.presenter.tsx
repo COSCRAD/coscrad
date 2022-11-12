@@ -7,7 +7,10 @@ export const ResourceInfoPresenter = ({
     type: resourceType,
     description,
     label,
-}: // We could expose the Schema as part of our own API docs somehow.
+}: /**
+ * TODO [https://www.pivotaltracker.com/story/show/183766033
+ * We should expose the Schema as part of our own API docs somehow.
+ */
 IAggregateInfo<ResourceType>): JSX.Element => {
     const resourceIndexLink = (
         <Link to={`/${routes.resources.ofType(resourceType).index}`}>View {label}s</Link>
