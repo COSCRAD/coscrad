@@ -10,5 +10,5 @@ export const useIdFromLocation = () => {
         throw new Error(`Failed to read ID from route params`);
     }
 
-    return [idFromLocation] as const;
+    return idFromLocation;
 };

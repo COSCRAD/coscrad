@@ -1,1 +1,1 @@
-export * from './TermIndex.container';
+export * from './term-index.container';

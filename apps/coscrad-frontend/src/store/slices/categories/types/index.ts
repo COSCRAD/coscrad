@@ -1,1 +1,1 @@
-export * from './categorySliceState';
+export * from './category-slice-state';

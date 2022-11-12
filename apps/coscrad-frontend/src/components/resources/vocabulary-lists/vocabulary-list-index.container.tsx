@@ -1,11 +1,10 @@
 import { useLoadableVocabularyLists } from '../../../store/slices/resources/vocabulary-lists/hooks';
-import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
+import { AggregateIndexContainer } from '../../higher-order-components/aggregate-index-container';
 import { VocabularyListIndexPresenter } from './vocabulary-list-index.presenter';
 
-export const VocabularyListIndexContainer = (): JSX.Element => {
-    const [loadableVocabularyLists] = useLoadableVocabularyLists();
-
-    const Presenter = displayLoadableWithErrorsAndLoading(VocabularyListIndexPresenter);
-
-    return <Presenter {...loadableVocabularyLists} />;
-};
+export const VocabularyListIndexContainer = (): JSX.Element => (
+    <AggregateIndexContainer
+        useLoadableModels={useLoadableVocabularyLists}
+        IndexPresenter={VocabularyListIndexPresenter}
+    />
+);

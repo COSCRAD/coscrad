@@ -1,2 +1,2 @@
-export * from './categorySlice';
+export * from './category-slice';
 export * from './thunks';

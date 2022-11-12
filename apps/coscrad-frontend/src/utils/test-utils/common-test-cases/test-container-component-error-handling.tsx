@@ -2,9 +2,9 @@ import { assertElementWithTestIdOnScreen } from '../assertions/assert-element-wi
 import {
     buildMockGETHandlerWithError,
     MockErrorResponseType,
-} from '../buildMockGETHandlerWithError';
+} from '../build-mock-get-handler-with-error';
 import { TestId } from '../constants';
-import { setupTestServer } from '../setupTestServer';
+import { setupTestServer } from '../setup-test-server';
 
 /**
  * TODO we need to update the checks here to identify specific error codes. Otherwise,

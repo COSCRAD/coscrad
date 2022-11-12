@@ -1,2 +1,2 @@
-export * from './photographSlice';
+export * from './photograph-slice';
 export * from './selectors';
