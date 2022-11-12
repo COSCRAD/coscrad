@@ -27,10 +27,6 @@ export const displayLoadableWithErrorsAndLoading =
 
         if (isLoading || data === null) return <Loading></Loading>;
 
-        if (data === undefined) {
-            throw new Error(`A loadable cannot have the state {data: undefined}`);
-        }
-
         // default to the identity map if no map is provided (this typically is what we want with non-array loaded data)
         const props = mapLoadedDataToPresenterProps
             ? mapLoadedDataToPresenterProps(data)

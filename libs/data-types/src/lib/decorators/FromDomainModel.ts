@@ -1,7 +1,9 @@
 import { COSCRAD_DATA_TYPE_METADATA } from '../constants';
 import { NoSchemaFoundForDomainModelReferencedByViewModelException } from '../exceptions/NoSchemaFoundForDomainModelReerencedByViewModel';
 import { getCoscradDataSchema } from '../utilities';
-import getCoscradDataSchemaFromPrototype from '../utilities/getCoscradDataSchemaFromPrototype';
+import getCoscradDataSchemaFromPrototype, {
+    Ctor,
+} from '../utilities/getCoscradDataSchemaFromPrototype';
 
 /**
  * This decorator is to be used to decorate view model properties that are simply
@@ -12,29 +14,35 @@ import getCoscradDataSchemaFromPrototype from '../utilities/getCoscradDataSchema
  * In the future, we may want to provide flexibility to rename the property on the
  * view model.
  */
-export function FromDomainModel<T extends Object>(
-    DomainModelDataClass: T,
+export function FromDomainModel<T extends Ctor<unknown>>(
+    DomainModelCtor: T,
     // TODO Constrain this to be a keyof an instance of the given class
-    propertyKeyOverride?: string
+    propertyKeyOverride?: keyof InstanceType<T>
 ): PropertyDecorator {
     return (target: Object, propertyKey: string) => {
-        const fullDataSchema = getCoscradDataSchema(DomainModelDataClass);
+        const fullDataSchemaForDomainModel = getCoscradDataSchema(DomainModelCtor);
 
-        const dataSchemaForProp = fullDataSchema[propertyKeyOverride || propertyKey];
+        const dataSchemaForPropInDomainModel =
+            /**
+             * To improve on the types here, we need to make getCoscradDataSchema generic.
+             */
+            fullDataSchemaForDomainModel[(propertyKeyOverride || propertyKey) as string];
 
-        // TODO Make this a custom exception class instance
-        if (dataSchemaForProp === null || typeof dataSchemaForProp === 'undefined')
+        if (
+            dataSchemaForPropInDomainModel === null ||
+            typeof dataSchemaForPropInDomainModel === 'undefined'
+        )
             throw new NoSchemaFoundForDomainModelReferencedByViewModelException(
                 target,
                 propertyKey
             );
 
         // Get existing schema metadata for this view model
-        const existingMeta = getCoscradDataSchemaFromPrototype(target);
+        const existingMetaForViewModel = getCoscradDataSchemaFromPrototype(target);
 
         Reflect.defineMetadata(
             COSCRAD_DATA_TYPE_METADATA,
-            { ...existingMeta, [propertyKey]: dataSchemaForProp },
+            { ...existingMetaForViewModel, [propertyKey]: dataSchemaForPropInDomainModel },
             target
         );
     };

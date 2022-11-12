@@ -1,14 +1,14 @@
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getApiResourcesBaseRoute } from '../../../store/slices/resources/shared';
 import {
     assertElementWithTestIdOnScreen,
     assertNotFound,
     renderWithProviders,
 } from '../../../utils/test-utils';
-import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/buildMockSuccessfulGETHandler';
+import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
-import { setupTestServer } from '../../../utils/test-utils/setupTestServer';
+import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
+import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { BookDetailContainer } from './book-detail.container';
 import { buildDummyBooks } from './test-utils/build-dummy-books';
 
@@ -27,11 +27,7 @@ const dummyIndexResponse = buildMockIndexResponse(
 
 const act = (idInLocation: string) =>
     renderWithProviders(
-        <MemoryRouter initialEntries={[`/Resources/Books/${idInLocation}`]}>
-            <Routes>
-                <Route path={`Resources/Books/:id`} element={<BookDetailContainer />} />
-            </Routes>
-        </MemoryRouter>
+        withDetailRoute(idInLocation, `/Resources/Books/`, <BookDetailContainer />)
     );
 
 describe('book detail', () => {
