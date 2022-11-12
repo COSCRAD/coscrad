@@ -1,1 +1,1 @@
-export const BIBLIOGRAPHIC_REFERENCE = 'bibliographicReference';
+export const BIBLIOGRAPHIC_REFERENCES = 'bibliographicReferences';

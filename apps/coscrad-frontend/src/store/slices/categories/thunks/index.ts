@@ -1,1 +1,1 @@
-export * from './fetchCategoryTree';
+export * from './fetch-category-tree';

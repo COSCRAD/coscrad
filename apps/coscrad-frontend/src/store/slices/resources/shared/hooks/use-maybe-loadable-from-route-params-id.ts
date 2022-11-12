@@ -4,11 +4,11 @@ import { ILoadable } from '../../../interfaces/loadable.interface';
 import { IMaybeLoadable, NOT_FOUND } from '../../../interfaces/maybe-loadable.interface';
 
 export const useMaybeLoadableFromRouteParamsId = <T extends IBaseViewModel>(
-    useLoadableItems: () => [ILoadable<IIndexQueryResult<T>>]
+    useLoadableItems: () => ILoadable<IIndexQueryResult<T>>
 ): IMaybeLoadable<IDetailQueryResult<T>> => {
-    const [idFromLocation] = useIdFromLocation();
+    const idFromLocation = useIdFromLocation();
 
-    const [loadableTranscribedAudioItems] = useLoadableItems();
+    const loadableTranscribedAudioItems = useLoadableItems();
 
     const { data: allItems, isLoading, errorInfo } = loadableTranscribedAudioItems;
 
