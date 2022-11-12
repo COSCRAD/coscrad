@@ -1,1 +1,1 @@
-export * from './NoteSliceState';
+export * from './note-slice-state';

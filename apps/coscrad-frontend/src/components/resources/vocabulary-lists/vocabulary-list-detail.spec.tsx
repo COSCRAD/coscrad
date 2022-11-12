@@ -1,81 +1,30 @@
-import {
-    DropboxOrCheckbox,
-    ITermViewModel,
-    IVocabularyListEntry,
-    IVocabularyListViewModel,
-} from '@coscrad/api-interfaces';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { getConfig } from '../../../config';
 import {
     assertElementWithTestIdOnScreen,
     assertNotFound,
     renderWithProviders,
 } from '../../../utils/test-utils';
-import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/buildMockSuccessfulGETHandler';
+import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
-import { setupTestServer } from '../../../utils/test-utils/setupTestServer';
+import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
+import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
+import { buildDummyVocabularyLists } from './test-utils/build-dummy-vocabulary-lists';
 import { VocabularyListDetailContainer } from './vocabulary-list-detail.container';
 
-const validValues: string[] = ['1', '2'];
+const dummyVocabularyLists = buildDummyVocabularyLists();
 
-const dummyTerms: ITermViewModel[] = [
-    {
-        id: '1',
-        term: 'term 1 (language)',
-        audioUrl: 'https://www.mysoundbox.com/foo.mp3',
-        contributor: 'John Doe',
-    },
-    {
-        id: '2',
-        term: 'term 2 (language)- has no audio',
-        termEnglish: 'term 2 (English)',
-        contributor: 'Jane Deer',
-    },
-];
-
-const dummyEntries: IVocabularyListEntry<boolean | string>[] = dummyTerms.map(
-    (term, index): IVocabularyListEntry<boolean | string> => ({
-        term,
-        variableValues: {
-            person: validValues[index],
-        },
-    })
-);
-
-const idToFind = '345';
-
-const dummyVocabularyList: IVocabularyListViewModel = {
-    id: idToFind,
-    name: 'VL name (language)',
-    nameEnglish: 'VL name (English)',
-    entries: dummyEntries,
-    variables: [
-        {
-            name: 'possessor',
-            type: DropboxOrCheckbox.dropbox,
-            validValues: validValues.map((value) => ({
-                value,
-                display: value,
-            })),
-        },
-    ],
-};
-
-const dummyVocabularyLists: IVocabularyListViewModel[] = [dummyVocabularyList];
+const idToFind = dummyVocabularyLists[0].id;
 
 const endpoint = `${getConfig().apiUrl}/resources/vocabularyLists`;
 
 const act = (idInLocation: string) =>
     renderWithProviders(
-        <MemoryRouter initialEntries={[`/Resources/VocabularyLists/${idInLocation}`]}>
-            <Routes>
-                <Route
-                    path={`Resources/VocabularyLists/:id`}
-                    element={<VocabularyListDetailContainer />}
-                />
-            </Routes>
-        </MemoryRouter>
+        withDetailRoute(
+            idInLocation,
+            `/Resources/VocabularyLists/`,
+            <VocabularyListDetailContainer />
+        )
     );
 
 describe('vocabulary list detail', () => {

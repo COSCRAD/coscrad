@@ -4,7 +4,7 @@ import { buildSpatialFeatureDetailPresenter } from './build-spatial-feature-deta
 export const SpatialFeatureDetailPresenter = (
     detailQueryResult: IDetailQueryResult<ISpatialFeatureViewModel>
 ): JSX.Element => {
-    if (!detailQueryResult.data.geometry) {
+    if (!detailQueryResult?.data?.geometry) {
         throw new Error(
             `geometry not specified on spatial feature detail result:${JSON.stringify(
                 detailQueryResult

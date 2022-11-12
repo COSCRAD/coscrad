@@ -1,11 +1,10 @@
 import { useLoadableBooks } from '../../../store/slices/resources/books';
-import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
+import { AggregateIndexContainer } from '../../higher-order-components/aggregate-index-container';
 import { BookIndexPresenter } from './book-index.presenter';
 
-export const BookIndexContainer = (): JSX.Element => {
-    const [loadableBooks] = useLoadableBooks();
-
-    const Presenter = displayLoadableWithErrorsAndLoading(BookIndexPresenter);
-
-    return <Presenter {...loadableBooks} />;
-};
+export const BookIndexContainer = (): JSX.Element => (
+    <AggregateIndexContainer
+        useLoadableModels={useLoadableBooks}
+        IndexPresenter={BookIndexPresenter}
+    />
+);

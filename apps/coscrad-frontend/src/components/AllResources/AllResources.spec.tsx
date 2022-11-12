@@ -4,7 +4,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
-import { renderWithProviders } from '../../utils/test-utils/renderWithProviders';
+import { renderWithProviders } from '../../utils/test-utils/render-with-providers';
 import { AllResources } from './AllResources';
 
 const ARTIFICIAL_DELAY = 150;

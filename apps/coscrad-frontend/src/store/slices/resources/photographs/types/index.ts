@@ -1,1 +1,1 @@
-export * from './PhotographSliceState';
+export * from './photograph-slice-state';
