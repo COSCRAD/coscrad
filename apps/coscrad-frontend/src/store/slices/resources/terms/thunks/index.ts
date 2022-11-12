@@ -1,1 +1,1 @@
-export * from './fetchTerms';
+export * from './fetch-terms';

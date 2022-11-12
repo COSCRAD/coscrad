@@ -1,10 +1,10 @@
 import { IIndexQueryResult, IVocabularyListViewModel } from '@coscrad/api-interfaces';
-import { createFetchThunk } from '../../../utils/createFetchThunk';
-import { RESOURCES } from '../../constants';
+import { buildResourceFetchActionPrefix } from '../../../utils/build-resource-fetch-action-prefix';
+import { createFetchThunk } from '../../../utils/create-fetch-thunk';
 import { getApiResourcesBaseRoute } from '../../shared';
-import { VOCABULARY_LIST } from '../constants';
+import { VOCABULARY_LISTS } from '../constants';
 
 export const fetchVocabularyLists = createFetchThunk<IIndexQueryResult<IVocabularyListViewModel>>(
-    `${RESOURCES}/${VOCABULARY_LIST}/fetch`,
+    buildResourceFetchActionPrefix(VOCABULARY_LISTS),
     `${getApiResourcesBaseRoute()}/vocabularyLists`
 );
