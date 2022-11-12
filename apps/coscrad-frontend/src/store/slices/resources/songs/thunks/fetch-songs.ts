@@ -1,10 +1,10 @@
-import { createFetchThunk } from '../../../utils/createFetchThunk';
-import { RESOURCES } from '../../constants';
+import { buildResourceFetchActionPrefix } from '../../../utils/build-resource-fetch-action-prefix';
+import { createFetchThunk } from '../../../utils/create-fetch-thunk';
 import { getApiResourcesBaseRoute } from '../../shared';
-import { SONG } from '../constants';
+import { SONGS } from '../constants';
 import { SongIndexState } from '../types';
 
 export const fetchSongs = createFetchThunk<SongIndexState>(
-    `${RESOURCES}/${SONG}/fetch`,
+    buildResourceFetchActionPrefix(SONGS),
     `${getApiResourcesBaseRoute()}/songs`
 );

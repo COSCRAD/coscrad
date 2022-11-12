@@ -1,3 +1,3 @@
 export * from './constants';
-export * from './tagSlice';
+export * from './tag-slice';
 export * from './types';

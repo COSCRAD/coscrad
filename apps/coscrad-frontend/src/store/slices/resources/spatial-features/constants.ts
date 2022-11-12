@@ -1,1 +1,1 @@
-export const SPATIAL_FEATURE = 'spatialFeature';
+export const SPATIAL_FEATURES = 'spatialFeatures';

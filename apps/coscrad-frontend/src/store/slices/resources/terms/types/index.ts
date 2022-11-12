@@ -1,1 +1,1 @@
-export * from './TermSliceState';
+export * from './term-slice-state';

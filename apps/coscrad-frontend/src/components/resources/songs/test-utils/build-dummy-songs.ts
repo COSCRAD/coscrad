@@ -5,7 +5,7 @@ export const buildDummySongs = (): ISongViewModel[] => [
         id: '12',
         title: 'ba ba ba',
         titleEnglish: 'cool song',
-        lyrics: 'go sing ba, ba, ba, ba, ba, ba, ba, ba ,ba',
+        lyrics: 'go sing ba, ba, ba, ba, ba, ba, ba, ba, ba',
         contributions: [],
         lengthMilliseconds: 100000,
         startMilliseconds: 0,
@@ -14,7 +14,7 @@ export const buildDummySongs = (): ISongViewModel[] => [
     {
         id: '13',
         title: 'la la la',
-        lyrics: 'go sing la, la, la, la, la, la, la, la ,la',
+        lyrics: 'go sing la, la, la, la, la, la, la, la, la',
         contributions: [],
         lengthMilliseconds: 655500,
         startMilliseconds: 5000,

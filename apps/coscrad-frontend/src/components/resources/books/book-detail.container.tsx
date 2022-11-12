@@ -1,11 +1,10 @@
 import { useLoadableBookById } from '../../../store/slices/resources/books';
-import { displayLoadableSearchResult } from '../../higher-order-components/display-loadable-search-result';
+import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
 import { BookDetailPresenter } from './book-detail.presenter';
 
-export const BookDetailContainer = (): JSX.Element => {
-    const loadableBook = useLoadableBookById();
-
-    const Presenter = displayLoadableSearchResult(BookDetailPresenter);
-
-    return <Presenter {...loadableBook} />;
-};
+export const BookDetailContainer = (): JSX.Element => (
+    <AggregateDetailContainer
+        useLoadableSearchResult={useLoadableBookById}
+        DetailPresenter={BookDetailPresenter}
+    />
+);

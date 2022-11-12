@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import { renderWithProviders } from '../../utils/test-utils';
-import { getDummyConfigurableContent } from '../../utils/test-utils/getDummyConfigurableContent';
+import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
 
 import { About } from './About';
 

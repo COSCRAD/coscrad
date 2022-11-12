@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { getDummyConfigurableContent } from '../../utils/test-utils/getDummyConfigurableContent';
-import { renderWithProviders } from '../../utils/test-utils/renderWithProviders';
+import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
+import { renderWithProviders } from '../../utils/test-utils/render-with-providers';
 
 import { Home } from './Home';
 
