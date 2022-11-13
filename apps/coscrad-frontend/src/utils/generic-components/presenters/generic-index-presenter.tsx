@@ -1,35 +1,42 @@
 import { IBaseViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../types/functional-component';
 import './generic-presenters.css';
-import { GenericTableRowPresenter } from './tables';
+import { GenericIndexTablePresenter, HeadingLabel } from './tables';
 
-export const GenericIndexPresenter: FunctionalComponent<IIndexQueryResult<IBaseViewModel>> = ({
+type GenericIndexPresenterProps = IIndexQueryResult<IBaseViewModel> & { indexLabel: string };
+
+export const GenericIndexPresenter: FunctionalComponent<GenericIndexPresenterProps> = ({
     data: viewModelsAndActions,
-}: IIndexQueryResult<IBaseViewModel>) => {
+    indexLabel,
+}: GenericIndexPresenterProps) => {
     const viewModels = viewModelsAndActions.map(({ data }) => data);
 
+    /**
+     * **DO NOT** use this util in production. It is meant to generate a placeholder
+     * so we can divide and conquer on development and design work. The followin
+     * algorithm may miss optional properties that are missing on the 0th result. If we
+     * want to actually use this tool, we should use one of the following
+     * approaches:
+     * 1. use the model schema from resource info to build headins
+     * 2. build up the headings as any property key that shows up on any model
+     *     - this still exposes a developer formatted key to the end user, so 1. is a better option
+     */
+    const headingLabels: HeadingLabel<IBaseViewModel>[] = Object.keys(viewModels[0]).map(
+        (key: keyof IBaseViewModel) => ({
+            propertyKey: key,
+            headingLabel: key,
+        })
+    );
+
+    const emptyCellRenderersDefinition = {};
+
     return (
-        <div>
-            <h3>Records</h3>
-            <div className="records-table">
-                <table border={1} cellSpacing={0}>
-                    <tbody>
-                        <tr>
-                            <th>Link</th>
-                            {Object.keys(viewModels[0]).map((propertyName) => (
-                                <th>{propertyName}</th>
-                            ))}
-                        </tr>
-                        {viewModels.map((viewModel) => (
-                            <GenericTableRowPresenter key={viewModel.id} {...viewModel} />
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            <h3>JSON Data</h3>
-            <div className="json-data">
-                <pre>{JSON.stringify(viewModels, null, 2)}</pre>
-            </div>
-        </div>
+        <GenericIndexTablePresenter
+            headingLabels={headingLabels}
+            tableData={viewModels}
+            cellRenderersDefinition={emptyCellRenderersDefinition}
+            // This should be a resource lable from resource info
+            heading={indexLabel}
+        />
     );
 };

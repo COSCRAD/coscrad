@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import {
     GenericIndexTablePresenter,
     HeadingLabel,
-    Renderer,
-} from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter';
+} from '../../../utils/generic-components/presenters/tables';
+import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 
 export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotographViewModel>) => {
     /**
@@ -22,29 +22,18 @@ export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotogr
         { propertyKey: 'photographer', headingLabel: 'Photographer' },
     ];
 
-    /**
-     * Note that for some reason we don't get type safety unless we use the
-     * generics on the Map. We might want an abstraction that takes in an array
-     * or object data structure (in a type safe way) and creates this map.
-     */
-    const cellRenderers = new Map<keyof IPhotographViewModel, Renderer<IPhotographViewModel>>()
-        .set('imageURL', ({ imageURL }: IPhotographViewModel) => `LINK: ${imageURL}`)
-        .set('id', ({ id }: IPhotographViewModel) => <Link to={id}>VIEW</Link>);
+    const cellRenderersDefinition: CellRenderersDefinition<IPhotographViewModel> = {
+        id: ({ id }: IPhotographViewModel) => <Link to={id}>VIEW</Link>,
+        imageURL: ({ imageURL }: IPhotographViewModel) => `LINK: ${imageURL}`,
+    };
 
     return (
-        <div>
-            <h3>Photographs</h3>
-            <div className="records-table">
-                <GenericIndexTablePresenter
-                    headingLabels={headingLabels}
-                    tableData={photographs}
-                    cellRenderers={cellRenderers}
-                />
-            </div>
-            <h3>JSON Data</h3>
-            <div className="json-data">
-                <pre>{JSON.stringify(photographs, null, 2)}</pre>
-            </div>
-        </div>
+        <GenericIndexTablePresenter
+            headingLabels={headingLabels}
+            tableData={photographs}
+            cellRenderersDefinition={cellRenderersDefinition}
+            // This should be a resource lable from resource info
+            heading={'Photographs'}
+        />
     );
 };
