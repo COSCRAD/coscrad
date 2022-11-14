@@ -70,6 +70,10 @@ const comprehensiveCellRenderersDefinition: CellRenderersDefinition<Widget> = {
     baz: ({ baz: { nestedProp } }: Widget) => nestedProp.join(' and then '),
 };
 
+/**
+ * If inspecting the snapshot proves tedious or flakey, we may want to check
+ * look for a `data-testid` prop on rendered cells.
+ */
 const assertValidTableRender = (props: GenericIndexTablePresenterProps<Widget>) => {
     // act
     const { baseElement } = renderWithProviders(
