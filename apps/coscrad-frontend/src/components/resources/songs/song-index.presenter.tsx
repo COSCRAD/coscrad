@@ -7,5 +7,5 @@ export const SongIndexPresenter = (songIndexResult: SongIndexState) => {
      * We may some day read the actions and allow for bulk command execution in
      * an index view.
      */
-    return <GenericIndexPresenter {...songIndexResult} />;
+    return <GenericIndexPresenter {...songIndexResult} indexLabel={'Songs'} />;
 };

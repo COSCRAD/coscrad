@@ -9,5 +9,5 @@ export const BibliographicReferenceIndexPresenter = (
      * We may some day read the actions and allow for bulk command execution in
      * an index view.
      */
-    <GenericIndexPresenter {...indexResult} />
+    <GenericIndexPresenter {...indexResult} indexLabel={'Bibliographic References'} />
 );

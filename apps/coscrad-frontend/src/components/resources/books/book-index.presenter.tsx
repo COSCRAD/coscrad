@@ -7,5 +7,5 @@ export const BookIndexPresenter = (bookIndexResult: BookIndexState) => {
      * We may some day read the actions and allow for bulk command execution in
      * an index view.
      */
-    return <GenericIndexPresenter {...bookIndexResult} />;
+    return <GenericIndexPresenter {...bookIndexResult} indexLabel={'Books'} />;
 };
