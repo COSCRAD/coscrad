@@ -15,10 +15,14 @@ export const GenericDetailPresenter = ({
 
     return (
         <div data-testid={viewModel.id}>
-            <h1>Data</h1>
-            {JSON.stringify(viewModel)}
+            <h3>JSON Data</h3>
+            <div className="json-data">
+                <pre>{JSON.stringify(viewModel, null, 2)}</pre>
+            </div>
 
-            <CommandPanel actions={actions} />
+            <div className="actions">
+                <CommandPanel actions={actions} />
+            </div>
         </div>
     );
 };

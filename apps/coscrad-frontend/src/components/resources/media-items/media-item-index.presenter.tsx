@@ -7,5 +7,5 @@ export const MediaItemIndexPresenter = (mediaIndexResult: MediaItemIndexState) =
      * We may some day read the actions and allow for bulk command execution in
      * an index view.
      */
-    return <GenericIndexPresenter {...mediaIndexResult} />;
+    return <GenericIndexPresenter {...mediaIndexResult} indexLabel={'Media Items'} />;
 };
