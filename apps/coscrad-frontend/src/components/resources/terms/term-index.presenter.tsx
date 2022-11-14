@@ -4,4 +4,4 @@ import { FunctionalComponent } from '../../../utils/types/functional-component';
 
 export const TermIndexPresenter: FunctionalComponent<IIndexQueryResult<ITermViewModel>> = (
     termsIndexResult: IIndexQueryResult<ITermViewModel>
-) => <GenericIndexPresenter {...termsIndexResult} />;
+) => <GenericIndexPresenter {...termsIndexResult} indexLabel={'Terms'} />;
