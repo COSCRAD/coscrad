@@ -1,4 +1,5 @@
 import { IBaseViewModel } from '@coscrad/api-interfaces';
+import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import './generic-index-table-presenter.css';
 import { renderCell } from './render-cell';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
@@ -10,6 +11,13 @@ import { CellRenderersDefinition } from './types/cell-renderers-definition';
  */
 export type ValueUnion<T> = T[keyof T];
 
+/**
+ * We want to constrain the keys of renderers to a subset of the heading
+ * labels' property keys. - This could lead to clients specifying unused renderers.
+ * For now, we just do a check and throw.
+ *
+ * We may also want to require renderers for non-string (or maybe non-primitive types)
+ */
 export interface GenericIndexTablePresenterProps<T extends IBaseViewModel> {
     headingLabels: HeadingLabel<T>[];
     tableData: T[];
@@ -17,48 +25,37 @@ export interface GenericIndexTablePresenterProps<T extends IBaseViewModel> {
     heading: string;
 }
 
-/**
- * Possible Issues:
- * 1. We want to constrain the keys of renderers to a subset of the heading
- * labels' property keys. - This could lead to clients specifying unused renderers.
- * For now, we just do a check and throw.
- *
- * 2. We'll want a test of this, especially if we don't tighten up the types
- *
- * 3. We may want to require renderers for non-string (or maybe non-primitive types)
- *
- * 4. Can't we just call this `IndexTable` ? Having "Generic" in the name
- * seems unnecessary. Maybe `DefaultIndexTablePresenter` if we need the
- * extra nuance.
- */
-export const GenericIndexTablePresenter = <T extends IBaseViewModel>({
+export const IndexTable = <T extends IBaseViewModel>({
     headingLabels,
     tableData,
     cellRenderersDefinition,
     heading,
 }: GenericIndexTablePresenterProps<T>) => {
-    const cellRenderers: CellRenderersMap<T> = new Map(
-        Object.entries(cellRenderersDefinition) as [keyof T, CellRenderer<T>][]
-    );
+    if (headingLabels.length === 0) {
+        throw new EmptyIndexTableException();
+    }
 
     /**
      * It's tricky to get type safety that forces cell renderers to only include
      * properties referenced in the heading labels. For now, we'll do a dynamic
      * check instead.
      */
-    const cellRendererKeysNotInHeadings = headingLabels.reduce(
-        (acc, { propertyKey }) =>
-            propertyKey in cellRenderersDefinition ? acc : acc.concat(propertyKey),
+    const propertiesInTable = headingLabels.map(({ propertyKey }) => propertyKey);
+
+    const cellRendererKeysNotInHeadings = Object.keys(cellRenderersDefinition).reduce(
+        (acc: string[], rendererPropertyKey) =>
+            // @ts-expect-error We need to tell the compiler the keys of IBaseViewModel  must be strings
+            propertiesInTable.includes(rendererPropertyKey) ? acc : acc.concat(rendererPropertyKey),
         []
     );
 
     if (cellRendererKeysNotInHeadings.length > 0) {
-        // TODO Custom exception class
-        // TODO add a test for this
-        throw new Error(
-            `The following renderers are unnecessary, as the corresponding properties are not part of the heading definition: ${cellRendererKeysNotInHeadings}`
-        );
+        throw new UnnecessaryCellRendererDefinitionException(cellRendererKeysNotInHeadings);
     }
+
+    const cellRenderers: CellRenderersMap<T> = new Map(
+        Object.entries(cellRenderersDefinition) as [keyof T, CellRenderer<T>][]
+    );
 
     return (
         <div>
@@ -78,7 +75,10 @@ export const GenericIndexTablePresenter = <T extends IBaseViewModel>({
                                 <tr key={row.id} data-testid={row.id}>
                                     {headingLabels.map(({ propertyKey }) => (
                                         // A little inversion of control here
-                                        <td>{renderCell(row, cellRenderers, propertyKey)}</td>
+                                        // We may want to use some currying here
+                                        <td key={String(propertyKey)}>
+                                            {renderCell(row, cellRenderers, propertyKey)}
+                                        </td>
                                     ))}
                                 </tr>
                             ))}

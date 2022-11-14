@@ -1,5 +1,8 @@
 import { IIndexQueryResult, ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
-import { Link } from 'react-router-dom';
+import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
+import { renderMediaLinkCell } from '../utils/render-media-link-cell';
 
 export const TranscribedAudioIndexPresenter = (
     indexResult: IIndexQueryResult<ITranscribedAudioViewModel>
@@ -9,41 +12,44 @@ export const TranscribedAudioIndexPresenter = (
      * We may some day read the actions and allow for bulk command execution in
      * an index view.
      */
-    const { data: transcribedAudioItems } = indexResult;
+    const { data: detailResult } = indexResult;
+
+    const headingLabels: HeadingLabel<ITranscribedAudioViewModel>[] = [
+        { propertyKey: 'id', headingLabel: 'Link' },
+        {
+            propertyKey: 'length',
+            headingLabel: 'Audio Length',
+        },
+        {
+            propertyKey: 'audioURL',
+            headingLabel: 'Audio',
+        },
+        /**
+         * TODO[modelling]
+         * We need to introduce more metadata on the model. It seems odd to
+         * show the entire transcript here. Instead, we want to show a
+         * title and maybe the participants, and so on.
+         */
+        { propertyKey: 'plainText', headingLabel: 'Transcript' },
+    ];
+
+    const cellRenderersDefinition: CellRenderersDefinition<ITranscribedAudioViewModel> = {
+        id: renderAggregateIdCell,
+        audioURL: ({ audioURL }: ITranscribedAudioViewModel) => renderMediaLinkCell(audioURL),
+    };
+
+    /**
+     * We should think about how the following map will shift when we clean up
+     * the structure of `IIndexQueryResult` and `IDetailQueryResult`.
+     */
+    const transcribedAudioItems = detailResult.map(({ data }) => data);
 
     return (
-        <div>
-            <h3>Transcribed Audio</h3>
-            <div className="records-table">
-                <table border={1} cellSpacing={0}>
-                    <tbody>
-                        <tr>
-                            <th>Link</th>
-                            <th>Audio Length</th>
-                            <th>Transcription</th>
-                        </tr>
-                        {transcribedAudioItems.map(({ data: transcribedAudio }) => (
-                            <tr>
-                                <td>
-                                    <Link to={transcribedAudio.id}>View</Link>
-                                </td>
-                                <td>{transcribedAudio.length}</td>
-                                <td>{transcribedAudio.plainText}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            <h3>JSON Data</h3>
-            <div className="json-data">
-                <pre>
-                    {JSON.stringify(
-                        transcribedAudioItems.map(({ data }) => data),
-                        null,
-                        2
-                    )}
-                </pre>
-            </div>
-        </div>
+        <IndexTable
+            headingLabels={headingLabels}
+            tableData={transcribedAudioItems}
+            cellRenderersDefinition={cellRenderersDefinition}
+            heading={'Audio Transcripts'}
+        />
     );
 };

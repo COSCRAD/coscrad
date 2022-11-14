@@ -1,7 +1,7 @@
 import { IBaseViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../types/functional-component';
 import './generic-presenters.css';
-import { GenericIndexTablePresenter, HeadingLabel } from './tables';
+import { HeadingLabel, IndexTable } from './tables';
 
 type GenericIndexPresenterProps = IIndexQueryResult<IBaseViewModel> & { indexLabel: string };
 
@@ -31,7 +31,7 @@ export const GenericIndexPresenter: FunctionalComponent<GenericIndexPresenterPro
     const emptyCellRenderersDefinition = {};
 
     return (
-        <GenericIndexTablePresenter
+        <IndexTable
             headingLabels={headingLabels}
             tableData={viewModels}
             cellRenderersDefinition={emptyCellRenderersDefinition}

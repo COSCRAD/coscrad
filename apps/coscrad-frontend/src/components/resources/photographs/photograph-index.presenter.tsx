@@ -1,10 +1,8 @@
 import { IIndexQueryResult, IPhotographViewModel } from '@coscrad/api-interfaces';
-import { Link } from 'react-router-dom';
-import {
-    GenericIndexTablePresenter,
-    HeadingLabel,
-} from '../../../utils/generic-components/presenters/tables';
+import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
+import { renderMediaLinkCell } from '../utils/render-media-link-cell';
 
 export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotographViewModel>) => {
     /**
@@ -23,12 +21,12 @@ export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotogr
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<IPhotographViewModel> = {
-        id: ({ id }: IPhotographViewModel) => <Link to={id}>VIEW</Link>,
-        imageURL: ({ imageURL }: IPhotographViewModel) => `LINK: ${imageURL}`,
+        id: renderAggregateIdCell,
+        imageURL: ({ imageURL }: IPhotographViewModel) => renderMediaLinkCell(imageURL),
     };
 
     return (
-        <GenericIndexTablePresenter
+        <IndexTable
             headingLabels={headingLabels}
             tableData={photographs}
             cellRenderersDefinition={cellRenderersDefinition}
