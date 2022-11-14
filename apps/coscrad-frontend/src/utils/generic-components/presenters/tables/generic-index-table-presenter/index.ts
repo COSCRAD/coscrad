@@ -1,2 +1,2 @@
 export * from './index-table';
-export { CellRenderer as RowRenderer, HeadingLabel } from './types';
+export { CellRenderer, HeadingLabel } from './types';

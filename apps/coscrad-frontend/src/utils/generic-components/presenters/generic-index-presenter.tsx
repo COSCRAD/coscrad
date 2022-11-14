@@ -1,4 +1,5 @@
 import { IBaseViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
+import { renderAggregateIdCell } from '../../../components/resources/utils/render-aggregate-id-cell';
 import { FunctionalComponent } from '../../types/functional-component';
 import './generic-presenters.css';
 import { HeadingLabel, IndexTable } from './tables';
@@ -28,13 +29,15 @@ export const GenericIndexPresenter: FunctionalComponent<GenericIndexPresenterPro
         })
     );
 
-    const emptyCellRenderersDefinition = {};
+    const defaultCellRenderers = {
+        id: renderAggregateIdCell,
+    };
 
     return (
         <IndexTable
             headingLabels={headingLabels}
             tableData={viewModels}
-            cellRenderersDefinition={emptyCellRenderersDefinition}
+            cellRenderersDefinition={defaultCellRenderers}
             // This should be a resource lable from resource info
             heading={indexLabel}
         />
