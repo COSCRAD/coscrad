@@ -1,10 +1,18 @@
-import { useLoadableTermById } from '../../../store/slices/resources';
-import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
-import { TermDetailPresenter } from './term-detail.presenter';
+import { ResourceType } from '@coscrad/api-interfaces';
+import { ConnectedResourcesPanel } from '../../../store/slices/resources/shared/connected-resources/connected-resources-panel';
+import { useIdFromLocation } from '../../../utils/custom-hooks/use-id-from-location';
+import { fullViewResourceDetailContainerFactory } from '../factories/full-view-resource-detail-container-factory';
 
-export const TermDetailContainer = (): JSX.Element => (
-    <AggregateDetailContainer
-        useLoadableSearchResult={useLoadableTermById}
-        DetailPresenter={TermDetailPresenter}
-    />
-);
+export const TermDetailContainer = (): JSX.Element => {
+    const DetailView = fullViewResourceDetailContainerFactory(ResourceType.term);
+
+    // TODO Avoid using this twice
+    const id = useIdFromLocation();
+
+    return (
+        <div>
+            <DetailView />
+            <ConnectedResourcesPanel compositeIdentifier={{ type: ResourceType.term, id }} />
+        </div>
+    );
+};

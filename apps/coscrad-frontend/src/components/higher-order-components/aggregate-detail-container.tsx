@@ -12,6 +12,7 @@ export interface AggregateDetailContainerProps<T> {
 export const AggregateDetailContainer = <T,>({
     useLoadableSearchResult,
     DetailPresenter,
+    // TODO remove me
     useId = useIdFromLocation,
 }: AggregateDetailContainerProps<T>) => {
     const idToFind = useId();
