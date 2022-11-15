@@ -1,4 +1,4 @@
-import { useMaybeLoadableFromRouteParamsId } from '../../shared/hooks';
+import { useLoadableSearchResult } from '../../shared/hooks';
 import { useLoadableTerms } from './use-loadable-terms';
 
-export const useLoadableTermById = () => useMaybeLoadableFromRouteParamsId(useLoadableTerms);
+export const useLoadableTermById = (id: string) => useLoadableSearchResult(useLoadableTerms, id);
