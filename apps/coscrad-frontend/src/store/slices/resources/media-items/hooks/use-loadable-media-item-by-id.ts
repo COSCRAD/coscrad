@@ -1,5 +1,5 @@
-import { useMaybeLoadableFromRouteParamsId } from '../../shared/hooks';
+import { useLoadableSearchResult } from '../../shared/hooks';
 import { useLoadableMediaItems } from './use-loadable-media-items';
 
-export const useLoadableMediaItemById = () =>
-    useMaybeLoadableFromRouteParamsId(useLoadableMediaItems);
+export const useLoadableMediaItemById = (id: string) =>
+    useLoadableSearchResult(useLoadableMediaItems, id);

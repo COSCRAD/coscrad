@@ -1,10 +1,4 @@
-import { useLoadableMediaItemById } from '../../../store/slices/resources/media-items';
-import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
-import { MediaItemDetailPresenter } from './media-item-detail.presenter';
+import { ResourceType } from '@coscrad/api-interfaces';
+import { ResourcePage } from '../../higher-order-components/resource-page';
 
-export const MediaItemDetailContainer = (): JSX.Element => (
-    <AggregateDetailContainer
-        useLoadableSearchResult={useLoadableMediaItemById}
-        DetailPresenter={MediaItemDetailPresenter}
-    />
-);
+export const MediaItemDetailContainer = (): JSX.Element => ResourcePage(ResourceType.mediaItem);
