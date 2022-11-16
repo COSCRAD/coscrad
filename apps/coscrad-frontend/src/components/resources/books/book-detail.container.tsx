@@ -1,10 +1,4 @@
-import { useLoadableBookById } from '../../../store/slices/resources/books';
-import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
-import { BookDetailPresenter } from './book-detail.presenter';
+import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregatePage } from '../../higher-order-components/aggregate-page';
 
-export const BookDetailContainer = (): JSX.Element => (
-    <AggregateDetailContainer
-        useLoadableSearchResult={useLoadableBookById}
-        DetailPresenter={BookDetailPresenter}
-    />
-);
+export const BookDetailContainer = (): JSX.Element => AggregatePage(ResourceType.book);

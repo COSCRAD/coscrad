@@ -1,23 +1,22 @@
-import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
-import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
+import { ResourceCompositeIdentifier, ResourceType } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../utils/types/functional-component';
+import { buildUseLoadableSearchResult } from '../resources/factories/buildUseLoadableSearchResult';
 import { displayLoadableSearchResult } from './display-loadable-search-result';
 
 export interface AggregateDetailContainerProps<T> {
-    useLoadableSearchResult: (id: string) => ILoadable<T>;
-    DetailPresenter: FunctionalComponent<T>;
-    useId?: () => string;
+    detailPresenterFactory: (resourceType: ResourceType) => FunctionalComponent<T>;
+    compositeIdentifier: ResourceCompositeIdentifier;
 }
 
 export const AggregateDetailContainer = <T,>({
-    useLoadableSearchResult,
-    DetailPresenter,
-    // TODO remove me
-    useId = useIdFromLocation,
+    compositeIdentifier: { type: resourceType, id },
+    detailPresenterFactory,
 }: AggregateDetailContainerProps<T>) => {
-    const idToFind = useId();
+    const useLoadableSearchResult = buildUseLoadableSearchResult(resourceType);
 
-    const loadableSearchResult = useLoadableSearchResult(idToFind);
+    const loadableSearchResult = useLoadableSearchResult(id);
+
+    const DetailPresenter = detailPresenterFactory(resourceType);
 
     // Wrap in error, pending, and not found presentation
     const Presenter = displayLoadableSearchResult(DetailPresenter);

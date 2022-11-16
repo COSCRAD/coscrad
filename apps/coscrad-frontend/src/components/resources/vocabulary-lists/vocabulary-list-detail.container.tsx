@@ -1,10 +1,5 @@
-import { useLoadableVocabularyListById } from '../../../store/slices/resources/vocabulary-lists/hooks/useLoadableVocabularyListById';
-import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
-import { VocabularyListDetailPresenter } from './vocabulary-list-detail.presenter';
+import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregatePage } from '../../higher-order-components/aggregate-page';
 
-export const VocabularyListDetailContainer = (): JSX.Element => (
-    <AggregateDetailContainer
-        useLoadableSearchResult={useLoadableVocabularyListById}
-        DetailPresenter={VocabularyListDetailPresenter}
-    />
-);
+export const VocabularyListDetailContainer = (): JSX.Element =>
+    AggregatePage(ResourceType.vocabularyList);

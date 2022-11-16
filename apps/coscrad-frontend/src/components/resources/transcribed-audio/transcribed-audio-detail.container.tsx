@@ -1,10 +1,5 @@
-import { useLoadableTranscribedAudioItemById } from '../../../store/slices/resources/transcribed-audio/hooks/use-loadable-transcribed-audio-item-by-id';
-import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
-import { TranscribedAudioDetailPresenter } from './transcribed-audio-detail.presenter';
+import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregatePage } from '../../higher-order-components/aggregate-page';
 
-export const TranscribedAudioDetailContainer = (): JSX.Element => (
-    <AggregateDetailContainer
-        useLoadableSearchResult={useLoadableTranscribedAudioItemById}
-        DetailPresenter={TranscribedAudioDetailPresenter}
-    />
-);
+export const TranscribedAudioDetailContainer = (): JSX.Element =>
+    AggregatePage(ResourceType.transcribedAudio);

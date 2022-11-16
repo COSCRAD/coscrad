@@ -1,8 +1,9 @@
 import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
-import { thumbnailResourceDetailContainerFactory } from '../../../../../components/resources/factories/thumbnail-resource-detail-container-factory';
+import { AggregateDetailContainer } from '../../../../../components/higher-order-components/aggregate-detail-container';
+import { thumbnailResourceDetailPresenterFactory } from '../../../../../components/resources/factories/thumbnail-resource-detail-container-factory';
 
-export const ResourceDetailThumbnail = ({ type, id }: ResourceCompositeIdentifier) => {
-    const DetailContainer = thumbnailResourceDetailContainerFactory(type);
-
-    return <DetailContainer id={id} />;
-};
+export const ResourceDetailThumbnail = (compositeIdentifier: ResourceCompositeIdentifier) =>
+    AggregateDetailContainer({
+        compositeIdentifier,
+        detailPresenterFactory: thumbnailResourceDetailPresenterFactory,
+    });

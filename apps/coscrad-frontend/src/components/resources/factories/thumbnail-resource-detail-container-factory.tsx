@@ -1,6 +1,5 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
-import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
 import { BookDetailPresenter } from '../books/book-detail.presenter';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
@@ -10,14 +9,8 @@ import { SpatialFeatureDetailPresenter } from '../spatial-features/spatial-featu
 import { TermDetailPresenter } from '../terms/term-detail.presenter';
 import { TranscribedAudioDetailPresenter } from '../transcribed-audio/transcribed-audio-detail.presenter';
 import { VocabularyListDetailPresenter } from '../vocabulary-lists/vocabulary-list-detail.presenter';
-import { buildUseLoadableSearchResult } from './buildUseLoadableSearchResult';
-import { ResourceDetailContainer } from './resource-detail-conainer';
 
-/**
- * TODO We could have a mapped type if we need type safety here.
- *
- * TODO Change these to be custom (streamlined) thumbnail presenters.
- */
+// TODO Define thumbnail specific presenters
 const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
     [ResourceType.bibliographicReference]: BibliographicReferenceDetailPresenter,
     [ResourceType.book]: BookDetailPresenter,
@@ -30,9 +23,9 @@ const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
     [ResourceType.vocabularyList]: VocabularyListDetailPresenter,
 };
 
-export const thumbnailResourceDetailContainerFactory = (
-    resourceType: ResourceType
-): ResourceDetailContainer => {
+export const thumbnailResourceDetailPresenterFactory = <T extends ResourceType>(
+    resourceType: T
+): typeof lookupTable[T] => {
     const lookupResult = lookupTable[resourceType];
 
     if (!lookupResult) {
@@ -41,13 +34,5 @@ export const thumbnailResourceDetailContainerFactory = (
         );
     }
 
-    const useLoadableSearchResult = buildUseLoadableSearchResult(resourceType);
-
-    return ({ id }: { id: string }) => (
-        <AggregateDetailContainer
-            useLoadableSearchResult={useLoadableSearchResult}
-            DetailPresenter={lookupResult}
-            useId={() => id}
-        />
-    );
+    return lookupResult;
 };

@@ -1,10 +1,5 @@
-import { useLoadableSpatialFeatureById } from '../../../store/slices/resources';
-import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
-import { SpatialFeatureDetailPresenter } from './spatial-feature-detail.presenter';
+import { ResourceType } from '@coscrad/api-interfaces';
+import { AggregatePage } from '../../higher-order-components/aggregate-page';
 
-export const SpatialFeatureDetailContainer = (): JSX.Element => (
-    <AggregateDetailContainer
-        useLoadableSearchResult={useLoadableSpatialFeatureById}
-        DetailPresenter={SpatialFeatureDetailPresenter}
-    />
-);
+export const SpatialFeatureDetailContainer = (): JSX.Element =>
+    AggregatePage(ResourceType.spatialFeature);
