@@ -1,13 +1,11 @@
 import { IBaseViewModel, IDetailQueryResult, IIndexQueryResult } from '@coscrad/api-interfaces';
-import { useIdFromLocation } from '../../../../../utils/custom-hooks/use-id-from-location';
 import { ILoadable } from '../../../interfaces/loadable.interface';
 import { IMaybeLoadable, NOT_FOUND } from '../../../interfaces/maybe-loadable.interface';
 
-export const useMaybeLoadableFromRouteParamsId = <T extends IBaseViewModel>(
-    useLoadableItems: () => ILoadable<IIndexQueryResult<T>>
+export const useLoadableSearchResult = <T extends IBaseViewModel>(
+    useLoadableItems: () => ILoadable<IIndexQueryResult<T>>,
+    idToFind: string
 ): IMaybeLoadable<IDetailQueryResult<T>> => {
-    const idFromLocation = useIdFromLocation();
-
     const loadableTranscribedAudioItems = useLoadableItems();
 
     const { data: allItems, isLoading, errorInfo } = loadableTranscribedAudioItems;
@@ -19,8 +17,7 @@ export const useMaybeLoadableFromRouteParamsId = <T extends IBaseViewModel>(
             data: null,
         };
 
-    const searchResult =
-        allItems.data.find(({ data: { id } }) => id === idFromLocation) || NOT_FOUND;
+    const searchResult = allItems.data.find(({ data: { id } }) => id === idToFind) || NOT_FOUND;
 
     return {
         isLoading: false,

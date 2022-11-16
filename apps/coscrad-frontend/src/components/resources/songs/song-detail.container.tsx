@@ -1,10 +1,4 @@
-import { useLoadableSongById } from '../../../store/slices/resources';
-import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
-import { SongDetailPresenter } from './song-detail.presenter';
+import { ResourceType } from '@coscrad/api-interfaces';
+import { ResourcePage } from '../../higher-order-components/resource-page';
 
-export const SongDetailContainer = (): JSX.Element => (
-    <AggregateDetailContainer
-        useLoadableSearchResult={useLoadableSongById}
-        DetailPresenter={SongDetailPresenter}
-    />
-);
+export const SongDetailContainer = (): JSX.Element => ResourcePage(ResourceType.song);
