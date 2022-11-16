@@ -1,5 +1,5 @@
-import { useMaybeLoadableFromRouteParamsId } from '../../shared/hooks';
+import { useLoadableSearchResult } from '../../shared/hooks';
 import { useLoadablePhotographs } from './use-loadable-photographs';
 
-export const useLoadablePhotographById = () =>
-    useMaybeLoadableFromRouteParamsId(useLoadablePhotographs);
+export const useLoadablePhotographById = (id: string) =>
+    useLoadableSearchResult(useLoadablePhotographs, id);
