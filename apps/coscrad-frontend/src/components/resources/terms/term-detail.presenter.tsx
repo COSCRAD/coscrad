@@ -5,4 +5,4 @@ import { GenericDetailPresenter } from '../../../utils/generic-components/presen
 // TODO[https://www.pivotaltracker.com/story/show/183681722] expose commands
 export const TermDetailPresenter = (
     dataAndActions: IDetailQueryResult<ITermViewModel>
-): JSX.Element => <GenericDetailPresenter {...dataAndActions} />;
+): JSX.Element => GenericDetailPresenter(dataAndActions);
