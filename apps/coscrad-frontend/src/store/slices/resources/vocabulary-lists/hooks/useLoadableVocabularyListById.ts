@@ -1,5 +1,5 @@
-import { useMaybeLoadableFromRouteParamsId } from '../../shared/hooks/use-maybe-loadable-from-route-params-id';
+import { useLoadableSearchResult } from '../../shared/hooks';
 import { useLoadableVocabularyLists } from './useLoadableVocabularyLists';
 
-export const useLoadableVocabularyListById = () =>
-    useMaybeLoadableFromRouteParamsId(useLoadableVocabularyLists);
+export const useLoadableVocabularyListById = (id: string) =>
+    useLoadableSearchResult(useLoadableVocabularyLists, id);

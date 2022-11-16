@@ -1,10 +1,4 @@
-import { useLoadablePhotographById } from '../../../store/slices/resources/photographs/hooks';
-import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
-import { PhotographDetailPresenter } from './photograph-detail.presenter';
+import { ResourceType } from '@coscrad/api-interfaces';
+import { ResourcePage } from '../../higher-order-components/resource-page';
 
-export const PhotographDetailContainer = (): JSX.Element => (
-    <AggregateDetailContainer
-        useLoadableSearchResult={useLoadablePhotographById}
-        DetailPresenter={PhotographDetailPresenter}
-    />
-);
+export const PhotographDetailContainer = (): JSX.Element => ResourcePage(ResourceType.photograph);
