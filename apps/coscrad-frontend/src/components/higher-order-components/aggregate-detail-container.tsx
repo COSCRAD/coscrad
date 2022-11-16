@@ -1,10 +1,15 @@
-import { ResourceCompositeIdentifier, ResourceType } from '@coscrad/api-interfaces';
-import { FunctionalComponent } from '../../utils/types/functional-component';
-import { buildUseLoadableSearchResult } from '../resources/factories/buildUseLoadableSearchResult';
+import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
+import { IResourceDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
+import { buildUseLoadableSearchResult } from './buildUseLoadableSearchResult';
 import { displayLoadableSearchResult } from './display-loadable-search-result';
 
 export interface AggregateDetailContainerProps<T> {
-    detailPresenterFactory: (resourceType: ResourceType) => FunctionalComponent<T>;
+    /**
+     * We program to an abstract factory so we can inject a different "kit" of
+     * presenters (e.g. thumnail, maybe someday mobile) while reusing all of the
+     * non-presentational logic.
+     */
+    detailPresenterFactory: IResourceDetailPresenterFactory<T>;
     compositeIdentifier: ResourceCompositeIdentifier;
 }
 

@@ -1,9 +1,7 @@
 import {
     IEdgeConnectionContext,
-    IEdgeConnectionMember,
     INoteViewModel,
     ResourceCompositeIdentifier,
-    ResourceType,
 } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../interfaces/loadable.interface';
 import { compositeIdentifierMatches } from './composite-identifiers-match';
@@ -37,8 +35,8 @@ export const useLoadableConnectionsToResource = (
         data.filter(
             ({ relatedResources }: INoteViewModel) =>
                 relatedResources.length === 2 &&
-                (relatedResources as IEdgeConnectionMember<string, ResourceType>[]).some(
-                    ({ compositeIdentifier }) => isTargetCompositeIdentifier(compositeIdentifier)
+                relatedResources.some(({ compositeIdentifier }) =>
+                    isTargetCompositeIdentifier(compositeIdentifier)
                 )
         ) || [];
 

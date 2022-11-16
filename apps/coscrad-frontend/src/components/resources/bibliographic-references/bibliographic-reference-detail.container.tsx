@@ -1,5 +1,5 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import { AggregatePage } from '../../higher-order-components/aggregate-page';
+import { ResourcePage } from '../../higher-order-components/resource-page';
 
 export const BibliographicReferenceDetailContainer = (): JSX.Element =>
-    AggregatePage(ResourceType.bibliographicReference);
+    ResourcePage(ResourceType.bibliographicReference);

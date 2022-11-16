@@ -1,4 +1,4 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import { AggregatePage } from '../../higher-order-components/aggregate-page';
+import { ResourcePage } from '../../higher-order-components/resource-page';
 
-export const TermDetailContainer = (): JSX.Element => AggregatePage(ResourceType.term);
+export const TermDetailContainer = (): JSX.Element => ResourcePage(ResourceType.term);

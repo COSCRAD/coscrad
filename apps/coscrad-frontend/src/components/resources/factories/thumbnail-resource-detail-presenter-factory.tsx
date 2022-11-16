@@ -23,6 +23,11 @@ const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
     [ResourceType.vocabularyList]: VocabularyListDetailPresenter,
 };
 
+/**
+ * This concrete Resource Detail Presenter Factory provides a thumbnail view of
+ * a single resource for each resource type. It is used for the connected
+ * resources flow.
+ */
 export const thumbnailResourceDetailPresenterFactory = <T extends ResourceType>(
     resourceType: T
 ): typeof lookupTable[T] => {

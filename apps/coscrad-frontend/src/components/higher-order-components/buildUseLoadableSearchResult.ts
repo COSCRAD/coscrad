@@ -1,16 +1,16 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import { IMaybeLoadable } from '../../../store/slices/interfaces/maybe-loadable.interface';
+import { IMaybeLoadable } from '../../store/slices/interfaces/maybe-loadable.interface';
 import {
     useLoadableBibliographicReferenceById,
     useLoadableSongById,
     useLoadableSpatialFeatureById,
     useLoadableTermById,
-} from '../../../store/slices/resources';
-import { useLoadableBookById } from '../../../store/slices/resources/books';
-import { useLoadableMediaItemById } from '../../../store/slices/resources/media-items';
-import { useLoadablePhotographById } from '../../../store/slices/resources/photographs/hooks';
-import { useLoadableTranscribedAudioItemById } from '../../../store/slices/resources/transcribed-audio/hooks/use-loadable-transcribed-audio-item-by-id';
-import { useLoadableVocabularyListById } from '../../../store/slices/resources/vocabulary-lists/hooks/useLoadableVocabularyListById';
+} from '../../store/slices/resources';
+import { useLoadableBookById } from '../../store/slices/resources/books';
+import { useLoadableMediaItemById } from '../../store/slices/resources/media-items';
+import { useLoadablePhotographById } from '../../store/slices/resources/photographs/hooks';
+import { useLoadableTranscribedAudioItemById } from '../../store/slices/resources/transcribed-audio/hooks/use-loadable-transcribed-audio-item-by-id';
+import { useLoadableVocabularyListById } from '../../store/slices/resources/vocabulary-lists/hooks/useLoadableVocabularyListById';
 
 type UseLoadableById = (id: string) => IMaybeLoadable<unknown>;
 
@@ -31,6 +31,11 @@ const lookupTable: { [K in ResourceType]: UseLoadableById } = {
     [ResourceType.vocabularyList]: useLoadableVocabularyListById,
 };
 
+/**
+ * we might want to actually build the `useXXXById` hook here so that no lookup
+ * table is required and new resources 'JUST WORK'. We'd need a link from
+ * resource type to the selector that fetches many.
+ */
 export const buildUseLoadableSearchResult = (resourceType: ResourceType): UseLoadableById => {
     const lookupResult = lookupTable[resourceType];
 

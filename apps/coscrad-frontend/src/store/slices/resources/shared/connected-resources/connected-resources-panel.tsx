@@ -13,11 +13,6 @@ export const ConnectedResourcesPanel = ({
 }: ConnectedResourcesPanelProps): JSX.Element => {
     const loadable = useLoadableConnectionsToResource(compositeIdentifier);
 
-    if (loadable.data)
-        console.log({
-            loadable,
-        });
-
     const Presenter = displayLoadableWithErrorsAndLoading(
         ConnectedResourcesPanelPresenter,
         wrapArrayProps

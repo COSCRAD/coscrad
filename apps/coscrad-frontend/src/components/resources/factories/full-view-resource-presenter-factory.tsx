@@ -27,7 +27,9 @@ const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
 };
 
 /**
- * This is a concrete Resource Presenter Factory
+ * This concrete Resource Detail Presenter Factory provides a full-view of
+ * a single resource for each resource type. It is used for the standard detail
+ * view in the big index-to-detail flow.
  */
 export const fullViewResourcePresenterFactory = <T extends ResourceType>(
     resourceType: T

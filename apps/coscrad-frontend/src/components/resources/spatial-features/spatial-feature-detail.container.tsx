@@ -1,5 +1,5 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import { AggregatePage } from '../../higher-order-components/aggregate-page';
+import { ResourcePage } from '../../higher-order-components/resource-page';
 
 export const SpatialFeatureDetailContainer = (): JSX.Element =>
-    AggregatePage(ResourceType.spatialFeature);
+    ResourcePage(ResourceType.spatialFeature);
