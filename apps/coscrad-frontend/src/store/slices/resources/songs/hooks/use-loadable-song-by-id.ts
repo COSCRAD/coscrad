@@ -1,4 +1,4 @@
-import { useMaybeLoadableFromRouteParamsId } from '../../shared/hooks';
+import { useLoadableSearchResult } from '../../shared/hooks';
 import { useLoadableSongs } from './use-loadable-songs';
 
-export const useLoadableSongById = () => useMaybeLoadableFromRouteParamsId(useLoadableSongs);
+export const useLoadableSongById = (id: string) => useLoadableSearchResult(useLoadableSongs, id);

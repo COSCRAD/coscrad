@@ -1,10 +1,5 @@
-import { useLoadableBibliographicReferenceById } from '../../../store/slices/resources';
-import { AggregateDetailContainer } from '../../higher-order-components/aggregate-detail-container';
-import { BibliographicReferenceDetailPresenter } from './bibliographic-reference-detail.presenter';
+import { ResourceType } from '@coscrad/api-interfaces';
+import { ResourcePage } from '../../higher-order-components/resource-page';
 
-export const BibliographicReferenceDetailContainer = (): JSX.Element => (
-    <AggregateDetailContainer
-        useLoadableSearchResult={useLoadableBibliographicReferenceById}
-        DetailPresenter={BibliographicReferenceDetailPresenter}
-    />
-);
+export const BibliographicReferenceDetailContainer = (): JSX.Element =>
+    ResourcePage(ResourceType.bibliographicReference);
