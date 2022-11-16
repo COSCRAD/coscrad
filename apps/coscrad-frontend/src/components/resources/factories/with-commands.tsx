@@ -1,4 +1,4 @@
-import { IBaseViewModel, IDetailQueryResult } from '../../../../../../libs/api-interfaces/src';
+import { IBaseViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { CommandPanel } from '../../commands';
 

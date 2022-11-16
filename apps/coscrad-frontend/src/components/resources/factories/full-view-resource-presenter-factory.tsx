@@ -9,6 +9,7 @@ import { SpatialFeatureDetailPresenter } from '../spatial-features/spatial-featu
 import { TermDetailPresenter } from '../terms/term-detail.presenter';
 import { TranscribedAudioDetailPresenter } from '../transcribed-audio/transcribed-audio-detail.presenter';
 import { VocabularyListDetailPresenter } from '../vocabulary-lists/vocabulary-list-detail.presenter';
+import { withCommands } from './with-commands';
 
 /**
  * TODO We could have a mapped type if we need type safety here.
@@ -39,5 +40,5 @@ export const fullViewResourcePresenterFactory = <T extends ResourceType>(
         );
     }
 
-    return DetailPresenter;
+    return withCommands(DetailPresenter);
 };
