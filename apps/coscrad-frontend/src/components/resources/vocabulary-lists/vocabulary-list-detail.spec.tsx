@@ -9,6 +9,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
+import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { buildDummyVocabularyLists } from './test-utils/build-dummy-vocabulary-lists';
 import { VocabularyListDetailContainer } from './vocabulary-list-detail.container';
 
@@ -27,6 +28,8 @@ const act = (idInLocation: string) =>
         )
     );
 
+const mockGetNotesHandler = buildMockGetNotesHandler();
+
 describe('vocabulary list detail', () => {
     describe('when the API request is valid', () => {
         setupTestServer(
@@ -36,7 +39,8 @@ describe('vocabulary list detail', () => {
                     dummyVocabularyLists.map((item) => [item, []]),
                     []
                 ),
-            })
+            }),
+            mockGetNotesHandler
         );
 
         describe('when the ID in the route matches an existing vocabulary list', () => {
@@ -57,6 +61,6 @@ describe('vocabulary list detail', () => {
     });
 
     describe('when the API request is invalid or pending', () => {
-        testContainerComponentErrorHandling(() => act(idToFind), endpoint);
+        testContainerComponentErrorHandling(() => act(idToFind), endpoint, mockGetNotesHandler);
     });
 });
