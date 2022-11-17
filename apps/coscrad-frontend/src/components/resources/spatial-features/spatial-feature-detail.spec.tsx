@@ -9,6 +9,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
+import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { SpatialFeatureDetailContainer } from './spatial-feature-detail.container';
 import { buildDummySpatialFeatures } from './test-utils/build-dummy-spatial-features';
 
@@ -25,6 +26,8 @@ const act = (idInLocation: string) =>
         withDetailRoute(idInLocation, `/Resources/Map/`, <SpatialFeatureDetailContainer />)
     );
 
+const mockGetNotesHandler = buildMockGetNotesHandler();
+
 describe('spatial feature detail', () => {
     describe('when the API request succeeds', () => {
         setupTestServer(
@@ -34,7 +37,8 @@ describe('spatial feature detail', () => {
                     dummySpatialFeatures.map((feature) => [feature, []]),
                     []
                 ),
-            })
+            }),
+            mockGetNotesHandler
         );
 
         describe('when the ID in the route matches an existing spatial feature', () => {
@@ -55,6 +59,6 @@ describe('spatial feature detail', () => {
     });
 
     describe('when the API request is invalid or pending', () => {
-        testContainerComponentErrorHandling(() => act(idToFind), endpoint);
+        testContainerComponentErrorHandling(() => act(idToFind), endpoint, mockGetNotesHandler);
     });
 });

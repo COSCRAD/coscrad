@@ -9,6 +9,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
+import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { MediaItemDetailContainer } from './media-item-detail.container';
 import { buildDummyMediaItems } from './test-utils/build-dummy-media-items';
 
@@ -29,13 +30,16 @@ const act = (idInLocation: string) =>
         withDetailRoute(idInLocation, `/Resources/MediaItems/`, <MediaItemDetailContainer />)
     );
 
+const mockGetNotesHandler = buildMockGetNotesHandler();
+
 describe('media item detail', () => {
     describe('when the API request succeeds', () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({
                 endpoint,
                 response: dummyIndexResponse,
-            })
+            }),
+            mockGetNotesHandler
         );
 
         describe('when the ID in the route corresponds to an existing media item', () => {
@@ -56,6 +60,6 @@ describe('media item detail', () => {
     });
 
     describe('when the API request has failed or is pending', () => {
-        testContainerComponentErrorHandling(() => act(idToFind), endpoint);
+        testContainerComponentErrorHandling(() => act(idToFind), endpoint, mockGetNotesHandler);
     });
 });

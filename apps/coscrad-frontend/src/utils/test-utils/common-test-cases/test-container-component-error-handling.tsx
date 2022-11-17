@@ -1,3 +1,4 @@
+import { RequestHandler } from 'msw';
 import { assertElementWithTestIdOnScreen } from '../assertions/assert-element-with-test-id-on-screen';
 import {
     buildMockGETHandlerWithError,
@@ -11,9 +12,16 @@ import { setupTestServer } from '../setup-test-server';
  * the tests will pass when the route is not overridden and there is a network
  * error as a result.
  */
-export const testContainerComponentErrorHandling = (act: () => void, endpoint: string) => {
+export const testContainerComponentErrorHandling = (
+    act: () => void,
+    endpoint: string,
+    ...additionalHandlers: RequestHandler[]
+) => {
     describe(`when the request resturns a 'Not Found' (404)`, () => {
-        setupTestServer(buildMockGETHandlerWithError(MockErrorResponseType.notFound, endpoint));
+        setupTestServer(
+            buildMockGETHandlerWithError(MockErrorResponseType.notFound, endpoint),
+            ...additionalHandlers
+        );
 
         it('should render an error', async () => {
             act();
@@ -24,7 +32,8 @@ export const testContainerComponentErrorHandling = (act: () => void, endpoint: s
 
     describe(`when the request returns an 'Internal Error' (500)`, () => {
         setupTestServer(
-            buildMockGETHandlerWithError(MockErrorResponseType.internalError, endpoint)
+            buildMockGETHandlerWithError(MockErrorResponseType.internalError, endpoint),
+            ...additionalHandlers
         );
 
         it('should render an error', async () => {
@@ -35,7 +44,10 @@ export const testContainerComponentErrorHandling = (act: () => void, endpoint: s
     });
 
     describe(`when there is a network error`, () => {
-        setupTestServer(buildMockGETHandlerWithError(MockErrorResponseType.networkError, endpoint));
+        setupTestServer(
+            buildMockGETHandlerWithError(MockErrorResponseType.networkError, endpoint),
+            ...additionalHandlers
+        );
 
         it('should render an error', async () => {
             act();
@@ -45,7 +57,10 @@ export const testContainerComponentErrorHandling = (act: () => void, endpoint: s
     });
 
     describe(`when the request returns a 'Bad Request' (400)`, () => {
-        setupTestServer(buildMockGETHandlerWithError(MockErrorResponseType.badRequest, endpoint));
+        setupTestServer(
+            buildMockGETHandlerWithError(MockErrorResponseType.badRequest, endpoint),
+            ...additionalHandlers
+        );
 
         it('should render an error', async () => {
             act();
@@ -55,7 +70,10 @@ export const testContainerComponentErrorHandling = (act: () => void, endpoint: s
     });
 
     describe(`when the request is pending`, () => {
-        setupTestServer(buildMockGETHandlerWithError(MockErrorResponseType.badRequest, endpoint));
+        setupTestServer(
+            buildMockGETHandlerWithError(MockErrorResponseType.badRequest, endpoint),
+            ...additionalHandlers
+        );
 
         it('should render the loading message', async () => {
             act();
