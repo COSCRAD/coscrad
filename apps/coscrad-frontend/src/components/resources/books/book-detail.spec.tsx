@@ -9,6 +9,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
+import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { BookDetailContainer } from './book-detail.container';
 import { buildDummyBooks } from './test-utils/build-dummy-books';
 
@@ -25,6 +26,8 @@ const dummyIndexResponse = buildMockIndexResponse(
     []
 );
 
+const mockGetNotesHandler = buildMockGetNotesHandler();
+
 const act = (idInLocation: string) =>
     renderWithProviders(
         withDetailRoute(idInLocation, `/Resources/Books/`, <BookDetailContainer />)
@@ -36,7 +39,8 @@ describe('book detail', () => {
             buildMockSuccessfulGETHandler({
                 endpoint,
                 response: dummyIndexResponse,
-            })
+            }),
+            mockGetNotesHandler
         );
 
         describe('when the ID in the route corresponds to an existing book', () => {
@@ -57,6 +61,6 @@ describe('book detail', () => {
     });
 
     describe('when the API request fails or is pending', () => {
-        testContainerComponentErrorHandling(() => act(idToFind), endpoint);
+        testContainerComponentErrorHandling(() => act(idToFind), endpoint, mockGetNotesHandler);
     });
 });

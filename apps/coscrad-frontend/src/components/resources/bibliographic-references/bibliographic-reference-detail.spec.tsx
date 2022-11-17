@@ -9,6 +9,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
+import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { BibliographicReferenceDetailContainer } from './bibliographic-reference-detail.container';
 import { buildDummyBibliographicReferences } from './test-utils/build-dummy-bibliographic-references';
 
@@ -29,6 +30,8 @@ const act = (idInLocation: string) =>
         )
     );
 
+const mockGetNotesHandler = buildMockGetNotesHandler();
+
 describe('bibliographic reference detail', () => {
     describe('when the API request is valid', () => {
         setupTestServer(
@@ -38,7 +41,8 @@ describe('bibliographic reference detail', () => {
                     dummyBibliographicReferences.map((reference) => [reference, []]),
                     []
                 ),
-            })
+            }),
+            mockGetNotesHandler
         );
 
         describe('when the ID in the route matches an existing bibliographic reference', () => {
@@ -59,6 +63,6 @@ describe('bibliographic reference detail', () => {
     });
 
     describe('when the API request is invalid or pending', () => {
-        testContainerComponentErrorHandling(() => act(idToFind), endpoint);
+        testContainerComponentErrorHandling(() => act(idToFind), endpoint, mockGetNotesHandler);
     });
 });
