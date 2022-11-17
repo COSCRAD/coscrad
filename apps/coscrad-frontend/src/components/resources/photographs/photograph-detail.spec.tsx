@@ -10,6 +10,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
+import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { PhotographDetailContainer } from './photograph-detail.container';
 
 const idToFind = '123';
@@ -31,6 +32,8 @@ const act = (idInLocation: string) =>
         withDetailRoute(idInLocation, `/Resources/Photographs/`, <PhotographDetailContainer />)
     );
 
+const mockGetNotesHandler = buildMockGetNotesHandler();
+
 describe('photograph detail', () => {
     describe('when the API request is valid', () => {
         setupTestServer(
@@ -38,7 +41,8 @@ describe('photograph detail', () => {
                 endpoint,
                 // TODO add detail scoped actions and check that they are displayed
                 response: buildMockIndexResponse([[photographToFind, []]], []),
-            })
+            }),
+            mockGetNotesHandler
         );
 
         describe('when the photograph ID in the route corresponds to an existing photograph', () => {
@@ -59,6 +63,6 @@ describe('photograph detail', () => {
     });
 
     describe('when the API fails or is pending', () => {
-        testContainerComponentErrorHandling(() => act(idToFind), endpoint);
+        testContainerComponentErrorHandling(() => act(idToFind), endpoint, mockGetNotesHandler);
     });
 });
