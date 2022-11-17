@@ -21,7 +21,14 @@ export const useLoadableConnectionsToResource = (
 
     const { data, errorInfo, isLoading } = loadableNotes;
 
-    if (isLoading || errorInfo !== null || data === null)
+    if (errorInfo !== null)
+        return {
+            isLoading: false,
+            errorInfo,
+            data: null,
+        };
+
+    if (isLoading || data === null)
         return {
             isLoading,
             errorInfo,
