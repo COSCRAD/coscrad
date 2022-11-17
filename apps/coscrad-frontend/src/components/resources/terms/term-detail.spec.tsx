@@ -9,6 +9,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
+import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { TermDetailContainer } from './term-detail.container';
 
 const idOfTermToFind = '123';
@@ -41,7 +42,8 @@ describe('Term Detail', () => {
                     allTerms.map((term) => [term, []]),
                     []
                 ),
-            })
+            }),
+            buildMockGetNotesHandler()
         );
 
         describe('when the term ID in the route corresponds to an existing term', () => {
@@ -62,6 +64,10 @@ describe('Term Detail', () => {
     });
 
     describe('when the API request is invalid or pending', () => {
-        testContainerComponentErrorHandling(() => act(idOfTermToFind), endpoint);
+        testContainerComponentErrorHandling(
+            () => act(idOfTermToFind),
+            endpoint,
+            buildMockGetNotesHandler()
+        );
     });
 });

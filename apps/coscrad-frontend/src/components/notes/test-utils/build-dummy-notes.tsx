@@ -1,51 +1,119 @@
-import { EdgeConnectionMemberRole, INoteViewModel } from '@coscrad/api-interfaces';
+import {
+    EdgeConnectionMemberRole,
+    EdgeConnectionType,
+    INoteViewModel,
+    ResourceCompositeIdentifier,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 
-export const buildDummyNotes = (): INoteViewModel[] => [
+const generalContext = {
+    type: 'general',
+};
+
+export const buildMemberWithGeneralContext = (
+    compositeIdentifier: ResourceCompositeIdentifier,
+    role: EdgeConnectionMemberRole
+) => ({
+    context: generalContext,
+    role,
+    compositeIdentifier,
+});
+
+const buildOneMemberForEveryResourceType = (role: EdgeConnectionMemberRole) =>
+    Object.values(ResourceType).map((resourceType, index) =>
+        buildMemberWithGeneralContext({ type: resourceType, id: index.toString() }, role)
+    );
+
+const selfEdgeConnections: INoteViewModel[] = buildOneMemberForEveryResourceType(
+    EdgeConnectionMemberRole.self
+).map((member, index) => ({
+    id: index.toString(),
+    note: `note for item ${index}`,
+    relatedResources: [member],
+}));
+
+// TODO share formatters with back end
+const formatCompositeIdentifier = ({ type, id }: ResourceCompositeIdentifier) => `${type}/${id}`;
+
+export const buildDummyDualEdgeConnection = (
+    fromCompositeIdentifier: ResourceCompositeIdentifier,
+    toCompositeIdentifier: ResourceCompositeIdentifier,
+    id: string
+): INoteViewModel => ({
+    id,
+    note: `This is why ${formatCompositeIdentifier(
+        fromCompositeIdentifier
+    )} is connected to ${formatCompositeIdentifier(toCompositeIdentifier)}`,
+    relatedResources: [
+        buildMemberWithGeneralContext(fromCompositeIdentifier, EdgeConnectionMemberRole.from),
+        buildMemberWithGeneralContext(toCompositeIdentifier, EdgeConnectionMemberRole.to),
+    ],
+});
+
+const dualEdgeConnections: INoteViewModel[] = [
     {
-        id: '55',
-        note: 'This is the best part of the book',
+        id: '111',
+        note: `This is why book 123 is related to media item 29`,
         relatedResources: [
-            {
-                compositeIdentifier: {
-                    type: 'book',
-                    id: '1',
+            buildMemberWithGeneralContext(
+                {
+                    type: ResourceType.book,
+                    id: '123',
                 },
-                role: EdgeConnectionMemberRole.to,
-                context: {
-                    type: 'pageRange',
-                    // TODO deal with specific context types
-                    // pageIdentifiers: ['33','34','35','36']
+                EdgeConnectionMemberRole.to
+            ),
+            buildMemberWithGeneralContext(
+                {
+                    type: ResourceType.mediaItem,
+                    id: '29',
                 },
-            },
+                EdgeConnectionMemberRole.to
+            ),
         ],
     },
     {
-        id: '59',
-        note: 'This is the part of the book depicted in the video here',
+        id: '112',
+        note: `This is why term 5 is related to audio transcript 8`,
         relatedResources: [
-            {
-                compositeIdentifier: {
-                    type: 'book',
-                    id: '1',
+            buildMemberWithGeneralContext(
+                {
+                    type: ResourceType.term,
+                    id: '5',
                 },
-                role: EdgeConnectionMemberRole.to,
-                context: {
-                    type: 'pageRange',
-                    // TODO deal with specific context types
-                    // pageIdentifiers: ['33','34','35','36']
+                EdgeConnectionMemberRole.to
+            ),
+            buildMemberWithGeneralContext(
+                {
+                    type: ResourceType.transcribedAudio,
+                    id: '8',
                 },
-            },
-            {
-                compositeIdentifier: {
-                    type: 'video',
-                    id: '44',
-                },
-                role: EdgeConnectionMemberRole.from,
-                context: {
-                    type: 'timeRange',
-                    // tODO deal with specific context types
-                },
-            },
+                EdgeConnectionMemberRole.to
+            ),
         ],
     },
+    {
+        id: '113',
+        note: `This is why spatial feature 12 is related to photograph 293`,
+        relatedResources: [
+            buildMemberWithGeneralContext(
+                {
+                    type: ResourceType.spatialFeature,
+                    id: '12',
+                },
+                EdgeConnectionMemberRole.to
+            ),
+            buildMemberWithGeneralContext(
+                {
+                    type: ResourceType.photograph,
+                    id: '293',
+                },
+                EdgeConnectionMemberRole.to
+            ),
+        ],
+    },
+];
+
+export const buildDummyNotes = (desiredEdgeConnectionType?: EdgeConnectionType) => [
+    ...(desiredEdgeConnectionType === EdgeConnectionType.self ? [] : dualEdgeConnections),
+    ...(desiredEdgeConnectionType === EdgeConnectionType.dual ? [] : selfEdgeConnections),
 ];
