@@ -10,6 +10,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
+import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { TranscribedAudioDetailContainer } from './transcribed-audio-detail.container';
 
 const idToFind = '44';
@@ -44,6 +45,8 @@ const act = (idInLocation: string) =>
         )
     );
 
+const mockGetNotesHandler = buildMockGetNotesHandler();
+
 describe('transribed audio detail', () => {
     describe('when the API request is valid', () => {
         setupTestServer(
@@ -53,7 +56,8 @@ describe('transribed audio detail', () => {
                     dummyTranscribedAudioItems.map((item) => [item, []]),
                     []
                 ),
-            })
+            }),
+            mockGetNotesHandler
         );
 
         describe('when the ID in the route corresponds to an existing transcribed audio item', () => {
@@ -74,6 +78,6 @@ describe('transribed audio detail', () => {
     });
 
     describe('when the API request is invalid or pending', () => {
-        testContainerComponentErrorHandling(() => act(idToFind), endpoint);
+        testContainerComponentErrorHandling(() => act(idToFind), endpoint, mockGetNotesHandler);
     });
 });
