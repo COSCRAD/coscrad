@@ -74,7 +74,7 @@ const dualConnections = [
     // Reverse the role of the term of focus to make sure it is still found
     buildDummyDualEdgeConnection(
         {
-            type: ResourceType.book,
+            type: ResourceType.term,
             id: connectedTerm.id,
         },
         compositeIdentifierOfTermOfFocus,
@@ -83,7 +83,7 @@ const dualConnections = [
     buildDummyDualEdgeConnection(
         compositeIdentifierOfTermOfFocus,
         {
-            type: ResourceType.book,
+            type: ResourceType.spatialFeature,
             id: connectedSpatialFeature.id,
         },
         '511'
@@ -116,7 +116,7 @@ describe(`NoteIndex`, () => {
             });
         });
 
-        describe.only('when there are several connections to the resource of focus', () => {
+        describe('when there are several connections to the resource of focus', () => {
             const handlers = [
                 ...(
                     [
@@ -161,7 +161,7 @@ describe(`NoteIndex`, () => {
         });
     });
 
-    describe.skip('when the API request is invalid or in progress', () => {
+    describe('when the API request is invalid or in progress', () => {
         testContainerComponentErrorHandling(act, noteEndpoint);
     });
 });
