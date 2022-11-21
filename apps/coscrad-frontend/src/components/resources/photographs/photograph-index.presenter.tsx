@@ -31,7 +31,7 @@ export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotogr
             headingLabels={headingLabels}
             tableData={photographs}
             cellRenderersDefinition={cellRenderersDefinition}
-            // This should be a resource lable from resource info
+            // This should be a resource label from resource info
             heading={'Photographs'}
         />
     );
