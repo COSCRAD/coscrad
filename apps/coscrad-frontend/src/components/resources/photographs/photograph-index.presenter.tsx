@@ -2,7 +2,7 @@ import { IIndexQueryResult, IPhotographViewModel } from '@coscrad/api-interfaces
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
-import { renderMediaLinkCell } from '../utils/render-media-link-cell';
+import { renderPhotographThumbnailLinkCell } from '../utils/render-photograph-thumbnail-link-cell';
 
 export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotographViewModel>) => {
     /**
@@ -22,7 +22,8 @@ export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotogr
 
     const cellRenderersDefinition: CellRenderersDefinition<IPhotographViewModel> = {
         id: renderAggregateIdCell,
-        imageURL: ({ imageURL }: IPhotographViewModel) => renderMediaLinkCell(imageURL),
+        imageURL: ({ id, imageURL }: IPhotographViewModel) =>
+            renderPhotographThumbnailLinkCell(id, imageURL),
     };
 
     return (
@@ -30,7 +31,7 @@ export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotogr
             headingLabels={headingLabels}
             tableData={photographs}
             cellRenderersDefinition={cellRenderersDefinition}
-            // This should be a resource lable from resource info
+            // This should be a resource label from resource info
             heading={'Photographs'}
         />
     );
