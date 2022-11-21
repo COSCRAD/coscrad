@@ -8,4 +8,5 @@ export * from './song.view-model.interface';
 export * from './spatial-feature';
 export * from './term.view-model.interface';
 export * from './transcribed-audio.view-model.interface';
+export * from './types';
 export * from './vocabulary-list';
