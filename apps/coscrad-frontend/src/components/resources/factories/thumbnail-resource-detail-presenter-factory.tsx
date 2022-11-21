@@ -3,7 +3,7 @@ import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
 import { BookDetailPresenter } from '../books/book-detail.presenter';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
-import { PhotographDetailPresenter } from '../photographs/photograph-detail.presenter';
+import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-detail.thumbnail.presenter';
 import { SongDetailPresenter } from '../songs/song-detail.presenter';
 import { SpatialFeatureDetailPresenter } from '../spatial-features/spatial-feature-detail.presenter';
 import { TermDetailPresenter } from '../terms/term-detail.presenter';
@@ -15,7 +15,7 @@ const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
     [ResourceType.bibliographicReference]: BibliographicReferenceDetailPresenter,
     [ResourceType.book]: BookDetailPresenter,
     [ResourceType.mediaItem]: MediaItemDetailPresenter,
-    [ResourceType.photograph]: PhotographDetailPresenter,
+    [ResourceType.photograph]: PhotographDetailThumbnailPresenter,
     [ResourceType.song]: SongDetailPresenter,
     [ResourceType.spatialFeature]: SpatialFeatureDetailPresenter,
     [ResourceType.term]: TermDetailPresenter,
