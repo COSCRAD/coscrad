@@ -2,7 +2,7 @@ import { IIndexQueryResult, ITranscribedAudioViewModel } from '@coscrad/api-inte
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
-import { renderMediaLinkCell } from '../utils/render-media-link-cell';
+import { renderAudioLinkCell } from '../utils/render-audio-link-cell';
 
 export const TranscribedAudioIndexPresenter = (
     indexResult: IIndexQueryResult<ITranscribedAudioViewModel>
@@ -35,7 +35,7 @@ export const TranscribedAudioIndexPresenter = (
 
     const cellRenderersDefinition: CellRenderersDefinition<ITranscribedAudioViewModel> = {
         id: renderAggregateIdCell,
-        audioURL: ({ audioURL }: ITranscribedAudioViewModel) => renderMediaLinkCell(audioURL),
+        audioURL: ({ audioURL }: ITranscribedAudioViewModel) => renderAudioLinkCell(audioURL),
     };
 
     /**
