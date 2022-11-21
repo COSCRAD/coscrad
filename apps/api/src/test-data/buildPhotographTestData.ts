@@ -3,7 +3,7 @@ import { ResourceType } from '../domain/types/ResourceType';
 
 const dtos = [
     {
-        filename: 'cat',
+        filename: 'Adiitsii-Running',
         photographer: 'Susie McRealart',
         dimensions: {
             widthPX: 300,
@@ -11,7 +11,7 @@ const dtos = [
         },
     },
     {
-        filename: 'dog',
+        filename: 'Nuu-Story',
         photographer: 'Robert McRealart',
         dimensions: {
             widthPX: 420,
@@ -19,7 +19,7 @@ const dtos = [
         },
     },
     {
-        filename: 'wildflower',
+        filename: 'TwoBrothersPole',
         photographer: 'Kenny Tree-Huggens',
         dimensions: {
             widthPX: 1200,

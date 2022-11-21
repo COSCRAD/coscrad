@@ -25,7 +25,7 @@ footer {
     position: relative;
 }
 
-.main-content img {
+.main-content img.home-image {
     width: 30%;
     height: auto;
     float: right;
@@ -42,4 +42,9 @@ footer {
 
 footer img {
     padding: 10px;
+}
+
+.spacer {
+    clear: both;
+    height: 1px;
 }
