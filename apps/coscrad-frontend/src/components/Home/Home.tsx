@@ -7,7 +7,7 @@ export const Home = (): JSX.Element => {
 
     return (
         <div>
-            <img src={siteHomeImageUrl} /> {siteDescription}
+            <img className="home-image" src={siteHomeImageUrl} /> {siteDescription}
         </div>
     );
 };
