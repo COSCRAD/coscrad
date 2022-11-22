@@ -1,7 +1,6 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { IBaseViewModel, IDetailQueryResult, ResourceType } from '@coscrad/api-interfaces';
+import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
-import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
-import { Loading } from '../Loading';
 import { IResourceDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
 import { buildUseLoadableForSingleResourceType } from './buildUseLoadableResourcesOfSingleType';
 import { displayLoadableWithErrorsAndLoading } from './displayLoadableWithErrorsAndLoading';
@@ -13,6 +12,8 @@ interface SelectedResourceContainerProps<T> {
     resourceDetailPresenterFactory: IResourceDetailPresenterFactory<T>;
 }
 
+type SearchResult = NOT_FOUND | IDetailQueryResult<IBaseViewModel>;
+
 export const SelectedResourceContainer = ({
     resourceType,
     selectedIds,
@@ -22,29 +23,33 @@ export const SelectedResourceContainer = ({
 
     const loadableResources = useResources();
 
-    const { data: allResourcesOfGivenType } = loadableResources;
+    const { data: allResourcesOfGivenType, isLoading, errorInfo } = loadableResources;
 
-    if (allResourcesOfGivenType) {
-        const searchResults = selectedIds.map(
-            (idToFind) =>
-                allResourcesOfGivenType.data.find(({ data: { id } }) => idToFind === id) ||
-                NOT_FOUND
-        );
+    /**
+     * Maybe we should abstract the search behind the custom hook as well. Since this
+     * is already a signle source of truth, reusable container, I am not too worried
+     * about that.
+     */
+    const loadableSearchResult: ILoadable<SearchResult[]> = {
+        isLoading,
+        errorInfo,
+        data:
+            allResourcesOfGivenType &&
+            selectedIds.map(
+                (idToFind) =>
+                    allResourcesOfGivenType.data.find(({ data: { id } }) => idToFind === id) ||
+                    NOT_FOUND
+            ),
+    };
 
-        return (
-            <SelectedResourcesPresenter
-                viewModels={searchResults}
-                presenterFactory={resourceDetailPresenterFactory}
-                resourceType={resourceType}
-            />
-        );
-    }
+    const Presenter = displayLoadableWithErrorsAndLoading(
+        SelectedResourcesPresenter,
+        (loadedData: SearchResult[]) => ({
+            viewModels: loadedData,
+            presenterFactory: resourceDetailPresenterFactory,
+            resourceType,
+        })
+    );
 
-    if (loadableResources.isLoading) return <Loading />;
-
-    if (loadableResources.errorInfo) return <ErrorDisplay {...loadableResources.errorInfo} />;
-
-    return <div>DEFAULT</div>;
-    // We should remove this hack
-    return displayLoadableWithErrorsAndLoading(() => <div>NULL</div>)(loadableResources);
+    return <Presenter {...loadableSearchResult} />;
 };

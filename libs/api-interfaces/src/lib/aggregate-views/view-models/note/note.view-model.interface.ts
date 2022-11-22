@@ -1,8 +1,9 @@
 import { IBaseViewModel } from '../base.view-model.interface';
 import { IEdgeConnectionMember } from './edge-connection-member.interface';
+import { EdgeConnectionType } from './edge-connection-type';
 
 export interface INoteViewModel extends IBaseViewModel {
-    // type?
+    connectionType: EdgeConnectionType;
     note: string;
-    relatedResources: IEdgeConnectionMember[];
+    connectedResources: IEdgeConnectionMember[];
 }

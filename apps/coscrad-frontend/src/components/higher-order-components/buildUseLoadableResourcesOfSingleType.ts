@@ -21,11 +21,6 @@ type UseLoadableResourcesOfSingleType<T extends IBaseViewModel> = () => ILoadabl
     IIndexQueryResult<T>
 >;
 
-/**
- * TODO Force the ID param to be passed to the hook from above. It's the
- * resource detail container's responsibility to know what ID it is a container
- * for.
- */
 const lookupTable: {
     [K in ResourceType]: UseLoadableResourcesOfSingleType<ResourceTypeToViewModel[K]>;
 } = {
@@ -43,7 +38,10 @@ const lookupTable: {
 /**
  * we might want to actually build the `useXXXById` hook here so that no lookup
  * table is required and new resources 'JUST WORK'. We'd need a link from
- * resource type to the selector that fetches many.
+ * resource type to the selector that fetches many. At the heart of the matter
+ * is the link from the resource type to it's state slice, but selectors
+ * are meant to enapsulate that, so the selector seems like the natural
+ * starting point.
  */
 export const buildUseLoadableForSingleResourceType = <T extends ResourceType>(
     resourceType: T
