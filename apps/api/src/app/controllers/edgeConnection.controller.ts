@@ -30,7 +30,9 @@ import mixTagsIntoViewModel from './utilities/mixTagsIntoViewModel';
 
 /**
  * TODO We need to return standardized query resuponses here (`IIndexQueryResult`
- * and `IDetailQueryResult`). Further, we need to use a query service to
+ * and `IDetailQueryResult`).
+ *
+ * Further, we need to use a query service to
  * extract the internal logic from the controller. The controller should
  * simply adapt to HTTP.
  */

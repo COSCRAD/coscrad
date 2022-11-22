@@ -59,7 +59,7 @@ describe('media item detail', () => {
         });
     });
 
-    describe.only('when the API request has failed or is pending', () => {
+    describe('when the API request has failed or is pending', () => {
         testContainerComponentErrorHandling(() => act(idToFind), endpoint, mockGetNotesHandler);
     });
 });

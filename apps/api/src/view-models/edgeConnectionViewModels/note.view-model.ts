@@ -1,4 +1,4 @@
-import { INoteViewModel } from '@coscrad/api-interfaces';
+import { EdgeConnectionType, INoteViewModel } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -9,6 +9,9 @@ import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from '../buildViewModelForResource/viewModels/base.view-model';
 
 export class NoteViewModel extends BaseViewModel implements INoteViewModel {
+    // TODO expose as part of schema
+    readonly connectionType: EdgeConnectionType;
+
     @ApiProperty({
         example: 'this part is about horses',
         description: 'a note about a resource or the connection between two resources',
@@ -17,13 +20,15 @@ export class NoteViewModel extends BaseViewModel implements INoteViewModel {
     readonly note: string;
 
     @NestedDataType(EdgeConnectionMember, { isArray: true })
-    readonly relatedResources: EdgeConnectionMember[] = [];
+    readonly connectedResources: EdgeConnectionMember[] = [];
 
-    constructor({ id, note, members }: EdgeConnection) {
+    constructor({ id, note, members, connectionType }: EdgeConnection) {
         super({ id });
+
+        this.connectionType = connectionType;
 
         this.note = note;
 
-        this.relatedResources = cloneToPlainObject(members);
+        this.connectedResources = cloneToPlainObject(members);
     }
 }

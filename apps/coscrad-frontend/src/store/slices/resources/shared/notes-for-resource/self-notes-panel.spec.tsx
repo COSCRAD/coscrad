@@ -1,5 +1,6 @@
 import {
     EdgeConnectionMemberRole,
+    EdgeConnectionType,
     INoteViewModel,
     ResourceCompositeIdentifier,
     ResourceType,
@@ -31,8 +32,9 @@ const dummyNotes: INoteViewModel[] = Array(NUMBER_OF_DUMMY_NOTES)
     .map(
         (_, index): INoteViewModel => ({
             id: index.toString(),
+            connectionType: EdgeConnectionType.self,
             note: `This is note number: ${index}`,
-            relatedResources: [
+            connectedResources: [
                 buildMemberWithGeneralContext(
                     compositeIdentifierOfFocus,
                     EdgeConnectionMemberRole.self
@@ -78,6 +80,7 @@ describe(`Self Notes Panel`, () => {
                     response: [],
                 })
             );
+
             it('should render the self notes panel', async () => {
                 act();
 

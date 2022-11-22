@@ -1,9 +1,9 @@
-import { HttpStatusCode, ResourceType } from '@coscrad/api-interfaces';
+import { IBaseViewModel, IDetailQueryResult, ResourceType } from '@coscrad/api-interfaces';
+import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
-import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
-import { Loading } from '../Loading';
 import { IResourceDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
 import { buildUseLoadableForSingleResourceType } from './buildUseLoadableResourcesOfSingleType';
+import { displayLoadableWithErrorsAndLoading } from './displayLoadableWithErrorsAndLoading';
 import { SelectedResourcesPresenter } from './selected-resources.presenter';
 
 interface SelectedResourceContainerProps<T> {
@@ -11,6 +11,8 @@ interface SelectedResourceContainerProps<T> {
     selectedIds: string[];
     resourceDetailPresenterFactory: IResourceDetailPresenterFactory<T>;
 }
+
+type SearchResult = NOT_FOUND | IDetailQueryResult<IBaseViewModel>;
 
 export const SelectedResourceContainer = ({
     resourceType,
@@ -21,32 +23,33 @@ export const SelectedResourceContainer = ({
 
     const loadableResources = useResources();
 
-    const { data: allResourcesOfGivenType } = loadableResources;
+    const { data: allResourcesOfGivenType, isLoading, errorInfo } = loadableResources;
 
-    if (allResourcesOfGivenType) {
-        const searchResults = selectedIds.map(
-            (idToFind) =>
-                allResourcesOfGivenType.data.find(({ data: { id } }) => idToFind === id) ||
-                NOT_FOUND
-        );
+    /**
+     * Maybe we should abstract the search behind the custom hook as well. Since this
+     * is already a signle source of truth, reusable container, I am not too worried
+     * about that.
+     */
+    const loadableSearchResult: ILoadable<SearchResult[]> = {
+        isLoading,
+        errorInfo,
+        data:
+            allResourcesOfGivenType &&
+            selectedIds.map(
+                (idToFind) =>
+                    allResourcesOfGivenType.data.find(({ data: { id } }) => idToFind === id) ||
+                    NOT_FOUND
+            ),
+    };
 
-        return (
-            <SelectedResourcesPresenter
-                viewModels={searchResults}
-                presenterFactory={resourceDetailPresenterFactory}
-                resourceType={resourceType}
-            />
-        );
-    }
-    if (loadableResources.errorInfo) return <ErrorDisplay {...loadableResources.errorInfo} />;
-
-    if (loadableResources.isLoading) return <Loading />;
-
-    // The need for this catch-all is a bit of a smell.
-    return (
-        <ErrorDisplay
-            code={HttpStatusCode.internalError}
-            message="Invalid selected resources query state"
-        />
+    const Presenter = displayLoadableWithErrorsAndLoading(
+        SelectedResourcesPresenter,
+        (loadedData: SearchResult[]) => ({
+            viewModels: loadedData,
+            presenterFactory: resourceDetailPresenterFactory,
+            resourceType,
+        })
     );
+
+    return <Presenter {...loadableSearchResult} />;
 };

@@ -1,4 +1,5 @@
 import {
+    EdgeConnectionType,
     IEdgeConnectionContext,
     INoteViewModel,
     ResourceCompositeIdentifier,
@@ -45,11 +46,11 @@ export const useLoadableSelfNotesForResource = (
 
     const selfNotesForThisResource = data
         .filter(
-            ({ relatedResources }: INoteViewModel) =>
-                relatedResources.length === 1 &&
+            ({ connectedResources: relatedResources, connectionType }: INoteViewModel) =>
+                connectionType === EdgeConnectionType.self &&
                 isTargetCompositeIdentifier(relatedResources[0].compositeIdentifier)
         )
-        .map(({ id, note, relatedResources }) => ({
+        .map(({ id, note, connectedResources: relatedResources }) => ({
             id,
             /**
              * `note.note` would be confusing. Note that we are aliasing in our
