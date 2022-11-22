@@ -32,9 +32,7 @@ const lookupTable: { [K in ResourceType]: UseLoadableById } = {
 };
 
 /**
- * we might want to actually build the `useXXXById` hook here so that no lookup
- * table is required and new resources 'JUST WORK'. We'd need a link from
- * resource type to the selector that fetches many.
+ * We might want to bring the search logic here, and out of `SelectedResourcesContainer`
  */
 export const buildUseLoadableSearchResult = (resourceType: ResourceType): UseLoadableById => {
     const lookupResult = lookupTable[resourceType];

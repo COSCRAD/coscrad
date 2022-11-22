@@ -23,7 +23,7 @@ const bookCompositeIdentifier = {
 const dummyEdgeConnection: INoteViewModel = {
     id: '1',
     note: 'this is why term 123 is related to book 5',
-    relatedResources: [
+    connectedResources: [
         {
             compositeIdentifier: termCompositeIdentifier,
             context: termContext,

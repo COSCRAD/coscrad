@@ -20,11 +20,11 @@ export const ConnectedResourcesPanelPresenter = ({
     data: connectedResources,
 }: Props): JSX.Element => {
     /**
-     * We don't necessarily need to show resources of every resource type in
-     * this panel. So we make sure to create selected resources views for only
-     * the resource types we need, so not to needlessly trigger fetches. We
-     * are lazy-loading resources here, on a "fetch all thefirst time the resource
-     * type is seen" basis.
+     * We only need to show the resource types that are connected to the resource
+     * of focus (the one whose detail page we are in) here. So we make sure to
+     * create selected resources views for only the resource types we need, so
+     * not to needlessly trigger fetches. We are lazy-loading resources here,
+     * on a "fetch all the first time the resource type is seen" basis.
      */
     const relevantResourceTypesWithDuplicates = connectedResources.map(
         ({ compositeIdentifier: { type } }) => type
@@ -49,13 +49,12 @@ export const ConnectedResourcesPanelPresenter = ({
     );
 
     return (
-        // TODO remove magic string
         <div data-testid={'connectedResourcesPanel'}>
             {uniqueResourceTypes.map((resourceType) => (
                 /**
-                 * Note taht the connected resources panel uses the thumbnail presenters.
+                 * Note that the connected resources panel uses the thumbnail presenters.
                  * If later we'd like to support mobile, we should inject the
-                 * correct factory here based on a config context.
+                 * correct thumbnail detail presenter factory here based on a config context.
                  */
                 <SelectedResourceContainer
                     key={resourceType}

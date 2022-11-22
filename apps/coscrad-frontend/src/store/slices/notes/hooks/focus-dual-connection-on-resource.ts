@@ -7,7 +7,7 @@ export const focusDualConnectionOnResource =
     (note: INoteViewModel): ConnectedResource => {
         const isTargetCompositeIdentifier = compositeIdentifierMatches(compositeIdentifierToMatch);
 
-        const { relatedResources } = note;
+        const { connectedResources: relatedResources } = note;
 
         // TODO Sorting into a tuple might be more efficient
         const selfContext = relatedResources.find(({ compositeIdentifier }) =>
