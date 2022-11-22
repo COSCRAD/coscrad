@@ -1,4 +1,4 @@
-import { ITermViewModel } from '../../../../../../../libs/api-interfaces/src';
+import { ITermViewModel } from '@coscrad/api-interfaces';
 
 export const buildDummyTerms = (): ITermViewModel[] => [
     {

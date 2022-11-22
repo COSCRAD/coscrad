@@ -1,4 +1,5 @@
 import {
+    EdgeConnectionType,
     IEdgeConnectionContext,
     INoteViewModel,
     ResourceCompositeIdentifier,
@@ -37,15 +38,13 @@ export const useLoadableConnectionsToResource = (
 
     const isTargetCompositeIdentifier = compositeIdentifierMatches(compositeIdentifierToMatch);
 
-    // TODO can we call the view model prop connected resources?
-    const searchResult =
-        data.filter(
-            ({ relatedResources }: INoteViewModel) =>
-                relatedResources.length === 2 &&
-                relatedResources.some(({ compositeIdentifier }) =>
-                    isTargetCompositeIdentifier(compositeIdentifier)
-                )
-        ) || [];
+    const searchResult = data.filter(
+        ({ connectedResources, connectionType }: INoteViewModel) =>
+            connectionType === EdgeConnectionType.dual &&
+            connectedResources.some(({ compositeIdentifier }) =>
+                isTargetCompositeIdentifier(compositeIdentifier)
+            )
+    );
 
     return {
         isLoading: false,
