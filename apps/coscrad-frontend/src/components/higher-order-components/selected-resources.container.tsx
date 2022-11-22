@@ -1,10 +1,9 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { HttpStatusCode, ResourceType } from '@coscrad/api-interfaces';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
 import { Loading } from '../Loading';
 import { IResourceDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
 import { buildUseLoadableForSingleResourceType } from './buildUseLoadableResourcesOfSingleType';
-import { displayLoadableWithErrorsAndLoading } from './displayLoadableWithErrorsAndLoading';
 import { SelectedResourcesPresenter } from './selected-resources.presenter';
 
 interface SelectedResourceContainerProps<T> {
@@ -39,12 +38,15 @@ export const SelectedResourceContainer = ({
             />
         );
     }
+    if (loadableResources.errorInfo) return <ErrorDisplay {...loadableResources.errorInfo} />;
 
     if (loadableResources.isLoading) return <Loading />;
 
-    if (loadableResources.errorInfo) return <ErrorDisplay {...loadableResources.errorInfo} />;
-
-    return <div>DEFAULT</div>;
-    // We should remove this hack
-    return displayLoadableWithErrorsAndLoading(() => <div>NULL</div>)(loadableResources);
+    // The need for this catch-all is a bit of a smell.
+    return (
+        <ErrorDisplay
+            code={HttpStatusCode.internalError}
+            message="Invalid selected resources query state"
+        />
+    );
 };
