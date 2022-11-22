@@ -1,6 +1,10 @@
 import { INoteViewModel } from '@coscrad/api-interfaces';
 
-export const NoteDetailPresenter = ({ id, note: text, relatedResources }: INoteViewModel) => (
+export const NoteDetailPresenter = ({
+    id,
+    note: text,
+    connectedResources: relatedResources,
+}: INoteViewModel) => (
     <div>
         <h2>Note ({id})</h2>
         <p>{text}</p>

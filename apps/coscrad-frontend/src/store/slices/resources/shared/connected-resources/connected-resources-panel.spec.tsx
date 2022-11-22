@@ -1,10 +1,11 @@
 import {
     EdgeConnectionMemberRole,
+    EdgeConnectionType,
     IBaseViewModel,
     INoteViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { MemoryRouter } from 'react-router-dom';
+import { waitFor } from '@testing-library/react';
 import {
     buildDummyDualEdgeConnection,
     buildDummyNotes,
@@ -20,9 +21,12 @@ import {
 } from '../../../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
+import { TestId } from '../../../../../utils/test-utils/constants';
 import { setupTestServer } from '../../../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../../../utils/test-utils/test-data';
 import { ConnectedResourcesPanel } from './connected-resources-panel';
+
+const config = getConfig();
 
 const dummyTerms = buildDummyTerms();
 
@@ -33,15 +37,13 @@ const compositeIdentifierOfTermOfFocus = {
     id: termOfFocus.id,
 };
 
-const dummyNotes = [...buildDummyNotes()];
+const dummyNotes = buildDummyNotes();
 
-const noteEndpoint = `${getConfig().apiUrl}/connections/notes`;
+const noteEndpoint = `${config.apiUrl}/connections/notes`;
 
 const act = () =>
     renderWithProviders(
-        <MemoryRouter>
-            <ConnectedResourcesPanel compositeIdentifier={compositeIdentifierOfTermOfFocus} />
-        </MemoryRouter>
+        <ConnectedResourcesPanel compositeIdentifier={compositeIdentifierOfTermOfFocus} />
     );
 
 const connectedTerm = dummyTerms[1];
@@ -52,9 +54,10 @@ const connectedSpatialFeature = buildDummySpatialFeatures()[0];
 
 // Make sure that self connections do not come through
 const selfNoteForTerm: INoteViewModel = {
+    connectionType: EdgeConnectionType.self,
     id: '334',
     note: 'this part is epic',
-    relatedResources: [
+    connectedResources: [
         buildMemberWithGeneralContext(
             compositeIdentifierOfTermOfFocus,
             EdgeConnectionMemberRole.self
@@ -92,13 +95,15 @@ const dualConnections = [
 
 const allConnections = [selfNoteForTerm, ...dualConnections];
 
-const termEndpoint = `${getConfig().apiUrl}/resources/terms`;
+const termEndpoint = `${config.apiUrl}/resources/terms`;
 
-const bookEndpoint = `${getConfig().apiUrl}/resources/books`;
+const bookEndpoint = `${config.apiUrl}/resources/books`;
 
-const spatialFeatureEndpoint = `${getConfig().apiUrl}/resources/spatialFeatures`;
+const spatialFeatureEndpoint = `${config.apiUrl}/resources/spatialFeatures`;
 
-describe(`NoteIndex`, () => {
+const CONNECTED_RESOURCES_PANEL_TEST_ID = 'connectedResourcesPanel';
+
+describe(`Connected Resources Panel`, () => {
     describe('when the API request is valid', () => {
         describe('when there are no connections to the resource of focus', () => {
             setupTestServer(
@@ -111,14 +116,18 @@ describe(`NoteIndex`, () => {
             it('should render the connected resources pannel', async () => {
                 act();
 
-                // TODO remove magic string
-                await assertElementWithTestIdOnScreen('connectedResourcesPanel');
+                await assertElementWithTestIdOnScreen(CONNECTED_RESOURCES_PANEL_TEST_ID);
             });
         });
 
         describe('when there are several connections to the resource of focus', () => {
             const handlers = [
-                ...(
+                .../**
+                 * Each tuple has an array of view models to be returned and
+                 * the endpoint. We then map to wrap each array of view models
+                 * in the `IIndexQueryResult` data structure.
+                 */
+                (
                     [
                         [dummyTerms, termEndpoint],
                         [[connectedBook], bookEndpoint],
@@ -141,10 +150,13 @@ describe(`NoteIndex`, () => {
             it('should render the connected resources pannel', async () => {
                 act();
 
-                // TODO remove magic string
-                await assertElementWithTestIdOnScreen('connectedResourcesPanel');
+                await assertElementWithTestIdOnScreen(CONNECTED_RESOURCES_PANEL_TEST_ID);
             });
 
+            /**
+             * We check that each resource that is connected to the term of focus
+             * is rendered.
+             */
             (
                 [
                     [connectedTerm, ResourceType.term],
@@ -156,6 +168,18 @@ describe(`NoteIndex`, () => {
                     act();
 
                     await assertElementWithTestIdOnScreen(id);
+                });
+            });
+
+            it('should not render self-notes', async () => {
+                const { queryByTestId } = act();
+
+                await waitFor(() => {
+                    expect(queryByTestId(TestId.loading)).toBeNull();
+
+                    expect(queryByTestId(TestId.error)).toBeNull();
+
+                    expect(queryByTestId(selfNoteForTerm.id)).toBeNull();
                 });
             });
         });
