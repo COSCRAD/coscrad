@@ -4,7 +4,7 @@ import { MediaPlayer } from '../../../../../../libs/media-player/src';
 import './term-detail.presenter.css';
 
 // TODO[https://www.pivotaltracker.com/story/show/183681722] expose commands
-export const TermDetailPresenter = ({
+export const TermDetailFullViewPresenter = ({
     data: { term, termEnglish, audioURL, contributor },
 }: IDetailQueryResult<ITermViewModel>): JSX.Element => (
     <div className="term-detail-page">
