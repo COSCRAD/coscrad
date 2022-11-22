@@ -6,5 +6,5 @@ import { buildDummyNotes } from './build-dummy-notes';
 export const buildMockGetNotesHandler = (notes?: INoteViewModel[]) =>
     buildMockSuccessfulGETHandler({
         endpoint: `${getConfig().apiUrl}/connections/notes`,
-        response: notes || buildDummyNotes,
+        response: notes || buildDummyNotes(),
     });

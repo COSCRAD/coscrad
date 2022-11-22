@@ -1,6 +1,6 @@
 import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
-import { ErrorDisplay } from '../../../../../components/ErrorDisplay/ErrorDisplay';
-import { Loading } from '../../../../../components/Loading';
+import { displayLoadableWithErrorsAndLoading } from '../../../../../components/higher-order-components';
+import { wrapArrayProps } from '../../../../../utils/prop-manipulation/wrap-array-props';
 import { useLoadableConnectionsToResource } from '../../../notes/hooks';
 import { ConnectedResourcesPanelPresenter } from './connected-resources-panel.presenter';
 
@@ -11,15 +11,12 @@ export interface ConnectedResourcesPanelProps {
 export const ConnectedResourcesPanel = ({
     compositeIdentifier,
 }: ConnectedResourcesPanelProps): JSX.Element => {
-    const {
-        isLoading,
-        errorInfo,
-        data: connections,
-    } = useLoadableConnectionsToResource(compositeIdentifier);
+    const loadableConnections = useLoadableConnectionsToResource(compositeIdentifier);
 
-    if (errorInfo) return <ErrorDisplay {...errorInfo} />;
+    const Presenter = displayLoadableWithErrorsAndLoading(
+        ConnectedResourcesPanelPresenter,
+        wrapArrayProps
+    );
 
-    if (isLoading || connections === null) return <Loading />;
-
-    return <ConnectedResourcesPanelPresenter data={connections} />;
+    return <Presenter {...loadableConnections} />;
 };
