@@ -27,9 +27,10 @@ const buildOneMemberForEveryResourceType = (role: EdgeConnectionMemberRole) =>
 const selfEdgeConnections: INoteViewModel[] = buildOneMemberForEveryResourceType(
     EdgeConnectionMemberRole.self
 ).map((member, index) => ({
+    connectionType: EdgeConnectionType.self,
     id: index.toString(),
     note: `note for item ${index}`,
-    relatedResources: [member],
+    connectedResources: [member],
 }));
 
 // TODO share formatters with back end
@@ -40,11 +41,12 @@ export const buildDummyDualEdgeConnection = (
     toCompositeIdentifier: ResourceCompositeIdentifier,
     id: string
 ): INoteViewModel => ({
+    connectionType: EdgeConnectionType.dual,
     id,
     note: `This is why ${formatCompositeIdentifier(
         fromCompositeIdentifier
     )} is connected to ${formatCompositeIdentifier(toCompositeIdentifier)}`,
-    relatedResources: [
+    connectedResources: [
         buildMemberWithGeneralContext(fromCompositeIdentifier, EdgeConnectionMemberRole.from),
         buildMemberWithGeneralContext(toCompositeIdentifier, EdgeConnectionMemberRole.to),
     ],
@@ -54,7 +56,7 @@ const dualEdgeConnections: INoteViewModel[] = [
     {
         id: '111',
         note: `This is why book 123 is related to media item 29`,
-        relatedResources: [
+        connectedResources: [
             buildMemberWithGeneralContext(
                 {
                     type: ResourceType.book,
@@ -74,7 +76,7 @@ const dualEdgeConnections: INoteViewModel[] = [
     {
         id: '112',
         note: `This is why term 5 is related to audio transcript 8`,
-        relatedResources: [
+        connectedResources: [
             buildMemberWithGeneralContext(
                 {
                     type: ResourceType.term,
@@ -94,7 +96,7 @@ const dualEdgeConnections: INoteViewModel[] = [
     {
         id: '113',
         note: `This is why spatial feature 12 is related to photograph 293`,
-        relatedResources: [
+        connectedResources: [
             buildMemberWithGeneralContext(
                 {
                     type: ResourceType.spatialFeature,
@@ -111,7 +113,10 @@ const dualEdgeConnections: INoteViewModel[] = [
             ),
         ],
     },
-];
+].map((partial) => ({
+    ...partial,
+    connectionType: EdgeConnectionType.dual,
+}));
 
 export const buildDummyNotes = (desiredEdgeConnectionType?: EdgeConnectionType) => [
     ...(desiredEdgeConnectionType === EdgeConnectionType.self ? [] : dualEdgeConnections),

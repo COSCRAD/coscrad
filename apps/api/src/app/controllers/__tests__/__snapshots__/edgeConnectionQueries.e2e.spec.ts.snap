@@ -6,17 +6,7 @@ Object {
   "label": "Note",
   "link": "/connections",
   "schema": Object {
-    "id": Object {
-      "coscradDataType": "NON_EMPTY_STRING",
-      "isArray": false,
-      "isOptional": false,
-    },
-    "note": Object {
-      "coscradDataType": "NON_EMPTY_STRING",
-      "isArray": false,
-      "isOptional": false,
-    },
-    "relatedResources": Object {
+    "connectedResources": Object {
       "complexDataType": "NESTED_TYPE",
       "isArray": true,
       "isOptional": false,
@@ -85,6 +75,16 @@ Object {
         },
       },
     },
+    "id": Object {
+      "coscradDataType": "NON_EMPTY_STRING",
+      "isArray": false,
+      "isOptional": false,
+    },
+    "note": Object {
+      "coscradDataType": "NON_EMPTY_STRING",
+      "isArray": false,
+      "isOptional": false,
+    },
   },
   "type": "note",
 }
@@ -93,9 +93,7 @@ Object {
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: bibliographicReference should return the expected result 1`] = `
 Array [
   Object {
-    "id": "3002",
-    "note": "here is the digital version of the book!",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -117,12 +115,13 @@ Array [
         "role": "to",
       },
     ],
+    "connectionType": "dual",
+    "id": "3002",
+    "note": "here is the digital version of the book!",
     "tags": Array [],
   },
   Object {
-    "id": "3102",
-    "note": "this library book has the lyrics from the song, but we do not have access to the book",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -148,6 +147,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "3102",
+    "note": "this library book has the lyrics from the song, but we do not have access to the book",
     "tags": Array [],
   },
 ]
@@ -156,9 +158,7 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: book should return the expected result 1`] = `
 Array [
   Object {
-    "id": "2002",
-    "note": "That is why transcribedAudio/110 is related to book/24",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "110",
@@ -187,6 +187,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2002",
+    "note": "That is why transcribedAudio/110 is related to book/24",
     "tags": Array [
       Object {
         "id": "4",
@@ -195,9 +198,7 @@ Array [
     ],
   },
   Object {
-    "id": "2003",
-    "note": "That is why book/24 is related to photograph/2",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "24",
@@ -242,6 +243,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2003",
+    "note": "That is why book/24 is related to photograph/2",
     "tags": Array [
       Object {
         "id": "3",
@@ -250,9 +254,7 @@ Array [
     ],
   },
   Object {
-    "id": "3002",
-    "note": "here is the digital version of the book!",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -274,12 +276,13 @@ Array [
         "role": "to",
       },
     ],
+    "connectionType": "dual",
+    "id": "3002",
+    "note": "here is the digital version of the book!",
     "tags": Array [],
   },
   Object {
-    "id": "3101",
-    "note": "this selection from the media item portrays the events in the book",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -308,6 +311,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "3101",
+    "note": "this selection from the media item portrays the events in the book",
     "tags": Array [],
   },
 ]
@@ -316,9 +322,7 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: mediaItem should return the expected result 1`] = `
 Array [
   Object {
-    "id": "3001",
-    "note": "this media item mentions a word in the term",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -349,12 +353,13 @@ Array [
         "role": "to",
       },
     ],
+    "connectionType": "dual",
+    "id": "3001",
+    "note": "this media item mentions a word in the term",
     "tags": Array [],
   },
   Object {
-    "id": "3101",
-    "note": "this selection from the media item portrays the events in the book",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -383,6 +388,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "3101",
+    "note": "this selection from the media item portrays the events in the book",
     "tags": Array [],
   },
 ]
@@ -391,9 +399,7 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: photograph should return the expected result 1`] = `
 Array [
   Object {
-    "id": "2003",
-    "note": "That is why book/24 is related to photograph/2",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "24",
@@ -438,6 +444,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2003",
+    "note": "That is why book/24 is related to photograph/2",
     "tags": Array [
       Object {
         "id": "3",
@@ -446,9 +455,7 @@ Array [
     ],
   },
   Object {
-    "id": "2004",
-    "note": "That is why photograph/2 is related to spatialFeature/300",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -490,6 +497,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2004",
+    "note": "That is why photograph/2 is related to spatialFeature/300",
     "tags": Array [
       Object {
         "id": "2",
@@ -503,9 +513,7 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: song should return the expected result 1`] = `
 Array [
   Object {
-    "id": "2005",
-    "note": "That is why spatialFeature/300 is related to song/1",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "300",
@@ -531,6 +539,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2005",
+    "note": "That is why spatialFeature/300 is related to song/1",
     "tags": Array [
       Object {
         "id": "1",
@@ -539,9 +550,7 @@ Array [
     ],
   },
   Object {
-    "id": "2006",
-    "note": "That is why song/1 is related to term/2",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -572,12 +581,13 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2006",
+    "note": "That is why song/1 is related to term/2",
     "tags": Array [],
   },
   Object {
-    "id": "3102",
-    "note": "this library book has the lyrics from the song, but we do not have access to the book",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -603,6 +613,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "3102",
+    "note": "this library book has the lyrics from the song, but we do not have access to the book",
     "tags": Array [],
   },
 ]
@@ -611,9 +624,7 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: spatialFeature should return the expected result 1`] = `
 Array [
   Object {
-    "id": "2004",
-    "note": "That is why photograph/2 is related to spatialFeature/300",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -655,6 +666,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2004",
+    "note": "That is why photograph/2 is related to spatialFeature/300",
     "tags": Array [
       Object {
         "id": "2",
@@ -663,9 +677,7 @@ Array [
     ],
   },
   Object {
-    "id": "2005",
-    "note": "That is why spatialFeature/300 is related to song/1",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "300",
@@ -691,6 +703,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2005",
+    "note": "That is why spatialFeature/300 is related to song/1",
     "tags": Array [
       Object {
         "id": "1",
@@ -704,9 +719,7 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: term should return the expected result 1`] = `
 Array [
   Object {
-    "id": "2000",
-    "note": "That is why term/2 is related to vocabularyList/2",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -738,12 +751,13 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2000",
+    "note": "That is why term/2 is related to vocabularyList/2",
     "tags": Array [],
   },
   Object {
-    "id": "2006",
-    "note": "That is why song/1 is related to term/2",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -774,12 +788,13 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2006",
+    "note": "That is why song/1 is related to term/2",
     "tags": Array [],
   },
   Object {
-    "id": "3001",
-    "note": "this media item mentions a word in the term",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -810,6 +825,9 @@ Array [
         "role": "to",
       },
     ],
+    "connectionType": "dual",
+    "id": "3001",
+    "note": "this media item mentions a word in the term",
     "tags": Array [],
   },
 ]
@@ -818,9 +836,7 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: transcribedAudio should return the expected result 1`] = `
 Array [
   Object {
-    "id": "2001",
-    "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -851,6 +867,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2001",
+    "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
     "tags": Array [
       Object {
         "id": "5",
@@ -859,9 +878,7 @@ Array [
     ],
   },
   Object {
-    "id": "2002",
-    "note": "That is why transcribedAudio/110 is related to book/24",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "110",
@@ -890,6 +907,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2002",
+    "note": "That is why transcribedAudio/110 is related to book/24",
     "tags": Array [
       Object {
         "id": "4",
@@ -903,9 +923,7 @@ Array [
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: vocabularyList should return the expected result 1`] = `
 Array [
   Object {
-    "id": "2000",
-    "note": "That is why term/2 is related to vocabularyList/2",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -937,12 +955,13 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2000",
+    "note": "That is why term/2 is related to vocabularyList/2",
     "tags": Array [],
   },
   Object {
-    "id": "2001",
-    "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -973,6 +992,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2001",
+    "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
     "tags": Array [
       Object {
         "id": "5",
@@ -986,9 +1008,7 @@ Array [
 exports[`When querying for edge connections GET /connections/notes should return the expected result 1`] = `
 Array [
   Object {
-    "id": "1",
-    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -1005,6 +1025,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "1",
+    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
     "tags": Array [
       Object {
         "id": "5",
@@ -1013,9 +1036,7 @@ Array [
     ],
   },
   Object {
-    "id": "2",
-    "note": "This page is about bears",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "24",
@@ -1030,12 +1051,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "2",
+    "note": "This page is about bears",
     "tags": Array [],
   },
   Object {
-    "id": "3",
-    "note": "This is the first letter of the list name",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -1052,6 +1074,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "3",
+    "note": "This is the first letter of the list name",
     "tags": Array [
       Object {
         "id": "4",
@@ -1060,9 +1085,7 @@ Array [
     ],
   },
   Object {
-    "id": "4",
-    "note": "there is a placename for this point at the base of the mountain",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "300",
@@ -1074,12 +1097,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "4",
+    "note": "there is a placename for this point at the base of the mountain",
     "tags": Array [],
   },
   Object {
-    "id": "5",
-    "note": "this clip talks about songs",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "110",
@@ -1095,6 +1119,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "5",
+    "note": "this clip talks about songs",
     "tags": Array [
       Object {
         "id": "3",
@@ -1103,9 +1130,7 @@ Array [
     ],
   },
   Object {
-    "id": "6",
-    "note": "this is the stem of the flower",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -1137,12 +1162,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "6",
+    "note": "this is the stem of the flower",
     "tags": Array [],
   },
   Object {
-    "id": "7",
-    "note": "this is the base of the flower",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -1158,6 +1184,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "7",
+    "note": "this is the base of the flower",
     "tags": Array [
       Object {
         "id": "2",
@@ -1166,9 +1195,7 @@ Array [
     ],
   },
   Object {
-    "id": "8",
-    "note": "this section is the best part of an illustrated book about birds",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "24",
@@ -1183,12 +1210,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "8",
+    "note": "this section is the best part of an illustrated book about birds",
     "tags": Array [],
   },
   Object {
-    "id": "9",
-    "note": "found this in the archives",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1200,6 +1228,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "9",
+    "note": "found this in the archives",
     "tags": Array [
       Object {
         "id": "1",
@@ -1208,9 +1239,7 @@ Array [
     ],
   },
   Object {
-    "id": "10",
-    "note": "this is a song",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1226,12 +1255,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "10",
+    "note": "this is a song",
     "tags": Array [],
   },
   Object {
-    "id": "11",
-    "note": "this is an awesome show",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1248,6 +1278,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "11",
+    "note": "this is an awesome show",
     "tags": Array [
       Object {
         "id": "1",
@@ -1256,9 +1289,7 @@ Array [
     ],
   },
   Object {
-    "id": "12",
-    "note": "important clip from the show",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1274,12 +1305,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "12",
+    "note": "important clip from the show",
     "tags": Array [],
   },
   Object {
-    "id": "13",
-    "note": "this book is hard to track down",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1291,12 +1323,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "13",
+    "note": "this book is hard to track down",
     "tags": Array [],
   },
   Object {
-    "id": "14",
-    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -1308,12 +1341,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "14",
+    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
     "tags": Array [],
   },
   Object {
-    "id": "15",
-    "note": "This page is about bears",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "24",
@@ -1325,12 +1359,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "15",
+    "note": "This page is about bears",
     "tags": Array [],
   },
   Object {
-    "id": "16",
-    "note": "This is the first letter of the list name",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -1342,12 +1377,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "16",
+    "note": "This is the first letter of the list name",
     "tags": Array [],
   },
   Object {
-    "id": "17",
-    "note": "this clip talks about songs",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "110",
@@ -1359,12 +1395,31 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "17",
+    "note": "this clip talks about songs",
     "tags": Array [],
   },
   Object {
+    "connectedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "2",
+          "type": "photograph",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+    "connectionType": "self",
     "id": "18",
     "note": "this is the stem of the flower",
-    "relatedResources": Array [
+    "tags": Array [],
+  },
+  Object {
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -1376,29 +1431,13 @@ Array [
         "role": "self",
       },
     ],
-    "tags": Array [],
-  },
-  Object {
+    "connectionType": "self",
     "id": "19",
     "note": "this is the base of the flower",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "photograph",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
     "tags": Array [],
   },
   Object {
-    "id": "20",
-    "note": "this section is the best part of an illustrated book about birds",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "24",
@@ -1410,12 +1449,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "20",
+    "note": "this section is the best part of an illustrated book about birds",
     "tags": Array [],
   },
   Object {
-    "id": "21",
-    "note": "this is a song",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1427,12 +1467,31 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "21",
+    "note": "this is a song",
     "tags": Array [],
   },
   Object {
+    "connectedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+    "connectionType": "self",
     "id": "22",
     "note": "this is an awesome show",
-    "relatedResources": Array [
+    "tags": Array [],
+  },
+  Object {
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1444,29 +1503,13 @@ Array [
         "role": "self",
       },
     ],
-    "tags": Array [],
-  },
-  Object {
+    "connectionType": "self",
     "id": "23",
     "note": "important clip from the show",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
     "tags": Array [],
   },
   Object {
-    "id": "2000",
-    "note": "That is why term/2 is related to vocabularyList/2",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -1498,12 +1541,13 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2000",
+    "note": "That is why term/2 is related to vocabularyList/2",
     "tags": Array [],
   },
   Object {
-    "id": "2001",
-    "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -1534,6 +1578,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2001",
+    "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
     "tags": Array [
       Object {
         "id": "5",
@@ -1542,9 +1589,7 @@ Array [
     ],
   },
   Object {
-    "id": "2002",
-    "note": "That is why transcribedAudio/110 is related to book/24",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "110",
@@ -1573,6 +1618,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2002",
+    "note": "That is why transcribedAudio/110 is related to book/24",
     "tags": Array [
       Object {
         "id": "4",
@@ -1581,9 +1629,7 @@ Array [
     ],
   },
   Object {
-    "id": "2003",
-    "note": "That is why book/24 is related to photograph/2",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "24",
@@ -1628,6 +1674,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2003",
+    "note": "That is why book/24 is related to photograph/2",
     "tags": Array [
       Object {
         "id": "3",
@@ -1636,9 +1685,7 @@ Array [
     ],
   },
   Object {
-    "id": "2004",
-    "note": "That is why photograph/2 is related to spatialFeature/300",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -1680,6 +1727,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2004",
+    "note": "That is why photograph/2 is related to spatialFeature/300",
     "tags": Array [
       Object {
         "id": "2",
@@ -1688,9 +1738,7 @@ Array [
     ],
   },
   Object {
-    "id": "2005",
-    "note": "That is why spatialFeature/300 is related to song/1",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "300",
@@ -1716,6 +1764,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2005",
+    "note": "That is why spatialFeature/300 is related to song/1",
     "tags": Array [
       Object {
         "id": "1",
@@ -1724,9 +1775,7 @@ Array [
     ],
   },
   Object {
-    "id": "2006",
-    "note": "That is why song/1 is related to term/2",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1757,12 +1806,13 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "2006",
+    "note": "That is why song/1 is related to term/2",
     "tags": Array [],
   },
   Object {
-    "id": "3001",
-    "note": "this media item mentions a word in the term",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1793,12 +1843,13 @@ Array [
         "role": "to",
       },
     ],
+    "connectionType": "dual",
+    "id": "3001",
+    "note": "this media item mentions a word in the term",
     "tags": Array [],
   },
   Object {
-    "id": "3002",
-    "note": "here is the digital version of the book!",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1820,12 +1871,13 @@ Array [
         "role": "to",
       },
     ],
+    "connectionType": "dual",
+    "id": "3002",
+    "note": "here is the digital version of the book!",
     "tags": Array [],
   },
   Object {
-    "id": "3101",
-    "note": "this selection from the media item portrays the events in the book",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1854,12 +1906,13 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "3101",
+    "note": "this selection from the media item portrays the events in the book",
     "tags": Array [],
   },
   Object {
-    "id": "3102",
-    "note": "this library book has the lyrics from the song, but we do not have access to the book",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1885,6 +1938,9 @@ Array [
         "role": "from",
       },
     ],
+    "connectionType": "dual",
+    "id": "3102",
+    "note": "this library book has the lyrics from the song, but we do not have access to the book",
     "tags": Array [],
   },
 ]
@@ -1893,9 +1949,7 @@ Array [
 exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: bibliographicReference should return the expected result 1`] = `
 Array [
   Object {
-    "id": "9",
-    "note": "found this in the archives",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1907,6 +1961,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "9",
+    "note": "found this in the archives",
     "tags": Array [
       Object {
         "id": "1",
@@ -1915,9 +1972,7 @@ Array [
     ],
   },
   Object {
-    "id": "13",
-    "note": "this book is hard to track down",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -1929,6 +1984,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "13",
+    "note": "this book is hard to track down",
     "tags": Array [],
   },
 ]
@@ -1937,9 +1995,28 @@ Array [
 exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: book should return the expected result 1`] = `
 Array [
   Object {
+    "connectedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "24",
+          "type": "book",
+        },
+        "context": Object {
+          "pageIdentifiers": Array [
+            "ix",
+          ],
+          "type": "pageRange",
+        },
+        "role": "self",
+      },
+    ],
+    "connectionType": "self",
     "id": "2",
     "note": "This page is about bears",
-    "relatedResources": Array [
+    "tags": Array [],
+  },
+  Object {
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "24",
@@ -1954,49 +2031,31 @@ Array [
         "role": "self",
       },
     ],
-    "tags": Array [],
-  },
-  Object {
+    "connectionType": "self",
     "id": "8",
     "note": "this section is the best part of an illustrated book about birds",
-    "relatedResources": Array [
+    "tags": Array [],
+  },
+  Object {
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "24",
           "type": "book",
         },
         "context": Object {
-          "pageIdentifiers": Array [
-            "ix",
-          ],
-          "type": "pageRange",
+          "type": "general",
         },
         "role": "self",
       },
     ],
-    "tags": Array [],
-  },
-  Object {
+    "connectionType": "self",
     "id": "15",
     "note": "This page is about bears",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "24",
-          "type": "book",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
     "tags": Array [],
   },
   Object {
-    "id": "20",
-    "note": "this section is the best part of an illustrated book about birds",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "24",
@@ -2008,6 +2067,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "20",
+    "note": "this section is the best part of an illustrated book about birds",
     "tags": Array [],
   },
 ]
@@ -2016,9 +2078,7 @@ Array [
 exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: mediaItem should return the expected result 1`] = `
 Array [
   Object {
-    "id": "11",
-    "note": "this is an awesome show",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -2035,6 +2095,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "11",
+    "note": "this is an awesome show",
     "tags": Array [
       Object {
         "id": "1",
@@ -2043,9 +2106,7 @@ Array [
     ],
   },
   Object {
-    "id": "12",
-    "note": "important clip from the show",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -2061,29 +2122,31 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "12",
+    "note": "important clip from the show",
     "tags": Array [],
   },
   Object {
+    "connectedResources": Array [
+      Object {
+        "compositeIdentifier": Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        "context": Object {
+          "type": "general",
+        },
+        "role": "self",
+      },
+    ],
+    "connectionType": "self",
     "id": "22",
     "note": "this is an awesome show",
-    "relatedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
     "tags": Array [],
   },
   Object {
-    "id": "23",
-    "note": "important clip from the show",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -2095,6 +2158,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "23",
+    "note": "important clip from the show",
     "tags": Array [],
   },
 ]
@@ -2103,9 +2169,7 @@ Array [
 exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: photograph should return the expected result 1`] = `
 Array [
   Object {
-    "id": "6",
-    "note": "this is the stem of the flower",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -2137,12 +2201,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "6",
+    "note": "this is the stem of the flower",
     "tags": Array [],
   },
   Object {
-    "id": "7",
-    "note": "this is the base of the flower",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -2158,6 +2223,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "7",
+    "note": "this is the base of the flower",
     "tags": Array [
       Object {
         "id": "2",
@@ -2166,9 +2234,7 @@ Array [
     ],
   },
   Object {
-    "id": "18",
-    "note": "this is the stem of the flower",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -2180,12 +2246,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "18",
+    "note": "this is the stem of the flower",
     "tags": Array [],
   },
   Object {
-    "id": "19",
-    "note": "this is the base of the flower",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -2197,6 +2264,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "19",
+    "note": "this is the base of the flower",
     "tags": Array [],
   },
 ]
@@ -2205,9 +2275,7 @@ Array [
 exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: song should return the expected result 1`] = `
 Array [
   Object {
-    "id": "10",
-    "note": "this is a song",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -2223,12 +2291,13 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "10",
+    "note": "this is a song",
     "tags": Array [],
   },
   Object {
-    "id": "21",
-    "note": "this is a song",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "1",
@@ -2240,6 +2309,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "21",
+    "note": "this is a song",
     "tags": Array [],
   },
 ]
@@ -2248,9 +2320,7 @@ Array [
 exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: spatialFeature should return the expected result 1`] = `
 Array [
   Object {
-    "id": "4",
-    "note": "there is a placename for this point at the base of the mountain",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "300",
@@ -2262,6 +2332,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "4",
+    "note": "there is a placename for this point at the base of the mountain",
     "tags": Array [],
   },
 ]
@@ -2270,9 +2343,7 @@ Array [
 exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: term should return the expected result 1`] = `
 Array [
   Object {
-    "id": "1",
-    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -2289,6 +2360,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "1",
+    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
     "tags": Array [
       Object {
         "id": "5",
@@ -2297,9 +2371,7 @@ Array [
     ],
   },
   Object {
-    "id": "14",
-    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -2311,6 +2383,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "14",
+    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
     "tags": Array [],
   },
 ]
@@ -2319,9 +2394,7 @@ Array [
 exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: transcribedAudio should return the expected result 1`] = `
 Array [
   Object {
-    "id": "5",
-    "note": "this clip talks about songs",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "110",
@@ -2337,6 +2410,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "5",
+    "note": "this clip talks about songs",
     "tags": Array [
       Object {
         "id": "3",
@@ -2345,9 +2421,7 @@ Array [
     ],
   },
   Object {
-    "id": "17",
-    "note": "this clip talks about songs",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "110",
@@ -2359,6 +2433,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "17",
+    "note": "this clip talks about songs",
     "tags": Array [],
   },
 ]
@@ -2367,9 +2444,7 @@ Array [
 exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: vocabularyList should return the expected result 1`] = `
 Array [
   Object {
-    "id": "3",
-    "note": "This is the first letter of the list name",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -2386,6 +2461,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "3",
+    "note": "This is the first letter of the list name",
     "tags": Array [
       Object {
         "id": "4",
@@ -2394,9 +2472,7 @@ Array [
     ],
   },
   Object {
-    "id": "16",
-    "note": "This is the first letter of the list name",
-    "relatedResources": Array [
+    "connectedResources": Array [
       Object {
         "compositeIdentifier": Object {
           "id": "2",
@@ -2408,6 +2484,9 @@ Array [
         "role": "self",
       },
     ],
+    "connectionType": "self",
+    "id": "16",
+    "note": "This is the first letter of the list name",
     "tags": Array [],
   },
 ]

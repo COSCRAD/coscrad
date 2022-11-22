@@ -1,6 +1,6 @@
 import { IDetailQueryResult, IPhotographViewModel, ResourceType } from '@coscrad/api-interfaces';
-import { routes } from 'apps/coscrad-frontend/src/app/routes/routes';
 import { Link } from 'react-router-dom';
+import { routes } from '../../../app/routes/routes';
 import './photograph-detail.thumbnail.presenter.css';
 
 export const PhotographDetailThumbnailPresenter = ({
@@ -9,7 +9,7 @@ export const PhotographDetailThumbnailPresenter = ({
     <Link to={`/${routes.resources.ofType(ResourceType.photograph).detail(id)}`}>
         <div className="detail-thumbnail-container" title="View Connected Photograph">
             <div className="detail-thumbnail-image-container">
-                <img src={imageURL} />
+                <img src={imageURL} alt={`For ${ResourceType.photograph}/${id}`} />
             </div>
             <div className="detail-thumbnail-meta-container">
                 <strong>Photograph ID:</strong> {id}

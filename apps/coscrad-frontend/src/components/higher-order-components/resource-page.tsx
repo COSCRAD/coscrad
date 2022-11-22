@@ -1,5 +1,4 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import { ConnectedResourcesPanel } from '../../store/slices/resources/shared/connected-resources';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { fullViewResourcePresenterFactory } from '../resources/factories/full-view-resource-presenter-factory';
 import { AggregateDetailContainer } from './aggregate-detail-container';
@@ -22,7 +21,6 @@ export const ResourcePage = (resourceType: ResourceType): JSX.Element => {
                 compositeIdentifier={compositeIdentifier}
                 detailPresenterFactory={fullViewResourcePresenterFactory}
             />
-            <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
         </div>
     );
 };
