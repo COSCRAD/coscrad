@@ -355,7 +355,7 @@ VocabularyList {
   "id": "1",
   "name": "test VL 1 chil",
   "nameEnglish": "test VL 1 engl",
-  "published": false,
+  "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": Array [],
     "allowedUserIds": Array [],
