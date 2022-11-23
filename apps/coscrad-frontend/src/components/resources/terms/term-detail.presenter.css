@@ -1,0 +1,45 @@
+.term-detail-page {
+    width: 100%;
+}
+
+.term-detail-card {
+    width: fit-content;
+    min-width: 320px;
+    padding: 16px 24px 24px 24px;
+    margin: auto !important;
+    text-align: center !important;
+}
+
+.term-detail-card #term-detail-term {
+    margin: 0 !important;
+    text-align: center !important;
+    display: block;
+}
+
+.term-detail-card div {
+    display: flex;
+    padding: 0 0 4px 0;
+}
+
+.term-detail-headers {
+    margin: 0;
+    padding: 0 12px 0 0;
+}
+
+.term-detail-meta {
+    margin: 14px 0 14px 0;
+}
+
+#term-media-player {
+    margin: auto !important;
+    display: inline-block !important;
+}
+
+#term-detail-divider {
+    margin: 4px 0 4px 0;
+}
+
+#term-detail-term {
+    font-size: 28px;
+    font-weight: 600;
+}
