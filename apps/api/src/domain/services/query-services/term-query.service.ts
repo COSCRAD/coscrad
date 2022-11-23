@@ -1,4 +1,4 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels, ITermViewModel } from '@coscrad/api-interfaces';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
@@ -9,7 +9,7 @@ import { ResourceType } from '../../types/ResourceType';
 import { BaseQueryService } from './base-query.service';
 
 @Injectable()
-export class TermQueryService extends BaseQueryService<Term, TermViewModel> {
+export class TermQueryService extends BaseQueryService<Term, ITermViewModel> {
     protected readonly type = ResourceType.term;
 
     constructor(
