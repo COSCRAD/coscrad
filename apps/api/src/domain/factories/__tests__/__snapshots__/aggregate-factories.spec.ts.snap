@@ -305,7 +305,7 @@ Term {
 
 exports[`Aggregate factories when attempting to build an instance of type: transcribedAudio from a DTO when the DTO is valid valid transribed audio DTO should succeed 1`] = `
 TranscribedAudio {
-  "audioFilename": "123.mp3",
+  "audioFilename": "Gaas",
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
   "id": "110",
