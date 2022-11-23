@@ -8,7 +8,7 @@ import { SongDetailPresenter } from '../songs/song-detail.presenter';
 import { SpatialFeatureDetailPresenter } from '../spatial-features/spatial-feature-detail.presenter';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
 import { TranscribedAudioDetailFullViewPresenter } from '../transcribed-audio/transcribed-audio-detail.full-view.presenter';
-import { VocabularyListDetailPresenter } from '../vocabulary-lists/vocabulary-list-detail.presenter';
+import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocabulary-list-detail.full-view.presenter';
 import { withCommands } from './with-commands';
 
 /**
@@ -23,7 +23,7 @@ const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
     [ResourceType.spatialFeature]: SpatialFeatureDetailPresenter,
     [ResourceType.term]: TermDetailFullViewPresenter,
     [ResourceType.transcribedAudio]: TranscribedAudioDetailFullViewPresenter,
-    [ResourceType.vocabularyList]: VocabularyListDetailPresenter,
+    [ResourceType.vocabularyList]: VocabularyListDetailFullViewPresenter,
 };
 
 /**

@@ -8,7 +8,7 @@ const vocabularyListDTOs = [
         id: '1',
         name: 'test VL 1 chil',
         nameEnglish: 'test VL 1 engl',
-        published: false,
+        published: true,
         entries: [
             {
                 termId: '1',
