@@ -51,5 +51,3 @@ export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
         </div>
     );
 }
-
-export default MediaPlayer;
