@@ -7,6 +7,10 @@ import { formatBilingualText } from './utils';
 export const VocabularyListIndexPresenter = ({
     data: vocabularyListsAndActions,
 }: IIndexQueryResult<IVocabularyListViewModel>) => {
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/183681556]
+     * Remove the need to map here.
+     */
     const vocabularyLists = vocabularyListsAndActions.map(({ data }) => data);
 
     const headingLabels: HeadingLabel<IVocabularyListViewModel>[] = [

@@ -1,1 +1,1 @@
-export * from './formatBilingualText';
+export * from './format-bilingual-text';
