@@ -7,7 +7,7 @@ export interface ITermViewModel extends IBaseViewModel {
 
     termEnglish?: string;
 
-    audioUrl?: string;
+    audioURL?: string;
 
     sourceProject?: string;
 }

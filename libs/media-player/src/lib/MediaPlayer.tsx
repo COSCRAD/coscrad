@@ -26,15 +26,22 @@ const useAudio = (audioUrl: string): [boolean, MouseEventHandler<HTMLButtonEleme
 
 export interface MediaPlayerProps {
     audioUrl: string;
+    listenMessage?: string;
 }
 
-export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
+const DEFAULT_LISTEN_MESSAGE = 'Listen Live!';
+
+export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
     const [playing, toggle] = useAudio(audioUrl);
 
     return (
         <div className={styles['container']}>
             <Button id={styles['radioButton']} variant="contained" onClick={toggle}>
-                {playing ? <div>Now Playing!</div> : <div>Listen Live!</div>}
+                {playing ? (
+                    <div>Now Playing!</div>
+                ) : (
+                    <div>{listenMessage || DEFAULT_LISTEN_MESSAGE}</div>
+                )}
                 {playing ? (
                     <PauseIcon className={styles['actionButton']} />
                 ) : (
