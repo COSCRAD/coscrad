@@ -3,10 +3,6 @@ import { HeadingLabel, IndexTable } from '../../../utils/generic-components/pres
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 
-//export const TermIndexPresenter: FunctionalComponent<IIndexQueryResult<ITermViewModel>> = (
-//    termsIndexResult: IIndexQueryResult<ITermViewModel>
-// ) => <GenericIndexPresenter {...termsIndexResult} indexLabel={'Terms'} />;
-
 export const TermIndexPresenter = (termsIndexResult: IIndexQueryResult<ITermViewModel>) => {
     const { data: detailResult } = termsIndexResult;
 
