@@ -7,7 +7,7 @@ import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-de
 import { SongDetailPresenter } from '../songs/song-detail.presenter';
 import { SpatialFeatureDetailPresenter } from '../spatial-features/spatial-feature-detail.presenter';
 import { TermDetailThumbnailPresenter } from '../terms/term-detail.thumbnail.presenter';
-import { TranscribedAudioDetailPresenter } from '../transcribed-audio/transcribed-audio-detail.presenter';
+import { TranscribedAudioDetailThumbnailPresenter } from '../transcribed-audio/transcribed-audio-detail.thumbnail.presenter';
 import { VocabularyListDetailPresenter } from '../vocabulary-lists/vocabulary-list-detail.presenter';
 
 // TODO Define thumbnail specific presenters
@@ -19,7 +19,7 @@ const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
     [ResourceType.song]: SongDetailPresenter,
     [ResourceType.spatialFeature]: SpatialFeatureDetailPresenter,
     [ResourceType.term]: TermDetailThumbnailPresenter,
-    [ResourceType.transcribedAudio]: TranscribedAudioDetailPresenter,
+    [ResourceType.transcribedAudio]: TranscribedAudioDetailThumbnailPresenter,
     [ResourceType.vocabularyList]: VocabularyListDetailPresenter,
 };
 

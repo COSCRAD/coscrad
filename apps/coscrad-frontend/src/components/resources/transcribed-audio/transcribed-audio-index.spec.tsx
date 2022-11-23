@@ -14,7 +14,7 @@ const dummyTranscribedAudioItems: ITranscribedAudioViewModel[] = [
         id: '44',
         audioURL: 'https://www.soundbox.org/123.mp3',
         start: 0,
-        length: 5600,
+        lengthMilliseconds: 5600,
         plainText: '[0:01] Blah blah blah [0:05]',
     },
 ];
