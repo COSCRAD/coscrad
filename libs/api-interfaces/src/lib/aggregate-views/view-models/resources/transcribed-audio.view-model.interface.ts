@@ -5,7 +5,7 @@ export interface ITranscribedAudioViewModel extends IBaseViewModel {
 
     start: number;
 
-    length: number;
+    lengthMilliseconds: number;
 
     /**
      * We may eventually want to make this a union of different
