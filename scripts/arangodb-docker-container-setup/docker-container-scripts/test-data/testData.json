@@ -429,7 +429,7 @@
                 "type": "vocabularyList",
                 "_key": "1",
                 "eventHistory": [],
-                "published": false,
+                "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
