@@ -1,0 +1,9 @@
+.detail-full-view-media-container,
+.detail-full-view-meta-container {
+    float: left;
+    position: relative;
+}
+
+.detail-full-view-meta-container {
+    margin-left: 20px;
+}

@@ -19,7 +19,7 @@ const transcribedAudioToFind: ITranscribedAudioViewModel = {
     id: idToFind,
     audioURL: 'https://www.soundbox.org/123.mp3',
     start: 0,
-    length: 5600,
+    lengthMilliseconds: 5600,
     plainText: '[0:01] Blah blah blah [0:05]',
 };
 
@@ -28,7 +28,7 @@ const dummyTranscribedAudioItems: ITranscribedAudioViewModel[] = [
         id: '90',
         audioURL: 'https://www.soundbox.org/1245.mp3',
         start: 0,
-        length: 56500,
+        lengthMilliseconds: 56500,
         plainText: '[0:03] testing, this is a test! [0:05]',
     },
     transcribedAudioToFind,

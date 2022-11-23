@@ -1,3 +1,4 @@
+import { ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
 import { NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { TranscribedAudio } from '../../../../domain/models/transcribed-audio/entities/transcribed-audio.entity';
@@ -5,7 +6,7 @@ import { BaseViewModel } from '../base.view-model';
 import buildFullDigitalAssetURL from '../utilities/buildFullDigitalAssetURL';
 import convertTimeRangeDataToPlainTextTranscript from './utilities/convertTimeRangeDataToPlainTextTranscript';
 
-export class TranscribedAudioViewModel extends BaseViewModel {
+export class TranscribedAudioViewModel extends BaseViewModel implements ITranscribedAudioViewModel {
     readonly #baseAudioURL: string;
 
     @ApiProperty({
@@ -27,7 +28,7 @@ export class TranscribedAudioViewModel extends BaseViewModel {
         description: 'the length of the audio clip in milliseconds',
     })
     @NonNegativeFiniteNumber()
-    readonly length: number;
+    readonly lengthMilliseconds: number;
 
     @ApiProperty({
         example: 'Once upon a time, there were three little pigs. They lived in the forest.',
@@ -52,7 +53,7 @@ export class TranscribedAudioViewModel extends BaseViewModel {
 
         this.start = startMilliseconds;
 
-        this.length = lengthMilliseconds;
+        this.lengthMilliseconds = lengthMilliseconds;
 
         this.plainText = convertTimeRangeDataToPlainTextTranscript(timeRanges);
 

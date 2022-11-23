@@ -5,7 +5,7 @@ import { DTO } from '../types/DTO';
 const partialDtos: DTO<Omit<TranscribedAudio, 'type'>>[] = [
     {
         id: '110',
-        audioFilename: '123.mp3',
+        audioFilename: 'Gaas',
         startMilliseconds: 0,
         lengthMilliseconds: 20000,
         published: true,
@@ -26,7 +26,7 @@ const partialDtos: DTO<Omit<TranscribedAudio, 'type'>>[] = [
     },
     {
         id: '111',
-        audioFilename: '4859.mp3',
+        audioFilename: 'Chinaay',
         startMilliseconds: 0,
         lengthMilliseconds: 23409,
         published: true,
@@ -52,7 +52,7 @@ const partialDtos: DTO<Omit<TranscribedAudio, 'type'>>[] = [
     },
     {
         id: '113',
-        audioFilename: '3948.mp3',
+        audioFilename: 'Kwa',
         startMilliseconds: 0,
         lengthMilliseconds: 32989,
         published: true,
