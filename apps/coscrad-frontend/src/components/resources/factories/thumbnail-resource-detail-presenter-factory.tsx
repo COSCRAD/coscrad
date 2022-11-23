@@ -1,7 +1,7 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
-import { BookDetailPresenter } from '../books/book-detail.presenter';
+import { BookDetailThumbnailPresenter } from '../books';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
 import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-detail.thumbnail.presenter';
 import { SongDetailPresenter } from '../songs/song-detail.presenter';
@@ -13,7 +13,7 @@ import { VocabularyListDetailThumbnailPresenter } from '../vocabulary-lists/voca
 // TODO Define thumbnail specific presenters
 const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
     [ResourceType.bibliographicReference]: BibliographicReferenceDetailPresenter,
-    [ResourceType.book]: BookDetailPresenter,
+    [ResourceType.book]: BookDetailThumbnailPresenter,
     [ResourceType.mediaItem]: MediaItemDetailPresenter,
     [ResourceType.photograph]: PhotographDetailThumbnailPresenter,
     [ResourceType.song]: SongDetailPresenter,

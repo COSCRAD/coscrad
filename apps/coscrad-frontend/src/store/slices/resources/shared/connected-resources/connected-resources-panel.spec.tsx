@@ -6,6 +6,7 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import {
     buildDummyDualEdgeConnection,
     buildDummyNotes,
@@ -43,7 +44,9 @@ const noteEndpoint = `${config.apiUrl}/connections/notes`;
 
 const act = () =>
     renderWithProviders(
-        <ConnectedResourcesPanel compositeIdentifier={compositeIdentifierOfTermOfFocus} />
+        <MemoryRouter>
+            <ConnectedResourcesPanel compositeIdentifier={compositeIdentifierOfTermOfFocus} />
+        </MemoryRouter>
     );
 
 const connectedTerm = dummyTerms[1];

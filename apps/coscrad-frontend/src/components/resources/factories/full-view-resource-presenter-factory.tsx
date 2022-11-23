@@ -1,7 +1,7 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
-import { BookDetailPresenter } from '../books/book-detail.presenter';
+import { BookDetailFullViewPresenter } from '../books';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
 import { PhotographDetailFullViewPresenter } from '../photographs/photograph-detail.full-view.presenter';
 import { SongDetailPresenter } from '../songs/song-detail.presenter';
@@ -16,7 +16,7 @@ import { withCommands } from './with-commands';
  */
 const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
     [ResourceType.bibliographicReference]: BibliographicReferenceDetailPresenter,
-    [ResourceType.book]: BookDetailPresenter,
+    [ResourceType.book]: BookDetailFullViewPresenter,
     [ResourceType.mediaItem]: MediaItemDetailPresenter,
     [ResourceType.photograph]: PhotographDetailFullViewPresenter,
     [ResourceType.song]: SongDetailPresenter,
