@@ -1117,8 +1117,8 @@ Object {
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
-            100,
-            0,
+            54.034404852745006,
+            -132.17563335558532,
           ],
           "type": "Point",
         },
@@ -1158,8 +1158,8 @@ Object {
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
-            20,
-            10,
+            53.26710566708586,
+            -131.99142447847115,
           ],
           "type": "Point",
         },
@@ -1199,8 +1199,8 @@ Object {
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
-            70.5,
-            23.5,
+            51.93152097800416,
+            -123.14042112774867,
           ],
           "type": "Point",
         },
@@ -1211,6 +1211,78 @@ Object {
             "label": "animals",
           },
         ],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            51.935065638350636,
+            -122.50936316168337,
+          ],
+          "type": "Point",
+        },
+        "id": "103",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            52.12579975880678,
+            -123.68132823530952,
+          ],
+          "type": "Point",
+        },
+        "id": "104",
+        "tags": Array [],
       },
     },
     Object {
@@ -1354,8 +1426,8 @@ Object {
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
-            100,
-            0,
+            54.034404852745006,
+            -132.17563335558532,
           ],
           "type": "Point",
         },
@@ -1395,8 +1467,8 @@ Object {
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
-            20,
-            10,
+            53.26710566708586,
+            -131.99142447847115,
           ],
           "type": "Point",
         },
@@ -1436,8 +1508,8 @@ Object {
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
-            70.5,
-            23.5,
+            51.93152097800416,
+            -123.14042112774867,
           ],
           "type": "Point",
         },
@@ -1448,6 +1520,78 @@ Object {
             "label": "animals",
           },
         ],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            51.935065638350636,
+            -122.50936316168337,
+          ],
+          "type": "Point",
+        },
+        "id": "103",
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            52.12579975880678,
+            -123.68132823530952,
+          ],
+          "type": "Point",
+        },
+        "id": "104",
+        "tags": Array [],
       },
     },
     Object {

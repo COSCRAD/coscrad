@@ -227,8 +227,8 @@ Point {
   "eventHistory": Array [],
   "geometry": Object {
     "coordinates": Array [
-      100,
-      0,
+      54.034404852745006,
+      -132.17563335558532,
     ],
     "type": "Point",
   },
