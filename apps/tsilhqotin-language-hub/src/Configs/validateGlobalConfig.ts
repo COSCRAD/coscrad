@@ -1,3 +1,4 @@
+import { isNotEmptyObject, isObject, isUUID } from 'class-validator';
 import { GlobalConfig } from './global.config';
 import { consolidateMessagesForErrors, createArrayValidator } from './utils';
 import { validateExternalLink } from './validateExternalLink';
@@ -6,6 +7,14 @@ import { validateFunderInfos } from './validateFunderInfos';
 export const isStringWithNonzeroLength = (input: unknown): input is string =>
     typeof input === 'string' && input.length > 0;
 
+const validateCreditsLookupTable = (input: unknown): input is Record<string, string> => {
+    if (!isObject(input) || !isNotEmptyObject(input)) return false;
+
+    return Object.entries(input).every(
+        ([key, value]) => isStringWithNonzeroLength(key) && isUUID(value)
+    );
+};
+
 export const validateGlobalConfig = (input: unknown): Error[] => {
     const allErrors: Error[] = [];
 
@@ -13,7 +22,8 @@ export const validateGlobalConfig = (input: unknown): Error[] => {
 
     if (input === null) return [new Error(`global config is null`)];
 
-    const { funderInfos, linkInfos, siteTitle } = input as GlobalConfig;
+    const { funderInfos, linkInfos, siteTitle, songIdToCredits, videoIdToCredits } =
+        input as GlobalConfig;
 
     const funderLinksErrors = validateFunderInfos(funderInfos);
 
@@ -46,6 +56,16 @@ export const validateGlobalConfig = (input: unknown): Error[] => {
                 )}`
             )
         );
+
+    const isSongCreditsValid = validateCreditsLookupTable(songIdToCredits);
+
+    if (!isSongCreditsValid)
+        allErrors.push(new Error(`Invalid song credits: ${JSON.stringify(songIdToCredits)}`));
+
+    const isVideoCreditsValid = validateCreditsLookupTable(videoIdToCredits);
+
+    if (!isVideoCreditsValid)
+        allErrors.push(new Error(`Invalid song credits: ${JSON.stringify(videoIdToCredits)}`));
 
     return allErrors;
 };

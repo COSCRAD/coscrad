@@ -10,7 +10,8 @@ export type SongData = {
 
     titleEnglish?: string;
 
-    contributions: string;
+    // pulled from the config above
+    creditsMap: Map<string, string>;
 
     lyrics: string;
 
@@ -25,7 +26,7 @@ export interface SongsDetailComponentProps {
 export function Song(props: SongsDetailComponentProps) {
     const { songData } = props;
 
-    const { id, title, titleEnglish, contributions, lyrics, audioURL } = songData;
+    const { id, title, titleEnglish, creditsMap, lyrics, audioURL } = songData;
 
     return (
         <div className="page">
@@ -40,7 +41,10 @@ export function Song(props: SongsDetailComponentProps) {
                     <Typography className="cardDetail" color={'white'} component="div">
                         <div>Title: {title}</div>
                         <div>English: {titleEnglish}</div>
-                        <div>Contributions: {`${contributions}`}</div>
+                        <div>
+                            Contributions:{' '}
+                            {creditsMap.has(id) ? creditsMap.get(id) : 'NO CREDITS LISTED'}
+                        </div>
                         <div>Lyrics: {`${lyrics || ''}`}</div>
                         <div>ID: {`${id}`} </div>
                     </Typography>
