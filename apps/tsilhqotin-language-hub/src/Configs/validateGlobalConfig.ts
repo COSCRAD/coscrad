@@ -11,7 +11,7 @@ const validateCreditsLookupTable = (input: unknown): input is Record<string, str
     if (!isObject(input) || !isNotEmptyObject(input)) return false;
 
     return Object.entries(input).every(
-        ([key, value]) => isStringWithNonzeroLength(key) && isUUID(value)
+        ([key, value]) => isUUID(key) && isStringWithNonzeroLength(value)
     );
 };
 

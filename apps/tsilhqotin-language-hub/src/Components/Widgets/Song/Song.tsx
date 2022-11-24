@@ -1,7 +1,8 @@
 import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import { Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Button, Card, CardContent, CardMedia, Divider, Typography } from '@mui/material';
 import buildBilingualTitle from '../../../app/utilities/buildBilingualTitle';
+import './Song.css';
 
 export type SongData = {
     id: string;
@@ -39,14 +40,12 @@ export function Song(props: SongsDetailComponentProps) {
                 <MusicNoteIcon className="songIcon" />
                 <CardContent>
                     <Typography className="cardDetail" color={'white'} component="div">
-                        <div>Title: {title}</div>
-                        <div>English: {titleEnglish}</div>
+                        <div>Title: {buildBilingualTitle(title, titleEnglish)}</div>
+                        <Divider id="detail-divider" />
                         <div>
-                            Contributions:{' '}
-                            {creditsMap.has(id) ? creditsMap.get(id) : 'NO CREDITS LISTED'}
+                            Credits: {creditsMap.has(id) ? creditsMap.get(id) : 'NO CREDITS LISTED'}
                         </div>
-                        <div>Lyrics: {`${lyrics || ''}`}</div>
-                        <div>ID: {`${id}`} </div>
+                        {lyrics && <div>Lyrics: {`${lyrics || ''}`}</div>}
                     </Typography>
                     <CardMedia>
                         <audio className="audioPlayer" src={`${audioURL}`} controls></audio>
