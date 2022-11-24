@@ -20,7 +20,7 @@ export const SpatialFeatureIndexPresenter = (indexResult: SpatialFeatureIndexSta
     const spatialFeatures = detailResult.map(({ data }) => data);
 
     /**
-     * Not sure where to get this from, if it can be derived from the spatial feature coordinates to be displayed?
+     * Not sure where to get this from, can it can be derived from the spatial feature coordinates to be displayed?
      */
     const initialMapCentreCoordinates: LatLngExpression = [53.232942164270135, -127.70090919382334];
 
