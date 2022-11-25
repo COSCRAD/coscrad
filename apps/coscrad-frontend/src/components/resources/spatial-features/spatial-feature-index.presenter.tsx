@@ -1,9 +1,13 @@
 import { LatLngExpression } from 'leaflet';
+import { SinglePropertyPresenter } from '../../../utils/generic-components';
 /**
  * This is an attempted fix from: https://stackoverflow.com/a/59523791
  * For some reason the shadow of the place marker is a broken image link
  */
+import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
 import 'leaflet/dist/images/marker-shadow.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { SpatialFeatureIndexState } from '../../../store/slices/resources';
@@ -24,6 +28,18 @@ export const SpatialFeatureIndexPresenter = (indexResult: SpatialFeatureIndexSta
      */
     const initialMapCentreCoordinates: LatLngExpression = [53.232942164270135, -127.70090919382334];
 
+    /**
+     * This is a workaround to get the default icon shadows (marker-shadow.png) to
+     * display.  There may be a leaflet bug affecting this but I haven't tracked down official
+     * documentation of it but it is reference here: https://stackoverflow.com/a/51232969
+     */
+    const DefaultIcon = L.icon({
+        iconUrl: icon,
+        shadowUrl: iconShadow,
+    });
+
+    L.Marker.prototype.options.icon = DefaultIcon;
+
     return (
         <>
             <MapContainer center={initialMapCentreCoordinates} zoom={6} scrollWheelZoom={false}>
@@ -37,7 +53,16 @@ export const SpatialFeatureIndexPresenter = (indexResult: SpatialFeatureIndexSta
                         const coordinates = geometry.coordinates as LatLngExpression;
                         return (
                             <Marker key={index} position={coordinates}>
-                                <Popup>Old Massett</Popup>
+                                <Popup>
+                                    <SinglePropertyPresenter
+                                        display="ID"
+                                        value={spatialFeature.id}
+                                    />
+                                    <SinglePropertyPresenter
+                                        display="Coordinates"
+                                        value={`Lat: ${coordinates[0]}, Long: ${coordinates[1]}`}
+                                    />
+                                </Popup>
                             </Marker>
                         );
                     }
