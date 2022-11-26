@@ -1,5 +1,5 @@
 import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
-import { Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Button, Card, CardContent, CardMedia, Divider, Typography } from '@mui/material';
 import buildBilingualTitle from '../../../app/utilities/buildBilingualTitle';
 
 export type MediaData = {
@@ -10,9 +10,11 @@ export type MediaData = {
     titleEnglish: string;
 
     url: string;
+
+    creditsMap: Map<string, string>;
 };
 
-export function Media({ id, title, titleEnglish, url }: MediaData) {
+export function Media({ id, title, titleEnglish, url, creditsMap }: MediaData) {
     return (
         <div className="page">
             <div id="heading">
@@ -28,10 +30,12 @@ export function Media({ id, title, titleEnglish, url }: MediaData) {
                         </video>
                     </CardMedia>
                     <Typography className="cardDetail" component="div">
-                        <div>Title: {title}</div>
-                        <div>English: {titleEnglish}</div>
+                        <div>Title: {buildBilingualTitle(title, titleEnglish)}</div>
+                        <Divider id="detail-divider" />
                         <source src={url} type="video/mp4" />
-                        <div>ID: {id}</div>
+                        <div>
+                            Credits: {creditsMap.has(id) ? creditsMap.get(id) : 'NO CREDITS LISTED'}
+                        </div>
                     </Typography>
                     <Button href={url} className="downloadMedia">
                         Download

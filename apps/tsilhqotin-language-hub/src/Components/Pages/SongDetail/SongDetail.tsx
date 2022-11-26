@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getConfig } from '../../../config';
+import { getGlobalConfig } from '../../../Configs/global.config';
 import SongData, { Song } from '../../Widgets/Song/Song';
 import './SongDetail.module.css';
 
@@ -25,7 +26,12 @@ export function SongDetail(props: SongViewModel) {
         fetch(apiUrl, { mode: 'cors' })
             .then((res) => res.json())
             .then((song) => {
-                setComponentState({ songData: song.data });
+                setComponentState({
+                    songData: {
+                        ...song.data,
+                        creditsMap: new Map(Object.entries(getGlobalConfig().songIdToCredits)),
+                    },
+                });
             })
             .catch((rej) => console.log(rej));
     }, [setComponentState]);
