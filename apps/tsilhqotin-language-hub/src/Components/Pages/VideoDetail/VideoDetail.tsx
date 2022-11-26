@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getConfig } from '../../../config';
+import { getGlobalConfig } from '../../../Configs/global.config';
 import { Media, MediaData } from '../../Widgets/Media/Media';
 
 type ComponentState = {
@@ -21,7 +22,12 @@ export default function MediaDetail() {
         fetch(apiUrl, { mode: 'cors' })
             .then((res) => res.json())
             .then((media) => {
-                setComponentState({ mediaData: media.data });
+                setComponentState({
+                    mediaData: {
+                        ...media.data,
+                        creditsMap: new Map(Object.entries(getGlobalConfig().videoIdToCredits)),
+                    },
+                });
             })
             .catch((rej) => console.log(rej));
     }, [setComponentState]);

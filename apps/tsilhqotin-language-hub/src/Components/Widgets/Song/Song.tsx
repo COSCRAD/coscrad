@@ -1,7 +1,8 @@
 import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import { Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Button, Card, CardContent, CardMedia, Divider, Typography } from '@mui/material';
 import buildBilingualTitle from '../../../app/utilities/buildBilingualTitle';
+import './Song.css';
 
 export type SongData = {
     id: string;
@@ -10,7 +11,8 @@ export type SongData = {
 
     titleEnglish?: string;
 
-    contributions: string;
+    // pulled from the config above
+    creditsMap: Map<string, string>;
 
     lyrics: string;
 
@@ -25,7 +27,7 @@ export interface SongsDetailComponentProps {
 export function Song(props: SongsDetailComponentProps) {
     const { songData } = props;
 
-    const { id, title, titleEnglish, contributions, lyrics, audioURL } = songData;
+    const { id, title, titleEnglish, creditsMap, lyrics, audioURL } = songData;
 
     return (
         <div className="page">
@@ -38,11 +40,12 @@ export function Song(props: SongsDetailComponentProps) {
                 <MusicNoteIcon className="songIcon" />
                 <CardContent>
                     <Typography className="cardDetail" color={'white'} component="div">
-                        <div>Title: {title}</div>
-                        <div>English: {titleEnglish}</div>
-                        <div>Contributions: {`${contributions}`}</div>
-                        <div>Lyrics: {`${lyrics || ''}`}</div>
-                        <div>ID: {`${id}`} </div>
+                        <div>Title: {buildBilingualTitle(title, titleEnglish)}</div>
+                        <Divider id="detail-divider" />
+                        <div>
+                            Credits: {creditsMap.has(id) ? creditsMap.get(id) : 'NO CREDITS LISTED'}
+                        </div>
+                        {lyrics && <div>Lyrics: {`${lyrics || ''}`}</div>}
                     </Typography>
                     <CardMedia>
                         <audio className="audioPlayer" src={`${audioURL}`} controls></audio>

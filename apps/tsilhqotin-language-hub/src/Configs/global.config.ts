@@ -16,11 +16,17 @@ export type LinkInfo = {
     description: string;
 };
 
+export type SongIdToCredits = Record<string, string>;
+
+export type VideoIdtoCredits = Record<string, string>;
+
 export type GlobalConfig = {
     siteTitle: string;
     funderInfos: FunderInfo[];
     // TODO Use this in the component
     linkInfos: LinkInfo[];
+    songIdToCredits: SongIdToCredits;
+    videoIdToCredits: VideoIdtoCredits;
 };
 
 export function getGlobalConfig(): GlobalConfig {
