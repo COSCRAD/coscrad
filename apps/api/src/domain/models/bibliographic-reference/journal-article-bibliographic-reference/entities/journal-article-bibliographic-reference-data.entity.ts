@@ -1,10 +1,10 @@
+import { IJournalArticleBibliographicReferenceData } from '@coscrad/api-interfaces';
 import { DiscriminatedBy, NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
 import { IsNonEmptyArray } from '@coscrad/validation';
 import { DTO } from '../../../../../types/DTO';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
 import BibliographicReferenceCreator from '../../common/bibliographic-reference-creator.entity';
-import { IBibliographicReferenceData } from '../../interfaces/bibliographic-reference-data.interface';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 
 const isOptional = true;
@@ -12,7 +12,7 @@ const isOptional = true;
 @DiscriminatedBy(BibliographicReferenceType.journalArticle)
 export default class JournalArticleBibliographicReferenceData
     extends BaseDomainModel
-    implements IBibliographicReferenceData
+    implements IJournalArticleBibliographicReferenceData
 {
     readonly type = BibliographicReferenceType.journalArticle;
 
