@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 
 export const BookBibliographicReferenceDetailFullViewPresenter = ({
+    id,
     data,
 }: IBibliographicReferenceViewModel<IBookBibliographicReferenceData>): JSX.Element => {
     const { title, abstract, year, publisher, place, url, numberOfPages, isbn } = data;
@@ -35,7 +36,7 @@ export const BookBibliographicReferenceDetailFullViewPresenter = ({
         <Card>
             <CardHeader title="Book Bibliographic Reference"></CardHeader>
             <CardContent>
-                <div>
+                <div data-testid={id}>
                     {title}
                     <Divider />
                     <br />
