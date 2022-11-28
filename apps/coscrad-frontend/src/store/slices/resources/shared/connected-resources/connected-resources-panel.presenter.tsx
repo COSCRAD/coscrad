@@ -50,6 +50,7 @@ export const ConnectedResourcesPanelPresenter = ({
 
     return (
         <div data-testid={'connectedResourcesPanel'}>
+            <h2>Connected Resources</h2>
             {uniqueResourceTypes.map((resourceType) => (
                 /**
                  * Note that the connected resources panel uses the thumbnail presenters.

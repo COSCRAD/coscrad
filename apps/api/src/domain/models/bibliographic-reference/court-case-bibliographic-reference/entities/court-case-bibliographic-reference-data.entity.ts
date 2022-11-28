@@ -1,14 +1,14 @@
+import { ICourtCaseBibliographicReferenceData } from '@coscrad/api-interfaces';
 import { DiscriminatedBy, NonEmptyString, URL } from '@coscrad/data-types';
 import { DTO } from '../../../../../types/DTO';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
-import { IBibliographicReferenceData } from '../../interfaces/bibliographic-reference-data.interface';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 
 @DiscriminatedBy(BibliographicReferenceType.courtCase)
 export class CourtCaseBibliographicReferenceData
     extends BaseDomainModel
-    implements IBibliographicReferenceData
+    implements ICourtCaseBibliographicReferenceData
 {
     readonly type = BibliographicReferenceType.courtCase;
 
