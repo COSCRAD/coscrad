@@ -3,23 +3,23 @@ import {
     IBibliographicReferenceViewModel,
     IDetailQueryResult,
 } from '@coscrad/api-interfaces';
-import { FunctionalComponent } from '../../../utils/types/functional-component';
-import { BookBibliographicReferenceDetailFullViewPresenter } from './book-bibliographic-reference-detail.full-view.presenter';
-import { CourtCaseBibliographicReferenceDetailFullViewPresenter } from './court-case-bibliographic-reference-detail.full-view.presenter';
-import { JournalArticleBibliographicReferenceFullViewPresenter } from './journal-article-bibliographic-reference.full-view.presenter';
+import { FunctionalComponent } from '../../../../utils/types/functional-component';
+import { BookBibliographicReferenceDetailThumbnailPresenter } from './book-bibliographic-reference-detail.thumbnail.presenter';
+import { CourtCaseBibliographicReferenceDetailThumbnailPresenter } from './court-case-bibliographic-reference-detail.thumbnail.presenter';
+import { JournalArticleBibliographicReferenceThumbnailPresenter } from './journal-article-bibliographic-reference-detail.thumbnail.presenter';
 
 type Presenter = FunctionalComponent<IDetailQueryResult<IBibliographicReferenceViewModel>>;
 
 const lookupTable: {
     [K in BibliographicReferenceType]: FunctionalComponent<IBibliographicReferenceViewModel>;
 } = {
-    [BibliographicReferenceType.book]: BookBibliographicReferenceDetailFullViewPresenter,
-    [BibliographicReferenceType.courtCase]: CourtCaseBibliographicReferenceDetailFullViewPresenter,
+    [BibliographicReferenceType.book]: BookBibliographicReferenceDetailThumbnailPresenter,
+    [BibliographicReferenceType.courtCase]: CourtCaseBibliographicReferenceDetailThumbnailPresenter,
     [BibliographicReferenceType.journalArticle]:
-        JournalArticleBibliographicReferenceFullViewPresenter,
+        JournalArticleBibliographicReferenceThumbnailPresenter,
 };
 
-export const buildBibliographicReferenceDetailPresenter = (
+export const buildBibliographicReferenceDetailThumbnailPresenter = (
     bibliographicReferenceType: BibliographicReferenceType
 ): Presenter => {
     const lookupResult = lookupTable[bibliographicReferenceType];
