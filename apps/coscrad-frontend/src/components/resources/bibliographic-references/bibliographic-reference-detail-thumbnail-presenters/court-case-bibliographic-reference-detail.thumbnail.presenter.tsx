@@ -1,26 +1,27 @@
 import {
     IBibliographicReferenceViewModel,
-    ICourtCaseBibliographicReferenceData,
+    ICourtCaseBibliographicReferenceData
 } from '@coscrad/api-interfaces';
 import { Card, CardContent, CardHeader, Divider } from '@mui/material';
+import { Abstract } from './abstract';
 
 export const CourtCaseBibliographicReferenceDetailThumbnailPresenter = ({
+    id,
     data: { caseName, abstract, dateDecided, pages },
 }: IBibliographicReferenceViewModel<ICourtCaseBibliographicReferenceData>): JSX.Element => {
     return (
         <Card>
             <CardHeader title="Court Case Bibliographic Reference"></CardHeader>
             <CardContent>
-                <div>
+                <div data-testid={id}>
                     {caseName}
                     <br />
                     {pages && <div>{pages} pages</div>}
                     {dateDecided && <div>({dateDecided})</div>}
                     <Divider />
-                    <div>
-                        <h3>Abstract</h3>
-                        {abstract}
-                    </div>
+                    {abstract !== null && typeof abstract !== undefined && (
+                        <Abstract abstract={abstract} />
+                    )}
                 </div>
             </CardContent>
         </Card>

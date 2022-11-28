@@ -2,6 +2,7 @@ import {
     IBibliographicReferenceViewModel,
     ICourtCaseBibliographicReferenceData,
 } from '@coscrad/api-interfaces';
+import { formatCitationInfromation } from './shared';
 import { BibliographicReferenceJointViewModel } from './types';
 
 export const CourtCaseBibliographicReferenceJointViewModel = ({
@@ -11,5 +12,5 @@ export const CourtCaseBibliographicReferenceJointViewModel = ({
     type: 'Court Case',
     id,
     title: caseName,
-    citation: `${[court, `${pages} pages`].join(',')} (${dateDecided})`,
+    citation: formatCitationInfromation([court, `${pages} pages`], dateDecided),
 });

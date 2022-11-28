@@ -13,7 +13,6 @@ type Presenter = FunctionalComponent<IDetailQueryResult<IBibliographicReferenceV
 const lookupTable: {
     [K in BibliographicReferenceType]: FunctionalComponent<IBibliographicReferenceViewModel>;
 } = {
-    // TODO Create specific presenters for each of the following
     [BibliographicReferenceType.book]: BookBibliographicReferenceDetailFullViewPresenter,
     [BibliographicReferenceType.courtCase]: CourtCaseBibliographicReferenceDetailFullViewPresenter,
     [BibliographicReferenceType.journalArticle]:

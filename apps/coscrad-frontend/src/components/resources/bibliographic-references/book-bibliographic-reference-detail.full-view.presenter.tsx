@@ -3,8 +3,7 @@ import {
     IBookBibliographicReferenceData,
     IValueAndDisplay,
 } from '@coscrad/api-interfaces';
-import { Card, CardContent, CardHeader, Divider } from '@mui/material';
-import { SinglePropertyPresenter } from '../../../utils/generic-components';
+import { BibliographicReferenceCard, buildValueAndDisplay } from './shared';
 
 export const BookBibliographicReferenceDetailFullViewPresenter = ({
     id,
@@ -15,38 +14,23 @@ export const BookBibliographicReferenceDetailFullViewPresenter = ({
     const labelsAndValues: IValueAndDisplay<unknown>[] = (
         [
             [abstract, 'Abstract'],
-            [year, 'Year'],
+            [year.toString(), 'Year'],
             [publisher, 'Publisher'],
             [place, 'Place'],
             // TODO format this as a link
             [url, 'External Link'],
-            [numberOfPages, 'Page Count'],
+            [numberOfPages.toString(), 'Page Count'],
             [isbn, 'ISBN'],
             // TODO Expose creators
-        ] as const
-    )
-        // Do not present optional values
-        .filter(([value, _]) => value !== null && typeof value !== 'undefined')
-        .map(([value, display]) => ({
-            value,
-            display,
-        }));
+        ] as [string, string][]
+    ).map(buildValueAndDisplay);
 
     return (
-        <Card>
-            <CardHeader title="Book Bibliographic Reference"></CardHeader>
-            <CardContent>
-                <div data-testid={id}>
-                    {title}
-                    <Divider />
-                    <br />
-                    {labelsAndValues
-                        .filter(({ value }) => value !== null && typeof value !== 'undefined')
-                        .map((valueAndDisplay) => (
-                            <SinglePropertyPresenter {...valueAndDisplay} />
-                        ))}
-                </div>
-            </CardContent>
-        </Card>
+        <BibliographicReferenceCard
+            id={id}
+            header="Book Bibliographic Reference"
+            title={title}
+            labelsAndValues={labelsAndValues}
+        />
     );
 };
