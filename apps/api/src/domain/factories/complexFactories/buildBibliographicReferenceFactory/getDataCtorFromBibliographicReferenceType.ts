@@ -1,5 +1,6 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
+import BaseDomainModel from '../../../models/BaseDomainModel';
 import BookBibliographicReferenceData from '../../../models/bibliographic-reference/book-bibliographic-reference/entities/book-bibliographic-reference-data.entity';
 import { CourtCaseBibliographicReferenceData } from '../../../models/bibliographic-reference/court-case-bibliographic-reference/entities/court-case-bibliographic-reference-data.entity';
 import { IBibliographicReferenceData } from '../../../models/bibliographic-reference/interfaces/bibliographic-reference-data.interface';
@@ -8,7 +9,9 @@ import { BibliographicReferenceType } from '../../../models/bibliographic-refere
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 
 const bibliographicReferenceTypeToDataClass: {
-    [K in BibliographicReferenceType]: DomainModelCtor<IBibliographicReferenceData>;
+    [K in BibliographicReferenceType]: DomainModelCtor<
+        IBibliographicReferenceData & BaseDomainModel
+    >;
 } = {
     [BibliographicReferenceType.book]: BookBibliographicReferenceData,
     [BibliographicReferenceType.courtCase]: CourtCaseBibliographicReferenceData,
