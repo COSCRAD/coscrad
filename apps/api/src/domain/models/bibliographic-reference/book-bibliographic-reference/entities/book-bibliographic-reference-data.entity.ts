@@ -1,3 +1,4 @@
+import { IBookBibliographicReferenceData } from '@coscrad/api-interfaces';
 import {
     DiscriminatedBy,
     ISBN,
@@ -12,7 +13,6 @@ import { DTO } from '../../../../../types/DTO';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
 import BibliographicReferenceCreator from '../../common/bibliographic-reference-creator.entity';
-import { IBibliographicReferenceData } from '../../interfaces/bibliographic-reference-data.interface';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 
 const isOptional = true;
@@ -20,7 +20,7 @@ const isOptional = true;
 @DiscriminatedBy(BibliographicReferenceType.book)
 export default class BookBibliographicReferenceData
     extends BaseDomainModel
-    implements IBibliographicReferenceData
+    implements IBookBibliographicReferenceData
 {
     readonly type = BibliographicReferenceType.book;
 
