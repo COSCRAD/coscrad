@@ -707,8 +707,8 @@
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
-                        100,
-                        0
+                        54.034404852745006,
+                        -132.17563335558532
                     ]
                 }
             },
@@ -724,8 +724,8 @@
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
-                        20,
-                        10
+                        53.26710566708586,
+                        -131.99142447847115
                     ]
                 }
             },
@@ -741,8 +741,42 @@
                 "geometry": {
                     "type": "Point",
                     "coordinates": [
-                        70.5,
-                        23.5
+                        51.93152097800416,
+                        -123.14042112774867
+                    ]
+                }
+            },
+            {
+                "type": "spatialFeature",
+                "_key": "103",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        51.935065638350636,
+                        -122.50936316168337
+                    ]
+                }
+            },
+            {
+                "type": "spatialFeature",
+                "_key": "104",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        52.12579975880678,
+                        -123.68132823530952
                     ]
                 }
             },
@@ -759,20 +793,32 @@
                     "type": "LineString",
                     "coordinates": [
                         [
-                            1,
-                            2
+                            52.3,
+                            -124.2
                         ],
                         [
-                            1,
-                            3
+                            52.35,
+                            -124.85
                         ],
                         [
-                            1.5,
-                            3.5
+                            52.21,
+                            -124.9
                         ],
                         [
-                            3,
-                            4.2
+                            52.05,
+                            -125.1
+                        ],
+                        [
+                            52.15,
+                            -125.1
+                        ],
+                        [
+                            52.33,
+                            -125.22
+                        ],
+                        [
+                            52.45,
+                            -125.39
                         ]
                     ]
                 }
@@ -791,24 +837,20 @@
                     "coordinates": [
                         [
                             [
-                                1,
-                                3
+                                52.47,
+                                -123.6
                             ],
                             [
-                                2,
-                                5
+                                52.42,
+                                -123.95
                             ],
                             [
-                                1.5,
-                                3.7
+                                52.05,
+                                -123.95
                             ],
                             [
-                                1.2,
-                                3.3
-                            ],
-                            [
-                                1,
-                                3
+                                52.05,
+                                -123.685
                             ]
                         ]
                     ]
