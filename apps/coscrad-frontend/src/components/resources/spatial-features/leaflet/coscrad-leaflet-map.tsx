@@ -26,7 +26,8 @@ export const CoscradLeafletMap: ICoscradMap = ({
         <MapContainer
             center={initialMapCentreCoordinates}
             zoom={initialZoom || INITIAL_ZOOM}
-            scrollWheelZoom={false}
+            // Inject through API?
+            scrollWheelZoom={true}
         >
             <TileLayer
                 attribution="&copy; ESRI and Contributors"
