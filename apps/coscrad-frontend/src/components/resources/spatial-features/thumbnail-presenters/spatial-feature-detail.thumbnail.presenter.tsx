@@ -2,8 +2,26 @@ import {
     GeometricFeatureType,
     IDetailQueryResult,
     ISpatialFeatureViewModel,
+    ResourceType,
 } from '@coscrad/api-interfaces';
-import { Card, CardContent, CardHeader, Divider } from '@mui/material';
+import {
+    ExpandLess as ExpandLessIcon,
+    ExpandMore as ExpandMoreIcon,
+    LinkSharp as LinkIcon,
+} from '@mui/icons-material';
+import {
+    Card,
+    CardActionArea,
+    CardActions,
+    CardContent,
+    CardHeader,
+    Collapse,
+    Divider,
+    IconButton,
+} from '@mui/material';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { routes } from '../../../../app/routes/routes';
 import { FunctionalComponent } from '../../../../utils/types/functional-component';
 import { LinePresenter } from './line-presenter';
 import { PointPresenter } from './point-presenter';
@@ -22,6 +40,8 @@ const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordin
 export const SpatialFeatureDetailThumbnailPresenter = ({
     data: spatialFeature,
 }: IDetailQueryResult<ISpatialFeatureViewModel>): JSX.Element => {
+    const [isExpanded, setIsExpanded] = useState(false);
+
     const { id, geometry, properties } = spatialFeature;
 
     if (!geometry) {
@@ -48,19 +68,38 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
      * TODO Wrap additional non-coordinate presentation around this.
      */
     return (
-        <div>
-            <Card>
-                <CardContent>
-                    <CardHeader title={name} />
-                    <img height="100px" src={imageUrl} alt={`Spatial Feature ${id}`} />
-                    <br />
-                    {description}
-                    <br />
+        <Card>
+            <CardContent>
+                <CardHeader title={name} />
+                <img height="100px" src={imageUrl} alt={`Spatial Feature ${id}`} />
+                <br />
+                {description}
+                <br />
 
-                    <Divider />
-                    <CoordinatesPresenter coordinates={coordinates} />
-                </CardContent>
-            </Card>
-        </div>
+                <Divider />
+                <CoordinatesPresenter coordinates={coordinates} />
+                <Collapse in={isExpanded}>
+                    <h3>JSON Data</h3>
+                    <pre>{JSON.stringify(spatialFeature, null, 2)}</pre>
+                </Collapse>
+            </CardContent>
+            <CardActionArea>
+                <CardActions>
+                    <Link
+                        to={`/${routes.resources.ofType(ResourceType.spatialFeature).detail(id)}`}
+                    >
+                        <IconButton aria-label="View">
+                            <LinkIcon></LinkIcon>
+                        </IconButton>
+                    </Link>
+                    <IconButton
+                        aria-label="View Full JSON"
+                        onClick={(_) => setIsExpanded(!isExpanded)}
+                    >
+                        {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    </IconButton>
+                </CardActions>
+            </CardActionArea>
+        </Card>
     );
 };
