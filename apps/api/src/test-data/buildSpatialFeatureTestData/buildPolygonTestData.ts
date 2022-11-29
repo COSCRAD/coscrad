@@ -29,5 +29,11 @@ export default (): Polygon[] =>
                 type: ResourceType.spatialFeature,
                 id: `${index + 300}`,
                 published: true,
+                properties: {
+                    name: `Point with ID: ${`${index + 300}`} Name`,
+                    description: `Description for point ${`${index + 300}`}`,
+                    imageUrl:
+                        'https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png',
+                },
             })
     );

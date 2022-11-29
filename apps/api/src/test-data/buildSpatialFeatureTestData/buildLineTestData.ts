@@ -20,7 +20,13 @@ const dtos: DTO<Line>[] = [
                 [52.45, -125.39],
             ],
         },
+        properties: {
+            name: 'Windy Path',
+            description: 'One amazing hike!',
+            imageUrl:
+                'https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png',
+        },
     },
 ];
 
-export default () => dtos.map((dto) => new Line(dto));
+export default (): Line[] => dtos.map((dto) => new Line(dto));
