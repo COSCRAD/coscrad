@@ -64,9 +64,6 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
         );
     }
 
-    /**
-     * TODO Wrap additional non-coordinate presentation around this.
-     */
     return (
         <Card>
             <CardContent>
@@ -79,7 +76,7 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
                 <Divider />
                 <CoordinatesPresenter coordinates={coordinates} />
                 <Collapse in={isExpanded}>
-                    <h3>JSON Data</h3>
+                    <h3>GEOJSON</h3>
                     <pre>{JSON.stringify(spatialFeature, null, 2)}</pre>
                 </Collapse>
             </CardContent>

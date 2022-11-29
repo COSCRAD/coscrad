@@ -8,6 +8,7 @@ export interface CoscradMapProps {
     spatialFeatures: ISpatialFeatureViewModel[];
     initialCentre?: [number, number];
     initialZoom?: number;
+    onSpatialFeatureSelected?: (id: string) => void;
     DetailPresenter: SpatialFeatureDetailPresenter;
 }
 

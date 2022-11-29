@@ -23,10 +23,7 @@ const lookupTable: {
         spatialFeature,
         DetailPresenter,
     }: MarkerPresenterProps<[number, number]>) => (
-        <PointMarker
-            key={spatialFeature.id}
-            position={spatialFeature.geometry.coordinates as [number, number]}
-        >
+        <PointMarker key={spatialFeature.id} position={spatialFeature.geometry.coordinates}>
             <LeafletPopup>
                 <SinglePropertyPresenter display="ID" value={spatialFeature.id} />
                 <DetailPresenter {...spatialFeature} />
@@ -59,16 +56,18 @@ const lookupTable: {
     ),
 };
 
+interface Props {
+    spatialFeature: ISpatialFeatureViewModel;
+    handleClick?: (id: string) => void;
+}
+
 /**
  * Note that we refer to any element that renders a spatial feature on a map
  * as a `Marker`. This is not exactly in keeping with Leaflet's terminology.
  */
 export const buildSpatialFeatureMarker =
     (DetailPresenter: SpatialFeatureDetailPresenter) =>
-    (
-        //   TODO discriminate to type guard coordinates
-        spatialFeature: ISpatialFeatureViewModel
-    ): JSX.Element => {
+    ({ spatialFeature, handleClick }: Props): JSX.Element => {
         const {
             geometry: { type: geometryType },
         } = spatialFeature;
@@ -94,5 +93,9 @@ export const buildSpatialFeatureMarker =
             );
         }
 
-        return <Presenter spatialFeature={spatialFeature} DetailPresenter={DetailPresenter} />;
+        return (
+            <button onClick={() => handleClick(spatialFeature.id)}>
+                <Presenter spatialFeature={spatialFeature} DetailPresenter={DetailPresenter} />
+            </button>
+        );
     };

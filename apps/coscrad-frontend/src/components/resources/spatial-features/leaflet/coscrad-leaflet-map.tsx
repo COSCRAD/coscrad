@@ -14,6 +14,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
      * either the full-view or thumbnail view based on a config property.
      */
     DetailPresenter: spatialFeatureDetailPresenter,
+    onSpatialFeatureSelected,
 }: CoscradMapProps) => {
     /**
      * Not sure where to get this from, can it can be derived from the spatial feature coordinates to be displayed?
@@ -35,7 +36,10 @@ export const CoscradLeafletMap: ICoscradMap = ({
                 url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             />
             {spatialFeatures.map((spatialFeature) => (
-                <SpatialFeatureMarker {...spatialFeature} />
+                <SpatialFeatureMarker
+                    spatialFeature={spatialFeature}
+                    handleClick={onSpatialFeatureSelected}
+                />
             ))}
         </MapContainer>
     );
