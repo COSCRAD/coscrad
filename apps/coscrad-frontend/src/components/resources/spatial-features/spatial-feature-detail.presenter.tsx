@@ -1,8 +1,13 @@
 import { IDetailQueryResult, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
-import { buildSpatialFeatureDetailPresenter } from './build-spatial-feature-detail-presenter';
+import { CoscradLeafletMap } from './leaflet';
+import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
+import { identifyCentrePointForMap } from './utils';
 
 export const SpatialFeatureDetailPresenter = (
-    detailQueryResult: IDetailQueryResult<ISpatialFeatureViewModel>
+    // We really need to manage coordinate types somewhere central!
+    detailQueryResult: IDetailQueryResult<
+        ISpatialFeatureViewModel<[number, number] | [number, number][] | [number, number][][]>
+    >
 ): JSX.Element => {
     if (!detailQueryResult?.data?.geometry) {
         throw new Error(
@@ -12,13 +17,17 @@ export const SpatialFeatureDetailPresenter = (
         );
     }
 
+    const { data: spatialFeature } = detailQueryResult;
+
     const {
-        data: {
-            geometry: { type: spatialFeatureGeometryType },
-        },
-    } = detailQueryResult;
+        geometry: { coordinates },
+    } = spatialFeature;
 
-    const Presenter = buildSpatialFeatureDetailPresenter(spatialFeatureGeometryType);
-
-    return <Presenter {...detailQueryResult} />;
+    return (
+        <CoscradLeafletMap
+            spatialFeatures={[spatialFeature]}
+            DetailPresenter={SpatialFeatureDetailThumbnailPresenter}
+            initialCentre={identifyCentrePointForMap(coordinates)}
+        />
+    );
 };

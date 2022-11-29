@@ -1,4 +1,8 @@
-import { GeometricFeatureType, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
+import {
+    GeometricFeatureType,
+    ISpatialFeatureViewModel,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { Icon as LeafletIcon, Marker as LeafletMarker } from 'leaflet';
 import iconUrl from 'leaflet/dist/images/marker-icon.png';
 import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
@@ -8,6 +12,8 @@ import {
     Polyline as PolylineMarker,
     Popup as LeafletPopup,
 } from 'react-leaflet';
+import { Link } from 'react-router-dom';
+import { routes } from '../../../../app/routes/routes';
 import { SinglePropertyPresenter } from '../../../../utils/generic-components';
 import { SpatialFeatureDetailPresenter } from '../map';
 
@@ -70,6 +76,7 @@ export const buildSpatialFeatureMarker =
         spatialFeature: ISpatialFeatureViewModel
     ): JSX.Element => {
         const {
+            id,
             geometry: { type: geometryType },
         } = spatialFeature;
 
@@ -94,5 +101,9 @@ export const buildSpatialFeatureMarker =
             );
         }
 
-        return <Presenter spatialFeature={spatialFeature} DetailPresenter={DetailPresenter} />;
+        return (
+            <Link to={`/${routes.resources.ofType(ResourceType.spatialFeature).detail(id)}`}>
+                <Presenter spatialFeature={spatialFeature} DetailPresenter={DetailPresenter} />
+            </Link>
+        );
     };
