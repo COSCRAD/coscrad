@@ -32,7 +32,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
             <TileLayer
                 attribution="&copy; ESRI and Contributors"
                 // Should this be part of the config?
-                url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             />
             {spatialFeatures.map((spatialFeature) => (
                 <SpatialFeatureMarker {...spatialFeature} />
