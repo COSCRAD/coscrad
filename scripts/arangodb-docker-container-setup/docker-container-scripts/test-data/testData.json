@@ -879,6 +879,11 @@
                         54.034404852745006,
                         -132.17563335558532
                     ]
+                },
+                "properties": {
+                    "name": "Name of Point with ID: 100",
+                    "description": "Description for point 100",
+                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
                 }
             },
             {
@@ -896,6 +901,11 @@
                         53.26710566708586,
                         -131.99142447847115
                     ]
+                },
+                "properties": {
+                    "name": "Name of Point with ID: 101",
+                    "description": "Description for point 101",
+                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
                 }
             },
             {
@@ -913,6 +923,11 @@
                         51.93152097800416,
                         -123.14042112774867
                     ]
+                },
+                "properties": {
+                    "name": "Name of Point with ID: 102",
+                    "description": "Description for point 102",
+                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
                 }
             },
             {
@@ -930,6 +945,11 @@
                         51.935065638350636,
                         -122.50936316168337
                     ]
+                },
+                "properties": {
+                    "name": "Name of Point with ID: 103",
+                    "description": "Description for point 103",
+                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
                 }
             },
             {
@@ -947,6 +967,11 @@
                         52.12579975880678,
                         -123.68132823530952
                     ]
+                },
+                "properties": {
+                    "name": "Name of Point with ID: 104",
+                    "description": "Description for point 104",
+                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
                 }
             },
             {
@@ -990,6 +1015,11 @@
                             -125.39
                         ]
                     ]
+                },
+                "properties": {
+                    "name": "Windy Path",
+                    "description": "One amazing hike!",
+                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
                 }
             },
             {
@@ -1023,6 +1053,11 @@
                             ]
                         ]
                     ]
+                },
+                "properties": {
+                    "name": "Point with ID: 300 Name",
+                    "description": "Description for point 300",
+                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
                 }
             }
         ],

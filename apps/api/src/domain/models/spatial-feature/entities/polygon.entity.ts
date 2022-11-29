@@ -1,3 +1,4 @@
+import { ISpatialFeatureProperties } from '@coscrad/api-interfaces';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
@@ -9,6 +10,7 @@ import { IGeometricFeature } from '../interfaces/geometric-feature.interface';
 import { ISpatialFeature } from '../interfaces/spatial-feature.interface';
 import { PolygonCoordinates } from '../types/Coordinates/PolygonCoordinates';
 import { GeometricFeatureType } from '../types/GeometricFeatureType';
+import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
 @RegisterIndexScopedCommands([])
 export class Polygon extends Resource implements ISpatialFeature {
@@ -16,12 +18,14 @@ export class Polygon extends Resource implements ISpatialFeature {
 
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.polygon, PolygonCoordinates>;
 
+    readonly properties: ISpatialFeatureProperties;
+
     constructor(dto: DTO<Polygon>) {
         super({ ...dto, type: ResourceType.spatialFeature });
 
         if (!dto) return;
 
-        const { geometry: geometryDTO } = dto;
+        const { geometry: geometryDTO, properties: propertiesDTO } = dto;
 
         /**
          * We use a plain-old object here to minimize maintenance and readability
@@ -34,6 +38,8 @@ export class Polygon extends Resource implements ISpatialFeature {
                 PolygonCoordinates
             >
         );
+
+        this.properties = new SpatialFeatureProperties(propertiesDTO);
     }
 
     protected validateComplexInvariants(): InternalError[] {

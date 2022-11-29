@@ -1,4 +1,5 @@
 import { GeometricFeatureType, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
+import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 import { FunctionalComponent } from '../../../../utils/types/functional-component';
 import { LinePresenter } from './line-presenter';
 import { PointPresenter } from './point-presenter';
@@ -18,7 +19,9 @@ export const SpatialFeatureDetailThumbnailPresenter = (
     spatialFeature: ISpatialFeatureViewModel
 ): JSX.Element => {
     const {
+        id,
         geometry: { type: geometryType, coordinates },
+        properties: { name, description, imageUrl },
     } = spatialFeature;
 
     const CoordinatesPresenter = lookupTable[geometryType];
@@ -32,5 +35,20 @@ export const SpatialFeatureDetailThumbnailPresenter = (
     /**
      * TODO Wrap additional non-coordinate presentation around this.
      */
-    return <CoordinatesPresenter coordinates={coordinates} />;
+    return (
+        <div>
+            <Card>
+                <CardContent>
+                    <CardHeader title={name} />
+                    <img height="100px" src={imageUrl} alt={`Spatial Feature ${id}`} />
+                    <br />
+                    {description}
+                    <br />
+
+                    <Divider />
+                    <CoordinatesPresenter coordinates={coordinates} />
+                </CardContent>
+            </Card>
+        </div>
+    );
 };
