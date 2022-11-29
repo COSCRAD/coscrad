@@ -1,4 +1,8 @@
-import { GeometricFeatureType, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
+import {
+    GeometricFeatureType,
+    IDetailQueryResult,
+    ISpatialFeatureViewModel,
+} from '@coscrad/api-interfaces';
 import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 import { FunctionalComponent } from '../../../../utils/types/functional-component';
 import { LinePresenter } from './line-presenter';
@@ -15,14 +19,22 @@ const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordin
     [GeometricFeatureType.polygon]: PolygonPresenter,
 };
 
-export const SpatialFeatureDetailThumbnailPresenter = (
-    spatialFeature: ISpatialFeatureViewModel
-): JSX.Element => {
-    const {
-        id,
-        geometry: { type: geometryType, coordinates },
-        properties: { name, description, imageUrl },
-    } = spatialFeature;
+export const SpatialFeatureDetailThumbnailPresenter = ({
+    data: spatialFeature,
+}: IDetailQueryResult<ISpatialFeatureViewModel>): JSX.Element => {
+    const { id, geometry, properties } = spatialFeature;
+
+    if (!geometry) {
+        throw new Error(`Spatial Feature: ${id} is missing geometry definition`);
+    }
+
+    if (!properties) {
+        throw new Error(`Spatial Feature: ${id} is missing its properties`);
+    }
+
+    const { name, description, imageUrl } = properties;
+
+    const { type: geometryType, coordinates } = geometry;
 
     const CoordinatesPresenter = lookupTable[geometryType];
 

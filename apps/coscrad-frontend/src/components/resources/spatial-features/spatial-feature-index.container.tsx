@@ -1,3 +1,4 @@
+import { ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import {
     SpatialFeatureIndexState,
     useLoadableSpatialFeatures,
@@ -7,6 +8,10 @@ import { CoscradLeafletMap } from './leaflet';
 import { SpatialFeatureIndexPresenter } from './spatial-feature-index.presenter';
 import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
 
+const AdaptedDetailPresenter = (spatialFeature: ISpatialFeatureViewModel) => (
+    <SpatialFeatureDetailThumbnailPresenter data={spatialFeature} actions={[]} />
+);
+
 const ConcreteSpatialFeatureIndexPresenter = (
     indexResult: SpatialFeatureIndexState
 ): JSX.Element => (
@@ -14,7 +19,7 @@ const ConcreteSpatialFeatureIndexPresenter = (
         {...indexResult}
         // TODO In the future, we can inject these based on a config
         MapComponent={CoscradLeafletMap}
-        DetailPresenter={SpatialFeatureDetailThumbnailPresenter}
+        DetailPresenter={AdaptedDetailPresenter}
     />
 );
 
