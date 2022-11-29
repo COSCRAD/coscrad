@@ -23,10 +23,15 @@ export const SpatialFeatureDetailPresenter = (
         geometry: { coordinates },
     } = spatialFeature;
 
+    // TODO clean up this hack
+    const AdaptedDetailPresenter = (spatialFeature: ISpatialFeatureViewModel) => (
+        <SpatialFeatureDetailThumbnailPresenter data={spatialFeature} actions={[]} />
+    );
+
     return (
         <CoscradLeafletMap
             spatialFeatures={[spatialFeature]}
-            DetailPresenter={SpatialFeatureDetailThumbnailPresenter}
+            DetailPresenter={AdaptedDetailPresenter}
             initialCentre={identifyCentrePointForMap(coordinates)}
         />
     );
