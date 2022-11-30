@@ -1,4 +1,5 @@
 import { CoscradDataType } from '@coscrad/api-interfaces';
+import { isNotEmptyObject } from 'class-validator';
 
 type ConstraintFunction = (input: unknown) => boolean;
 
@@ -15,7 +16,7 @@ const lookupTable: LookupTable = {
     [CoscradDataType.NonEmptyString]: isStringWithNonzeroLength,
     [CoscradDataType.NonNegativeFiniteNumber]: isStringWithNonzeroLength,
     [CoscradDataType.PositiveInteger]: isStringWithNonzeroLength,
-    [CoscradDataType.RawData]: isStringWithNonzeroLength,
+    [CoscradDataType.RawData]: isNotEmptyObject,
     [CoscradDataType.URL]: isStringWithNonzeroLength,
     [CoscradDataType.UUID]: isStringWithNonzeroLength,
     [CoscradDataType.Year]: isStringWithNonzeroLength,

@@ -14,4 +14,8 @@ export const getDummyConfigurableContent = (): ConfigurableContent => ({
     copyrightHolder: 'ME',
 
     organizationLogoUrl: 'https://mysite.com/logo.png',
+
+    songIdToCredits: {
+        '12': 'Beatboxing by Justin',
+    },
 });
