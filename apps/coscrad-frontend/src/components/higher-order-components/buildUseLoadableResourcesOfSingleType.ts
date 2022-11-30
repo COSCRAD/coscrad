@@ -1,10 +1,11 @@
 import {
+    CategorizableType,
+    CategorizableTypeToViewModel,
     IBaseViewModel,
     IIndexQueryResult,
-    ResourceType,
-    ResourceTypeToViewModel,
 } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
+import { useLoadableNotesWithStandardFormat } from '../../store/slices/notes/hooks/use-loadable-notes-with-standard-format';
 import {
     useLoadableBibliographicReferences,
     useLoadableSongs,
@@ -22,17 +23,18 @@ type UseLoadableResourcesOfSingleType<T extends IBaseViewModel> = () => ILoadabl
 >;
 
 const lookupTable: {
-    [K in ResourceType]: UseLoadableResourcesOfSingleType<ResourceTypeToViewModel[K]>;
+    [K in CategorizableType]: UseLoadableResourcesOfSingleType<CategorizableTypeToViewModel[K]>;
 } = {
-    [ResourceType.bibliographicReference]: useLoadableBibliographicReferences,
-    [ResourceType.book]: useLoadableBooks,
-    [ResourceType.mediaItem]: useLoadableMediaItems,
-    [ResourceType.photograph]: useLoadablePhotographs,
-    [ResourceType.song]: useLoadableSongs,
-    [ResourceType.spatialFeature]: useLoadableSpatialFeatures,
-    [ResourceType.term]: useLoadableTerms,
-    [ResourceType.transcribedAudio]: useLoadableTranscribedAudioItems,
-    [ResourceType.vocabularyList]: useLoadableVocabularyLists,
+    [CategorizableType.bibliographicReference]: useLoadableBibliographicReferences,
+    [CategorizableType.book]: useLoadableBooks,
+    [CategorizableType.mediaItem]: useLoadableMediaItems,
+    [CategorizableType.photograph]: useLoadablePhotographs,
+    [CategorizableType.song]: useLoadableSongs,
+    [CategorizableType.spatialFeature]: useLoadableSpatialFeatures,
+    [CategorizableType.term]: useLoadableTerms,
+    [CategorizableType.transcribedAudio]: useLoadableTranscribedAudioItems,
+    [CategorizableType.vocabularyList]: useLoadableVocabularyLists,
+    [CategorizableType.note]: useLoadableNotesWithStandardFormat,
 };
 
 /**
@@ -43,9 +45,9 @@ const lookupTable: {
  * are meant to enapsulate that, so the selector seems like the natural
  * starting point.
  */
-export const buildUseLoadableForSingleResourceType = <T extends ResourceType>(
+export const buildUseLoadableForSingleCategorizableType = <T extends CategorizableType>(
     resourceType: T
-): UseLoadableResourcesOfSingleType<ResourceTypeToViewModel[T]> => {
+): UseLoadableResourcesOfSingleType<CategorizableTypeToViewModel[T]> => {
     const lookupResult = lookupTable[resourceType];
 
     if (!lookupResult) {

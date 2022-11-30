@@ -1,6 +1,4 @@
+import { CompositeIdentifier } from '../composite-identifier.interface';
 import { ResourceType } from './resource-type.enum';
 
-export interface ResourceCompositeIdentifier {
-    type: ResourceType;
-    id: string;
-}
+export type ResourceCompositeIdentifier = CompositeIdentifier<ResourceType>;

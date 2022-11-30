@@ -1,27 +1,27 @@
-import { ResourceType } from '@coscrad/api-interfaces';
-import { IResourceDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
-import { SelectedResourceContainer } from './selected-resources.container';
+import { CategorizableType } from '@coscrad/api-interfaces';
+import { ICategorizableDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
+import { SelectedCategorizableContainer } from './selected-resources.container';
 
-type ResourceTypeAndSelectedIds = { [K in ResourceType]?: string[] };
+type CategorizableTypeAndSelectedIds = { [K in CategorizableType]?: string[] };
 
 interface ResourcesOfMultipleTypeContainerProps<T> {
-    resourceTypeAndIds: ResourceTypeAndSelectedIds;
-    resourceDetailPresenterFactory: IResourceDetailPresenterFactory<T>;
+    categorizableTypeAndIds: CategorizableTypeAndSelectedIds;
+    detailPresenterFactory: ICategorizableDetailPresenterFactory<T>;
     heading?: string;
 }
 
-export const ResourcesOfMultipleTypeContainer = <T,>({
-    resourceTypeAndIds,
-    resourceDetailPresenterFactory,
+export const CategorizableOfMultipleTypeContainer = <T,>({
+    categorizableTypeAndIds,
+    detailPresenterFactory: resourceDetailPresenterFactory,
     heading,
 }: ResourcesOfMultipleTypeContainerProps<T>): JSX.Element => (
     <div>
         <h3>{heading || 'Selected Resources'}</h3>
-        {Object.entries(resourceTypeAndIds).map(
-            ([resourceType, selectedIds]: [ResourceType, string[]]) => (
-                <SelectedResourceContainer
-                    resourceType={resourceType}
-                    resourceDetailPresenterFactory={resourceDetailPresenterFactory}
+        {Object.entries(categorizableTypeAndIds).map(
+            ([categorizableType, selectedIds]: [CategorizableType, string[]]) => (
+                <SelectedCategorizableContainer
+                    categorizableType={categorizableType}
+                    detailPresenterFactory={resourceDetailPresenterFactory}
                     selectedIds={selectedIds}
                 />
             )

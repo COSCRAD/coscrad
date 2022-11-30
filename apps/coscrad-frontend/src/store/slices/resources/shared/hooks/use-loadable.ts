@@ -21,7 +21,7 @@ export const useLoadable = <TSelectedState, UIndexState>({
 }: UseLoadableArgs<TSelectedState, UIndexState>): ILoadable<TSelectedState> => {
     const loadable = useSelector(selector);
 
-    const { data } = loadable;
+    const { data: data } = loadable;
 
     const dispatch = useAppDispatch();
 

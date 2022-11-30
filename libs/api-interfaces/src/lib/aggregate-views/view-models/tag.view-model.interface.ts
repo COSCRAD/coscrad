@@ -1,9 +1,8 @@
 import { IBaseViewModel } from './base.view-model.interface';
-import { ResourceCompositeIdentifier } from './resources';
+import { CategorizableCompositeIdentifier } from './categorizable-composite-identifier';
 
 export interface ITagViewModel extends IBaseViewModel {
     label: string;
 
-    // TODO expose members here
-    members: ResourceCompositeIdentifier[];
+    members: CategorizableCompositeIdentifier[];
 }

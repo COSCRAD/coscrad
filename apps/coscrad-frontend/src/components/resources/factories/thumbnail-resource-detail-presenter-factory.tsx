@@ -1,5 +1,6 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { CategorizableType, IDetailQueryResult, INoteViewModel } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
+import { NoteDetailPresenter } from '../../notes/note-detail.presenter';
 import { BibliographicReferenceDetailThumbnailPresenter } from '../bibliographic-references/bibliographic-reference-detail-thumbnail-presenters';
 import { BookDetailThumbnailPresenter } from '../books';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
@@ -11,16 +12,19 @@ import { TranscribedAudioDetailThumbnailPresenter } from '../transcribed-audio/t
 import { VocabularyListDetailThumbnailPresenter } from '../vocabulary-lists/vocabulary-list-detail.thumbnail.presenter';
 
 // TODO Define thumbnail specific presenters
-const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
-    [ResourceType.bibliographicReference]: BibliographicReferenceDetailThumbnailPresenter,
-    [ResourceType.book]: BookDetailThumbnailPresenter,
-    [ResourceType.mediaItem]: MediaItemDetailPresenter,
-    [ResourceType.photograph]: PhotographDetailThumbnailPresenter,
-    [ResourceType.song]: SongDetailPresenter,
-    [ResourceType.spatialFeature]: SpatialFeatureDetailPresenter,
-    [ResourceType.term]: TermDetailThumbnailPresenter,
-    [ResourceType.transcribedAudio]: TranscribedAudioDetailThumbnailPresenter,
-    [ResourceType.vocabularyList]: VocabularyListDetailThumbnailPresenter,
+const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
+    [CategorizableType.bibliographicReference]: BibliographicReferenceDetailThumbnailPresenter,
+    [CategorizableType.book]: BookDetailThumbnailPresenter,
+    [CategorizableType.mediaItem]: MediaItemDetailPresenter,
+    [CategorizableType.photograph]: PhotographDetailThumbnailPresenter,
+    [CategorizableType.song]: SongDetailPresenter,
+    [CategorizableType.spatialFeature]: SpatialFeatureDetailPresenter,
+    [CategorizableType.term]: TermDetailThumbnailPresenter,
+    [CategorizableType.transcribedAudio]: TranscribedAudioDetailThumbnailPresenter,
+    [CategorizableType.vocabularyList]: VocabularyListDetailThumbnailPresenter,
+    // TODO remove this hack
+    [CategorizableType.note]: ({ data: note }: IDetailQueryResult<INoteViewModel>) =>
+        NoteDetailPresenter(note),
 };
 
 /**
@@ -28,14 +32,14 @@ const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
  * a single resource for each resource type. It is used for the connected
  * resources flow.
  */
-export const thumbnailResourceDetailPresenterFactory = <T extends ResourceType>(
-    resourceType: T
+export const thumbnailCategorizableDetailPresenterFactory = <T extends CategorizableType>(
+    typeOfCategorizable: T
 ): typeof lookupTable[T] => {
-    const lookupResult = lookupTable[resourceType];
+    const lookupResult = lookupTable[typeOfCategorizable];
 
     if (!lookupResult) {
         throw new Error(
-            `Failed to build a full format detail view for resource type: ${resourceType}`
+            `Failed to build a full format detail view for resource type: ${typeOfCategorizable}`
         );
     }
 

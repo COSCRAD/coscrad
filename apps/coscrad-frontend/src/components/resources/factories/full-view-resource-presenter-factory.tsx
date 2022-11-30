@@ -1,5 +1,6 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { CategorizableType } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
+import { NoteDetailPresenter } from '../../notes/note-detail.presenter';
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
 import { BookDetailFullViewPresenter } from '../books';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
@@ -14,16 +15,17 @@ import { withCommands } from './with-commands';
 /**
  * TODO We could have a mapped type if we need type safety here.
  */
-const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
-    [ResourceType.bibliographicReference]: BibliographicReferenceDetailPresenter,
-    [ResourceType.book]: BookDetailFullViewPresenter,
-    [ResourceType.mediaItem]: MediaItemDetailPresenter,
-    [ResourceType.photograph]: PhotographDetailFullViewPresenter,
-    [ResourceType.song]: SongDetailPresenter,
-    [ResourceType.spatialFeature]: SpatialFeatureDetailPresenter,
-    [ResourceType.term]: TermDetailFullViewPresenter,
-    [ResourceType.transcribedAudio]: TranscribedAudioDetailFullViewPresenter,
-    [ResourceType.vocabularyList]: VocabularyListDetailFullViewPresenter,
+const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
+    [CategorizableType.bibliographicReference]: BibliographicReferenceDetailPresenter,
+    [CategorizableType.book]: BookDetailFullViewPresenter,
+    [CategorizableType.mediaItem]: MediaItemDetailPresenter,
+    [CategorizableType.photograph]: PhotographDetailFullViewPresenter,
+    [CategorizableType.song]: SongDetailPresenter,
+    [CategorizableType.spatialFeature]: SpatialFeatureDetailPresenter,
+    [CategorizableType.term]: TermDetailFullViewPresenter,
+    [CategorizableType.transcribedAudio]: TranscribedAudioDetailFullViewPresenter,
+    [CategorizableType.vocabularyList]: VocabularyListDetailFullViewPresenter,
+    [CategorizableType.note]: NoteDetailPresenter,
 };
 
 /**
@@ -31,14 +33,14 @@ const lookupTable: { [K in ResourceType]: FunctionalComponent } = {
  * a single resource for each resource type. It is used for the standard detail
  * view in the big index-to-detail flow.
  */
-export const fullViewResourcePresenterFactory = <T extends ResourceType>(
-    resourceType: T
+export const fullViewCategorizablePresenterFactory = <T extends CategorizableType>(
+    typeOfCategorizable: T
 ): typeof lookupTable[T] => {
-    const DetailPresenter = lookupTable[resourceType];
+    const DetailPresenter = lookupTable[typeOfCategorizable];
 
     if (!DetailPresenter) {
         throw new Error(
-            `Failed to build a full format detail view for resource type: ${resourceType}`
+            `Failed to build a full format detail view for resource type: ${typeOfCategorizable}`
         );
     }
 

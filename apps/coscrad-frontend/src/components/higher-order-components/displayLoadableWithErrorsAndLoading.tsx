@@ -19,7 +19,7 @@ export const displayLoadableWithErrorsAndLoading =
         mapLoadedDataToPresenterProps?: MapLoadedDataToProps<T, U>
     ) =>
     (loadable: ILoadable<T>) => {
-        const { errorInfo, isLoading, data } = loadable;
+        const { errorInfo, isLoading, data: data } = loadable;
 
         if (errorInfo) {
             return <ErrorDisplay {...errorInfo}></ErrorDisplay>;

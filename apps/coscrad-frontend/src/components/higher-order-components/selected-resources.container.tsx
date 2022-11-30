@@ -1,25 +1,25 @@
-import { IBaseViewModel, IDetailQueryResult, ResourceType } from '@coscrad/api-interfaces';
+import { CategorizableType, IBaseViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
-import { IResourceDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
-import { buildUseLoadableForSingleResourceType } from './buildUseLoadableResourcesOfSingleType';
+import { ICategorizableDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
+import { buildUseLoadableForSingleCategorizableType } from './buildUseLoadableResourcesOfSingleType';
 import { displayLoadableWithErrorsAndLoading } from './displayLoadableWithErrorsAndLoading';
-import { SelectedResourcesPresenter } from './selected-resources.presenter';
+import { SelectedCategorizablePresenter } from './selected-resources.presenter';
 
 interface SelectedResourceContainerProps<T> {
-    resourceType: ResourceType;
+    categorizableType: CategorizableType;
     selectedIds: string[];
-    resourceDetailPresenterFactory: IResourceDetailPresenterFactory<T>;
+    detailPresenterFactory: ICategorizableDetailPresenterFactory<T>;
 }
 
 type SearchResult = NOT_FOUND | IDetailQueryResult<IBaseViewModel>;
 
-export const SelectedResourceContainer = ({
-    resourceType,
+export const SelectedCategorizableContainer = ({
+    categorizableType,
     selectedIds,
-    resourceDetailPresenterFactory,
+    detailPresenterFactory,
 }: SelectedResourceContainerProps<unknown>): JSX.Element => {
-    const useResources = buildUseLoadableForSingleResourceType(resourceType);
+    const useResources = buildUseLoadableForSingleCategorizableType(categorizableType);
 
     const loadableResources = useResources();
 
@@ -43,11 +43,11 @@ export const SelectedResourceContainer = ({
     };
 
     const Presenter = displayLoadableWithErrorsAndLoading(
-        SelectedResourcesPresenter,
+        SelectedCategorizablePresenter,
         (loadedData: SearchResult[]) => ({
             viewModels: loadedData,
-            presenterFactory: resourceDetailPresenterFactory,
-            resourceType,
+            presenterFactory: detailPresenterFactory,
+            categorizableType,
         })
     );
 

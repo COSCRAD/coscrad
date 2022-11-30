@@ -1,25 +1,25 @@
-import { IBaseViewModel, IDetailQueryResult, ResourceType } from '@coscrad/api-interfaces';
+import { CategorizableType, IBaseViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { NotFound } from '../NotFound';
-import { IResourceDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
+import { ICategorizableDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
 
 interface SelectedResourcesPresenterProps<T extends IBaseViewModel> {
     viewModels: (IDetailQueryResult<T> | NOT_FOUND)[];
-    presenterFactory: IResourceDetailPresenterFactory<IDetailQueryResult<T>>;
-    resourceType: ResourceType;
+    presenterFactory: ICategorizableDetailPresenterFactory<IDetailQueryResult<T>>;
+    categorizableType: CategorizableType;
 }
 
-export const SelectedResourcesPresenter = <T extends IBaseViewModel>({
+export const SelectedCategorizablePresenter = <T extends IBaseViewModel>({
     viewModels,
     presenterFactory,
-    resourceType,
+    categorizableType,
 }: SelectedResourcesPresenterProps<T>): JSX.Element => {
-    const Presenter = presenterFactory(resourceType);
+    const Presenter = presenterFactory(categorizableType);
 
     return (
         <div>
             {/* TODO Use a label here */}
-            <h2>{resourceType}s</h2>
+            <h2>{categorizableType}s</h2>
             {viewModels.map((viewModel, index) => (
                 <div key={index}>
                     {viewModel === NOT_FOUND ? <NotFound /> : <Presenter {...viewModel} />}
