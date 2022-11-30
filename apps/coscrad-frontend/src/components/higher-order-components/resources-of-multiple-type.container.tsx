@@ -2,7 +2,7 @@ import { CategorizableType } from '@coscrad/api-interfaces';
 import { ICategorizableDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
 import { SelectedCategorizableContainer } from './selected-resources.container';
 
-type CategorizableTypeAndSelectedIds = { [K in CategorizableType]?: string[] };
+export type CategorizableTypeAndSelectedIds = { [K in CategorizableType]?: string[] };
 
 interface ResourcesOfMultipleTypeContainerProps<T> {
     categorizableTypeAndIds: CategorizableTypeAndSelectedIds;

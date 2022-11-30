@@ -1,4 +1,5 @@
 export * from './base.view-model.interface';
+export * from './categorizable-composite-identifier';
 export * from './category-tree';
 export * from './has-id.interface';
 export * from './note';
