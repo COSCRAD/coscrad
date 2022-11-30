@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
+import { MapTest } from '../MapTest/MapTest';
 import './About.module.scss';
 
 export interface AboutProps {
@@ -9,5 +10,12 @@ export interface AboutProps {
 export const About = (): JSX.Element => {
     const { about } = useContext(ConfigurableContentContext);
 
-    return <div>{about}</div>;
+    return (
+        <>
+            <div>{about}</div>
+            <div>
+                <MapTest />
+            </div>
+        </>
+    );
 };
