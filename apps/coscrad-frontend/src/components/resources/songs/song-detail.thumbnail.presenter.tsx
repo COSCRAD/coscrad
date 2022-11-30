@@ -1,27 +1,29 @@
 import { IDetailQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
+import { MediaPlayer } from '@coscrad/media-player';
 import { Card, Divider } from '@mui/material';
-import { MediaPlayer } from '../../../../../../libs/media-player/src';
 import { formatBilingualText } from '../vocabulary-lists/utils';
 
+const buildLyricsStatusMessage = (lyrics: string | null | undefined): string =>
+    lyrics === null || typeof lyrics === 'undefined'
+        ? 'No Lyrics Available'
+        : 'Lyrics are available for this song';
+
 export const SongDetailThumbnailPresenter = ({
-    data: { title, titleEnglish, contributions, lyrics, audioURL },
+    data: { title, titleEnglish, lyrics, audioURL },
 }: IDetailQueryResult<ISongViewModel>): JSX.Element => (
     <div data-testid={title}>
-        <Card className="term-detail-card">
-            <div id="term-detail-term" className="term-detail-meta">
+        <Card className="detail-card">
+            <div id="detail-term" className="detail-meta">
                 {formatBilingualText(title, titleEnglish)}
             </div>
-            <Divider id="term-detail-divider" />
+            <Divider id="detail-divider" />
 
-            <div className="term-detail-meta">
-                <h3 className="term-detail-headers">Contributions:</h3>
+            <div className="detail-meta">
+                <h3 className="detail-headers">Contributions:</h3>
                 TODO use config for this
             </div>
-            <div className="term-detail-meta">
-                <h3 className="term-detail-headers">Lyrics:</h3>
-                {lyrics || 'Coming soon'}
-            </div>
-            <div id="term-media-player">
+            <div className="detail-meta">{buildLyricsStatusMessage(lyrics)}</div>
+            <div id="media-player">
                 <MediaPlayer listenMessage="Play" audioUrl={audioURL} />
             </div>
         </Card>

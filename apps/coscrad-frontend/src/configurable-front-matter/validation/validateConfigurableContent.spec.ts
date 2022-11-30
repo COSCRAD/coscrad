@@ -1,5 +1,6 @@
 import { CoscradDataType } from '@coscrad/api-interfaces';
 import { FuzzGenerator } from '@coscrad/data-types';
+import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
 import {
     ConfigurableContent,
     ConfigurableContentSchema,
@@ -10,21 +11,7 @@ import { validateConfigurableContent } from './validateConfigurableContent';
 
 const propertyType = CoscradDataType.NonEmptyString;
 
-const validContentConfig: ConfigurableContent = {
-    siteTitle: 'My Site',
-
-    subTitle: 'Where it all Happens',
-
-    about: 'Just a Test',
-
-    siteDescription: 'This is my testing site',
-
-    siteHomeImageUrl: 'https://mysite.com/image.png',
-
-    copyrightHolder: 'ME',
-
-    organizationLogoUrl: 'https://mysite.com/logo.png',
-};
+const validContentConfig = getDummyConfigurableContent();
 
 // TODO Break this into utility types lib
 type Overrides<T> = {
@@ -53,8 +40,9 @@ const invalidProps: [keyof ConfigurableContent, unknown][] = Object.entries(
         )
 );
 
-const invalidConfigsAndExpectedErrors: [Overrides<ConfigurableContent>, Error[]][] =
-    invalidProps.map(([propertyName, invalidValue]) => [
+const invalidConfigsAndExpectedErrors: [Overrides<ConfigurableContent>, Error[]][] = invalidProps
+    .filter(([propertyName, _]) => propertyName !== 'songIdToCredits')
+    .map(([propertyName, invalidValue]) => [
         buildInvalidContentConfig({ [propertyName]: invalidValue }),
         [
             new InvalidConfigurationPropertyError({

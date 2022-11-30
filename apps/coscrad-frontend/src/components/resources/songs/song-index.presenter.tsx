@@ -1,4 +1,4 @@
-import { IIndexQueryResult, ISongViewModel } from '../../../../../../libs/api-interfaces/src';
+import { IIndexQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
