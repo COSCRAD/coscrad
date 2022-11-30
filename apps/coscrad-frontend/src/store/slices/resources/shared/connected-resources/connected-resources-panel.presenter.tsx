@@ -1,6 +1,6 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import { SelectedResourceContainer } from '../../../../../components/higher-order-components/selected-resources.container';
-import { thumbnailResourceDetailPresenterFactory } from '../../../../../components/resources/factories/thumbnail-resource-detail-presenter-factory';
+import { SelectedCategorizableContainer } from '../../../../../components/higher-order-components/selected-resources.container';
+import { thumbnailCategorizableDetailPresenterFactory } from '../../../../../components/resources/factories/thumbnail-resource-detail-presenter-factory';
 import { ConnectedResource } from '../../../notes/hooks';
 
 type SelectedResourcesMap = Map<ResourceType, string[]>;
@@ -57,11 +57,11 @@ export const ConnectedResourcesPanelPresenter = ({
                  * If later we'd like to support mobile, we should inject the
                  * correct thumbnail detail presenter factory here based on a config context.
                  */
-                <SelectedResourceContainer
+                <SelectedCategorizableContainer
                     key={resourceType}
-                    resourceType={resourceType}
+                    categorizableType={resourceType}
                     selectedIds={resourceTypeToCompositeIds.get(resourceType)}
-                    resourceDetailPresenterFactory={thumbnailResourceDetailPresenterFactory}
+                    detailPresenterFactory={thumbnailCategorizableDetailPresenterFactory}
                 />
             ))}
         </div>

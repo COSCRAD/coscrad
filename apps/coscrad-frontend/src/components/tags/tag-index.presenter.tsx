@@ -1,16 +1,7 @@
 import { ITagViewModel } from '@coscrad/api-interfaces';
-import { LinkSharp as LinkIcon } from '@mui/icons-material';
-import {
-    Card,
-    CardActionArea,
-    CardActions,
-    CardContent,
-    CardHeader,
-    IconButton,
-} from '@mui/material';
-import { Link } from 'react-router-dom';
-import { ResourcesOfMultipleTypeContainer } from '../higher-order-components';
-import { thumbnailResourceDetailPresenterFactory } from '../resources/factories/thumbnail-resource-detail-presenter-factory';
+import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
+import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
 
 type HasViewModels<TViewModel> = {
     data: TViewModel[];
@@ -21,39 +12,27 @@ type HasViewModels<TViewModel> = {
  * We need to expose Tag commands through Tag queries.
  */
 export const TagIndexPresenter = ({ data: tags }: HasViewModels<ITagViewModel>): JSX.Element => {
-    // const allResourceTypes = tags.reduce(
-    //     ({members}) =>
-    // )
+    const headingLabels: HeadingLabel<ITagViewModel>[] = [
+        {
+            propertyKey: 'id',
+            headingLabel: 'Link',
+        },
+        {
+            propertyKey: 'label',
+            headingLabel: 'Label',
+        },
+    ];
 
-    const resourceTypesAndSelectedIds = {
-        term: ['1'],
+    const cellRenderersDefinition: CellRenderersDefinition<ITagViewModel> = {
+        id: renderAggregateIdCell,
     };
 
     return (
-        <div>
-            {tags.map((tag) => (
-                <Card>
-                    <CardHeader title={tag.label} />
-                    <CardContent>
-                        <h3>Tagged Resources</h3>
-                        <ResourcesOfMultipleTypeContainer
-                            resourceTypeAndIds={resourceTypesAndSelectedIds}
-                            resourceDetailPresenterFactory={thumbnailResourceDetailPresenterFactory}
-                        />
-                    </CardContent>
-                    <CardActionArea>
-                        <CardActions>
-                            <Link to={tag.id}>
-                                <IconButton>
-                                    <LinkIcon />
-                                </IconButton>
-                            </Link>
-                        </CardActions>
-                    </CardActionArea>
-                </Card>
-            ))}
-            {/* <h2>Index Actions</h2> */}
-            {/* <CommandPanel actions={tagsData.actions}></CommandPanel> */}
-        </div>
+        <IndexTable
+            tableData={tags}
+            headingLabels={headingLabels}
+            cellRenderersDefinition={cellRenderersDefinition}
+            heading="Tags"
+        />
     );
 };
