@@ -1,6 +1,6 @@
+import { MediaPlayer } from '@coscrad/media-player';
 import RadioIcon from '@mui/icons-material/Radio';
 import { Card } from '@mui/material';
-import { MediaPlayer } from '../../../../../../libs/media-player/src';
 import { getRadioConfig } from '../../../Configs/Radio/radio.config';
 import ScrollToTop from '../../Widgets/ScrollButton/ScrollToTop';
 
