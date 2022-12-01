@@ -53,7 +53,22 @@ const vocabularyListDTOs = [
                 },
             },
         ],
-        variables: [],
+        variables: [
+            {
+                name: 'His',
+                type: DropboxOrCheckbox.checkbox,
+                validValues: [
+                    {
+                        display: 'his',
+                        value: true,
+                    },
+                    {
+                        display: 'hers',
+                        value: false,
+                    },
+                ],
+            },
+        ],
     },
 ];
 

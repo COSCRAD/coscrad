@@ -485,7 +485,22 @@
                         }
                     }
                 ],
-                "variables": []
+                "variables": [
+                    {
+                        "name": "His",
+                        "type": "checkbox",
+                        "validValues": [
+                            {
+                                "display": "his",
+                                "value": true
+                            },
+                            {
+                                "display": "hers",
+                                "value": false
+                            }
+                        ]
+                    }
+                ]
             }
         ],
         "transcribed_audio": [

@@ -1,4 +1,11 @@
-import { IVocabularyListEntry } from '@coscrad/api-interfaces';
+import {
+    DropboxOrCheckbox,
+    FormFieldType,
+    IFormData,
+    IFormField,
+    IVocabularyListEntry,
+    IVocabularyListViewModel,
+} from '@coscrad/api-interfaces';
 import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Term } from '../../../domain/models/term/entities/term.entity';
@@ -7,6 +14,7 @@ import { VocabularyList } from '../../../domain/models/vocabulary-list/entities/
 import { VocabularyListVariableValue } from '../../../domain/models/vocabulary-list/types/vocabulary-list-variable-value';
 import { VocabularyListEntry } from '../../../domain/models/vocabulary-list/vocabulary-list-entry';
 import { NotFound } from '../../../lib/types/not-found';
+import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from './base.view-model';
 import { TermViewModel } from './term.view-model';
 
@@ -34,7 +42,22 @@ class VocabularyListEntryViewModel implements IVocabularyListEntry<VocabularyLis
 
 const FromVocabularyList = FromDomainModel(VocabularyList);
 
-export class VocabularyListViewModel extends BaseViewModel {
+const convertVocabularyListVaraibleToFormElement = ({
+    type: variableType,
+    name,
+    validValues,
+}: VocabularyListVariable): IFormField => ({
+    type:
+        variableType === DropboxOrCheckbox.checkbox
+            ? FormFieldType.switch
+            : FormFieldType.staticSelect,
+    name,
+    label: name, // do we need a separate label?
+    description: `choose ${name}`,
+    options: cloneToPlainObject(validValues),
+});
+
+export class VocabularyListViewModel extends BaseViewModel implements IVocabularyListViewModel {
     @ApiPropertyOptional({
         example: 'Vocabulary List Name (in the language)',
         description: 'name of the vocabulary list, in the language',
@@ -59,12 +82,12 @@ export class VocabularyListViewModel extends BaseViewModel {
     @NestedDataType(VocabularyListEntryViewModel, { isArray: true })
     readonly entries: VocabularyListEntryViewModel[];
 
-    @ApiProperty({
-        type: VocabularyListVariable,
+    // @ApiProperty({
+    //     type: VocabularyListVariable,
 
-        description: 'this property specifies a dynamic form for filtering the entries',
-    })
-    readonly variables: VocabularyListVariable[];
+    //     description: 'this property specifies a dynamic form for filtering the entries',
+    // })
+    readonly form: IFormData;
 
     readonly #baseAudioURL: string;
 
@@ -81,7 +104,9 @@ export class VocabularyListViewModel extends BaseViewModel {
 
         this.nameEnglish = nameEnglish;
 
-        this.variables = variables;
+        this.form = {
+            fields: variables.map(convertVocabularyListVaraibleToFormElement),
+        };
 
         const newEntries = (entries || [])
             .map(({ termId, variableValues }) => {

@@ -2,9 +2,10 @@ import { IDetailQueryResult, IVocabularyListViewModel } from '@coscrad/api-inter
 import { Carousel } from '../../higher-order-components/carousel';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
 import { formatBilingualText } from './utils';
+import { VocabularyListForm } from './vocabulary-list-form';
 
 export const VocabularyListDetailFullViewPresenter = ({
-    data: { id, name, nameEnglish, entries },
+    data: { id, name, nameEnglish, entries, form },
 }: IDetailQueryResult<IVocabularyListViewModel>): JSX.Element => (
     <div data-testid={id}>
         <h1>{formatBilingualText(name, nameEnglish)}</h1>
@@ -16,6 +17,8 @@ export const VocabularyListDetailFullViewPresenter = ({
                 Presenter={TermDetailFullViewPresenter}
             />
         </div>
-        {/* TODO We need to render the Vocaulary List Form / associated filtering */}
+        <div>
+            <VocabularyListForm fields={form.fields} />
+        </div>
     </div>
 );
