@@ -34,7 +34,7 @@ const vocabularyListDTOs = [
                     },
                     {
                         display: 'We',
-                        value: '21',
+                        value: '12',
                     },
                 ],
             },
