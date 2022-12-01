@@ -25,6 +25,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
 
     return (
         <MapContainer
+            style={{ height: '600px' }}
             center={initialMapCentreCoordinates}
             zoom={initialZoom || INITIAL_ZOOM}
             // Inject through API?

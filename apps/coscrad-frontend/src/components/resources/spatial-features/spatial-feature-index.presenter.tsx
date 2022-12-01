@@ -13,7 +13,6 @@ import { ICoscradMap, SpatialFeatureDetailPresenter } from './map';
 import './spatial-feature-index.presenter.css';
 
 type SpatialFeatureIndexPresenterProps = SpatialFeatureIndexState & {
-    onSpatialFeatureSelected?: () => void;
     MapComponent: ICoscradMap;
     initialCentre?: [number, number];
     initialZoom?: number;

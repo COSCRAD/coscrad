@@ -14,6 +14,7 @@ import { SpatialFeatureDetailPresenter } from '../map';
 interface MarkerPresenterProps<T = unknown> {
     spatialFeature: ISpatialFeatureViewModel<T>;
     DetailPresenter: SpatialFeatureDetailPresenter;
+    handleClick?: (id: string) => void;
 }
 
 const lookupTable: {
@@ -22,8 +23,15 @@ const lookupTable: {
     [GeometricFeatureType.point]: ({
         spatialFeature,
         DetailPresenter,
+        handleClick,
     }: MarkerPresenterProps<[number, number]>) => (
-        <PointMarker key={spatialFeature.id} position={spatialFeature.geometry.coordinates}>
+        <PointMarker
+            key={spatialFeature.id}
+            position={spatialFeature.geometry.coordinates}
+            eventHandlers={{
+                click: () => handleClick(spatialFeature.id),
+            }}
+        >
             <LeafletPopup>
                 <SinglePropertyPresenter display="ID" value={spatialFeature.id} />
                 <DetailPresenter {...spatialFeature} />
@@ -34,8 +42,14 @@ const lookupTable: {
     [GeometricFeatureType.line]: ({
         spatialFeature,
         DetailPresenter,
+        handleClick,
     }: MarkerPresenterProps<[number, number][]>) => (
-        <PolylineMarker positions={spatialFeature.geometry.coordinates}>
+        <PolylineMarker
+            positions={spatialFeature.geometry.coordinates}
+            eventHandlers={{
+                click: () => handleClick(spatialFeature.id),
+            }}
+        >
             <LeafletPopup>
                 <SinglePropertyPresenter display="ID" value={spatialFeature.id} />
                 <DetailPresenter {...spatialFeature} />
@@ -45,8 +59,14 @@ const lookupTable: {
     [GeometricFeatureType.polygon]: ({
         spatialFeature,
         DetailPresenter,
+        handleClick,
     }: MarkerPresenterProps<[number, number][][]>) => (
-        <PolygonMarker positions={spatialFeature.geometry.coordinates}>
+        <PolygonMarker
+            positions={spatialFeature.geometry.coordinates}
+            eventHandlers={{
+                click: () => handleClick(spatialFeature.id),
+            }}
+        >
             <LeafletPopup>
                 <SinglePropertyPresenter display="ID" value={spatialFeature.id} />
                 <DetailPresenter {...spatialFeature} />
@@ -80,6 +100,8 @@ export const buildSpatialFeatureMarker =
         const DefaultIcon = new LeafletIcon({
             iconUrl,
             shadowUrl,
+            iconAnchor: [12, 41],
+            shadowAnchor: [20, 95],
         });
 
         // TODO Fix this hack
@@ -94,8 +116,10 @@ export const buildSpatialFeatureMarker =
         }
 
         return (
-            <button onClick={() => handleClick(spatialFeature.id)}>
-                <Presenter spatialFeature={spatialFeature} DetailPresenter={DetailPresenter} />
-            </button>
+            <Presenter
+                spatialFeature={spatialFeature}
+                DetailPresenter={DetailPresenter}
+                handleClick={handleClick}
+            />
         );
     };
