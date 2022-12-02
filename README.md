@@ -10,6 +10,31 @@ _COSCRAD_ is a loose collaboration of several organizations, technical teams, an
 
 We have adopted the monorepo approach to allow our members to maximize opportunities for code sharing and collaboration, while maintaining autonomy and focus on their own individual projects within this workspace.
 
+### Projects
+#### Apps
+Our apps are of two kinds:
+**core coscrad apps**
+- `api` (core back-end for the COSCRAD `web of knowledge`)
+- `coscrad-frontend` (standard front-end for the COSCRAD `web of knowledge`)
+
+**community experimental prototypes**
+- `tng-dictionary` (maintained by Justin Bambrick, TNG)
+- `tsilqotin-language-hub` (maintained by Justin Bambrick, TNG)
+- `tng-radio-hub` (maintained by Blake Sellars, TNG)
+
+The core apps adhere to strict static analysis, and leverage relatively comprehensive automated  unit \ integration test coverage (Jest), and e2e tests (Cypress). Meanwhile, the experimental prototypes are more 'Wild West'. Many ideas explored in the prototypes will eventually find their way into Coscrad's core.
+
+#### libs
+We maintain several libraries, which allow us to share code between applications in the monorepo.
+- `@coscrad/api-interfaces` (shared types \ enums that represent the contract between `api` and `coscrad-frontend`)
+- `@coscrad/validation` (our custom constraint functions and a combination of custom and `class-validator` validation decorators)
+- `@coscrad/data-types` (custom data types for models and command payloads and decorators that wrap-in corresponding validation decorators)
+- `@coscrad/commands` (our custom barebones command infrastructure, loosely based on the command part of `@nestjs/cqrs`
+- `@coscrad/media-player` (our custom react media player)
+
+**
+
+## Getting Started
 ### Technical Details
 
 This monorepo workspace is managed using [Nx](https://nx.dev). See the `README` in an individual app or lib to learn more about the tools used on that particular project.
@@ -99,11 +124,15 @@ not be modified, nor should `sample.env`.
 
 #### Coscrad Frontend (frontend)
 
-**In Progress**
+To run just the front-end, run
+> > nx serve coscrad-frontend
+
+To run the front-end and back-end concurrently from a single command, run
+> > npm run serve:all
 
 ## Workflow
 
-For convenience we have included a quality check script. This script will run lint, jest tests and build for the front-end (coscrad-frontend) and back-end (api).
+For convenience we have included a quality check script. This script will run lint, Jest tests and build for the front-end (coscrad-frontend) and back-end (api), and run the `e2e` tests via Cypress for the entire COSCRAD core.
 
 > > npm run quality-check:coscrad
 
@@ -152,27 +181,32 @@ For example, to run the tests for the project `api`, run
 
 To run a single test, use the `testFile` flag as follows:
 
-> > nx run <project-name>:test --testFile <name-of-test-file>
+> > nx text <project-name> --test-file=<name-of-test-file>
 
 e.g.
 
-> > nx run api:test --testFile entities.e2e.spec.ts
+> > nx run api:test --test-file=entities.e2e.spec.ts
 
 To run all tests whose names match a RegEx pattern, run
 
-> > nx run <project-name>:test --testPathPattern <regex-to-match-file-paths>
+> > nx test api --test-path-pattern=<regex-to-match-file-paths>
 
 e.g.
 
-> > nx run api:test --testPathPattern 'src/.\*validate.\*'
+> > nx test api --test-path-pattern='src/.\*validate.\*'
+
+In the event that a Jest snapshot fails, first run the single test with a failing snapshot in isolation. To accept the snapshot changes, rerun the test with the -u flag as follows:
+
+> > nx text <project-name> -- --test-file=<name-of-test-file> -u
+
 
 #### Cypress- Front-end e2e tests
 
 **In Progress**
-We also have a set of front-end `e2e` tests using Cypress. The Cypress tests
+We also have a set of front-end `e2e` tests using Cypress. The Cypress tests for a given React project
 are maintained in a separate project, whose name is determined by appending
 `-e2e` to the name of the corresponding front-end project. So `coscrad-frontend-e2e`
-is the project with the Cypress tests for `coscrad-frontend`.
+is the project with the Cypress tests for `coscrad-frontend`. Note that `coscrad-frontend` connects to `api`, and so `coscrad-frontend-e2e` holds the e2e tests for the entire COSCRAD core system.
 
 <!-- TODO Add License info \ choose open source license -->
 
@@ -193,6 +227,8 @@ swagger locally, run
 > > npm run serve:api
 
 and navigate to `http://localhost:{NODE_PORT}/api/docs`.
+
+Note that we are still in the process of updating our Swagger annotations, especially for view model schemas.
 
 ### Deployment
 
