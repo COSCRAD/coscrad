@@ -1,17 +1,36 @@
 import { FormFieldType, IFormField } from '@coscrad/api-interfaces';
 import { VocabularyListCheckbox } from './vocabulary-list-checkbox';
+import { VocabularyListFilter } from './vocabulary-list-detail.full-view.presenter';
 import { VocabularyListSelect } from './vocabulary-list-select';
 
-export const VocabularyListFormElement = (formField: IFormField): JSX.Element => {
-    const { type, label, description } = formField;
+type VocabularyListFormElementProps = {
+    formField: IFormField;
+    onElementChange: (key: string, value: string | boolean) => void;
+    formState: VocabularyListFilter;
+};
+
+export const VocabularyListFormElement = ({
+    formField,
+    onElementChange,
+    formState,
+}: VocabularyListFormElementProps): JSX.Element => {
+    const { type, label, description, name } = formField;
 
     if (type === FormFieldType.switch) {
+        const currentState = formState[name];
+
+        const isChecked = typeof currentState === 'boolean' ? currentState : false;
+
         return (
             <div>
                 label: {label}
                 <br />
                 {description}
-                <VocabularyListCheckbox {...formField} isChecked={true} />
+                <VocabularyListCheckbox
+                    {...formField}
+                    onIsCheckedChange={onElementChange}
+                    isChecked={isChecked}
+                />
             </div>
         );
     }
@@ -19,7 +38,7 @@ export const VocabularyListFormElement = (formField: IFormField): JSX.Element =>
     if (type === FormFieldType.staticSelect) {
         return (
             <div>
-                <VocabularyListSelect {...formField} />
+                <VocabularyListSelect formField={formField} onNewSelection={onElementChange} />
             </div>
         );
     }

@@ -1,19 +1,23 @@
 import { FormFieldType, IFormField, IValueAndDisplay } from '@coscrad/api-interfaces';
-import { useState } from 'react';
+import { Checkbox } from '@mui/material';
 
 type CheckboxProps = IFormField & {
+    onIsCheckedChange?: (name: string, value: string | boolean) => void;
     isChecked: boolean;
-    onIsCheckedChange?: () => void;
 };
 
+/**
+ * TODO[https://www.pivotaltracker.com/story/show/183941489]
+ * We may want to add an 'indeterminate' state so that the user can have
+ * the option of omitting the boolean filter altogether (more results)
+ */
 export const VocabularyListCheckbox = ({
     type,
     name,
     options,
-    isChecked: isCheckedInitially,
+    onIsCheckedChange,
+    isChecked,
 }: CheckboxProps): JSX.Element => {
-    const [isChecked, setIsChecked] = useState<boolean>(isCheckedInitially);
-
     if (type !== FormFieldType.switch) {
         throw new Error(`Invalid form element type: ${type} for checkbox`);
     }
@@ -22,14 +26,20 @@ export const VocabularyListCheckbox = ({
         ({ value }) => value === true
     )?.display;
 
-    const labelWhenUnchecked = (options as IValueAndDisplay<boolean>[]).find(
-        ({ value }) => value === false
-    )?.display;
+    // const labelWhenUnchecked = (options as IValueAndDisplay<boolean>[]).find(
+    //     ({ value }) => value === false
+    // )?.display;
 
     return (
         <div>
-            <input type="checkbox" name={name} onChange={() => setIsChecked(!isChecked)} />
-            {isChecked ? labelWhenChecked : labelWhenUnchecked}
+            <Checkbox
+                checked={isChecked}
+                name={name}
+                onChange={(eventData) => {
+                    onIsCheckedChange(eventData.target.name, eventData.target.checked);
+                }}
+            />
+            {labelWhenChecked}
         </div>
     );
 };

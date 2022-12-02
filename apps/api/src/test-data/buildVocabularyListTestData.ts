@@ -19,7 +19,7 @@ const vocabularyListDTOs = [
             {
                 termId: '2',
                 variableValues: {
-                    person: '21',
+                    person: '12',
                 },
             },
         ],
@@ -49,13 +49,19 @@ const vocabularyListDTOs = [
             {
                 termId: '2',
                 variableValues: {
-                    person: '23',
+                    his: false,
+                },
+            },
+            {
+                termId: '1',
+                variableValues: {
+                    his: true,
                 },
             },
         ],
         variables: [
             {
-                name: 'His',
+                name: 'his',
                 type: DropboxOrCheckbox.checkbox,
                 validValues: [
                     {
