@@ -14,7 +14,7 @@ export const VocabularyListFormElement = ({
     onElementChange,
     formState,
 }: VocabularyListFormElementProps): JSX.Element => {
-    const { type, label, description, name } = formField;
+    const { type, name } = formField;
 
     if (type === FormFieldType.switch) {
         const currentState = formState[name];
@@ -23,9 +23,6 @@ export const VocabularyListFormElement = ({
 
         return (
             <div>
-                label: {label}
-                <br />
-                {description}
                 <VocabularyListCheckbox
                     {...formField}
                     onIsCheckedChange={onElementChange}

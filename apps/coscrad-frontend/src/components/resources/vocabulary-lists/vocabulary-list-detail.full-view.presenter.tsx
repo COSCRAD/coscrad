@@ -73,12 +73,6 @@ export const VocabularyListDetailFullViewPresenter = ({
     return (
         <div data-testid={id}>
             <h1>{formatBilingualText(name, nameEnglish)}</h1>
-            Filters:
-            <br />
-            {JSON.stringify(filter)}
-            Values:
-            <br />
-            {entries.map((entry) => JSON.stringify(entry.variableValues))}
             <div>
                 <h3>Entries:</h3>
                 {/* TODO [https://www.pivotaltracker.com/story/show/183681556] We need to fix the following hack */}

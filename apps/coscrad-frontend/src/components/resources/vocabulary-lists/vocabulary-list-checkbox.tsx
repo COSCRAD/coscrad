@@ -15,6 +15,7 @@ export const VocabularyListCheckbox = ({
     type,
     name,
     options,
+    label,
     onIsCheckedChange,
     isChecked,
 }: CheckboxProps): JSX.Element => {
@@ -26,12 +27,13 @@ export const VocabularyListCheckbox = ({
         ({ value }) => value === true
     )?.display;
 
-    // const labelWhenUnchecked = (options as IValueAndDisplay<boolean>[]).find(
-    //     ({ value }) => value === false
-    // )?.display;
+    const labelWhenUnchecked = (options as IValueAndDisplay<boolean>[]).find(
+        ({ value }) => value === false
+    )?.display;
 
     return (
         <div>
+            {label}
             <Checkbox
                 checked={isChecked}
                 name={name}
@@ -39,7 +41,7 @@ export const VocabularyListCheckbox = ({
                     onIsCheckedChange(eventData.target.name, eventData.target.checked);
                 }}
             />
-            {labelWhenChecked}
+            {isChecked ? labelWhenChecked : labelWhenUnchecked}
         </div>
     );
 };

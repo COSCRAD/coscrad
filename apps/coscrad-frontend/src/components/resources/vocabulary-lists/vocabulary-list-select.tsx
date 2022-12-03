@@ -1,5 +1,5 @@
 import { IFormField, IValueAndDisplay } from '@coscrad/api-interfaces';
-import { InputLabel, MenuItem, Select } from '@mui/material';
+import { MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
 
 const NO_SELECTION_PLACEHOLDER = '-';
@@ -19,7 +19,7 @@ export const VocabularyListSelect = ({
 
     return (
         <div>
-            <InputLabel>{name}</InputLabel>
+            {label}
             <Select
                 value={currentValue}
                 label={label}
