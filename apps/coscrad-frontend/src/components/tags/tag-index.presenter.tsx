@@ -1,5 +1,7 @@
 import { ITagViewModel } from '@coscrad/api-interfaces';
-import { Link } from 'react-router-dom';
+import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
+import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
 
 type HasViewModels<TViewModel> = {
     data: TViewModel[];
@@ -9,17 +11,28 @@ type HasViewModels<TViewModel> = {
  * TODO[https://www.pivotaltracker.com/story/show/183618856]
  * We need to expose Tag commands through Tag queries.
  */
-export const TagIndexPresenter = ({ data: tags }: HasViewModels<ITagViewModel>): JSX.Element => (
-    <div>
-        {tags.map((tag) => (
-            // TODO Format as table
-            <div key={tag.id} data-testid={tag.id}>
-                <Link to={tag.id}>
-                    {tag.label} (id: {tag.id})
-                </Link>
-            </div>
-        ))}
-        {/* <h2>Index Actions</h2> */}
-        {/* <CommandPanel actions={tagsData.actions}></CommandPanel> */}
-    </div>
-);
+export const TagIndexPresenter = ({ data: tags }: HasViewModels<ITagViewModel>): JSX.Element => {
+    const headingLabels: HeadingLabel<ITagViewModel>[] = [
+        {
+            propertyKey: 'id',
+            headingLabel: 'Link',
+        },
+        {
+            propertyKey: 'label',
+            headingLabel: 'Label',
+        },
+    ];
+
+    const cellRenderersDefinition: CellRenderersDefinition<ITagViewModel> = {
+        id: renderAggregateIdCell,
+    };
+
+    return (
+        <IndexTable
+            tableData={tags}
+            headingLabels={headingLabels}
+            cellRenderersDefinition={cellRenderersDefinition}
+            heading="Tags"
+        />
+    );
+};

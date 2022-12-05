@@ -1,6 +1,6 @@
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
-import { displayLoadableWithErrorsAndLoading } from './displayLoadableWithErrorsAndLoading';
+import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 
 export interface AggregateIndexContainerProps<T, UPresenterProps = T> {
     useLoadableModels: () => ILoadable<T>;

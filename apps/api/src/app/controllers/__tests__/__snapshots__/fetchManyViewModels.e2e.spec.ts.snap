@@ -51,6 +51,32 @@ Object {
           Object {
             "id": "2",
             "label": "animals",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "term",
+              },
+              Object {
+                "id": "3",
+                "type": "term",
+              },
+              Object {
+                "id": "102",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2004",
+                "type": "note",
+              },
+              Object {
+                "id": "7",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "bibliographicReference",
+              },
+            ],
           },
         ],
       },
@@ -141,6 +167,12 @@ Object {
           Object {
             "id": "6",
             "label": "law",
+            "members": Array [
+              Object {
+                "id": "3",
+                "type": "bibliographicReference",
+              },
+            ],
           },
         ],
       },
@@ -200,6 +232,32 @@ Object {
           Object {
             "id": "2",
             "label": "animals",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "term",
+              },
+              Object {
+                "id": "3",
+                "type": "term",
+              },
+              Object {
+                "id": "102",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2004",
+                "type": "note",
+              },
+              Object {
+                "id": "7",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "bibliographicReference",
+              },
+            ],
           },
         ],
       },
@@ -290,6 +348,12 @@ Object {
           Object {
             "id": "6",
             "label": "law",
+            "members": Array [
+              Object {
+                "id": "3",
+                "type": "bibliographicReference",
+              },
+            ],
           },
         ],
       },
@@ -347,6 +411,40 @@ Object {
           Object {
             "id": "1",
             "label": "plants",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "term",
+              },
+              Object {
+                "id": "23",
+                "type": "book",
+              },
+              Object {
+                "id": "24",
+                "type": "book",
+              },
+              Object {
+                "id": "1",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "100",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2005",
+                "type": "note",
+              },
+              Object {
+                "id": "9",
+                "type": "note",
+              },
+              Object {
+                "id": "11",
+                "type": "note",
+              },
+            ],
           },
         ],
         "title": "Three Little Pigs",
@@ -391,6 +489,40 @@ Object {
           Object {
             "id": "1",
             "label": "plants",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "term",
+              },
+              Object {
+                "id": "23",
+                "type": "book",
+              },
+              Object {
+                "id": "24",
+                "type": "book",
+              },
+              Object {
+                "id": "1",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "100",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2005",
+                "type": "note",
+              },
+              Object {
+                "id": "9",
+                "type": "note",
+              },
+              Object {
+                "id": "11",
+                "type": "note",
+              },
+            ],
           },
         ],
         "title": "An Adventure Story",
@@ -488,6 +620,40 @@ Object {
           Object {
             "id": "1",
             "label": "plants",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "term",
+              },
+              Object {
+                "id": "23",
+                "type": "book",
+              },
+              Object {
+                "id": "24",
+                "type": "book",
+              },
+              Object {
+                "id": "1",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "100",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2005",
+                "type": "note",
+              },
+              Object {
+                "id": "9",
+                "type": "note",
+              },
+              Object {
+                "id": "11",
+                "type": "note",
+              },
+            ],
           },
         ],
         "title": "Three Little Pigs",
@@ -532,6 +698,40 @@ Object {
           Object {
             "id": "1",
             "label": "plants",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "term",
+              },
+              Object {
+                "id": "23",
+                "type": "book",
+              },
+              Object {
+                "id": "24",
+                "type": "book",
+              },
+              Object {
+                "id": "1",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "100",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2005",
+                "type": "note",
+              },
+              Object {
+                "id": "9",
+                "type": "note",
+              },
+              Object {
+                "id": "11",
+                "type": "note",
+              },
+            ],
           },
         ],
         "title": "An Adventure Story",
@@ -622,6 +822,32 @@ Object {
           Object {
             "id": "5",
             "label": "legends",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "101",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2001",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "mediaItem",
+              },
+              Object {
+                "id": "1",
+                "type": "song",
+              },
+            ],
           },
         ],
         "title": "episode title (in language)",
@@ -675,6 +901,32 @@ Object {
           Object {
             "id": "5",
             "label": "legends",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "101",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2001",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "mediaItem",
+              },
+              Object {
+                "id": "1",
+                "type": "song",
+              },
+            ],
           },
         ],
         "title": "episode title (in language)",
@@ -722,6 +974,24 @@ Object {
           Object {
             "id": "3",
             "label": "placenames",
+            "members": Array [
+              Object {
+                "id": "0",
+                "type": "photograph",
+              },
+              Object {
+                "id": "110",
+                "type": "transcribedAudio",
+              },
+              Object {
+                "id": "2003",
+                "type": "note",
+              },
+              Object {
+                "id": "5",
+                "type": "note",
+              },
+            ],
           },
         ],
       },
@@ -758,6 +1028,20 @@ Object {
           Object {
             "id": "4",
             "label": "songs",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "photograph",
+              },
+              Object {
+                "id": "2002",
+                "type": "note",
+              },
+              Object {
+                "id": "3",
+                "type": "note",
+              },
+            ],
           },
         ],
       },
@@ -833,6 +1117,24 @@ Object {
           Object {
             "id": "3",
             "label": "placenames",
+            "members": Array [
+              Object {
+                "id": "0",
+                "type": "photograph",
+              },
+              Object {
+                "id": "110",
+                "type": "transcribedAudio",
+              },
+              Object {
+                "id": "2003",
+                "type": "note",
+              },
+              Object {
+                "id": "5",
+                "type": "note",
+              },
+            ],
           },
         ],
       },
@@ -869,6 +1171,20 @@ Object {
           Object {
             "id": "4",
             "label": "songs",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "photograph",
+              },
+              Object {
+                "id": "2002",
+                "type": "note",
+              },
+              Object {
+                "id": "3",
+                "type": "note",
+              },
+            ],
           },
         ],
       },
@@ -949,6 +1265,32 @@ Object {
           Object {
             "id": "5",
             "label": "legends",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "101",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2001",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "mediaItem",
+              },
+              Object {
+                "id": "1",
+                "type": "song",
+              },
+            ],
           },
         ],
         "title": "Song title in language",
@@ -1038,6 +1380,32 @@ Object {
           Object {
             "id": "5",
             "label": "legends",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "101",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2001",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "mediaItem",
+              },
+              Object {
+                "id": "1",
+                "type": "song",
+              },
+            ],
           },
         ],
         "title": "Song title in language",
@@ -1127,6 +1495,40 @@ Object {
           Object {
             "id": "1",
             "label": "plants",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "term",
+              },
+              Object {
+                "id": "23",
+                "type": "book",
+              },
+              Object {
+                "id": "24",
+                "type": "book",
+              },
+              Object {
+                "id": "1",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "100",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2005",
+                "type": "note",
+              },
+              Object {
+                "id": "9",
+                "type": "note",
+              },
+              Object {
+                "id": "11",
+                "type": "note",
+              },
+            ],
           },
         ],
       },
@@ -1168,6 +1570,32 @@ Object {
           Object {
             "id": "5",
             "label": "legends",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "101",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2001",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "mediaItem",
+              },
+              Object {
+                "id": "1",
+                "type": "song",
+              },
+            ],
           },
         ],
       },
@@ -1209,6 +1637,32 @@ Object {
           Object {
             "id": "2",
             "label": "animals",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "term",
+              },
+              Object {
+                "id": "3",
+                "type": "term",
+              },
+              Object {
+                "id": "102",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2004",
+                "type": "note",
+              },
+              Object {
+                "id": "7",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "bibliographicReference",
+              },
+            ],
           },
         ],
       },
@@ -1364,6 +1818,40 @@ Object {
           Object {
             "id": "1",
             "label": "plants",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "term",
+              },
+              Object {
+                "id": "23",
+                "type": "book",
+              },
+              Object {
+                "id": "24",
+                "type": "book",
+              },
+              Object {
+                "id": "1",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "100",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2005",
+                "type": "note",
+              },
+              Object {
+                "id": "9",
+                "type": "note",
+              },
+              Object {
+                "id": "11",
+                "type": "note",
+              },
+            ],
           },
         ],
       },
@@ -1405,6 +1893,32 @@ Object {
           Object {
             "id": "5",
             "label": "legends",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "101",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2001",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "mediaItem",
+              },
+              Object {
+                "id": "1",
+                "type": "song",
+              },
+            ],
           },
         ],
       },
@@ -1446,6 +1960,32 @@ Object {
           Object {
             "id": "2",
             "label": "animals",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "term",
+              },
+              Object {
+                "id": "3",
+                "type": "term",
+              },
+              Object {
+                "id": "102",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2004",
+                "type": "note",
+              },
+              Object {
+                "id": "7",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "bibliographicReference",
+              },
+            ],
           },
         ],
       },
@@ -1595,6 +2135,40 @@ Object {
           Object {
             "id": "1",
             "label": "plants",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "term",
+              },
+              Object {
+                "id": "23",
+                "type": "book",
+              },
+              Object {
+                "id": "24",
+                "type": "book",
+              },
+              Object {
+                "id": "1",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "100",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2005",
+                "type": "note",
+              },
+              Object {
+                "id": "9",
+                "type": "note",
+              },
+              Object {
+                "id": "11",
+                "type": "note",
+              },
+            ],
           },
         ],
         "term": "Chil-term-1",
@@ -1632,6 +2206,32 @@ Object {
           Object {
             "id": "2",
             "label": "animals",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "term",
+              },
+              Object {
+                "id": "3",
+                "type": "term",
+              },
+              Object {
+                "id": "102",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2004",
+                "type": "note",
+              },
+              Object {
+                "id": "7",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "bibliographicReference",
+              },
+            ],
           },
         ],
         "term": "Chil-term-2",
@@ -1669,6 +2269,32 @@ Object {
           Object {
             "id": "2",
             "label": "animals",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "term",
+              },
+              Object {
+                "id": "3",
+                "type": "term",
+              },
+              Object {
+                "id": "102",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2004",
+                "type": "note",
+              },
+              Object {
+                "id": "7",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "bibliographicReference",
+              },
+            ],
           },
         ],
         "term": "Chil-term-no-english",
@@ -1713,6 +2339,40 @@ Object {
           Object {
             "id": "1",
             "label": "plants",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "term",
+              },
+              Object {
+                "id": "23",
+                "type": "book",
+              },
+              Object {
+                "id": "24",
+                "type": "book",
+              },
+              Object {
+                "id": "1",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "100",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2005",
+                "type": "note",
+              },
+              Object {
+                "id": "9",
+                "type": "note",
+              },
+              Object {
+                "id": "11",
+                "type": "note",
+              },
+            ],
           },
         ],
         "term": "Chil-term-1",
@@ -1750,6 +2410,32 @@ Object {
           Object {
             "id": "2",
             "label": "animals",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "term",
+              },
+              Object {
+                "id": "3",
+                "type": "term",
+              },
+              Object {
+                "id": "102",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2004",
+                "type": "note",
+              },
+              Object {
+                "id": "7",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "bibliographicReference",
+              },
+            ],
           },
         ],
         "term": "Chil-term-2",
@@ -1787,6 +2473,32 @@ Object {
           Object {
             "id": "2",
             "label": "animals",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "term",
+              },
+              Object {
+                "id": "3",
+                "type": "term",
+              },
+              Object {
+                "id": "102",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2004",
+                "type": "note",
+              },
+              Object {
+                "id": "7",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "bibliographicReference",
+              },
+            ],
           },
         ],
         "term": "Chil-term-no-english",
@@ -1836,6 +2548,24 @@ Object {
           Object {
             "id": "3",
             "label": "placenames",
+            "members": Array [
+              Object {
+                "id": "0",
+                "type": "photograph",
+              },
+              Object {
+                "id": "110",
+                "type": "transcribedAudio",
+              },
+              Object {
+                "id": "2003",
+                "type": "note",
+              },
+              Object {
+                "id": "5",
+                "type": "note",
+              },
+            ],
           },
         ],
       },
@@ -1955,6 +2685,24 @@ Object {
           Object {
             "id": "3",
             "label": "placenames",
+            "members": Array [
+              Object {
+                "id": "0",
+                "type": "photograph",
+              },
+              Object {
+                "id": "110",
+                "type": "transcribedAudio",
+              },
+              Object {
+                "id": "2003",
+                "type": "note",
+              },
+              Object {
+                "id": "5",
+                "type": "note",
+              },
+            ],
           },
         ],
       },
@@ -2094,6 +2842,40 @@ Object {
           Object {
             "id": "1",
             "label": "plants",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "term",
+              },
+              Object {
+                "id": "23",
+                "type": "book",
+              },
+              Object {
+                "id": "24",
+                "type": "book",
+              },
+              Object {
+                "id": "1",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "100",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2005",
+                "type": "note",
+              },
+              Object {
+                "id": "9",
+                "type": "note",
+              },
+              Object {
+                "id": "11",
+                "type": "note",
+              },
+            ],
           },
         ],
         "variables": Array [
@@ -2158,6 +2940,32 @@ Object {
           Object {
             "id": "5",
             "label": "legends",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "101",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2001",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "mediaItem",
+              },
+              Object {
+                "id": "1",
+                "type": "song",
+              },
+            ],
           },
         ],
         "variables": Array [],
@@ -2204,6 +3012,40 @@ Object {
           Object {
             "id": "1",
             "label": "plants",
+            "members": Array [
+              Object {
+                "id": "1",
+                "type": "term",
+              },
+              Object {
+                "id": "23",
+                "type": "book",
+              },
+              Object {
+                "id": "24",
+                "type": "book",
+              },
+              Object {
+                "id": "1",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "100",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2005",
+                "type": "note",
+              },
+              Object {
+                "id": "9",
+                "type": "note",
+              },
+              Object {
+                "id": "11",
+                "type": "note",
+              },
+            ],
           },
         ],
         "variables": Array [
@@ -2256,6 +3098,32 @@ Object {
           Object {
             "id": "5",
             "label": "legends",
+            "members": Array [
+              Object {
+                "id": "2",
+                "type": "vocabularyList",
+              },
+              Object {
+                "id": "101",
+                "type": "spatialFeature",
+              },
+              Object {
+                "id": "2001",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "note",
+              },
+              Object {
+                "id": "1",
+                "type": "mediaItem",
+              },
+              Object {
+                "id": "1",
+                "type": "song",
+              },
+            ],
           },
         ],
         "variables": Array [],
