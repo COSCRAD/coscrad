@@ -1,6 +1,6 @@
 import { useLoadableNotes } from '../../store/slices/notes/hooks';
 import { wrapArrayProps } from '../../utils/prop-manipulation/wrap-array-props';
-import { displayLoadableWithErrorsAndLoading } from '../higher-order-components/displayLoadableWithErrorsAndLoading';
+import { displayLoadableWithErrorsAndLoading } from '../higher-order-components/display-loadable-with-errors-and-loading';
 import { NoteIndexPresenter } from './note-index.presenter';
 
 export const NoteIndexContainer = (): JSX.Element => {
