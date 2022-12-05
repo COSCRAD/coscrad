@@ -194,6 +194,20 @@ Array [
       Object {
         "id": "4",
         "label": "songs",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "photograph",
+          },
+          Object {
+            "id": "2002",
+            "type": "note",
+          },
+          Object {
+            "id": "3",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -250,6 +264,24 @@ Array [
       Object {
         "id": "3",
         "label": "placenames",
+        "members": Array [
+          Object {
+            "id": "0",
+            "type": "photograph",
+          },
+          Object {
+            "id": "110",
+            "type": "transcribedAudio",
+          },
+          Object {
+            "id": "2003",
+            "type": "note",
+          },
+          Object {
+            "id": "5",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -451,6 +483,24 @@ Array [
       Object {
         "id": "3",
         "label": "placenames",
+        "members": Array [
+          Object {
+            "id": "0",
+            "type": "photograph",
+          },
+          Object {
+            "id": "110",
+            "type": "transcribedAudio",
+          },
+          Object {
+            "id": "2003",
+            "type": "note",
+          },
+          Object {
+            "id": "5",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -504,6 +554,32 @@ Array [
       Object {
         "id": "2",
         "label": "animals",
+        "members": Array [
+          Object {
+            "id": "2",
+            "type": "term",
+          },
+          Object {
+            "id": "3",
+            "type": "term",
+          },
+          Object {
+            "id": "102",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2004",
+            "type": "note",
+          },
+          Object {
+            "id": "7",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "bibliographicReference",
+          },
+        ],
       },
     ],
   },
@@ -546,6 +622,40 @@ Array [
       Object {
         "id": "1",
         "label": "plants",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "term",
+          },
+          Object {
+            "id": "23",
+            "type": "book",
+          },
+          Object {
+            "id": "24",
+            "type": "book",
+          },
+          Object {
+            "id": "1",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "100",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2005",
+            "type": "note",
+          },
+          Object {
+            "id": "9",
+            "type": "note",
+          },
+          Object {
+            "id": "11",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -673,6 +783,32 @@ Array [
       Object {
         "id": "2",
         "label": "animals",
+        "members": Array [
+          Object {
+            "id": "2",
+            "type": "term",
+          },
+          Object {
+            "id": "3",
+            "type": "term",
+          },
+          Object {
+            "id": "102",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2004",
+            "type": "note",
+          },
+          Object {
+            "id": "7",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "bibliographicReference",
+          },
+        ],
       },
     ],
   },
@@ -710,6 +846,40 @@ Array [
       Object {
         "id": "1",
         "label": "plants",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "term",
+          },
+          Object {
+            "id": "23",
+            "type": "book",
+          },
+          Object {
+            "id": "24",
+            "type": "book",
+          },
+          Object {
+            "id": "1",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "100",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2005",
+            "type": "note",
+          },
+          Object {
+            "id": "9",
+            "type": "note",
+          },
+          Object {
+            "id": "11",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -874,6 +1044,32 @@ Array [
       Object {
         "id": "5",
         "label": "legends",
+        "members": Array [
+          Object {
+            "id": "2",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "101",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2001",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "mediaItem",
+          },
+          Object {
+            "id": "1",
+            "type": "song",
+          },
+        ],
       },
     ],
   },
@@ -914,6 +1110,20 @@ Array [
       Object {
         "id": "4",
         "label": "songs",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "photograph",
+          },
+          Object {
+            "id": "2002",
+            "type": "note",
+          },
+          Object {
+            "id": "3",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -999,6 +1209,32 @@ Array [
       Object {
         "id": "5",
         "label": "legends",
+        "members": Array [
+          Object {
+            "id": "2",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "101",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2001",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "mediaItem",
+          },
+          Object {
+            "id": "1",
+            "type": "song",
+          },
+        ],
       },
     ],
   },
@@ -1032,6 +1268,32 @@ Array [
       Object {
         "id": "5",
         "label": "legends",
+        "members": Array [
+          Object {
+            "id": "2",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "101",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2001",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "mediaItem",
+          },
+          Object {
+            "id": "1",
+            "type": "song",
+          },
+        ],
       },
     ],
   },
@@ -1081,6 +1343,20 @@ Array [
       Object {
         "id": "4",
         "label": "songs",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "photograph",
+          },
+          Object {
+            "id": "2002",
+            "type": "note",
+          },
+          Object {
+            "id": "3",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -1126,6 +1402,24 @@ Array [
       Object {
         "id": "3",
         "label": "placenames",
+        "members": Array [
+          Object {
+            "id": "0",
+            "type": "photograph",
+          },
+          Object {
+            "id": "110",
+            "type": "transcribedAudio",
+          },
+          Object {
+            "id": "2003",
+            "type": "note",
+          },
+          Object {
+            "id": "5",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -1191,6 +1485,32 @@ Array [
       Object {
         "id": "2",
         "label": "animals",
+        "members": Array [
+          Object {
+            "id": "2",
+            "type": "term",
+          },
+          Object {
+            "id": "3",
+            "type": "term",
+          },
+          Object {
+            "id": "102",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2004",
+            "type": "note",
+          },
+          Object {
+            "id": "7",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "bibliographicReference",
+          },
+        ],
       },
     ],
   },
@@ -1235,6 +1555,40 @@ Array [
       Object {
         "id": "1",
         "label": "plants",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "term",
+          },
+          Object {
+            "id": "23",
+            "type": "book",
+          },
+          Object {
+            "id": "24",
+            "type": "book",
+          },
+          Object {
+            "id": "1",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "100",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2005",
+            "type": "note",
+          },
+          Object {
+            "id": "9",
+            "type": "note",
+          },
+          Object {
+            "id": "11",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -1285,6 +1639,40 @@ Array [
       Object {
         "id": "1",
         "label": "plants",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "term",
+          },
+          Object {
+            "id": "23",
+            "type": "book",
+          },
+          Object {
+            "id": "24",
+            "type": "book",
+          },
+          Object {
+            "id": "1",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "100",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2005",
+            "type": "note",
+          },
+          Object {
+            "id": "9",
+            "type": "note",
+          },
+          Object {
+            "id": "11",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -1585,6 +1973,32 @@ Array [
       Object {
         "id": "5",
         "label": "legends",
+        "members": Array [
+          Object {
+            "id": "2",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "101",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2001",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "mediaItem",
+          },
+          Object {
+            "id": "1",
+            "type": "song",
+          },
+        ],
       },
     ],
   },
@@ -1625,6 +2039,20 @@ Array [
       Object {
         "id": "4",
         "label": "songs",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "photograph",
+          },
+          Object {
+            "id": "2002",
+            "type": "note",
+          },
+          Object {
+            "id": "3",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -1681,6 +2109,24 @@ Array [
       Object {
         "id": "3",
         "label": "placenames",
+        "members": Array [
+          Object {
+            "id": "0",
+            "type": "photograph",
+          },
+          Object {
+            "id": "110",
+            "type": "transcribedAudio",
+          },
+          Object {
+            "id": "2003",
+            "type": "note",
+          },
+          Object {
+            "id": "5",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -1734,6 +2180,32 @@ Array [
       Object {
         "id": "2",
         "label": "animals",
+        "members": Array [
+          Object {
+            "id": "2",
+            "type": "term",
+          },
+          Object {
+            "id": "3",
+            "type": "term",
+          },
+          Object {
+            "id": "102",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2004",
+            "type": "note",
+          },
+          Object {
+            "id": "7",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "bibliographicReference",
+          },
+        ],
       },
     ],
   },
@@ -1771,6 +2243,40 @@ Array [
       Object {
         "id": "1",
         "label": "plants",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "term",
+          },
+          Object {
+            "id": "23",
+            "type": "book",
+          },
+          Object {
+            "id": "24",
+            "type": "book",
+          },
+          Object {
+            "id": "1",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "100",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2005",
+            "type": "note",
+          },
+          Object {
+            "id": "9",
+            "type": "note",
+          },
+          Object {
+            "id": "11",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -1968,6 +2474,40 @@ Array [
       Object {
         "id": "1",
         "label": "plants",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "term",
+          },
+          Object {
+            "id": "23",
+            "type": "book",
+          },
+          Object {
+            "id": "24",
+            "type": "book",
+          },
+          Object {
+            "id": "1",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "100",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2005",
+            "type": "note",
+          },
+          Object {
+            "id": "9",
+            "type": "note",
+          },
+          Object {
+            "id": "11",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -2102,6 +2642,40 @@ Array [
       Object {
         "id": "1",
         "label": "plants",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "term",
+          },
+          Object {
+            "id": "23",
+            "type": "book",
+          },
+          Object {
+            "id": "24",
+            "type": "book",
+          },
+          Object {
+            "id": "1",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "100",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2005",
+            "type": "note",
+          },
+          Object {
+            "id": "9",
+            "type": "note",
+          },
+          Object {
+            "id": "11",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -2230,6 +2804,32 @@ Array [
       Object {
         "id": "2",
         "label": "animals",
+        "members": Array [
+          Object {
+            "id": "2",
+            "type": "term",
+          },
+          Object {
+            "id": "3",
+            "type": "term",
+          },
+          Object {
+            "id": "102",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2004",
+            "type": "note",
+          },
+          Object {
+            "id": "7",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "bibliographicReference",
+          },
+        ],
       },
     ],
   },
@@ -2367,6 +2967,32 @@ Array [
       Object {
         "id": "5",
         "label": "legends",
+        "members": Array [
+          Object {
+            "id": "2",
+            "type": "vocabularyList",
+          },
+          Object {
+            "id": "101",
+            "type": "spatialFeature",
+          },
+          Object {
+            "id": "2001",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "note",
+          },
+          Object {
+            "id": "1",
+            "type": "mediaItem",
+          },
+          Object {
+            "id": "1",
+            "type": "song",
+          },
+        ],
       },
     ],
   },
@@ -2417,6 +3043,24 @@ Array [
       Object {
         "id": "3",
         "label": "placenames",
+        "members": Array [
+          Object {
+            "id": "0",
+            "type": "photograph",
+          },
+          Object {
+            "id": "110",
+            "type": "transcribedAudio",
+          },
+          Object {
+            "id": "2003",
+            "type": "note",
+          },
+          Object {
+            "id": "5",
+            "type": "note",
+          },
+        ],
       },
     ],
   },
@@ -2468,6 +3112,20 @@ Array [
       Object {
         "id": "4",
         "label": "songs",
+        "members": Array [
+          Object {
+            "id": "1",
+            "type": "photograph",
+          },
+          Object {
+            "id": "2002",
+            "type": "note",
+          },
+          Object {
+            "id": "3",
+            "type": "note",
+          },
+        ],
       },
     ],
   },

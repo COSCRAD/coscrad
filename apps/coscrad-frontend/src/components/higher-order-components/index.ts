@@ -1,1 +1,2 @@
-export * from './displayLoadableWithErrorsAndLoading';
+export * from './categorizables-of-multiple-type.container';
+export * from './display-loadable-with-errors-and-loading';

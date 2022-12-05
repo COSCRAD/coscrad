@@ -1,11 +1,6 @@
-import { ResourceType } from './ResourceType';
+import { CategorizableType } from '@coscrad/api-interfaces';
 
-export const CategorizableType = {
-    ...ResourceType,
-    note: 'note',
-} as const;
-
-export type CategorizableType = ResourceType | typeof CategorizableType.note;
+export { CategorizableType };
 
 export const isCategorizableType = (input: unknown): input is CategorizableType =>
     Object.values(CategorizableType).some((type) => type === input);
