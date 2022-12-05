@@ -1,5 +1,5 @@
 import { IAggregateInfo, ResourceType } from '@coscrad/api-interfaces';
-import { Divider } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { HasData } from '../higher-order-components';
 import { ResourceInfoPresenter } from './ResourceInfoPresenter';
@@ -14,10 +14,10 @@ export const ResourceInfosPresenter: FunctionalComponent<
     <div>
         <h2>Available Resources</h2>
         <Divider />
-        <br />
-        <br />
-        {resourceInfos.map((info) => (
-            <ResourceInfoPresenter {...info} key={info.type}></ResourceInfoPresenter>
-        ))}
+        <Stack spacing={1}>
+            {resourceInfos.map((info) => (
+                <ResourceInfoPresenter {...info} key={info.type}></ResourceInfoPresenter>
+            ))}
+        </Stack>
     </div>
 );
