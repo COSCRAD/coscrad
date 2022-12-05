@@ -14,6 +14,7 @@ export const configurableContentSchema = {
     copyrightHolder: CoscradDataType.NonEmptyString,
     organizationLogoUrl: CoscradDataType.NonEmptyString,
     // This is a hack. We need to represent contributors as a resource in our system and then use notes to relay this info
+    // We may want to make this optional or allow an empty array
     songIdToCredits: CoscradDataType.RawData,
     // videoIdToCredits: CoscradDataType.RawData
 } as const;

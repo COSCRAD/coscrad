@@ -1,1 +1,1 @@
-export * from './resource-type-to-view-model';
+export * from './categorizable-type-to-view-model';
