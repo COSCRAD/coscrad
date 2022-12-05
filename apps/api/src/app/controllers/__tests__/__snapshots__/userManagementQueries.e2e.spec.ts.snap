@@ -17,6 +17,11 @@ Array [
         "isArray": false,
         "isOptional": false,
       },
+      "members": Object {
+        "coscradDataType": "COMPOSITE_IDENTIFIER",
+        "isArray": true,
+        "isOptional": false,
+      },
     },
     "type": "tag",
   },

@@ -1,3 +1,4 @@
+export * from '../categorizable-type.enum';
 export * from './bibliographic-reference';
 export * from './book';
 export * from './media-items';
