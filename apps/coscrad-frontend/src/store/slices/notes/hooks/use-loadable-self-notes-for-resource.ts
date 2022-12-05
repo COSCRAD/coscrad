@@ -25,7 +25,7 @@ export const useLoadableSelfNotesForResource = (
 ): ILoadable<SelfConnectionNote[]> => {
     const loadableNotes = useLoadableNotes();
 
-    const { data: data, errorInfo, isLoading } = loadableNotes;
+    const { data, errorInfo, isLoading } = loadableNotes;
 
     if (errorInfo !== null)
         return {

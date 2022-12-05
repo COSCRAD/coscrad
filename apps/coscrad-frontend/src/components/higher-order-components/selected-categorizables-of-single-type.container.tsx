@@ -1,23 +1,25 @@
 import { CategorizableType, IBaseViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
-import { ICategorizableDetailPresenterFactory } from '../resources/factories/resource-detail-presenter-factory.interface';
+import { ICategorizableDetailPresenterFactory } from '../resources/factories/categorizable-detail-presenter-factory.interface';
 import { buildUseLoadableForSingleCategorizableType } from './buildUseLoadableResourcesOfSingleType';
-import { displayLoadableWithErrorsAndLoading } from './displayLoadableWithErrorsAndLoading';
-import { SelectedCategorizablePresenter } from './selected-resources.presenter';
+import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
+import { SelectedCategorizablesPresenter } from './selected-categorizables.presenter';
 
 interface SelectedResourceContainerProps<T> {
     categorizableType: CategorizableType;
     selectedIds: string[];
     detailPresenterFactory: ICategorizableDetailPresenterFactory<T>;
+    pluralLabelForCategorizableType: string;
 }
 
 type SearchResult = NOT_FOUND | IDetailQueryResult<IBaseViewModel>;
 
-export const SelectedCategorizableContainer = ({
+export const SelectedCategorizablesOfSingleTypeContainer = ({
     categorizableType,
     selectedIds,
     detailPresenterFactory,
+    pluralLabelForCategorizableType,
 }: SelectedResourceContainerProps<unknown>): JSX.Element => {
     const useResources = buildUseLoadableForSingleCategorizableType(categorizableType);
 
@@ -43,11 +45,12 @@ export const SelectedCategorizableContainer = ({
     };
 
     const Presenter = displayLoadableWithErrorsAndLoading(
-        SelectedCategorizablePresenter,
+        SelectedCategorizablesPresenter,
         (loadedData: SearchResult[]) => ({
             viewModels: loadedData,
             presenterFactory: detailPresenterFactory,
             categorizableType,
+            pluralLabelForCategorizableType,
         })
     );
 

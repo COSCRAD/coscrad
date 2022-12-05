@@ -12,10 +12,13 @@ const allTags: ITagViewModel[] = [
     {
         label: 'birds',
         id: '201',
+        // TODO Add members
+        members: [],
     },
     {
         label: 'reptiles',
         id: '202',
+        members: [],
     },
 ];
 
@@ -41,7 +44,7 @@ describe(`Tag Detail`, () => {
                 response: allTags,
             })
         );
-        describe(`when the tag ID in the route corresponds to an existing term`, () => {
+        describe(`when the tag ID in the route corresponds to an existing tag`, () => {
             it('should display the tag', async () => {
                 act(idToFind);
 

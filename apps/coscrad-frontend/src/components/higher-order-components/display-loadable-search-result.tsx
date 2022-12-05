@@ -2,7 +2,7 @@ import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { IMaybeLoadable, NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { NotFound } from '../NotFound';
-import { displayLoadableWithErrorsAndLoading } from './displayLoadableWithErrorsAndLoading';
+import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 import { MapLoadedDataToProps } from './types';
 
 export const displayLoadableSearchResult =
