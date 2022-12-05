@@ -2,7 +2,7 @@ import { IFormField, IValueAndDisplay } from '@coscrad/api-interfaces';
 import { MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
 
-const NO_SELECTION_PLACEHOLDER = '-';
+const NO_SELECTION_PLACEHOLDER = '-SELECT-';
 
 interface VocabularyListSelectProps {
     formField: IFormField;

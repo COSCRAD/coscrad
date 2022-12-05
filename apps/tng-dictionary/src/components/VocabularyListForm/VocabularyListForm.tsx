@@ -178,10 +178,6 @@ export function VocabularyListForm({ formItems }: VocabularyListFormProps) {
     ): void => {
         const newState = getUpdatedFormState(existingState, key, value);
 
-        console.log({
-            newState,
-        });
-
         setFormState(newState);
     };
 
