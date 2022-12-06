@@ -2,6 +2,7 @@ import { GeometricFeatureType, ISpatialFeatureViewModel } from '@coscrad/api-int
 import { Icon as LeafletIcon, Marker as LeafletMarker } from 'leaflet';
 import iconUrl from 'leaflet/dist/images/marker-icon.png';
 import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+import { PropsWithChildren, useEffect, useRef } from 'react';
 import {
     Marker as PointMarker,
     Polygon as PolygonMarker,
@@ -11,10 +12,11 @@ import {
 import { SinglePropertyPresenter } from '../../../../utils/generic-components';
 import { SpatialFeatureDetailPresenter } from '../map';
 
-interface MarkerPresenterProps<T = unknown> {
+interface MarkerPresenterProps<T = unknown> extends PropsWithChildren {
     spatialFeature: ISpatialFeatureViewModel<T>;
     DetailPresenter: SpatialFeatureDetailPresenter;
     handleClick?: (id: string) => void;
+    elRef: any;
 }
 
 const lookupTable: {
@@ -22,8 +24,9 @@ const lookupTable: {
 } = {
     [GeometricFeatureType.point]: ({
         spatialFeature,
-        DetailPresenter,
         handleClick,
+        children,
+        elRef,
     }: MarkerPresenterProps<[number, number]>) => (
         <PointMarker
             key={spatialFeature.id}
@@ -31,47 +34,41 @@ const lookupTable: {
             eventHandlers={{
                 click: () => handleClick(spatialFeature.id),
             }}
+            ref={elRef}
         >
-            <LeafletPopup>
-                <SinglePropertyPresenter display="ID" value={spatialFeature.id} />
-                <DetailPresenter {...spatialFeature} />
-                {/* <PointPresenter coordinates={coordinates} /> */}
-            </LeafletPopup>
+            {children}
         </PointMarker>
     ),
     [GeometricFeatureType.line]: ({
         spatialFeature,
-        DetailPresenter,
         handleClick,
+        children,
+        elRef,
     }: MarkerPresenterProps<[number, number][]>) => (
         <PolylineMarker
             positions={spatialFeature.geometry.coordinates}
             eventHandlers={{
                 click: () => handleClick(spatialFeature.id),
             }}
+            ref={elRef}
         >
-            <LeafletPopup>
-                <SinglePropertyPresenter display="ID" value={spatialFeature.id} />
-                <DetailPresenter {...spatialFeature} />
-            </LeafletPopup>
+            {children}
         </PolylineMarker>
     ),
     [GeometricFeatureType.polygon]: ({
         spatialFeature,
-        DetailPresenter,
         handleClick,
+        children,
+        elRef,
     }: MarkerPresenterProps<[number, number][][]>) => (
         <PolygonMarker
             positions={spatialFeature.geometry.coordinates}
             eventHandlers={{
                 click: () => handleClick(spatialFeature.id),
             }}
+            ref={elRef}
         >
-            <LeafletPopup>
-                <SinglePropertyPresenter display="ID" value={spatialFeature.id} />
-                <DetailPresenter {...spatialFeature} />
-                {/* <PolygonPresenter coordinates={coordinates} /> */}
-            </LeafletPopup>
+            {children}
         </PolygonMarker>
     ),
 };
@@ -79,6 +76,7 @@ const lookupTable: {
 interface Props {
     spatialFeature: ISpatialFeatureViewModel;
     handleClick?: (id: string) => void;
+    customEffects: (id: string, marker: any) => void;
 }
 
 /**
@@ -87,7 +85,13 @@ interface Props {
  */
 export const buildSpatialFeatureMarker =
     (DetailPresenter: SpatialFeatureDetailPresenter) =>
-    ({ spatialFeature, handleClick }: Props): JSX.Element => {
+    ({ spatialFeature, handleClick, customEffects }: Props): JSX.Element => {
+        const markerRef = useRef();
+
+        useEffect(() => {
+            customEffects(spatialFeature.id, markerRef.current);
+        }, [markerRef, spatialFeature.id, customEffects]);
+
         const {
             geometry: { type: geometryType },
         } = spatialFeature;
@@ -120,6 +124,12 @@ export const buildSpatialFeatureMarker =
                 spatialFeature={spatialFeature}
                 DetailPresenter={DetailPresenter}
                 handleClick={handleClick}
-            />
+                elRef={markerRef}
+            >
+                <LeafletPopup>
+                    <SinglePropertyPresenter display="ID" value={spatialFeature.id} />
+                    <DetailPresenter {...spatialFeature} />
+                </LeafletPopup>
+            </Presenter>
         );
     };

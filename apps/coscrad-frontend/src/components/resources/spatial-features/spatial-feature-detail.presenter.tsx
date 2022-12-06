@@ -20,6 +20,7 @@ export const SpatialFeatureDetailPresenter = (
     const { data: spatialFeature } = detailQueryResult;
 
     const {
+        id,
         geometry: { coordinates },
     } = spatialFeature;
 
@@ -33,6 +34,7 @@ export const SpatialFeatureDetailPresenter = (
             spatialFeatures={[spatialFeature]}
             DetailPresenter={AdaptedDetailPresenter}
             initialCentre={identifyCentrePointForMap(coordinates)}
+            selectedSpatialFeatureId={id}
         />
     );
 };

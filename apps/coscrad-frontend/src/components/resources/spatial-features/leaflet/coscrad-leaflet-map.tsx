@@ -1,4 +1,5 @@
 import { LatLngExpression } from 'leaflet';
+import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { INITIAL_CENTRE, INITIAL_ZOOM } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
@@ -15,7 +16,14 @@ export const CoscradLeafletMap: ICoscradMap = ({
      */
     DetailPresenter: spatialFeatureDetailPresenter,
     onSpatialFeatureSelected,
+    selectedSpatialFeatureId,
 }: CoscradMapProps) => {
+    const mapRef: any = useRef();
+
+    useEffect(() => {
+        return;
+    }, [mapRef]);
+
     /**
      * Not sure where to get this from, can it can be derived from the spatial feature coordinates to be displayed?
      */
@@ -30,6 +38,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
             zoom={initialZoom || INITIAL_ZOOM}
             // Inject through API?
             scrollWheelZoom={true}
+            ref={mapRef}
         >
             <TileLayer
                 attribution="&copy; ESRI and Contributors"
@@ -40,6 +49,15 @@ export const CoscradLeafletMap: ICoscradMap = ({
                 <SpatialFeatureMarker
                     spatialFeature={spatialFeature}
                     handleClick={onSpatialFeatureSelected}
+                    customEffects={(id, marker) => {
+                        if (id === selectedSpatialFeatureId) {
+                            console.log({ marker });
+                            console.log({
+                                mapRefCurrent: mapRef.current,
+                            });
+                            marker.openPopup();
+                        }
+                    }}
                 />
             ))}
         </MapContainer>

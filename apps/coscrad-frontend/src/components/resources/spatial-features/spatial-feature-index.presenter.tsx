@@ -44,10 +44,10 @@ export const SpatialFeatureIndexPresenter = ({
                 initialZoom={initialZoom}
                 onSpatialFeatureSelected={(id: string) => setSelectedSpatialFeatureId(id)}
                 DetailPresenter={DetailPresenter}
+                selectedSpatialFeatureId={selectedSpatialFeatureId}
             />
 
             <div>
-                Selected Id: {selectedSpatialFeatureId}
                 <ConnectedResourcesPanel
                     compositeIdentifier={{
                         type: ResourceType.spatialFeature,

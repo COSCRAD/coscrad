@@ -10,6 +10,7 @@ export interface CoscradMapProps {
     initialZoom?: number;
     onSpatialFeatureSelected?: (id: string) => void;
     DetailPresenter: SpatialFeatureDetailPresenter;
+    selectedSpatialFeatureId: string;
 }
 
 export interface ICoscradMap {
