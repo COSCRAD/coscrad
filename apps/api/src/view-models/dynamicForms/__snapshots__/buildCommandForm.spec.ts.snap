@@ -47,7 +47,7 @@ Object {
           "value": "video/mp4",
         },
       ],
-      "type": "STATIC_SELECt",
+      "type": "STATIC_SELECT",
     },
     Object {
       "description": "add description",

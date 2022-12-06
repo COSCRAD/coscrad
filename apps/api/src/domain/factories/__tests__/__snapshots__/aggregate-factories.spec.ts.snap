@@ -287,18 +287,18 @@ Polygon {
 exports[`Aggregate factories when attempting to build an instance of type: term from a DTO when the DTO is valid when the dto is valid should succeed 1`] = `
 Term {
   "audioFilename": undefined,
-  "contributorId": "John Doe",
+  "contributorId": "Sarah Smith",
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
-  "id": "1",
+  "id": "11",
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": Array [],
     "allowedUserIds": Array [],
   },
   "sourceProject": undefined,
-  "term": "Chil-term-1",
-  "termEnglish": "Engl-term-1",
+  "term": "I am singing (lang)",
+  "termEnglish": "I am singing (Engl)",
   "type": "term",
 }
 `;
@@ -338,23 +338,46 @@ exports[`Aggregate factories when attempting to build an instance of type: vocab
 VocabularyList {
   "entries": Array [
     VocabularyListEntry {
-      "termId": "1",
+      "termId": "11",
       "variableValues": Object {
-        "person": "11",
+        "person": "1",
+        "positive": true,
       },
     },
     VocabularyListEntry {
-      "termId": "2",
+      "termId": "12",
       "variableValues": Object {
-        "person": "21",
+        "person": "2",
+        "positive": true,
+      },
+    },
+    VocabularyListEntry {
+      "termId": "13",
+      "variableValues": Object {
+        "person": "3",
+        "positive": true,
+      },
+    },
+    VocabularyListEntry {
+      "termId": "01",
+      "variableValues": Object {
+        "person": "1",
+        "positive": false,
+      },
+    },
+    VocabularyListEntry {
+      "termId": "02",
+      "variableValues": Object {
+        "person": "2",
+        "positive": false,
       },
     },
   ],
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
-  "id": "1",
-  "name": "test VL 1 chil",
-  "nameEnglish": "test VL 1 engl",
+  "id": "4567",
+  "name": "To Sing (lang)",
+  "nameEnglish": "To Sing (Engl)",
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": Array [],
@@ -363,16 +386,34 @@ VocabularyList {
   "type": "vocabularyList",
   "variables": Array [
     Object {
+      "name": "positive",
+      "type": "checkbox",
+      "validValues": Array [
+        Object {
+          "display": "negative (lha)",
+          "value": false,
+        },
+        Object {
+          "display": "positive form (switch for negative)",
+          "value": true,
+        },
+      ],
+    },
+    Object {
       "name": "person",
       "type": "dropbox",
       "validValues": Array [
         Object {
           "display": "I",
-          "value": "11",
+          "value": "1",
         },
         Object {
-          "display": "We",
-          "value": "21",
+          "display": "You",
+          "value": "2",
+        },
+        Object {
+          "display": "She",
+          "value": "3",
         },
       ],
     },

@@ -1,8 +1,80 @@
+import { Term } from '../domain/models/term/entities/term.entity';
+import { VocabularyListVariable } from '../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { DropboxOrCheckbox } from '../domain/models/vocabulary-list/types/dropbox-or-checkbox';
+import { VocabularyListEntry } from '../domain/models/vocabulary-list/vocabulary-list-entry';
 import { ResourceType } from '../domain/types/ResourceType';
+import { DTO } from '../types/DTO';
+import { buildTermsForVocabularyList } from './buildTermTestData';
+
+const terms = buildTermsForVocabularyList();
+
+const buildEntryForTerm = (term: Term): VocabularyListEntry => {
+    const { id } = term;
+
+    // 1 positive = true, 2 positive = false (negative form)
+    const positive = id[0] === '1';
+
+    // 1 - first person, etc.
+    const person = id[1];
+
+    return new VocabularyListEntry({
+        termId: id,
+        variableValues: {
+            positive,
+            person,
+        },
+    });
+};
+
+const entries = terms.map(buildEntryForTerm);
+
+const formFieldForPositive: VocabularyListVariable = {
+    name: 'positive',
+    type: DropboxOrCheckbox.checkbox,
+    validValues: [
+        {
+            value: false,
+            display: 'negative (lha)',
+        },
+        {
+            value: true,
+            display: 'positive form (switch for negative)',
+        },
+    ],
+};
+
+const formFieldForPerson: VocabularyListVariable = {
+    name: 'person',
+    type: DropboxOrCheckbox.dropbox,
+    validValues: [
+        {
+            value: '1',
+            display: 'I',
+        },
+        {
+            value: '2',
+            display: 'You',
+        },
+        {
+            value: '3',
+            display: 'She',
+        },
+    ],
+};
+
+const detailedVocabularyList: DTO<VocabularyList> = {
+    id: '4567',
+    name: 'To Sing (lang)',
+    nameEnglish: 'To Sing (Engl)',
+    entries,
+    variables: [formFieldForPositive, formFieldForPerson],
+    published: true,
+    type: ResourceType.vocabularyList,
+};
 
 const vocabularyListDTOs = [
+    detailedVocabularyList,
     // Vocabulary List 1
     {
         id: '1',
@@ -19,7 +91,7 @@ const vocabularyListDTOs = [
             {
                 termId: '2',
                 variableValues: {
-                    person: '21',
+                    person: '12',
                 },
             },
         ],
@@ -34,7 +106,7 @@ const vocabularyListDTOs = [
                     },
                     {
                         display: 'We',
-                        value: '21',
+                        value: '12',
                     },
                 ],
             },
@@ -49,11 +121,32 @@ const vocabularyListDTOs = [
             {
                 termId: '2',
                 variableValues: {
-                    person: '23',
+                    his: false,
+                },
+            },
+            {
+                termId: '1',
+                variableValues: {
+                    his: true,
                 },
             },
         ],
-        variables: [],
+        variables: [
+            {
+                name: 'his',
+                type: DropboxOrCheckbox.checkbox,
+                validValues: [
+                    {
+                        display: 'his',
+                        value: true,
+                    },
+                    {
+                        display: 'hers',
+                        value: false,
+                    },
+                ],
+            },
+        ],
     },
 ];
 
