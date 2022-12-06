@@ -13,6 +13,12 @@ import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNot
 import { MediaItemDetailContainer } from './media-item-detail.container';
 import { buildDummyMediaItems } from './test-utils/build-dummy-media-items';
 
+jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
+    /* eslint-disable-next-line */
+    .mockImplementation(() => {});
+
+jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => Promise.resolve());
+
 const dummyMediaItems = buildDummyMediaItems();
 
 const mediaItemToFind = dummyMediaItems[0];

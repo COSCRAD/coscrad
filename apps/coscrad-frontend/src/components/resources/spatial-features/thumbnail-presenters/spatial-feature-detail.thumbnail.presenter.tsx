@@ -13,7 +13,6 @@ import {
     CardHeader,
     Collapse,
     Divider,
-    IconButton,
 } from '@mui/material';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -85,12 +84,9 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
             </CardContent>
             <CardActionArea>
                 <CardActions>
-                    <IconButton
-                        aria-label="View Full JSON"
-                        onClick={(_) => setIsExpanded(!isExpanded)}
-                    >
+                    <span aria-label="View Full JSON" onClick={(_) => setIsExpanded(!isExpanded)}>
                         {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </IconButton>
+                    </span>
                 </CardActions>
             </CardActionArea>
         </Card>

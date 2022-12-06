@@ -12,6 +12,12 @@ import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { TermDetailContainer } from './term-detail.container';
 
+jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
+    /* eslint-disable-next-line */
+    .mockImplementation(() => {});
+
+jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => Promise.resolve());
+
 const idOfTermToFind = '123';
 
 const termToFind = {
