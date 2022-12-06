@@ -7,7 +7,7 @@ interface LinePresenterProps {
 export const LinePresenter = ({ coordinates }: LinePresenterProps): JSX.Element => (
     <div>
         {coordinates.map((point, index) => (
-            <div>
+            <div key={index}>
                 Point {index + 1}/{coordinates.length}
                 <br />
                 <PointPresenter coordinates={point} />
