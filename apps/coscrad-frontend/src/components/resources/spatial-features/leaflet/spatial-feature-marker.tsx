@@ -11,6 +11,7 @@ import {
 } from 'react-leaflet';
 import { SinglePropertyPresenter } from '../../../../utils/generic-components';
 import { SpatialFeatureDetailPresenter } from '../map';
+import { Line2D, MultiPolygon2D, Position2D } from '../types';
 
 interface MarkerPresenterProps<T = unknown> extends PropsWithChildren {
     spatialFeature: ISpatialFeatureViewModel<T>;
@@ -27,7 +28,7 @@ const lookupTable: {
         handleClick,
         children,
         elRef,
-    }: MarkerPresenterProps<[number, number]>) => (
+    }: MarkerPresenterProps<Position2D>) => (
         <PointMarker
             key={spatialFeature.id}
             position={spatialFeature.geometry.coordinates}
@@ -44,7 +45,7 @@ const lookupTable: {
         handleClick,
         children,
         elRef,
-    }: MarkerPresenterProps<[number, number][]>) => (
+    }: MarkerPresenterProps<Line2D>) => (
         <PolylineMarker
             positions={spatialFeature.geometry.coordinates}
             eventHandlers={{
@@ -60,7 +61,7 @@ const lookupTable: {
         handleClick,
         children,
         elRef,
-    }: MarkerPresenterProps<[number, number][][]>) => (
+    }: MarkerPresenterProps<MultiPolygon2D>) => (
         <PolygonMarker
             positions={spatialFeature.geometry.coordinates}
             eventHandlers={{

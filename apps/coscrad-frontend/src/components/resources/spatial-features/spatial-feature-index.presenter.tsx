@@ -11,16 +11,16 @@ import { ConnectedResourcesPanel } from '../../../store/slices/resources/shared/
 import { SelfNotesPanelContainer } from '../../../store/slices/resources/shared/notes-for-resource';
 import { ICoscradMap, SpatialFeatureDetailPresenter } from './map';
 import './spatial-feature-index.presenter.css';
+import { Position2D } from './types';
 
 type SpatialFeatureIndexPresenterProps = SpatialFeatureIndexState & {
     MapComponent: ICoscradMap;
-    initialCentre?: [number, number];
+    initialCentre?: Position2D;
     initialZoom?: number;
     DetailPresenter: SpatialFeatureDetailPresenter;
 };
 
 /**
- * We may want to wrap leaflet behind our own API and inject it here.
  * TODO [https://www.pivotaltracker.com/story/show/183681839]
  * We may some day read the actions and allow for bulk command execution in
  * an index view.

@@ -1,14 +1,12 @@
-type Position2D = [number, number];
+import { Position2D, SpatialFeatureCoordinatesUnion } from '../types';
 
-type GeometricCoordinates = Position2D | Position2D[] | Position2D[][];
+type GeometricCoordinates = SpatialFeatureCoordinatesUnion;
 
 /**
  * Returns the first point on a `Point`, `Line`, or `MultiPolygon`.
  *
- * Returns `undefind` if an empty array is passed in.
- *
- * Currently only supports a single ring as part of a multi-polygon.
- */
+ * Returns `undefined` if an empty array is passed in.
+ **/
 export const findFirstPoint = (coordinates: GeometricCoordinates): Position2D => {
     if (coordinates.length === 0) return undefined;
 

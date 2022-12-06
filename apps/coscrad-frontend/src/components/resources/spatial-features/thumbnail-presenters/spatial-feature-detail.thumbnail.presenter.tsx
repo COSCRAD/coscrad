@@ -4,11 +4,7 @@ import {
     ISpatialFeatureViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import {
-    ExpandLess as ExpandLessIcon,
-    ExpandMore as ExpandMoreIcon,
-    LinkSharp as LinkIcon,
-} from '@mui/icons-material';
+import { ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import {
     Card,
     CardActionArea,
@@ -23,20 +19,24 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../../app/routes/routes';
 import { FunctionalComponent } from '../../../../utils/types/functional-component';
-import { LinePresenter } from './line-presenter';
-import { PointPresenter } from './point-presenter';
-import { PolygonPresenter } from './polygon-presenter';
+import { LineTextPresenter } from './line-text-presenter';
+import { PointTextPresenter } from './point-text-presenter';
+import { PolygonTextPresenter } from './polygon-text-presenter';
 
 interface HasCoordinates<T = unknown> {
     coordinates: T;
 }
 
 const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordinates> } = {
-    [GeometricFeatureType.point]: PointPresenter,
-    [GeometricFeatureType.line]: LinePresenter,
-    [GeometricFeatureType.polygon]: PolygonPresenter,
+    [GeometricFeatureType.point]: PointTextPresenter,
+    [GeometricFeatureType.line]: LineTextPresenter,
+    [GeometricFeatureType.polygon]: PolygonTextPresenter,
 };
 
+/**
+ * Our current approach is to present a text summary of the coordinates for a
+ * spatial feature in its thumbnail view.
+ */
 export const SpatialFeatureDetailThumbnailPresenter = ({
     data: spatialFeature,
 }: IDetailQueryResult<ISpatialFeatureViewModel>): JSX.Element => {
@@ -56,9 +56,9 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
 
     const { type: geometryType, coordinates } = geometry;
 
-    const CoordinatesPresenter = lookupTable[geometryType];
+    const CoordinatesTextPresenter = lookupTable[geometryType];
 
-    if (CoordinatesPresenter === null || typeof CoordinatesPresenter === 'undefined') {
+    if (CoordinatesTextPresenter === null || typeof CoordinatesTextPresenter === 'undefined') {
         throw new Error(
             `There is no thumbnail presenter registered for coordinates of geometry type: ${geometryType}`
         );
@@ -74,21 +74,17 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
                 <br />
 
                 <Divider />
-                <CoordinatesPresenter coordinates={coordinates} />
+                <CoordinatesTextPresenter coordinates={coordinates} />
                 <Collapse in={isExpanded}>
                     <h3>GEOJSON</h3>
                     <pre>{JSON.stringify(spatialFeature, null, 2)}</pre>
                 </Collapse>
+                <Link to={`/${routes.resources.ofType(ResourceType.spatialFeature).detail(id)}`}>
+                    View Spatial Feature
+                </Link>
             </CardContent>
             <CardActionArea>
                 <CardActions>
-                    <Link
-                        to={`/${routes.resources.ofType(ResourceType.spatialFeature).detail(id)}`}
-                    >
-                        <IconButton aria-label="View">
-                            <LinkIcon></LinkIcon>
-                        </IconButton>
-                    </Link>
                     <IconButton
                         aria-label="View Full JSON"
                         onClick={(_) => setIsExpanded(!isExpanded)}

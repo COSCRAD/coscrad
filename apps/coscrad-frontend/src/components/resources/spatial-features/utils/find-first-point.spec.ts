@@ -1,3 +1,4 @@
+import { Line2D, MultiPolygon2D, Position2D } from '../types';
 import { findFirstPoint } from './find-first-point';
 
 describe('caclulateGeometricCentre', () => {
@@ -11,7 +12,7 @@ describe('caclulateGeometricCentre', () => {
 
     describe('when the input is a point', () => {
         it('should simply return the point', () => {
-            const input: [number, number] = [3.5, 3.9];
+            const input: Position2D = [3.5, 3.9];
 
             const result = findFirstPoint(input);
 
@@ -21,9 +22,9 @@ describe('caclulateGeometricCentre', () => {
 
     describe('when the input is a line', () => {
         it('should return the first point', () => {
-            const firstPoint: [number, number] = [5.67, -8, 90455];
+            const firstPoint: Position2D = [5.67, -8];
 
-            const input: [number, number][] = [
+            const input: Line2D = [
                 [...firstPoint],
                 [3.45, 45.56],
                 [1.9869, 393.456],
@@ -38,16 +39,16 @@ describe('caclulateGeometricCentre', () => {
 
     describe('when the input is a multi-polygon', () => {
         it('should return the first point', () => {
-            const firstPoint: [number, number] = [3.45, 45.56];
+            const firstPoint: Position2D = [3.45, 45.56];
 
-            const firstRing: [number, number][] = [
+            const firstRing: Line2D = [
                 [...firstPoint],
                 [13.45, 46.5],
                 [13.99, 48.456],
                 [5.234, 48.77],
             ];
 
-            const input: [number, number][][] = [
+            const input: MultiPolygon2D = [
                 firstRing,
                 [
                     [1, 2],
