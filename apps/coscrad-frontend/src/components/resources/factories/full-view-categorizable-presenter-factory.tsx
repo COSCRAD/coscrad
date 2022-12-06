@@ -5,7 +5,7 @@ import { NoteDetailFullViewPresenter } from '../../notes/note-detail.full-view.p
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
 import { BookInfo } from '../books/book-info';
 import { BookReader } from '../books/pages';
-import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
+import { MediaItemDetailFullViewPresenter } from '../media-items/media-item-detail.full-view.presenter';
 import { PhotographDetailFullViewPresenter } from '../photographs/photograph-detail.full-view.presenter';
 import { SongDetailFullViewPresenter } from '../songs/song-detail.full-view.presenter';
 import { SpatialFeatureDetailThumbnailPresenter } from '../spatial-features/thumbnail-presenters';
@@ -46,6 +46,8 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
         );
     },
     [CategorizableType.note]: NoteDetailFullViewPresenter,
+    [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
+    [CategorizableType.note]: NoteDetailPresenter,
 };
 
 /**
