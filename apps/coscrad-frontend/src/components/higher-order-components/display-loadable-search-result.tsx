@@ -16,7 +16,7 @@ export const displayLoadableSearchResult =
         mapLoadedDataToPresenterProps?: MapLoadedDataToProps<T, U>
     ) =>
     (searchResult: IMaybeLoadable<T>) => {
-        const { data: data } = searchResult;
+        const { data } = searchResult;
 
         if (data === NOT_FOUND) return <NotFound />;
 

@@ -387,6 +387,71 @@
         "terms": [
             {
                 "type": "term",
+                "_key": "11",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "I am singing (lang)",
+                "termEnglish": "I am singing (Engl)",
+                "contributorId": "Sarah Smith"
+            },
+            {
+                "type": "term",
+                "_key": "12",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "You are singing (lang)",
+                "termEnglish": "You are singing (Engl)",
+                "contributorId": "Sarah Smith"
+            },
+            {
+                "type": "term",
+                "_key": "13",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "She is singing (lang)",
+                "termEnglish": "She is singing (Engl)",
+                "contributorId": "Sarah Smith"
+            },
+            {
+                "type": "term",
+                "_key": "01",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "I am not singing (lang)",
+                "termEnglish": "I am not singing (Engl)",
+                "contributorId": "Sarah Smith"
+            },
+            {
+                "type": "term",
+                "_key": "02",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "You are not singing (lang)",
+                "termEnglish": "You are not singing (Engl)",
+                "contributorId": "Sarah Smith"
+            },
+            {
+                "type": "term",
                 "_key": "1",
                 "eventHistory": [],
                 "published": true,
@@ -427,6 +492,89 @@
         "vocabulary_lists": [
             {
                 "type": "vocabularyList",
+                "_key": "4567",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "name": "To Sing (lang)",
+                "nameEnglish": "To Sing (Engl)",
+                "entries": [
+                    {
+                        "termId": "11",
+                        "variableValues": {
+                            "positive": true,
+                            "person": "1"
+                        }
+                    },
+                    {
+                        "termId": "12",
+                        "variableValues": {
+                            "positive": true,
+                            "person": "2"
+                        }
+                    },
+                    {
+                        "termId": "13",
+                        "variableValues": {
+                            "positive": true,
+                            "person": "3"
+                        }
+                    },
+                    {
+                        "termId": "01",
+                        "variableValues": {
+                            "positive": false,
+                            "person": "1"
+                        }
+                    },
+                    {
+                        "termId": "02",
+                        "variableValues": {
+                            "positive": false,
+                            "person": "2"
+                        }
+                    }
+                ],
+                "variables": [
+                    {
+                        "name": "positive",
+                        "type": "checkbox",
+                        "validValues": [
+                            {
+                                "value": false,
+                                "display": "negative (lha)"
+                            },
+                            {
+                                "value": true,
+                                "display": "positive form (switch for negative)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "person",
+                        "type": "dropbox",
+                        "validValues": [
+                            {
+                                "value": "1",
+                                "display": "I"
+                            },
+                            {
+                                "value": "2",
+                                "display": "You"
+                            },
+                            {
+                                "value": "3",
+                                "display": "She"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "vocabularyList",
                 "_key": "1",
                 "eventHistory": [],
                 "published": true,
@@ -446,7 +594,7 @@
                     {
                         "termId": "2",
                         "variableValues": {
-                            "person": "21"
+                            "person": "12"
                         }
                     }
                 ],
@@ -461,7 +609,7 @@
                             },
                             {
                                 "display": "We",
-                                "value": "21"
+                                "value": "12"
                             }
                         ]
                     }
@@ -481,11 +629,32 @@
                     {
                         "termId": "2",
                         "variableValues": {
-                            "person": "23"
+                            "his": false
+                        }
+                    },
+                    {
+                        "termId": "1",
+                        "variableValues": {
+                            "his": true
                         }
                     }
                 ],
-                "variables": []
+                "variables": [
+                    {
+                        "name": "his",
+                        "type": "checkbox",
+                        "validValues": [
+                            {
+                                "display": "his",
+                                "value": true
+                            },
+                            {
+                                "display": "hers",
+                                "value": false
+                            }
+                        ]
+                    }
+                ]
             }
         ],
         "transcribed_audio": [

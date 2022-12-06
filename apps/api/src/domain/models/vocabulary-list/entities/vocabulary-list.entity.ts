@@ -49,6 +49,9 @@ export class VocabularyList extends Resource {
             ? entries.map((entryDto) => new VocabularyListEntry(entryDto))
             : null;
 
+        /**
+         * Missing invariant- each variable must have a unique name.
+         */
         this.variables = Array.isArray(variables)
             ? variables.map((v) => (isNullOrUndefined(v) ? v : cloneToPlainObject(v)))
             : null;
