@@ -404,6 +404,11 @@ Object {
       "type": "Point",
     },
     "id": "100",
+    "properties": Object {
+      "description": "Description for point 100",
+      "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+      "name": "Name of Point with ID: 100",
+    },
     "tags": Array [
       Object {
         "id": "1",

@@ -1214,78 +1214,6 @@ Object {
         },
       ],
       "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            51.935065638350636,
-            -122.50936316168337,
-          ],
-          "type": "Point",
-        },
-        "id": "103",
-        "tags": Array [],
-      },
-    },
-    Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "userId",
-                "type": "TEXT_FIELD",
-              },
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            52.12579975880678,
-            -123.68132823530952,
-          ],
-          "type": "Point",
-        },
-        "id": "104",
-        "tags": Array [],
-      },
-    },
-    Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "userId",
-                "type": "TEXT_FIELD",
-              },
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
-      "data": Object {
         "id": "2",
         "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
         "photographer": "Kenny Tree-Huggens",
@@ -1563,6 +1491,11 @@ Object {
           "type": "Point",
         },
         "id": "100",
+        "properties": Object {
+          "description": "Description for point 100",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Name of Point with ID: 100",
+        },
         "tags": Array [
           Object {
             "id": "1",
@@ -1632,84 +1565,17 @@ Object {
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
-            51.935065638350636,
-            -122.50936316168337,
-          ],
-          "type": "Point",
-        },
-        "id": "103",
-        "tags": Array [],
-      },
-    },
-    Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "userId",
-                "type": "TEXT_FIELD",
-              },
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            52.12579975880678,
-            -123.68132823530952,
-          ],
-          "type": "Point",
-        },
-        "id": "104",
-        "tags": Array [],
-      },
-    },
-    Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "userId",
-                "type": "TEXT_FIELD",
-              },
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
             53.26710566708586,
             -131.99142447847115,
           ],
           "type": "Point",
         },
         "id": "101",
+        "properties": Object {
+          "description": "Description for point 101",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Name of Point with ID: 101",
+        },
         "tags": Array [
           Object {
             "id": "5",
@@ -1777,6 +1643,11 @@ Object {
           "type": "Point",
         },
         "id": "102",
+        "properties": Object {
+          "description": "Description for point 102",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Name of Point with ID: 102",
+        },
         "tags": Array [
           Object {
             "id": "2",
@@ -1838,26 +1709,125 @@ Object {
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
+            51.935065638350636,
+            -122.50936316168337,
+          ],
+          "type": "Point",
+        },
+        "id": "103",
+        "properties": Object {
+          "description": "Description for point 103",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Name of Point with ID: 103",
+        },
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            52.12579975880678,
+            -123.68132823530952,
+          ],
+          "type": "Point",
+        },
+        "id": "104",
+        "properties": Object {
+          "description": "Description for point 104",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Name of Point with ID: 104",
+        },
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
             Array [
-              1,
-              2,
+              52.3,
+              -124.2,
             ],
             Array [
-              1,
-              3,
+              52.35,
+              -124.85,
             ],
             Array [
-              1.5,
-              3.5,
+              52.21,
+              -124.9,
             ],
             Array [
-              3,
-              4.2,
+              52.05,
+              -125.1,
+            ],
+            Array [
+              52.15,
+              -125.1,
+            ],
+            Array [
+              52.33,
+              -125.22,
+            ],
+            Array [
+              52.45,
+              -125.39,
             ],
           ],
           "type": "LineString",
         },
         "id": "1",
+        "properties": Object {
+          "description": "One amazing hike!",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Windy Path",
+        },
         "tags": Array [],
       },
     },
@@ -1890,30 +1860,31 @@ Object {
           "coordinates": Array [
             Array [
               Array [
-                1,
-                3,
+                52.47,
+                -123.6,
               ],
               Array [
-                2,
-                5,
+                52.42,
+                -123.95,
               ],
               Array [
-                1.5,
-                3.7,
+                52.05,
+                -123.95,
               ],
               Array [
-                1.2,
-                3.3,
-              ],
-              Array [
-                1,
-                3,
+                52.05,
+                -123.685,
               ],
             ],
           ],
           "type": "Polygon",
         },
         "id": "300",
+        "properties": Object {
+          "description": "Description for point 300",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Point with ID: 300 Name",
+        },
         "tags": Array [],
       },
     },
@@ -1958,6 +1929,11 @@ Object {
           "type": "Point",
         },
         "id": "100",
+        "properties": Object {
+          "description": "Description for point 100",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Name of Point with ID: 100",
+        },
         "tags": Array [
           Object {
             "id": "1",
@@ -2033,6 +2009,11 @@ Object {
           "type": "Point",
         },
         "id": "101",
+        "properties": Object {
+          "description": "Description for point 101",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Name of Point with ID: 101",
+        },
         "tags": Array [
           Object {
             "id": "5",
@@ -2100,6 +2081,11 @@ Object {
           "type": "Point",
         },
         "id": "102",
+        "properties": Object {
+          "description": "Description for point 102",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Name of Point with ID: 102",
+        },
         "tags": Array [
           Object {
             "id": "2",
@@ -2161,26 +2147,125 @@ Object {
       "data": Object {
         "geometry": Object {
           "coordinates": Array [
+            51.935065638350636,
+            -122.50936316168337,
+          ],
+          "type": "Point",
+        },
+        "id": "103",
+        "properties": Object {
+          "description": "Description for point 103",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Name of Point with ID: 103",
+        },
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
+            52.12579975880678,
+            -123.68132823530952,
+          ],
+          "type": "Point",
+        },
+        "id": "104",
+        "properties": Object {
+          "description": "Description for point 104",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Name of Point with ID: 104",
+        },
+        "tags": Array [],
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "geometry": Object {
+          "coordinates": Array [
             Array [
-              1,
-              2,
+              52.3,
+              -124.2,
             ],
             Array [
-              1,
-              3,
+              52.35,
+              -124.85,
             ],
             Array [
-              1.5,
-              3.5,
+              52.21,
+              -124.9,
             ],
             Array [
-              3,
-              4.2,
+              52.05,
+              -125.1,
+            ],
+            Array [
+              52.15,
+              -125.1,
+            ],
+            Array [
+              52.33,
+              -125.22,
+            ],
+            Array [
+              52.45,
+              -125.39,
             ],
           ],
           "type": "LineString",
         },
         "id": "1",
+        "properties": Object {
+          "description": "One amazing hike!",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Windy Path",
+        },
         "tags": Array [],
       },
     },
@@ -2213,30 +2298,31 @@ Object {
           "coordinates": Array [
             Array [
               Array [
-                1,
-                3,
+                52.47,
+                -123.6,
               ],
               Array [
-                2,
-                5,
+                52.42,
+                -123.95,
               ],
               Array [
-                1.5,
-                3.7,
+                52.05,
+                -123.95,
               ],
               Array [
-                1.2,
-                3.3,
-              ],
-              Array [
-                1,
-                3,
+                52.05,
+                -123.685,
               ],
             ],
           ],
           "type": "Polygon",
         },
         "id": "300",
+        "properties": Object {
+          "description": "Description for point 300",
+          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+          "name": "Point with ID: 300 Name",
+        },
         "tags": Array [],
       },
     },
