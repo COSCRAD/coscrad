@@ -6,7 +6,7 @@ import { BookDetailFullViewPresenter } from '../books';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
 import { PhotographDetailFullViewPresenter } from '../photographs/photograph-detail.full-view.presenter';
 import { SongDetailFullViewPresenter } from '../songs/song-detail.full-view.presenter';
-import { SpatialFeatureDetailPresenter } from '../spatial-features/spatial-feature-detail.presenter';
+import { SpatialFeatureDetailThumbnailPresenter } from '../spatial-features/thumbnail-presenters';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
 import { TranscribedAudioDetailFullViewPresenter } from '../transcribed-audio/transcribed-audio-detail.full-view.presenter';
 import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocabulary-list-detail.full-view.presenter';
@@ -20,7 +20,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.mediaItem]: MediaItemDetailPresenter,
     [CategorizableType.photograph]: PhotographDetailFullViewPresenter,
     [CategorizableType.song]: SongDetailFullViewPresenter,
-    [CategorizableType.spatialFeature]: SpatialFeatureDetailPresenter,
+    [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
     [CategorizableType.term]: TermDetailFullViewPresenter,
     [CategorizableType.transcribedAudio]: TranscribedAudioDetailFullViewPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailFullViewPresenter,

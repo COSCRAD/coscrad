@@ -3,7 +3,7 @@
  * For some reason the shadow of the place marker is a broken image link
  */
 import { ResourceType } from '@coscrad/api-interfaces';
-import 'leaflet/dist/images/marker-shadow.png';
+// import 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { SpatialFeatureIndexState } from '../../../store/slices/resources';

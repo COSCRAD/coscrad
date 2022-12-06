@@ -65,7 +65,7 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
     }
 
     return (
-        <Card>
+        <Card data-testid={id}>
             <CardContent>
                 <CardHeader title={name} />
                 <img height="100px" src={imageUrl} alt={`Spatial Feature ${id}`} />

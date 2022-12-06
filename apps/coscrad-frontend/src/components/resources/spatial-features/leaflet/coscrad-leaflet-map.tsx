@@ -34,7 +34,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
     return (
         <MapContainer
             style={{ height: '600px' }}
-            center={initialMapCentreCoordinates}
+            center={initialMapCentreCoordinates || INITIAL_CENTRE}
             zoom={initialZoom || INITIAL_ZOOM}
             // Inject through API?
             scrollWheelZoom={true}

@@ -1,7 +1,5 @@
 import { GeometricFeatureType, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { Icon as LeafletIcon, Marker as LeafletMarker } from 'leaflet';
-import iconUrl from 'leaflet/dist/images/marker-icon.png';
-import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
 import { PropsWithChildren, useEffect, useRef } from 'react';
 import {
     Marker as PointMarker,
@@ -49,7 +47,7 @@ const lookupTable: {
         <PolylineMarker
             positions={spatialFeature.geometry.coordinates}
             eventHandlers={{
-                click: () => handleClick(spatialFeature.id),
+                popupopen: () => handleClick(spatialFeature.id),
             }}
             ref={elRef}
         >
@@ -65,7 +63,7 @@ const lookupTable: {
         <PolygonMarker
             positions={spatialFeature.geometry.coordinates}
             eventHandlers={{
-                click: () => handleClick(spatialFeature.id),
+                popupopen: () => handleClick(spatialFeature.id),
             }}
             ref={elRef}
         >
@@ -73,6 +71,10 @@ const lookupTable: {
         </PolygonMarker>
     ),
 };
+
+const iconUrl = 'https://www.digiteched.com/content/images/2022/12/marker-icon.png';
+
+const shadowUrl = 'https://www.digiteched.com/content/images/2022/12/marker-shadow.png';
 
 interface Props {
     spatialFeature: ISpatialFeatureViewModel;
@@ -108,6 +110,9 @@ export const buildSpatialFeatureMarker =
             iconAnchor: [12, 41],
             shadowAnchor: [20, 95],
         });
+
+        // TODO Fix this hack
+        LeafletMarker.prototype.options.icon = DefaultIcon;
 
         // TODO Fix this hack
         LeafletMarker.prototype.options.icon = DefaultIcon;

@@ -3,6 +3,7 @@ import {
     SpatialFeatureIndexState,
     useLoadableSpatialFeatures,
 } from '../../../store/slices/resources';
+import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { AggregateIndexContainer } from '../../higher-order-components/aggregate-index-container';
 import { CoscradLeafletMap } from './leaflet';
 import { SpatialFeatureIndexPresenter } from './spatial-feature-index.presenter';
@@ -23,9 +24,15 @@ const ConcreteSpatialFeatureIndexPresenter = (
     />
 );
 
-export const SpatialFeatureIndexContainer = (): JSX.Element => (
+interface Props {
+    SpatialFeatureIndexPresenter?: FunctionalComponent<SpatialFeatureIndexState>;
+}
+
+export const SpatialFeatureIndexContainer = ({
+    SpatialFeatureIndexPresenter,
+}: Props): JSX.Element => (
     <AggregateIndexContainer
         useLoadableModels={useLoadableSpatialFeatures}
-        IndexPresenter={ConcreteSpatialFeatureIndexPresenter}
+        IndexPresenter={SpatialFeatureIndexPresenter || ConcreteSpatialFeatureIndexPresenter}
     />
 );
