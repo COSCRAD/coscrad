@@ -61,33 +61,45 @@ const filterEntriesForSelectedTerms = (
     allEntries: IVocabularyListEntry<VocabularyListFilterProperty>[],
     filter: VocabularyListFilter
 ): IVocabularyListEntry<VocabularyListFilterProperty>[] =>
-    allEntries.filter(({ variableValues }) => doValuesMatchFilters(variableValues, filter));
+    allEntries.filter(({ variableValues }) => {
+        return doValuesMatchFilters(variableValues, filter);
+    });
 
 export const VocabularyListDetailFullViewPresenter = ({
     data: { id, name, nameEnglish, entries, form },
 }: IDetailQueryResult<IVocabularyListViewModel>): JSX.Element => {
     const [filter, dispatch] = useReducer(filterReducer, {});
 
-    const selectedEntries = filterEntriesForSelectedTerms(entries, filter);
+    const filterWithoutNullAndUndefined = Object.entries(filter).reduce(
+        (acc, [key, value]) =>
+            value === null || typeof value === 'undefined'
+                ? acc
+                : {
+                      ...acc,
+                      [key]: value,
+                  },
+        {}
+    );
+
+    const selectedEntries = filterEntriesForSelectedTerms(entries, filterWithoutNullAndUndefined);
 
     return (
         <div data-testid={id}>
             <h1>{formatBilingualText(name, nameEnglish)}</h1>
-            <div>
-                <h3>Entries:</h3>
-                {/* TODO [https://www.pivotaltracker.com/story/show/183681556] We need to fix the following hack */}
-                <Carousel
-                    propsForItems={selectedEntries.map(({ term }) => ({ data: term, actions: [] }))}
-                    Presenter={TermDetailFullViewPresenter}
-                />
-            </div>
             <div>
                 <VocabularyListForm
                     fields={form.fields}
                     onFormChange={(key: string, value: VocabularyListFilterProperty) =>
                         dispatch(updateVocabularyListFilter(key, value))
                     }
-                    formState={filter}
+                    formState={filterWithoutNullAndUndefined}
+                />
+            </div>
+            <div>
+                {/* We may want to give the user the option of seeing a Multiple Categorizables of Single Type view instead*/}
+                <Carousel
+                    propsForItems={selectedEntries.map(({ term }) => ({ data: term, actions: [] }))}
+                    Presenter={TermDetailFullViewPresenter}
                 />
             </div>
         </div>

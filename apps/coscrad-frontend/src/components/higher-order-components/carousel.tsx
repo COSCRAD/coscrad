@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 
 import { cyclicDecrement, cyclicIncrement } from '../../utils/math';
+import { NotFound } from '../NotFound';
 
 const STARTING_INDEX = 0;
 
@@ -17,9 +18,16 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
 
     const numberOfItems = propsForItems.length;
 
-    if (numberOfItems === 0) return <p>No Data</p>;
+    /**
+     * This is a bit of a hack. Sometimes we use filtering behaviour for the
+     * `propsForItems` outside of this component. We should find a better way to
+     * manage this situation.
+     */
+    const indexToUse = currentIndex >= numberOfItems ? 0 : currentIndex;
 
-    const propsForSelectedItem = propsForItems[currentIndex];
+    if (numberOfItems === 0) return <NotFound></NotFound>;
+
+    const propsForSelectedItem = propsForItems[indexToUse];
 
     return (
         <Card>
@@ -29,14 +37,14 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
             <CardActions>
                 <Button
                     disableRipple={true}
-                    onClick={(_) => setIndex(cyclicDecrement(currentIndex, numberOfItems))}
+                    onClick={(_) => setIndex(cyclicDecrement(indexToUse, numberOfItems))}
                 >
                     {' '}
                     Back
                 </Button>
                 <Button
                     disableRipple={true}
-                    onClick={(_) => setIndex(cyclicIncrement(currentIndex, numberOfItems))}
+                    onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}
                 >
                     Next{' '}
                 </Button>

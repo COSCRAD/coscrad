@@ -10,7 +10,6 @@ import { SpatialFeatureDetailPresenter } from '../spatial-features/spatial-featu
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
 import { TranscribedAudioDetailFullViewPresenter } from '../transcribed-audio/transcribed-audio-detail.full-view.presenter';
 import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocabulary-list-detail.full-view.presenter';
-import { withCommands } from './with-commands';
 
 /**
  * TODO We could have a mapped type if we need type safety here.
@@ -44,5 +43,5 @@ export const fullViewCategorizablePresenterFactory = <T extends CategorizableTyp
         );
     }
 
-    return withCommands(DetailPresenter);
+    return DetailPresenter;
 };

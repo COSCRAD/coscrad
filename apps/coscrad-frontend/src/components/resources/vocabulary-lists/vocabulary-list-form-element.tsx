@@ -1,5 +1,4 @@
 import { FormFieldType, IFormField } from '@coscrad/api-interfaces';
-import { VocabularyListCheckbox } from './vocabulary-list-checkbox';
 import { VocabularyListFilter } from './vocabulary-list-detail.full-view.presenter';
 import { VocabularyListSelect } from './vocabulary-list-select';
 
@@ -12,33 +11,11 @@ type VocabularyListFormElementProps = {
 export const VocabularyListFormElement = ({
     formField,
     onElementChange,
-    formState,
 }: VocabularyListFormElementProps): JSX.Element => {
-    const { type, name } = formField;
+    const { type } = formField;
 
-    if (type === FormFieldType.switch) {
-        const currentState = formState[name];
+    if (type !== FormFieldType.switch && type !== FormFieldType.staticSelect)
+        return <div>Failed to build a form element for unsupporeted type: {type}</div>;
 
-        const isChecked = typeof currentState === 'boolean' ? currentState : false;
-
-        return (
-            <div>
-                <VocabularyListCheckbox
-                    {...formField}
-                    onIsCheckedChange={onElementChange}
-                    isChecked={isChecked}
-                />
-            </div>
-        );
-    }
-
-    if (type === FormFieldType.staticSelect) {
-        return (
-            <div>
-                <VocabularyListSelect formField={formField} onNewSelection={onElementChange} />
-            </div>
-        );
-    }
-
-    return <div>Failed to build a form element for unsupporeted type: {type}</div>;
+    return <VocabularyListSelect formField={formField} onNewSelection={onElementChange} />;
 };
