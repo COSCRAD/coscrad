@@ -9,7 +9,7 @@ import { routes } from '../../../app/routes/routes';
 import { formatBilingualText } from './utils';
 
 export const VocabularyListDetailThumbnailPresenter = ({
-    data: { id, name, nameEnglish, entries },
+    data: { id, name, nameEnglish, entries, form },
 }: IDetailQueryResult<IVocabularyListViewModel>): JSX.Element => (
     <Link to={`/${routes.resources.ofType(ResourceType.vocabularyList).detail(id)}`}>
         <Card>

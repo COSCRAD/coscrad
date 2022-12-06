@@ -475,49 +475,10 @@ Object {
   ],
   "data": Object {
     "contributor": "",
-    "id": "1",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-        "members": Array [
-          Object {
-            "id": "1",
-            "type": "term",
-          },
-          Object {
-            "id": "23",
-            "type": "book",
-          },
-          Object {
-            "id": "24",
-            "type": "book",
-          },
-          Object {
-            "id": "1",
-            "type": "vocabularyList",
-          },
-          Object {
-            "id": "100",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2005",
-            "type": "note",
-          },
-          Object {
-            "id": "9",
-            "type": "note",
-          },
-          Object {
-            "id": "11",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-    "term": "Chil-term-1",
-    "termEnglish": "Engl-term-1",
+    "id": "11",
+    "tags": Array [],
+    "term": "I am singing (lang)",
+    "termEnglish": "I am singing (Engl)",
   },
 }
 `;
@@ -613,85 +574,108 @@ Object {
       Object {
         "term": Object {
           "contributor": "",
-          "id": "1",
-          "term": "Chil-term-1",
-          "termEnglish": "Engl-term-1",
+          "id": "11",
+          "term": "I am singing (lang)",
+          "termEnglish": "I am singing (Engl)",
         },
         "variableValues": Object {
-          "person": "11",
+          "person": "1",
+          "positive": true,
         },
       },
       Object {
         "term": Object {
           "contributor": "",
-          "id": "2",
-          "term": "Chil-term-2",
-          "termEnglish": "Engl-term-2",
+          "id": "12",
+          "term": "You are singing (lang)",
+          "termEnglish": "You are singing (Engl)",
         },
         "variableValues": Object {
-          "person": "21",
+          "person": "2",
+          "positive": true,
+        },
+      },
+      Object {
+        "term": Object {
+          "contributor": "",
+          "id": "13",
+          "term": "She is singing (lang)",
+          "termEnglish": "She is singing (Engl)",
+        },
+        "variableValues": Object {
+          "person": "3",
+          "positive": true,
+        },
+      },
+      Object {
+        "term": Object {
+          "contributor": "",
+          "id": "01",
+          "term": "I am not singing (lang)",
+          "termEnglish": "I am not singing (Engl)",
+        },
+        "variableValues": Object {
+          "person": "1",
+          "positive": false,
+        },
+      },
+      Object {
+        "term": Object {
+          "contributor": "",
+          "id": "02",
+          "term": "You are not singing (lang)",
+          "termEnglish": "You are not singing (Engl)",
+        },
+        "variableValues": Object {
+          "person": "2",
+          "positive": false,
         },
       },
     ],
-    "id": "1",
-    "name": "test VL 1 chil",
-    "nameEnglish": "test VL 1 engl",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-        "members": Array [
-          Object {
-            "id": "1",
-            "type": "term",
-          },
-          Object {
-            "id": "23",
-            "type": "book",
-          },
-          Object {
-            "id": "24",
-            "type": "book",
-          },
-          Object {
-            "id": "1",
-            "type": "vocabularyList",
-          },
-          Object {
-            "id": "100",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2005",
-            "type": "note",
-          },
-          Object {
-            "id": "9",
-            "type": "note",
-          },
-          Object {
-            "id": "11",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-    "variables": Array [
-      Object {
-        "name": "person",
-        "type": "dropbox",
-        "validValues": Array [
-          Object {
-            "display": "I",
-            "value": "11",
-          },
-          Object {
-            "display": "We",
-            "value": "21",
-          },
-        ],
-      },
-    ],
+    "form": Object {
+      "fields": Array [
+        Object {
+          "description": "choose positive",
+          "label": "positive",
+          "name": "positive",
+          "options": Array [
+            Object {
+              "display": "negative (lha)",
+              "value": false,
+            },
+            Object {
+              "display": "positive form (switch for negative)",
+              "value": true,
+            },
+          ],
+          "type": "SWITCH",
+        },
+        Object {
+          "description": "choose person",
+          "label": "person",
+          "name": "person",
+          "options": Array [
+            Object {
+              "display": "I",
+              "value": "1",
+            },
+            Object {
+              "display": "You",
+              "value": "2",
+            },
+            Object {
+              "display": "She",
+              "value": "3",
+            },
+          ],
+          "type": "STATIC_SELECT",
+        },
+      ],
+    },
+    "id": "4567",
+    "name": "To Sing (lang)",
+    "nameEnglish": "To Sing (Engl)",
+    "tags": Array [],
   },
 }
 `;

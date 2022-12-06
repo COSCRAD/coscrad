@@ -1,5 +1,5 @@
 import {
-    DropboxOrCheckbox,
+    FormFieldType,
     ITermViewModel,
     IVocabularyListEntry,
     IVocabularyListViewModel,
@@ -11,7 +11,7 @@ const dummyTerms: ITermViewModel[] = [
     {
         id: '1',
         term: 'term 1 (language)',
-        audioUrl: 'https://www.mysoundbox.com/foo.mp3',
+        audioURL: 'https://www.mysoundbox.com/foo.mp3',
         contributor: 'John Doe',
     },
     {
@@ -37,16 +37,20 @@ const dummyVocabularyLists: IVocabularyListViewModel[] = [
         name: 'VL name (language)',
         nameEnglish: 'VL name (English)',
         entries: dummyEntries,
-        variables: [
-            {
-                name: 'possessor',
-                type: DropboxOrCheckbox.dropbox,
-                validValues: validValues.map((value) => ({
-                    value,
-                    display: value,
-                })),
-            },
-        ],
+        form: {
+            fields: [
+                {
+                    name: 'possessor',
+                    label: 'Possessor',
+                    description: 'Owner of the noun that is subject of the paradigm',
+                    type: FormFieldType.staticSelect,
+                    options: validValues.map((value) => ({
+                        value,
+                        display: value,
+                    })),
+                },
+            ],
+        },
     },
 ];
 

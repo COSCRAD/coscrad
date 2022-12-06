@@ -7,5 +7,6 @@ export enum FormFieldType {
      */
     jsonInput = 'JSON_INPUT',
     yearPicker = 'YEAR_PICKER',
-    staticSelect = 'STATIC_SELECt',
+    staticSelect = 'STATIC_SELECT', // Corresponds to a dropdown
+    switch = 'SWITCH', // Corresponds to a switch
 }
