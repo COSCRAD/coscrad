@@ -3,6 +3,7 @@ import { Card, CardContent } from '@mui/material';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailFullViewPresenter } from '../../notes/note-detail.full-view.presenter';
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
+import { BookInfo } from '../books/book-info';
 import { BookReader } from '../books/pages';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
 import { PhotographDetailFullViewPresenter } from '../photographs/photograph-detail.full-view.presenter';
@@ -28,24 +29,14 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
      * TODO Investigate why importing this from the component file leads to a
      * circular dependency.
      */
-    [CategorizableType.book]: ({
-        data: { id, pages, title, subtitle, author, publicationDate },
-    }: IDetailQueryResult<IBookViewModel>): JSX.Element => {
+    [CategorizableType.book]: ({ data: book }: IDetailQueryResult<IBookViewModel>): JSX.Element => {
+        const { id, pages } = book;
+
         return (
             <div data-testid={id}>
                 <Card>
                     <CardContent>
-                        <div>
-                            <h1>{title}</h1>
-                            {subtitle && <h3>{subtitle}</h3>}
-                            <strong>by</strong> {author}
-                            <br />
-                            {publicationDate && (
-                                <div>
-                                    <strong>published</strong> {publicationDate}
-                                </div>
-                            )}
-                        </div>
+                        {<BookInfo {...book} />}
                         <div>
                             <BookReader pages={pages} />
                         </div>

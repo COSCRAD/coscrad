@@ -11,6 +11,7 @@ import { routes } from '../../../app/routes/routes';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailThumbnailPresenter } from '../../notes/note-detail.thumbnail.presenter';
 import { BibliographicReferenceDetailThumbnailPresenter } from '../bibliographic-references/bibliographic-reference-detail-thumbnail-presenters';
+import { BookInfo } from '../books/book-info';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
 import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-detail.thumbnail.presenter';
 import { SongDetailThumbnailPresenter } from '../songs';
@@ -33,26 +34,16 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
      * TODO Investigate why importing this from the component file leads to a
      * circular dependency.
      */
-    [CategorizableType.book]: ({
-        data: { id, pages, title, subtitle, author, publicationDate },
-    }: IDetailQueryResult<IBookViewModel>): JSX.Element => {
+    [CategorizableType.book]: ({ data: book }: IDetailQueryResult<IBookViewModel>): JSX.Element => {
+        const { id, pages } = book;
+
         return (
             // TODO We may want to automate the link wrapping because it's easy to forget
             <Link to={`/${routes.resources.ofType(ResourceType.book).detail(id)}`}>
                 <div data-testid={id}>
                     <Card>
                         <CardContent>
-                            <div>
-                                <h1>{title}</h1>
-                                {subtitle && <h3>{subtitle}</h3>}
-                                <strong>by</strong> {author}
-                                <br />
-                                {publicationDate && (
-                                    <div>
-                                        <strong>published</strong> {publicationDate}
-                                    </div>
-                                )}
-                            </div>
+                            {<BookInfo {...book} />}
                             <div>
                                 <strong>page count:</strong> {pages.length}
                             </div>
