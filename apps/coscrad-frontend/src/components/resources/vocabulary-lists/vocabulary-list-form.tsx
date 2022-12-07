@@ -23,6 +23,7 @@ export const VocabularyListForm = ({
                         formField={field}
                         onElementChange={onFormChange}
                         formState={formState}
+                        key={field.label + field.type}
                     />
                 ))}
             </FormControl>

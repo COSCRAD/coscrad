@@ -1,5 +1,5 @@
-import rawData from './data/configurable-front-matter.json';
 import { ConfigurableContent } from './data/configurableContentSchema';
+import rawData from './data/content.config.json';
 import { InvalidContentConfigurationException } from './errorHandling/exceptions/InvalidContentConfigurationException';
 import { validateConfigurableContent } from './validation/validateConfigurableContent';
 

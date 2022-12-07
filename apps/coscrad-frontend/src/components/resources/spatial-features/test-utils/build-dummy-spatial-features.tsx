@@ -7,6 +7,11 @@ export const buildDummySpatialFeatures = (): ISpatialFeatureViewModel[] => [
             type: GeometricFeatureType.point,
             coordinates: [100.0, 0],
         },
+        properties: {
+            name: 'cool point',
+            description: 'where the penguins hang out',
+            imageUrl: 'https://www.pics.com/123.png',
+        },
     },
     {
         id: '2',
@@ -18,6 +23,11 @@ export const buildDummySpatialFeatures = (): ISpatialFeatureViewModel[] => [
                 [1.5, 3.5],
                 [3, 4.2],
             ],
+        },
+        properties: {
+            name: 'Dee River',
+            description: 'nice swimming spot',
+            imageUrl: 'https://www.pics.com/126.png',
         },
     },
     {
@@ -33,6 +43,11 @@ export const buildDummySpatialFeatures = (): ISpatialFeatureViewModel[] => [
                     [1.0, 3.0],
                 ],
             ],
+        },
+        properties: {
+            name: 'Dee Park',
+            description: 'we play here',
+            imageUrl: 'https://www.pics.com/296.png',
         },
     },
 ];

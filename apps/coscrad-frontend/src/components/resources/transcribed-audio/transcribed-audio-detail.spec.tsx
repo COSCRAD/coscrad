@@ -13,6 +13,12 @@ import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
 import { TranscribedAudioDetailContainer } from './transcribed-audio-detail.container';
 
+jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
+    /* eslint-disable-next-line */
+    .mockImplementation(() => {});
+
+jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => Promise.resolve());
+
 const idToFind = '44';
 
 const transcribedAudioToFind: ITranscribedAudioViewModel = {
