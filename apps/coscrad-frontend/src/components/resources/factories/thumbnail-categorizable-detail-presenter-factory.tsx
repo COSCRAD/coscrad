@@ -1,8 +1,17 @@
-import { CategorizableType, IDetailQueryResult, INoteViewModel } from '@coscrad/api-interfaces';
+import {
+    CategorizableType,
+    IBookViewModel,
+    IDetailQueryResult,
+    INoteViewModel,
+    ResourceType,
+} from '@coscrad/api-interfaces';
+import { Card, CardContent } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { routes } from '../../../app/routes/routes';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
-import { NoteDetailPresenter } from '../../notes/note-detail.presenter';
+import { NoteDetailThumbnailPresenter } from '../../notes/note-detail.thumbnail.presenter';
 import { BibliographicReferenceDetailThumbnailPresenter } from '../bibliographic-references/bibliographic-reference-detail-thumbnail-presenters';
-import { BookDetailThumbnailPresenter } from '../books';
+import { BookInfo } from '../books/book-info';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
 import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-detail.thumbnail.presenter';
 import { SongDetailThumbnailPresenter } from '../songs';
@@ -14,7 +23,6 @@ import { VocabularyListDetailThumbnailPresenter } from '../vocabulary-lists/voca
 // TODO Define thumbnail specific presenters
 const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailThumbnailPresenter,
-    [CategorizableType.book]: BookDetailThumbnailPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailPresenter,
     [CategorizableType.photograph]: PhotographDetailThumbnailPresenter,
     [CategorizableType.song]: SongDetailThumbnailPresenter,
@@ -22,9 +30,32 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.term]: TermDetailThumbnailPresenter,
     [CategorizableType.transcribedAudio]: TranscribedAudioDetailThumbnailPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailThumbnailPresenter,
+    /**
+     * TODO Investigate why importing this from the component file leads to a
+     * circular dependency.
+     */
+    [CategorizableType.book]: ({ data: book }: IDetailQueryResult<IBookViewModel>): JSX.Element => {
+        const { id, pages } = book;
+
+        return (
+            // TODO We may want to automate the link wrapping because it's easy to forget
+            <Link to={`/${routes.resources.ofType(ResourceType.book).detail(id)}`}>
+                <div data-testid={id}>
+                    <Card>
+                        <CardContent>
+                            {<BookInfo {...book} />}
+                            <div>
+                                <strong>page count:</strong> {pages.length}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            </Link>
+        );
+    },
     // TODO remove this hack
     [CategorizableType.note]: ({ data: note }: IDetailQueryResult<INoteViewModel>) =>
-        NoteDetailPresenter(note),
+        NoteDetailThumbnailPresenter(note),
 };
 
 /**
