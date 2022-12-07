@@ -18,9 +18,9 @@ export const SelfNotesPanelPresenter = ({
             Notes for {resourceType}/{id}
         </h2>
         <div>
-            {notes.map((note) => (
-                <SelfNotePresenter {...note} key={note.id} />
-            ))}
+            {notes.length > 0
+                ? notes.map((note) => <SelfNotePresenter {...note} key={note.id} />)
+                : 'No Notes Found'}
         </div>
     </div>
 );
