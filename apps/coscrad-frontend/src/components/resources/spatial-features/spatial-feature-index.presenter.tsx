@@ -1,11 +1,66 @@
+/**
+ * This is an attempted fix from: https://stackoverflow.com/a/59523791
+ * For some reason the shadow of the place marker is a broken image link
+ */
+import { ResourceType } from '@coscrad/api-interfaces';
+// import 'leaflet/dist/images/marker-shadow.png';
+import 'leaflet/dist/leaflet.css';
+import { useState } from 'react';
 import { SpatialFeatureIndexState } from '../../../store/slices/resources';
-import { GenericIndexPresenter } from '../../../utils/generic-components/presenters/generic-index-presenter';
+import { ConnectedResourcesPanel } from '../../../store/slices/resources/shared/connected-resources';
+import { SelfNotesPanelContainer } from '../../../store/slices/resources/shared/notes-for-resource';
+import { ICoscradMap, SpatialFeatureDetailPresenter } from './map';
+import './spatial-feature-index.presenter.css';
+import { Position2D } from './types';
 
-export const SpatialFeatureIndexPresenter = (indexResult: SpatialFeatureIndexState) => (
-    /**
-     *  TODO [https://www.pivotaltracker.com/story/show/183681839]
-     * We may some day read the actions and allow for bulk command execution in
-     * an index view.
-     */
-    <GenericIndexPresenter {...indexResult} indexLabel={'Places'} />
-);
+type SpatialFeatureIndexPresenterProps = SpatialFeatureIndexState & {
+    MapComponent: ICoscradMap;
+    initialCentre?: Position2D;
+    initialZoom?: number;
+    DetailPresenter: SpatialFeatureDetailPresenter;
+};
+
+/**
+ * TODO [https://www.pivotaltracker.com/story/show/183681839]
+ * We may some day read the actions and allow for bulk command execution in
+ * an index view.
+ */
+export const SpatialFeatureIndexPresenter = ({
+    data: detailResult,
+    MapComponent,
+    initialCentre,
+    initialZoom,
+    DetailPresenter,
+}: SpatialFeatureIndexPresenterProps) => {
+    const [selectedSpatialFeatureId, setSelectedSpatialFeatureId] = useState<string>(null);
+
+    const spatialFeatures = detailResult.map(({ data }) => data);
+
+    return (
+        <div>
+            <MapComponent
+                spatialFeatures={spatialFeatures}
+                initialCentre={initialCentre}
+                initialZoom={initialZoom}
+                onSpatialFeatureSelected={(id: string) => setSelectedSpatialFeatureId(id)}
+                DetailPresenter={DetailPresenter}
+                selectedSpatialFeatureId={selectedSpatialFeatureId}
+            />
+
+            <div>
+                <ConnectedResourcesPanel
+                    compositeIdentifier={{
+                        type: ResourceType.spatialFeature,
+                        id: selectedSpatialFeatureId,
+                    }}
+                />
+                <SelfNotesPanelContainer
+                    compositeIdentifier={{
+                        type: ResourceType.spatialFeature,
+                        id: selectedSpatialFeatureId,
+                    }}
+                />
+            </div>
+        </div>
+    );
+};

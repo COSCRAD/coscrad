@@ -21,7 +21,7 @@ export const VocabularyListSelect = ({
         <div>
             {label}
             <Select
-                value={currentValue}
+                value={currentValue || ''}
                 label={label}
                 name={name}
                 onChange={(changeEvent) => {
@@ -29,9 +29,15 @@ export const VocabularyListSelect = ({
                     setCurrentValue(changeEvent.target.value);
                 }}
             >
-                {[<MenuItem value={null}>{NO_SELECTION_PLACEHOLDER}</MenuItem>].concat(
+                {[
+                    <MenuItem value={null} key={'0'}>
+                        {NO_SELECTION_PLACEHOLDER}
+                    </MenuItem>,
+                ].concat(
                     ...menuItems.map(({ display: label, value }) => (
-                        <MenuItem value={value}>{label}</MenuItem>
+                        <MenuItem key={`${label}-${value}`} value={value}>
+                            {label}
+                        </MenuItem>
                     ))
                 )}
             </Select>
