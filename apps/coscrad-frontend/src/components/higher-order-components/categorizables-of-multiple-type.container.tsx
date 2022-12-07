@@ -11,7 +11,13 @@ interface CategorizablesOfMultipleTypeContainerProps<T> {
     heading?: string;
 }
 
-const buildInitialEmptyReosurceTypesAndSelectedIds = (
+/**
+ * We build an object with each key (category type) pointing to an empty array
+ * as the initial value for the subsequent reduce. This avoids having the logic
+ * to initialize each key with an empty array show up in a conditional in the
+ * reducer, improving readability.
+ */
+const buildInitialEmptyResourceTypesAndSelectedIds = (
     members: CategorizableCompositeIdentifier[]
 ) =>
     [...new Set(members.map(({ type }) => type))].reduce(
@@ -29,7 +35,7 @@ const collectResourceTypesAndSelectedIds = (members: CategorizableCompositeIdent
             ...acc,
             [resourceType]: acc[resourceType].concat(id),
         }),
-        buildInitialEmptyReosurceTypesAndSelectedIds(members)
+        buildInitialEmptyResourceTypesAndSelectedIds(members)
     );
 
 /**

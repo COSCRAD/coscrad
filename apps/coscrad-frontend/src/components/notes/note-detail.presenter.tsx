@@ -12,6 +12,7 @@ export const NoteDetailPresenter = ({ id, note: text, connectedResources }: INot
         <CategorizablesOfMultipleTypeContainer
             detailPresenterFactory={thumbnailCategorizableDetailPresenterFactory}
             members={connectedResources.map(({ compositeIdentifier }) => compositeIdentifier)}
+            heading={'Connected Resources'}
         />
     </div>
 );

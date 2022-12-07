@@ -2,6 +2,7 @@ import { CategorizableType, IDetailQueryResult, INoteViewModel } from '@coscrad/
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailPresenter } from '../../notes/note-detail.presenter';
 import { BibliographicReferenceDetailThumbnailPresenter } from '../bibliographic-references/bibliographic-reference-detail-thumbnail-presenters';
+import { BookDetailThumbnailPresenter } from '../books';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
 import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-detail.thumbnail.presenter';
 import { SongDetailThumbnailPresenter } from '../songs';
@@ -13,12 +14,12 @@ import { VocabularyListDetailThumbnailPresenter } from '../vocabulary-lists/voca
 // TODO Define thumbnail specific presenters
 const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailThumbnailPresenter,
-    [CategorizableType.book]: SongDetailThumbnailPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailPresenter,
     [CategorizableType.photograph]: PhotographDetailThumbnailPresenter,
     [CategorizableType.song]: SongDetailThumbnailPresenter,
     [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
     [CategorizableType.term]: TermDetailThumbnailPresenter,
+    [CategorizableType.book]: BookDetailThumbnailPresenter,
     [CategorizableType.transcribedAudio]: TranscribedAudioDetailThumbnailPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailThumbnailPresenter,
     // TODO remove this hack

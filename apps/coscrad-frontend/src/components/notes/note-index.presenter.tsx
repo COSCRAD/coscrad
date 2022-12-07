@@ -1,6 +1,7 @@
 import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
+    ICompositeIdentifier,
     IEdgeConnectionMember,
     INoteViewModel,
 } from '@coscrad/api-interfaces';
@@ -9,42 +10,44 @@ import { CellRenderersDefinition } from '../../utils/generic-components/presente
 import { HasData } from '../higher-order-components';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
 
+const formatCompositeIentifier = ({ type, id }: ICompositeIdentifier): string => `${type}/${id}`;
+
+/**
+ * Sorts tuple of members of a dual edge connection with the `to` member first
+ * and the `from` member last (returns [toMember,fromMember])
+ *
+ * TODO Unit test
+ * TODO Break out into a utility lib
+ */
+const sortEdgeConnectionMembers = (members: IEdgeConnectionMember[]): IEdgeConnectionMember[] => {
+    if (members.length !== 2) return members;
+
+    // We want the `from` member to come first ("be smaller")
+    return [...members].sort(({ role: roleA }, _) =>
+        roleA === EdgeConnectionMemberRole.from ? -1 : 1
+    );
+};
+
 interface DisplayConnectedResourcesInfoProps {
     resourceInfos: IEdgeConnectionMember[];
+    connectionType: EdgeConnectionType;
 }
 
 const DisplayConnectedResourcesInfo = ({
     resourceInfos,
+    connectionType,
 }: DisplayConnectedResourcesInfoProps): JSX.Element => {
-    if (resourceInfos.length === 1) {
-        const {
-            compositeIdentifier: { type, id },
-        } = resourceInfos[0];
+    if (connectionType === EdgeConnectionType.self) {
+        const { compositeIdentifier } = resourceInfos[0];
 
-        return (
-            <div>
-                A note about {type}/{id}
-            </div>
-        );
+        return <div>A note about {formatCompositeIentifier(compositeIdentifier)}</div>;
     }
 
-    const {
-        compositeIdentifier: { type: type0, id: id0 },
-        role: role0,
-    } = resourceInfos[0];
+    const [fromMember, toMember] = sortEdgeConnectionMembers(resourceInfos);
 
-    const {
-        compositeIdentifier: { type: type1, id: id1 },
-    } = resourceInfos[1];
-
-    const stringCompositeId0 = `${type0}/${id0}`;
-
-    const stringCompositeId1 = `${type1}/${id1}`;
-
-    const fromMessage =
-        role0 === EdgeConnectionMemberRole.from
-            ? `connection from ${stringCompositeId0} to ${stringCompositeId1}`
-            : `connection from ${stringCompositeId1} to ${stringCompositeId0}`;
+    const fromMessage = `connection from ${formatCompositeIentifier(
+        fromMember.compositeIdentifier
+    )} to ${formatCompositeIentifier(toMember.compositeIdentifier)}`;
 
     return <div>{fromMessage}</div>;
 };
@@ -72,9 +75,12 @@ export const NoteIndexPresenter = ({ data: notes }: HasData<INoteViewModel[]>): 
     const cellRenderersDefinition: CellRenderersDefinition<INoteViewModel> = {
         id: renderAggregateIdCell,
         // we may want to limit or else wrap the note's text
-        connectedResources: ({ connectedResources }: INoteViewModel) => (
+        connectedResources: ({ connectedResources, connectionType }: INoteViewModel) => (
             // do we want a simple icon for this instead?
-            <DisplayConnectedResourcesInfo resourceInfos={connectedResources} />
+            <DisplayConnectedResourcesInfo
+                resourceInfos={connectedResources}
+                connectionType={connectionType}
+            />
         ),
         connectionType: ({ connectionType }: INoteViewModel) =>
             // icon?
