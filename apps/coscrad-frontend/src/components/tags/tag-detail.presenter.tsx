@@ -14,7 +14,7 @@ export const TagDetailPresenter = ({ id, label, members }: ITagViewModel): JSX.E
 
     const uniqueResourceTypesWithThisTag = [...new Set(allResourceTypesWithRepeats)];
 
-    const initialEmptyReosurceTypesAndSelectedIds = uniqueResourceTypesWithThisTag.reduce(
+    const initialEmptyResourceTypesAndSelectedIds = uniqueResourceTypesWithThisTag.reduce(
         (acc, resourceType) => ({
             ...acc,
             [resourceType]: [],
@@ -31,7 +31,7 @@ export const TagDetailPresenter = ({ id, label, members }: ITagViewModel): JSX.E
             ...acc,
             [resourceType]: acc[resourceType].concat(id),
         }),
-        initialEmptyReosurceTypesAndSelectedIds
+        initialEmptyResourceTypesAndSelectedIds
     );
 
     return (

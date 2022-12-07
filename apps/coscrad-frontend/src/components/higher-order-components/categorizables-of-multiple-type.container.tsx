@@ -3,7 +3,7 @@ import { buildPluralLabelsMapForCategorizableTypes } from '../../store/slices/re
 import { ICategorizableDetailPresenterFactory } from '../resources/factories/categorizable-detail-presenter-factory.interface';
 import { SelectedCategorizablesOfSingleTypeContainer } from './selected-categorizables-of-single-type.container';
 
-type CategorizableTypeAndSelectedIds = { [K in CategorizableType]?: string[] };
+export type CategorizableTypeAndSelectedIds = { [K in CategorizableType]?: string[] };
 
 interface CategorizablesOfMultipleTypeContainerProps<T> {
     categorizableTypeAndIds: CategorizableTypeAndSelectedIds;
