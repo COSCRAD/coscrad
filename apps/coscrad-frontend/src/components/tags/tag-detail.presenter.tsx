@@ -1,14 +1,6 @@
 import { ITagViewModel } from '@coscrad/api-interfaces';
 import { LinkSharp as LinkIcon } from '@mui/icons-material';
-import {
-    Card,
-    CardActionArea,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Divider,
-    IconButton,
-} from '@mui/material';
+import { Card, CardActionArea, CardActions, CardContent, CardHeader, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { CategorizablesOfMultipleTypeContainer } from '../higher-order-components';
 import { thumbnailCategorizableDetailPresenterFactory } from '../resources/factories/thumbnail-categorizable-detail-presenter-factory';
@@ -57,9 +49,7 @@ export const TagDetailPresenter = ({ id, label, members }: ITagViewModel): JSX.E
                 <CardActionArea>
                     <CardActions>
                         <Link to={id}>
-                            <IconButton>
-                                <LinkIcon />
-                            </IconButton>
+                            <LinkIcon />
                         </Link>
                     </CardActions>
                 </CardActionArea>

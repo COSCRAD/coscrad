@@ -29,7 +29,10 @@ export const BibliographicReferenceCard = ({
                 {labelsAndValues
                     .filter(({ value }) => value !== null && typeof value !== 'undefined')
                     .map((valueAndDisplay) => (
-                        <SinglePropertyPresenter {...valueAndDisplay} />
+                        <SinglePropertyPresenter
+                            {...valueAndDisplay}
+                            key={valueAndDisplay.display}
+                        />
                     ))}
             </div>
         </CardContent>

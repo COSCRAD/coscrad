@@ -27,6 +27,12 @@ import { setupTestServer } from '../../../../../utils/test-utils/setup-test-serv
 import { buildMockIndexResponse } from '../../../../../utils/test-utils/test-data';
 import { ConnectedResourcesPanel } from './connected-resources-panel';
 
+jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
+    /* eslint-disable-next-line */
+    .mockImplementation(() => {});
+
+jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => Promise.resolve());
+
 const config = getConfig();
 
 const dummyTerms = buildDummyTerms();

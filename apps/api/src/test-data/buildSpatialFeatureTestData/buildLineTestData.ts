@@ -11,13 +11,22 @@ const dtos: DTO<Line>[] = [
         geometry: {
             type: GeometricFeatureType.line,
             coordinates: [
-                [1, 2],
-                [1, 3],
-                [1.5, 3.5],
-                [3, 4.2],
+                [52.3, -124.2],
+                [52.35, -124.85],
+                [52.21, -124.9],
+                [52.05, -125.1],
+                [52.15, -125.1],
+                [52.33, -125.22],
+                [52.45, -125.39],
             ],
+        },
+        properties: {
+            name: 'Windy Path',
+            description: 'One amazing hike!',
+            imageUrl:
+                'https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png',
         },
     },
 ];
 
-export default () => dtos.map((dto) => new Line(dto));
+export default (): Line[] => dtos.map((dto) => new Line(dto));

@@ -13,6 +13,12 @@ import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNot
 import { SongDetailContainer } from './song-detail.container';
 import { buildDummySongs } from './test-utils/build-dummy-songs';
 
+jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
+    /* eslint-disable-next-line */
+    .mockImplementation(() => {});
+
+jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => Promise.resolve());
+
 const dummySongs = buildDummySongs();
 
 const songToFind = dummySongs[0];

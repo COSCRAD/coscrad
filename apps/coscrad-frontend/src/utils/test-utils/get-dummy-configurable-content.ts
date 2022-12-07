@@ -1,21 +1,11 @@
 import { ConfigurableContent } from '../../configurable-front-matter/data/configurableContentSchema';
+import sampleData from '../../configurable-front-matter/data/content.config.SAMPLE.json';
 
-export const getDummyConfigurableContent = (): ConfigurableContent => ({
-    siteTitle: 'My Site',
-
-    subTitle: 'Where it all Happens',
-
-    about: 'Just a Test',
-
-    siteDescription: 'This is my testing site',
-
-    siteHomeImageUrl: 'https://mysite.com/image.png',
-
-    copyrightHolder: 'ME',
-
-    organizationLogoUrl: 'https://mysite.com/logo.png',
-
-    songIdToCredits: {
-        '12': 'Beatboxing by Justin',
-    },
-});
+export const getDummyConfigurableContent = (): ConfigurableContent => {
+    /**
+     * We validate that this is indeed valid in `validateConfigurableContent.spec.ts`.
+     * This ensures that we keep the sample up-to-date, while also allowing
+     * it to serve as a single dummy configurable content for other tests.
+     */
+    return sampleData as ConfigurableContent;
+};

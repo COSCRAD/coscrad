@@ -10,11 +10,10 @@ const dtos = [
             type: GeometricFeatureType.polygon,
             coordinates: [
                 [
-                    [1.0, 3.0],
-                    [2.0, 5.0],
-                    [1.5, 3.7],
-                    [1.2, 3.3],
-                    [1.0, 3.0],
+                    [52.47, -123.6],
+                    [52.42, -123.95],
+                    [52.05, -123.95],
+                    [52.05, -123.685],
                 ],
             ],
             // TODO Remove cast
@@ -30,5 +29,11 @@ export default (): Polygon[] =>
                 type: ResourceType.spatialFeature,
                 id: `${index + 300}`,
                 published: true,
+                properties: {
+                    name: `Point with ID: ${`${index + 300}`} Name`,
+                    description: `Description for point ${`${index + 300}`}`,
+                    imageUrl:
+                        'https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png',
+                },
             })
     );
