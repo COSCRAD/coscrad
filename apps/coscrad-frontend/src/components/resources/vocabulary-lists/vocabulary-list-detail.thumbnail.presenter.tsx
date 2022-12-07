@@ -9,19 +9,18 @@ import { routes } from '../../../app/routes/routes';
 import { formatBilingualText } from './utils';
 
 export const VocabularyListDetailThumbnailPresenter = ({
-    data: { id, name, nameEnglish, entries, form },
+    data: { id, name, nameEnglish, entries },
 }: IDetailQueryResult<IVocabularyListViewModel>): JSX.Element => (
-    <Link to={`/${routes.resources.ofType(ResourceType.vocabularyList).detail(id)}`}>
-        <Card>
-            <CardHeader>
-                <div data-testid={id}>{formatBilingualText(name, nameEnglish)}</div>
-            </CardHeader>
+    <div data-testid={id}>
+        <Link to={`/${routes.resources.ofType(ResourceType.vocabularyList).detail(id)}`}>
+            <Card>
+                <CardHeader title={formatBilingualText(name, nameEnglish)}></CardHeader>
 
-            <CardContent>
-                <br />
-                <Divider />
-                Number of Entries: {entries.length}
-            </CardContent>
-        </Card>
-    </Link>
+                <CardContent>
+                    <Divider />
+                    Number of Entries: {entries.length}
+                </CardContent>
+            </Card>
+        </Link>
+    </div>
 );

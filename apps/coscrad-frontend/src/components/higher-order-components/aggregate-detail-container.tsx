@@ -1,6 +1,11 @@
-import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
+import {
+    IBaseViewModel,
+    IDetailQueryResult,
+    ResourceCompositeIdentifier,
+} from '@coscrad/api-interfaces';
 import { ConnectedResourcesPanel } from '../../store/slices/resources/shared/connected-resources';
 import { SelfNotesPanelContainer } from '../../store/slices/resources/shared/notes-for-resource';
+import { CommandPanel } from '../commands';
 import { ICategorizableDetailPresenterFactory } from '../resources/factories/categorizable-detail-presenter-factory.interface';
 import { buildUseLoadableSearchResult } from './buildUseLoadableSearchResult';
 import { displayLoadableSearchResult } from './display-loadable-search-result';
@@ -27,16 +32,17 @@ export const AggregateDetailContainer = <T,>({
 
     const DetailPresenter = detailPresenterFactory(resourceType);
 
-    const WithConnectionsPanels = (props: unknown) => (
+    const WithConnectionsPanelsAndCommands = (props: IDetailQueryResult<IBaseViewModel>) => (
         <div>
-            {DetailPresenter(props as T)}
+            {DetailPresenter(props as unknown as T)}
+            <CommandPanel actions={props.actions} />
             <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
             <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
         </div>
     );
 
     // Wrap in error, pending, and not found presentation
-    const Presenter = displayLoadableSearchResult(WithConnectionsPanels);
+    const Presenter = displayLoadableSearchResult(WithConnectionsPanelsAndCommands);
 
     return <Presenter {...loadableSearchResult} />;
 };

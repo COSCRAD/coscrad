@@ -3,7 +3,6 @@ import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { CategorizablesOfMultipleTypeContainer } from '../higher-order-components';
 import { thumbnailCategorizableDetailPresenterFactory } from '../resources/factories/thumbnail-categorizable-detail-presenter-factory';
-import { createMultipleCategorizableLookupTable } from '../tags/createMultipleCategorizableLookupTable';
 
 const wrapTree = ({
     label,
@@ -16,7 +15,7 @@ const wrapTree = ({
                 <AccordionSummary>{label}</AccordionSummary>
                 <AccordionDetails>
                     <CategorizablesOfMultipleTypeContainer
-                        categorizableTypeAndIds={createMultipleCategorizableLookupTable(members)}
+                        members={members}
                         detailPresenterFactory={thumbnailCategorizableDetailPresenterFactory}
                     />
                     {
