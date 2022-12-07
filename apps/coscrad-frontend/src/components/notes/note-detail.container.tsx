@@ -5,8 +5,10 @@ import { RootState } from '../../store';
 import { fetchNotes } from '../../store/slices/notes/thunks';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
+import { CategorizablesOfMultipleTypeContainer } from '../higher-order-components';
 import { Loading } from '../Loading';
-import { NoteDetailPresenter } from './note-detail.presenter';
+import { fullViewCategorizablePresenterFactory } from '../resources/factories/full-view-categorizable-presenter-factory';
+import { NoteDetailFullViewPresenter } from './note-detail.full-view.presenter';
 
 export const NoteDetailContainer = (): JSX.Element => {
     /**
@@ -32,5 +34,15 @@ export const NoteDetailContainer = (): JSX.Element => {
     // Make this render a <NotFound />
     if (!note) return <div>Not Found</div>;
 
-    return <NoteDetailPresenter {...note} />;
+    return (
+        <div>
+            <NoteDetailFullViewPresenter {...note} />
+            <CategorizablesOfMultipleTypeContainer
+                detailPresenterFactory={fullViewCategorizablePresenterFactory}
+                members={note.connectedResources.map(
+                    ({ compositeIdentifier }) => compositeIdentifier
+                )}
+            />
+        </div>
+    );
 };

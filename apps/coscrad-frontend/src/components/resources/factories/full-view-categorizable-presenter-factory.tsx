@@ -1,8 +1,9 @@
-import { CategorizableType } from '@coscrad/api-interfaces';
+import { CategorizableType, IBookViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
+import { Card, CardContent } from '@mui/material';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
-import { NoteDetailPresenter } from '../../notes/note-detail.presenter';
+import { NoteDetailFullViewPresenter } from '../../notes/note-detail.full-view.presenter';
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
-import { BookDetailFullViewPresenter } from '../books';
+import { BookReader } from '../books/pages';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
 import { PhotographDetailFullViewPresenter } from '../photographs/photograph-detail.full-view.presenter';
 import { SongDetailFullViewPresenter } from '../songs/song-detail.full-view.presenter';
@@ -16,7 +17,6 @@ import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocab
  */
 const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailPresenter,
-    [CategorizableType.book]: BookDetailFullViewPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailPresenter,
     [CategorizableType.photograph]: PhotographDetailFullViewPresenter,
     [CategorizableType.song]: SongDetailFullViewPresenter,
@@ -24,7 +24,37 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.term]: TermDetailFullViewPresenter,
     [CategorizableType.transcribedAudio]: TranscribedAudioDetailFullViewPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailFullViewPresenter,
-    [CategorizableType.note]: NoteDetailPresenter,
+    /**
+     * TODO Investigate why importing this from the component file leads to a
+     * circular dependency.
+     */
+    [CategorizableType.book]: ({
+        data: { id, pages, title, subtitle, author, publicationDate },
+    }: IDetailQueryResult<IBookViewModel>): JSX.Element => {
+        return (
+            <div data-testid={id}>
+                <Card>
+                    <CardContent>
+                        <div>
+                            <h1>{title}</h1>
+                            {subtitle && <h3>{subtitle}</h3>}
+                            <strong>by</strong> {author}
+                            <br />
+                            {publicationDate && (
+                                <div>
+                                    <strong>published</strong> {publicationDate}
+                                </div>
+                            )}
+                        </div>
+                        <div>
+                            <BookReader pages={pages} />
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+        );
+    },
+    [CategorizableType.note]: NoteDetailFullViewPresenter,
 };
 
 /**

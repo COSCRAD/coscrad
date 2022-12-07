@@ -1,8 +1,16 @@
-import { CategorizableType, IDetailQueryResult, INoteViewModel } from '@coscrad/api-interfaces';
+import {
+    CategorizableType,
+    IBookViewModel,
+    IDetailQueryResult,
+    INoteViewModel,
+    ResourceType,
+} from '@coscrad/api-interfaces';
+import { Card, CardContent } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { routes } from '../../../app/routes/routes';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
-import { NoteDetailPresenter } from '../../notes/note-detail.presenter';
+import { NoteDetailThumbnailPresenter } from '../../notes/note-detail.thumbnail.presenter';
 import { BibliographicReferenceDetailThumbnailPresenter } from '../bibliographic-references/bibliographic-reference-detail-thumbnail-presenters';
-import { BookDetailThumbnailPresenter } from '../books';
 import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
 import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-detail.thumbnail.presenter';
 import { SongDetailThumbnailPresenter } from '../songs';
@@ -19,12 +27,44 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.song]: SongDetailThumbnailPresenter,
     [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
     [CategorizableType.term]: TermDetailThumbnailPresenter,
-    [CategorizableType.book]: BookDetailThumbnailPresenter,
     [CategorizableType.transcribedAudio]: TranscribedAudioDetailThumbnailPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailThumbnailPresenter,
+    /**
+     * TODO Investigate why importing this from the component file leads to a
+     * circular dependency.
+     */
+    [CategorizableType.book]: ({
+        data: { id, pages, title, subtitle, author, publicationDate },
+    }: IDetailQueryResult<IBookViewModel>): JSX.Element => {
+        return (
+            // TODO We may want to automate the link wrapping because it's easy to forget
+            <Link to={`/${routes.resources.ofType(ResourceType.book).detail(id)}`}>
+                <div data-testid={id}>
+                    <Card>
+                        <CardContent>
+                            <div>
+                                <h1>{title}</h1>
+                                {subtitle && <h3>{subtitle}</h3>}
+                                <strong>by</strong> {author}
+                                <br />
+                                {publicationDate && (
+                                    <div>
+                                        <strong>published</strong> {publicationDate}
+                                    </div>
+                                )}
+                            </div>
+                            <div>
+                                <strong>page count:</strong> {pages.length}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            </Link>
+        );
+    },
     // TODO remove this hack
     [CategorizableType.note]: ({ data: note }: IDetailQueryResult<INoteViewModel>) =>
-        NoteDetailPresenter(note),
+        NoteDetailThumbnailPresenter(note),
 };
 
 /**
