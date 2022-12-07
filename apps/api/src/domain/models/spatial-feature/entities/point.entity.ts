@@ -1,3 +1,4 @@
+import { ISpatialFeatureProperties } from '@coscrad/api-interfaces';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
@@ -10,6 +11,7 @@ import { ISpatialFeature } from '../interfaces/spatial-feature.interface';
 import { PointCoordinates } from '../types/Coordinates/PointCoordinates';
 import { GeometricFeatureType } from '../types/GeometricFeatureType';
 import validatePosition2D from '../validation/validatePosition2D';
+import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
 @RegisterIndexScopedCommands([])
 export class Point extends Resource implements ISpatialFeature {
@@ -17,12 +19,14 @@ export class Point extends Resource implements ISpatialFeature {
 
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>;
 
+    readonly properties: ISpatialFeatureProperties;
+
     constructor(dto: DTO<Point>) {
         super({ ...dto, type: ResourceType.spatialFeature });
 
         if (!dto) return;
 
-        const { geometry: geometryDTO } = dto;
+        const { geometry: geometryDTO, properties: propertiesDTO } = dto;
 
         /**
          * We use a plain-old object here to minimize maintenance and readability
@@ -32,6 +36,8 @@ export class Point extends Resource implements ISpatialFeature {
         this.geometry = cloneToPlainObject(
             geometryDTO as IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>
         );
+
+        this.properties = new SpatialFeatureProperties(propertiesDTO);
     }
 
     protected validateComplexInvariants(): InternalError[] {
