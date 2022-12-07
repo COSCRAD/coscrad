@@ -11,6 +11,7 @@ import { validateConfigurableContent } from './validateConfigurableContent';
 
 const propertyType = CoscradDataType.NonEmptyString;
 
+// Reads the sample config, which will also be validated here
 const validContentConfig = getDummyConfigurableContent();
 
 // TODO Break this into utility types lib
@@ -54,7 +55,7 @@ const invalidConfigsAndExpectedErrors: [Overrides<ConfigurableContent>, Error[]]
     ]);
 
 describe('validateFrontMatterData', () => {
-    describe('when the content config is valid', () => {
+    describe('when the content config is valid (using the sample  config)', () => {
         it('should return no errors', () => {
             const result = validateConfigurableContent(validContentConfig);
 

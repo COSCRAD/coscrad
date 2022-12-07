@@ -193,26 +193,43 @@ Line {
   "geometry": Object {
     "coordinates": Array [
       Array [
-        1,
-        2,
+        52.3,
+        -124.2,
       ],
       Array [
-        1,
-        3,
+        52.35,
+        -124.85,
       ],
       Array [
-        1.5,
-        3.5,
+        52.21,
+        -124.9,
       ],
       Array [
-        3,
-        4.2,
+        52.05,
+        -125.1,
+      ],
+      Array [
+        52.15,
+        -125.1,
+      ],
+      Array [
+        52.33,
+        -125.22,
+      ],
+      Array [
+        52.45,
+        -125.39,
       ],
     ],
     "type": "LineString",
   },
   "getCompositeIdentifier": [Function],
   "id": "1",
+  "properties": SpatialFeatureProperties {
+    "description": "One amazing hike!",
+    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+    "name": "Windy Path",
+  },
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": Array [],
@@ -227,13 +244,18 @@ Point {
   "eventHistory": Array [],
   "geometry": Object {
     "coordinates": Array [
-      100,
-      0,
+      54.034404852745006,
+      -132.17563335558532,
     ],
     "type": "Point",
   },
   "getCompositeIdentifier": [Function],
   "id": "100",
+  "properties": SpatialFeatureProperties {
+    "description": "Description for point 100",
+    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+    "name": "Name of Point with ID: 100",
+  },
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": Array [],
@@ -250,24 +272,20 @@ Polygon {
     "coordinates": Array [
       Array [
         Array [
-          1,
-          3,
+          52.47,
+          -123.6,
         ],
         Array [
-          2,
-          5,
+          52.42,
+          -123.95,
         ],
         Array [
-          1.5,
-          3.7,
+          52.05,
+          -123.95,
         ],
         Array [
-          1.2,
-          3.3,
-        ],
-        Array [
-          1,
-          3,
+          52.05,
+          -123.685,
         ],
       ],
     ],
@@ -275,6 +293,11 @@ Polygon {
   },
   "getCompositeIdentifier": [Function],
   "id": "300",
+  "properties": SpatialFeatureProperties {
+    "description": "Description for point 300",
+    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+    "name": "Point with ID: 300 Name",
+  },
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": Array [],

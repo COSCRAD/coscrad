@@ -1,0 +1,12 @@
+{
+    "siteTitle": "Site Title",
+    "subTitle": "Site Subtitle",
+    "about": "Add a few sentences about your web of knowledge!",
+    "siteDescription": "Your site decription goes here..",
+    "siteHomeImageUrl": "https://www.picbox.org/home-image.png",
+    "copyrightHolder": "My Organization",
+    "organizationLogoUrl": "https://www.picbox.org/logo.png",
+    "songIdToCredits": {
+        "1": "Credits for song 1"
+    }
+}

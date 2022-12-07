@@ -13,6 +13,12 @@ import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNot
 import { buildDummyVocabularyLists } from './test-utils/build-dummy-vocabulary-lists';
 import { VocabularyListDetailContainer } from './vocabulary-list-detail.container';
 
+jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
+    /* eslint-disable-next-line */
+    .mockImplementation(() => {});
+
+jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => Promise.resolve());
+
 const dummyVocabularyLists = buildDummyVocabularyLists();
 
 const idToFind = dummyVocabularyLists[0].id;
