@@ -8,7 +8,7 @@ export const createMultipleCategorizableLookupTable = (
 
     const uniqueResourceTypesWithThisTag = [...new Set(allResourceTypesWithRepeats)];
 
-    const initialEmptyReosurceTypesAndSelectedIds = uniqueResourceTypesWithThisTag.reduce(
+    const initialEmptyResourceTypesAndSelectedIds = uniqueResourceTypesWithThisTag.reduce(
         (acc, resourceType) => ({
             ...acc,
             [resourceType]: [],
@@ -22,6 +22,6 @@ export const createMultipleCategorizableLookupTable = (
             ...acc,
             [resourceType]: acc[resourceType].concat(id),
         }),
-        initialEmptyReosurceTypesAndSelectedIds
+        initialEmptyResourceTypesAndSelectedIds
     );
 };
