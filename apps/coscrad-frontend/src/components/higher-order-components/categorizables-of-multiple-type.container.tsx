@@ -1,4 +1,4 @@
-import { CategorizableType } from '@coscrad/api-interfaces';
+import { CategorizableCompositeIdentifier, CategorizableType } from '@coscrad/api-interfaces';
 import { buildPluralLabelsMapForCategorizableTypes } from '../../store/slices/resources/shared/connected-resources/build-plural-labels-map-for-categorizable-types';
 import { ICategorizableDetailPresenterFactory } from '../resources/factories/categorizable-detail-presenter-factory.interface';
 import { SelectedCategorizablesOfSingleTypeContainer } from './selected-categorizables-of-single-type.container';
@@ -6,10 +6,37 @@ import { SelectedCategorizablesOfSingleTypeContainer } from './selected-categori
 export type CategorizableTypeAndSelectedIds = { [K in CategorizableType]?: string[] };
 
 interface CategorizablesOfMultipleTypeContainerProps<T> {
-    categorizableTypeAndIds: CategorizableTypeAndSelectedIds;
+    members: CategorizableCompositeIdentifier[];
     detailPresenterFactory: ICategorizableDetailPresenterFactory<T>;
     heading?: string;
 }
+
+/**
+ * We build an object with each key (category type) pointing to an empty array
+ * as the initial value for the subsequent reduce. This avoids having the logic
+ * to initialize each key with an empty array show up in a conditional in the
+ * reducer, improving readability.
+ */
+const buildInitialEmptyResourceTypesAndSelectedIds = (
+    members: CategorizableCompositeIdentifier[]
+) =>
+    [...new Set(members.map(({ type }) => type))].reduce(
+        (acc, resourceType) => ({
+            ...acc,
+            [resourceType]: [],
+        }),
+        {}
+    );
+
+// A Map might improve readability here
+const collectResourceTypesAndSelectedIds = (members: CategorizableCompositeIdentifier[]) =>
+    members.reduce(
+        (acc, { type: resourceType, id }) => ({
+            ...acc,
+            [resourceType]: acc[resourceType].concat(id),
+        }),
+        buildInitialEmptyResourceTypesAndSelectedIds(members)
+    );
 
 /**
  * TODO Let's update `CategorizablesOfMultipleTypesContainer` to take in
@@ -17,13 +44,13 @@ interface CategorizablesOfMultipleTypeContainerProps<T> {
  * by the clients.
  */
 export const CategorizablesOfMultipleTypeContainer = <T,>({
-    categorizableTypeAndIds,
+    members,
     detailPresenterFactory,
     heading,
 }: CategorizablesOfMultipleTypeContainerProps<T>): JSX.Element => (
     <div>
         <h3>{heading || 'Selected Resources'}</h3>
-        {Object.entries(categorizableTypeAndIds).map(
+        {Object.entries(collectResourceTypesAndSelectedIds(members)).map(
             ([categorizableType, selectedIds]: [CategorizableType, string[]]) => (
                 <SelectedCategorizablesOfSingleTypeContainer
                     categorizableType={categorizableType}

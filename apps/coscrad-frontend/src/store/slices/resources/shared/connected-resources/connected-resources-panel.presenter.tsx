@@ -20,6 +20,14 @@ interface Props {
 export const ConnectedResourcesPanelPresenter = ({
     data: connectedResources,
 }: Props): JSX.Element => {
+    if (connectedResources.length === 0)
+        return (
+            <div data-testid={'connectedResourcesPanel'}>
+                <h2>Connected Resources</h2>
+                No Connections Found
+            </div>
+        );
+
     /**
      * We only need to show the resource types that are connected to the resource
      * of focus (the one whose detail page we are in) here. So we make sure to
