@@ -20,6 +20,7 @@ const lookupTable: LookupTable = {
     [CoscradDataType.URL]: isStringWithNonzeroLength,
     [CoscradDataType.UUID]: isStringWithNonzeroLength,
     [CoscradDataType.Year]: isStringWithNonzeroLength,
+    [CoscradDataType.BOOLEAN]: (input: unknown) => typeof input === 'boolean',
 };
 
 export const getConstraintFunctionForCoscradDataType = (dataType: string): ConstraintFunction => {

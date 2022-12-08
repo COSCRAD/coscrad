@@ -1,17 +1,12 @@
-import { ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
+import { ITranscribedAudioViewModel, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
-import {
-    assertElementWithTestIdOnScreen,
-    assertNotFound,
-    renderWithProviders,
-} from '../../../utils/test-utils';
+import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
-import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
-import { TranscribedAudioDetailContainer } from './transcribed-audio-detail.container';
+import { buildResourceDetailPageRendererForTest } from '../test-utils';
 
 jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
     /* eslint-disable-next-line */
@@ -42,14 +37,7 @@ const dummyTranscribedAudioItems: ITranscribedAudioViewModel[] = [
 
 const endpoint = `${getConfig().apiUrl}/resources/transcribedAudioItems`;
 
-const act = (idInLocation: string) =>
-    renderWithProviders(
-        withDetailRoute(
-            idInLocation,
-            `/Resources/Transcripts/`,
-            <TranscribedAudioDetailContainer />
-        )
-    );
+const act = buildResourceDetailPageRendererForTest(ResourceType.transcribedAudio);
 
 const mockGetNotesHandler = buildMockGetNotesHandler();
 

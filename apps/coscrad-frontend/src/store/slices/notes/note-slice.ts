@@ -1,4 +1,4 @@
-import { INoteViewModel } from '@coscrad/api-interfaces';
+import { INoteViewModel, WithTags } from '@coscrad/api-interfaces';
 import { createSlice } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../utils';
 import { buildReducersForThunk } from '../utils/build-reducers-for-thunk';
@@ -6,7 +6,7 @@ import { NOTES } from './constants';
 import { fetchNotes } from './thunks';
 import { NoteSliceState } from './types';
 
-const initialState: NoteSliceState = buildInitialLoadableState<INoteViewModel[]>();
+const initialState: NoteSliceState = buildInitialLoadableState<WithTags<INoteViewModel>[]>();
 
 export const noteSlice = createSlice({
     name: NOTES,

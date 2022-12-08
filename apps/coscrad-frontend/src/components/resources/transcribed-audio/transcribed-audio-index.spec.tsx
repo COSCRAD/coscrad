@@ -1,13 +1,11 @@
-import { ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
-import { MemoryRouter } from 'react-router-dom';
+import { ITranscribedAudioViewModel, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
-import { renderWithProviders } from '../../../utils/test-utils';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
-import { TranscribedAudioIndexContainer } from './transcribed-audio-index.container';
+import { renderResourceIndexPageForTest } from '../test-utils';
 
 jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
     /* eslint-disable-next-line */
@@ -27,12 +25,7 @@ const dummyTranscribedAudioItems: ITranscribedAudioViewModel[] = [
 
 const endpoint = `${getConfig().apiUrl}/resources/transcribedAudioItems`;
 
-const act = () =>
-    renderWithProviders(
-        <MemoryRouter>
-            <TranscribedAudioIndexContainer />
-        </MemoryRouter>
-    );
+const act = () => renderResourceIndexPageForTest(ResourceType.transcribedAudio);
 
 describe('Transcribed Audio Index', () => {
     describe('when the API request is valid', () => {

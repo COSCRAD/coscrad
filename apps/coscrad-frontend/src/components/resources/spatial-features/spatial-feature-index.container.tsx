@@ -1,4 +1,4 @@
-import { ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
+import { ISpatialFeatureViewModel, WithTags } from '@coscrad/api-interfaces';
 import {
     SpatialFeatureIndexState,
     useLoadableSpatialFeatures,
@@ -9,7 +9,7 @@ import { CoscradLeafletMap } from './leaflet';
 import { SpatialFeatureIndexPresenter } from './spatial-feature-index.presenter';
 import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
 
-const AdaptedDetailPresenter = (spatialFeature: ISpatialFeatureViewModel) => (
+const AdaptedDetailPresenter = (spatialFeature: WithTags<ISpatialFeatureViewModel>) => (
     <SpatialFeatureDetailThumbnailPresenter data={spatialFeature} actions={[]} />
 );
 

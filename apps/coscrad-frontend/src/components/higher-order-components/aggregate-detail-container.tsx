@@ -3,6 +3,8 @@ import {
     IDetailQueryResult,
     ResourceCompositeIdentifier,
 } from '@coscrad/api-interfaces';
+import { useContext } from 'react';
+import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { ConnectedResourcesPanel } from '../../store/slices/resources/shared/connected-resources';
 import { SelfNotesPanelContainer } from '../../store/slices/resources/shared/notes-for-resource';
 import { CommandPanel } from '../commands';
@@ -26,20 +28,26 @@ export const AggregateDetailContainer = <T,>({
 }: AggregateDetailContainerProps<T>) => {
     const { type: resourceType, id } = compositeIdentifier;
 
+    const { shouldEnableWebOfKnowledgeForResources } = useContext(ConfigurableContentContext);
+
     const useLoadableSearchResult = buildUseLoadableSearchResult(resourceType);
 
     const loadableSearchResult = useLoadableSearchResult(id);
 
     const DetailPresenter = detailPresenterFactory(resourceType);
 
-    const WithConnectionsPanelsAndCommands = (props: IDetailQueryResult<IBaseViewModel>) => (
-        <div>
-            {DetailPresenter(props as unknown as T)}
-            <CommandPanel actions={props.actions} />
-            <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
-            <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
-        </div>
-    );
+    const WithConnectionsPanelsAndCommands = (props: IDetailQueryResult<IBaseViewModel>) =>
+        shouldEnableWebOfKnowledgeForResources ? (
+            <div>
+                {DetailPresenter(props as unknown as T)}
+                {/* TODO Only expose commands if you have an admin user context */}
+                <CommandPanel actions={props.actions} />
+                <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
+                <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
+            </div>
+        ) : (
+            <div>{DetailPresenter(props as unknown as T)}</div>
+        );
 
     // Wrap in error, pending, and not found presentation
     const Presenter = displayLoadableSearchResult(WithConnectionsPanelsAndCommands);

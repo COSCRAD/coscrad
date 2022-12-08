@@ -1,17 +1,12 @@
-import { IPhotographViewModel } from '@coscrad/api-interfaces';
+import { IPhotographViewModel, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
-import {
-    assertElementWithTestIdOnScreen,
-    assertNotFound,
-    renderWithProviders,
-} from '../../../utils/test-utils';
+import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
-import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
-import { PhotographDetailContainer } from './photograph-detail.container';
+import { buildResourceDetailPageRendererForTest } from '../test-utils';
 
 const idToFind = '123';
 
@@ -27,10 +22,7 @@ const photographToFind: IPhotographViewModel = {
  */
 const endpoint = `${getConfig().apiUrl}/resources/photographs`;
 
-const act = (idInLocation: string) =>
-    renderWithProviders(
-        withDetailRoute(idInLocation, `/Resources/Photographs/`, <PhotographDetailContainer />)
-    );
+const act = buildResourceDetailPageRendererForTest(ResourceType.photograph);
 
 const mockGetNotesHandler = buildMockGetNotesHandler();
 

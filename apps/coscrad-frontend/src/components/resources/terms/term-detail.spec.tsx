@@ -1,16 +1,12 @@
+import { ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
-import {
-    assertElementWithTestIdOnScreen,
-    assertNotFound,
-    renderWithProviders,
-} from '../../../utils/test-utils';
+import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
-import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
-import { TermDetailContainer } from './term-detail.container';
+import { buildResourceDetailPageRendererForTest } from '../test-utils';
 
 jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
     /* eslint-disable-next-line */
@@ -30,10 +26,7 @@ const allTerms = [termToFind];
 
 const endpoint = `${getConfig().apiUrl}/resources/terms`;
 
-const act = (idInLocation: string) =>
-    renderWithProviders(
-        withDetailRoute(idInLocation, `/Resources/Terms/`, <TermDetailContainer />)
-    );
+const act = buildResourceDetailPageRendererForTest(ResourceType.term);
 
 describe('Term Detail', () => {
     describe('when the API request is valid', () => {
