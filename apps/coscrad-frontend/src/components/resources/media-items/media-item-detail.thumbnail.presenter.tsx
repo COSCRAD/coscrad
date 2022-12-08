@@ -1,18 +1,11 @@
 import { IDetailQueryResult, IMediaItemViewModel } from '@coscrad/api-interfaces';
 import { Card, Divider } from '@mui/material';
-import { useContext } from 'react';
-import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
 import { formatBilingualText } from '../vocabulary-lists/utils';
 
 export const MediaItemDetailThumbnailPresenter = ({
-    data: { id, title, titleEnglish, contributions, url },
+    data: { id, title, titleEnglish, url, lengthMilliseconds },
 }: IDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
-    const { videoIdToCredits } = useContext(ConfigurableContentContext);
-
-    const creditsMap = new Map<string, string>(
-        Object.entries(videoIdToCredits as Record<string, string>)
-    );
-
     return (
         <div data-testid={id}>
             <Card className="detail-card">
@@ -21,8 +14,8 @@ export const MediaItemDetailThumbnailPresenter = ({
                 </div>
                 <Divider id="detail-divider" />
                 <div className="detail-meta">
-                    <h3 className="detail-headers">Contributions:</h3>
-                    TODO use config for this
+                    <h3>Length:</h3>
+                    {renderMediaLengthInSeconds(lengthMilliseconds)}
                 </div>
                 <div className="detail-meta">{url}</div>
             </Card>
