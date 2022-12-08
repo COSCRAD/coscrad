@@ -1,17 +1,13 @@
+import { ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
-import {
-    assertElementWithTestIdOnScreen,
-    assertNotFound,
-    renderWithProviders,
-} from '../../../utils/test-utils';
+import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
-import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
+import { buildResourceDetailPageRendererForTest } from '../test-utils';
 import { buildDummyVocabularyLists } from './test-utils/build-dummy-vocabulary-lists';
-import { VocabularyListDetailContainer } from './vocabulary-list-detail.container';
 
 jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
     /* eslint-disable-next-line */
@@ -25,15 +21,7 @@ const idToFind = dummyVocabularyLists[0].id;
 
 const endpoint = `${getConfig().apiUrl}/resources/vocabularyLists`;
 
-const act = (idInLocation: string) =>
-    renderWithProviders(
-        withDetailRoute(
-            idInLocation,
-            `/Resources/VocabularyLists/`,
-            <VocabularyListDetailContainer />
-        )
-    );
-
+const act = buildResourceDetailPageRendererForTest(ResourceType.vocabularyList);
 const mockGetNotesHandler = buildMockGetNotesHandler();
 
 describe('vocabulary list detail', () => {

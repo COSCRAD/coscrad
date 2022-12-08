@@ -9,3 +9,6 @@ export enum ResourceType {
     song = 'song',
     mediaItem = 'mediaItem',
 }
+
+export const isResourceType = (input: unknown): input is ResourceType =>
+    Object.values(ResourceType).includes(input as ResourceType);

@@ -9,8 +9,6 @@ import {
 import { InvalidConfigurationPropertyError } from '../errorHandling/errors/InvalidConfigurationPropertyError';
 import { validateConfigurableContent } from './validateConfigurableContent';
 
-const propertyType = CoscradDataType.NonEmptyString;
-
 // Reads the sample config, which will also be validated here
 const validContentConfig = getDummyConfigurableContent();
 
@@ -26,7 +24,7 @@ const buildInvalidContentConfig = (
     ...overrides,
 });
 
-const invalidProps: [keyof ConfigurableContent, unknown][] = Object.entries(
+const invalidProps: [keyof ConfigurableContent, unknown, CoscradDataType][] = Object.entries(
     configurableContentSchema
 ).flatMap(([propertyName, coscradDataType]) =>
     new FuzzGenerator({
@@ -37,18 +35,22 @@ const invalidProps: [keyof ConfigurableContent, unknown][] = Object.entries(
         .generateInvalidValues()
         .map(
             (invalidValue: unknown) =>
-                [propertyName, invalidValue] as [keyof ConfigurableContentSchema, unknown]
+                [propertyName, invalidValue, coscradDataType] as [
+                    keyof ConfigurableContentSchema,
+                    unknown,
+                    CoscradDataType
+                ]
         )
 );
 
 const invalidConfigsAndExpectedErrors: [Overrides<ConfigurableContent>, Error[]][] = invalidProps
     .filter(([propertyName, _]) => !['songIdToCredits', 'videoIdToCredits'].includes(propertyName))
-    .map(([propertyName, invalidValue]) => [
+    .map(([propertyName, invalidValue, coscradDataType]) => [
         buildInvalidContentConfig({ [propertyName]: invalidValue }),
         [
             new InvalidConfigurationPropertyError({
                 propertyName,
-                propertyType,
+                propertyType: coscradDataType,
                 invalidReceivedValue: invalidValue,
             }),
         ],
@@ -94,10 +96,6 @@ describe('validateFrontMatterData', () => {
                 expectedErrors.forEach((expectedError, index) =>
                     expect(result[index]).toEqual(expectedError)
                 );
-
-                if (result.length !== expectedErrors.length) {
-                    console.log('I really need to learn conditional breakpoints for debugging!');
-                }
 
                 // just in case there are additional errors in the result
                 expect(result.length).toBe(expectedErrors.length);

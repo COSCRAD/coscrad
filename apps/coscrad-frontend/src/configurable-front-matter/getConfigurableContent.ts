@@ -1,14 +1,14 @@
 import { ConfigurableContent } from './data/configurableContentSchema';
-import rawData from './data/content.config.json';
+import { contentConfig } from './data/content.config';
 import { InvalidContentConfigurationException } from './errorHandling/exceptions/InvalidContentConfigurationException';
 import { validateConfigurableContent } from './validation/validateConfigurableContent';
 
 export const getConfigurableContent = (): ConfigurableContent => {
-    const validationResult = validateConfigurableContent(rawData);
+    const validationResult = validateConfigurableContent(contentConfig);
 
     if (validationResult.length > 0) {
         throw new InvalidContentConfigurationException(validationResult);
     }
 
-    return rawData as ConfigurableContent;
+    return contentConfig as unknown as ConfigurableContent;
 };
