@@ -14,6 +14,7 @@ type CoscradDataTypeToTypeScriptType = {
     [CoscradDataType.URL]: string;
     [CoscradDataType.UUID]: string;
     [CoscradDataType.Year]: number;
+    [CoscradDataType.BOOLEAN]: boolean;
 };
 
 export type FromCoscradDataType<T extends CoscradDataType> = CoscradDataTypeToTypeScriptType[T];
