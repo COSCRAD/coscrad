@@ -28,6 +28,7 @@ const lookupTable: { [K in CoscradDataType]: FormFieldType } = {
     // Eventually, we want this to be a dynamic selection
     [CoscradDataType.UUID]: FormFieldType.textField,
     [CoscradDataType.Year]: FormFieldType.yearPicker,
+    [CoscradDataType.BOOLEAN]: FormFieldType.switch,
 };
 
 const buildSimpleFormField = (

@@ -49,4 +49,5 @@ Thumbs.db
 auth_config.json
 config.json
 *.config.json
+*.config.ts
 configurable-front-matter.json

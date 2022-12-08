@@ -1,4 +1,10 @@
-import { CoscradDataType, FromCoscradDataType } from '@coscrad/api-interfaces';
+import {
+    CategorizableType,
+    CategorizableTypeToViewModel,
+    CoscradDataType,
+    FromCoscradDataType,
+    WithTags,
+} from '@coscrad/api-interfaces';
 
 /**
  * We may want to refactor this to include the standard
@@ -17,11 +23,25 @@ export const configurableContentSchema = {
     // We may want to make this optional or allow an empty array
     songIdToCredits: CoscradDataType.RawData,
     videoIdToCredits: CoscradDataType.RawData,
+    shouldEnableWebOfKnowledgeForResources: CoscradDataType.BOOLEAN,
 } as const;
 
 export type ConfigurableContentSchema = typeof configurableContentSchema;
 
-export type ConfigurableContent = {
+export enum DetailViewType {
+    fullView = 'full-view',
+    thumbnail = 'thumbnail-view',
+}
+
+type IndexToDetailFlowDefinition<T extends CategorizableType> = {
+    categorizableType: T;
+    indexFilter?: (viewModel: WithTags<CategorizableTypeToViewModel[T]>) => boolean;
+    detailViewType: DetailViewType;
+};
+
+export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
+    indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
+} & {
     [K in keyof typeof configurableContentSchema]: FromCoscradDataType<
         typeof configurableContentSchema[K]
     >;

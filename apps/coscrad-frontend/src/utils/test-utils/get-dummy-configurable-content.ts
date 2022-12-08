@@ -1,5 +1,5 @@
 import { ConfigurableContent } from '../../configurable-front-matter/data/configurableContentSchema';
-import sampleData from '../../configurable-front-matter/data/content.config.SAMPLE.json';
+import { contentConfig } from '../../configurable-front-matter/data/content.config.SAMPLE';
 
 export const getDummyConfigurableContent = (): ConfigurableContent => {
     /**
@@ -7,5 +7,5 @@ export const getDummyConfigurableContent = (): ConfigurableContent => {
      * This ensures that we keep the sample up-to-date, while also allowing
      * it to serve as a single dummy configurable content for other tests.
      */
-    return sampleData as unknown as ConfigurableContent;
+    return contentConfig as ConfigurableContent;
 };
