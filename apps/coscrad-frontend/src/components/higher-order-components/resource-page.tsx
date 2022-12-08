@@ -1,7 +1,19 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import {
+    CategorizableType,
+    CategorizableTypeToViewModel,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
-import { fullViewCategorizablePresenterFactory } from '../resources/factories/full-view-categorizable-presenter-factory';
 import { AggregateDetailContainer } from './aggregate-detail-container';
+
+type DetailPresenter<T extends CategorizableType> = (
+    viewModel: CategorizableTypeToViewModel[T]
+) => JSX.Element;
+
+interface ResourcePageProps<T extends CategorizableType> {
+    resourceType: ResourceType;
+    detailPresenterFactory: (categorizableType: T) => DetailPresenter<T>;
+}
 
 /**
  * We may want to extends this to an `AggregatePage` some day, or at least
@@ -11,7 +23,10 @@ import { AggregateDetailContainer } from './aggregate-detail-container';
  *
  * We may want to put this in `/Components/Resources/Shared`.
  */
-export const ResourcePage = (resourceType: ResourceType): JSX.Element => {
+export const ResourcePage = <T extends CategorizableType>({
+    resourceType,
+    detailPresenterFactory,
+}: ResourcePageProps<T>): JSX.Element => {
     const id = useIdFromLocation();
 
     const compositeIdentifier = { type: resourceType, id };
@@ -20,7 +35,7 @@ export const ResourcePage = (resourceType: ResourceType): JSX.Element => {
         <div>
             <AggregateDetailContainer
                 compositeIdentifier={compositeIdentifier}
-                detailPresenterFactory={fullViewCategorizablePresenterFactory}
+                detailPresenterFactory={detailPresenterFactory}
             />
         </div>
     );

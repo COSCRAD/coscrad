@@ -2,6 +2,7 @@ import {
     ICommandFormAndLabels,
     IDetailQueryResult,
     IIndexQueryResult,
+    WithTags,
 } from '@coscrad/api-interfaces';
 import { CoscradUserRole } from '@coscrad/data-types';
 import { Inject } from '@nestjs/common';
@@ -25,7 +26,7 @@ import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
 
-type ViewModelWithTags<T> = T & { tags: TagViewModel[] };
+type ViewModelWithTags<T> = WithTags<T>;
 
 type ResourceFilter = (resource: Resource) => boolean;
 
