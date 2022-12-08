@@ -29,6 +29,8 @@ const fuzzData = {
     year: 2002,
     isbn10: ` 0-940016-73-7`,
     isbn13: `978-3-16-148410-0`,
+    true: true,
+    false: false,
 } as const;
 
 type FuzzDataType = keyof typeof fuzzData;
@@ -50,6 +52,7 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.Year]: ['year', 'positiveInteger', 'zero'],
     [CoscradDataType.PositiveInteger]: ['year', 'positiveInteger'],
     [CoscradDataType.ISBN]: ['isbn10', 'isbn13'],
+    [CoscradDataType.BOOLEAN]: ['true', 'false'],
 };
 
 export const generateValidValuesOfType = (

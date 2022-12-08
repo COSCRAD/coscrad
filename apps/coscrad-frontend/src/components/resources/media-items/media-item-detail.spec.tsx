@@ -1,16 +1,12 @@
+import { ResourceType } from '@coscrad/api-interfaces';
 import { getApiResourcesBaseRoute } from '../../../store/slices/resources/shared';
-import {
-    assertElementWithTestIdOnScreen,
-    assertNotFound,
-    renderWithProviders,
-} from '../../../utils/test-utils';
+import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
-import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
-import { MediaItemDetailContainer } from './media-item-detail.container';
+import { buildResourceDetailPageRendererForTest } from '../test-utils';
 import { buildDummyMediaItems } from './test-utils/build-dummy-media-items';
 
 jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
@@ -31,11 +27,7 @@ const dummyIndexResponse = buildMockIndexResponse(
     []
 );
 
-const act = (idInLocation: string) =>
-    renderWithProviders(
-        withDetailRoute(idInLocation, `/Resources/MediaItems/`, <MediaItemDetailContainer />)
-    );
-
+const act = buildResourceDetailPageRendererForTest(ResourceType.mediaItem);
 const mockGetNotesHandler = buildMockGetNotesHandler();
 
 describe('media item detail', () => {

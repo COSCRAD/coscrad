@@ -1,12 +1,11 @@
-import { MemoryRouter } from 'react-router-dom';
+import { ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
-import { renderWithProviders } from '../../../utils/test-utils';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
-import { TermIndexContainer } from './term-index.container';
+import { renderResourceIndexPageForTest } from '../test-utils';
 
 const dummyTerms = [
     {
@@ -23,12 +22,7 @@ const dummyTerms = [
 
 const endpoint = `${getConfig().apiUrl}/Resources/Terms`;
 
-const act = () =>
-    renderWithProviders(
-        <MemoryRouter>
-            <TermIndexContainer />
-        </MemoryRouter>
-    );
+const act = () => renderResourceIndexPageForTest(ResourceType.term);
 
 describe(`Term Index`, () => {
     describe('when the API request is valid', () => {
