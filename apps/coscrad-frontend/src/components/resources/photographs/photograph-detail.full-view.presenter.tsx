@@ -7,7 +7,7 @@ export const PhotographDetailFullViewPresenter = ({
     <div className="photograph-detail-container" data-testid={id}>
         <h3>Photograph {id}</h3>
         <div className="detail-image-container">
-            <img src={imageURL} />
+            <img src={imageURL} alt="failed to load" />
         </div>
     </div>
 );

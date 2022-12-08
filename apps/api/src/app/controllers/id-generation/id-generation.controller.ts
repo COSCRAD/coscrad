@@ -4,6 +4,8 @@ import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import sendInternalResultAsHttpResponse from '../resources/common/sendInternalResultAsHttpResponse';
 
+// @ApiBearerAuth('JWT')
+// @UseGuards(AdminJwtGuard)
 @ApiTags('id generation')
 @Controller()
 export class IdGenerationController {
