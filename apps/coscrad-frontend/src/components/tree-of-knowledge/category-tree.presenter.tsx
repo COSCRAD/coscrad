@@ -5,11 +5,12 @@ import { CategorizablesOfMultipleTypeContainer } from '../higher-order-component
 import { thumbnailCategorizableDetailPresenterFactory } from '../resources/factories/thumbnail-categorizable-detail-presenter-factory';
 
 const wrapTree = ({
+    id,
     label,
     children,
     members,
 }: ICategoryTreeViewModel<CategorizableType>): JSX.Element => (
-    <div>
+    <div data-testid={id} key={id}>
         {
             <Accordion>
                 <AccordionSummary>{label}</AccordionSummary>
