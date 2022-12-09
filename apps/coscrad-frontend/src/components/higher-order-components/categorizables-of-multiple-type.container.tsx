@@ -53,6 +53,7 @@ export const CategorizablesOfMultipleTypeContainer = <T,>({
         {Object.entries(collectResourceTypesAndSelectedIds(members)).map(
             ([categorizableType, selectedIds]: [CategorizableType, string[]]) => (
                 <SelectedCategorizablesOfSingleTypeContainer
+                    key={categorizableType}
                     categorizableType={categorizableType}
                     detailPresenterFactory={detailPresenterFactory}
                     selectedIds={selectedIds}

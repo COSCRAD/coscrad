@@ -42,7 +42,7 @@ const invalidProps: [keyof ConfigurableContent, unknown][] = Object.entries(
 );
 
 const invalidConfigsAndExpectedErrors: [Overrides<ConfigurableContent>, Error[]][] = invalidProps
-    .filter(([propertyName, _]) => propertyName !== 'songIdToCredits')
+    .filter(([propertyName, _]) => !['songIdToCredits', 'videoIdToCredits'].includes(propertyName))
     .map(([propertyName, invalidValue]) => [
         buildInvalidContentConfig({ [propertyName]: invalidValue }),
         [
@@ -94,6 +94,10 @@ describe('validateFrontMatterData', () => {
                 expectedErrors.forEach((expectedError, index) =>
                     expect(result[index]).toEqual(expectedError)
                 );
+
+                if (result.length !== expectedErrors.length) {
+                    console.log('I really need to learn conditional breakpoints for debugging!');
+                }
 
                 // just in case there are additional errors in the result
                 expect(result.length).toBe(expectedErrors.length);

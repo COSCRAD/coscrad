@@ -18,7 +18,7 @@ import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocab
  */
 const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailPresenter,
-    [CategorizableType.mediaItem]: MediaItemDetailPresenter,
+    [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
     [CategorizableType.photograph]: PhotographDetailFullViewPresenter,
     [CategorizableType.song]: SongDetailFullViewPresenter,
     [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
@@ -47,7 +47,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     },
     [CategorizableType.note]: NoteDetailFullViewPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
-    [CategorizableType.note]: NoteDetailPresenter,
+    [CategorizableType.note]: NoteDetailFullViewPresenter,
 };
 
 /**
