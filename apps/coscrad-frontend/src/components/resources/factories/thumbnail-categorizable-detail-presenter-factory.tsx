@@ -11,8 +11,9 @@ import { routes } from '../../../app/routes/routes';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailThumbnailPresenter } from '../../notes/note-detail.thumbnail.presenter';
 import { BibliographicReferenceDetailThumbnailPresenter } from '../bibliographic-references/bibliographic-reference-detail-thumbnail-presenters';
+import { BookDetailThumbnailPresenter } from '../books';
 import { BookInfo } from '../books/book-info';
-import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
+import { MediaItemDetailThumbnailPresenter } from '../media-items/media-item-detail.thumbnail.presenter';
 import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-detail.thumbnail.presenter';
 import { SongDetailThumbnailPresenter } from '../songs';
 import { SpatialFeatureDetailThumbnailPresenter } from '../spatial-features/thumbnail-presenters';
@@ -23,7 +24,9 @@ import { VocabularyListDetailThumbnailPresenter } from '../vocabulary-lists/voca
 // TODO Define thumbnail specific presenters
 const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailThumbnailPresenter,
-    [CategorizableType.mediaItem]: MediaItemDetailPresenter,
+    [CategorizableType.mediaItem]: MediaItemDetailThumbnailPresenter,
+    [CategorizableType.book]: BookDetailThumbnailPresenter,
+    [CategorizableType.mediaItem]: MediaItemDetailThumbnailPresenter,
     [CategorizableType.photograph]: PhotographDetailThumbnailPresenter,
     [CategorizableType.song]: SongDetailThumbnailPresenter,
     [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
