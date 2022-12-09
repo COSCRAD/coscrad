@@ -18,10 +18,6 @@ export const SongDetailThumbnailPresenter = ({
             </div>
             <Divider id="detail-divider" />
 
-            <div className="detail-meta">
-                <h3 className="detail-headers">Contributions:</h3>
-                TODO use config for this
-            </div>
             <div className="detail-meta">{buildLyricsStatusMessage(lyrics)}</div>
             <div id="media-player">
                 <MediaPlayer listenMessage="Play" audioUrl={audioURL} />

@@ -1,11 +1,26 @@
-import { ICategoryTreeViewModel } from '@coscrad/api-interfaces';
+import { CategorizableType, IBaseViewModel, ICategoryTreeViewModel } from '@coscrad/api-interfaces';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
 import { assertElementWithTestIdOnScreen, renderWithProviders } from '../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/build-mock-successful-get-handler';
 import { TestId } from '../../utils/test-utils/constants';
 import { setupTestServer } from '../../utils/test-utils/setup-test-server';
+import { buildMockIndexResponse } from '../../utils/test-utils/test-data';
+import { buildDummyBooks } from '../resources/books/test-utils/build-dummy-books';
+import { buildDummyTerms } from '../resources/terms/test-utils/build-dummy-terms';
+import { buildDummyVocabularyLists } from '../resources/vocabulary-lists/test-utils/build-dummy-vocabulary-lists';
 import { CategoryTreeContainer } from './category-tree.container';
+
+const getCompositeIdentifier = ({ type, id }: { type: CategorizableType; id: string }) => ({
+    type,
+    id,
+});
+
+const dummyBooks = buildDummyBooks();
+
+const dummyTerms = buildDummyTerms();
+
+const dummyVocabularyLists = buildDummyVocabularyLists();
 
 const grandChildCategory: ICategoryTreeViewModel = {
     id: 'grandchild-1',
@@ -26,12 +41,12 @@ const childCategory1: ICategoryTreeViewModel = {
     children: [grandChildCategory],
     members: [
         {
-            type: 'book',
-            id: '345',
+            type: CategorizableType.book,
+            id: dummyBooks[0].id,
         },
         {
-            type: 'term',
-            id: '39',
+            type: CategorizableType.term,
+            id: dummyTerms[0].id,
         },
     ],
 };
@@ -51,16 +66,16 @@ const dummyCategoryTree: ICategoryTreeViewModel = {
     children: childrenCategories,
     members: [
         {
-            type: 'book',
-            id: '9992',
+            type: CategorizableType.book,
+            id: dummyBooks[1].id,
         },
         {
-            type: 'vocabularyList',
-            id: '3',
+            type: CategorizableType.vocabularyList,
+            id: dummyVocabularyLists[0].id,
         },
         {
-            type: 'term',
-            id: '45',
+            type: CategorizableType.term,
+            id: dummyTerms[1].id,
         },
     ],
 };
@@ -70,7 +85,17 @@ const dummyCategoryTree: ICategoryTreeViewModel = {
  * We need to inject a dummy config. This test should not be dependent upon
  * environment.
  */
-const endpoint = `${getConfig().apiUrl}/treeOfKnowledge`;
+const { apiUrl } = getConfig();
+
+const resourcesBaseEndpoint = `${apiUrl}/resources`;
+
+const endpoint = `${apiUrl}/treeOfKnowledge`;
+
+const termsEndpoint = `${resourcesBaseEndpoint}/terms`;
+
+const booksEndpoint = `${resourcesBaseEndpoint}/books`;
+
+const vocabularyListsEndpoint = `${resourcesBaseEndpoint}/vocabularyLists`;
 
 const act = () =>
     renderWithProviders(
@@ -79,13 +104,31 @@ const act = () =>
         </MemoryRouter>
     );
 
+const buildIndexResponse = (models: IBaseViewModel[]) =>
+    buildMockIndexResponse(
+        models.map((model) => [model, []]),
+        []
+    );
+
 describe('Category Tree', () => {
     describe('when the API request for categories is valid', () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({
                 endpoint,
                 response: dummyCategoryTree,
-            })
+            }),
+            ...(
+                [
+                    [termsEndpoint, dummyTerms],
+                    [booksEndpoint, dummyBooks],
+                    [vocabularyListsEndpoint, dummyVocabularyLists],
+                ] as const
+            ).map(([endpoint, models]) =>
+                buildMockSuccessfulGETHandler({
+                    endpoint,
+                    response: buildIndexResponse(models),
+                })
+            )
         );
 
         it('should display the category tree nodes', async () => {
