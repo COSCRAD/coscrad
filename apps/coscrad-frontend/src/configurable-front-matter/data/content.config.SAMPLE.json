@@ -8,5 +8,8 @@
     "organizationLogoUrl": "https://www.picbox.org/logo.png",
     "songIdToCredits": {
         "1": "Credits for song 1"
+    },
+    "videoIdToCredits": {
+        "2": "Johnny produced this one!"
     }
 }

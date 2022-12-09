@@ -5,7 +5,7 @@ import { NoteDetailFullViewPresenter } from '../../notes/note-detail.full-view.p
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
 import { BookInfo } from '../books/book-info';
 import { BookReader } from '../books/pages';
-import { MediaItemDetailPresenter } from '../media-items/media-item-detail.presenter';
+import { MediaItemDetailFullViewPresenter } from '../media-items/media-item-detail.full-view.presenter';
 import { PhotographDetailFullViewPresenter } from '../photographs/photograph-detail.full-view.presenter';
 import { SongDetailFullViewPresenter } from '../songs/song-detail.full-view.presenter';
 import { SpatialFeatureDetailThumbnailPresenter } from '../spatial-features/thumbnail-presenters';
@@ -18,7 +18,7 @@ import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocab
  */
 const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailPresenter,
-    [CategorizableType.mediaItem]: MediaItemDetailPresenter,
+    [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
     [CategorizableType.photograph]: PhotographDetailFullViewPresenter,
     [CategorizableType.song]: SongDetailFullViewPresenter,
     [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
@@ -45,6 +45,8 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
             </div>
         );
     },
+    [CategorizableType.note]: NoteDetailFullViewPresenter,
+    [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
     [CategorizableType.note]: NoteDetailFullViewPresenter,
 };
 

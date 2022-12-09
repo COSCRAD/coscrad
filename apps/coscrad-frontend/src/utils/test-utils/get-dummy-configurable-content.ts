@@ -7,5 +7,5 @@ export const getDummyConfigurableContent = (): ConfigurableContent => {
      * This ensures that we keep the sample up-to-date, while also allowing
      * it to serve as a single dummy configurable content for other tests.
      */
-    return sampleData as ConfigurableContent;
+    return sampleData as unknown as ConfigurableContent;
 };
