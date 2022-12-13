@@ -1,5 +1,8 @@
 import { IBaseViewModel } from '@coscrad/api-interfaces';
+import { MenuItem, Select } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { NotFoundPresenter } from '../../../../../components/not-found';
+import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import './generic-index-table-presenter.css';
 import { renderCell } from './render-cell';
@@ -32,6 +35,7 @@ export interface GenericIndexTablePresenterProps<T extends IBaseViewModel> {
     tableData: T[];
     cellRenderersDefinition: CellRenderersDefinition<T>;
     heading: string;
+    filterableProperties?: (keyof T)[];
 }
 
 export const IndexTable = <T extends IBaseViewModel>({
@@ -39,39 +43,37 @@ export const IndexTable = <T extends IBaseViewModel>({
     tableData,
     cellRenderersDefinition,
     heading,
+    filterableProperties = [],
 }: GenericIndexTablePresenterProps<T>) => {
-    if (headingLabels.length === 0) {
-        throw new EmptyIndexTableException();
-    }
-
-    // SEARCH LOGIC
-
     if (headingLabels.length === 0) {
         throw new EmptyIndexTableException();
     }
 
     const [searchValue, setSearchValue] = useState('');
 
-    const filteredTableData = tableData.filter((row) =>
-        Object.values(row).some((value) =>
-            String(value).toLowerCase().includes(searchValue.toLowerCase())
-        )
-    );
+    // SEARCH LOGIC
+    const filteredTableData =
+        searchValue.length === 0
+            ? tableData
+            : tableData.filter((row) =>
+                  filterableProperties.some((propertyKey) =>
+                      String(row[propertyKey]).toLowerCase().includes(searchValue.toLowerCase())
+                  )
+              );
 
     // PAGINATION
+    const [currentPageIndex, setCurrentPageIndex] = useState(0);
+    const [pageSize, setPageSize] = useState(5);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const lastPageIndex = calculateNumberOfPages(filteredTableData.length, pageSize) - 1;
 
     useEffect(() => {
-        const lastPage = calculateNumberOfPages(filteredTableData.length, pageSize);
+        if (currentPageIndex > lastPageIndex) setCurrentPageIndex(0);
+    }, [lastPageIndex, currentPageIndex]);
 
-        if (currentPage > lastPage) setCurrentPage(1);
-    }, []);
-
-    const startIndex = (currentPage - 1) * pageSize;
+    const startIndex = currentPageIndex * pageSize;
     const endIndex = startIndex + pageSize;
-    const paginatedData = tableData.slice(startIndex, endIndex);
+    const paginatedData = filteredTableData.slice(startIndex, endIndex);
 
     /**
      * It's tricky to get type safety that forces cell renderers to only include
@@ -95,6 +97,82 @@ export const IndexTable = <T extends IBaseViewModel>({
         Object.entries(cellRenderersDefinition) as [keyof T, CellRenderer<T>][]
     );
 
+    const table =
+        paginatedData.length === 0 ? (
+            <NotFoundPresenter />
+        ) : (
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            {headingLabels.map(({ headingLabel }) => (
+                                <th key={headingLabel}>{headingLabel}</th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {paginatedData.map((row) => (
+                            <tr key={row.id} data-testid={row.id}>
+                                {headingLabels.map(({ propertyKey }) => (
+                                    // A little inversion of control here
+                                    // We may want to use some currying here
+                                    <td key={String(propertyKey)}>
+                                        {renderCell(row, cellRenderers, propertyKey)}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <div>
+                    Page: {currentPageIndex + 1}/{lastPageIndex + 1}
+                    <div className="pagination-buttons">
+                        <button
+                            onClick={() =>
+                                setCurrentPageIndex(
+                                    cyclicIncrement(currentPageIndex, lastPageIndex + 1)
+                                )
+                            }
+                        >
+                            Prev
+                        </button>
+                        <button
+                            onClick={() =>
+                                setCurrentPageIndex(
+                                    cyclicDecrement(currentPageIndex, lastPageIndex + 1)
+                                )
+                            }
+                        >
+                            Next
+                        </button>
+                    </div>
+                    <div>
+                        "Results per page"
+                        <Select
+                            name="pageSize"
+                            value={pageSize}
+                            onChange={(changeEvent) => {
+                                const {
+                                    target: { value },
+                                } = changeEvent;
+
+                                const newPageSize =
+                                    typeof value === 'string' ? Number.parseInt(value) : value;
+
+                                setPageSize(newPageSize);
+                            }}
+                        >
+                            {[5, 10, 50, 100].map((pageSize) => (
+                                <MenuItem key={pageSize} value={pageSize}>
+                                    {pageSize}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </div>
+                </div>
+            </div>
+        );
+
     return (
         <div>
             <h3>{heading}</h3>
@@ -103,36 +181,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                 value={searchValue}
                 onChange={(event) => setSearchValue(event.target.value)}
             />
-            <div className="records-table">
-                <div>
-                    <div className="pagination-buttons">
-                        <button onClick={() => setCurrentPage(currentPage - 1)}>Prev</button>
-                        <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                {headingLabels.map(({ headingLabel }) => (
-                                    <th key={headingLabel}>{headingLabel}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {paginatedData.map((row) => (
-                                <tr key={row.id} data-testid={row.id}>
-                                    {headingLabels.map(({ propertyKey }) => (
-                                        // A little inversion of control here
-                                        // We may want to use some currying here
-                                        <td key={String(propertyKey)}>
-                                            {renderCell(row, cellRenderers, propertyKey)}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <div className="records-table">{table}</div>
         </div>
     );
 };

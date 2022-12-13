@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 
 import { cyclicDecrement, cyclicIncrement } from '../../utils/math';
-import { NotFound } from '../NotFound';
+import { NotFoundPresenter } from '../not-found';
 
 const STARTING_INDEX = 0;
 
@@ -25,7 +25,7 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
      */
     const indexToUse = currentIndex >= numberOfItems ? 0 : currentIndex;
 
-    if (numberOfItems === 0) return <NotFound></NotFound>;
+    if (numberOfItems === 0) return <NotFoundPresenter></NotFoundPresenter>;
 
     const propsForSelectedItem = propsForItems[indexToUse];
 
