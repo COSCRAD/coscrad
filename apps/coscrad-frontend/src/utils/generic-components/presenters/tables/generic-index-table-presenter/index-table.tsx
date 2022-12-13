@@ -1,9 +1,18 @@
 import { IBaseViewModel } from '@coscrad/api-interfaces';
+import { useEffect, useState } from 'react';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import './generic-index-table-presenter.css';
 import { renderCell } from './render-cell';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
 import { CellRenderersDefinition } from './types/cell-renderers-definition';
+
+const calculateNumberOfPages = (numberOfRecords: number, pageSize: number) => {
+    const quotient = Math.floor(numberOfRecords / pageSize);
+
+    const remainder = numberOfRecords % pageSize;
+
+    return remainder === 0 ? quotient : quotient + 1;
+};
 
 /**
  * TODO [https://www.pivotaltracker.com/story/show/182694263]
@@ -35,6 +44,35 @@ export const IndexTable = <T extends IBaseViewModel>({
         throw new EmptyIndexTableException();
     }
 
+    // SEARCH LOGIC
+
+    if (headingLabels.length === 0) {
+        throw new EmptyIndexTableException();
+    }
+
+    const [searchValue, setSearchValue] = useState('');
+
+    const filteredTableData = tableData.filter((row) =>
+        Object.values(row).some((value) =>
+            String(value).toLowerCase().includes(searchValue.toLowerCase())
+        )
+    );
+
+    // PAGINATION
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+
+    useEffect(() => {
+        const lastPage = calculateNumberOfPages(filteredTableData.length, pageSize);
+
+        if (currentPage > lastPage) setCurrentPage(1);
+    }, []);
+
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const paginatedData = tableData.slice(startIndex, endIndex);
+
     /**
      * It's tricky to get type safety that forces cell renderers to only include
      * properties referenced in the heading labels. For now, we'll do a dynamic
@@ -60,8 +98,17 @@ export const IndexTable = <T extends IBaseViewModel>({
     return (
         <div>
             <h3>{heading}</h3>
+            <input
+                placeholder="Search ..."
+                value={searchValue}
+                onChange={(event) => setSearchValue(event.target.value)}
+            />
             <div className="records-table">
                 <div>
+                    <div className="pagination-buttons">
+                        <button onClick={() => setCurrentPage(currentPage - 1)}>Prev</button>
+                        <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+                    </div>
                     <table>
                         <thead>
                             <tr>
@@ -71,7 +118,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                             </tr>
                         </thead>
                         <tbody>
-                            {tableData.map((row) => (
+                            {paginatedData.map((row) => (
                                 <tr key={row.id} data-testid={row.id}>
                                     {headingLabels.map(({ propertyKey }) => (
                                         // A little inversion of control here
