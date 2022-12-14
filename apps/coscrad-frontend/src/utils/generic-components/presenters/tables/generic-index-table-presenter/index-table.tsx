@@ -3,7 +3,6 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { FormControl, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { NotFoundPresenter } from '../../../../../components/not-found';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import './generic-index-table-presenter.css';
@@ -11,6 +10,10 @@ import './index-table.css';
 import { renderCell } from './render-cell';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
 import { CellRenderersDefinition } from './types/cell-renderers-definition';
+
+const DEFAULT_PAGE_SIZE = 5;
+
+const pageSizeOptions: number[] = [DEFAULT_PAGE_SIZE, 10, 50, 100];
 
 const calculateNumberOfPages = (numberOfRecords: number, pageSize: number) => {
     const quotient = Math.floor(numberOfRecords / pageSize);
@@ -38,7 +41,7 @@ export interface GenericIndexTablePresenterProps<T extends IBaseViewModel> {
     tableData: T[];
     cellRenderersDefinition: CellRenderersDefinition<T>;
     heading: string;
-    filterableProperties?: (keyof T)[];
+    filterableProperties: (keyof T)[];
 }
 
 export const IndexTable = <T extends IBaseViewModel>({
@@ -46,7 +49,7 @@ export const IndexTable = <T extends IBaseViewModel>({
     tableData,
     cellRenderersDefinition,
     heading,
-    filterableProperties = [],
+    filterableProperties,
 }: GenericIndexTablePresenterProps<T>) => {
     if (headingLabels.length === 0) {
         throw new EmptyIndexTableException();
@@ -65,8 +68,9 @@ export const IndexTable = <T extends IBaseViewModel>({
               );
 
     // PAGINATION
+    // we index pages starting at 0
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(pageSizeOptions[0]);
 
     const lastPageIndex = calculateNumberOfPages(filteredTableData.length, pageSize) - 1;
 
@@ -100,9 +104,23 @@ export const IndexTable = <T extends IBaseViewModel>({
         Object.entries(cellRenderersDefinition) as [keyof T, CellRenderer<T>][]
     );
 
+    /**
+     * TODO Break the presentation part of this table out so that we can inject
+     * instead a mobile list view, for example, without rewriting the filtering
+     * and pagination logic.
+     */
     const table =
         paginatedData.length === 0 ? (
-            <NotFoundPresenter />
+            // <NotFoundPresenter />
+            <div>
+                filterable props:{' '}
+                {filterableProperties.reduce(
+                    (msg, key) => msg.concat(key as unknown as string),
+                    ''
+                )}
+                <br />
+                properties: {Object.keys(tableData[0]).reduce((msg, key) => msg.concat(key), '')}
+            </div>
         ) : (
             <div>
                 <table>
@@ -147,7 +165,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                                     setPageSize(newPageSize);
                                 }}
                             >
-                                {[5, 10, 50, 100].map((pageSize) => (
+                                {pageSizeOptions.map((pageSize) => (
                                     <MenuItem key={pageSize} value={pageSize}>
                                         {pageSize}
                                     </MenuItem>

@@ -33,6 +33,7 @@ export const SongIndexPresenter = (songsIndexResult: IIndexQueryResult<ISongView
             tableData={songs}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Songs'}
+            filterableProperties={['lyrics', 'title', 'titleEnglish']}
         />
     );
 };

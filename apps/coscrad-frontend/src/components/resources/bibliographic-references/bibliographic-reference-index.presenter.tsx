@@ -47,6 +47,7 @@ export const BibliographicReferenceIndexPresenter = ({
             tableData={consolidatedViewOfBibliographicReferences}
             cellRenderersDefinition={cellRenderersDefinition}
             heading="Bibliographic References"
+            filterableProperties={['title', 'citation', 'type']}
         />
     );
 };
