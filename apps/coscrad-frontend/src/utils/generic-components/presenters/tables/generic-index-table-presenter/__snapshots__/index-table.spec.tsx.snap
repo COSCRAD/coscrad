@@ -8,6 +8,37 @@ exports[` 1`] = `
         Widgets
       </h3>
       <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-1"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+      <div
         class="records-table"
       >
         <div>
@@ -65,6 +96,98 @@ exports[` 1`] = `
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -80,6 +203,37 @@ exports[` 2`] = `
         Widgets
       </h3>
       <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-1"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+      <div
         class="records-table"
       >
         <div>
@@ -137,6 +291,98 @@ exports[` 2`] = `
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -146,6 +392,37 @@ exports[` 2`] = `
       <h3>
         Widgets
       </h3>
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-2"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
       <div
         class="records-table"
       >
@@ -212,6 +489,98 @@ exports[` 2`] = `
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -227,6 +596,37 @@ exports[` 3`] = `
         Widgets
       </h3>
       <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-1"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+      <div
         class="records-table"
       >
         <div>
@@ -284,6 +684,98 @@ exports[` 3`] = `
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -293,6 +785,37 @@ exports[` 3`] = `
       <h3>
         Widgets
       </h3>
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-2"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
       <div
         class="records-table"
       >
@@ -359,6 +882,98 @@ exports[` 3`] = `
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -368,6 +983,37 @@ exports[` 3`] = `
       <h3>
         Widgets
       </h3>
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-3"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
       <div
         class="records-table"
       >
@@ -428,6 +1074,98 @@ exports[` 3`] = `
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -442,6 +1180,37 @@ exports[`IndexTable when the table setup is valid when all properies are include
       <h3>
         Widgets
       </h3>
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-5"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
       <div
         class="records-table"
       >
@@ -536,6 +1305,98 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -550,6 +1411,37 @@ exports[`IndexTable when the table setup is valid when all properies are include
       <h3>
         Widgets
       </h3>
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-6"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
       <div
         class="records-table"
       >
@@ -646,6 +1538,98 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -660,6 +1644,37 @@ exports[`IndexTable when the table setup is valid when all properies are include
       <h3>
         Widgets
       </h3>
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-1"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
       <div
         class="records-table"
       >
@@ -718,6 +1733,98 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -727,6 +1834,37 @@ exports[`IndexTable when the table setup is valid when all properies are include
       <h3>
         Widgets
       </h3>
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-2"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
       <div
         class="records-table"
       >
@@ -793,6 +1931,98 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -802,6 +2032,37 @@ exports[`IndexTable when the table setup is valid when all properies are include
       <h3>
         Widgets
       </h3>
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-3"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
       <div
         class="records-table"
       >
@@ -862,6 +2123,98 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -871,6 +2224,37 @@ exports[`IndexTable when the table setup is valid when all properies are include
       <h3>
         Widgets
       </h3>
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        style="padding: 0px 0px 5px 0px;"
+      >
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="mui-4"
+            placeholder="Search ..."
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-nnbavb"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
       <div
         class="records-table"
       >
@@ -959,6 +2343,98 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+            >
+              <span>
+                 
+              </span>
+               Rows per page:
+              <div
+                class="MuiFormControl-root css-woqgka-MuiFormControl-root"
+              >
+                <div
+                  class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall pagination-control css-1hhqo8v-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <div
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="mui-component-select-pageSize"
+                    class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="mui-component-select-pageSize"
+                    role="button"
+                    tabindex="0"
+                  >
+                    5
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                    name="pageSize"
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-nnbavb"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+              Page: 
+              1
+              /
+              1
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowBackIosIcon"
+                focusable="false"
+                id="pagination-back-arrow"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                data-testid="ArrowForwardIosIcon"
+                focusable="false"
+                id="pagination-front-arrow"
+                style="vertical-align: sub;"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+                />
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
     </div>

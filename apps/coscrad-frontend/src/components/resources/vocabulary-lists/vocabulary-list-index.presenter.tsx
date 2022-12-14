@@ -30,6 +30,7 @@ export const VocabularyListIndexPresenter = ({
             cellRenderersDefinition={cellRenderersDefinition}
             // This should be a resource label from resource info
             heading={'Vocabulary Lists'}
+            filterableProperties={['name', 'nameEnglish']}
         />
     );
 };

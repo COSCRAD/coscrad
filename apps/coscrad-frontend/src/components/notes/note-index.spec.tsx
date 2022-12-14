@@ -1,5 +1,6 @@
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
+import { DEFAULT_PAGE_SIZE } from '../../utils/generic-components/presenters/tables';
 import { renderWithProviders } from '../../utils/test-utils';
 import { assertElementWithEveryIdRenderedForIndex } from '../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/build-mock-successful-get-handler';
@@ -31,7 +32,13 @@ describe(`NoteIndex`, () => {
         it('should display the notes', async () => {
             act();
 
-            await assertElementWithEveryIdRenderedForIndex(dummyNotes);
+            /**
+             * This is a hack. We probably want to make the page size options
+             * injectable via a config and set the initial page number for tests.
+             *
+             * TODO We should test pagination behaviour.
+             */
+            await assertElementWithEveryIdRenderedForIndex(dummyNotes.slice(0, DEFAULT_PAGE_SIZE));
         });
     });
 

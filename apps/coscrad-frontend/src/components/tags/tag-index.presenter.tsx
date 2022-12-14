@@ -33,6 +33,7 @@ export const TagIndexPresenter = ({ data: tags }: HasViewModels<ITagViewModel>):
             headingLabels={headingLabels}
             cellRenderersDefinition={cellRenderersDefinition}
             heading="Tags"
+            filterableProperties={['label']}
         />
     );
 };

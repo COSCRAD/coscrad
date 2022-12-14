@@ -42,6 +42,7 @@ export const BookIndexPresenter = ({ data: booksAndActions }: BookIndexState) =>
              * This should be a resource label from resource info.
              */
             heading={'Books'}
+            filterableProperties={['title', 'author', 'subtitle']}
         />
     );
 };

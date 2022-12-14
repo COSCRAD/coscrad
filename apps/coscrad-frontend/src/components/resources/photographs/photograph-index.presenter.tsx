@@ -33,6 +33,7 @@ export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotogr
             cellRenderersDefinition={cellRenderersDefinition}
             // This should be a resource label from resource info
             heading={'Photographs'}
+            filterableProperties={['photographer']}
         />
     );
 };

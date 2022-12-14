@@ -54,6 +54,7 @@ export const TranscribedAudioIndexPresenter = (
             tableData={transcribedAudioItems}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Audio Transcripts'}
+            filterableProperties={['plainText']}
         />
     );
 };
