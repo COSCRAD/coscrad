@@ -29,6 +29,7 @@ export const TermIndexPresenter = (termsIndexResult: IIndexQueryResult<ITermView
             tableData={terms}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Terms'}
+            filterableProperties={['term', 'termEnglish', 'contributor']}
         />
     );
 };

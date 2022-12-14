@@ -39,6 +39,7 @@ export const MediaItemIndexPresenter = (
             tableData={medias}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Media'}
+            filterableProperties={['title', 'titleEnglish']}
         />
     );
 };
