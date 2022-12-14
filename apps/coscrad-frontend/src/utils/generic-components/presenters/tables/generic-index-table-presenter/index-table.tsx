@@ -3,6 +3,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { FormControl, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { NotFoundPresenter } from '../../../../../components/not-found';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import './generic-index-table-presenter.css';
@@ -11,7 +12,7 @@ import { renderCell } from './render-cell';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
 import { CellRenderersDefinition } from './types/cell-renderers-definition';
 
-const DEFAULT_PAGE_SIZE = 5;
+export const DEFAULT_PAGE_SIZE = 5;
 
 const pageSizeOptions: number[] = [DEFAULT_PAGE_SIZE, 10, 50, 100];
 
@@ -111,16 +112,7 @@ export const IndexTable = <T extends IBaseViewModel>({
      */
     const table =
         paginatedData.length === 0 ? (
-            // <NotFoundPresenter />
-            <div>
-                filterable props:{' '}
-                {filterableProperties.reduce(
-                    (msg, key) => msg.concat(key as unknown as string),
-                    ''
-                )}
-                <br />
-                properties: {Object.keys(tableData[0]).reduce((msg, key) => msg.concat(key), '')}
-            </div>
+            <NotFoundPresenter />
         ) : (
             <div>
                 <table>
@@ -145,7 +137,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                         ))}
                     </tbody>
                 </table>
-                <Typography>
+                <Typography component={'span'}>
                     <Paper className="index-footer">
                         <span> </span> Rows per page:
                         <FormControl sx={{ m: 1, width: 60 }} size="small">
@@ -206,7 +198,6 @@ export const IndexTable = <T extends IBaseViewModel>({
             <h3>{heading}</h3>
             <TextField
                 style={{ padding: '0 0 5px 0' }}
-                defaultValue="Small"
                 size="small"
                 placeholder="Search ..."
                 value={searchValue}
