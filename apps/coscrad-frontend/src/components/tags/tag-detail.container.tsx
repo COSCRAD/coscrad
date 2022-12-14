@@ -6,7 +6,7 @@ import { fetchTags } from '../../store/slices/tagSlice/thunks';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
 import { Loading } from '../Loading';
-import { NotFound } from '../NotFound';
+import { NotFoundPresenter } from '../not-found';
 import { TagDetailPresenter } from './tag-detail.presenter';
 
 export const TagDetailContainer = (): JSX.Element => {
@@ -40,7 +40,7 @@ export const TagDetailContainer = (): JSX.Element => {
 
     const tag = allTags.find(({ id }) => id === idFromLocation);
 
-    if (!tag) return <NotFound />;
+    if (!tag) return <NotFoundPresenter />;
 
     return <TagDetailPresenter {...tag}></TagDetailPresenter>;
 };

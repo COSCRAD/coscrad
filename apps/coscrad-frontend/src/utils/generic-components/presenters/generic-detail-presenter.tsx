@@ -1,9 +1,9 @@
 import { IBaseViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
-import { NotFound } from '../../../components/NotFound';
+import { NotFoundPresenter } from '../../../components/not-found';
 import { NOT_FOUND } from '../../../store/slices/interfaces/maybe-loadable.interface';
 
 export const GenericDetailPresenter = ({ data: viewModel }: IDetailQueryResult<IBaseViewModel>) => {
-    if ((viewModel as unknown) === NOT_FOUND) return <NotFound />;
+    if ((viewModel as unknown) === NOT_FOUND) return <NotFoundPresenter />;
 
     if (!viewModel) {
         throw new Error(`Invalid data received by GenericDetailPresenter: ${viewModel}`);

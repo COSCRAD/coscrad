@@ -93,6 +93,7 @@ export const NoteIndexPresenter = ({ data: notes }: HasData<INoteViewModel[]>): 
             tableData={notes}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Notes'}
+            filterableProperties={['connectionType', 'note']}
         />
     );
 };
