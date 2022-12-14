@@ -1,0 +1,26 @@
+.index-footer {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    text-align: right;
+}
+
+.pagination-control {
+    padding-right: 20px;
+}
+
+.MuiOutlinedInput-notchedOutline {
+    border: none;
+}
+
+.pagination-arrow {
+    vertical-align: sub;
+    padding-top: 14px;
+}
+
+#pagination-back-arrow {
+    padding-left: 30px;
+}
+
+#pagination-front-arrow {
+    padding-right: 20px;
+}

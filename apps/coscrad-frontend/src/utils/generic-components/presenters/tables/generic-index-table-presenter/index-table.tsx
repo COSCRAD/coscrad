@@ -1,10 +1,13 @@
 import { IBaseViewModel } from '@coscrad/api-interfaces';
-import { MenuItem, Select } from '@mui/material';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { FormControl, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { NotFoundPresenter } from '../../../../../components/not-found';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import './generic-index-table-presenter.css';
+import './index-table.css';
 import { renderCell } from './render-cell';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
 import { CellRenderersDefinition } from './types/cell-renderers-definition';
@@ -124,59 +127,69 @@ export const IndexTable = <T extends IBaseViewModel>({
                         ))}
                     </tbody>
                 </table>
-                <div>
-                    Page: {currentPageIndex + 1}/{lastPageIndex + 1}
-                    <div className="pagination-buttons">
-                        <button
-                            onClick={() =>
-                                setCurrentPageIndex(
-                                    cyclicIncrement(currentPageIndex, lastPageIndex + 1)
-                                )
-                            }
-                        >
-                            Prev
-                        </button>
-                        <button
+                <Typography>
+                    <Paper className="index-footer">
+                        <span> </span> Rows per page:
+                        <FormControl sx={{ m: 1, width: 60 }} size="small">
+                            <Select
+                                sx={{ notchedOutline: 'none' }}
+                                className="pagination-control"
+                                name="pageSize"
+                                value={pageSize}
+                                onChange={(changeEvent) => {
+                                    const {
+                                        target: { value },
+                                    } = changeEvent;
+
+                                    const newPageSize =
+                                        typeof value === 'string' ? Number.parseInt(value) : value;
+
+                                    setPageSize(newPageSize);
+                                }}
+                            >
+                                {[5, 10, 50, 100].map((pageSize) => (
+                                    <MenuItem key={pageSize} value={pageSize}>
+                                        {pageSize}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        Page: {currentPageIndex + 1}/{lastPageIndex + 1}
+                        <ArrowBackIosIcon
+                            id="pagination-back-arrow"
+                            className="pagination-arrow"
                             onClick={() =>
                                 setCurrentPageIndex(
                                     cyclicDecrement(currentPageIndex, lastPageIndex + 1)
                                 )
                             }
                         >
-                            Next
-                        </button>
-                    </div>
-                    <div>
-                        "Results per page"
-                        <Select
-                            name="pageSize"
-                            value={pageSize}
-                            onChange={(changeEvent) => {
-                                const {
-                                    target: { value },
-                                } = changeEvent;
-
-                                const newPageSize =
-                                    typeof value === 'string' ? Number.parseInt(value) : value;
-
-                                setPageSize(newPageSize);
-                            }}
+                            Prev
+                        </ArrowBackIosIcon>
+                        <ArrowForwardIosIcon
+                            id="pagination-front-arrow"
+                            className="pagination-arrow"
+                            style={{ verticalAlign: 'sub' }}
+                            onClick={() =>
+                                setCurrentPageIndex(
+                                    cyclicIncrement(currentPageIndex, lastPageIndex + 1)
+                                )
+                            }
                         >
-                            {[5, 10, 50, 100].map((pageSize) => (
-                                <MenuItem key={pageSize} value={pageSize}>
-                                    {pageSize}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </div>
-                </div>
+                            Next
+                        </ArrowForwardIosIcon>
+                    </Paper>
+                </Typography>
             </div>
         );
 
     return (
         <div>
             <h3>{heading}</h3>
-            <input
+            <TextField
+                style={{ padding: '0 0 5px 0' }}
+                defaultValue="Small"
+                size="small"
                 placeholder="Search ..."
                 value={searchValue}
                 onChange={(event) => setSearchValue(event.target.value)}
