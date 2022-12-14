@@ -2,6 +2,7 @@ import { IIndexQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
+import { formatBilingualText } from '../vocabulary-lists/utils/formatBilingualText';
 
 export const SongIndexPresenter = (songsIndexResult: IIndexQueryResult<ISongViewModel>) => {
     /**
@@ -22,7 +23,7 @@ export const SongIndexPresenter = (songsIndexResult: IIndexQueryResult<ISongView
 
     const cellRenderersDefinition: CellRenderersDefinition<ISongViewModel> = {
         title: renderAggregateIdCell,
-        titleEnglish: ({ titleEnglish }: ISongViewModel) => titleEnglish,
+        titleEnglish: ({ titleEnglish, title }) => formatBilingualText(titleEnglish, title),
         // audioURL: ({ audioURL }: ISongViewModel) => audioURL,
     };
 
@@ -32,6 +33,7 @@ export const SongIndexPresenter = (songsIndexResult: IIndexQueryResult<ISongView
             tableData={songs}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Songs'}
+            filterableProperties={['lyrics', 'title', 'titleEnglish']}
         />
     );
 };

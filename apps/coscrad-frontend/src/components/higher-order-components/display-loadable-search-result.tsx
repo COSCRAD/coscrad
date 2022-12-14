@@ -1,7 +1,7 @@
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { IMaybeLoadable, NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
-import { NotFound } from '../NotFound';
+import { NotFoundPresenter } from '../not-found';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 import { MapLoadedDataToProps } from './types';
 
@@ -18,7 +18,7 @@ export const displayLoadableSearchResult =
     (searchResult: IMaybeLoadable<T>) => {
         const { data } = searchResult;
 
-        if (data === NOT_FOUND) return <NotFound />;
+        if (data === NOT_FOUND) return <NotFoundPresenter />;
 
         return displayLoadableWithErrorsAndLoading(
             WrappedPresenterComponent,
