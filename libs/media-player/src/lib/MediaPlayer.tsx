@@ -1,4 +1,7 @@
+import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
+import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import { useEffect, useState } from 'react';
+import styles from './MediaPlayer.module.scss';
 
 export interface MediaPlayerProps {
     audioUrl: string;
@@ -34,11 +37,21 @@ export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
     }, []);
 
     return (
-        <div>
+        <div className={styles['container']}>
             {audio && (
                 <>
-                    <button onClick={() => safePlay()}>Play</button>
-                    <button onClick={() => audio.pause()}>Pause</button>
+                    <PlayCircleFilledIcon
+                        className={styles['media-controls']}
+                        onClick={() => safePlay()}
+                    >
+                        Play
+                    </PlayCircleFilledIcon>
+                    <PauseCircleFilledIcon
+                        className={styles['media-controls']}
+                        onClick={() => audio.pause()}
+                    >
+                        Pause
+                    </PauseCircleFilledIcon>
                 </>
             )}
         </div>

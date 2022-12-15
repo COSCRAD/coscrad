@@ -3,7 +3,7 @@
 }
 
 .detail-card {
-    width: fit-content;
+    width: 500px;
     min-width: 320px;
     padding: 16px 24px 24px 24px;
     margin: auto !important;
