@@ -1,28 +1,4 @@
-import PauseIcon from '@mui/icons-material/Pause';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { Button } from '@mui/material';
-import { MouseEventHandler, useEffect, useState } from 'react';
-import styles from './MediaPlayer.module.scss';
-
-const useAudio = (audioUrl: string): [boolean, MouseEventHandler<HTMLButtonElement>] => {
-    const [audio] = useState(new Audio(audioUrl));
-    const [playing, setPlaying] = useState(false);
-
-    const toggle: MouseEventHandler<HTMLButtonElement> = (): void => setPlaying(!playing);
-
-    useEffect(() => {
-        playing ? audio.play() : audio.pause();
-    }, [playing]);
-
-    useEffect(() => {
-        audio.addEventListener('ended', () => setPlaying(false));
-        return () => {
-            audio.removeEventListener('ended', () => setPlaying(false));
-        };
-    }, []);
-
-    return [playing, toggle];
-};
+import { useEffect, useState } from 'react';
 
 export interface MediaPlayerProps {
     audioUrl: string;
@@ -32,22 +8,39 @@ export interface MediaPlayerProps {
 const DEFAULT_LISTEN_MESSAGE = 'Listen Live!';
 
 export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
-    const [playing, toggle] = useAudio(audioUrl);
+    const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+
+    const [canPlayThrough, setCanPlayThrough] = useState(false);
+
+    const safePlay = () => {
+        if (!canPlayThrough || !audio) {
+            console.log('Audio not ready');
+            return;
+        }
+
+        audio.play();
+    };
+
+    //  const toggle: MouseEventHandler<HTMLButtonElement> = (): void => setPlaying(!playing);
+
+    useEffect(() => {
+        const audioElement = new Audio();
+        audioElement.src = audioUrl;
+        audioElement.preload = 'auto';
+        audioElement.addEventListener('canplaythrough', () => {
+            setCanPlayThrough(true);
+        });
+        setAudio(audioElement);
+    }, []);
 
     return (
-        <div className={styles['container']}>
-            <Button id={styles['radioButton']} variant="contained" onClick={toggle}>
-                {playing ? (
-                    <div>Now Playing!</div>
-                ) : (
-                    <div>{listenMessage || DEFAULT_LISTEN_MESSAGE}</div>
-                )}
-                {playing ? (
-                    <PauseIcon className={styles['actionButton']} />
-                ) : (
-                    <PlayArrowIcon className={styles['actionButton']} />
-                )}
-            </Button>
+        <div>
+            {audio && (
+                <>
+                    <button onClick={() => safePlay()}>Play</button>
+                    <button onClick={() => audio.pause()}>Pause</button>
+                </>
+            )}
         </div>
     );
 }
