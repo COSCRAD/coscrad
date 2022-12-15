@@ -28,6 +28,10 @@ export default (): Song[] =>
             published: false,
             startMilliseconds: 0,
             lengthMilliseconds: 33000,
+            queryAccessControlList: {
+                allowedUserIds: ['1'],
+                allowedGroupIds: [],
+            },
             contributions: [
                 {
                     contributorId: '33',

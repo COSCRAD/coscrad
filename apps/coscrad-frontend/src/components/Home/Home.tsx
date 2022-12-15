@@ -10,8 +10,6 @@ export const Home = (): JSX.Element => {
 
     const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
 
-    console.log({ user });
-
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -19,7 +17,7 @@ export const Home = (): JSX.Element => {
             getAccessTokenSilently().then((token) => {
                 dispatch(
                     userLoginSucceeded({
-                        userId: '123',
+                        userId: user?.sub,
                         token,
                     })
                 );

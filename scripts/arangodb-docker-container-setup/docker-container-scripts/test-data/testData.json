@@ -1178,7 +1178,9 @@
                 "eventHistory": [],
                 "published": false,
                 "queryAccessControlList": {
-                    "allowedUserIds": [],
+                    "allowedUserIds": [
+                        "1"
+                    ],
                     "allowedGroupIds": []
                 },
                 "title": "Unpublished Song Title (lang)",
