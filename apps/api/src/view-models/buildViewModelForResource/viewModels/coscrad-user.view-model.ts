@@ -1,3 +1,4 @@
+import { IUserViewModel } from '@coscrad/api-interfaces';
 import { CoscradUserRole, FromDomainModel } from '@coscrad/data-types';
 import { CoscradUserProfile } from '../../../domain/models/user-management/user/entities/user/coscrad-user-profile.entity';
 import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
@@ -5,7 +6,7 @@ import { BaseViewModel } from './base.view-model';
 
 const FromUser = FromDomainModel(CoscradUser);
 
-export class CoscradUserViewModel extends BaseViewModel {
+export class CoscradUserViewModel extends BaseViewModel implements IUserViewModel {
     @FromUser
     readonly profile: CoscradUserProfile;
 

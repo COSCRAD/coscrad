@@ -1,6 +1,19 @@
 import { HttpStatusCode, IHttpErrorInfo } from '@coscrad/api-interfaces';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+const buildAuthenticationHeaders = (accessToken: string) => {
+    const contentTypeHeaders = {
+        'content-type': 'application/json',
+    };
+
+    if (typeof accessToken !== 'string' || accessToken.length === 0) return contentTypeHeaders;
+
+    return {
+        ...contentTypeHeaders,
+        Authorization: `Bearer ${accessToken}`,
+    };
+};
+
 /**
  *
  * @param actionTypePrefix prefix of the type property of generated aciton FSAs
@@ -16,7 +29,15 @@ export const createFetchThunk = <TPayload>(
         responseJson as TPayload
 ) =>
     createAsyncThunk(actionTypePrefix, async (_, thunkApi) => {
-        const response = await fetch(endpoint);
+        const { getState } = thunkApi;
+
+        const token = getState()['authorization']?.userInfo?.token || '';
+
+        console.log({ token });
+
+        const response = await fetch(endpoint, {
+            headers: buildAuthenticationHeaders(token),
+        });
 
         const responseJson = await response.json();
 

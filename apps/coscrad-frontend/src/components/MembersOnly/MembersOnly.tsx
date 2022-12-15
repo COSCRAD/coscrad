@@ -1,24 +1,25 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
 import { getConfig } from '../../config';
+import { Loading } from '../Loading';
 
 type ComponentState = {
-    message: string;
+    user: unknown;
 };
 
 function MembersOnly() {
     const [appState, setAppState] = useState<ComponentState>({
-        message: 'Loading',
+        user: null,
     });
 
     useEffect(() => {
-        setAppState({ message: 'Loading' });
+        setAppState({ user: null });
 
         /**
          * TODO[https://www.pivotaltracker.com/story/show/183618729]
          * We need to read the config from context \ a provider.
          */
-        const endpoint = `${getConfig().apiUrl}/hello`;
+        const endpoint = `${getConfig().apiUrl}/user`;
 
         fetch(endpoint, { mode: 'cors' })
             .then((res) => {
@@ -26,16 +27,14 @@ function MembersOnly() {
 
                 return result;
             })
-            .then((message) => {
-                setAppState({
-                    message,
-                });
+            .then((result) => {
+                setAppState(result);
             });
     }, [setAppState, appState]);
 
-    return <div>MESSAGE FROM COSCRAD: {appState.message}</div>;
+    return <div>COSCRAD USER: {JSON.stringify(appState.user)}</div>;
 }
 
 export default withAuthenticationRequired(MembersOnly, {
-    onRedirecting: () => <div>Loading ...</div>,
+    onRedirecting: () => <Loading />,
 });
