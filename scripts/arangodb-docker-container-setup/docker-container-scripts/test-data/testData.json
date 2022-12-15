@@ -487,6 +487,20 @@
                 },
                 "term": "Chil-term-no-english",
                 "contributorId": "Jane Deer"
+            },
+            {
+                "type": "term",
+                "_key": "4",
+                "eventHistory": [],
+                "published": false,
+                "queryAccessControlList": {
+                    "allowedUserIds": [
+                        "1"
+                    ],
+                    "allowedGroupIds": []
+                },
+                "term": "My Secret Term",
+                "contributorId": "This will be removed soon"
             }
         ],
         "vocabulary_lists": [
