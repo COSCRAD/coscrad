@@ -1,6 +1,7 @@
 export * from '../categorizable-type.enum';
 export * from './bibliographic-reference';
 export * from './book';
+export * from './coscrad-user';
 export * from './media-items';
 export * from './photograph.view-model.interface';
 export * from './resource-composite-identifier';
