@@ -18,15 +18,18 @@ class Message {
 export class AppController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
-    @Get('hello')
+    @Get('user')
     getData(@Request() req, @Response() res) {
         if (!(req.user instanceof CoscradUserWithGroups)) {
+            // Make this an authentication exception
             return sendInternalResultAsHttpResponse(res, NotFound);
         }
 
         return sendInternalResultAsHttpResponse(res, req.user.toDTO());
     }
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
     @Get('')
     @ApiOkResponse({ type: Message })
     getWelcomeMessage(): Message {
