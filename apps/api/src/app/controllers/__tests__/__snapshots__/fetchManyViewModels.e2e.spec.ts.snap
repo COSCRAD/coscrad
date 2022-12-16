@@ -2690,6 +2690,37 @@ Object {
         "term": "Chil-term-no-english",
       },
     },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "contributor": "",
+        "id": "4",
+        "tags": Array [],
+        "term": "My Secret Term",
+      },
+    },
   ],
 }
 `;
@@ -3052,6 +3083,37 @@ Object {
           },
         ],
         "term": "Chil-term-no-english",
+      },
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "contributor": "",
+        "id": "4",
+        "tags": Array [],
+        "term": "My Secret Term",
       },
     },
   ],
