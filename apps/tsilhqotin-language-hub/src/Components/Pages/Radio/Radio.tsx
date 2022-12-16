@@ -1,4 +1,4 @@
-import { MediaPlayer } from '@coscrad/media-player';
+import { IcecastPlayer } from '@coscrad/media-player';
 import RadioIcon from '@mui/icons-material/Radio';
 import { Card } from '@mui/material';
 import { getRadioConfig } from '../../../Configs/Radio/radio.config';
@@ -20,7 +20,7 @@ export const Radio = (): JSX.Element => {
                 <Card className="tsilhqotinRadio">
                     <img width={120} alt="radioLogo" src={getRadioConfig().radioLogoUrl} />
                     <div className="radioPlayer">
-                        <MediaPlayer audioUrl={getRadioConfig().radioAudioUrl} />
+                        <IcecastPlayer audioUrl={getRadioConfig().radioAudioUrl} />
                     </div>
                 </Card>
 
