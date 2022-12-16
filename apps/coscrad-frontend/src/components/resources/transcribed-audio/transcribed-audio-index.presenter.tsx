@@ -20,7 +20,9 @@ export const TranscribedAudioIndexPresenter = (
             propertyKey: 'lengthMilliseconds',
             headingLabel: 'Audio Length',
         },
-        // TODO Play audio (Spotify experience)
+
+        // TODO [https://www.pivotaltracker.com/story/show/184048108]
+        // Play audio (Spotify experience)
         // {
         //     propertyKey: 'audioURL',
         //     headingLabel: 'Audio',
