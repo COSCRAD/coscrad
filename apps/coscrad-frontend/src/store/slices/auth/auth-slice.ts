@@ -5,7 +5,7 @@ import { AuthenticatedUserInfo } from './types/authenticated-user-info';
 
 export const initialState: AuthSliceState = {
     hasAuthenticatedUser: false,
-    userInfo: null,
+    userAuthInfo: null,
 };
 
 export const authSlice = createSlice({
@@ -13,24 +13,20 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         userLoginSucceeded: (
-            state: AuthSliceState,
+            _: AuthSliceState,
             { payload: { userId, token } }: PayloadAction<AuthenticatedUserInfo>
         ) => {
             // Note that Immer will handle this uptate immutably
-            state = {
+            return {
                 hasAuthenticatedUser: true,
-                userInfo: { userId, token },
+                userAuthInfo: { userId, token },
             };
-
-            return state;
         },
-        userLoggedOut: (state: AuthSliceState) => {
-            state = {
+        userLoggedOut: (_: AuthSliceState) => {
+            return {
                 hasAuthenticatedUser: false,
-                userInfo: null,
+                userAuthInfo: null,
             };
-
-            return state;
         },
     },
 });

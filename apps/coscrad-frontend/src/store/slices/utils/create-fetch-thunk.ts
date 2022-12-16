@@ -31,9 +31,7 @@ export const createFetchThunk = <TPayload>(
     createAsyncThunk(actionTypePrefix, async (_, thunkApi) => {
         const { getState } = thunkApi;
 
-        const token = getState()['authorization']?.userInfo?.token || '';
-
-        console.log({ token });
+        const token = getState()['auth']?.userAuthInfo?.token;
 
         const response = await fetch(endpoint, {
             headers: buildAuthenticationHeaders(token),

@@ -1,1 +1,1 @@
-export const AUTH = 'authorization';
+export const AUTH = 'auth';
