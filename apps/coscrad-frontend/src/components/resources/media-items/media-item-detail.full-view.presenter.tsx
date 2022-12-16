@@ -16,13 +16,13 @@ export const MediaItemDetailFullViewPresenter = ({
 
     return (
         <div data-testid={id}>
-            <Card id="video-card" className="detail-card">
+            <Card className="detail-card">
                 <div id="detail-term" className="detail-meta">
                     {formatBilingualText(title, titleEnglish)}
                 </div>
                 <Divider id="detail-divider" />
 
-                <video style={{ display: 'block', margin: '0 auto' }} controls width="450">
+                <video className="video-player" controls>
                     <source src={url} type="video/webm" />
                     <source src={url} type="video/mp4" />
                 </video>

@@ -3,7 +3,6 @@ import { HeadingLabel, IndexTable } from '../../../utils/generic-components/pres
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
-import { renderTranscribedAudioMediaCell } from '../utils/render-transcribed-audio-media-cell';
 
 export const TranscribedAudioIndexPresenter = (
     indexResult: IIndexQueryResult<ITranscribedAudioViewModel>
@@ -21,10 +20,13 @@ export const TranscribedAudioIndexPresenter = (
             propertyKey: 'lengthMilliseconds',
             headingLabel: 'Audio Length',
         },
-        {
-            propertyKey: 'audioURL',
-            headingLabel: 'Audio',
-        },
+
+        // TODO [https://www.pivotaltracker.com/story/show/184048108]
+        // Play audio (Spotify experience)
+        // {
+        //     propertyKey: 'audioURL',
+        //     headingLabel: 'Audio',
+        // },
         /**
          * TODO[modelling]
          * We need to introduce more metadata on the model. It seems odd to
@@ -38,8 +40,8 @@ export const TranscribedAudioIndexPresenter = (
         id: renderAggregateIdCell,
         lengthMilliseconds: ({ lengthMilliseconds }: ITranscribedAudioViewModel) =>
             renderMediaLengthInSeconds(lengthMilliseconds),
-        audioURL: ({ audioURL }: ITranscribedAudioViewModel) =>
-            renderTranscribedAudioMediaCell(audioURL),
+        // audioURL: ({ audioURL }: ITranscribedAudioViewModel) =>
+        //     renderTranscribedAudioMediaCell(audioURL),
     };
 
     /**
