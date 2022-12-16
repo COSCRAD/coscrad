@@ -1,7 +1,7 @@
 import {
     DropboxOrCheckbox,
     FormFieldType,
-    IFormData,
+    IDynamicForm,
     IFormField,
     IVocabularyListEntry,
     IVocabularyListViewModel,
@@ -87,7 +87,7 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
 
     //     description: 'this property specifies a dynamic form for filtering the entries',
     // })
-    readonly form: IFormData;
+    readonly form: IDynamicForm;
 
     readonly #baseAudioURL: string;
 
@@ -105,6 +105,8 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
         this.nameEnglish = nameEnglish;
 
         this.form = {
+            label: 'Vocabulary List Form',
+            description: 'filter the vocabulary list',
             fields: variables.map(convertVocabularyListVaraibleToFormElement),
         };
 

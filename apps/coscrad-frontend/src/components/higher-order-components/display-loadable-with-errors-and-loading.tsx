@@ -1,6 +1,6 @@
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
-import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
+import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../Loading';
 import { MapLoadedDataToProps } from './types';
 

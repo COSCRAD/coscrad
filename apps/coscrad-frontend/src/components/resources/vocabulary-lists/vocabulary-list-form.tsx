@@ -1,10 +1,11 @@
-import { IFormData } from '@coscrad/api-interfaces';
+import { IFormField } from '@coscrad/api-interfaces';
 import { Card, CardContent, CardHeader, FormControl } from '@mui/material';
 import {} from './';
 import { VocabularyListFilter } from './vocabulary-list-detail.full-view.presenter';
 import { VocabularyListFormElement } from './vocabulary-list-form-element';
 
-type VocabularyListFormProps = IFormData & {
+type VocabularyListFormProps = {
+    fields: IFormField[];
     onFormChange: (key: string, value: string | boolean) => void;
     formState: VocabularyListFilter;
 };

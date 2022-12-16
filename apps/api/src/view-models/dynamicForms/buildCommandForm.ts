@@ -1,15 +1,17 @@
 import {
     CoscradDataType,
     ICoscradModelSchema,
-    IFormData,
+    IDynamicForm,
     IFormField,
 } from '@coscrad/api-interfaces';
 import { buildFormFieldForCommandPayloadProp } from './buildFormFieldForCommandPayloadProp';
 
 export const buildCommandForm = <T extends Record<string, unknown>>(
     commandType: string,
+    label: string,
+    description: string,
     schema: ICoscradModelSchema<T, CoscradDataType>
-): IFormData => {
+): IDynamicForm => {
     const fields: IFormField[] = Object.entries(schema).reduce(
         (acc: IFormField[], [key, propertySchema]) => [
             ...acc,
@@ -27,6 +29,8 @@ export const buildCommandForm = <T extends Record<string, unknown>>(
     );
 
     return {
+        label,
+        description,
         fields,
     };
 };

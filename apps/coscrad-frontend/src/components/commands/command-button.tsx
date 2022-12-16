@@ -8,16 +8,16 @@ interface CommandButtonProps {
 }
 
 export const CommandButton = ({
-    commandFormAndLabels: { label, type, form },
+    commandFormAndLabels: { type, form },
     onButtonClick,
 }: CommandButtonProps) => (
     <button
-        key={label}
+        key={form.label}
         onClick={() => {
             log({ form });
             onButtonClick(type);
         }}
     >
-        {label}
+        {form.label}
     </button>
 );

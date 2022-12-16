@@ -1,5 +1,7 @@
 import { IFormField } from './form-field.interface';
 
-export interface IFormData {
+export interface IDynamicForm {
+    description: string;
+    label: string;
     fields: IFormField[];
 }
