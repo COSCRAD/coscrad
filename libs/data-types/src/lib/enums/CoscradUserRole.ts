@@ -1,10 +1,9 @@
 import { isEnum } from '@coscrad/validation';
+// TODO Perhaps we don't want the enums in this lib
+// eslint-disable-next-line
+import { CoscradUserRole } from '@coscrad/api-interfaces';
 
-export enum CoscradUserRole {
-    superAdmin = 'superAdmin', // Technical Admin
-    projectAdmin = 'projectAdmin', // Project admin- can read and write
-    viewer = 'viewer', // Authenticated user- can read including non-public materials if they are in the read ACL
-}
+export { CoscradUserRole };
 
 export const isCoscardUserRole = (input: unknown): input is CoscradUserRole =>
     isEnum(input, CoscradUserRole);

@@ -1,4 +1,5 @@
 import { routes } from '../../app/routes/routes';
+import AuthenticationButton from '../AuthenticationButton/AuthenticationButton';
 import './NavBar.css';
 import { NavBarItem } from './NavBarItem';
 
@@ -47,6 +48,7 @@ export const NavBar = (): JSX.Element => {
             {navItemInfos.map((info, index) => (
                 <NavBarItem {...info} key={index} />
             ))}
+            <AuthenticationButton />
         </ul>
     );
 };
