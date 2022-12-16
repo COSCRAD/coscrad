@@ -1,4 +1,5 @@
 import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
+import { AUTH, authReducer } from './slices/auth';
 import { categoryTreeReducer } from './slices/categories';
 import { CATEGORY_TREE } from './slices/categories/constants';
 import { noteReducer, NOTES } from './slices/notes';
@@ -25,6 +26,7 @@ import { tagReducer } from './slices/tagSlice';
 import { TAGS } from './slices/tagSlice/constants';
 
 export const rootReducer = combineReducers({
+    [AUTH]: authReducer,
     [RESOURCE_INFO]: resourceInfoReducer,
     [TAGS]: tagReducer,
     [NOTES]: noteReducer,

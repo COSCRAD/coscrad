@@ -81,4 +81,14 @@ export default (): Term[] =>
             id: '3',
             published: false,
         },
+        {
+            term: 'My Secret Term',
+            contributorId: 'This will be removed soon',
+            id: '4',
+            published: false,
+            queryAccessControlList: {
+                allowedUserIds: ['1'],
+                allowedGroupIds: [],
+            },
+        },
     ].map((dto) => new Term({ ...dto, type: ResourceType.term }));
