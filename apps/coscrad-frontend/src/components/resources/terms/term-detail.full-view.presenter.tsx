@@ -8,20 +8,20 @@ export const TermDetailFullViewPresenter = ({
     data: { id, term, termEnglish, audioURL, contributor },
 }: IDetailQueryResult<ITermViewModel>): JSX.Element => (
     <div className="term-detail-page" data-testid={id}>
-        <Card className="term-detail-card">
-            <div id="term-detail-term">{term || ''}</div>
-            <Divider id="term-detail-divider" />
-            <div className="term-detail-meta">
-                <h3 className="term-detail-headers"> English: </h3>
+        <Card className="detail-card">
+            <div id="detail-term">{term || ''}</div>
+            <Divider id="detail-divider" />
+            <div className="detail-meta">
+                <h3 className="detail-headers"> English: </h3>
                 {termEnglish || ''}
             </div>
 
-            <div className="term-detail-meta">
-                <h3 className="term-detail-headers">Contributor: </h3>
+            <div className="detail-meta">
+                <h3 className="detail-headers">Contributor: </h3>
                 {contributor}
             </div>
 
-            <div id="term-media-player">
+            <div id="media-player">
                 <MediaPlayer listenMessage="Play!" audioUrl={audioURL} />
             </div>
         </Card>
