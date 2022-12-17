@@ -1,7 +1,10 @@
 import { IBibliographicReferenceViewModel, ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
+import { BookBibliographicReference } from '../../models/bibliographic-reference/book-bibliographic-reference/entities/book-bibliographic-reference.entity';
+import { CourtCaseBibliographicReference } from '../../models/bibliographic-reference/court-case-bibliographic-reference/entities/court-case-bibliographic-reference.entity';
 import { IBibliographicReferenceData } from '../../models/bibliographic-reference/interfaces/bibliographic-reference-data.interface';
 import { IBibliographicReference } from '../../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
+import { JournalArticleBibliographicReference } from '../../models/bibliographic-reference/journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference.entity';
 import { ResourceType } from '../../types/ResourceType';
 import { BaseQueryService } from './base-query.service';
 
@@ -18,10 +21,10 @@ export class BibliographicReferenceQueryService extends BaseQueryService<
     }
 
     getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
-        return [];
-        // TODO Get available index scoped commands from Ctors
-        // return [BookBibliographicReference, JournalArticleBibliographicReference].flatMap((Ctor) =>
-        //     this.commandInfoService.getCommandInfo(Ctor)
-        // );
+        return [
+            BookBibliographicReference,
+            JournalArticleBibliographicReference,
+            CourtCaseBibliographicReference,
+        ].flatMap((Ctor) => this.commandInfoService.getCommandInfo(Ctor));
     }
 }

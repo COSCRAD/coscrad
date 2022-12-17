@@ -1,5 +1,6 @@
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
+import { CommandPanel } from '../commands';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 
 export interface AggregateIndexContainerProps<T, UPresenterProps = T> {
@@ -16,5 +17,11 @@ export const AggregateIndexContainer = <T, U = T>({
     // Wrap in error and pending presentation
     const Presenter = displayLoadableWithErrorsAndLoading(IndexPresenter);
 
-    return <Presenter {...loadableModels} />;
+    return (
+        <div>
+            <Presenter {...loadableModels} />
+            {/* @ts-expect-error fix index response types */}
+            {loadableModels.data?.actions && <CommandPanel actions={loadableModels.data.actions} />}
+        </div>
+    );
 };

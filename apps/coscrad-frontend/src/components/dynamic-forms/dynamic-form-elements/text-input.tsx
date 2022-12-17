@@ -3,14 +3,27 @@ import { FormGroup, TextField } from '@mui/material';
 
 interface TextInputProps {
     formField: IFormField;
-    onNewSelection?: (name: string, value: string | boolean) => void;
+    onInputChange?: (name: string, value: string | boolean) => void;
 }
 
-export const TextInput = ({ formField: { description, name } }: TextInputProps): JSX.Element => {
+export const TextInput = ({
+    formField: { description, name, label },
+    onInputChange,
+}: TextInputProps): JSX.Element => {
     return (
         <FormGroup>
             <h3>{description}</h3>
-            <TextField label={name} />
+            <TextField
+                name={name}
+                label={label}
+                onChange={(e) => {
+                    console.log({
+                        name: e.target.name,
+                        value: e.target.value,
+                    });
+                    onInputChange(e.target.name, e.target.value);
+                }}
+            />
         </FormGroup>
     );
 };

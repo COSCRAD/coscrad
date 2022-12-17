@@ -37,5 +37,7 @@ export const YearPicker = ({
         options: selectOptions,
     };
 
-    return <StaticSelect formField={formFieldForStaticSelect} />;
+    return (
+        <StaticSelect formField={formFieldForStaticSelect} initialValue={CURRENT_YEAR.toString()} />
+    );
 };

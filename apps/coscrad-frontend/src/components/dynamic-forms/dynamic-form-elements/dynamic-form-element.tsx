@@ -18,13 +18,16 @@ export const DynamicFormElement = ({
     if (type === FormFieldType.switch || type === FormFieldType.staticSelect)
         return <StaticSelect formField={formField} onNewSelection={onElementChange} />;
 
-    if (type === FormFieldType.textField) return <TextInput formField={formField}></TextInput>;
+    if (type === FormFieldType.textField)
+        return <TextInput formField={formField} onInputChange={onElementChange}></TextInput>;
 
     // TODO We need to 'transform' data to proper JSON on submit.
-    if (type === FormFieldType.jsonInput) return <TextInput formField={formField}></TextInput>;
+    if (type === FormFieldType.jsonInput)
+        return <TextInput formField={formField} onInputChange={onElementChange}></TextInput>;
 
     // TODO We need separate validation rules based on `CoscradDataTypes`
-    if (type === FormFieldType.numericInput) return <TextInput formField={formField}></TextInput>;
+    if (type === FormFieldType.numericInput)
+        return <TextInput formField={formField} onInputChange={onElementChange}></TextInput>;
 
     if (type === FormFieldType.yearPicker) return <YearPicker formField={formField} />;
 

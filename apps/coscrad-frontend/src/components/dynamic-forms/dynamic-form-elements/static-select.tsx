@@ -7,11 +7,13 @@ const NO_SELECTION_PLACEHOLDER = '-SELECT-';
 interface VocabularyListSelectProps {
     formField: IFormField;
     onNewSelection?: (name: string, value: string | boolean) => void;
+    initialValue?: string;
 }
 
 export const StaticSelect = ({
     formField: { name, options, label },
     onNewSelection,
+    initialValue,
 }: VocabularyListSelectProps): JSX.Element => {
     const [currentValue, setCurrentValue] = useState<string>(null);
 
@@ -21,7 +23,7 @@ export const StaticSelect = ({
         <FormGroup>
             {label}
             <Select
-                value={currentValue || ''}
+                value={currentValue || initialValue || ''}
                 label={label}
                 name={name}
                 onChange={(changeEvent) => {

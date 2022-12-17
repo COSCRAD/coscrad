@@ -8,7 +8,6 @@ import {
 } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation';
 import { InternalError } from '../../lib/errors/InternalError';
-import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 
 // TODO Move this to a higher level- possibly called CommandPayloadPropertyMeta
 type NameLabelAndDescription = {
@@ -73,7 +72,8 @@ export const buildFormFieldForCommandPayloadProp = (
             label: enumLabel,
             name: enumName,
             description: 'Add property description',
-            options: cloneToPlainObject(labelsAndValues),
+            // TODO consolidate LabelAndValue with DisplayAndValue
+            options: labelsAndValues.map(({ label, value }) => ({ display: label, value })),
         };
     }
 
