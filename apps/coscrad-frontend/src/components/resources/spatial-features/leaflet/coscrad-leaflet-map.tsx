@@ -51,10 +51,6 @@ export const CoscradLeafletMap: ICoscradMap = ({
                     handleClick={onSpatialFeatureSelected}
                     customEffects={(id, marker) => {
                         if (id === selectedSpatialFeatureId) {
-                            console.log({ marker });
-                            console.log({
-                                mapRefCurrent: mapRef.current,
-                            });
                             marker.openPopup();
                         }
                     }}

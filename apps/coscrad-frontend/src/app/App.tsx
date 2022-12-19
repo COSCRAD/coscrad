@@ -25,7 +25,6 @@ export function App() {
                     <Route path={routes.tags.index} element={<TagIndexContainer />} />
                     <Route path={routes.tags.detail()} element={<TagDetailContainer />} />
                     <Route path={routes.treeOfKnowledge} element={<CategoryTreeContainer />} />
-                    {/* TODO Add helper to build the following routes for resources */}
                     {IndexToDetailFlowRoutes()}
                     {/* The following are temporary or experimental */}
                     <Route path="MembersOnly" element={<MembersOnly />} />

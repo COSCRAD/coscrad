@@ -8,11 +8,6 @@ const consolidateEmptyValues = (input: unknown) =>
     emptyValues.includes(input as null | undefined | '') ? undefined : input;
 
 export const formStateReducer = (state: FormState, fsa: PayloadAction<unknown>): FormState => {
-    console.log({
-        update: 'formStateReducer',
-        state,
-        fsa,
-    });
     if (isUpdateFormAction(fsa))
         return {
             // TODO [https://www.pivotaltracker.com/story/show/184066176] Deep clone
