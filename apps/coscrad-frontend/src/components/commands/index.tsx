@@ -1,1 +1,1 @@
-export * from './CommandPanel';
+export * from './command-panel';

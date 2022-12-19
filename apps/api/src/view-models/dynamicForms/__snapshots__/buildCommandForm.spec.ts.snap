@@ -39,11 +39,11 @@ Object {
       "name": "MIME_TYPE",
       "options": Array [
         Object {
-          "label": "mp3",
+          "display": "mp3",
           "value": "audio/mpeg",
         },
         Object {
-          "label": "mp4",
+          "display": "mp4",
           "value": "video/mp4",
         },
       ],

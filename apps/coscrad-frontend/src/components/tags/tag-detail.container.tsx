@@ -4,7 +4,7 @@ import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../store';
 import { fetchTags } from '../../store/slices/tagSlice/thunks';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
-import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
+import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../Loading';
 import { NotFoundPresenter } from '../not-found';
 import { TagDetailPresenter } from './tag-detail.presenter';
