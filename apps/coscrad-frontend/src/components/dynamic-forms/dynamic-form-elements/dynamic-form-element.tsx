@@ -21,20 +21,28 @@ export const DynamicFormElement = ({
     if (type === FormFieldType.textField)
         return <TextInput formField={formField} onInputChange={onElementChange}></TextInput>;
 
-    // TODO We need to 'transform' data to proper JSON on submit.
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/184065964]
+     * We need to 'transform' data to proper JSON on submit.
+     */
     if (type === FormFieldType.jsonInput)
         return <TextInput formField={formField} onInputChange={onElementChange}></TextInput>;
 
-    // TODO We need separate validation rules based on `CoscradDataTypes`
+    /**
+     * TODO[https://www.pivotaltracker.com/story/show/184056535]
+     * We need separate validation rules based on `CoscradDataTypes`<div className=""></div>
+     */
     if (type === FormFieldType.numericInput)
         return <TextInput formField={formField} onInputChange={onElementChange}></TextInput>;
 
     if (type === FormFieldType.yearPicker) return <YearPicker formField={formField} />;
 
+    const exhaustiveCheck: never = type;
+
     return (
         <ErrorDisplay
             code={HttpStatusCode.internalError}
-            message={`Failed to build a form element for unsupporeted type: ${type}`}
+            message={`Failed to build a form element for unsupporeted type: ${exhaustiveCheck}`}
         />
     );
 };

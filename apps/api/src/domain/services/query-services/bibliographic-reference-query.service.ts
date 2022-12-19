@@ -20,6 +20,10 @@ export class BibliographicReferenceQueryService extends BaseQueryService<
         return new BibliographicReferenceViewModel(bibliographicReferenceInstance);
     }
 
+    /**
+     * We may want to have a `BibliographicReference` base class or some other
+     * mechanism to make the following method closed to modification.
+     */
     getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
         return [
             BookBibliographicReference,

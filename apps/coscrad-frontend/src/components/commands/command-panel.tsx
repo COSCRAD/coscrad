@@ -28,21 +28,28 @@ export const CommandPanel = ({ actions }: CommandProps) => {
             </div>
         );
 
+    const {
+        label,
+        description,
+        form: { fields },
+    } = selectedCommand;
+
     return (
         <>
             <h1>Execute Command</h1>
             <div>
-                Form State:
+                <h3>{label}</h3>
                 <br />
-                {JSON.stringify(formState)}
-            </div>
-            <div>
-                You are executing: {selectedCommandType}
+                <p>{description}</p>
                 <br />
                 <DynamicForm
-                    fields={selectedCommand.form.fields}
-                    label={selectedCommand.form.label}
-                    description={selectedCommand.form.description}
+                    fields={fields}
+                    /**
+                     * TODO [https://www.pivotaltracker.com/story/show/184056544]
+                     * In reality, things are a bit more complex than this. We
+                     * will eventually need to display an `Ack` \ `NAck` and then
+                     * an `ok` button via either this panel or a modal.
+                     */
                     onSubmitForm={() => {
                         console.log(
                             `You submitted: ${selectedCommand.type} with payload: ${JSON.stringify(

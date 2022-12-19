@@ -15,7 +15,7 @@ export const formStateReducer = (state: FormState, fsa: PayloadAction<unknown>):
     });
     if (isUpdateFormAction(fsa))
         return {
-            // TODO Deep clone
+            // TODO [https://www.pivotaltracker.com/story/show/184066176] Deep clone
             ...state,
             [fsa.payload.propertyKey]: consolidateEmptyValues(fsa.payload.propertyValue),
         };

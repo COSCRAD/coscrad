@@ -17,10 +17,6 @@ export const TextInput = ({
                 name={name}
                 label={label}
                 onChange={(e) => {
-                    console.log({
-                        name: e.target.name,
-                        value: e.target.value,
-                    });
                     onInputChange(e.target.name, e.target.value);
                 }}
             />

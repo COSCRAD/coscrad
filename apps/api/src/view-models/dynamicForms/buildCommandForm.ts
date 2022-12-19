@@ -7,9 +7,6 @@ import {
 import { buildFormFieldForCommandPayloadProp } from './buildFormFieldForCommandPayloadProp';
 
 export const buildCommandForm = <T extends Record<string, unknown>>(
-    commandType: string,
-    label: string,
-    description: string,
     schema: ICoscradModelSchema<T, CoscradDataType>
 ): IDynamicForm => {
     const fields: IFormField[] = Object.entries(schema).reduce(
@@ -29,8 +26,6 @@ export const buildCommandForm = <T extends Record<string, unknown>>(
     );
 
     return {
-        label,
-        description,
         fields,
     };
 };

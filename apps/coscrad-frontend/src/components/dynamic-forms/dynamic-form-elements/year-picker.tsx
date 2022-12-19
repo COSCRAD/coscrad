@@ -12,9 +12,12 @@ interface YearPickerProps {
 }
 
 /**
- * Note that MUI has a free and paid teir for their date-picker element, which
+ * TODO [https://www.pivotaltracker.com/story/show/184066046]
+ * We need a component test for `YearPicker.
+ *
+ * Note that MUI has a free and paid tier for their date-picker element, which
  * is not part of their core library. We decided it was safest to simply
- * "role our own".
+ * "role our own" year picker.
  */
 export const YearPicker = ({
     formField: { name, label, description, type },

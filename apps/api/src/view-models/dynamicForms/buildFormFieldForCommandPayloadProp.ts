@@ -72,7 +72,10 @@ export const buildFormFieldForCommandPayloadProp = (
             label: enumLabel,
             name: enumName,
             description: 'Add property description',
-            // TODO consolidate LabelAndValue with DisplayAndValue
+            /**
+             * TODO [https://www.pivotaltracker.com/story/show/184065854]
+             * consolidate LabelAndValue with DisplayAndValue.
+             */
             options: labelsAndValues.map(({ label, value }) => ({ display: label, value })),
         };
     }

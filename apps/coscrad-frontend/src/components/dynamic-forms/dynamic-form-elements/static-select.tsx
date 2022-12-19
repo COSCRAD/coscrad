@@ -2,6 +2,7 @@ import { IFormField, IValueAndDisplay } from '@coscrad/api-interfaces';
 import { FormGroup, MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
 
+// TODO Make this configurable
 const NO_SELECTION_PLACEHOLDER = '-SELECT-';
 
 interface VocabularyListSelectProps {
@@ -31,11 +32,13 @@ export const StaticSelect = ({
                     setCurrentValue(changeEvent.target.value);
                 }}
             >
+                {/* Include a null selection placeholder to represent unselected state */}
                 {[
                     <MenuItem value={null} key={'0'}>
                         {NO_SELECTION_PLACEHOLDER}
                     </MenuItem>,
                 ].concat(
+                    // Create one select menu item for each option
                     ...menuItems.map(({ display: label, value }) => (
                         <MenuItem key={`${label}-${value}`} value={value}>
                             {label}

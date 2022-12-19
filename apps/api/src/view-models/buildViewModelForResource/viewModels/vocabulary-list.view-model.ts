@@ -105,8 +105,6 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
         this.nameEnglish = nameEnglish;
 
         this.form = {
-            label: 'Vocabulary List Form',
-            description: 'filter the vocabulary list',
             fields: variables.map(convertVocabularyListVaraibleToFormElement),
         };
 
