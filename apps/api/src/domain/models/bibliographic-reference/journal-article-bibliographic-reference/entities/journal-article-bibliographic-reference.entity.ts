@@ -9,7 +9,7 @@ import { Resource } from '../../../resource.entity';
 import { IBibliographicReference } from '../../interfaces/bibliographic-reference.interface';
 import JournalArticleBibliographicReferenceData from './journal-article-bibliographic-reference-data.entity';
 
-@RegisterIndexScopedCommands(['CREATE_JOURNAL_ARTICLE_BOOK_BIBLIOGRAPHIC_REFERENCE'])
+@RegisterIndexScopedCommands(['CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE'])
 export class JournalArticleBibliographicReference
     extends Resource
     implements IBibliographicReference<JournalArticleBibliographicReferenceData>

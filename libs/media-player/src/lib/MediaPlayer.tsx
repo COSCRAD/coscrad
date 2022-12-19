@@ -17,7 +17,6 @@ export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
 
     const safePlay = () => {
         if (!canPlayThrough || !audio) {
-            console.log('Audio not ready');
             return;
         }
 

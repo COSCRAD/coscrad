@@ -6,7 +6,7 @@ describe('buildCommandForm', () => {
     it('should return the expected result', () => {
         const commandSchema = getCoscradDataSchema(CreateMediaItem);
 
-        const form = buildCommandForm('CREATE_MEDIA_ITEM', commandSchema);
+        const form = buildCommandForm(commandSchema);
 
         expect(form).toMatchSnapshot();
     });
