@@ -1,8 +1,8 @@
-import { IFormData } from '../form-data';
+import { IDynamicForm } from '../form-data/dynamic-form.interface';
 
 export interface ICommandFormAndLabels {
-    description: string;
     label: string;
+    description: string;
+    form: IDynamicForm;
     type: string;
-    form: IFormData;
 }

@@ -4,7 +4,7 @@ import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../store';
 import { fetchNotes } from '../../store/slices/notes/thunks';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
-import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
+import { ErrorDisplay } from '../error-display/error-display';
 import { CategorizablesOfMultipleTypeContainer } from '../higher-order-components';
 import { Loading } from '../Loading';
 import { fullViewCategorizablePresenterFactory } from '../resources/factories/full-view-categorizable-presenter-factory';

@@ -59,7 +59,7 @@ export class CommandInfoService {
                 label,
                 description,
                 type,
-                form: buildCommandForm(type, schema),
+                form: buildCommandForm(schema),
             }));
     }
 }
