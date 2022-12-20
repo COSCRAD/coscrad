@@ -2,7 +2,7 @@ import {
     CategorizableType,
     CategorizableTypeToViewModel,
     IBaseViewModel,
-    IIndexQueryResult,
+    ICategorizableIndexQueryResult,
 } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { useLoadableNotesWithStandardFormat } from '../../store/slices/notes/hooks/use-loadable-notes-with-standard-format';
@@ -19,7 +19,7 @@ import { useLoadableTranscribedAudioItems } from '../../store/slices/resources/t
 import { useLoadableVocabularyLists } from '../../store/slices/resources/vocabulary-lists/hooks';
 
 type UseLoadableResourcesOfSingleType<T extends IBaseViewModel> = () => ILoadable<
-    IIndexQueryResult<T>
+    ICategorizableIndexQueryResult<T>
 >;
 
 const lookupTable: {

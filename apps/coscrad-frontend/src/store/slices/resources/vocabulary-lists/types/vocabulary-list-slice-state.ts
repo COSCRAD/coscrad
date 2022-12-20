@@ -1,4 +1,4 @@
-import { IIndexQueryResult, IVocabularyListViewModel } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../../interfaces/loadable.interface';
+import { VocabularyListIndexState } from './vocabulary-list-index-state';
 
-export type VocabularyListSliceState = ILoadable<IIndexQueryResult<IVocabularyListViewModel>>;
+export type VocabularyListSliceState = ILoadable<VocabularyListIndexState>;

@@ -69,8 +69,8 @@ export class CoscradUserGroupQueryService {
             .map((userGroup) => this.buildDetailResult(userGroup, externalState));
 
         return {
-            data: viewModelsAndActions,
-            actions: this.commandInfoService.getCommandInfo(CoscradUserGroup),
+            entities: viewModelsAndActions,
+            indexScopedActions: this.commandInfoService.getCommandInfo(CoscradUserGroup),
         };
     }
 
@@ -79,7 +79,7 @@ export class CoscradUserGroupQueryService {
         { user: allUsers }: InMemorySnapshot
     ): IDetailQueryResult<CoscradUserGroupViewModel> {
         return {
-            data: new CoscradUserGroupViewModel(userGroup, allUsers),
+            ...new CoscradUserGroupViewModel(userGroup, allUsers),
             actions: this.commandInfoService.getCommandInfo(userGroup),
         };
     }

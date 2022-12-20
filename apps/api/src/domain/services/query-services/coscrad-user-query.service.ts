@@ -26,7 +26,7 @@ export class CoscradUserQueryService {
         if (isNotFound(searchResult)) return searchResult;
 
         return {
-            data: new CoscradUserViewModel(searchResult),
+            ...new CoscradUserViewModel(searchResult),
             actions: this.commandInfoService.getCommandInfo(searchResult),
         };
     }
@@ -47,13 +47,13 @@ export class CoscradUserQueryService {
                 return true;
             })
             .map((user) => ({
-                data: new CoscradUserViewModel(user),
+                ...new CoscradUserViewModel(user),
                 actions: this.commandInfoService.getCommandInfo(user),
             }));
 
         return {
-            data: viewModelsAndActions,
-            actions: this.commandInfoService.getCommandInfo(CoscradUser),
+            entities: viewModelsAndActions,
+            indexScopedActions: this.commandInfoService.getCommandInfo(CoscradUser),
         };
     }
 }

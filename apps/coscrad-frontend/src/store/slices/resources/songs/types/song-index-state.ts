@@ -1,3 +1,3 @@
-import { IIndexQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
+import { ICategorizableIndexQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
 
-export type SongIndexState = IIndexQueryResult<ISongViewModel>;
+export type SongIndexState = ICategorizableIndexQueryResult<ISongViewModel>;

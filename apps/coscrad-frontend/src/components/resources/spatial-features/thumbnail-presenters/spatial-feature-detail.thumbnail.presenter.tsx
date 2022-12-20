@@ -1,6 +1,6 @@
 import {
     GeometricFeatureType,
-    IDetailQueryResult,
+    ICategorizableDetailQueryResult,
     ISpatialFeatureViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
@@ -21,6 +21,7 @@ import { FunctionalComponent } from '../../../../utils/types/functional-componen
 import { LineTextPresenter } from './line-text-presenter';
 import { PointTextPresenter } from './point-text-presenter';
 import { PolygonTextPresenter } from './polygon-text-presenter';
+import { toGeoJSON } from './to-geo-json';
 
 interface HasCoordinates<T = unknown> {
     coordinates: T;
@@ -36,9 +37,9 @@ const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordin
  * Our current approach is to present a text summary of the coordinates for a
  * spatial feature in its thumbnail view.
  */
-export const SpatialFeatureDetailThumbnailPresenter = ({
-    data: spatialFeature,
-}: IDetailQueryResult<ISpatialFeatureViewModel>): JSX.Element => {
+export const SpatialFeatureDetailThumbnailPresenter = (
+    spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>
+): JSX.Element => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const { id, geometry, properties } = spatialFeature;
@@ -76,7 +77,7 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
                 <CoordinatesTextPresenter coordinates={coordinates} />
                 <Collapse in={isExpanded}>
                     <h3>GEOJSON</h3>
-                    <pre>{JSON.stringify(spatialFeature, null, 2)}</pre>
+                    <pre>{JSON.stringify(toGeoJSON(spatialFeature), null, 2)}</pre>
                 </Collapse>
                 <Link to={`/${routes.resources.ofType(ResourceType.spatialFeature).detail(id)}`}>
                     View Spatial Feature

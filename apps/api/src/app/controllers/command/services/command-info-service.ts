@@ -4,15 +4,19 @@ import { ClassSchema, getCoscradDataSchema } from '@coscrad/data-types';
 import { Injectable } from '@nestjs/common';
 import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
+import isStringWithNonzeroLength from '../../../../lib/utilities/isStringWithNonzeroLength';
 import { buildCommandForm } from '../../../../view-models/dynamicForms';
 import { INDEX_SCOPED_COMMANDS } from '../command-info/constants';
 
 type CommandTypeFilter = (commandType: string) => boolean;
 
 const buildCommandTypeFilter = (
-    context?: DomainModelCtor | CommandWriteContext
+    context?: DomainModelCtor | CommandWriteContext | string[]
 ): CommandTypeFilter => {
     if (isNullOrUndefined(context)) return (_: string) => true;
+
+    if (Array.isArray(context) && context.every(isStringWithNonzeroLength))
+        return (commandType: string) => context.includes(commandType);
 
     if (isCommandWriteContext(context))
         return (commandType: string) => context.getAvailableCommands().includes(commandType);
@@ -43,7 +47,10 @@ export class CommandInfoService {
     getCommandInfo(): ICommandFormAndLabels[];
     getCommandInfo(context: DomainModelCtor): ICommandFormAndLabels[];
     getCommandInfo(context: CommandWriteContext): ICommandFormAndLabels[];
-    getCommandInfo(context?: DomainModelCtor | CommandWriteContext): ICommandFormAndLabels[] {
+    getCommandInfo(context: string[]): ICommandFormAndLabels[];
+    getCommandInfo(
+        context?: DomainModelCtor | CommandWriteContext | string[]
+    ): ICommandFormAndLabels[] {
         const commandTypeFilter = buildCommandTypeFilter(context);
 
         const allCommandsAndMeta = this.commandHandlerService.getAllCommandCtorsAndMetadata();

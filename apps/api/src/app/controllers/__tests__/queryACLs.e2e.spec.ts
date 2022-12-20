@@ -40,7 +40,7 @@ const assertIndexOkResponse = (
 ) => {
     expect(res.status).toBe(httpStatusCodes.ok);
 
-    const viewModels = res.body.data.map((result) => result.data);
+    const viewModels = res.body.entities;
 
     expect(viewModels.every((viewModel) => viewModel instanceof BaseViewModel));
 
@@ -52,7 +52,7 @@ const assertIndexOkResponse = (
 const assertDetailOkResponse = (res: request.Response, resourceToFind: Resource) => {
     expect(res.status).toBe(httpStatusCodes.ok);
 
-    const viewModel = res.body.data;
+    const viewModel = res.body;
 
     expect(viewModel.id).toBe(resourceToFind.id);
 };

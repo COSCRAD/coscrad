@@ -1,4 +1,3 @@
-import { CoscradDataType } from '@coscrad/api-interfaces';
 import { ConfigurableContentSchema } from '../data/configurableContentSchema';
 import { InvalidConfigurationPropertyError } from '../errorHandling/errors/InvalidConfigurationPropertyError';
 import { getConstraintFunctionForCoscradDataType } from './getConstraintFunctionForCoscradDataType';
@@ -14,11 +13,7 @@ export const buildConfigValidationFunction =
 
                 const isSatisfied = constraintFunction(propertyValue);
 
-                if (!isSatisfied) {
-                    if (propertyType === CoscradDataType.BOOLEAN) {
-                        console.log('it is all my fault!');
-                    }
-
+                if (!isSatisfied)
                     return accumulatedErrors.concat(
                         new InvalidConfigurationPropertyError({
                             propertyName,
@@ -26,7 +21,6 @@ export const buildConfigValidationFunction =
                             invalidReceivedValue: propertyValue,
                         })
                     );
-                }
 
                 return accumulatedErrors;
             },

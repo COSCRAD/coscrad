@@ -1,20 +1,11 @@
-import { IIndexQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
+import { ISongViewModel } from '@coscrad/api-interfaces';
+import { SongIndexState } from '../../../store/slices/resources/songs/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { formatBilingualText } from '../vocabulary-lists/utils/formatBilingualText';
 
-export const SongIndexPresenter = (songsIndexResult: IIndexQueryResult<ISongViewModel>) => {
-    /**
-     *  TODO [https://www.pivotaltracker.com/story/show/183681839]
-     * We may some day read the actions and allow for bulk command execution in
-     * an index view.
-     */
-
-    const { data: detailResult } = songsIndexResult;
-
-    const songs = detailResult.map(({ data }) => data);
-
+export const SongIndexPresenter = ({ entities: songs }: SongIndexState) => {
     const headingLabels: HeadingLabel<ISongViewModel>[] = [
         { propertyKey: 'title', headingLabel: 'Title' },
         { propertyKey: 'titleEnglish', headingLabel: 'English' },

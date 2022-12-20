@@ -5,8 +5,10 @@ import { selectLoadableNotes } from '../selectors';
 import { fetchNotes } from '../thunks';
 
 /**
- * TODO [https://www.pivotaltracker.com/story/show/183681556]
+ * TODO [https://www.pivotaltracker.com/story/show/184069659]
  * Remove this **HACK** once the tech-debt story is completed.
+ *
+ * Do this now!
  */
 export const useLoadableNotesWithStandardFormat = () => {
     const loadable = useSelector(selectLoadableNotes);
@@ -29,9 +31,9 @@ export const useLoadableNotesWithStandardFormat = () => {
     return {
         ...loadable,
         data: notes && {
-            actions: [],
-            data: notes.map((note) => ({
-                data: note,
+            indexScopedActions: [],
+            entities: notes.map((note) => ({
+                ...note,
                 actions: [],
             })),
         },

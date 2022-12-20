@@ -1,3 +1,3 @@
-import { IIndexQueryResult, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
+import { ICategorizableIndexQueryResult, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 
-export type SpatialFeatureIndexState = IIndexQueryResult<ISpatialFeatureViewModel>;
+export type SpatialFeatureIndexState = ICategorizableIndexQueryResult<ISpatialFeatureViewModel>;

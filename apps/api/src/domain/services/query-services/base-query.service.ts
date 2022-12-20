@@ -135,7 +135,7 @@ export abstract class BaseQueryService<
         };
 
         return {
-            data: viewModelWithTags,
+            ...viewModelWithTags,
             actions: this.commandInfoService.getCommandInfo(domainModelSearchResult),
         };
     }
@@ -151,8 +151,8 @@ export abstract class BaseQueryService<
 
         const validInstances = searchResult.filter(validAggregateOrThrow).filter(accessFilter);
 
-        const data = validInstances.map((instance) => ({
-            data: mixTagsIntoViewModel<UViewModel>(
+        const entities = validInstances.map((instance) => ({
+            ...mixTagsIntoViewModel<UViewModel>(
                 this.buildViewModel(instance, requiredExternalState),
                 requiredExternalState.tag,
                 this.type
@@ -161,8 +161,8 @@ export abstract class BaseQueryService<
         }));
 
         return {
-            data,
-            actions: this.getInfoForIndexScopedCommands(),
+            entities,
+            indexScopedActions: this.getInfoForIndexScopedCommands(),
         };
     }
 }
