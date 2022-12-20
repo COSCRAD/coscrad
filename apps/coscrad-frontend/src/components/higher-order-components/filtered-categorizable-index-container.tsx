@@ -1,10 +1,14 @@
-import { IBaseViewModel, IIndexQueryResult, WithTags } from '@coscrad/api-interfaces';
+import {
+    IBaseViewModel,
+    ICategorizableDetailQueryResult,
+    IIndexQueryResult,
+} from '@coscrad/api-interfaces';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 
 export interface FilteredAggregateIndexContainerProps<
-    T extends WithTags<IBaseViewModel>,
+    T extends ICategorizableDetailQueryResult<IBaseViewModel>,
     UPresenterProps = T
 > {
     useLoadableModels: () => ILoadable<IIndexQueryResult<T>>;
@@ -12,7 +16,10 @@ export interface FilteredAggregateIndexContainerProps<
     preFilter?: (model: T) => boolean;
 }
 
-export const FilteredAggregateIndexContainer = <T extends WithTags<IBaseViewModel>, U = T>({
+export const FilteredCategorizableIndexContainer = <
+    T extends ICategorizableDetailQueryResult<IBaseViewModel>,
+    U = T
+>({
     useLoadableModels,
     IndexPresenter,
     preFilter,

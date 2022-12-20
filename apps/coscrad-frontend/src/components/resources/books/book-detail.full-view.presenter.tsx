@@ -1,4 +1,4 @@
-import { IBookViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
+import { IBookViewModel, ICategorizableDetailQueryResult } from '@coscrad/api-interfaces';
 import { Card, CardContent } from '@mui/material';
 import { BookReader } from './pages';
 
@@ -9,7 +9,7 @@ export const BookDetailFullViewPresenter = ({
     subtitle,
     author,
     publicationDate,
-}: IDetailQueryResult<IBookViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IBookViewModel>): JSX.Element => {
     return (
         <div data-testid={id}>
             <Card>

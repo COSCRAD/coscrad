@@ -1,10 +1,11 @@
-import { IIndexQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
+import { ISongViewModel } from '@coscrad/api-interfaces';
+import { SongIndexState } from '../../../store/slices/resources/songs/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { formatBilingualText } from '../vocabulary-lists/utils/formatBilingualText';
 
-export const SongIndexPresenter = ({ entities: songs }: IIndexQueryResult<ISongViewModel>) => {
+export const SongIndexPresenter = ({ entities: songs }: SongIndexState) => {
     const headingLabels: HeadingLabel<ISongViewModel>[] = [
         { propertyKey: 'title', headingLabel: 'Title' },
         { propertyKey: 'titleEnglish', headingLabel: 'English' },

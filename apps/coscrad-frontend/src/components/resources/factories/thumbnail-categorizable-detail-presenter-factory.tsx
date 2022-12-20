@@ -1,7 +1,7 @@
 import {
     CategorizableType,
     IBookViewModel,
-    IDetailQueryResult,
+    ICategorizableDetailQueryResult,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { Card, CardContent } from '@mui/material';
@@ -36,7 +36,9 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
      * TODO Investigate why importing this from the component file leads to a
      * circular dependency.
      */
-    [CategorizableType.book]: (book: IDetailQueryResult<IBookViewModel>): JSX.Element => {
+    [CategorizableType.book]: (
+        book: ICategorizableDetailQueryResult<IBookViewModel>
+    ): JSX.Element => {
         const { id, pages } = book;
 
         return (

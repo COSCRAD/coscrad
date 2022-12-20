@@ -1,4 +1,4 @@
-import { IDetailQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
+import { ICategorizableDetailQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
 import { Card, Divider } from '@mui/material';
 import { useContext } from 'react';
@@ -13,7 +13,7 @@ export const SongDetailFullViewPresenter = ({
     titleEnglish,
     lyrics,
     audioURL,
-}: IDetailQueryResult<ISongViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<ISongViewModel>): JSX.Element => {
     const { songIdToCredits } = useContext(ConfigurableContentContext);
 
     const creditsMap = new Map<string, string>(

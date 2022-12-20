@@ -1,12 +1,11 @@
-import { IIndexQueryResult, IPhotographViewModel } from '@coscrad/api-interfaces';
+import { IPhotographViewModel } from '@coscrad/api-interfaces';
+import { PhotographIndexState } from '../../../store/slices/resources/photographs/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderPhotographThumbnailLinkCell } from '../utils/render-photograph-thumbnail-link-cell';
 
-export const PhotographIndexPresenter = ({
-    entities: photographs,
-}: IIndexQueryResult<IPhotographViewModel>) => {
+export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIndexState) => {
     const headingLabels: HeadingLabel<IPhotographViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
         { propertyKey: 'imageURL', headingLabel: 'Image URL' },

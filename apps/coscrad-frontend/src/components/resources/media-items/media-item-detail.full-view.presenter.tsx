@@ -1,4 +1,4 @@
-import { IDetailQueryResult, IMediaItemViewModel } from '@coscrad/api-interfaces';
+import { ICategorizableDetailQueryResult, IMediaItemViewModel } from '@coscrad/api-interfaces';
 import { Card, Divider } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
@@ -10,7 +10,7 @@ export const MediaItemDetailFullViewPresenter = ({
     title,
     titleEnglish,
     url,
-}: IDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
     const { videoIdToCredits } = useContext(ConfigurableContentContext);
 
     const contributionsMap = new Map<string, string>(

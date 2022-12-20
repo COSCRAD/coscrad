@@ -1,5 +1,5 @@
 import {
-    IDetailQueryResult,
+    ICategorizableDetailQueryResult,
     ITranscribedAudioViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
@@ -14,7 +14,7 @@ export const TranscribedAudioDetailThumbnailPresenter = ({
     id,
     lengthMilliseconds,
     audioURL,
-}: IDetailQueryResult<ITranscribedAudioViewModel>): JSX.Element => (
+}: ICategorizableDetailQueryResult<ITranscribedAudioViewModel>): JSX.Element => (
     <div className="detail-thumbnail-container">
         <Link to={`/${routes.resources.ofType(ResourceType.transcribedAudio).detail(id)}`}>
             <div

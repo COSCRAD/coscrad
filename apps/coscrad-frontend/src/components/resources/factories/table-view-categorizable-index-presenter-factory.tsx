@@ -1,11 +1,11 @@
 import {
     CategorizableType,
-    IIndexQueryResult,
+    ICategorizableIndexQueryResult,
     ISpatialFeatureViewModel,
 } from '@coscrad/api-interfaces';
 import { BibliographicReferenceIndexPresenter } from '../bibliographic-references/bibliographic-reference-index.presenter';
 import { BookIndexPresenter } from '../books/book-index.presenter';
-import { MediaItemIndexContainer } from '../media-items';
+import { MediaItemIndexPresenter } from '../media-items/media-item-index.presenter';
 import { PhotographIndexPresenter } from '../photographs/photograph-index.presenter';
 import { SongIndexPresenter } from '../songs/song-index.presenter';
 import { CoscradLeafletMap } from '../spatial-features/leaflet';
@@ -14,18 +14,16 @@ import { TermIndexPresenter } from '../terms/term-index.presenter';
 import { TranscribedAudioIndexPresenter } from '../transcribed-audio/transcribed-audio-index.presenter';
 import { VocabularyListIndexPresenter } from '../vocabulary-lists/vocabulary-list-index.presenter';
 import {
+    CategorizableIndexPresenter,
     CategorizableIndexPresenterFactory,
-    IndexPresenter,
 } from './categorizable-index-presneter-factory.interface';
 import { thumbnailCategorizableDetailPresenterFactory } from './thumbnail-categorizable-detail-presenter-factory';
 
 /**
  * TODO Find a better way to inject the dependencies
- *
- * Note- this breaks! Fix me before merging in!
  */
 const ConcreteSpatialFeaturePresenter = (
-    result: IIndexQueryResult<ISpatialFeatureViewModel>
+    result: ICategorizableIndexQueryResult<ISpatialFeatureViewModel>
 ): JSX.Element => (
     <SpatialFeatureIndexPresenter
         MapComponent={CoscradLeafletMap}
@@ -40,35 +38,35 @@ export const tableViewCategorizableIndexPresenterFactory: CategorizableIndexPres
     T extends CategorizableType
 >(
     categorizableType: T
-): IndexPresenter<T> => {
+): CategorizableIndexPresenter<T> => {
     switch (categorizableType) {
         case CategorizableType.bibliographicReference:
-            return BibliographicReferenceIndexPresenter as IndexPresenter<T>;
+            return BibliographicReferenceIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.book:
-            return BookIndexPresenter as IndexPresenter<T>;
+            return BookIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.mediaItem:
-            return MediaItemIndexContainer as IndexPresenter<T>;
+            return MediaItemIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.photograph:
-            return PhotographIndexPresenter as IndexPresenter<T>;
+            return PhotographIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.song:
-            return SongIndexPresenter as IndexPresenter<T>;
+            return SongIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.spatialFeature:
             // throw new Error('not implemented');
-            return ConcreteSpatialFeaturePresenter as IndexPresenter<T>;
+            return ConcreteSpatialFeaturePresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.term:
-            return TermIndexPresenter as IndexPresenter<T>;
+            return TermIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.transcribedAudio:
-            return TranscribedAudioIndexPresenter as IndexPresenter<T>;
+            return TranscribedAudioIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.vocabularyList:
-            return VocabularyListIndexPresenter as IndexPresenter<T>;
+            return VocabularyListIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         default:
             throw new Error(`Failed to build index presenter for: ${categorizableType}`);

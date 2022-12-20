@@ -1,4 +1,4 @@
-import { IDetailQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
+import { ICategorizableDetailQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
 import { Card, Divider } from '@mui/material';
 import './term-detail.presenter.css';
@@ -10,7 +10,7 @@ export const TermDetailFullViewPresenter = ({
     termEnglish,
     audioURL,
     contributor,
-}: IDetailQueryResult<ITermViewModel>): JSX.Element => (
+}: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => (
     <div className="term-detail-page" data-testid={id}>
         <Card className="detail-card">
             <div id="detail-term">{term || ''}</div>

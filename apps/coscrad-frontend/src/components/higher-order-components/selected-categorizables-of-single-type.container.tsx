@@ -1,4 +1,8 @@
-import { CategorizableType, IBaseViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
+import {
+    CategorizableType,
+    IBaseViewModel,
+    ICategorizableDetailQueryResult,
+} from '@coscrad/api-interfaces';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { ICategorizableDetailPresenterFactory } from '../resources/factories/categorizable-detail-presenter-factory.interface';
@@ -13,7 +17,7 @@ interface SelectedResourceContainerProps<T> {
     pluralLabelForCategorizableType: string;
 }
 
-type SearchResult = NOT_FOUND | IDetailQueryResult<IBaseViewModel>;
+type SearchResult = NOT_FOUND | ICategorizableDetailQueryResult<IBaseViewModel>;
 
 export const SelectedCategorizablesOfSingleTypeContainer = ({
     categorizableType,

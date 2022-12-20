@@ -1,11 +1,15 @@
-import { CategorizableType, IBaseViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
+import {
+    CategorizableType,
+    IBaseViewModel,
+    ICategorizableDetailQueryResult,
+} from '@coscrad/api-interfaces';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { NotFoundPresenter } from '../not-found';
 import { ICategorizableDetailPresenterFactory } from '../resources/factories/categorizable-detail-presenter-factory.interface';
 
 interface SelectedCategorizablesPresenterProps<T extends IBaseViewModel> {
-    viewModels: (IDetailQueryResult<T> | NOT_FOUND)[];
-    presenterFactory: ICategorizableDetailPresenterFactory<IDetailQueryResult<T>>;
+    viewModels: (ICategorizableDetailQueryResult<T> | NOT_FOUND)[];
+    presenterFactory: ICategorizableDetailPresenterFactory<ICategorizableDetailQueryResult<T>>;
     categorizableType: CategorizableType;
     pluralLabelForCategorizableType: string;
 }

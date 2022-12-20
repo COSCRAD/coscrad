@@ -1,4 +1,5 @@
-import { IIndexQueryResult, IVocabularyListViewModel } from '@coscrad/api-interfaces';
+import { IVocabularyListViewModel } from '@coscrad/api-interfaces';
+import { VocabularyListIndexState } from '../../../store/slices/resources/vocabulary-lists/types/vocabulary-list-index-state';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
@@ -6,7 +7,7 @@ import { formatBilingualText } from './utils';
 
 export const VocabularyListIndexPresenter = ({
     entities: vocabularyLists,
-}: IIndexQueryResult<IVocabularyListViewModel>) => {
+}: VocabularyListIndexState) => {
     const headingLabels: HeadingLabel<IVocabularyListViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'link' },
         { propertyKey: 'name', headingLabel: 'Vocabulary List' },

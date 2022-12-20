@@ -3,7 +3,7 @@ import {
     CategorizableTypeToViewModel,
     CoscradDataType,
     FromCoscradDataType,
-    IDetailQueryResult,
+    ICategorizableDetailQueryResult,
 } from '@coscrad/api-interfaces';
 
 /**
@@ -35,7 +35,9 @@ export enum DetailViewType {
 
 type IndexToDetailFlowDefinition<T extends CategorizableType> = {
     categorizableType: T;
-    indexFilter?: (viewModel: IDetailQueryResult<CategorizableTypeToViewModel[T]>) => boolean;
+    indexFilter?: (
+        viewModel: ICategorizableDetailQueryResult<CategorizableTypeToViewModel[T]>
+    ) => boolean;
     detailViewType: DetailViewType;
 };
 

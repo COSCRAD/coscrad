@@ -1,4 +1,5 @@
-import { IIndexQueryResult, ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
+import { ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
+import { TranscribedAudioIndexState } from '../../../store/slices/resources/transcribed-audio/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
@@ -6,7 +7,7 @@ import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seco
 
 export const TranscribedAudioIndexPresenter = ({
     entities: transcribedAudioItems,
-}: IIndexQueryResult<ITranscribedAudioViewModel>) => {
+}: TranscribedAudioIndexState) => {
     const headingLabels: HeadingLabel<ITranscribedAudioViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
         {

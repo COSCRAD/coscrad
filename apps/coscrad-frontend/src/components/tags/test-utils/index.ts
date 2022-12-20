@@ -1,4 +1,4 @@
-import { ITagViewModel } from '../../../../../../libs/api-interfaces/src';
+import { ITagViewModel } from '@coscrad/api-interfaces';
 
 export const buildDummyTags = (): ITagViewModel[] => [
     {

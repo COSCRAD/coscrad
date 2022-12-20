@@ -1,6 +1,6 @@
 import {
     GeometricFeatureType,
-    IDetailQueryResult,
+    ICategorizableDetailQueryResult,
     ISpatialFeatureViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
@@ -38,7 +38,7 @@ const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordin
  * spatial feature in its thumbnail view.
  */
 export const SpatialFeatureDetailThumbnailPresenter = (
-    spatialFeature: IDetailQueryResult<ISpatialFeatureViewModel>
+    spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>
 ): JSX.Element => {
     const [isExpanded, setIsExpanded] = useState(false);
 

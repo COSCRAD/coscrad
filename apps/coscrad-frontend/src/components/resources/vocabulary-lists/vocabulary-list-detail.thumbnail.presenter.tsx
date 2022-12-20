@@ -1,5 +1,5 @@
 import {
-    IDetailQueryResult,
+    ICategorizableDetailQueryResult,
     IVocabularyListViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
@@ -13,7 +13,7 @@ export const VocabularyListDetailThumbnailPresenter = ({
     name,
     nameEnglish,
     entries,
-}: IDetailQueryResult<IVocabularyListViewModel>): JSX.Element => (
+}: ICategorizableDetailQueryResult<IVocabularyListViewModel>): JSX.Element => (
     <div data-testid={id}>
         <Link to={`/${routes.resources.ofType(ResourceType.vocabularyList).detail(id)}`}>
             <Card>

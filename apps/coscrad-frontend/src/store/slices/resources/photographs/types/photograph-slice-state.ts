@@ -1,4 +1,4 @@
-import { IIndexQueryResult, IPhotographViewModel } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../../interfaces/loadable.interface';
+import { PhotographIndexState } from './photograph-index-state';
 
-export type PhotographSliceState = ILoadable<IIndexQueryResult<IPhotographViewModel>>;
+export type PhotographSliceState = ILoadable<PhotographIndexState>;

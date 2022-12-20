@@ -1,7 +1,7 @@
 import { CategorizableType } from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { Route } from 'react-router-dom';
-import { FilteredAggregateIndexContainer } from '../components/higher-order-components';
+import { FilteredCategorizableIndexContainer } from '../components/higher-order-components';
 import { buildUseLoadableForSingleCategorizableType } from '../components/higher-order-components/buildUseLoadableResourcesOfSingleType';
 import { ResourcePage } from '../components/higher-order-components/resource-page';
 import { NoteDetailContainer } from '../components/notes/note-detail.container';
@@ -45,8 +45,8 @@ export const IndexToDetailFlowRoutes = () => {
                 <Route
                     path={routeBuilder.index}
                     element={
-                        <FilteredAggregateIndexContainer
-                            // @ts-expect-error fix me
+                        <FilteredCategorizableIndexContainer
+                            // @ts-expect-error fix types
                             useLoadableModels={buildUseLoadableForSingleCategorizableType(
                                 categorizableType
                             )}

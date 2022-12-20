@@ -1,14 +1,16 @@
 import {
     BibliographicReferenceType,
     IBibliographicReferenceViewModel,
-    IDetailQueryResult,
+    ICategorizableDetailQueryResult,
 } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../../utils/types/functional-component';
 import { BookBibliographicReferenceDetailThumbnailPresenter } from './book-bibliographic-reference-detail.thumbnail.presenter';
 import { CourtCaseBibliographicReferenceDetailThumbnailPresenter } from './court-case-bibliographic-reference-detail.thumbnail.presenter';
 import { JournalArticleBibliographicReferenceThumbnailPresenter } from './journal-article-bibliographic-reference-detail.thumbnail.presenter';
 
-type Presenter = FunctionalComponent<IDetailQueryResult<IBibliographicReferenceViewModel>>;
+type Presenter = FunctionalComponent<
+    ICategorizableDetailQueryResult<IBibliographicReferenceViewModel>
+>;
 
 const lookupTable: {
     [K in BibliographicReferenceType]: FunctionalComponent<IBibliographicReferenceViewModel>;

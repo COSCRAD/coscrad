@@ -1,5 +1,5 @@
 import {
-    IDetailQueryResult,
+    ICategorizableDetailQueryResult,
     IVocabularyListEntry,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
@@ -71,7 +71,7 @@ export const VocabularyListDetailFullViewPresenter = ({
     nameEnglish,
     entries,
     form,
-}: IDetailQueryResult<IVocabularyListViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IVocabularyListViewModel>): JSX.Element => {
     const [filter, dispatch] = useReducer(filterReducer, {});
 
     const filterWithoutNullAndUndefined = Object.entries(filter).reduce(

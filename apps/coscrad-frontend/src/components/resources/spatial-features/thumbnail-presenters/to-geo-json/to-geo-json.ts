@@ -1,4 +1,4 @@
-import { IDetailQueryResult, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
+import { ICategorizableDetailQueryResult, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 
 /**
  * Our `SpatialFeature` view models are a sub-type of GeoJSON. While this technically
@@ -6,11 +6,11 @@ import { IDetailQueryResult, ISpatialFeatureViewModel } from '@coscrad/api-inter
  * superfluous (base view model \ detail query result) props `tags` and `actions`.
  */
 export const toGeoJSON = (
-    nonStandardModel: IDetailQueryResult<ISpatialFeatureViewModel>
-): Omit<IDetailQueryResult<ISpatialFeatureViewModel>, 'actions' | 'tags'> => {
+    nonStandardModel: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>
+): Omit<ICategorizableDetailQueryResult<ISpatialFeatureViewModel>, 'actions' | 'tags'> => {
     const cloned = JSON.parse(
         JSON.stringify(nonStandardModel)
-    ) as IDetailQueryResult<ISpatialFeatureViewModel>;
+    ) as ICategorizableDetailQueryResult<ISpatialFeatureViewModel>;
 
     /**
      * Note that we shouldn't hit the case that one of these props is not defined

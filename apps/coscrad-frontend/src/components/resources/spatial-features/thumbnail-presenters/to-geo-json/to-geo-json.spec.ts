@@ -1,6 +1,6 @@
 import {
     GeometricFeatureType,
-    IDetailQueryResult,
+    ICategorizableDetailQueryResult,
     ISpatialFeatureViewModel,
 } from '@coscrad/api-interfaces';
 import { buildDummyTags } from '../../../../tags/test-utils';
@@ -8,8 +8,11 @@ import { toGeoJSON } from './to-geo-json';
 
 type TestCase = {
     description: string;
-    viewModel: IDetailQueryResult<ISpatialFeatureViewModel>;
-    expectedOutput: Omit<IDetailQueryResult<ISpatialFeatureViewModel>, 'actions' | 'tags'>;
+    viewModel: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>;
+    expectedOutput: Omit<
+        ICategorizableDetailQueryResult<ISpatialFeatureViewModel>,
+        'actions' | 'tags'
+    >;
 };
 
 const testCases: TestCase[] = [
