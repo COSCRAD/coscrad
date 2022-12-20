@@ -8,10 +8,16 @@ export class CoscradUserProfile extends BaseDomainModel {
      * TODO [https://www.pivotaltracker.com/story/show/182703183]
      * Add an `Email` `Coscrad Data Type`, and tighten the validation rules.
      */
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'email',
+        description: "the user's email address",
+    })
     readonly email: string;
 
-    @NestedDataType(FullName)
+    @NestedDataType(FullName, {
+        label: 'full name',
+        description: "the user's full name",
+    })
     readonly name: FullName;
 
     // readonly contact?: ContactInfo;

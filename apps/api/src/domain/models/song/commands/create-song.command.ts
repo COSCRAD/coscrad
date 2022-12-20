@@ -10,25 +10,51 @@ import { ContributorAndRole } from '../ContributorAndRole';
     description: 'Creates a new song',
 })
 export class CreateSong implements ICreateCommand {
-    @UUID()
+    @UUID({
+        label: 'ID (generated)',
+        description: 'unique identifier for the song that will be created',
+    })
     readonly id: AggregateId;
 
-    @NonEmptyString({ isOptional: true })
+    @NonEmptyString({
+        isOptional: true,
+        label: 'title',
+        description: "song's title in the language",
+    })
     readonly title?: string;
 
-    @NonEmptyString({ isOptional: true })
+    @NonEmptyString({
+        isOptional: true,
+        label: 'title (colonial language)',
+        description: "song's title in the colonial language",
+    })
     readonly titleEnglish?: string;
 
-    @NestedDataType(ContributorAndRole, { isArray: true })
+    @NestedDataType(ContributorAndRole, {
+        isArray: true,
+        label: 'contributions',
+        description: 'acknowledgement of all contributors who worked on this song',
+    })
     readonly contributions: ContributorAndRole[];
 
-    @NonEmptyString({ isOptional: true })
+    @NonEmptyString({
+        isOptional: true,
+        label: 'lyrics',
+        description: "plain text representation of this song's lyrics",
+    })
     readonly lyrics?: string;
 
-    @URL()
+    @URL({
+        label: 'audio link',
+        description: 'a web URL link to the audio for this song',
+    })
     readonly audioURL: string;
 
-    @RawDataObject({ isOptional: true })
+    @RawDataObject({
+        isOptional: true,
+        label: 'raw data',
+        description: 'additional data from a legacy \\ third-party system source of the data',
+    })
     readonly rawData?: Record<string, unknown>;
 
     // the length can be set later

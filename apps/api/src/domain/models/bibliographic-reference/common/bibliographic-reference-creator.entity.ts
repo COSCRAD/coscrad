@@ -9,10 +9,16 @@ import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-unde
 import BaseDomainModel from '../../BaseDomainModel';
 
 export default class BibliographicReferenceCreator extends BaseDomainModel {
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'name',
+        description: "full name of work's creator (free-form text)",
+    })
     readonly name: string;
 
-    @Enum(CoscradEnum.BibliographicSubjectCreatorType)
+    @Enum(CoscradEnum.BibliographicSubjectCreatorType, {
+        label: 'creator type',
+        description: "the person's role in creating the given work",
+    })
     readonly type: BibliographicSubjectCreatorType;
 
     constructor(dto: DTO<BibliographicReferenceCreator>) {

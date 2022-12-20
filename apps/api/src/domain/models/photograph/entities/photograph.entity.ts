@@ -22,14 +22,23 @@ export class Photograph extends Resource implements Boundable2D {
     readonly type = ResourceType.photograph;
 
     // TODO Make this a `mediaItemId` @UUID
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'file name',
+        description: 'the name (not full URL \\ path) of the digital file',
+    })
     readonly filename: string;
 
     // TODO make this a `contributorID`
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'photograph',
+        description: 'the person who took the picture',
+    })
     readonly photographer: string;
 
-    @NestedDataType(PhotographDimensions)
+    @NestedDataType(PhotographDimensions, {
+        label: 'dimensions',
+        description: 'the height and width of the photograph in pixels',
+    })
     readonly dimensions: PhotographDimensions;
 
     constructor(dto: DTO<Photograph>) {

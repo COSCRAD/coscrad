@@ -3,10 +3,16 @@ import { DTO } from '../../../../../../types/DTO';
 import BaseDomainModel from '../../../../BaseDomainModel';
 
 export class FullName extends BaseDomainModel {
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'first name',
+        description: "the user's first name",
+    })
     readonly firstName: string;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'last name',
+        description: "the user's last name",
+    })
     readonly lastName: string;
 
     constructor(dto: DTO<FullName>) {

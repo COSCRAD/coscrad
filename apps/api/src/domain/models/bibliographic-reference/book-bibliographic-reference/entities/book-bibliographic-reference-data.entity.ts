@@ -24,33 +24,68 @@ export default class BookBibliographicReferenceData
 {
     readonly type = BibliographicReferenceType.book;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'title',
+        description: 'the title of the referenced book',
+    })
     readonly title: string;
 
     @IsNonEmptyArray()
-    @NestedDataType(BibliographicReferenceCreator, { isArray: true })
+    @NestedDataType(BibliographicReferenceCreator, {
+        isArray: true,
+        label: 'creators',
+        description: 'those responsible for creating this work',
+    })
     readonly creators: BibliographicReferenceCreator[];
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'abstract',
+        description: 'a brief summary of the referenced book',
+    })
     // `abstractNote` is what Zotero calls this property
     readonly abstract?: string;
 
-    @Year({ isOptional })
+    @Year({
+        isOptional,
+        label: 'year',
+        description: 'A number representing the year of publication',
+    })
     readonly year?: number;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'publisher',
+        description: 'the publisher of the referenced book',
+    })
     readonly publisher?: string;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'place',
+        description: 'the place where the referenced book was published',
+    })
     readonly place?: string;
 
-    @URL({ isOptional })
+    @URL({
+        isOptional,
+        label: 'external link',
+        description: 'an link to an external digital representation of the book',
+    })
     readonly url?: string;
 
-    @PositiveInteger({ isOptional })
+    @PositiveInteger({
+        isOptional,
+        label: 'number of pages',
+        description: 'the total number of pages in the referenced book',
+    })
     readonly numberOfPages?: number;
 
-    @ISBN({ isOptional })
+    @ISBN({
+        isOptional,
+        label: 'ISBN',
+        description: 'a standardized globally unique identifier for the referenced book',
+    })
     readonly isbn?: string;
 
     constructor(dto: DTO<BookBibliographicReferenceData>) {

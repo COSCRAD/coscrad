@@ -16,7 +16,10 @@ class CategorizableCompositeIdentifier {
     @IsEnum(CategorizableType)
     type: CategorizableType;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'ID',
+        description: 'unique identifier for this category',
+    })
     id: AggregateId;
 }
 
@@ -24,16 +27,27 @@ class CategorizableCompositeIdentifier {
 export class Category extends Aggregate implements HasLabel {
     readonly type = AggregateType.category;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'label',
+        description: 'the user-facing label for this category',
+    })
     readonly label: string;
 
     @Type(() => CategorizableCompositeIdentifier)
-    @CompositeIdentifier(CategorizableType, isCategorizableType, { isArray: true })
+    @CompositeIdentifier(CategorizableType, isCategorizableType, {
+        isArray: true,
+        label: 'members',
+        description: 'the composite identifier of every resource or note in this category',
+    })
     readonly members: CategorizableCompositeIdentifier[];
 
     // These are `Category` IDs for the children categories of this category
     // TODO Make this a UUID
-    @NonEmptyString({ isArray: true })
+    @NonEmptyString({
+        isArray: true,
+        label: 'children IDs',
+        description: 'the ID of every category that is a child (sub-cateogry) of this one',
+    })
     readonly childrenIDs: AggregateId[];
 
     constructor(dto: DTO<Category>) {

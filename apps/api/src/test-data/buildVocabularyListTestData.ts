@@ -2,7 +2,7 @@ import { Term } from '../domain/models/term/entities/term.entity';
 import { VocabularyListVariable } from '../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { DropboxOrCheckbox } from '../domain/models/vocabulary-list/types/dropbox-or-checkbox';
-import { VocabularyListEntry } from '../domain/models/vocabulary-list/vocabulary-list-entry';
+import { VocabularyListEntry } from '../domain/models/vocabulary-list/vocabulary-list-entry.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { DTO } from '../types/DTO';
 import { buildTermsForVocabularyList } from './buildTermTestData';

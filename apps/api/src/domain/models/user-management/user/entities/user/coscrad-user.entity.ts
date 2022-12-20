@@ -33,16 +33,31 @@ export class CoscradUser extends Aggregate {
      * - We may want to use a different or multiple auth providers
      * - We want it to be easy to switch auth providers
      */
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'user ID with the auth provider',
+        description: 'an external ID that identifies the user with the auth provider',
+    })
     readonly authProviderUserId: string;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'username',
+        description: 'a human-readable identifier for this user',
+    })
     readonly username: string;
 
-    @NestedDataType(CoscradUserProfile, { isOptional: true })
+    @NestedDataType(CoscradUserProfile, {
+        isOptional: true,
+        label: 'profile',
+        description: "the user's profile information",
+    })
     readonly profile?: CoscradUserProfile;
 
-    @Enum(CoscradEnum.CoscradUserRole, { isArray: true })
+    @Enum(CoscradEnum.CoscradUserRole, {
+        isArray: true,
+        label: 'roles',
+        description:
+            "the user's roles, which grant privileges to perform certain read \\ write actions",
+    })
     readonly roles: CoscradUserRole[];
 
     // userData - we may want to store usage data some day- e.g. to store what level the user has completed on a game

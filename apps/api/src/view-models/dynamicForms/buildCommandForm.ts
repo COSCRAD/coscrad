@@ -18,8 +18,8 @@ export const buildCommandForm = <T extends Record<string, unknown>>(
                  * TODO [https://www.pivotaltracker.com/story/show/183504291]
                  * We need decorators for command prop labels and descriptions.
                  */
-                label: 'add label',
-                description: 'add description',
+                label: propertySchema.label,
+                description: propertySchema.description,
             }),
         ],
         []

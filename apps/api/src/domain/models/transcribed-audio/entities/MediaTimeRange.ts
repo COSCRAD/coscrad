@@ -12,14 +12,25 @@ type MediaTimestamp = number;
 type MediaData = string;
 
 export class MediaTimeRange extends BaseDomainModel {
-    @NonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber({
+        label: 'in point',
+        description: 'starting time stamp',
+    })
     readonly inPoint: MediaTimestamp;
 
-    @NonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber({
+        label: 'out point',
+        description: 'ending time stamp',
+    })
     readonly outPoint: MediaTimestamp;
 
+    // TODO Calling this property `data` is probably a bad idea
     // TODO Abstract over different data types
-    @NonEmptyString({ isOptional: true })
+    @NonEmptyString({
+        isOptional: true,
+        label: 'text data',
+        description: 'text for this time range',
+    })
     readonly data?: MediaData;
 
     constructor(dto: DTO<MediaTimeRange>) {
