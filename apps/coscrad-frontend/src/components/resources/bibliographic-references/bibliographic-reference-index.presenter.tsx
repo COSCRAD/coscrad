@@ -8,11 +8,11 @@ import {
 } from './joint-view';
 
 export const BibliographicReferenceIndexPresenter = ({
-    data: detailResult,
+    entities,
 }: BibliographicReferenceIndexState) => {
-    const consolidatedViewOfBibliographicReferences = detailResult
-        .map(({ data }) => data)
-        .map(buildBibliographicReferenceJointViewModel);
+    const consolidatedViewOfBibliographicReferences = entities.map(
+        buildBibliographicReferenceJointViewModel
+    );
 
     const headingLabels: HeadingLabel<BibliographicReferenceJointViewModel>[] = [
         {

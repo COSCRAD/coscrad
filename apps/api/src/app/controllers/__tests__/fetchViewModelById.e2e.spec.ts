@@ -122,7 +122,7 @@ describe('GET  (fetch view models)', () => {
 
                             expect(res.status).toBe(httpStatusCodes.ok);
 
-                            expect(res.body.data.id).toBe(resourceToFind.id);
+                            expect(res.body.id).toBe(resourceToFind.id);
 
                             expect(res.body).toMatchSnapshot();
                         });

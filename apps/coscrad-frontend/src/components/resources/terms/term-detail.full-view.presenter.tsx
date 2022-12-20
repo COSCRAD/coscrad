@@ -1,12 +1,16 @@
-import { IDetailQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
+import { ICategorizableDetailQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
 import { Card, Divider } from '@mui/material';
 import './term-detail.presenter.css';
 
 // TODO[https://www.pivotaltracker.com/story/show/183681722] expose commands
 export const TermDetailFullViewPresenter = ({
-    data: { id, term, termEnglish, audioURL, contributor },
-}: IDetailQueryResult<ITermViewModel>): JSX.Element => (
+    id,
+    term,
+    termEnglish,
+    audioURL,
+    contributor,
+}: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => (
     <div className="term-detail-page" data-testid={id}>
         <Card className="detail-card">
             <div id="detail-term">{term || ''}</div>
