@@ -1,30 +1,37 @@
-import { IBaseViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
+import {
+    IBaseViewModel,
+    ICategorizableDetailQueryResult,
+    IIndexQueryResult,
+} from '@coscrad/api-interfaces';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 
 export interface FilteredAggregateIndexContainerProps<
-    T extends IBaseViewModel,
+    T extends ICategorizableDetailQueryResult<IBaseViewModel>,
     UPresenterProps = T
 > {
     useLoadableModels: () => ILoadable<IIndexQueryResult<T>>;
     IndexPresenter: FunctionalComponent<UPresenterProps>;
-    filter?: (model: T) => boolean;
+    preFilter?: (model: T) => boolean;
 }
 
-export const FilteredAggregateIndexContainer = <T extends IBaseViewModel, U = T>({
+export const FilteredCategorizableIndexContainer = <
+    T extends ICategorizableDetailQueryResult<IBaseViewModel>,
+    U = T
+>({
     useLoadableModels,
     IndexPresenter,
-    filter,
+    preFilter,
 }: FilteredAggregateIndexContainerProps<T, U>): JSX.Element => {
     const loadableModels = useLoadableModels();
 
     const filteredLoadableModels =
-        typeof filter === 'function' && loadableModels.data !== null
+        typeof preFilter === 'function' && loadableModels.data !== null
             ? {
                   ...loadableModels,
                   data: {
-                      data: loadableModels.data.data.filter(({ data: model }) => filter(model)),
+                      entities: loadableModels.data.entities.filter((model) => preFilter(model)),
                   },
               }
             : loadableModels;

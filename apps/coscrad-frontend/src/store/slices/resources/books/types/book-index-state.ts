@@ -1,3 +1,3 @@
-import { IBookViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
+import { IBookViewModel, ICategorizableIndexQueryResult } from '@coscrad/api-interfaces';
 
-export type BookIndexState = IIndexQueryResult<IBookViewModel>;
+export type BookIndexState = ICategorizableIndexQueryResult<IBookViewModel>;

@@ -1,18 +1,13 @@
-import { IIndexQueryResult, IVocabularyListViewModel } from '@coscrad/api-interfaces';
+import { IVocabularyListViewModel } from '@coscrad/api-interfaces';
+import { VocabularyListIndexState } from '../../../store/slices/resources/vocabulary-lists/types/vocabulary-list-index-state';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { formatBilingualText } from './utils';
 
 export const VocabularyListIndexPresenter = ({
-    data: vocabularyListsAndActions,
-}: IIndexQueryResult<IVocabularyListViewModel>) => {
-    /**
-     * TODO [https://www.pivotaltracker.com/story/show/183681556]
-     * Remove the need to map here.
-     */
-    const vocabularyLists = vocabularyListsAndActions.map(({ data }) => data);
-
+    entities: vocabularyLists,
+}: VocabularyListIndexState) => {
     const headingLabels: HeadingLabel<IVocabularyListViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'link' },
         { propertyKey: 'name', headingLabel: 'Vocabulary List' },

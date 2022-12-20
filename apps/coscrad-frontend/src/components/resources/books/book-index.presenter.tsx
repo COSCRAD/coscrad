@@ -10,13 +10,7 @@ import { formatBilingualText } from '../vocabulary-lists/utils';
  * We may some day read the actions and allow for bulk command execution in
  * an index view.
  */
-export const BookIndexPresenter = ({ data: booksAndActions }: BookIndexState) => {
-    /**
-     * TODO[https://www.pivotaltracker.com/story/show/183681556]
-     * Remove the need for this mapping.
-     */
-    const books = booksAndActions.map(({ data }) => data);
-
+export const BookIndexPresenter = ({ entities: books }: BookIndexState) => {
     const headingLabels: HeadingLabel<IBookViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
         { propertyKey: 'title', headingLabel: 'Title' },
