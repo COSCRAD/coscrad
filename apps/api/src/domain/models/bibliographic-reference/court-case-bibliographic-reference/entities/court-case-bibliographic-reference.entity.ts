@@ -17,7 +17,10 @@ export class CourtCaseBibliographicReference
 {
     readonly type = AggregateType.bibliographicReference;
 
-    @NestedDataType(CourtCaseBibliographicReferenceData)
+    @NestedDataType(CourtCaseBibliographicReferenceData, {
+        label: 'reference data',
+        description: 'citation information for the referenced court case',
+    })
     readonly data: CourtCaseBibliographicReferenceData;
 
     constructor(dto: DTO<CourtCaseBibliographicReference>) {

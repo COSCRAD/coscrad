@@ -9,18 +9,24 @@ Array [
     "schema": Object {
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "label": "ID",
       },
       "label": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a human readable text label for this tag",
         "isArray": false,
         "isOptional": false,
+        "label": "label",
       },
       "members": Object {
         "coscradDataType": "COMPOSITE_IDENTIFIER",
+        "description": "the composite identifier of every resource or note with this tag",
         "isArray": true,
         "isOptional": false,
+        "label": "members",
       },
     },
     "type": "tag",
@@ -32,40 +38,54 @@ Array [
     "schema": Object {
       "children": Object {
         "complexDataType": "NESTED_TYPE",
+        "description": "self similar reference to all categories that are direct-descendants of this category in the tree",
         "isArray": false,
         "isOptional": false,
+        "label": "children",
         "schema": Object {
           "id": Object {
             "coscradDataType": "NON_EMPTY_STRING",
+            "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
+            "label": "ID",
           },
           "label": Object {
             "coscradDataType": "NON_EMPTY_STRING",
+            "description": "the user-facing label for this category",
             "isArray": false,
             "isOptional": false,
+            "label": "label",
           },
           "members": Object {
             "coscradDataType": "COMPOSITE_IDENTIFIER",
+            "description": "the composite identifier of every resource or note in this category",
             "isArray": true,
             "isOptional": false,
+            "label": "members",
           },
         },
       },
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "label": "ID",
       },
       "label": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the user-facing label for this category",
         "isArray": false,
         "isOptional": false,
+        "label": "label",
       },
       "members": Object {
         "coscradDataType": "COMPOSITE_IDENTIFIER",
+        "description": "the composite identifier of every resource or note in this category",
         "isArray": true,
         "isOptional": false,
+        "label": "members",
       },
     },
     "type": "category",
@@ -77,33 +97,45 @@ Array [
     "schema": Object {
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "label": "ID",
       },
       "profile": Object {
         "complexDataType": "NESTED_TYPE",
+        "description": "the user's profile information",
         "isArray": false,
         "isOptional": true,
+        "label": "profile",
         "schema": Object {
           "email": Object {
             "coscradDataType": "NON_EMPTY_STRING",
+            "description": "the user's email address",
             "isArray": false,
             "isOptional": false,
+            "label": "email",
           },
           "name": Object {
             "complexDataType": "NESTED_TYPE",
+            "description": "the user's full name",
             "isArray": false,
             "isOptional": false,
+            "label": "full name",
             "schema": Object {
               "firstName": Object {
                 "coscradDataType": "NON_EMPTY_STRING",
+                "description": "the user's first name",
                 "isArray": false,
                 "isOptional": false,
+                "label": "first name",
               },
               "lastName": Object {
                 "coscradDataType": "NON_EMPTY_STRING",
+                "description": "the user's last name",
                 "isArray": false,
                 "isOptional": false,
+                "label": "last name",
               },
             },
           },
@@ -111,10 +143,12 @@ Array [
       },
       "roles": Object {
         "complexDataType": "ENUM",
+        "description": "the user's roles, which grant privileges to perform certain read \\\\ write actions",
         "enumLabel": "User Role",
         "enumName": "COSCRAD_USER_ROLE",
         "isArray": true,
         "isOptional": false,
+        "label": "roles",
         "labelsAndValues": Array [
           Object {
             "label": "admin",
@@ -132,8 +166,10 @@ Array [
       },
       "username": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a human-readable identifier for this user",
         "isArray": false,
         "isOptional": false,
+        "label": "username",
       },
     },
     "type": "user",
@@ -145,23 +181,31 @@ Array [
     "schema": Object {
       "description": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a summary of the significance of this user group (what its members have in common)",
         "isArray": false,
         "isOptional": false,
+        "label": "description",
       },
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "label": "ID",
       },
       "label": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the name of the group",
         "isArray": false,
         "isOptional": false,
+        "label": "label",
       },
       "userIds": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the ID of every user that is in this group",
         "isArray": true,
         "isOptional": false,
+        "label": "user IDs",
       },
     },
     "type": "userGroup",

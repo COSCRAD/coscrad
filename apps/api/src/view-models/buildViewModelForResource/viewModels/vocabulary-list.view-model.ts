@@ -12,7 +12,7 @@ import { Term } from '../../../domain/models/term/entities/term.entity';
 import { VocabularyListVariable } from '../../../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
 import { VocabularyListVariableValue } from '../../../domain/models/vocabulary-list/types/vocabulary-list-variable-value';
-import { VocabularyListEntry } from '../../../domain/models/vocabulary-list/vocabulary-list-entry';
+import { VocabularyListEntry } from '../../../domain/models/vocabulary-list/vocabulary-list-entry.entity';
 import { NotFound } from '../../../lib/types/not-found';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from './base.view-model';
@@ -24,7 +24,10 @@ class VocabularyListEntryViewModel implements IVocabularyListEntry<VocabularyLis
     @ApiProperty({
         type: TermViewModel,
     })
-    @NestedDataType(TermViewModel)
+    @NestedDataType(TermViewModel, {
+        label: 'term',
+        description: 'the term that is included in the vocabulary list via this entry',
+    })
     term: TermViewModel;
 
     @ApiProperty({
@@ -79,7 +82,11 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
         description:
             'an entry combines a term with a set of "variable values" parametrizing it within the given vocabulary list',
     })
-    @NestedDataType(VocabularyListEntryViewModel, { isArray: true })
+    @NestedDataType(VocabularyListEntryViewModel, {
+        isArray: true,
+        label: 'entries',
+        description: 'all terms in this vocabulary list together with their filter properties',
+    })
     readonly entries: VocabularyListEntryViewModel[];
 
     // @ApiProperty({

@@ -8,9 +8,15 @@ import { AggregateId } from '../../../../../types/AggregateId';
     description: 'Add an existing user to an existing user group',
 })
 export class AddUserToGroup implements ICommand {
-    @UUID()
+    @UUID({
+        label: 'group ID',
+        description: 'the ID of the group to which the user will be added',
+    })
     readonly groupId: AggregateId;
 
-    @UUID()
+    @UUID({
+        label: 'user ID',
+        description: 'the ID of the user that will be added to this group',
+    })
     readonly userId: AggregateId;
 }

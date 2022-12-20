@@ -5,10 +5,16 @@ import BaseDomainModel from '../../BaseDomainModel';
 
 // This is a value-object
 export default class PhotographDimensions extends BaseDomainModel {
-    @NonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber({
+        label: 'width (px)',
+        description: 'the width of the photograph in pixels',
+    })
     readonly widthPX: number;
 
-    @NonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber({
+        label: 'height (px)',
+        description: 'the height of the photograph in pixels',
+    })
     readonly heightPX: number;
 
     constructor(dto: DTO<PhotographDimensions>) {

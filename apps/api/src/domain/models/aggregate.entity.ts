@@ -36,7 +36,10 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
     readonly type: AggregateType;
 
     // TODO Make this a UUID
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'ID',
+        description: 'unique identifier',
+    })
     readonly id: AggregateId;
 
     constructor(dto: DTO<Aggregate>) {

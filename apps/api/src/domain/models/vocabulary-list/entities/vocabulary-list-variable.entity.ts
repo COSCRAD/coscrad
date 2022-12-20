@@ -18,7 +18,10 @@ export class VocabularyListVariable<
         example: 'person',
         description: 'name of a property that parametrizes terms in the list',
     })
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'filter property name',
+        description: 'the name of this filter property',
+    })
     name: string;
 
     @ApiProperty({

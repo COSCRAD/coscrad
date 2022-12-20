@@ -10,7 +10,11 @@ export class CoscradUserGroupViewModel extends BaseViewModel {
     @FromUserGroup
     readonly label: string;
 
-    @NestedDataType(CoscradUserViewModel, { isArray: true })
+    @NestedDataType(CoscradUserViewModel, {
+        isArray: true,
+        label: 'users',
+        description: 'all users that are in this group',
+    })
     readonly users: CoscradUserViewModel[];
 
     @FromUserGroup

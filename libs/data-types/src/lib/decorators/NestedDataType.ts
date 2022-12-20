@@ -10,7 +10,7 @@ import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
 
 export function NestedDataType(
     NestedDataClass: Object,
-    userOptions: Partial<TypeDecoratorOptions> = {}
+    userOptions: TypeDecoratorOptions
 ): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol) => {
         const options = mixinDefaultTypeDecoratorOptions(userOptions);

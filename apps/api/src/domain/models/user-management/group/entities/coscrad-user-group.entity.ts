@@ -18,17 +18,28 @@ import UserIsAlreadyInGroupError from '../errors/invalid-state-transition-errors
 export class CoscradUserGroup extends Aggregate {
     type = AggregateType.userGroup;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'label',
+        description: 'the name of the group',
+    })
     readonly label: string; // Consider making this multi-lingual text
 
     /**
      * TODO [https://www.pivotaltracker.com/story/show/182693980]
      * Make this type `AggregateId`.
      */
-    @NonEmptyString({ isArray: true })
+    @NonEmptyString({
+        isArray: true,
+        label: 'user IDs',
+        description: 'the ID of every user that is in this group',
+    })
     readonly userIds: string[];
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'description',
+        description:
+            'a summary of the significance of this user group (what its members have in common)',
+    })
     readonly description: string;
 
     constructor(dto: DTO<CoscradUserGroup>) {

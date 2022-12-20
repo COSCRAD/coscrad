@@ -8,7 +8,11 @@ import { VocabularyListVariableValue } from './types/vocabulary-list-variable-va
 
 export class VocabularyListEntry extends BaseDomainModel {
     // TODO Make this a UUID
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'term ID',
+        description:
+            'unique identifier for the term that is included in the vocabulary list via this entry',
+    })
     termId: AggregateId;
 
     // TODO Add type validation rules

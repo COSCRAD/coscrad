@@ -14,13 +14,18 @@ import {
 import { BibliographicSubjectCreatorType, CoscradEnum, MIMEType } from '../lib/enums';
 import { CoscradUserRole } from '../lib/enums/CoscradUserRole';
 
+const buildDummyLabelAndDescription = (name: string): { label: string; description: string } => ({
+    label: `label for property: ${name}`,
+    description: `description of property: ${name}`,
+});
+
 const isOptional = true;
 
 class Whatsit {
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({ isOptional, ...buildDummyLabelAndDescription('whatsitName') })
     whatsitName = 'whatsit 1';
 
-    @UUID()
+    @UUID({ ...buildDummyLabelAndDescription('whatsitId') })
     whatsitId = '25c5824f-6b4b-4341-bb60-3145d8109568';
 }
 
@@ -28,7 +33,9 @@ class Whatsit {
 class ThingDataOne {
     type = 'one';
 
-    @NonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber({
+        ...buildDummyLabelAndDescription('strength'),
+    })
     strength = 99.5;
 }
 
@@ -36,80 +43,82 @@ class ThingDataOne {
 class ThingDataTwo {
     type = 'two';
 
-    @PositiveInteger()
+    @PositiveInteger({ ...buildDummyLabelAndDescription('rating') })
     rating = 5;
 }
 
 export class Widget {
-    @NonEmptyString()
+    @NonEmptyString({ ...buildDummyLabelAndDescription('widgetName') })
     widgetName = 'Machine';
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({ isOptional, ...buildDummyLabelAndDescription('locationName') })
     locationName = 'Back Red Room 12';
 
     // @IsString({ each: true })
     // @IsNotEmpty()
-    @NonEmptyString({ isArray: true })
+    @NonEmptyString({ isArray: true, ...buildDummyLabelAndDescription('aliases') })
     aliases: ['super machine', 'widget king'];
 
-    @UUID()
+    @UUID({ ...buildDummyLabelAndDescription('id') })
     id = '25c5824f-6b4b-4341-bb60-3145d8109568';
 
-    @UUID({ isOptional })
+    @UUID({ isOptional, ...buildDummyLabelAndDescription('locationId') })
     locationId = '25c5824f-6b4b-4341-bb60-3145d8109568';
 
-    @URL()
+    @URL({ ...buildDummyLabelAndDescription('iconUrl') })
     iconUrl = 'https://www.mylink.com/uploads/123.png';
 
-    @URL({ isOptional })
+    @URL({ isOptional, ...buildDummyLabelAndDescription('specSheetUrl') })
     specSheetUrl = undefined;
 
-    @NonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber({ ...buildDummyLabelAndDescription('width') })
     width = 134.5;
 
-    @NonNegativeFiniteNumber({ isOptional })
+    @NonNegativeFiniteNumber({ isOptional, ...buildDummyLabelAndDescription('averageRating') })
     averageRating = 3.5;
 
-    @NestedDataType(Whatsit)
+    @NestedDataType(Whatsit, { ...buildDummyLabelAndDescription('primaryWhatsit') })
     primaryWhatsit = {};
 
-    @NestedDataType(Whatsit, { isOptional })
+    @NestedDataType(Whatsit, { isOptional, ...buildDummyLabelAndDescription('secondaryWhatsit') })
     secondaryWhatsit = {};
 
-    @RawDataObject()
+    @RawDataObject({ ...buildDummyLabelAndDescription('rawDataObject') })
     rawDataObject = { foo: 72 };
 
-    @RawDataObject({ isOptional })
+    @RawDataObject({ isOptional, ...buildDummyLabelAndDescription('optionalRawData') })
     optionalRawData = undefined;
 
-    @Enum(CoscradEnum.MIMEType)
+    @Enum(CoscradEnum.MIMEType, { ...buildDummyLabelAndDescription('mimeType') })
     mimeType = MIMEType.mp3;
 
-    @Enum(CoscradEnum.CoscradUserRole)
+    @Enum(CoscradEnum.CoscradUserRole, { ...buildDummyLabelAndDescription('role') })
     role = CoscradUserRole.viewer;
 
-    @Enum(CoscradEnum.BibliographicSubjectCreatorType)
+    @Enum(CoscradEnum.BibliographicSubjectCreatorType, {
+        ...buildDummyLabelAndDescription('creatorType'),
+    })
     creatorType = BibliographicSubjectCreatorType.artist;
 
-    @Year()
+    @Year({ ...buildDummyLabelAndDescription('year') })
     year = 1998;
 
-    @Year({ isOptional })
+    @Year({ isOptional, ...buildDummyLabelAndDescription('yearUploaded') })
     yearUploaded = 2002;
 
-    @PositiveInteger()
+    @PositiveInteger({ ...buildDummyLabelAndDescription('numkberOfLikes') })
     numberOfLikes = 22;
 
-    @PositiveInteger({ isOptional })
+    @PositiveInteger({ isOptional, ...buildDummyLabelAndDescription('numberOfDownvotes') })
     numberOfDownvotes = 2;
 
-    @ISBN()
+    @ISBN({ ...buildDummyLabelAndDescription('requiredISBN') })
     requiredISBN = `978-3-16-148410-0`;
 
-    @ISBN({ isOptional })
+    @ISBN({ isOptional, ...buildDummyLabelAndDescription('optionalISBN') })
     optionalISBN = `979-3-16-148410-0`;
 
-    @Union([ThingDataOne, ThingDataTwo], 'type')
+    @Union([ThingDataOne, ThingDataTwo], 'type', { ...buildDummyLabelAndDescription('data') })
     data: ThingDataOne | ThingDataTwo = {
         type: 'one',
 

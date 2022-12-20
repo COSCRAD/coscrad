@@ -14,10 +14,17 @@ const isOptional = true;
     description: 'Creates a new journal article bibliographic reference',
 })
 export class CreateJournalArticleBibliographicReference implements ICreateCommand {
-    @UUID()
+    @UUID({
+        label: 'ID (generated)',
+        description: 'unique identifier of the new journal article bibliographic reference',
+    })
     readonly id: AggregateId;
 
-    @RawDataObject({ isOptional })
+    @RawDataObject({
+        isOptional,
+        label: 'raw data',
+        description: 'raw data from third-party system of origin (e.g. Zotero)',
+    })
     // Perhaps this should be part of ICreateCommand?
     readonly rawData?: Record<string, unknown>;
 
@@ -29,7 +36,10 @@ export class CreateJournalArticleBibliographicReference implements ICreateComman
      *
      * This is why we ignore command.ts files in Sonar Cloud.
      */
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'title',
+        description: 'title of the referenced journal article',
+    })
     readonly title: string;
 
     /**
@@ -37,29 +47,53 @@ export class CreateJournalArticleBibliographicReference implements ICreateComman
      * Support non-empty array based on `isOptional`.
      */
     @IsNonEmptyArray()
-    @NestedDataType(BibliographicReferenceCreator, { isArray: true })
+    @NestedDataType(BibliographicReferenceCreator, {
+        isArray: true,
+        label: 'creators',
+        description: 'the authors of the referenced journal article',
+    })
     readonly creators: BibliographicReferenceCreator[];
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'abstract',
+        description: 'a brief summary of the referenced journal article',
+    })
     readonly abstract?: string;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'issue date',
+        description: 'a free-form text representation of the date of publication',
+    })
     // WARNING: this is unstructured data from Zotero
     readonly issueDate: string;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'publication title',
+        description: 'the name of the journal in which the article was published',
+    })
     readonly publicationTitle?: string;
 
-    @URL({ isOptional })
+    @URL({
+        isOptional,
+        label: 'external link',
+        description: 'an external web link to the referenced journal article',
+    })
     readonly url?: string;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'pages',
+        description:
+            'text summary of the pages on which this article appears in the larger journal',
+    })
     // TODO Clarify the significance of this property
     readonly pages?: string;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({ isOptional, label: 'ISSN', description: 'the ISSN of the journal article' })
     readonly issn?: string;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({ isOptional, label: 'DOI', description: 'the DOI of the journal article' })
     readonly doi?: string;
 }
