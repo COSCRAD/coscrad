@@ -4,7 +4,9 @@ import { routes } from '../../../app/routes/routes';
 import './photograph-detail.thumbnail.presenter.css';
 
 export const PhotographDetailThumbnailPresenter = ({
-    data: { id, imageURL, photographer },
+    id,
+    imageURL,
+    photographer,
 }: IDetailQueryResult<IPhotographViewModel>): JSX.Element => (
     <Link to={`/${routes.resources.ofType(ResourceType.photograph).detail(id)}`}>
         <div className="detail-thumbnail-container" title="View Connected Photograph">

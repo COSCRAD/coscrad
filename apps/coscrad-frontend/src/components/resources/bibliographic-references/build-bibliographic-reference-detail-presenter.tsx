@@ -29,6 +29,5 @@ export const buildBibliographicReferenceDetailPresenter = (
             `Failed to build a detail presenter for bibliographic reference type: ${bibliographicReferenceType}`
         );
 
-    // Let's hide this from the nested presenter
-    return ({ data }: IDetailQueryResult<IBibliographicReferenceViewModel>) => lookupResult(data);
+    return lookupResult;
 };

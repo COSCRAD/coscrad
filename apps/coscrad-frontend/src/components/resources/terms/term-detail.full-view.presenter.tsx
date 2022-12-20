@@ -5,7 +5,11 @@ import './term-detail.presenter.css';
 
 // TODO[https://www.pivotaltracker.com/story/show/183681722] expose commands
 export const TermDetailFullViewPresenter = ({
-    data: { id, term, termEnglish, audioURL, contributor },
+    id,
+    term,
+    termEnglish,
+    audioURL,
+    contributor,
 }: IDetailQueryResult<ITermViewModel>): JSX.Element => (
     <div className="term-detail-page" data-testid={id}>
         <Card className="detail-card">

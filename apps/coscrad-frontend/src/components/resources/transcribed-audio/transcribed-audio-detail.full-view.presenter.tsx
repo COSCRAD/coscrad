@@ -6,7 +6,10 @@ import { convertMillisecondsToSeconds } from '../utils/math/';
 import './transcribed-audio-detail.full-view.presenter.css';
 
 export const TranscribedAudioDetailFullViewPresenter = ({
-    data: { id, lengthMilliseconds, audioURL, plainText },
+    id,
+    lengthMilliseconds,
+    audioURL,
+    plainText,
 }: IDetailQueryResult<ITranscribedAudioViewModel>): JSX.Element => (
     <div className="detail-full-view-container" title="View Connected Photograph" data-testid={id}>
         <div className="detail-full-view-media-container">

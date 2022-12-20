@@ -2,12 +2,13 @@ import { IDetailQueryResult, IPhotographViewModel } from '@coscrad/api-interface
 import './photograph-detail.full-view.presenter.css';
 
 export const PhotographDetailFullViewPresenter = ({
-    data: { id, imageURL },
+    id,
+    imageURL,
 }: IDetailQueryResult<IPhotographViewModel>): JSX.Element => (
     <div className="photograph-detail-container" data-testid={id}>
         <h3>Photograph {id}</h3>
         <div className="detail-image-container">
-            <img src={imageURL} />
+            <img src={imageURL} alt={id} />
         </div>
     </div>
 );

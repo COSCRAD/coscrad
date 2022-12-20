@@ -9,7 +9,10 @@ const buildLyricsStatusMessage = (lyrics: string | null | undefined): string =>
         : 'Lyrics are available for this song';
 
 export const SongDetailThumbnailPresenter = ({
-    data: { title, titleEnglish, lyrics, audioURL },
+    title,
+    titleEnglish,
+    lyrics,
+    audioURL,
 }: IDetailQueryResult<ISongViewModel>): JSX.Element => (
     <div data-testid={title}>
         <Card className="detail-card">

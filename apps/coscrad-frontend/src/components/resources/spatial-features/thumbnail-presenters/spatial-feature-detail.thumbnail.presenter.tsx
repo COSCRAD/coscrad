@@ -3,6 +3,7 @@ import {
     IDetailQueryResult,
     ISpatialFeatureViewModel,
     ResourceType,
+    WithTags,
 } from '@coscrad/api-interfaces';
 import { ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import {
@@ -22,6 +23,20 @@ import { LineTextPresenter } from './line-text-presenter';
 import { PointTextPresenter } from './point-text-presenter';
 import { PolygonTextPresenter } from './polygon-text-presenter';
 
+const toGeoJSON = (
+    nonStandardModel: IDetailQueryResult<WithTags<ISpatialFeatureViewModel>>
+): Omit<IDetailQueryResult<WithTags<ISpatialFeatureViewModel>>, 'actions' | 'tags'> => {
+    const cloned = JSON.parse(
+        JSON.stringify(nonStandardModel)
+    ) as IDetailQueryResult<ISpatialFeatureViewModel>;
+
+    delete cloned['actions'];
+
+    delete cloned['tags'];
+
+    return cloned;
+};
+
 interface HasCoordinates<T = unknown> {
     coordinates: T;
 }
@@ -36,9 +51,9 @@ const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordin
  * Our current approach is to present a text summary of the coordinates for a
  * spatial feature in its thumbnail view.
  */
-export const SpatialFeatureDetailThumbnailPresenter = ({
-    data: spatialFeature,
-}: IDetailQueryResult<ISpatialFeatureViewModel>): JSX.Element => {
+export const SpatialFeatureDetailThumbnailPresenter = (
+    spatialFeature: IDetailQueryResult<WithTags<ISpatialFeatureViewModel>>
+): JSX.Element => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const { id, geometry, properties } = spatialFeature;
@@ -76,7 +91,7 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
                 <CoordinatesTextPresenter coordinates={coordinates} />
                 <Collapse in={isExpanded}>
                     <h3>GEOJSON</h3>
-                    <pre>{JSON.stringify(spatialFeature, null, 2)}</pre>
+                    <pre>{JSON.stringify(toGeoJSON(spatialFeature), null, 2)}</pre>
                 </Collapse>
                 <Link to={`/${routes.resources.ofType(ResourceType.spatialFeature).detail(id)}`}>
                     View Spatial Feature

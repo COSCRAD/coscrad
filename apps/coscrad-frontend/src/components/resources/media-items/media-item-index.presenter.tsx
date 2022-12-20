@@ -4,13 +4,9 @@ import { CellRenderersDefinition } from '../../../utils/generic-components/prese
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { formatBilingualText } from '../vocabulary-lists/utils/formatBilingualText';
 
-export const MediaItemIndexPresenter = (
-    mediaIndexResult: IIndexQueryResult<IMediaItemViewModel>
-) => {
-    const { data: detailResult } = mediaIndexResult;
-
-    const medias = detailResult.map(({ data }) => data);
-
+export const MediaItemIndexPresenter = ({
+    entities: mediaItems,
+}: IIndexQueryResult<IMediaItemViewModel>) => {
     const headingLabels: HeadingLabel<IMediaItemViewModel>[] = [
         {
             propertyKey: 'id',
@@ -36,7 +32,7 @@ export const MediaItemIndexPresenter = (
     return (
         <IndexTable
             headingLabels={headingLabels}
-            tableData={medias}
+            tableData={mediaItems}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Media'}
             filterableProperties={['title', 'titleEnglish']}

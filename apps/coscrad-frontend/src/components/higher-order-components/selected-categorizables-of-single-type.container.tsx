@@ -39,8 +39,7 @@ export const SelectedCategorizablesOfSingleTypeContainer = ({
             allResourcesOfGivenType &&
             selectedIds.map(
                 (idToFind) =>
-                    allResourcesOfGivenType.data.find(({ data: { id } }) => idToFind === id) ||
-                    NOT_FOUND
+                    allResourcesOfGivenType.entities.find(({ id }) => idToFind === id) || NOT_FOUND
             ),
     };
 

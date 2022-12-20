@@ -4,16 +4,9 @@ import { CellRenderersDefinition } from '../../../utils/generic-components/prese
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderPhotographThumbnailLinkCell } from '../utils/render-photograph-thumbnail-link-cell';
 
-export const PhotographIndexPresenter = (indexResult: IIndexQueryResult<IPhotographViewModel>) => {
-    /**
-     *  TODO [https://www.pivotaltracker.com/story/show/183681839]
-     * We may some day read the actions and allow for bulk command execution in
-     * an index view.
-     */
-    const { data: detailResult } = indexResult;
-
-    const photographs = detailResult.map(({ data }) => data);
-
+export const PhotographIndexPresenter = ({
+    entities: photographs,
+}: IIndexQueryResult<IPhotographViewModel>) => {
     const headingLabels: HeadingLabel<IPhotographViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
         { propertyKey: 'imageURL', headingLabel: 'Image URL' },

@@ -4,9 +4,7 @@ import { CellRenderersDefinition } from '../../../utils/generic-components/prese
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 
 export const TermIndexPresenter = (termsIndexResult: IIndexQueryResult<ITermViewModel>) => {
-    const { data: detailResult } = termsIndexResult;
-
-    const terms = detailResult.map(({ data }) => data);
+    const { entities: terms } = termsIndexResult;
 
     const headingLabels: HeadingLabel<ITermViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },

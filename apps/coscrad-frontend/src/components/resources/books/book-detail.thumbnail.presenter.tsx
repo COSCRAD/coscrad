@@ -4,7 +4,12 @@ import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
 
 export const BookDetailThumbnailPresenter = ({
-    data: { id, pages, title, subtitle, author, publicationDate },
+    id,
+    pages,
+    title,
+    subtitle,
+    author,
+    publicationDate,
 }: IDetailQueryResult<IBookViewModel>): JSX.Element => {
     return (
         // TODO We may want to automate the link wrapping because it's easy to forget

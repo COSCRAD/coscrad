@@ -5,9 +5,7 @@ export const BibliographicReferenceDetailPresenter = (
     detailQueryResult: IDetailQueryResult<IBibliographicReferenceViewModel>
 ): JSX.Element => {
     const {
-        data: {
-            data: { type: bibliographicReferenceType },
-        },
+        data: { type: bibliographicReferenceType },
     } = detailQueryResult;
 
     const Presenter = buildBibliographicReferenceDetailPresenter(bibliographicReferenceType);

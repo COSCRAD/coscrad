@@ -5,9 +5,7 @@ export const BibliographicReferenceDetailThumbnailPresenter = (
     detailQueryResult: IDetailQueryResult<IBibliographicReferenceViewModel>
 ): JSX.Element => {
     const {
-        data: {
-            data: { type: bibliographicReferenceType },
-        },
+        data: { type: bibliographicReferenceType },
     } = detailQueryResult;
 
     // This is the same logic as the full-view with a different factory here

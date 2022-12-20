@@ -26,57 +26,55 @@ Object {
     },
   ],
   "data": Object {
-    "data": Object {
-      "abstract": "This is the abstract, NOT a general note!",
-      "creators": Array [
-        Object {
-          "name": "Alana Duvernay",
-          "type": "author",
-        },
-      ],
-      "isbn": "978-1-895811-34-6",
-      "numberOfPages": 455,
-      "place": "Kennebunk Port, Maine",
-      "publisher": "Atlantic Publishing",
-      "title": "A Day in the Life",
-      "type": "book",
-      "url": "https://atlanticpublishing.com",
-      "year": 1999,
-    },
-    "id": "1",
-    "tags": Array [
+    "abstract": "This is the abstract, NOT a general note!",
+    "creators": Array [
       Object {
-        "id": "2",
-        "label": "animals",
-        "members": Array [
-          Object {
-            "id": "2",
-            "type": "term",
-          },
-          Object {
-            "id": "3",
-            "type": "term",
-          },
-          Object {
-            "id": "102",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2004",
-            "type": "note",
-          },
-          Object {
-            "id": "7",
-            "type": "note",
-          },
-          Object {
-            "id": "1",
-            "type": "bibliographicReference",
-          },
-        ],
+        "name": "Alana Duvernay",
+        "type": "author",
       },
     ],
+    "isbn": "978-1-895811-34-6",
+    "numberOfPages": 455,
+    "place": "Kennebunk Port, Maine",
+    "publisher": "Atlantic Publishing",
+    "title": "A Day in the Life",
+    "type": "book",
+    "url": "https://atlanticpublishing.com",
+    "year": 1999,
   },
+  "id": "1",
+  "tags": Array [
+    Object {
+      "id": "2",
+      "label": "animals",
+      "members": Array [
+        Object {
+          "id": "2",
+          "type": "term",
+        },
+        Object {
+          "id": "3",
+          "type": "term",
+        },
+        Object {
+          "id": "102",
+          "type": "spatialFeature",
+        },
+        Object {
+          "id": "2004",
+          "type": "note",
+        },
+        Object {
+          "id": "7",
+          "type": "note",
+        },
+        Object {
+          "id": "1",
+          "type": "bibliographicReference",
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -105,65 +103,63 @@ Object {
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
     },
   ],
-  "data": Object {
-    "author": "John Doeburg",
-    "id": "23",
-    "pages": Array [
-      Object {
-        "identifier": "1",
-        "text": "foo",
-        "translation": "dee foo",
-      },
-      Object {
-        "identifier": "2",
-        "text": "blah blah blah",
-        "translation": "blahas",
-      },
-    ],
-    "publicationDate": "2002",
-    "subtitle": "The wolf's revenge",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-        "members": Array [
-          Object {
-            "id": "1",
-            "type": "term",
-          },
-          Object {
-            "id": "23",
-            "type": "book",
-          },
-          Object {
-            "id": "24",
-            "type": "book",
-          },
-          Object {
-            "id": "1",
-            "type": "vocabularyList",
-          },
-          Object {
-            "id": "100",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2005",
-            "type": "note",
-          },
-          Object {
-            "id": "9",
-            "type": "note",
-          },
-          Object {
-            "id": "11",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-    "title": "Three Little Pigs",
-  },
+  "author": "John Doeburg",
+  "id": "23",
+  "pages": Array [
+    Object {
+      "identifier": "1",
+      "text": "foo",
+      "translation": "dee foo",
+    },
+    Object {
+      "identifier": "2",
+      "text": "blah blah blah",
+      "translation": "blahas",
+    },
+  ],
+  "publicationDate": "2002",
+  "subtitle": "The wolf's revenge",
+  "tags": Array [
+    Object {
+      "id": "1",
+      "label": "plants",
+      "members": Array [
+        Object {
+          "id": "1",
+          "type": "term",
+        },
+        Object {
+          "id": "23",
+          "type": "book",
+        },
+        Object {
+          "id": "24",
+          "type": "book",
+        },
+        Object {
+          "id": "1",
+          "type": "vocabularyList",
+        },
+        Object {
+          "id": "100",
+          "type": "spatialFeature",
+        },
+        Object {
+          "id": "2005",
+          "type": "note",
+        },
+        Object {
+          "id": "9",
+          "type": "note",
+        },
+        Object {
+          "id": "11",
+          "type": "note",
+        },
+      ],
+    },
+  ],
+  "title": "Three Little Pigs",
 }
 `;
 
@@ -192,52 +188,50 @@ Object {
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
     },
   ],
-  "data": Object {
-    "contributions": Array [
-      Object {
-        "contributorId": "2",
-        "role": "host",
-      },
-    ],
-    "id": "1",
-    "lengthMilliseconds": 2500,
-    "mimeType": "audio/mpeg",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
-        "members": Array [
-          Object {
-            "id": "2",
-            "type": "vocabularyList",
-          },
-          Object {
-            "id": "101",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2001",
-            "type": "note",
-          },
-          Object {
-            "id": "1",
-            "type": "note",
-          },
-          Object {
-            "id": "1",
-            "type": "mediaItem",
-          },
-          Object {
-            "id": "1",
-            "type": "song",
-          },
-        ],
-      },
-    ],
-    "title": "episode title (in language)",
-    "titleEnglish": "Metal Mondays episode 1",
-    "url": "https://www.metalmondays.com/1.mp3",
-  },
+  "contributions": Array [
+    Object {
+      "contributorId": "2",
+      "role": "host",
+    },
+  ],
+  "id": "1",
+  "lengthMilliseconds": 2500,
+  "mimeType": "audio/mpeg",
+  "tags": Array [
+    Object {
+      "id": "5",
+      "label": "legends",
+      "members": Array [
+        Object {
+          "id": "2",
+          "type": "vocabularyList",
+        },
+        Object {
+          "id": "101",
+          "type": "spatialFeature",
+        },
+        Object {
+          "id": "2001",
+          "type": "note",
+        },
+        Object {
+          "id": "1",
+          "type": "note",
+        },
+        Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        Object {
+          "id": "1",
+          "type": "song",
+        },
+      ],
+    },
+  ],
+  "title": "episode title (in language)",
+  "titleEnglish": "Metal Mondays episode 1",
+  "url": "https://www.metalmondays.com/1.mp3",
 }
 `;
 
@@ -266,35 +260,33 @@ Object {
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
     },
   ],
-  "data": Object {
-    "id": "0",
-    "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
-    "photographer": "Susie McRealart",
-    "tags": Array [
-      Object {
-        "id": "3",
-        "label": "placenames",
-        "members": Array [
-          Object {
-            "id": "0",
-            "type": "photograph",
-          },
-          Object {
-            "id": "110",
-            "type": "transcribedAudio",
-          },
-          Object {
-            "id": "2003",
-            "type": "note",
-          },
-          Object {
-            "id": "5",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-  },
+  "id": "0",
+  "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
+  "photographer": "Susie McRealart",
+  "tags": Array [
+    Object {
+      "id": "3",
+      "label": "placenames",
+      "members": Array [
+        Object {
+          "id": "0",
+          "type": "photograph",
+        },
+        Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        Object {
+          "id": "2003",
+          "type": "note",
+        },
+        Object {
+          "id": "5",
+          "type": "note",
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -323,50 +315,48 @@ Object {
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
     },
   ],
-  "data": Object {
-    "audioURL": "https://www.myaudio.com/lamb.mp3",
-    "contributions": Array [
-      "1 (performer)",
-    ],
-    "id": "1",
-    "lengthMilliseconds": 3500,
-    "lyrics": "Mary had a little lamb, little lamb.",
-    "startMilliseconds": 0,
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
-        "members": Array [
-          Object {
-            "id": "2",
-            "type": "vocabularyList",
-          },
-          Object {
-            "id": "101",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2001",
-            "type": "note",
-          },
-          Object {
-            "id": "1",
-            "type": "note",
-          },
-          Object {
-            "id": "1",
-            "type": "mediaItem",
-          },
-          Object {
-            "id": "1",
-            "type": "song",
-          },
-        ],
-      },
-    ],
-    "title": "Song title in language",
-    "titleEnglish": "Mary had a little lamb",
-  },
+  "audioURL": "https://www.myaudio.com/lamb.mp3",
+  "contributions": Array [
+    "1 (performer)",
+  ],
+  "id": "1",
+  "lengthMilliseconds": 3500,
+  "lyrics": "Mary had a little lamb, little lamb.",
+  "startMilliseconds": 0,
+  "tags": Array [
+    Object {
+      "id": "5",
+      "label": "legends",
+      "members": Array [
+        Object {
+          "id": "2",
+          "type": "vocabularyList",
+        },
+        Object {
+          "id": "101",
+          "type": "spatialFeature",
+        },
+        Object {
+          "id": "2001",
+          "type": "note",
+        },
+        Object {
+          "id": "1",
+          "type": "note",
+        },
+        Object {
+          "id": "1",
+          "type": "mediaItem",
+        },
+        Object {
+          "id": "1",
+          "type": "song",
+        },
+      ],
+    },
+  ],
+  "title": "Song title in language",
+  "titleEnglish": "Mary had a little lamb",
 }
 `;
 
@@ -395,61 +385,59 @@ Object {
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
     },
   ],
-  "data": Object {
-    "geometry": Object {
-      "coordinates": Array [
-        54.034404852745006,
-        -132.17563335558532,
-      ],
-      "type": "Point",
-    },
-    "id": "100",
-    "properties": Object {
-      "description": "Description for point 100",
-      "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-      "name": "Name of Point with ID: 100",
-    },
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-        "members": Array [
-          Object {
-            "id": "1",
-            "type": "term",
-          },
-          Object {
-            "id": "23",
-            "type": "book",
-          },
-          Object {
-            "id": "24",
-            "type": "book",
-          },
-          Object {
-            "id": "1",
-            "type": "vocabularyList",
-          },
-          Object {
-            "id": "100",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2005",
-            "type": "note",
-          },
-          Object {
-            "id": "9",
-            "type": "note",
-          },
-          Object {
-            "id": "11",
-            "type": "note",
-          },
-        ],
-      },
+  "geometry": Object {
+    "coordinates": Array [
+      54.034404852745006,
+      -132.17563335558532,
     ],
+    "type": "Point",
   },
+  "id": "100",
+  "properties": Object {
+    "description": "Description for point 100",
+    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+    "name": "Name of Point with ID: 100",
+  },
+  "tags": Array [
+    Object {
+      "id": "1",
+      "label": "plants",
+      "members": Array [
+        Object {
+          "id": "1",
+          "type": "term",
+        },
+        Object {
+          "id": "23",
+          "type": "book",
+        },
+        Object {
+          "id": "24",
+          "type": "book",
+        },
+        Object {
+          "id": "1",
+          "type": "vocabularyList",
+        },
+        Object {
+          "id": "100",
+          "type": "spatialFeature",
+        },
+        Object {
+          "id": "2005",
+          "type": "note",
+        },
+        Object {
+          "id": "9",
+          "type": "note",
+        },
+        Object {
+          "id": "11",
+          "type": "note",
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -478,13 +466,11 @@ Object {
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
     },
   ],
-  "data": Object {
-    "contributor": "",
-    "id": "11",
-    "tags": Array [],
-    "term": "I am singing (lang)",
-    "termEnglish": "I am singing (Engl)",
-  },
+  "contributor": "",
+  "id": "11",
+  "tags": Array [],
+  "term": "I am singing (lang)",
+  "termEnglish": "I am singing (Engl)",
 }
 `;
 
@@ -513,39 +499,37 @@ Object {
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
     },
   ],
-  "data": Object {
-    "audioURL": "https://www.mysound.org/downloads/Gaas.mp3",
-    "id": "110",
-    "lengthMilliseconds": 20000,
-    "plainText": "
+  "audioURL": "https://www.mysound.org/downloads/Gaas.mp3",
+  "id": "110",
+  "lengthMilliseconds": 20000,
+  "plainText": "
 [12000] There once was a little wooden boy. [15550]
 [18300] His name was Pinocchio. [19240]",
-    "start": 0,
-    "tags": Array [
-      Object {
-        "id": "3",
-        "label": "placenames",
-        "members": Array [
-          Object {
-            "id": "0",
-            "type": "photograph",
-          },
-          Object {
-            "id": "110",
-            "type": "transcribedAudio",
-          },
-          Object {
-            "id": "2003",
-            "type": "note",
-          },
-          Object {
-            "id": "5",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-  },
+  "start": 0,
+  "tags": Array [
+    Object {
+      "id": "3",
+      "label": "placenames",
+      "members": Array [
+        Object {
+          "id": "0",
+          "type": "photograph",
+        },
+        Object {
+          "id": "110",
+          "type": "transcribedAudio",
+        },
+        Object {
+          "id": "2003",
+          "type": "note",
+        },
+        Object {
+          "id": "5",
+          "type": "note",
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -574,113 +558,111 @@ Object {
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
     },
   ],
-  "data": Object {
-    "entries": Array [
+  "entries": Array [
+    Object {
+      "term": Object {
+        "contributor": "",
+        "id": "11",
+        "term": "I am singing (lang)",
+        "termEnglish": "I am singing (Engl)",
+      },
+      "variableValues": Object {
+        "person": "1",
+        "positive": true,
+      },
+    },
+    Object {
+      "term": Object {
+        "contributor": "",
+        "id": "12",
+        "term": "You are singing (lang)",
+        "termEnglish": "You are singing (Engl)",
+      },
+      "variableValues": Object {
+        "person": "2",
+        "positive": true,
+      },
+    },
+    Object {
+      "term": Object {
+        "contributor": "",
+        "id": "13",
+        "term": "She is singing (lang)",
+        "termEnglish": "She is singing (Engl)",
+      },
+      "variableValues": Object {
+        "person": "3",
+        "positive": true,
+      },
+    },
+    Object {
+      "term": Object {
+        "contributor": "",
+        "id": "01",
+        "term": "I am not singing (lang)",
+        "termEnglish": "I am not singing (Engl)",
+      },
+      "variableValues": Object {
+        "person": "1",
+        "positive": false,
+      },
+    },
+    Object {
+      "term": Object {
+        "contributor": "",
+        "id": "02",
+        "term": "You are not singing (lang)",
+        "termEnglish": "You are not singing (Engl)",
+      },
+      "variableValues": Object {
+        "person": "2",
+        "positive": false,
+      },
+    },
+  ],
+  "form": Object {
+    "fields": Array [
       Object {
-        "term": Object {
-          "contributor": "",
-          "id": "11",
-          "term": "I am singing (lang)",
-          "termEnglish": "I am singing (Engl)",
-        },
-        "variableValues": Object {
-          "person": "1",
-          "positive": true,
-        },
+        "description": "choose positive",
+        "label": "positive",
+        "name": "positive",
+        "options": Array [
+          Object {
+            "display": "negative (lha)",
+            "value": false,
+          },
+          Object {
+            "display": "positive form (switch for negative)",
+            "value": true,
+          },
+        ],
+        "type": "SWITCH",
       },
       Object {
-        "term": Object {
-          "contributor": "",
-          "id": "12",
-          "term": "You are singing (lang)",
-          "termEnglish": "You are singing (Engl)",
-        },
-        "variableValues": Object {
-          "person": "2",
-          "positive": true,
-        },
-      },
-      Object {
-        "term": Object {
-          "contributor": "",
-          "id": "13",
-          "term": "She is singing (lang)",
-          "termEnglish": "She is singing (Engl)",
-        },
-        "variableValues": Object {
-          "person": "3",
-          "positive": true,
-        },
-      },
-      Object {
-        "term": Object {
-          "contributor": "",
-          "id": "01",
-          "term": "I am not singing (lang)",
-          "termEnglish": "I am not singing (Engl)",
-        },
-        "variableValues": Object {
-          "person": "1",
-          "positive": false,
-        },
-      },
-      Object {
-        "term": Object {
-          "contributor": "",
-          "id": "02",
-          "term": "You are not singing (lang)",
-          "termEnglish": "You are not singing (Engl)",
-        },
-        "variableValues": Object {
-          "person": "2",
-          "positive": false,
-        },
+        "description": "choose person",
+        "label": "person",
+        "name": "person",
+        "options": Array [
+          Object {
+            "display": "I",
+            "value": "1",
+          },
+          Object {
+            "display": "You",
+            "value": "2",
+          },
+          Object {
+            "display": "She",
+            "value": "3",
+          },
+        ],
+        "type": "STATIC_SELECT",
       },
     ],
-    "form": Object {
-      "fields": Array [
-        Object {
-          "description": "choose positive",
-          "label": "positive",
-          "name": "positive",
-          "options": Array [
-            Object {
-              "display": "negative (lha)",
-              "value": false,
-            },
-            Object {
-              "display": "positive form (switch for negative)",
-              "value": true,
-            },
-          ],
-          "type": "SWITCH",
-        },
-        Object {
-          "description": "choose person",
-          "label": "person",
-          "name": "person",
-          "options": Array [
-            Object {
-              "display": "I",
-              "value": "1",
-            },
-            Object {
-              "display": "You",
-              "value": "2",
-            },
-            Object {
-              "display": "She",
-              "value": "3",
-            },
-          ],
-          "type": "STATIC_SELECT",
-        },
-      ],
-    },
-    "id": "4567",
-    "name": "To Sing (lang)",
-    "nameEnglish": "To Sing (Engl)",
-    "tags": Array [],
   },
+  "id": "4567",
+  "name": "To Sing (lang)",
+  "nameEnglish": "To Sing (Engl)",
+  "tags": Array [],
 }
 `;

@@ -4,7 +4,11 @@ import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seco
 import { formatBilingualText } from '../vocabulary-lists/utils';
 
 export const MediaItemDetailThumbnailPresenter = ({
-    data: { id, title, titleEnglish, url, lengthMilliseconds },
+    id,
+    title,
+    titleEnglish,
+    url,
+    lengthMilliseconds,
 }: IDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
     return (
         <div data-testid={id}>

@@ -8,7 +8,11 @@ import { CreditsHack } from './credits-hack';
 import { SongLyrics } from './song-lyrics';
 
 export const SongDetailFullViewPresenter = ({
-    data: { id, title, titleEnglish, lyrics, audioURL },
+    id,
+    title,
+    titleEnglish,
+    lyrics,
+    audioURL,
 }: IDetailQueryResult<ISongViewModel>): JSX.Element => {
     const { songIdToCredits } = useContext(ConfigurableContentContext);
 

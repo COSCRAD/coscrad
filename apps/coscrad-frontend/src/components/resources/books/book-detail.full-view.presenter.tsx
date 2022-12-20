@@ -3,7 +3,12 @@ import { Card, CardContent } from '@mui/material';
 import { BookReader } from './pages';
 
 export const BookDetailFullViewPresenter = ({
-    data: { id, pages, title, subtitle, author, publicationDate },
+    id,
+    pages,
+    title,
+    subtitle,
+    author,
+    publicationDate,
 }: IDetailQueryResult<IBookViewModel>): JSX.Element => {
     return (
         <div data-testid={id}>

@@ -11,7 +11,9 @@ import { convertMillisecondsToSeconds } from '../utils/math/';
 import './transcribed-audio-detail.thumbnail.presenter.css';
 
 export const TranscribedAudioDetailThumbnailPresenter = ({
-    data: { id, lengthMilliseconds, audioURL },
+    id,
+    lengthMilliseconds,
+    audioURL,
 }: IDetailQueryResult<ITranscribedAudioViewModel>): JSX.Element => (
     <div className="detail-thumbnail-container">
         <Link to={`/${routes.resources.ofType(ResourceType.transcribedAudio).detail(id)}`}>

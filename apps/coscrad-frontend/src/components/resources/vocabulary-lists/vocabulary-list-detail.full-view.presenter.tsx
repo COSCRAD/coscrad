@@ -66,7 +66,11 @@ const filterEntriesForSelectedTerms = (
     });
 
 export const VocabularyListDetailFullViewPresenter = ({
-    data: { id, name, nameEnglish, entries, form },
+    id,
+    name,
+    nameEnglish,
+    entries,
+    form,
 }: IDetailQueryResult<IVocabularyListViewModel>): JSX.Element => {
     const [filter, dispatch] = useReducer(filterReducer, {});
 
@@ -98,7 +102,7 @@ export const VocabularyListDetailFullViewPresenter = ({
             <div>
                 {/* We may want to give the user the option of seeing a Multiple Categorizables of Single Type view instead*/}
                 <Carousel
-                    propsForItems={selectedEntries.map(({ term }) => ({ data: term, actions: [] }))}
+                    propsForItems={selectedEntries.map(({ term }) => term)}
                     Presenter={TermDetailFullViewPresenter}
                 />
             </div>

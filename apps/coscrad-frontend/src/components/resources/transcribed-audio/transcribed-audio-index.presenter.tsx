@@ -4,16 +4,9 @@ import { CellRenderersDefinition } from '../../../utils/generic-components/prese
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
 
-export const TranscribedAudioIndexPresenter = (
-    indexResult: IIndexQueryResult<ITranscribedAudioViewModel>
-) => {
-    /**
-     *  TODO [https://www.pivotaltracker.com/story/show/183681839]
-     * We may some day read the actions and allow for bulk command execution in
-     * an index view.
-     */
-    const { data: detailResult } = indexResult;
-
+export const TranscribedAudioIndexPresenter = ({
+    entities: transcribedAudioItems,
+}: IIndexQueryResult<ITranscribedAudioViewModel>) => {
     const headingLabels: HeadingLabel<ITranscribedAudioViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
         {
@@ -43,12 +36,6 @@ export const TranscribedAudioIndexPresenter = (
         // audioURL: ({ audioURL }: ITranscribedAudioViewModel) =>
         //     renderTranscribedAudioMediaCell(audioURL),
     };
-
-    /**
-     * We should think about how the following map will shift when we clean up
-     * the structure of `IIndexQueryResult` and `IDetailQueryResult`.
-     */
-    const transcribedAudioItems = detailResult.map(({ data }) => data);
 
     return (
         <IndexTable

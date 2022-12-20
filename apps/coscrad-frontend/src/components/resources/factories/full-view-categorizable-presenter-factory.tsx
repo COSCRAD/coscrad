@@ -29,7 +29,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
      * TODO Investigate why importing this from the component file leads to a
      * circular dependency.
      */
-    [CategorizableType.book]: ({ data: book }: IDetailQueryResult<IBookViewModel>): JSX.Element => {
+    [CategorizableType.book]: (book: IDetailQueryResult<IBookViewModel>): JSX.Element => {
         const { id, pages } = book;
 
         return (

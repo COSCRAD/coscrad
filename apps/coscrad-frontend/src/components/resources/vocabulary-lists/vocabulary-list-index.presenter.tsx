@@ -5,14 +5,8 @@ import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { formatBilingualText } from './utils';
 
 export const VocabularyListIndexPresenter = ({
-    data: vocabularyListsAndActions,
+    entities: vocabularyLists,
 }: IIndexQueryResult<IVocabularyListViewModel>) => {
-    /**
-     * TODO [https://www.pivotaltracker.com/story/show/183681556]
-     * Remove the need to map here.
-     */
-    const vocabularyLists = vocabularyListsAndActions.map(({ data }) => data);
-
     const headingLabels: HeadingLabel<IVocabularyListViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'link' },
         { propertyKey: 'name', headingLabel: 'Vocabulary List' },

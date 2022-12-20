@@ -10,6 +10,7 @@ export class BookQueryService extends BaseQueryService<Book, IBookViewModel> {
     buildViewModel(book: Book): IBookViewModel {
         return new BookViewModel(book);
     }
+
     getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
         return this.commandInfoService.getCommandInfo(Book);
     }

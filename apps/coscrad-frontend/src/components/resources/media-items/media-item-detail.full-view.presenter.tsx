@@ -6,7 +6,10 @@ import { formatBilingualText } from '../vocabulary-lists/utils';
 import { ContributionsHack } from './contributors-hack';
 
 export const MediaItemDetailFullViewPresenter = ({
-    data: { id, title, titleEnglish, url },
+    id,
+    title,
+    titleEnglish,
+    url,
 }: IDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
     const { videoIdToCredits } = useContext(ConfigurableContentContext);
 

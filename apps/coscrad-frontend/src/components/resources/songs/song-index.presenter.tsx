@@ -4,17 +4,7 @@ import { CellRenderersDefinition } from '../../../utils/generic-components/prese
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { formatBilingualText } from '../vocabulary-lists/utils/formatBilingualText';
 
-export const SongIndexPresenter = (songsIndexResult: IIndexQueryResult<ISongViewModel>) => {
-    /**
-     *  TODO [https://www.pivotaltracker.com/story/show/183681839]
-     * We may some day read the actions and allow for bulk command execution in
-     * an index view.
-     */
-
-    const { data: detailResult } = songsIndexResult;
-
-    const songs = detailResult.map(({ data }) => data);
-
+export const SongIndexPresenter = ({ entities: songs }: IIndexQueryResult<ISongViewModel>) => {
     const headingLabels: HeadingLabel<ISongViewModel>[] = [
         { propertyKey: 'title', headingLabel: 'Title' },
         { propertyKey: 'titleEnglish', headingLabel: 'English' },
