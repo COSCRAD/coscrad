@@ -7,12 +7,11 @@ interface TextInputProps {
 }
 
 export const TextInput = ({
-    formField: { description, name, label },
+    formField: { name, label },
     onInputChange,
 }: TextInputProps): JSX.Element => {
     return (
         <FormGroup>
-            <h3>{description}</h3>
             <TextField
                 name={name}
                 label={label}

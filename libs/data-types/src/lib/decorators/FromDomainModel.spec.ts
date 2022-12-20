@@ -15,16 +15,33 @@ const checkSchema = (
     expect(viewModelSchema).toEqual(expectedSchema);
 };
 
+const dummyNumberOfStarsOptions = {
+    label: 'Number of Stars',
+    description: 'the number of stars to rate your experience',
+};
+
+const dummyLabelOptions = {
+    isOptional: true,
+    label: 'Label',
+    description: 'a label for this item',
+};
+
+const dummyLinksOptions = {
+    isArray: true,
+    label: 'Links',
+    description: 'a set of links to associated material',
+};
+
 describe(`@FromDomainModel`, () => {
     describe('when there is a valid definition of each property on a corresponding domain model', () => {
         class MyDomainClass {
-            @PositiveInteger()
+            @PositiveInteger(dummyNumberOfStarsOptions)
             readonly numberOfStars: number;
 
-            @NonEmptyString({ isOptional: true })
+            @NonEmptyString(dummyLabelOptions)
             readonly label?: string;
 
-            @URL({ isArray: true })
+            @URL(dummyLinksOptions)
             readonly links: string[];
 
             // This property is intentinoally not exposed to public API
@@ -50,16 +67,19 @@ describe(`@FromDomainModel`, () => {
                 coscradDataType: CoscradDataType.PositiveInteger,
                 isArray: false,
                 isOptional: false,
+                ...dummyNumberOfStarsOptions,
             },
             label: {
                 coscradDataType: CoscradDataType.NonEmptyString,
                 isArray: false,
                 isOptional: true,
+                ...dummyLabelOptions,
             },
             links: {
                 coscradDataType: CoscradDataType.URL,
                 isArray: true,
                 isOptional: false,
+                ...dummyLinksOptions,
             },
         };
 
@@ -70,13 +90,13 @@ describe(`@FromDomainModel`, () => {
 
     describe('when there is no corresponding property on the domain model', () => {
         class MyDomainClass {
-            @PositiveInteger()
+            @PositiveInteger(dummyNumberOfStarsOptions)
             readonly numberOfStars: number;
 
-            @NonEmptyString({ isOptional: true })
+            @NonEmptyString(dummyLabelOptions)
             readonly label?: string;
 
-            @URL({ isArray: true })
+            @URL(dummyLinksOptions)
             readonly links: string[];
 
             // This property is intentinoally not exposed to public API

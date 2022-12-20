@@ -4,13 +4,22 @@ import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 
 export class SpatialFeatureProperties extends BaseDomainModel implements ISpatialFeatureProperties {
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'name',
+        description: 'a place name (in any language)',
+    })
     readonly name: string;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'description',
+        description: 'a description of the place',
+    })
     readonly description: string;
 
-    @URL()
+    @URL({
+        label: 'image link',
+        description: 'a full URL link to an image to display with this spatial feature',
+    })
     readonly imageUrl: string;
 
     constructor(dto: DTO<SpatialFeatureProperties>) {

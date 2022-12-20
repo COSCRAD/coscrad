@@ -38,7 +38,10 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
     extends BaseDomainModel
     implements IEdgeConnectionMember
 {
-    @CompositeIdentifier(ResourceType, isResourceType)
+    @CompositeIdentifier(ResourceType, isResourceType, {
+        label: 'composite identifier',
+        description: "composite identifier of the members's resource",
+    })
     readonly compositeIdentifier: ResourceCompositeIdentifier;
 
     @Union(
@@ -51,11 +54,18 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
             TextFieldContext,
             TimeRangeContext,
         ],
-        'type'
+        'type',
+        {
+            label: 'context',
+            description: 'contextualizes this resource as a member of this connection',
+        }
     )
     context: T;
 
-    @Enum(CoscradEnum.EdgeConnectionMemberRole)
+    @Enum(CoscradEnum.EdgeConnectionMemberRole, {
+        label: 'role',
+        description: 'is',
+    })
     role: EdgeConnectionMemberRole;
 
     constructor(dto: DTO<EdgeConnectionMember>) {
@@ -85,7 +95,10 @@ export class EdgeConnection extends Aggregate {
 
     readonly members: EdgeConnectionMember[];
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'note text',
+        description: 'text summary of why this connection is relevant',
+    })
     readonly note: string;
 
     constructor(dto: DTO<EdgeConnection>) {

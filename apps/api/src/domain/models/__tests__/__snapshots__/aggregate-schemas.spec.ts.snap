@@ -4,30 +4,40 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "data": Object {
     "complexDataType": "NESTED_TYPE",
+    "description": "citation information for the referenced book",
     "isArray": false,
     "isOptional": false,
+    "label": "reference data",
     "schema": Object {
       "abstract": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a brief summary of the referenced book",
         "isArray": false,
         "isOptional": true,
+        "label": "abstract",
       },
       "creators": Object {
         "complexDataType": "NESTED_TYPE",
+        "description": "those responsible for creating this work",
         "isArray": true,
         "isOptional": false,
+        "label": "creators",
         "schema": Object {
           "name": Object {
             "coscradDataType": "NON_EMPTY_STRING",
+            "description": "full name of work's creator (free-form text)",
             "isArray": false,
             "isOptional": false,
+            "label": "name",
           },
           "type": Object {
             "complexDataType": "ENUM",
+            "description": "the person's role in creating the given work",
             "enumLabel": "Creator Type",
             "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
             "isArray": false,
             "isOptional": false,
+            "label": "creator type",
             "labelsAndValues": Array [
               Object {
                 "label": "artist",
@@ -47,45 +57,61 @@ Object {
       },
       "isbn": Object {
         "coscradDataType": "ISBN",
+        "description": "a standardized globally unique identifier for the referenced book",
         "isArray": false,
         "isOptional": true,
+        "label": "ISBN",
       },
       "numberOfPages": Object {
         "coscradDataType": "POSITIVE_INTEGER",
+        "description": "the total number of pages in the referenced book",
         "isArray": false,
         "isOptional": true,
+        "label": "number of pages",
       },
       "place": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the place where the referenced book was published",
         "isArray": false,
         "isOptional": true,
+        "label": "place",
       },
       "publisher": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the publisher of the referenced book",
         "isArray": false,
         "isOptional": true,
+        "label": "publisher",
       },
       "title": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the title of the referenced book",
         "isArray": false,
         "isOptional": false,
+        "label": "title",
       },
       "url": Object {
         "coscradDataType": "URL",
+        "description": "an link to an external digital representation of the book",
         "isArray": false,
         "isOptional": true,
+        "label": "external link",
       },
       "year": Object {
         "coscradDataType": "YEAR",
+        "description": "A number representing the year of publication",
         "isArray": false,
         "isOptional": true,
+        "label": "year",
       },
     },
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
 }
 `;
@@ -94,45 +120,61 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "data": Object {
     "complexDataType": "NESTED_TYPE",
+    "description": "citation information for the referenced court case",
     "isArray": false,
     "isOptional": false,
+    "label": "reference data",
     "schema": Object {
       "abstract": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a brief summary of the court case",
         "isArray": false,
         "isOptional": true,
+        "label": "abstract",
       },
       "caseName": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the official name of the court case",
         "isArray": false,
         "isOptional": false,
+        "label": "case name",
       },
       "court": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the name of the court in which the case was decided",
         "isArray": false,
         "isOptional": true,
+        "label": "court",
       },
       "dateDecided": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the date on which the court case was decided",
         "isArray": false,
         "isOptional": true,
+        "label": "date decided",
       },
       "pages": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "summary information about the pages relevant to this court case",
         "isArray": false,
         "isOptional": true,
+        "label": "pages",
       },
       "url": Object {
         "coscradDataType": "URL",
+        "description": "external link to digital materials regarding this court case",
         "isArray": false,
         "isOptional": true,
+        "label": "external link",
       },
     },
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
 }
 `;
@@ -141,30 +183,40 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "data": Object {
     "complexDataType": "NESTED_TYPE",
+    "description": "citation information for the referenced journal article",
     "isArray": false,
     "isOptional": false,
+    "label": "reference data",
     "schema": Object {
       "abstract": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a brief summary of the journal article",
         "isArray": false,
         "isOptional": true,
+        "label": "abstract",
       },
       "creators": Object {
         "complexDataType": "NESTED_TYPE",
+        "description": "the authors of the referenced journal article",
         "isArray": true,
         "isOptional": false,
+        "label": "creators",
         "schema": Object {
           "name": Object {
             "coscradDataType": "NON_EMPTY_STRING",
+            "description": "full name of work's creator (free-form text)",
             "isArray": false,
             "isOptional": false,
+            "label": "name",
           },
           "type": Object {
             "complexDataType": "ENUM",
+            "description": "the person's role in creating the given work",
             "enumLabel": "Creator Type",
             "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
             "isArray": false,
             "isOptional": false,
+            "label": "creator type",
             "labelsAndValues": Array [
               Object {
                 "label": "artist",
@@ -184,40 +236,54 @@ Object {
       },
       "doi": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "an alternative unique identifier in the form of a permalink",
         "isArray": false,
         "isOptional": true,
+        "label": "DOI",
       },
       "issn": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a standardized unique identifier for the journal article",
         "isArray": false,
         "isOptional": true,
+        "label": "ISSN",
       },
       "issueDate": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "unstructured text representation of the date the journal article was issued",
         "isArray": false,
         "isOptional": false,
+        "label": "issue date",
       },
       "publicationTitle": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the name of the journal in which the article was published",
         "isArray": false,
         "isOptional": true,
+        "label": "publication title",
       },
       "title": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the title of the referenced journal article",
         "isArray": false,
         "isOptional": false,
+        "label": "title",
       },
       "url": Object {
         "coscradDataType": "URL",
+        "description": "an external link to a digital representation of the referenced journal article",
         "isArray": false,
         "isOptional": true,
+        "label": "external link",
       },
     },
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
 }
 `;
@@ -226,50 +292,68 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "author": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the author of the book",
     "isArray": false,
     "isOptional": false,
+    "label": "author",
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "pages": Object {
     "complexDataType": "NESTED_TYPE",
-    "isArray": false,
+    "description": "a digital representation of the book's pages",
+    "isArray": true,
     "isOptional": false,
+    "label": "book pages",
     "schema": Object {
       "identifier": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "text identifier for the page(",
         "isArray": false,
         "isOptional": false,
+        "label": "identifier",
       },
       "text": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the page's text in the language",
         "isArray": false,
         "isOptional": false,
+        "label": "text",
       },
       "translation": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "translation of the page's text into the colonial language",
         "isArray": false,
         "isOptional": false,
+        "label": "translation",
       },
     },
   },
   "publicationDate": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "a free form string that specifies the publication date",
     "isArray": false,
     "isOptional": true,
+    "label": "publication date",
   },
   "subtitle": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "subtitle of the book (in whatever language)",
     "isArray": false,
     "isOptional": true,
+    "label": "subtitle",
   },
   "title": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "title of the book (in whatever language)",
     "isArray": false,
     "isOptional": false,
+    "label": "title",
   },
 }
 `;
@@ -278,23 +362,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "childrenIDs": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the ID of every category that is a child (sub-cateogry) of this one",
     "isArray": true,
     "isOptional": false,
+    "label": "children IDs",
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "label": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the user-facing label for this category",
     "isArray": false,
     "isOptional": false,
+    "label": "label",
   },
   "members": Object {
     "coscradDataType": "COMPOSITE_IDENTIFIER",
+    "description": "the composite identifier of every resource or note in this category",
     "isArray": true,
     "isOptional": false,
+    "label": "members",
   },
 }
 `;
@@ -303,37 +395,49 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "contributorAndRoles": Object {
     "complexDataType": "NESTED_TYPE",
+    "description": "acknowledgement of those who worked on creating and producing the media item",
     "isArray": true,
     "isOptional": false,
+    "label": "contributions",
     "schema": Object {
       "contributorId": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "unique identifier of the contributor",
         "isArray": false,
         "isOptional": false,
+        "label": "contributor ID",
       },
       "role": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a text summary of the contributor's role",
         "isArray": false,
         "isOptional": false,
+        "label": "role",
       },
     },
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "lengthMilliseconds": Object {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+    "description": "length of the media item in milliseconds",
     "isArray": false,
     "isOptional": false,
+    "label": "length (ms)",
   },
   "mimeType": Object {
     "complexDataType": "ENUM",
+    "description": "technical specification of the format of the media item",
     "enumLabel": "MIME Type",
     "enumName": "MIME_TYPE",
     "isArray": false,
     "isOptional": false,
+    "label": "MIME type",
     "labelsAndValues": Array [
       Object {
         "label": "mp3",
@@ -347,18 +451,24 @@ Object {
   },
   "title": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "title of the media item in the language",
     "isArray": false,
     "isOptional": true,
+    "label": "title (language)",
   },
   "titleEnglish": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "title of the media item in the colonial language",
     "isArray": false,
     "isOptional": true,
+    "label": "title (colonial language)",
   },
   "url": Object {
     "coscradDataType": "URL",
+    "description": "a web link to the corresponding media file",
     "isArray": false,
     "isOptional": false,
+    "label": "url",
   },
 }
 `;
@@ -367,13 +477,17 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "note": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "text summary of why this connection is relevant",
     "isArray": false,
     "isOptional": false,
+    "label": "note text",
   },
 }
 `;
@@ -382,35 +496,47 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "dimensions": Object {
     "complexDataType": "NESTED_TYPE",
+    "description": "the height and width of the photograph in pixels",
     "isArray": false,
     "isOptional": false,
+    "label": "dimensions",
     "schema": Object {
       "heightPX": Object {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "description": "the height of the photograph in pixels",
         "isArray": false,
         "isOptional": false,
+        "label": "height (px)",
       },
       "widthPX": Object {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "description": "the width of the photograph in pixels",
         "isArray": false,
         "isOptional": false,
+        "label": "width (px)",
       },
     },
   },
   "filename": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the name (not full URL \\\\ path) of the digital file",
     "isArray": false,
     "isOptional": false,
+    "label": "file name",
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "photographer": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the person who took the picture",
     "isArray": false,
     "isOptional": false,
+    "label": "photograph",
   },
 }
 `;
@@ -419,55 +545,75 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "audioURL": Object {
     "coscradDataType": "URL",
+    "description": "a web link to the audio for the song",
     "isArray": false,
     "isOptional": false,
+    "label": "audio URL",
   },
   "contributions": Object {
     "complexDataType": "NESTED_TYPE",
+    "description": "summary of contributions to the creation and recording of the song",
     "isArray": true,
     "isOptional": false,
+    "label": "contributions",
     "schema": Object {
       "contributorId": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "unique identifier of the contributor",
         "isArray": false,
         "isOptional": false,
+        "label": "contributor ID",
       },
       "role": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a text summary of the contributor's role",
         "isArray": false,
         "isOptional": false,
+        "label": "role",
       },
     },
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "lengthMilliseconds": Object {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+    "description": "length of the audio file in milliseconds",
     "isArray": false,
     "isOptional": false,
+    "label": "length (ms)",
   },
   "lyrics": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the lyrics of the song",
     "isArray": false,
     "isOptional": true,
+    "label": "lyrics",
   },
   "startMilliseconds": Object {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+    "description": "the starting timestamp for the audio file",
     "isArray": false,
     "isOptional": false,
+    "label": "start (ms)",
   },
   "title": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the title of the song in the language",
     "isArray": false,
     "isOptional": true,
+    "label": "title",
   },
   "titleEnglish": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the title of the song in the colonial language",
     "isArray": false,
     "isOptional": true,
+    "label": "title (colonial language)",
   },
 }
 `;
@@ -476,8 +622,10 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
 }
 `;
@@ -486,8 +634,10 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
 }
 `;
@@ -496,8 +646,10 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
 }
 `;
@@ -506,18 +658,24 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "label": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "a human readable text label for this tag",
     "isArray": false,
     "isOptional": false,
+    "label": "label",
   },
   "members": Object {
     "coscradDataType": "COMPOSITE_IDENTIFIER",
+    "description": "the composite identifier of every resource or note with this tag",
     "isArray": true,
     "isOptional": false,
+    "label": "members",
   },
 }
 `;
@@ -526,33 +684,45 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "audioFilename": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the name of the audio file",
     "isArray": false,
     "isOptional": true,
+    "label": "Audio Filename",
   },
   "contributorId": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "reference to the contributor for this term",
     "isArray": false,
     "isOptional": false,
+    "label": "contributor ID",
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "sourceProject": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the name of the project through which the term was collected",
     "isArray": false,
     "isOptional": true,
+    "label": "Source Project",
   },
   "term": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the term in the language",
     "isArray": false,
     "isOptional": true,
+    "label": "text (language)",
   },
   "termEnglish": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the text in the colonial language",
     "isArray": false,
     "isOptional": true,
+    "label": "text (colonial language)",
   },
 }
 `;
@@ -561,48 +731,66 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "audioFilename": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the name (not full path) of the audio file",
     "isArray": false,
     "isOptional": false,
+    "label": "audio file name",
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "lengthMilliseconds": Object {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+    "description": "the length of the corresponding audio file in milliseconds",
     "isArray": false,
     "isOptional": false,
+    "label": "length (ms)",
   },
   "startMilliseconds": Object {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+    "description": "the starting timestamp in milliseconds",
     "isArray": false,
     "isOptional": false,
+    "label": "start (ms)",
   },
   "transcript": Object {
     "complexDataType": "NESTED_TYPE",
+    "description": "a digital representation of the transcript's text",
     "isArray": false,
     "isOptional": false,
+    "label": "transcript",
     "schema": Object {
       "timeRanges": Object {
         "complexDataType": "NESTED_TYPE",
+        "description": "time stamps with text",
         "isArray": true,
         "isOptional": false,
+        "label": "time aligned text",
         "schema": Object {
           "data": Object {
             "coscradDataType": "NON_EMPTY_STRING",
+            "description": "text for this time range",
             "isArray": false,
             "isOptional": true,
+            "label": "text data",
           },
           "inPoint": Object {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "starting time stamp",
             "isArray": false,
             "isOptional": false,
+            "label": "in point",
           },
           "outPoint": Object {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "ending time stamp",
             "isArray": false,
             "isOptional": false,
+            "label": "out point",
           },
         },
       },
@@ -615,38 +803,52 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "authProviderUserId": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "an external ID that identifies the user with the auth provider",
     "isArray": false,
     "isOptional": false,
+    "label": "user ID with the auth provider",
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "profile": Object {
     "complexDataType": "NESTED_TYPE",
+    "description": "the user's profile information",
     "isArray": false,
     "isOptional": true,
+    "label": "profile",
     "schema": Object {
       "email": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the user's email address",
         "isArray": false,
         "isOptional": false,
+        "label": "email",
       },
       "name": Object {
         "complexDataType": "NESTED_TYPE",
+        "description": "the user's full name",
         "isArray": false,
         "isOptional": false,
+        "label": "full name",
         "schema": Object {
           "firstName": Object {
             "coscradDataType": "NON_EMPTY_STRING",
+            "description": "the user's first name",
             "isArray": false,
             "isOptional": false,
+            "label": "first name",
           },
           "lastName": Object {
             "coscradDataType": "NON_EMPTY_STRING",
+            "description": "the user's last name",
             "isArray": false,
             "isOptional": false,
+            "label": "last name",
           },
         },
       },
@@ -654,10 +856,12 @@ Object {
   },
   "roles": Object {
     "complexDataType": "ENUM",
+    "description": "the user's roles, which grant privileges to perform certain read \\\\ write actions",
     "enumLabel": "User Role",
     "enumName": "COSCRAD_USER_ROLE",
     "isArray": true,
     "isOptional": false,
+    "label": "roles",
     "labelsAndValues": Array [
       Object {
         "label": "admin",
@@ -675,8 +879,10 @@ Object {
   },
   "username": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "a human-readable identifier for this user",
     "isArray": false,
     "isOptional": false,
+    "label": "username",
   },
 }
 `;
@@ -685,23 +891,31 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "description": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "a summary of the significance of this user group (what its members have in common)",
     "isArray": false,
     "isOptional": false,
+    "label": "description",
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "label": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the name of the group",
     "isArray": false,
     "isOptional": false,
+    "label": "label",
   },
   "userIds": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "the ID of every user that is in this group",
     "isArray": true,
     "isOptional": false,
+    "label": "user IDs",
   },
 }
 `;
@@ -710,40 +924,54 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 Object {
   "entries": Object {
     "complexDataType": "NESTED_TYPE",
+    "description": "all terms in this vocabulary list with corresponding filter properties",
     "isArray": false,
     "isOptional": false,
+    "label": "entries",
     "schema": Object {
       "termId": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "unique identifier for the term that is included in the vocabulary list via this entry",
         "isArray": false,
         "isOptional": false,
+        "label": "term ID",
       },
     },
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "label": "ID",
   },
   "name": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "name of the vocabulary list in the language",
     "isArray": false,
     "isOptional": true,
+    "label": "name (language)",
   },
   "nameEnglish": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "name of the vocabulary list in the colonial language",
     "isArray": false,
     "isOptional": true,
+    "label": "name (colonial language)",
   },
   "variables": Object {
     "complexDataType": "NESTED_TYPE",
+    "description": "defines a dynamic form that can be used to filter the entries",
     "isArray": true,
     "isOptional": false,
+    "label": "filters",
     "schema": Object {
       "name": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the name of this filter property",
         "isArray": false,
         "isOptional": false,
+        "label": "filter property name",
       },
     },
   },

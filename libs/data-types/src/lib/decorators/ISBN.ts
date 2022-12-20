@@ -5,7 +5,7 @@ import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecorator
 import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
 import WithValidation from './validation/WithValidation';
 
-export function ISBN(userOptions?: Partial<TypeDecoratorOptions>): PropertyDecorator {
+export function ISBN(userOptions: TypeDecoratorOptions): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol) => {
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 

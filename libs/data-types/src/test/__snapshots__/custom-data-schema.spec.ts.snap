@@ -4,20 +4,26 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
 Object {
   "aliases": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "description of property: aliases",
     "isArray": true,
     "isOptional": false,
+    "label": "label for property: aliases",
   },
   "averageRating": Object {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+    "description": "description of property: averageRating",
     "isArray": false,
     "isOptional": true,
+    "label": "label for property: averageRating",
   },
   "creatorType": Object {
-    "coscradDataType": "ENUM",
+    "complexDataType": "ENUM",
+    "description": "description of property: creatorType",
     "enumLabel": "Creator Type",
     "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: creatorType",
     "labelsAndValues": Array [
       Object {
         "label": "artist",
@@ -34,60 +40,75 @@ Object {
     ],
   },
   "data": Object {
-    "coscradDataType": Object {
-      "discriminantPath": "data.type",
-      "schemaDefinitions": Array [
-        Object {
-          "discriminant": "one",
-          "schema": Object {
-            "strength": Object {
-              "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-              "isArray": false,
-              "isOptional": false,
-            },
-          },
-        },
-        Object {
-          "discriminant": "two",
-          "schema": Object {
-            "rating": Object {
-              "coscradDataType": "POSITIVE_INTEGER",
-              "isArray": false,
-              "isOptional": false,
-            },
-          },
-        },
-      ],
-    },
+    "complexDataType": "UNION_TYPE",
+    "description": "description of property: data",
+    "discriminantPath": "type",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: data",
+    "schemaDefinitions": Array [
+      Object {
+        "discriminant": "one",
+        "schema": Object {
+          "strength": Object {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "description of property: strength",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label for property: strength",
+          },
+        },
+      },
+      Object {
+        "discriminant": "two",
+        "schema": Object {
+          "rating": Object {
+            "coscradDataType": "POSITIVE_INTEGER",
+            "description": "description of property: rating",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label for property: rating",
+          },
+        },
+      },
+    ],
   },
   "iconUrl": Object {
     "coscradDataType": "URL",
+    "description": "description of property: iconUrl",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: iconUrl",
   },
   "id": Object {
     "coscradDataType": "UUID",
+    "description": "description of property: id",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: id",
   },
   "locationId": Object {
     "coscradDataType": "UUID",
+    "description": "description of property: locationId",
     "isArray": false,
     "isOptional": true,
+    "label": "label for property: locationId",
   },
   "locationName": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "description of property: locationName",
     "isArray": false,
     "isOptional": true,
+    "label": "label for property: locationName",
   },
   "mimeType": Object {
-    "coscradDataType": "ENUM",
+    "complexDataType": "ENUM",
+    "description": "description of property: mimeType",
     "enumLabel": "MIME Type",
     "enumName": "MIME_TYPE",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: mimeType",
     "labelsAndValues": Array [
       Object {
         "label": "mp3",
@@ -101,56 +122,77 @@ Object {
   },
   "numberOfDownvotes": Object {
     "coscradDataType": "POSITIVE_INTEGER",
+    "description": "description of property: numberOfDownvotes",
     "isArray": false,
     "isOptional": true,
+    "label": "label for property: numberOfDownvotes",
   },
   "numberOfLikes": Object {
     "coscradDataType": "POSITIVE_INTEGER",
+    "description": "description of property: numkberOfLikes",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: numkberOfLikes",
   },
   "optionalISBN": Object {
     "coscradDataType": "ISBN",
+    "description": "description of property: optionalISBN",
     "isArray": false,
     "isOptional": true,
+    "label": "label for property: optionalISBN",
   },
   "optionalRawData": Object {
     "coscradDataType": "RAW_DATA",
+    "description": "description of property: optionalRawData",
     "isArray": false,
     "isOptional": true,
+    "label": "label for property: optionalRawData",
   },
   "primaryWhatsit": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "description of property: primaryWhatsit",
+    "isArray": false,
+    "isOptional": false,
+    "label": "label for property: primaryWhatsit",
+    "schema": Object {
       "whatsitId": Object {
         "coscradDataType": "UUID",
+        "description": "description of property: whatsitId",
         "isArray": false,
         "isOptional": false,
+        "label": "label for property: whatsitId",
       },
       "whatsitName": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "description of property: whatsitName",
         "isArray": false,
         "isOptional": true,
+        "label": "label for property: whatsitName",
       },
     },
-    "isArray": false,
-    "isOptional": false,
   },
   "rawDataObject": Object {
     "coscradDataType": "RAW_DATA",
+    "description": "description of property: rawDataObject",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: rawDataObject",
   },
   "requiredISBN": Object {
     "coscradDataType": "ISBN",
+    "description": "description of property: requiredISBN",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: requiredISBN",
   },
   "role": Object {
-    "coscradDataType": "ENUM",
+    "complexDataType": "ENUM",
+    "description": "description of property: role",
     "enumLabel": "User Role",
     "enumName": "COSCRAD_USER_ROLE",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: role",
     "labelsAndValues": Array [
       Object {
         "label": "admin",
@@ -167,45 +209,62 @@ Object {
     ],
   },
   "secondaryWhatsit": Object {
-    "coscradDataType": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "description of property: secondaryWhatsit",
+    "isArray": false,
+    "isOptional": true,
+    "label": "label for property: secondaryWhatsit",
+    "schema": Object {
       "whatsitId": Object {
         "coscradDataType": "UUID",
+        "description": "description of property: whatsitId",
         "isArray": false,
         "isOptional": false,
+        "label": "label for property: whatsitId",
       },
       "whatsitName": Object {
         "coscradDataType": "NON_EMPTY_STRING",
+        "description": "description of property: whatsitName",
         "isArray": false,
         "isOptional": true,
+        "label": "label for property: whatsitName",
       },
     },
-    "isArray": false,
-    "isOptional": true,
   },
   "specSheetUrl": Object {
     "coscradDataType": "URL",
+    "description": "description of property: specSheetUrl",
     "isArray": false,
     "isOptional": true,
+    "label": "label for property: specSheetUrl",
   },
   "widgetName": Object {
     "coscradDataType": "NON_EMPTY_STRING",
+    "description": "description of property: widgetName",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: widgetName",
   },
   "width": Object {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+    "description": "description of property: width",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: width",
   },
   "year": Object {
     "coscradDataType": "YEAR",
+    "description": "description of property: year",
     "isArray": false,
     "isOptional": false,
+    "label": "label for property: year",
   },
   "yearUploaded": Object {
     "coscradDataType": "YEAR",
+    "description": "description of property: yearUploaded",
     "isArray": false,
     "isOptional": true,
+    "label": "label for property: yearUploaded",
   },
 }
 `;
