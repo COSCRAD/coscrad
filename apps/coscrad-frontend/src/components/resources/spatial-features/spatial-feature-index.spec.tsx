@@ -1,11 +1,8 @@
 import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
-    IDetailQueryResult,
     INoteViewModel,
-    ISpatialFeatureViewModel,
     ResourceType,
-    WithTags,
 } from '@coscrad/api-interfaces';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../../config';
@@ -23,10 +20,6 @@ import { SpatialFeatureIndexPresenter } from './spatial-feature-index.presenter'
 import { buildDummySpatialFeatures } from './test-utils/build-dummy-spatial-features';
 import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
 
-const AdaptedDetailPresenter = (
-    spatialFeature: IDetailQueryResult<WithTags<ISpatialFeatureViewModel>>
-) => <SpatialFeatureDetailThumbnailPresenter {...spatialFeature} />;
-
 const MockMap: ICoscradMap = ({ spatialFeatures }) => (
     <div>
         {spatialFeatures.map(({ id }) => (
@@ -38,9 +31,8 @@ const MockMap: ICoscradMap = ({ spatialFeatures }) => (
 const MockSpatialFeatureIndexPresenter = (indexResult: SpatialFeatureIndexState): JSX.Element => (
     <SpatialFeatureIndexPresenter
         {...indexResult}
-        // TODO In the future, we can inject these based on a config
         MapComponent={MockMap}
-        DetailPresenter={AdaptedDetailPresenter}
+        DetailPresenter={SpatialFeatureDetailThumbnailPresenter}
     />
 );
 

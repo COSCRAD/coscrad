@@ -7,21 +7,9 @@ import { testContainerComponentErrorHandling } from '../../utils/test-utils/comm
 import { renderWithProviders } from '../../utils/test-utils/render-with-providers';
 import { setupTestServer } from '../../utils/test-utils/setup-test-server';
 import { TagIndexContainer } from './tag-index.container';
+import { buildDummyTags } from './test-utils';
 
-const dummyTags: ITagViewModel[] = [
-    {
-        label: 'trees',
-        id: '101',
-    },
-    {
-        label: 'animals',
-        id: '102',
-    },
-    {
-        label: 'plants',
-        id: '103',
-    },
-];
+const dummyTags: ITagViewModel[] = buildDummyTags();
 
 /**
  * TODO[https://www.pivotaltracker.com/story/show/183618729]

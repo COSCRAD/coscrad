@@ -3,7 +3,6 @@ import {
     IDetailQueryResult,
     ISpatialFeatureViewModel,
     ResourceType,
-    WithTags,
 } from '@coscrad/api-interfaces';
 import { ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import {
@@ -22,20 +21,7 @@ import { FunctionalComponent } from '../../../../utils/types/functional-componen
 import { LineTextPresenter } from './line-text-presenter';
 import { PointTextPresenter } from './point-text-presenter';
 import { PolygonTextPresenter } from './polygon-text-presenter';
-
-const toGeoJSON = (
-    nonStandardModel: IDetailQueryResult<WithTags<ISpatialFeatureViewModel>>
-): Omit<IDetailQueryResult<WithTags<ISpatialFeatureViewModel>>, 'actions' | 'tags'> => {
-    const cloned = JSON.parse(
-        JSON.stringify(nonStandardModel)
-    ) as IDetailQueryResult<ISpatialFeatureViewModel>;
-
-    delete cloned['actions'];
-
-    delete cloned['tags'];
-
-    return cloned;
-};
+import { toGeoJSON } from './to-geo-json';
 
 interface HasCoordinates<T = unknown> {
     coordinates: T;
@@ -52,7 +38,7 @@ const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordin
  * spatial feature in its thumbnail view.
  */
 export const SpatialFeatureDetailThumbnailPresenter = (
-    spatialFeature: IDetailQueryResult<WithTags<ISpatialFeatureViewModel>>
+    spatialFeature: IDetailQueryResult<ISpatialFeatureViewModel>
 ): JSX.Element => {
     const [isExpanded, setIsExpanded] = useState(false);
 
