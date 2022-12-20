@@ -10,7 +10,10 @@ export class PhotographViewModel extends BaseViewModel implements IPhotographVie
         example: 'https://www.myimages.com/mountains.png',
         description: 'a url where the client can fetch a digital version of the photograph',
     })
-    @URL()
+    @URL({
+        label: 'image link',
+        description: 'a web link to a digital version of the photograph',
+    })
     readonly imageURL: string;
 
     @ApiProperty({

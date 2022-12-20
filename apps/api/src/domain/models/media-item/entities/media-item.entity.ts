@@ -28,22 +28,43 @@ import { ContributorAndRole } from '../../song/ContributorAndRole';
 export class MediaItem extends Resource implements ITimeBoundable {
     readonly type = ResourceType.mediaItem;
 
-    @NonEmptyString({ isOptional: true })
+    @NonEmptyString({
+        isOptional: true,
+        label: 'title (language)',
+        description: 'title of the media item in the language',
+    })
     readonly title?: string;
 
-    @NonEmptyString({ isOptional: true })
+    @NonEmptyString({
+        isOptional: true,
+        label: 'title (colonial language)',
+        description: 'title of the media item in the colonial language',
+    })
     readonly titleEnglish?: string;
 
-    @NestedDataType(ContributorAndRole, { isArray: true })
+    @NestedDataType(ContributorAndRole, {
+        isArray: true,
+        label: 'contributions',
+        description: 'acknowledgement of those who worked on creating and producing the media item',
+    })
     readonly contributorAndRoles: ContributorAndRole[];
 
-    @URL()
+    @URL({
+        label: 'url',
+        description: 'a web link to the corresponding media file',
+    })
     readonly url: string;
 
-    @Enum(CoscradEnum.MIMEType)
+    @Enum(CoscradEnum.MIMEType, {
+        label: 'MIME type',
+        description: 'technical specification of the format of the media item',
+    })
     readonly mimeType: MIMEType;
 
-    @NonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber({
+        label: 'length (ms)',
+        description: 'length of the media item in milliseconds',
+    })
     readonly lengthMilliseconds: number;
 
     constructor(dto: DTO<MediaItem>) {

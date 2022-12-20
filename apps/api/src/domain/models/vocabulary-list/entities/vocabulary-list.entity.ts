@@ -14,7 +14,7 @@ import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-unde
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
 import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
-import { VocabularyListEntry } from '../vocabulary-list-entry';
+import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
 const isOptional = true;
@@ -22,16 +22,31 @@ const isOptional = true;
 export class VocabularyList extends Resource {
     readonly type = ResourceType.vocabularyList;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'name (language)',
+        description: 'name of the vocabulary list in the language',
+    })
     readonly name?: string;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'name (colonial language)',
+        description: 'name of the vocabulary list in the colonial language',
+    })
     readonly nameEnglish?: string;
 
-    @NestedDataType(VocabularyListEntry)
+    @NestedDataType(VocabularyListEntry, {
+        label: 'entries',
+        description: 'all terms in this vocabulary list with corresponding filter properties',
+    })
     readonly entries: VocabularyListEntry[];
 
-    @NestedDataType(VocabularyListVariable, { isArray: true })
+    @NestedDataType(VocabularyListVariable, {
+        isArray: true,
+        label: 'filters',
+        description: 'defines a dynamic form that can be used to filter the entries',
+    })
     readonly variables: VocabularyListVariable[];
 
     constructor(dto: DTO<VocabularyList>) {

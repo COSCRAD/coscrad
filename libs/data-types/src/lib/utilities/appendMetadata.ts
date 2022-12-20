@@ -5,7 +5,12 @@ import { UnionDataTypeDefinition } from '../types/ComplexDataTypes/UnionDataType
 import { CoscradDataType, isCoscradDataType } from '../types/CoscradDataType';
 import getCoscradDataSchemaFromPrototype from './getCoscradDataSchemaFromPrototype';
 
-type OptionalMetadata = { isOptional: boolean; isArray: boolean };
+type OptionalMetadata = {
+    isOptional: boolean;
+    isArray: boolean;
+    label?: string;
+    description?: string;
+};
 
 export default (
     target: Object,
@@ -16,7 +21,7 @@ export default (
         | EnumTypeDefinition
         | NestedTypeDefinition
         | UnionDataTypeDefinition,
-    { isOptional, isArray }: OptionalMetadata
+    { isOptional, isArray, label, description }: OptionalMetadata
 ): void => {
     const existingMeta = getCoscradDataSchemaFromPrototype(target);
 
@@ -25,8 +30,8 @@ export default (
         {
             ...existingMeta,
             [propertyKey]: isCoscradDataType(propertyType)
-                ? { coscradDataType: propertyType, isOptional, isArray }
-                : { ...propertyType, isOptional, isArray },
+                ? { coscradDataType: propertyType, isOptional, isArray, label, description }
+                : { ...propertyType, isOptional, isArray, label, description },
         },
         target
     );

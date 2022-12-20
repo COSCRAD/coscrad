@@ -4,7 +4,11 @@ import BaseDomainModel from '../../BaseDomainModel';
 import { MediaTimeRange } from './MediaTimeRange';
 
 export class Transcript extends BaseDomainModel {
-    @NestedDataType(MediaTimeRange, { isArray: true })
+    @NestedDataType(MediaTimeRange, {
+        isArray: true,
+        label: 'time aligned text',
+        description: 'time stamps with text',
+    })
     // TODO rename this, as it includes the data as well
     timeRanges: MediaTimeRange[];
 

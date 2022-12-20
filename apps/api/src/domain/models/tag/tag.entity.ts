@@ -17,10 +17,17 @@ export class Tag extends Aggregate implements HasLabel {
 
     id: AggregateId;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'label',
+        description: 'a human readable text label for this tag',
+    })
     label: string;
 
-    @CompositeIdentifier(CategorizableType, isCategorizableType, { isArray: true })
+    @CompositeIdentifier(CategorizableType, isCategorizableType, {
+        isArray: true,
+        label: 'members',
+        description: 'the composite identifier of every resource or note with this tag',
+    })
     members: CategorizableCompositeIdentifier[];
 
     constructor(dto: DTO<Tag>) {

@@ -6,7 +6,7 @@ import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecorator
 import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
 import WithValidation from './validation/WithValidation';
 
-export function NonEmptyString(userOptions: Partial<TypeDecoratorOptions> = {}): PropertyDecorator {
+export function NonEmptyString(userOptions: TypeDecoratorOptions): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol) => {
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 

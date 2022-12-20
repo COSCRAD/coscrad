@@ -19,26 +19,45 @@ const isOptional = true;
 export class Song extends Resource implements ITimeBoundable {
     readonly type = ResourceType.song;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'title',
+        description: 'the title of the song in the language',
+    })
     readonly title?: string;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'title (colonial language)',
+        description: 'the title of the song in the colonial language',
+    })
     readonly titleEnglish?: string;
 
-    @NestedDataType(ContributorAndRole, { isArray: true })
+    @NestedDataType(ContributorAndRole, {
+        isArray: true,
+        label: 'contributions',
+        description: 'summary of contributions to the creation and recording of the song',
+    })
     readonly contributions: ContributorAndRole[];
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({ isOptional, label: 'lyrics', description: 'the lyrics of the song' })
     // the type of `lyrics` should allow three way translation in future
     readonly lyrics?: string;
 
-    @URL()
+    @URL({ label: 'audio URL', description: 'a web link to the audio for the song' })
     readonly audioURL: string;
 
-    @NonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber({
+        label: 'length (ms)',
+        description: 'length of the audio file in milliseconds',
+    })
     readonly lengthMilliseconds: number;
 
-    @NonNegativeFiniteNumber()
+    // TODO Consider removing this if it's not needed
+    @NonNegativeFiniteNumber({
+        label: 'start (ms)',
+        description: 'the starting timestamp for the audio file',
+    })
     readonly startMilliseconds: number;
 
     constructor(dto: DTO<Song>) {

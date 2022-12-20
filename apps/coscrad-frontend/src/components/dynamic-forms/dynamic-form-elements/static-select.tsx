@@ -22,7 +22,6 @@ export const StaticSelect = ({
 
     return (
         <FormGroup>
-            {label}
             <Select
                 value={currentValue || initialValue || ''}
                 label={label}

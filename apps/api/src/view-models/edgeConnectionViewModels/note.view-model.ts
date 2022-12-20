@@ -16,10 +16,15 @@ export class NoteViewModel extends BaseViewModel implements INoteViewModel {
         example: 'this part is about horses',
         description: 'a note about a resource or the connection between two resources',
     })
-    @NonEmptyString()
+    @NonEmptyString({ label: 'note text', description: '' })
     readonly note: string;
 
-    @NestedDataType(EdgeConnectionMember, { isArray: true })
+    @NestedDataType(EdgeConnectionMember, {
+        isArray: true,
+        label: 'connected resources',
+        // TODO reword
+        description: 'the 1 (self note) or 2 (dual connection) resources that this note connects',
+    })
     readonly connectedResources: EdgeConnectionMember[] = [];
 
     constructor({ id, note, members, connectionType }: EdgeConnection) {
