@@ -17,7 +17,7 @@ export const useLoadableSearchResult = <T extends IBaseViewModel>(
             data: null,
         };
 
-    const searchResult = allItems.data.find(({ data: { id } }) => id === idToFind) || NOT_FOUND;
+    const searchResult = allItems.entities.find(({ id }) => id === idToFind) || NOT_FOUND;
 
     return {
         isLoading: false,

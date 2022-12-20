@@ -1,12 +1,12 @@
-import { IIndexQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
 import { createSlice } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../../utils';
 import { buildReducersForThunk } from '../../utils/build-reducers-for-thunk';
 import { TERMS } from './constants';
 import { fetchTerms } from './thunks';
 import { TermSliceState } from './types';
+import { TermIndexState } from './types/term-index-state';
 
-const initialState: TermSliceState = buildInitialLoadableState<IIndexQueryResult<ITermViewModel>>();
+const initialState: TermSliceState = buildInitialLoadableState<TermIndexState>();
 
 export const termSlice = createSlice({
     name: TERMS,

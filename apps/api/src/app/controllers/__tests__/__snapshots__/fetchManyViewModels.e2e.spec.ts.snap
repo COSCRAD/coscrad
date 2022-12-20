@@ -2,8 +2,7 @@
 
 exports[`When fetching multiple resources GET /resources/bibliographicReferences when all of the resources are published should fetch multiple resources of type bibliographicReference 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -29,102 +28,55 @@ Object {
         },
       ],
       "data": Object {
-        "data": Object {
-          "abstract": "This is the abstract, NOT a general note!",
-          "creators": Array [
-            Object {
-              "name": "Alana Duvernay",
-              "type": "author",
-            },
-          ],
-          "isbn": "978-1-895811-34-6",
-          "numberOfPages": 455,
-          "place": "Kennebunk Port, Maine",
-          "publisher": "Atlantic Publishing",
-          "title": "A Day in the Life",
-          "type": "book",
-          "url": "https://atlanticpublishing.com",
-          "year": 1999,
-        },
-        "id": "1",
-        "tags": Array [
+        "abstract": "This is the abstract, NOT a general note!",
+        "creators": Array [
           Object {
-            "id": "2",
-            "label": "animals",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "term",
-              },
-              Object {
-                "id": "3",
-                "type": "term",
-              },
-              Object {
-                "id": "102",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2004",
-                "type": "note",
-              },
-              Object {
-                "id": "7",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "bibliographicReference",
-              },
-            ],
+            "name": "Alana Duvernay",
+            "type": "author",
           },
         ],
+        "isbn": "978-1-895811-34-6",
+        "numberOfPages": 455,
+        "place": "Kennebunk Port, Maine",
+        "publisher": "Atlantic Publishing",
+        "title": "A Day in the Life",
+        "type": "book",
+        "url": "https://atlanticpublishing.com",
+        "year": 1999,
       },
-    },
-    Object {
-      "actions": Array [
+      "id": "1",
+      "tags": Array [
         Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "userId",
-                "type": "TEXT_FIELD",
-              },
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
-      "data": Object {
-        "data": Object {
-          "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
-          "creators": Array [
+          "id": "2",
+          "label": "animals",
+          "members": Array [
             Object {
-              "name": "Sigurd Purcell",
-              "type": "author",
+              "id": "2",
+              "type": "term",
+            },
+            Object {
+              "id": "3",
+              "type": "term",
+            },
+            Object {
+              "id": "102",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2004",
+              "type": "note",
+            },
+            Object {
+              "id": "7",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "bibliographicReference",
             },
           ],
-          "doi": "10.14288/bcs.v0i19.784",
-          "issn": "00052949",
-          "issueDate": "Spring 2013",
-          "publicationTitle": "Journal of History",
-          "title": "Report on the Cariboo Chilcotin Justice inquiry",
-          "type": "journalArticle",
-          "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
         },
-        "id": "23",
-        "tags": Array [],
-      },
+      ],
     },
     Object {
       "actions": Array [
@@ -151,40 +103,81 @@ Object {
         },
       ],
       "data": Object {
-        "data": Object {
-          "abstract": "William, June
+        "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
+        "creators": Array [
+          Object {
+            "name": "Sigurd Purcell",
+            "type": "author",
+          },
+        ],
+        "doi": "10.14288/bcs.v0i19.784",
+        "issn": "00052949",
+        "issueDate": "Spring 2013",
+        "publicationTitle": "Journal of History",
+        "title": "Report on the Cariboo Chilcotin Justice inquiry",
+        "type": "journalArticle",
+        "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+      },
+      "id": "23",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "abstract": "William, June
 - Nemiah Valley
 - Qualifying as an expert in Tsilhqot'in written language",
-          "caseName": "2002-07-08_Tsilhqot'inTitleCase",
-          "court": "Supreme Court of British Columbia",
-          "dateDecided": "Recorded 2002-07-08",
-          "pages": "Pages 1-6",
-          "type": "courtCase",
-          "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
-        },
-        "id": "3",
-        "tags": Array [
-          Object {
-            "id": "6",
-            "label": "law",
-            "members": Array [
-              Object {
-                "id": "3",
-                "type": "bibliographicReference",
-              },
-            ],
-          },
-        ],
+        "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+        "court": "Supreme Court of British Columbia",
+        "dateDecided": "Recorded 2002-07-08",
+        "pages": "Pages 1-6",
+        "type": "courtCase",
+        "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
       },
+      "id": "3",
+      "tags": Array [
+        Object {
+          "id": "6",
+          "label": "law",
+          "members": Array [
+            Object {
+              "id": "3",
+              "type": "bibliographicReference",
+            },
+          ],
+        },
+      ],
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/bibliographicReferences when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -210,102 +203,55 @@ Object {
         },
       ],
       "data": Object {
-        "data": Object {
-          "abstract": "This is the abstract, NOT a general note!",
-          "creators": Array [
-            Object {
-              "name": "Alana Duvernay",
-              "type": "author",
-            },
-          ],
-          "isbn": "978-1-895811-34-6",
-          "numberOfPages": 455,
-          "place": "Kennebunk Port, Maine",
-          "publisher": "Atlantic Publishing",
-          "title": "A Day in the Life",
-          "type": "book",
-          "url": "https://atlanticpublishing.com",
-          "year": 1999,
-        },
-        "id": "1",
-        "tags": Array [
+        "abstract": "This is the abstract, NOT a general note!",
+        "creators": Array [
           Object {
-            "id": "2",
-            "label": "animals",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "term",
-              },
-              Object {
-                "id": "3",
-                "type": "term",
-              },
-              Object {
-                "id": "102",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2004",
-                "type": "note",
-              },
-              Object {
-                "id": "7",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "bibliographicReference",
-              },
-            ],
+            "name": "Alana Duvernay",
+            "type": "author",
           },
         ],
+        "isbn": "978-1-895811-34-6",
+        "numberOfPages": 455,
+        "place": "Kennebunk Port, Maine",
+        "publisher": "Atlantic Publishing",
+        "title": "A Day in the Life",
+        "type": "book",
+        "url": "https://atlanticpublishing.com",
+        "year": 1999,
       },
-    },
-    Object {
-      "actions": Array [
+      "id": "1",
+      "tags": Array [
         Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "userId",
-                "type": "TEXT_FIELD",
-              },
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
-      "data": Object {
-        "data": Object {
-          "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
-          "creators": Array [
+          "id": "2",
+          "label": "animals",
+          "members": Array [
             Object {
-              "name": "Sigurd Purcell",
-              "type": "author",
+              "id": "2",
+              "type": "term",
+            },
+            Object {
+              "id": "3",
+              "type": "term",
+            },
+            Object {
+              "id": "102",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2004",
+              "type": "note",
+            },
+            Object {
+              "id": "7",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "bibliographicReference",
             },
           ],
-          "doi": "10.14288/bcs.v0i19.784",
-          "issn": "00052949",
-          "issueDate": "Spring 2013",
-          "publicationTitle": "Journal of History",
-          "title": "Report on the Cariboo Chilcotin Justice inquiry",
-          "type": "journalArticle",
-          "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
         },
-        "id": "23",
-        "tags": Array [],
-      },
+      ],
     },
     Object {
       "actions": Array [
@@ -332,40 +278,81 @@ Object {
         },
       ],
       "data": Object {
-        "data": Object {
-          "abstract": "William, June
+        "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
+        "creators": Array [
+          Object {
+            "name": "Sigurd Purcell",
+            "type": "author",
+          },
+        ],
+        "doi": "10.14288/bcs.v0i19.784",
+        "issn": "00052949",
+        "issueDate": "Spring 2013",
+        "publicationTitle": "Journal of History",
+        "title": "Report on the Cariboo Chilcotin Justice inquiry",
+        "type": "journalArticle",
+        "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+      },
+      "id": "23",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "data": Object {
+        "abstract": "William, June
 - Nemiah Valley
 - Qualifying as an expert in Tsilhqot'in written language",
-          "caseName": "2002-07-08_Tsilhqot'inTitleCase",
-          "court": "Supreme Court of British Columbia",
-          "dateDecided": "Recorded 2002-07-08",
-          "pages": "Pages 1-6",
-          "type": "courtCase",
-          "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
-        },
-        "id": "3",
-        "tags": Array [
-          Object {
-            "id": "6",
-            "label": "law",
-            "members": Array [
-              Object {
-                "id": "3",
-                "type": "bibliographicReference",
-              },
-            ],
-          },
-        ],
+        "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+        "court": "Supreme Court of British Columbia",
+        "dateDecided": "Recorded 2002-07-08",
+        "pages": "Pages 1-6",
+        "type": "courtCase",
+        "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
       },
+      "id": "3",
+      "tags": Array [
+        Object {
+          "id": "6",
+          "label": "law",
+          "members": Array [
+            Object {
+              "id": "3",
+              "type": "bibliographicReference",
+            },
+          ],
+        },
+      ],
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/books when all of the resources are published should fetch multiple resources of type book 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -390,65 +377,63 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "author": "John Doeburg",
-        "id": "23",
-        "pages": Array [
-          Object {
-            "identifier": "1",
-            "text": "foo",
-            "translation": "dee foo",
-          },
-          Object {
-            "identifier": "2",
-            "text": "blah blah blah",
-            "translation": "blahas",
-          },
-        ],
-        "publicationDate": "2002",
-        "subtitle": "The wolf's revenge",
-        "tags": Array [
-          Object {
-            "id": "1",
-            "label": "plants",
-            "members": Array [
-              Object {
-                "id": "1",
-                "type": "term",
-              },
-              Object {
-                "id": "23",
-                "type": "book",
-              },
-              Object {
-                "id": "24",
-                "type": "book",
-              },
-              Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2005",
-                "type": "note",
-              },
-              Object {
-                "id": "9",
-                "type": "note",
-              },
-              Object {
-                "id": "11",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-        "title": "Three Little Pigs",
-      },
+      "author": "John Doeburg",
+      "id": "23",
+      "pages": Array [
+        Object {
+          "identifier": "1",
+          "text": "foo",
+          "translation": "dee foo",
+        },
+        Object {
+          "identifier": "2",
+          "text": "blah blah blah",
+          "translation": "blahas",
+        },
+      ],
+      "publicationDate": "2002",
+      "subtitle": "The wolf's revenge",
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
+          ],
+        },
+      ],
+      "title": "Three Little Pigs",
     },
     Object {
       "actions": Array [
@@ -474,59 +459,57 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "author": "Jane Donnaldson",
-        "id": "24",
-        "pages": Array [
-          Object {
-            "identifier": "ix",
-            "text": "blah blah blah",
-            "translation": "blahas",
-          },
-        ],
-        "publicationDate": "2011",
-        "tags": Array [
-          Object {
-            "id": "1",
-            "label": "plants",
-            "members": Array [
-              Object {
-                "id": "1",
-                "type": "term",
-              },
-              Object {
-                "id": "23",
-                "type": "book",
-              },
-              Object {
-                "id": "24",
-                "type": "book",
-              },
-              Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2005",
-                "type": "note",
-              },
-              Object {
-                "id": "9",
-                "type": "note",
-              },
-              Object {
-                "id": "11",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-        "title": "An Adventure Story",
-      },
+      "author": "Jane Donnaldson",
+      "id": "24",
+      "pages": Array [
+        Object {
+          "identifier": "ix",
+          "text": "blah blah blah",
+          "translation": "blahas",
+        },
+      ],
+      "publicationDate": "2011",
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
+          ],
+        },
+      ],
+      "title": "An Adventure Story",
     },
     Object {
       "actions": Array [
@@ -552,29 +535,27 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "author": "Jane Donnaldson",
-        "id": "25",
-        "pages": Array [
-          Object {
-            "identifier": "ix",
-            "text": "blah blah blah",
-            "translation": "blahas",
-          },
-        ],
-        "publicationDate": "2012",
-        "tags": Array [],
-        "title": "An Adventure Story II",
-      },
+      "author": "Jane Donnaldson",
+      "id": "25",
+      "pages": Array [
+        Object {
+          "identifier": "ix",
+          "text": "blah blah blah",
+          "translation": "blahas",
+        },
+      ],
+      "publicationDate": "2012",
+      "tags": Array [],
+      "title": "An Adventure Story II",
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/books when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -599,65 +580,63 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "author": "John Doeburg",
-        "id": "23",
-        "pages": Array [
-          Object {
-            "identifier": "1",
-            "text": "foo",
-            "translation": "dee foo",
-          },
-          Object {
-            "identifier": "2",
-            "text": "blah blah blah",
-            "translation": "blahas",
-          },
-        ],
-        "publicationDate": "2002",
-        "subtitle": "The wolf's revenge",
-        "tags": Array [
-          Object {
-            "id": "1",
-            "label": "plants",
-            "members": Array [
-              Object {
-                "id": "1",
-                "type": "term",
-              },
-              Object {
-                "id": "23",
-                "type": "book",
-              },
-              Object {
-                "id": "24",
-                "type": "book",
-              },
-              Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2005",
-                "type": "note",
-              },
-              Object {
-                "id": "9",
-                "type": "note",
-              },
-              Object {
-                "id": "11",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-        "title": "Three Little Pigs",
-      },
+      "author": "John Doeburg",
+      "id": "23",
+      "pages": Array [
+        Object {
+          "identifier": "1",
+          "text": "foo",
+          "translation": "dee foo",
+        },
+        Object {
+          "identifier": "2",
+          "text": "blah blah blah",
+          "translation": "blahas",
+        },
+      ],
+      "publicationDate": "2002",
+      "subtitle": "The wolf's revenge",
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
+          ],
+        },
+      ],
+      "title": "Three Little Pigs",
     },
     Object {
       "actions": Array [
@@ -683,59 +662,57 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "author": "Jane Donnaldson",
-        "id": "24",
-        "pages": Array [
-          Object {
-            "identifier": "ix",
-            "text": "blah blah blah",
-            "translation": "blahas",
-          },
-        ],
-        "publicationDate": "2011",
-        "tags": Array [
-          Object {
-            "id": "1",
-            "label": "plants",
-            "members": Array [
-              Object {
-                "id": "1",
-                "type": "term",
-              },
-              Object {
-                "id": "23",
-                "type": "book",
-              },
-              Object {
-                "id": "24",
-                "type": "book",
-              },
-              Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2005",
-                "type": "note",
-              },
-              Object {
-                "id": "9",
-                "type": "note",
-              },
-              Object {
-                "id": "11",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-        "title": "An Adventure Story",
-      },
+      "author": "Jane Donnaldson",
+      "id": "24",
+      "pages": Array [
+        Object {
+          "identifier": "ix",
+          "text": "blah blah blah",
+          "translation": "blahas",
+        },
+      ],
+      "publicationDate": "2011",
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
+          ],
+        },
+      ],
+      "title": "An Adventure Story",
     },
     Object {
       "actions": Array [
@@ -761,29 +738,27 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "author": "Jane Donnaldson",
-        "id": "25",
-        "pages": Array [
-          Object {
-            "identifier": "ix",
-            "text": "blah blah blah",
-            "translation": "blahas",
-          },
-        ],
-        "publicationDate": "2012",
-        "tags": Array [],
-        "title": "An Adventure Story II",
-      },
+      "author": "Jane Donnaldson",
+      "id": "25",
+      "pages": Array [
+        Object {
+          "identifier": "ix",
+          "text": "blah blah blah",
+          "translation": "blahas",
+        },
+      ],
+      "publicationDate": "2012",
+      "tags": Array [],
+      "title": "An Adventure Story II",
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/mediaItems when all of the resources are published should fetch multiple resources of type mediaItem 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -808,61 +783,59 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributions": Array [
-          Object {
-            "contributorId": "2",
-            "role": "host",
-          },
-        ],
-        "id": "1",
-        "lengthMilliseconds": 2500,
-        "mimeType": "audio/mpeg",
-        "tags": Array [
-          Object {
-            "id": "5",
-            "label": "legends",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "101",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2001",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "mediaItem",
-              },
-              Object {
-                "id": "1",
-                "type": "song",
-              },
-            ],
-          },
-        ],
-        "title": "episode title (in language)",
-        "titleEnglish": "Metal Mondays episode 1",
-        "url": "https://www.metalmondays.com/1.mp3",
-      },
+      "contributions": Array [
+        Object {
+          "contributorId": "2",
+          "role": "host",
+        },
+      ],
+      "id": "1",
+      "lengthMilliseconds": 2500,
+      "mimeType": "audio/mpeg",
+      "tags": Array [
+        Object {
+          "id": "5",
+          "label": "legends",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "101",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2001",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "mediaItem",
+            },
+            Object {
+              "id": "1",
+              "type": "song",
+            },
+          ],
+        },
+      ],
+      "title": "episode title (in language)",
+      "titleEnglish": "Metal Mondays episode 1",
+      "url": "https://www.metalmondays.com/1.mp3",
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/mediaItems when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -887,61 +860,59 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributions": Array [
-          Object {
-            "contributorId": "2",
-            "role": "host",
-          },
-        ],
-        "id": "1",
-        "lengthMilliseconds": 2500,
-        "mimeType": "audio/mpeg",
-        "tags": Array [
-          Object {
-            "id": "5",
-            "label": "legends",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "101",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2001",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "mediaItem",
-              },
-              Object {
-                "id": "1",
-                "type": "song",
-              },
-            ],
-          },
-        ],
-        "title": "episode title (in language)",
-        "titleEnglish": "Metal Mondays episode 1",
-        "url": "https://www.metalmondays.com/1.mp3",
-      },
+      "contributions": Array [
+        Object {
+          "contributorId": "2",
+          "role": "host",
+        },
+      ],
+      "id": "1",
+      "lengthMilliseconds": 2500,
+      "mimeType": "audio/mpeg",
+      "tags": Array [
+        Object {
+          "id": "5",
+          "label": "legends",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "101",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2001",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "mediaItem",
+            },
+            Object {
+              "id": "1",
+              "type": "song",
+            },
+          ],
+        },
+      ],
+      "title": "episode title (in language)",
+      "titleEnglish": "Metal Mondays episode 1",
+      "url": "https://www.metalmondays.com/1.mp3",
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/photographs when all of the resources are published should fetch multiple resources of type photograph 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -966,35 +937,33 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "id": "0",
-        "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
-        "photographer": "Susie McRealart",
-        "tags": Array [
-          Object {
-            "id": "3",
-            "label": "placenames",
-            "members": Array [
-              Object {
-                "id": "0",
-                "type": "photograph",
-              },
-              Object {
-                "id": "110",
-                "type": "transcribedAudio",
-              },
-              Object {
-                "id": "2003",
-                "type": "note",
-              },
-              Object {
-                "id": "5",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-      },
+      "id": "0",
+      "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
+      "photographer": "Susie McRealart",
+      "tags": Array [
+        Object {
+          "id": "3",
+          "label": "placenames",
+          "members": Array [
+            Object {
+              "id": "0",
+              "type": "photograph",
+            },
+            Object {
+              "id": "110",
+              "type": "transcribedAudio",
+            },
+            Object {
+              "id": "2003",
+              "type": "note",
+            },
+            Object {
+              "id": "5",
+              "type": "note",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -1020,31 +989,29 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "id": "1",
-        "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
-        "photographer": "Robert McRealart",
-        "tags": Array [
-          Object {
-            "id": "4",
-            "label": "songs",
-            "members": Array [
-              Object {
-                "id": "1",
-                "type": "photograph",
-              },
-              Object {
-                "id": "2002",
-                "type": "note",
-              },
-              Object {
-                "id": "3",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-      },
+      "id": "1",
+      "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
+      "photographer": "Robert McRealart",
+      "tags": Array [
+        Object {
+          "id": "4",
+          "label": "songs",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "photograph",
+            },
+            Object {
+              "id": "2002",
+              "type": "note",
+            },
+            Object {
+              "id": "3",
+              "type": "note",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -1070,21 +1037,19 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "id": "2",
-        "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
-        "photographer": "Kenny Tree-Huggens",
-        "tags": Array [],
-      },
+      "id": "2",
+      "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
+      "photographer": "Kenny Tree-Huggens",
+      "tags": Array [],
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/photographs when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -1109,35 +1074,33 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "id": "0",
-        "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
-        "photographer": "Susie McRealart",
-        "tags": Array [
-          Object {
-            "id": "3",
-            "label": "placenames",
-            "members": Array [
-              Object {
-                "id": "0",
-                "type": "photograph",
-              },
-              Object {
-                "id": "110",
-                "type": "transcribedAudio",
-              },
-              Object {
-                "id": "2003",
-                "type": "note",
-              },
-              Object {
-                "id": "5",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-      },
+      "id": "0",
+      "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
+      "photographer": "Susie McRealart",
+      "tags": Array [
+        Object {
+          "id": "3",
+          "label": "placenames",
+          "members": Array [
+            Object {
+              "id": "0",
+              "type": "photograph",
+            },
+            Object {
+              "id": "110",
+              "type": "transcribedAudio",
+            },
+            Object {
+              "id": "2003",
+              "type": "note",
+            },
+            Object {
+              "id": "5",
+              "type": "note",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -1163,31 +1126,29 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "id": "1",
-        "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
-        "photographer": "Robert McRealart",
-        "tags": Array [
-          Object {
-            "id": "4",
-            "label": "songs",
-            "members": Array [
-              Object {
-                "id": "1",
-                "type": "photograph",
-              },
-              Object {
-                "id": "2002",
-                "type": "note",
-              },
-              Object {
-                "id": "3",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-      },
+      "id": "1",
+      "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
+      "photographer": "Robert McRealart",
+      "tags": Array [
+        Object {
+          "id": "4",
+          "label": "songs",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "photograph",
+            },
+            Object {
+              "id": "2002",
+              "type": "note",
+            },
+            Object {
+              "id": "3",
+              "type": "note",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -1213,21 +1174,19 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "id": "2",
-        "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
-        "photographer": "Kenny Tree-Huggens",
-        "tags": Array [],
-      },
+      "id": "2",
+      "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
+      "photographer": "Kenny Tree-Huggens",
+      "tags": Array [],
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/songs when all of the resources are published should fetch multiple resources of type song 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -1252,50 +1211,48 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "audioURL": "https://www.myaudio.com/lamb.mp3",
-        "contributions": Array [
-          "1 (performer)",
-        ],
-        "id": "1",
-        "lengthMilliseconds": 3500,
-        "lyrics": "Mary had a little lamb, little lamb.",
-        "startMilliseconds": 0,
-        "tags": Array [
-          Object {
-            "id": "5",
-            "label": "legends",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "101",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2001",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "mediaItem",
-              },
-              Object {
-                "id": "1",
-                "type": "song",
-              },
-            ],
-          },
-        ],
-        "title": "Song title in language",
-        "titleEnglish": "Mary had a little lamb",
-      },
+      "audioURL": "https://www.myaudio.com/lamb.mp3",
+      "contributions": Array [
+        "1 (performer)",
+      ],
+      "id": "1",
+      "lengthMilliseconds": 3500,
+      "lyrics": "Mary had a little lamb, little lamb.",
+      "startMilliseconds": 0,
+      "tags": Array [
+        Object {
+          "id": "5",
+          "label": "legends",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "101",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2001",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "mediaItem",
+            },
+            Object {
+              "id": "1",
+              "type": "song",
+            },
+          ],
+        },
+      ],
+      "title": "Song title in language",
+      "titleEnglish": "Mary had a little lamb",
     },
     Object {
       "actions": Array [
@@ -1321,28 +1278,26 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "audioURL": "https://www.myaudio.com/badsong.wav",
-        "contributions": Array [
-          "33 (author)",
-        ],
-        "id": "2",
-        "lengthMilliseconds": 33000,
-        "lyrics": "Ain't gonna see the light of day, light of day, light of day",
-        "startMilliseconds": 0,
-        "tags": Array [],
-        "title": "Unpublished Song Title (lang)",
-        "titleEnglish": "Unpublished Song Title (Engl)",
-      },
+      "audioURL": "https://www.myaudio.com/badsong.wav",
+      "contributions": Array [
+        "33 (author)",
+      ],
+      "id": "2",
+      "lengthMilliseconds": 33000,
+      "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+      "startMilliseconds": 0,
+      "tags": Array [],
+      "title": "Unpublished Song Title (lang)",
+      "titleEnglish": "Unpublished Song Title (Engl)",
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/songs when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -1367,50 +1322,48 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "audioURL": "https://www.myaudio.com/lamb.mp3",
-        "contributions": Array [
-          "1 (performer)",
-        ],
-        "id": "1",
-        "lengthMilliseconds": 3500,
-        "lyrics": "Mary had a little lamb, little lamb.",
-        "startMilliseconds": 0,
-        "tags": Array [
-          Object {
-            "id": "5",
-            "label": "legends",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "101",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2001",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "mediaItem",
-              },
-              Object {
-                "id": "1",
-                "type": "song",
-              },
-            ],
-          },
-        ],
-        "title": "Song title in language",
-        "titleEnglish": "Mary had a little lamb",
-      },
+      "audioURL": "https://www.myaudio.com/lamb.mp3",
+      "contributions": Array [
+        "1 (performer)",
+      ],
+      "id": "1",
+      "lengthMilliseconds": 3500,
+      "lyrics": "Mary had a little lamb, little lamb.",
+      "startMilliseconds": 0,
+      "tags": Array [
+        Object {
+          "id": "5",
+          "label": "legends",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "101",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2001",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "mediaItem",
+            },
+            Object {
+              "id": "1",
+              "type": "song",
+            },
+          ],
+        },
+      ],
+      "title": "Song title in language",
+      "titleEnglish": "Mary had a little lamb",
     },
     Object {
       "actions": Array [
@@ -1436,28 +1389,26 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "audioURL": "https://www.myaudio.com/badsong.wav",
-        "contributions": Array [
-          "33 (author)",
-        ],
-        "id": "2",
-        "lengthMilliseconds": 33000,
-        "lyrics": "Ain't gonna see the light of day, light of day, light of day",
-        "startMilliseconds": 0,
-        "tags": Array [],
-        "title": "Unpublished Song Title (lang)",
-        "titleEnglish": "Unpublished Song Title (Engl)",
-      },
+      "audioURL": "https://www.myaudio.com/badsong.wav",
+      "contributions": Array [
+        "33 (author)",
+      ],
+      "id": "2",
+      "lengthMilliseconds": 33000,
+      "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+      "startMilliseconds": 0,
+      "tags": Array [],
+      "title": "Unpublished Song Title (lang)",
+      "titleEnglish": "Unpublished Song Title (Engl)",
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/spatialFeatures when all of the resources are published should fetch multiple resources of type spatialFeature 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -1482,61 +1433,59 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            54.034404852745006,
-            -132.17563335558532,
-          ],
-          "type": "Point",
-        },
-        "id": "100",
-        "properties": Object {
-          "description": "Description for point 100",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Name of Point with ID: 100",
-        },
-        "tags": Array [
-          Object {
-            "id": "1",
-            "label": "plants",
-            "members": Array [
-              Object {
-                "id": "1",
-                "type": "term",
-              },
-              Object {
-                "id": "23",
-                "type": "book",
-              },
-              Object {
-                "id": "24",
-                "type": "book",
-              },
-              Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2005",
-                "type": "note",
-              },
-              Object {
-                "id": "9",
-                "type": "note",
-              },
-              Object {
-                "id": "11",
-                "type": "note",
-              },
-            ],
-          },
+      "geometry": Object {
+        "coordinates": Array [
+          54.034404852745006,
+          -132.17563335558532,
         ],
+        "type": "Point",
       },
+      "id": "100",
+      "properties": Object {
+        "description": "Description for point 100",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 100",
+      },
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -1562,53 +1511,51 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            53.26710566708586,
-            -131.99142447847115,
-          ],
-          "type": "Point",
-        },
-        "id": "101",
-        "properties": Object {
-          "description": "Description for point 101",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Name of Point with ID: 101",
-        },
-        "tags": Array [
-          Object {
-            "id": "5",
-            "label": "legends",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "101",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2001",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "mediaItem",
-              },
-              Object {
-                "id": "1",
-                "type": "song",
-              },
-            ],
-          },
+      "geometry": Object {
+        "coordinates": Array [
+          53.26710566708586,
+          -131.99142447847115,
         ],
+        "type": "Point",
       },
+      "id": "101",
+      "properties": Object {
+        "description": "Description for point 101",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 101",
+      },
+      "tags": Array [
+        Object {
+          "id": "5",
+          "label": "legends",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "101",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2001",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "mediaItem",
+            },
+            Object {
+              "id": "1",
+              "type": "song",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -1634,94 +1581,51 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            51.93152097800416,
-            -123.14042112774867,
-          ],
-          "type": "Point",
-        },
-        "id": "102",
-        "properties": Object {
-          "description": "Description for point 102",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Name of Point with ID: 102",
-        },
-        "tags": Array [
-          Object {
-            "id": "2",
-            "label": "animals",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "term",
-              },
-              Object {
-                "id": "3",
-                "type": "term",
-              },
-              Object {
-                "id": "102",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2004",
-                "type": "note",
-              },
-              Object {
-                "id": "7",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "bibliographicReference",
-              },
-            ],
-          },
+      "geometry": Object {
+        "coordinates": Array [
+          51.93152097800416,
+          -123.14042112774867,
         ],
+        "type": "Point",
       },
-    },
-    Object {
-      "actions": Array [
+      "id": "102",
+      "properties": Object {
+        "description": "Description for point 102",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 102",
+      },
+      "tags": Array [
         Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "userId",
-                "type": "TEXT_FIELD",
-              },
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            51.935065638350636,
-            -122.50936316168337,
+          "id": "2",
+          "label": "animals",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "term",
+            },
+            Object {
+              "id": "3",
+              "type": "term",
+            },
+            Object {
+              "id": "102",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2004",
+              "type": "note",
+            },
+            Object {
+              "id": "7",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "bibliographicReference",
+            },
           ],
-          "type": "Point",
         },
-        "id": "103",
-        "properties": Object {
-          "description": "Description for point 103",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Name of Point with ID: 103",
-        },
-        "tags": Array [],
-      },
+      ],
     },
     Object {
       "actions": Array [
@@ -1747,22 +1651,124 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            52.12579975880678,
-            -123.68132823530952,
+      "geometry": Object {
+        "coordinates": Array [
+          51.935065638350636,
+          -122.50936316168337,
+        ],
+        "type": "Point",
+      },
+      "id": "103",
+      "properties": Object {
+        "description": "Description for point 103",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 103",
+      },
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "geometry": Object {
+        "coordinates": Array [
+          52.12579975880678,
+          -123.68132823530952,
+        ],
+        "type": "Point",
+      },
+      "id": "104",
+      "properties": Object {
+        "description": "Description for point 104",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 104",
+      },
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "geometry": Object {
+        "coordinates": Array [
+          Array [
+            52.3,
+            -124.2,
           ],
-          "type": "Point",
-        },
-        "id": "104",
-        "properties": Object {
-          "description": "Description for point 104",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Name of Point with ID: 104",
-        },
-        "tags": Array [],
+          Array [
+            52.35,
+            -124.85,
+          ],
+          Array [
+            52.21,
+            -124.9,
+          ],
+          Array [
+            52.05,
+            -125.1,
+          ],
+          Array [
+            52.15,
+            -125.1,
+          ],
+          Array [
+            52.33,
+            -125.22,
+          ],
+          Array [
+            52.45,
+            -125.39,
+          ],
+        ],
+        "type": "LineString",
       },
+      "id": "1",
+      "properties": Object {
+        "description": "One amazing hike!",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Windy Path",
+      },
+      "tags": Array [],
     },
     Object {
       "actions": Array [
@@ -1788,114 +1794,45 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
+      "geometry": Object {
+        "coordinates": Array [
+          Array [
             Array [
-              52.3,
-              -124.2,
+              52.47,
+              -123.6,
             ],
             Array [
-              52.35,
-              -124.85,
-            ],
-            Array [
-              52.21,
-              -124.9,
+              52.42,
+              -123.95,
             ],
             Array [
               52.05,
-              -125.1,
+              -123.95,
             ],
             Array [
-              52.15,
-              -125.1,
-            ],
-            Array [
-              52.33,
-              -125.22,
-            ],
-            Array [
-              52.45,
-              -125.39,
+              52.05,
+              -123.685,
             ],
           ],
-          "type": "LineString",
-        },
-        "id": "1",
-        "properties": Object {
-          "description": "One amazing hike!",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Windy Path",
-        },
-        "tags": Array [],
+        ],
+        "type": "Polygon",
       },
-    },
-    Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "userId",
-                "type": "TEXT_FIELD",
-              },
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            Array [
-              Array [
-                52.47,
-                -123.6,
-              ],
-              Array [
-                52.42,
-                -123.95,
-              ],
-              Array [
-                52.05,
-                -123.95,
-              ],
-              Array [
-                52.05,
-                -123.685,
-              ],
-            ],
-          ],
-          "type": "Polygon",
-        },
-        "id": "300",
-        "properties": Object {
-          "description": "Description for point 300",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Point with ID: 300 Name",
-        },
-        "tags": Array [],
+      "id": "300",
+      "properties": Object {
+        "description": "Description for point 300",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Point with ID: 300 Name",
       },
+      "tags": Array [],
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/spatialFeatures when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -1920,61 +1857,59 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            54.034404852745006,
-            -132.17563335558532,
-          ],
-          "type": "Point",
-        },
-        "id": "100",
-        "properties": Object {
-          "description": "Description for point 100",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Name of Point with ID: 100",
-        },
-        "tags": Array [
-          Object {
-            "id": "1",
-            "label": "plants",
-            "members": Array [
-              Object {
-                "id": "1",
-                "type": "term",
-              },
-              Object {
-                "id": "23",
-                "type": "book",
-              },
-              Object {
-                "id": "24",
-                "type": "book",
-              },
-              Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2005",
-                "type": "note",
-              },
-              Object {
-                "id": "9",
-                "type": "note",
-              },
-              Object {
-                "id": "11",
-                "type": "note",
-              },
-            ],
-          },
+      "geometry": Object {
+        "coordinates": Array [
+          54.034404852745006,
+          -132.17563335558532,
         ],
+        "type": "Point",
       },
+      "id": "100",
+      "properties": Object {
+        "description": "Description for point 100",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 100",
+      },
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -2000,53 +1935,51 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            53.26710566708586,
-            -131.99142447847115,
-          ],
-          "type": "Point",
-        },
-        "id": "101",
-        "properties": Object {
-          "description": "Description for point 101",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Name of Point with ID: 101",
-        },
-        "tags": Array [
-          Object {
-            "id": "5",
-            "label": "legends",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "101",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2001",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "mediaItem",
-              },
-              Object {
-                "id": "1",
-                "type": "song",
-              },
-            ],
-          },
+      "geometry": Object {
+        "coordinates": Array [
+          53.26710566708586,
+          -131.99142447847115,
         ],
+        "type": "Point",
       },
+      "id": "101",
+      "properties": Object {
+        "description": "Description for point 101",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 101",
+      },
+      "tags": Array [
+        Object {
+          "id": "5",
+          "label": "legends",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "101",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2001",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "mediaItem",
+            },
+            Object {
+              "id": "1",
+              "type": "song",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -2072,94 +2005,51 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            51.93152097800416,
-            -123.14042112774867,
-          ],
-          "type": "Point",
-        },
-        "id": "102",
-        "properties": Object {
-          "description": "Description for point 102",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Name of Point with ID: 102",
-        },
-        "tags": Array [
-          Object {
-            "id": "2",
-            "label": "animals",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "term",
-              },
-              Object {
-                "id": "3",
-                "type": "term",
-              },
-              Object {
-                "id": "102",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2004",
-                "type": "note",
-              },
-              Object {
-                "id": "7",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "bibliographicReference",
-              },
-            ],
-          },
+      "geometry": Object {
+        "coordinates": Array [
+          51.93152097800416,
+          -123.14042112774867,
         ],
+        "type": "Point",
       },
-    },
-    Object {
-      "actions": Array [
+      "id": "102",
+      "properties": Object {
+        "description": "Description for point 102",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 102",
+      },
+      "tags": Array [
         Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "userId",
-                "type": "TEXT_FIELD",
-              },
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            51.935065638350636,
-            -122.50936316168337,
+          "id": "2",
+          "label": "animals",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "term",
+            },
+            Object {
+              "id": "3",
+              "type": "term",
+            },
+            Object {
+              "id": "102",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2004",
+              "type": "note",
+            },
+            Object {
+              "id": "7",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "bibliographicReference",
+            },
           ],
-          "type": "Point",
         },
-        "id": "103",
-        "properties": Object {
-          "description": "Description for point 103",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Name of Point with ID: 103",
-        },
-        "tags": Array [],
-      },
+      ],
     },
     Object {
       "actions": Array [
@@ -2185,22 +2075,124 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            52.12579975880678,
-            -123.68132823530952,
+      "geometry": Object {
+        "coordinates": Array [
+          51.935065638350636,
+          -122.50936316168337,
+        ],
+        "type": "Point",
+      },
+      "id": "103",
+      "properties": Object {
+        "description": "Description for point 103",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 103",
+      },
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "geometry": Object {
+        "coordinates": Array [
+          52.12579975880678,
+          -123.68132823530952,
+        ],
+        "type": "Point",
+      },
+      "id": "104",
+      "properties": Object {
+        "description": "Description for point 104",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 104",
+      },
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [
+        Object {
+          "description": "Allow a user to view (but not edit) a given resource",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "userId",
+                "type": "TEXT_FIELD",
+              },
+              Object {
+                "description": "add description",
+                "label": "add label",
+                "name": "resourceCompositeIdentifier",
+                "type": "JSON_INPUT",
+              },
+            ],
+          },
+          "label": "Grant Read Access to User",
+          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+        },
+      ],
+      "geometry": Object {
+        "coordinates": Array [
+          Array [
+            52.3,
+            -124.2,
           ],
-          "type": "Point",
-        },
-        "id": "104",
-        "properties": Object {
-          "description": "Description for point 104",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Name of Point with ID: 104",
-        },
-        "tags": Array [],
+          Array [
+            52.35,
+            -124.85,
+          ],
+          Array [
+            52.21,
+            -124.9,
+          ],
+          Array [
+            52.05,
+            -125.1,
+          ],
+          Array [
+            52.15,
+            -125.1,
+          ],
+          Array [
+            52.33,
+            -125.22,
+          ],
+          Array [
+            52.45,
+            -125.39,
+          ],
+        ],
+        "type": "LineString",
       },
+      "id": "1",
+      "properties": Object {
+        "description": "One amazing hike!",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Windy Path",
+      },
+      "tags": Array [],
     },
     Object {
       "actions": Array [
@@ -2226,114 +2218,45 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
+      "geometry": Object {
+        "coordinates": Array [
+          Array [
             Array [
-              52.3,
-              -124.2,
+              52.47,
+              -123.6,
             ],
             Array [
-              52.35,
-              -124.85,
-            ],
-            Array [
-              52.21,
-              -124.9,
+              52.42,
+              -123.95,
             ],
             Array [
               52.05,
-              -125.1,
+              -123.95,
             ],
             Array [
-              52.15,
-              -125.1,
-            ],
-            Array [
-              52.33,
-              -125.22,
-            ],
-            Array [
-              52.45,
-              -125.39,
+              52.05,
+              -123.685,
             ],
           ],
-          "type": "LineString",
-        },
-        "id": "1",
-        "properties": Object {
-          "description": "One amazing hike!",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Windy Path",
-        },
-        "tags": Array [],
+        ],
+        "type": "Polygon",
       },
-    },
-    Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "userId",
-                "type": "TEXT_FIELD",
-              },
-              Object {
-                "description": "add description",
-                "label": "add label",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
-      "data": Object {
-        "geometry": Object {
-          "coordinates": Array [
-            Array [
-              Array [
-                52.47,
-                -123.6,
-              ],
-              Array [
-                52.42,
-                -123.95,
-              ],
-              Array [
-                52.05,
-                -123.95,
-              ],
-              Array [
-                52.05,
-                -123.685,
-              ],
-            ],
-          ],
-          "type": "Polygon",
-        },
-        "id": "300",
-        "properties": Object {
-          "description": "Description for point 300",
-          "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-          "name": "Point with ID: 300 Name",
-        },
-        "tags": Array [],
+      "id": "300",
+      "properties": Object {
+        "description": "Description for point 300",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Point with ID: 300 Name",
       },
+      "tags": Array [],
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/terms when all of the resources are published should fetch multiple resources of type term 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -2358,13 +2281,11 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "11",
-        "tags": Array [],
-        "term": "I am singing (lang)",
-        "termEnglish": "I am singing (Engl)",
-      },
+      "contributor": "",
+      "id": "11",
+      "tags": Array [],
+      "term": "I am singing (lang)",
+      "termEnglish": "I am singing (Engl)",
     },
     Object {
       "actions": Array [
@@ -2390,13 +2311,11 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "12",
-        "tags": Array [],
-        "term": "You are singing (lang)",
-        "termEnglish": "You are singing (Engl)",
-      },
+      "contributor": "",
+      "id": "12",
+      "tags": Array [],
+      "term": "You are singing (lang)",
+      "termEnglish": "You are singing (Engl)",
     },
     Object {
       "actions": Array [
@@ -2422,13 +2341,11 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "13",
-        "tags": Array [],
-        "term": "She is singing (lang)",
-        "termEnglish": "She is singing (Engl)",
-      },
+      "contributor": "",
+      "id": "13",
+      "tags": Array [],
+      "term": "She is singing (lang)",
+      "termEnglish": "She is singing (Engl)",
     },
     Object {
       "actions": Array [
@@ -2454,13 +2371,11 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "01",
-        "tags": Array [],
-        "term": "I am not singing (lang)",
-        "termEnglish": "I am not singing (Engl)",
-      },
+      "contributor": "",
+      "id": "01",
+      "tags": Array [],
+      "term": "I am not singing (lang)",
+      "termEnglish": "I am not singing (Engl)",
     },
     Object {
       "actions": Array [
@@ -2486,13 +2401,11 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "02",
-        "tags": Array [],
-        "term": "You are not singing (lang)",
-        "termEnglish": "You are not singing (Engl)",
-      },
+      "contributor": "",
+      "id": "02",
+      "tags": Array [],
+      "term": "You are not singing (lang)",
+      "termEnglish": "You are not singing (Engl)",
     },
     Object {
       "actions": Array [
@@ -2518,52 +2431,50 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "1",
-        "tags": Array [
-          Object {
-            "id": "1",
-            "label": "plants",
-            "members": Array [
-              Object {
-                "id": "1",
-                "type": "term",
-              },
-              Object {
-                "id": "23",
-                "type": "book",
-              },
-              Object {
-                "id": "24",
-                "type": "book",
-              },
-              Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2005",
-                "type": "note",
-              },
-              Object {
-                "id": "9",
-                "type": "note",
-              },
-              Object {
-                "id": "11",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-        "term": "Chil-term-1",
-        "termEnglish": "Engl-term-1",
-      },
+      "contributor": "",
+      "id": "1",
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
+          ],
+        },
+      ],
+      "term": "Chil-term-1",
+      "termEnglish": "Engl-term-1",
     },
     Object {
       "actions": Array [
@@ -2589,44 +2500,42 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "2",
-        "tags": Array [
-          Object {
-            "id": "2",
-            "label": "animals",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "term",
-              },
-              Object {
-                "id": "3",
-                "type": "term",
-              },
-              Object {
-                "id": "102",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2004",
-                "type": "note",
-              },
-              Object {
-                "id": "7",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "bibliographicReference",
-              },
-            ],
-          },
-        ],
-        "term": "Chil-term-2",
-        "termEnglish": "Engl-term-2",
-      },
+      "contributor": "",
+      "id": "2",
+      "tags": Array [
+        Object {
+          "id": "2",
+          "label": "animals",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "term",
+            },
+            Object {
+              "id": "3",
+              "type": "term",
+            },
+            Object {
+              "id": "102",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2004",
+              "type": "note",
+            },
+            Object {
+              "id": "7",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "bibliographicReference",
+            },
+          ],
+        },
+      ],
+      "term": "Chil-term-2",
+      "termEnglish": "Engl-term-2",
     },
     Object {
       "actions": Array [
@@ -2652,43 +2561,41 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "3",
-        "tags": Array [
-          Object {
-            "id": "2",
-            "label": "animals",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "term",
-              },
-              Object {
-                "id": "3",
-                "type": "term",
-              },
-              Object {
-                "id": "102",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2004",
-                "type": "note",
-              },
-              Object {
-                "id": "7",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "bibliographicReference",
-              },
-            ],
-          },
-        ],
-        "term": "Chil-term-no-english",
-      },
+      "contributor": "",
+      "id": "3",
+      "tags": Array [
+        Object {
+          "id": "2",
+          "label": "animals",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "term",
+            },
+            Object {
+              "id": "3",
+              "type": "term",
+            },
+            Object {
+              "id": "102",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2004",
+              "type": "note",
+            },
+            Object {
+              "id": "7",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "bibliographicReference",
+            },
+          ],
+        },
+      ],
+      "term": "Chil-term-no-english",
     },
     Object {
       "actions": Array [
@@ -2714,21 +2621,19 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "4",
-        "tags": Array [],
-        "term": "My Secret Term",
-      },
+      "contributor": "",
+      "id": "4",
+      "tags": Array [],
+      "term": "My Secret Term",
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/terms when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -2753,13 +2658,11 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "11",
-        "tags": Array [],
-        "term": "I am singing (lang)",
-        "termEnglish": "I am singing (Engl)",
-      },
+      "contributor": "",
+      "id": "11",
+      "tags": Array [],
+      "term": "I am singing (lang)",
+      "termEnglish": "I am singing (Engl)",
     },
     Object {
       "actions": Array [
@@ -2785,13 +2688,11 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "12",
-        "tags": Array [],
-        "term": "You are singing (lang)",
-        "termEnglish": "You are singing (Engl)",
-      },
+      "contributor": "",
+      "id": "12",
+      "tags": Array [],
+      "term": "You are singing (lang)",
+      "termEnglish": "You are singing (Engl)",
     },
     Object {
       "actions": Array [
@@ -2817,13 +2718,11 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "13",
-        "tags": Array [],
-        "term": "She is singing (lang)",
-        "termEnglish": "She is singing (Engl)",
-      },
+      "contributor": "",
+      "id": "13",
+      "tags": Array [],
+      "term": "She is singing (lang)",
+      "termEnglish": "She is singing (Engl)",
     },
     Object {
       "actions": Array [
@@ -2849,13 +2748,11 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "01",
-        "tags": Array [],
-        "term": "I am not singing (lang)",
-        "termEnglish": "I am not singing (Engl)",
-      },
+      "contributor": "",
+      "id": "01",
+      "tags": Array [],
+      "term": "I am not singing (lang)",
+      "termEnglish": "I am not singing (Engl)",
     },
     Object {
       "actions": Array [
@@ -2881,13 +2778,11 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "02",
-        "tags": Array [],
-        "term": "You are not singing (lang)",
-        "termEnglish": "You are not singing (Engl)",
-      },
+      "contributor": "",
+      "id": "02",
+      "tags": Array [],
+      "term": "You are not singing (lang)",
+      "termEnglish": "You are not singing (Engl)",
     },
     Object {
       "actions": Array [
@@ -2913,52 +2808,50 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "1",
-        "tags": Array [
-          Object {
-            "id": "1",
-            "label": "plants",
-            "members": Array [
-              Object {
-                "id": "1",
-                "type": "term",
-              },
-              Object {
-                "id": "23",
-                "type": "book",
-              },
-              Object {
-                "id": "24",
-                "type": "book",
-              },
-              Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2005",
-                "type": "note",
-              },
-              Object {
-                "id": "9",
-                "type": "note",
-              },
-              Object {
-                "id": "11",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-        "term": "Chil-term-1",
-        "termEnglish": "Engl-term-1",
-      },
+      "contributor": "",
+      "id": "1",
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
+          ],
+        },
+      ],
+      "term": "Chil-term-1",
+      "termEnglish": "Engl-term-1",
     },
     Object {
       "actions": Array [
@@ -2984,44 +2877,42 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "2",
-        "tags": Array [
-          Object {
-            "id": "2",
-            "label": "animals",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "term",
-              },
-              Object {
-                "id": "3",
-                "type": "term",
-              },
-              Object {
-                "id": "102",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2004",
-                "type": "note",
-              },
-              Object {
-                "id": "7",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "bibliographicReference",
-              },
-            ],
-          },
-        ],
-        "term": "Chil-term-2",
-        "termEnglish": "Engl-term-2",
-      },
+      "contributor": "",
+      "id": "2",
+      "tags": Array [
+        Object {
+          "id": "2",
+          "label": "animals",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "term",
+            },
+            Object {
+              "id": "3",
+              "type": "term",
+            },
+            Object {
+              "id": "102",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2004",
+              "type": "note",
+            },
+            Object {
+              "id": "7",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "bibliographicReference",
+            },
+          ],
+        },
+      ],
+      "term": "Chil-term-2",
+      "termEnglish": "Engl-term-2",
     },
     Object {
       "actions": Array [
@@ -3047,43 +2938,41 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "3",
-        "tags": Array [
-          Object {
-            "id": "2",
-            "label": "animals",
-            "members": Array [
-              Object {
-                "id": "2",
-                "type": "term",
-              },
-              Object {
-                "id": "3",
-                "type": "term",
-              },
-              Object {
-                "id": "102",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2004",
-                "type": "note",
-              },
-              Object {
-                "id": "7",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "bibliographicReference",
-              },
-            ],
-          },
-        ],
-        "term": "Chil-term-no-english",
-      },
+      "contributor": "",
+      "id": "3",
+      "tags": Array [
+        Object {
+          "id": "2",
+          "label": "animals",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "term",
+            },
+            Object {
+              "id": "3",
+              "type": "term",
+            },
+            Object {
+              "id": "102",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2004",
+              "type": "note",
+            },
+            Object {
+              "id": "7",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "bibliographicReference",
+            },
+          ],
+        },
+      ],
+      "term": "Chil-term-no-english",
     },
     Object {
       "actions": Array [
@@ -3109,21 +2998,19 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "contributor": "",
-        "id": "4",
-        "tags": Array [],
-        "term": "My Secret Term",
-      },
+      "contributor": "",
+      "id": "4",
+      "tags": Array [],
+      "term": "My Secret Term",
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/transcribedAudioItems when all of the resources are published should fetch multiple resources of type transcribedAudio 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -3148,39 +3035,37 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "audioURL": "https://www.mysound.org/downloads/Gaas.mp3",
-        "id": "110",
-        "lengthMilliseconds": 20000,
-        "plainText": "
+      "audioURL": "https://www.mysound.org/downloads/Gaas.mp3",
+      "id": "110",
+      "lengthMilliseconds": 20000,
+      "plainText": "
 [12000] There once was a little wooden boy. [15550]
 [18300] His name was Pinocchio. [19240]",
-        "start": 0,
-        "tags": Array [
-          Object {
-            "id": "3",
-            "label": "placenames",
-            "members": Array [
-              Object {
-                "id": "0",
-                "type": "photograph",
-              },
-              Object {
-                "id": "110",
-                "type": "transcribedAudio",
-              },
-              Object {
-                "id": "2003",
-                "type": "note",
-              },
-              Object {
-                "id": "5",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-      },
+      "start": 0,
+      "tags": Array [
+        Object {
+          "id": "3",
+          "label": "placenames",
+          "members": Array [
+            Object {
+              "id": "0",
+              "type": "photograph",
+            },
+            Object {
+              "id": "110",
+              "type": "transcribedAudio",
+            },
+            Object {
+              "id": "2003",
+              "type": "note",
+            },
+            Object {
+              "id": "5",
+              "type": "note",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -3206,17 +3091,15 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "audioURL": "https://www.mysound.org/downloads/Chinaay.mp3",
-        "id": "111",
-        "lengthMilliseconds": 23409,
-        "plainText": "
+      "audioURL": "https://www.mysound.org/downloads/Chinaay.mp3",
+      "id": "111",
+      "lengthMilliseconds": 23409,
+      "plainText": "
 [3400] While she went down to the river [3670]
 [3700] someone had already filled the water tank. [3980]
 [4010] These were the types of problems we had. [4290]",
-        "start": 0,
-        "tags": Array [],
-      },
+      "start": 0,
+      "tags": Array [],
     },
     Object {
       "actions": Array [
@@ -3242,25 +3125,23 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "audioURL": "https://www.mysound.org/downloads/Kwa.mp3",
-        "id": "113",
-        "lengthMilliseconds": 32989,
-        "plainText": "
+      "audioURL": "https://www.mysound.org/downloads/Kwa.mp3",
+      "id": "113",
+      "lengthMilliseconds": 32989,
+      "plainText": "
 [120] this type of spoon is used in ceremonies [848]
 [930] by members of the opposite clan of the house chief [1080]",
-        "start": 0,
-        "tags": Array [],
-      },
+      "start": 0,
+      "tags": Array [],
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/transcribedAudioItems when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -3285,39 +3166,37 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "audioURL": "https://www.mysound.org/downloads/Gaas.mp3",
-        "id": "110",
-        "lengthMilliseconds": 20000,
-        "plainText": "
+      "audioURL": "https://www.mysound.org/downloads/Gaas.mp3",
+      "id": "110",
+      "lengthMilliseconds": 20000,
+      "plainText": "
 [12000] There once was a little wooden boy. [15550]
 [18300] His name was Pinocchio. [19240]",
-        "start": 0,
-        "tags": Array [
-          Object {
-            "id": "3",
-            "label": "placenames",
-            "members": Array [
-              Object {
-                "id": "0",
-                "type": "photograph",
-              },
-              Object {
-                "id": "110",
-                "type": "transcribedAudio",
-              },
-              Object {
-                "id": "2003",
-                "type": "note",
-              },
-              Object {
-                "id": "5",
-                "type": "note",
-              },
-            ],
-          },
-        ],
-      },
+      "start": 0,
+      "tags": Array [
+        Object {
+          "id": "3",
+          "label": "placenames",
+          "members": Array [
+            Object {
+              "id": "0",
+              "type": "photograph",
+            },
+            Object {
+              "id": "110",
+              "type": "transcribedAudio",
+            },
+            Object {
+              "id": "2003",
+              "type": "note",
+            },
+            Object {
+              "id": "5",
+              "type": "note",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -3343,17 +3222,15 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "audioURL": "https://www.mysound.org/downloads/Chinaay.mp3",
-        "id": "111",
-        "lengthMilliseconds": 23409,
-        "plainText": "
+      "audioURL": "https://www.mysound.org/downloads/Chinaay.mp3",
+      "id": "111",
+      "lengthMilliseconds": 23409,
+      "plainText": "
 [3400] While she went down to the river [3670]
 [3700] someone had already filled the water tank. [3980]
 [4010] These were the types of problems we had. [4290]",
-        "start": 0,
-        "tags": Array [],
-      },
+      "start": 0,
+      "tags": Array [],
     },
     Object {
       "actions": Array [
@@ -3379,25 +3256,23 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "audioURL": "https://www.mysound.org/downloads/Kwa.mp3",
-        "id": "113",
-        "lengthMilliseconds": 32989,
-        "plainText": "
+      "audioURL": "https://www.mysound.org/downloads/Kwa.mp3",
+      "id": "113",
+      "lengthMilliseconds": 32989,
+      "plainText": "
 [120] this type of spoon is used in ceremonies [848]
 [930] by members of the opposite clan of the house chief [1080]",
-        "start": 0,
-        "tags": Array [],
-      },
+      "start": 0,
+      "tags": Array [],
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/vocabularyLists when all of the resources are published should fetch multiple resources of type vocabularyList 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -3422,114 +3297,112 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "entries": Array [
+      "entries": Array [
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "11",
+            "term": "I am singing (lang)",
+            "termEnglish": "I am singing (Engl)",
+          },
+          "variableValues": Object {
+            "person": "1",
+            "positive": true,
+          },
+        },
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "12",
+            "term": "You are singing (lang)",
+            "termEnglish": "You are singing (Engl)",
+          },
+          "variableValues": Object {
+            "person": "2",
+            "positive": true,
+          },
+        },
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "13",
+            "term": "She is singing (lang)",
+            "termEnglish": "She is singing (Engl)",
+          },
+          "variableValues": Object {
+            "person": "3",
+            "positive": true,
+          },
+        },
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "01",
+            "term": "I am not singing (lang)",
+            "termEnglish": "I am not singing (Engl)",
+          },
+          "variableValues": Object {
+            "person": "1",
+            "positive": false,
+          },
+        },
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "02",
+            "term": "You are not singing (lang)",
+            "termEnglish": "You are not singing (Engl)",
+          },
+          "variableValues": Object {
+            "person": "2",
+            "positive": false,
+          },
+        },
+      ],
+      "form": Object {
+        "fields": Array [
           Object {
-            "term": Object {
-              "contributor": "",
-              "id": "11",
-              "term": "I am singing (lang)",
-              "termEnglish": "I am singing (Engl)",
-            },
-            "variableValues": Object {
-              "person": "1",
-              "positive": true,
-            },
+            "description": "choose positive",
+            "label": "positive",
+            "name": "positive",
+            "options": Array [
+              Object {
+                "display": "negative (lha)",
+                "value": false,
+              },
+              Object {
+                "display": "positive form (switch for negative)",
+                "value": true,
+              },
+            ],
+            "type": "SWITCH",
           },
           Object {
-            "term": Object {
-              "contributor": "",
-              "id": "12",
-              "term": "You are singing (lang)",
-              "termEnglish": "You are singing (Engl)",
-            },
-            "variableValues": Object {
-              "person": "2",
-              "positive": true,
-            },
-          },
-          Object {
-            "term": Object {
-              "contributor": "",
-              "id": "13",
-              "term": "She is singing (lang)",
-              "termEnglish": "She is singing (Engl)",
-            },
-            "variableValues": Object {
-              "person": "3",
-              "positive": true,
-            },
-          },
-          Object {
-            "term": Object {
-              "contributor": "",
-              "id": "01",
-              "term": "I am not singing (lang)",
-              "termEnglish": "I am not singing (Engl)",
-            },
-            "variableValues": Object {
-              "person": "1",
-              "positive": false,
-            },
-          },
-          Object {
-            "term": Object {
-              "contributor": "",
-              "id": "02",
-              "term": "You are not singing (lang)",
-              "termEnglish": "You are not singing (Engl)",
-            },
-            "variableValues": Object {
-              "person": "2",
-              "positive": false,
-            },
+            "description": "choose person",
+            "label": "person",
+            "name": "person",
+            "options": Array [
+              Object {
+                "display": "I",
+                "value": "1",
+              },
+              Object {
+                "display": "You",
+                "value": "2",
+              },
+              Object {
+                "display": "She",
+                "value": "3",
+              },
+            ],
+            "type": "STATIC_SELECT",
           },
         ],
-        "form": Object {
-          "fields": Array [
-            Object {
-              "description": "choose positive",
-              "label": "positive",
-              "name": "positive",
-              "options": Array [
-                Object {
-                  "display": "negative (lha)",
-                  "value": false,
-                },
-                Object {
-                  "display": "positive form (switch for negative)",
-                  "value": true,
-                },
-              ],
-              "type": "SWITCH",
-            },
-            Object {
-              "description": "choose person",
-              "label": "person",
-              "name": "person",
-              "options": Array [
-                Object {
-                  "display": "I",
-                  "value": "1",
-                },
-                Object {
-                  "display": "You",
-                  "value": "2",
-                },
-                Object {
-                  "display": "She",
-                  "value": "3",
-                },
-              ],
-              "type": "STATIC_SELECT",
-            },
-          ],
-        },
-        "id": "4567",
-        "name": "To Sing (lang)",
-        "nameEnglish": "To Sing (Engl)",
-        "tags": Array [],
       },
+      "id": "4567",
+      "name": "To Sing (lang)",
+      "nameEnglish": "To Sing (Engl)",
+      "tags": Array [],
     },
     Object {
       "actions": Array [
@@ -3555,95 +3428,93 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "entries": Array [
-          Object {
-            "term": Object {
-              "contributor": "",
-              "id": "1",
-              "term": "Chil-term-1",
-              "termEnglish": "Engl-term-1",
-            },
-            "variableValues": Object {
-              "person": "11",
-            },
-          },
-          Object {
-            "term": Object {
-              "contributor": "",
-              "id": "2",
-              "term": "Chil-term-2",
-              "termEnglish": "Engl-term-2",
-            },
-            "variableValues": Object {
-              "person": "12",
-            },
-          },
-        ],
-        "form": Object {
-          "fields": Array [
-            Object {
-              "description": "choose person",
-              "label": "person",
-              "name": "person",
-              "options": Array [
-                Object {
-                  "display": "I",
-                  "value": "11",
-                },
-                Object {
-                  "display": "We",
-                  "value": "12",
-                },
-              ],
-              "type": "STATIC_SELECT",
-            },
-          ],
-        },
-        "id": "1",
-        "name": "test VL 1 chil",
-        "nameEnglish": "test VL 1 engl",
-        "tags": Array [
-          Object {
+      "entries": Array [
+        Object {
+          "term": Object {
+            "contributor": "",
             "id": "1",
-            "label": "plants",
-            "members": Array [
+            "term": "Chil-term-1",
+            "termEnglish": "Engl-term-1",
+          },
+          "variableValues": Object {
+            "person": "11",
+          },
+        },
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "2",
+            "term": "Chil-term-2",
+            "termEnglish": "Engl-term-2",
+          },
+          "variableValues": Object {
+            "person": "12",
+          },
+        },
+      ],
+      "form": Object {
+        "fields": Array [
+          Object {
+            "description": "choose person",
+            "label": "person",
+            "name": "person",
+            "options": Array [
               Object {
-                "id": "1",
-                "type": "term",
+                "display": "I",
+                "value": "11",
               },
               Object {
-                "id": "23",
-                "type": "book",
-              },
-              Object {
-                "id": "24",
-                "type": "book",
-              },
-              Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2005",
-                "type": "note",
-              },
-              Object {
-                "id": "9",
-                "type": "note",
-              },
-              Object {
-                "id": "11",
-                "type": "note",
+                "display": "We",
+                "value": "12",
               },
             ],
+            "type": "STATIC_SELECT",
           },
         ],
       },
+      "id": "1",
+      "name": "test VL 1 chil",
+      "nameEnglish": "test VL 1 engl",
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -3669,95 +3540,93 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "entries": Array [
-          Object {
-            "term": Object {
-              "contributor": "",
-              "id": "2",
-              "term": "Chil-term-2",
-              "termEnglish": "Engl-term-2",
-            },
-            "variableValues": Object {
-              "his": false,
-            },
+      "entries": Array [
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "2",
+            "term": "Chil-term-2",
+            "termEnglish": "Engl-term-2",
           },
-          Object {
-            "term": Object {
-              "contributor": "",
-              "id": "1",
-              "term": "Chil-term-1",
-              "termEnglish": "Engl-term-1",
-            },
-            "variableValues": Object {
-              "his": true,
-            },
+          "variableValues": Object {
+            "his": false,
           },
-        ],
-        "form": Object {
-          "fields": Array [
-            Object {
-              "description": "choose his",
-              "label": "his",
-              "name": "his",
-              "options": Array [
-                Object {
-                  "display": "his",
-                  "value": true,
-                },
-                Object {
-                  "display": "hers",
-                  "value": false,
-                },
-              ],
-              "type": "SWITCH",
-            },
-          ],
         },
-        "id": "2",
-        "name": "test VL 2 CHIL- no engl name",
-        "tags": Array [
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "1",
+            "term": "Chil-term-1",
+            "termEnglish": "Engl-term-1",
+          },
+          "variableValues": Object {
+            "his": true,
+          },
+        },
+      ],
+      "form": Object {
+        "fields": Array [
           Object {
-            "id": "5",
-            "label": "legends",
-            "members": Array [
+            "description": "choose his",
+            "label": "his",
+            "name": "his",
+            "options": Array [
               Object {
-                "id": "2",
-                "type": "vocabularyList",
+                "display": "his",
+                "value": true,
               },
               Object {
-                "id": "101",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2001",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "mediaItem",
-              },
-              Object {
-                "id": "1",
-                "type": "song",
+                "display": "hers",
+                "value": false,
               },
             ],
+            "type": "SWITCH",
           },
         ],
       },
+      "id": "2",
+      "name": "test VL 2 CHIL- no engl name",
+      "tags": Array [
+        Object {
+          "id": "5",
+          "label": "legends",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "101",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2001",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "mediaItem",
+            },
+            Object {
+              "id": "1",
+              "type": "song",
+            },
+          ],
+        },
+      ],
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/vocabularyLists when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
-  "actions": Array [],
-  "data": Array [
+  "entities": Array [
     Object {
       "actions": Array [
         Object {
@@ -3782,53 +3651,51 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "entries": Array [],
-        "form": Object {
-          "fields": Array [
-            Object {
-              "description": "choose positive",
-              "label": "positive",
-              "name": "positive",
-              "options": Array [
-                Object {
-                  "display": "negative (lha)",
-                  "value": false,
-                },
-                Object {
-                  "display": "positive form (switch for negative)",
-                  "value": true,
-                },
-              ],
-              "type": "SWITCH",
-            },
-            Object {
-              "description": "choose person",
-              "label": "person",
-              "name": "person",
-              "options": Array [
-                Object {
-                  "display": "I",
-                  "value": "1",
-                },
-                Object {
-                  "display": "You",
-                  "value": "2",
-                },
-                Object {
-                  "display": "She",
-                  "value": "3",
-                },
-              ],
-              "type": "STATIC_SELECT",
-            },
-          ],
-        },
-        "id": "4567",
-        "name": "To Sing (lang)",
-        "nameEnglish": "To Sing (Engl)",
-        "tags": Array [],
+      "entries": Array [],
+      "form": Object {
+        "fields": Array [
+          Object {
+            "description": "choose positive",
+            "label": "positive",
+            "name": "positive",
+            "options": Array [
+              Object {
+                "display": "negative (lha)",
+                "value": false,
+              },
+              Object {
+                "display": "positive form (switch for negative)",
+                "value": true,
+              },
+            ],
+            "type": "SWITCH",
+          },
+          Object {
+            "description": "choose person",
+            "label": "person",
+            "name": "person",
+            "options": Array [
+              Object {
+                "display": "I",
+                "value": "1",
+              },
+              Object {
+                "display": "You",
+                "value": "2",
+              },
+              Object {
+                "display": "She",
+                "value": "3",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+        ],
       },
+      "id": "4567",
+      "name": "To Sing (lang)",
+      "nameEnglish": "To Sing (Engl)",
+      "tags": Array [],
     },
     Object {
       "actions": Array [
@@ -3854,72 +3721,70 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "entries": Array [],
-        "form": Object {
-          "fields": Array [
-            Object {
-              "description": "choose person",
-              "label": "person",
-              "name": "person",
-              "options": Array [
-                Object {
-                  "display": "I",
-                  "value": "11",
-                },
-                Object {
-                  "display": "We",
-                  "value": "12",
-                },
-              ],
-              "type": "STATIC_SELECT",
-            },
-          ],
-        },
-        "id": "1",
-        "name": "test VL 1 chil",
-        "nameEnglish": "test VL 1 engl",
-        "tags": Array [
+      "entries": Array [],
+      "form": Object {
+        "fields": Array [
           Object {
-            "id": "1",
-            "label": "plants",
-            "members": Array [
+            "description": "choose person",
+            "label": "person",
+            "name": "person",
+            "options": Array [
               Object {
-                "id": "1",
-                "type": "term",
+                "display": "I",
+                "value": "11",
               },
               Object {
-                "id": "23",
-                "type": "book",
-              },
-              Object {
-                "id": "24",
-                "type": "book",
-              },
-              Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-              Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2005",
-                "type": "note",
-              },
-              Object {
-                "id": "9",
-                "type": "note",
-              },
-              Object {
-                "id": "11",
-                "type": "note",
+                "display": "We",
+                "value": "12",
               },
             ],
+            "type": "STATIC_SELECT",
           },
         ],
       },
+      "id": "1",
+      "name": "test VL 1 chil",
+      "nameEnglish": "test VL 1 engl",
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
+          ],
+        },
+      ],
     },
     Object {
       "actions": Array [
@@ -3945,64 +3810,63 @@ Object {
           "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
         },
       ],
-      "data": Object {
-        "entries": Array [],
-        "form": Object {
-          "fields": Array [
-            Object {
-              "description": "choose his",
-              "label": "his",
-              "name": "his",
-              "options": Array [
-                Object {
-                  "display": "his",
-                  "value": true,
-                },
-                Object {
-                  "display": "hers",
-                  "value": false,
-                },
-              ],
-              "type": "SWITCH",
-            },
-          ],
-        },
-        "id": "2",
-        "name": "test VL 2 CHIL- no engl name",
-        "tags": Array [
+      "entries": Array [],
+      "form": Object {
+        "fields": Array [
           Object {
-            "id": "5",
-            "label": "legends",
-            "members": Array [
+            "description": "choose his",
+            "label": "his",
+            "name": "his",
+            "options": Array [
               Object {
-                "id": "2",
-                "type": "vocabularyList",
+                "display": "his",
+                "value": true,
               },
               Object {
-                "id": "101",
-                "type": "spatialFeature",
-              },
-              Object {
-                "id": "2001",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "note",
-              },
-              Object {
-                "id": "1",
-                "type": "mediaItem",
-              },
-              Object {
-                "id": "1",
-                "type": "song",
+                "display": "hers",
+                "value": false,
               },
             ],
+            "type": "SWITCH",
           },
         ],
       },
+      "id": "2",
+      "name": "test VL 2 CHIL- no engl name",
+      "tags": Array [
+        Object {
+          "id": "5",
+          "label": "legends",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "101",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2001",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "mediaItem",
+            },
+            Object {
+              "id": "1",
+              "type": "song",
+            },
+          ],
+        },
+      ],
     },
   ],
+  "indexScopedActions": Array [],
 }
 `;

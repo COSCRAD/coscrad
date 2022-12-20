@@ -2,7 +2,7 @@ import { IBaseViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
 import { NotFoundPresenter } from '../../../components/not-found';
 import { NOT_FOUND } from '../../../store/slices/interfaces/maybe-loadable.interface';
 
-export const GenericDetailPresenter = ({ data: viewModel }: IDetailQueryResult<IBaseViewModel>) => {
+export const GenericDetailPresenter = (viewModel: IDetailQueryResult<IBaseViewModel>) => {
     if ((viewModel as unknown) === NOT_FOUND) return <NotFoundPresenter />;
 
     if (!viewModel) {

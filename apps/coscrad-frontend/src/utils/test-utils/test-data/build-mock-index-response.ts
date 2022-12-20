@@ -4,13 +4,13 @@ export const buildMockIndexResponse = <T extends IBaseViewModel>(
     viewsAndDetailScopedActions: [T, ICommandFormAndLabels[]][],
     indexScopedActions: ICommandFormAndLabels[]
 ): IIndexQueryResult<T> => ({
-    data: viewsAndDetailScopedActions.reduce(
+    entities: viewsAndDetailScopedActions.reduce(
         (acc, [nextView, nextDetailActions]) =>
             acc.concat({
-                data: nextView,
+                ...nextView,
                 actions: nextDetailActions,
             }),
         []
     ),
-    actions: indexScopedActions,
+    indexScopedActions: indexScopedActions,
 });

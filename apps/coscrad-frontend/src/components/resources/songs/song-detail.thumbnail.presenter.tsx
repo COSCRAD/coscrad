@@ -1,4 +1,4 @@
-import { IDetailQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
+import { ICategorizableDetailQueryResult, ISongViewModel } from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
 import { Card, Divider } from '@mui/material';
 import { formatBilingualText } from '../vocabulary-lists/utils';
@@ -9,8 +9,11 @@ const buildLyricsStatusMessage = (lyrics: string | null | undefined): string =>
         : 'Lyrics are available for this song';
 
 export const SongDetailThumbnailPresenter = ({
-    data: { title, titleEnglish, lyrics, audioURL },
-}: IDetailQueryResult<ISongViewModel>): JSX.Element => (
+    title,
+    titleEnglish,
+    lyrics,
+    audioURL,
+}: ICategorizableDetailQueryResult<ISongViewModel>): JSX.Element => (
     <div data-testid={title}>
         <Card className="detail-card">
             <div id="detail-term" className="detail-meta">
