@@ -26,15 +26,13 @@ type SpatialFeatureIndexPresenterProps = SpatialFeatureIndexState & {
  * an index view.
  */
 export const SpatialFeatureIndexPresenter = ({
-    data: detailResult,
+    entities: spatialFeatures,
     MapComponent,
     initialCentre,
     initialZoom,
     DetailPresenter,
 }: SpatialFeatureIndexPresenterProps) => {
     const [selectedSpatialFeatureId, setSelectedSpatialFeatureId] = useState<string>(null);
-
-    const spatialFeatures = detailResult.map(({ data }) => data);
 
     return (
         <div>

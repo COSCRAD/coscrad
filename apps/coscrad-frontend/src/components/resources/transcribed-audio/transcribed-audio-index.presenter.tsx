@@ -1,19 +1,13 @@
-import { IIndexQueryResult, ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
+import { ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
+import { TranscribedAudioIndexState } from '../../../store/slices/resources/transcribed-audio/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
 
-export const TranscribedAudioIndexPresenter = (
-    indexResult: IIndexQueryResult<ITranscribedAudioViewModel>
-) => {
-    /**
-     *  TODO [https://www.pivotaltracker.com/story/show/183681839]
-     * We may some day read the actions and allow for bulk command execution in
-     * an index view.
-     */
-    const { data: detailResult } = indexResult;
-
+export const TranscribedAudioIndexPresenter = ({
+    entities: transcribedAudioItems,
+}: TranscribedAudioIndexState) => {
     const headingLabels: HeadingLabel<ITranscribedAudioViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
         {
@@ -43,12 +37,6 @@ export const TranscribedAudioIndexPresenter = (
         // audioURL: ({ audioURL }: ITranscribedAudioViewModel) =>
         //     renderTranscribedAudioMediaCell(audioURL),
     };
-
-    /**
-     * We should think about how the following map will shift when we clean up
-     * the structure of `IIndexQueryResult` and `IDetailQueryResult`.
-     */
-    const transcribedAudioItems = detailResult.map(({ data }) => data);
 
     return (
         <IndexTable

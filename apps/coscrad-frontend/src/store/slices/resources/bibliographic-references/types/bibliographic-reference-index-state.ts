@@ -1,3 +1,7 @@
-import { IBibliographicReferenceViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
+import {
+    IBibliographicReferenceViewModel,
+    ICategorizableIndexQueryResult,
+} from '@coscrad/api-interfaces';
 
-export type BibliographicReferenceIndexState = IIndexQueryResult<IBibliographicReferenceViewModel>;
+export type BibliographicReferenceIndexState =
+    ICategorizableIndexQueryResult<IBibliographicReferenceViewModel>;

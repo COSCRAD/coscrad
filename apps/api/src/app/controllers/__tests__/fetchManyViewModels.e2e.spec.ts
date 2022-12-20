@@ -84,7 +84,7 @@ describe('When fetching multiple resources', () => {
 
                     expect(res.status).toBe(httpStatusCodes.ok);
 
-                    expect(res.body.data.length).toBe(
+                    expect(res.body.entities.length).toBe(
                         testDataWithAllResourcesPublished[resourceType].length
                     );
 
@@ -126,7 +126,7 @@ describe('When fetching multiple resources', () => {
                 it('should return the expected number of results', async () => {
                     const res = await request(app.getHttpServer()).get(endpointUnderTest);
 
-                    expect(res.body.data.length).toBe(publishedResourcesToAdd.length);
+                    expect(res.body.entities.length).toBe(publishedResourcesToAdd.length);
 
                     // Sanity check
                     expect(publishedResourcesToAdd.length).not.toEqual(

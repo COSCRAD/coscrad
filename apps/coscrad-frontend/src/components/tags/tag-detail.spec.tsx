@@ -7,20 +7,9 @@ import { testContainerComponentErrorHandling } from '../../utils/test-utils/comm
 import { setupTestServer } from '../../utils/test-utils/setup-test-server';
 import { withDetailRoute } from '../../utils/test-utils/with-detail-route';
 import { TagDetailContainer } from './tag-detail.container';
+import { buildDummyTags } from './test-utils';
 
-const allTags: ITagViewModel[] = [
-    {
-        label: 'birds',
-        id: '201',
-        // TODO Add members
-        members: [],
-    },
-    {
-        label: 'reptiles',
-        id: '202',
-        members: [],
-    },
-];
+const allTags: ITagViewModel[] = buildDummyTags();
 
 /**
  * TODO[https://www.pivotaltracker.com/story/show/183618729]

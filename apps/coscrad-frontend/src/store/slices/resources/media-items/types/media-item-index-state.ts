@@ -1,3 +1,3 @@
-import { IIndexQueryResult, IMediaItemViewModel } from '@coscrad/api-interfaces';
+import { ICategorizableIndexQueryResult, IMediaItemViewModel } from '@coscrad/api-interfaces';
 
-export type MediaItemIndexState = IIndexQueryResult<IMediaItemViewModel>;
+export type MediaItemIndexState = ICategorizableIndexQueryResult<IMediaItemViewModel>;
