@@ -9,7 +9,7 @@ import WithValidation from './validation/WithValidation';
 export function CompositeIdentifier(
     AllowedTypesEnum: Record<string, string>,
     idTypeGuard: TypeGuard<string | number>,
-    userOptions: Partial<TypeDecoratorOptions> = {}
+    userOptions: TypeDecoratorOptions
 ): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol) => {
         const options = { ...mixinDefaultTypeDecoratorOptions(userOptions) };

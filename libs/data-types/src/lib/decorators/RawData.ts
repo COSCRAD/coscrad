@@ -12,7 +12,7 @@ import WithValidation from './validation/WithValidation';
  * `Raw Data` is not meant to be used in the schema for an object that is returned to
  * the user.
  */
-export function RawDataObject(userOptions: Partial<TypeDecoratorOptions> = {}): PropertyDecorator {
+export function RawDataObject(userOptions: TypeDecoratorOptions): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol) => {
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
