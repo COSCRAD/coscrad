@@ -14,16 +14,29 @@ import { Transcript } from './Transcript';
 export class TranscribedAudio extends Resource {
     readonly type = ResourceType.transcribedAudio;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'audio file name',
+        description: 'the name (not full path) of the audio file',
+    })
     readonly audioFilename: string;
 
-    @NonNegativeFiniteNumber()
+    @NonNegativeFiniteNumber({
+        label: 'length (ms)',
+        description: 'the length of the corresponding audio file in milliseconds',
+    })
     readonly lengthMilliseconds: number;
 
-    @NonNegativeFiniteNumber()
+    // TODO consider removing this
+    @NonNegativeFiniteNumber({
+        label: 'start (ms)',
+        description: 'the starting timestamp in milliseconds',
+    })
     readonly startMilliseconds: number;
 
-    @NestedDataType(Transcript)
+    @NestedDataType(Transcript, {
+        label: 'transcript',
+        description: "a digital representation of the transcript's text",
+    })
     readonly transcript: Transcript;
 
     constructor(dto: DTO<TranscribedAudio>) {

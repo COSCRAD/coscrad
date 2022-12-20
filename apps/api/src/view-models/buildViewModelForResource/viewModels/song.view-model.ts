@@ -13,13 +13,20 @@ export class SongViewModel extends BaseViewModel implements ISongViewModel {
     @FromSong
     readonly titleEnglish?: string;
 
-    @NonEmptyString({ isArray: true })
+    @NonEmptyString({
+        isArray: true,
+        label: 'contributions',
+        description: 'acknowledgement of each person who worked on this song',
+    })
     readonly contributions: string[];
 
     @FromSong
     readonly lyrics?: string;
 
-    @URL()
+    @URL({
+        label: 'audio link',
+        description: 'a web link to the digital audio file for playback',
+    })
     readonly audioURL: string;
 
     @FromSong

@@ -17,21 +17,39 @@ const isOptional = true;
 export class Book extends Resource {
     readonly type = ResourceType.book;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'title',
+        description: 'title of the book (in whatever language)',
+    })
     readonly title: string;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'subtitle',
+        description: 'subtitle of the book (in whatever language)',
+    })
     readonly subtitle?: string;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'author',
+        description: 'the author of the book',
+    })
     // TODO Use `contributorID` instead
     readonly author: string;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'publication date',
+        description: 'a free form string that specifies the publication date',
+    })
     // TODO Determine a publication model
     readonly publicationDate?: string;
 
-    @NestedDataType(BookPage)
+    @NestedDataType(BookPage, {
+        isArray: true,
+        label: 'book pages',
+        description: "a digital representation of the book's pages",
+    })
     pages: BookPage[];
 
     constructor(dto: DTO<Book>) {

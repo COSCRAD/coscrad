@@ -14,7 +14,7 @@ import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
 export function Union(
     memberClasses: Object[],
     discriminantPath: string,
-    userOptions: Partial<TypeDecoratorOptions> = {}
+    userOptions: TypeDecoratorOptions
 ): PropertyDecorator {
     const options = mixinDefaultTypeDecoratorOptions(userOptions);
 

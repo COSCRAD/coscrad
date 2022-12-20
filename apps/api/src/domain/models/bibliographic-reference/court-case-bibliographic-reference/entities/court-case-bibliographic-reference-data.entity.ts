@@ -12,23 +12,42 @@ export class CourtCaseBibliographicReferenceData
 {
     readonly type = BibliographicReferenceType.courtCase;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'case name',
+        description: 'the official name of the court case',
+    })
     readonly caseName: string;
 
     // We may want this in the future, but not existing data uses this prop
     // @NestedDataType(BibliographicReferenceCreator, { isArray: true })
     // readonly creators: BibliographicReferenceCreator[];
 
-    @NonEmptyString({ isOptional: true })
+    @NonEmptyString({
+        isOptional: true,
+        label: 'abstract',
+        description: 'a brief summary of the court case',
+    })
     readonly abstract?: string;
 
-    @NonEmptyString({ isOptional: true })
+    @NonEmptyString({
+        isOptional: true,
+        label: 'date decided',
+        description: 'the date on which the court case was decided',
+    })
     readonly dateDecided?: string;
 
-    @NonEmptyString({ isOptional: true })
+    @NonEmptyString({
+        isOptional: true,
+        label: 'court',
+        description: 'the name of the court in which the case was decided',
+    })
     readonly court?: string;
 
-    @URL({ isOptional: true })
+    @URL({
+        isOptional: true,
+        label: 'external link',
+        description: 'external link to digital materials regarding this court case',
+    })
     readonly url?: string;
 
     /**
@@ -36,7 +55,11 @@ export class CourtCaseBibliographicReferenceData
      * Clarify the domain significance of this property and give it a more
      * transparent name.
      */
-    @NonEmptyString({ isOptional: true })
+    @NonEmptyString({
+        isOptional: true,
+        label: 'pages',
+        description: 'summary information about the pages relevant to this court case',
+    })
     readonly pages?: string;
 
     constructor(dto: DTO<CourtCaseBibliographicReferenceData>) {

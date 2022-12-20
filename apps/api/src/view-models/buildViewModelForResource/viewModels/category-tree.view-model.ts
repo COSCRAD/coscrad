@@ -31,7 +31,11 @@ export class CategoryTreeViewModel
      * will look up the current schema for `CategoryTreeViewModel` using
      * reflection metadata and find the complete definition.
      */
-    @NestedDataType(CategoryTreeViewModel)
+    @NestedDataType(CategoryTreeViewModel, {
+        label: 'children',
+        description:
+            'self similar reference to all categories that are direct-descendants of this category in the tree',
+    })
     // Note the use of the concrete type here
     readonly children: CategoryTreeViewModel[];
 

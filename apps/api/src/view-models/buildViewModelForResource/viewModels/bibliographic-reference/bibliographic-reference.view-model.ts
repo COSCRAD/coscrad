@@ -23,7 +23,11 @@ export class BibliographicReferenceViewModel
             CourtCaseBibliographicReferenceData,
             JournalArticleBibliographicReferenceData,
         ],
-        'type'
+        'type',
+        {
+            label: 'reference data',
+            description: 'citation information for this bibliographic reference',
+        }
     )
     readonly data: IBibliographicReferenceData;
 

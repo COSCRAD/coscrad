@@ -2,4 +2,6 @@ export interface ISimpleCoscradPropertyTypeDefinition<TDataTypeEnum extends stri
     coscradDataType: TDataTypeEnum;
     isArray: boolean;
     isOptional: boolean;
+    label: string;
+    description: string;
 }

@@ -8,9 +8,15 @@ import { AggregateId } from '../../../../../types/AggregateId';
     description: 'Grant an additional user role to the user',
 })
 export class GrantUserRole implements ICommand {
-    @UUID()
+    @UUID({
+        label: 'user ID',
+        description: 'the ID of the user who will be granted the new role',
+    })
     readonly userId: AggregateId;
 
-    @Enum(CoscradEnum.CoscradUserRole)
+    @Enum(CoscradEnum.CoscradUserRole, {
+        label: 'role',
+        description: 'the role that will be granted to this user',
+    })
     readonly role: CoscradUserRole;
 }
