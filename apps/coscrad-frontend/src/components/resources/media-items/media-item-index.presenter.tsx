@@ -1,16 +1,11 @@
-import { IIndexQueryResult, IMediaItemViewModel } from '@coscrad/api-interfaces';
+import { IMediaItemViewModel } from '@coscrad/api-interfaces';
+import { MediaItemIndexState } from '../../../store/slices/resources/media-items/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { formatBilingualText } from '../vocabulary-lists/utils/formatBilingualText';
 
-export const MediaItemIndexPresenter = (
-    mediaIndexResult: IIndexQueryResult<IMediaItemViewModel>
-) => {
-    const { data: detailResult } = mediaIndexResult;
-
-    const medias = detailResult.map(({ data }) => data);
-
+export const MediaItemIndexPresenter = ({ entities: mediaItems }: MediaItemIndexState) => {
     const headingLabels: HeadingLabel<IMediaItemViewModel>[] = [
         {
             propertyKey: 'id',
@@ -36,7 +31,7 @@ export const MediaItemIndexPresenter = (
     return (
         <IndexTable
             headingLabels={headingLabels}
-            tableData={medias}
+            tableData={mediaItems}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Media'}
             filterableProperties={['title', 'titleEnglish']}

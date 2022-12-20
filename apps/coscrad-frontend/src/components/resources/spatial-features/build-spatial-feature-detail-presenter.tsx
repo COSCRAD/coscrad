@@ -1,12 +1,12 @@
 import {
     GeometricFeatureType,
-    IDetailQueryResult,
+    ICategorizableDetailQueryResult,
     ISpatialFeatureViewModel,
 } from '@coscrad/api-interfaces';
 import { GenericDetailPresenter } from '../../../utils/generic-components/presenters/generic-detail-presenter';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 
-type Presenter = FunctionalComponent<IDetailQueryResult<ISpatialFeatureViewModel>>;
+type Presenter = FunctionalComponent<ICategorizableDetailQueryResult<ISpatialFeatureViewModel>>;
 
 const lookupTable: { [K in GeometricFeatureType]: Presenter } = {
     [GeometricFeatureType.line]: GenericDetailPresenter,

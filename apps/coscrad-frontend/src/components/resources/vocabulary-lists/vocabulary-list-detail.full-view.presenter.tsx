@@ -1,5 +1,5 @@
 import {
-    IDetailQueryResult,
+    ICategorizableDetailQueryResult,
     IVocabularyListEntry,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
@@ -66,8 +66,12 @@ const filterEntriesForSelectedTerms = (
     });
 
 export const VocabularyListDetailFullViewPresenter = ({
-    data: { id, name, nameEnglish, entries, form },
-}: IDetailQueryResult<IVocabularyListViewModel>): JSX.Element => {
+    id,
+    name,
+    nameEnglish,
+    entries,
+    form,
+}: ICategorizableDetailQueryResult<IVocabularyListViewModel>): JSX.Element => {
     const [filter, dispatch] = useReducer(filterReducer, {});
 
     const filterWithoutNullAndUndefined = Object.entries(filter).reduce(
@@ -98,7 +102,7 @@ export const VocabularyListDetailFullViewPresenter = ({
             <div>
                 {/* We may want to give the user the option of seeing a Multiple Categorizables of Single Type view instead*/}
                 <Carousel
-                    propsForItems={selectedEntries.map(({ term }) => ({ data: term, actions: [] }))}
+                    propsForItems={selectedEntries.map(({ term }) => term)}
                     Presenter={TermDetailFullViewPresenter}
                 />
             </div>

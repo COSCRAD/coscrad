@@ -16,6 +16,8 @@ interface ResourcePageProps<T extends CategorizableType> {
 }
 
 /**
+ * TODO [https://www.pivotaltracker.com/story/show/184069659]
+ *
  * We may want to extends this to an `AggregatePage` some day, or at least
  * `CategorizablePage`. We aren't too concerned about that right now as our core
  * value is being extensbile to adding new resource typs and non-resource

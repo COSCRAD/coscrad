@@ -1,12 +1,11 @@
-import { IIndexQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
+import { ITermViewModel } from '@coscrad/api-interfaces';
+import { TermIndexState } from '../../../store/slices/resources/terms/types/term-index-state';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 
-export const TermIndexPresenter = (termsIndexResult: IIndexQueryResult<ITermViewModel>) => {
-    const { data: detailResult } = termsIndexResult;
-
-    const terms = detailResult.map(({ data }) => data);
+export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
+    const { entities: terms } = termsIndexResult;
 
     const headingLabels: HeadingLabel<ITermViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },

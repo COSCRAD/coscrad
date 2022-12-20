@@ -1,4 +1,4 @@
-import { IDetailQueryResult, IMediaItemViewModel } from '@coscrad/api-interfaces';
+import { ICategorizableDetailQueryResult, IMediaItemViewModel } from '@coscrad/api-interfaces';
 import { Card, Divider } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
@@ -6,8 +6,11 @@ import { formatBilingualText } from '../vocabulary-lists/utils';
 import { ContributionsHack } from './contributors-hack';
 
 export const MediaItemDetailFullViewPresenter = ({
-    data: { id, title, titleEnglish, url },
-}: IDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
+    id,
+    title,
+    titleEnglish,
+    url,
+}: ICategorizableDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
     const { videoIdToCredits } = useContext(ConfigurableContentContext);
 
     const contributionsMap = new Map<string, string>(
