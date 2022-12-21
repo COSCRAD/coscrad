@@ -6,6 +6,7 @@ import { assertElementWithEveryIdRenderedForIndex } from '../../utils/test-utils
 import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../utils/test-utils/setup-test-server';
+import { buildMockIndexResponse } from '../../utils/test-utils/test-data';
 import { NoteIndexContainer } from './note-index.container';
 import { buildDummyNotes } from './test-utils/build-dummy-notes';
 
@@ -25,7 +26,10 @@ describe(`NoteIndex`, () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({
                 endpoint,
-                response: dummyNotes,
+                response: buildMockIndexResponse(
+                    dummyNotes.map((note) => [note, []]),
+                    []
+                ),
             })
         );
 

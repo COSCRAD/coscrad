@@ -118,7 +118,10 @@ describe(`Connected Resources Panel`, () => {
             setupTestServer(
                 buildMockSuccessfulGETHandler({
                     endpoint: noteEndpoint,
-                    response: dummyNotes,
+                    response: buildMockIndexResponse(
+                        dummyNotes.map((note) => [note, []]),
+                        []
+                    ),
                 })
             );
 
@@ -151,7 +154,13 @@ describe(`Connected Resources Panel`, () => {
                         ),
                     })
                 ),
-                buildMockSuccessfulGETHandler({ endpoint: noteEndpoint, response: allConnections }),
+                buildMockSuccessfulGETHandler({
+                    endpoint: noteEndpoint,
+                    response: buildMockIndexResponse(
+                        allConnections.map((connection) => [connection, []]),
+                        []
+                    ),
+                }),
             ];
 
             setupTestServer(...handlers);
