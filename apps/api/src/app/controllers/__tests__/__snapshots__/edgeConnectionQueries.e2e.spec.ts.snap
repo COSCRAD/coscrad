@@ -1254,1214 +1254,1251 @@ Array [
 `;
 
 exports[`When querying for edge connections GET /connections/notes should return the expected result 1`] = `
-Array [
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "term",
+Object {
+  "entities": Array [
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
+            "type": "term",
+          },
+          "context": Object {
+            "charRange": Array [
+              0,
+              3,
+            ],
+            "target": "term",
+            "type": "textField",
+          },
+          "role": "self",
         },
-        "context": Object {
-          "charRange": Array [
-            0,
-            3,
+      ],
+      "connectionType": "self",
+      "id": "1",
+      "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
+      "tags": Array [
+        Object {
+          "id": "5",
+          "label": "legends",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "101",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2001",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "mediaItem",
+            },
+            Object {
+              "id": "1",
+              "type": "song",
+            },
           ],
-          "target": "term",
-          "type": "textField",
         },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "1",
-    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
-        "members": Array [
-          Object {
+      ],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "24",
+            "type": "book",
+          },
+          "context": Object {
+            "pageIdentifiers": Array [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "2",
+      "note": "This page is about bears",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
             "id": "2",
             "type": "vocabularyList",
           },
-          Object {
-            "id": "101",
+          "context": Object {
+            "charRange": Array [
+              0,
+              1,
+            ],
+            "target": "name",
+            "type": "textField",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "3",
+      "note": "This is the first letter of the list name",
+      "tags": Array [
+        Object {
+          "id": "4",
+          "label": "songs",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "photograph",
+            },
+            Object {
+              "id": "2002",
+              "type": "note",
+            },
+            Object {
+              "id": "3",
+              "type": "note",
+            },
+          ],
+        },
+      ],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "300",
             "type": "spatialFeature",
           },
-          Object {
-            "id": "2001",
-            "type": "note",
+          "context": Object {
+            "type": "general",
           },
-          Object {
-            "id": "1",
-            "type": "note",
-          },
-          Object {
-            "id": "1",
-            "type": "mediaItem",
-          },
-          Object {
-            "id": "1",
-            "type": "song",
-          },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "24",
-          "type": "book",
+          "role": "self",
         },
-        "context": Object {
-          "pageIdentifiers": Array [
-            "ix",
-          ],
-          "type": "pageRange",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "2",
-    "note": "This page is about bears",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "vocabularyList",
-        },
-        "context": Object {
-          "charRange": Array [
-            0,
-            1,
-          ],
-          "target": "name",
-          "type": "textField",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "3",
-    "note": "This is the first letter of the list name",
-    "tags": Array [
-      Object {
-        "id": "4",
-        "label": "songs",
-        "members": Array [
-          Object {
-            "id": "1",
-            "type": "photograph",
-          },
-          Object {
-            "id": "2002",
-            "type": "note",
-          },
-          Object {
-            "id": "3",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "300",
-          "type": "spatialFeature",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "4",
-    "note": "there is a placename for this point at the base of the mountain",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "110",
-          "type": "transcribedAudio",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 11000,
-            "outPoint": 12950,
-          },
-          "type": "timeRange",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "5",
-    "note": "this clip talks about songs",
-    "tags": Array [
-      Object {
-        "id": "3",
-        "label": "placenames",
-        "members": Array [
-          Object {
-            "id": "0",
-            "type": "photograph",
-          },
-          Object {
+      ],
+      "connectionType": "self",
+      "id": "4",
+      "note": "there is a placename for this point at the base of the mountain",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
             "id": "110",
             "type": "transcribedAudio",
           },
-          Object {
-            "id": "2003",
-            "type": "note",
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
           },
-          Object {
-            "id": "5",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "photograph",
+          "role": "self",
         },
-        "context": Object {
-          "lines": Array [
-            Array [
+      ],
+      "connectionType": "self",
+      "id": "5",
+      "note": "this clip talks about songs",
+      "tags": Array [
+        Object {
+          "id": "3",
+          "label": "placenames",
+          "members": Array [
+            Object {
+              "id": "0",
+              "type": "photograph",
+            },
+            Object {
+              "id": "110",
+              "type": "transcribedAudio",
+            },
+            Object {
+              "id": "2003",
+              "type": "note",
+            },
+            Object {
+              "id": "5",
+              "type": "note",
+            },
+          ],
+        },
+      ],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
+            "type": "photograph",
+          },
+          "context": Object {
+            "lines": Array [
               Array [
-                0,
-                200,
-              ],
-              Array [
-                100,
-                300,
-              ],
-              Array [
-                200,
-                400,
-              ],
-              Array [
-                250,
-                475,
+                Array [
+                  0,
+                  200,
+                ],
+                Array [
+                  100,
+                  300,
+                ],
+                Array [
+                  200,
+                  400,
+                ],
+                Array [
+                  250,
+                  475,
+                ],
               ],
             ],
-          ],
-          "type": "freeMultiline",
+            "type": "freeMultiline",
+          },
+          "role": "self",
         },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "6",
-    "note": "this is the stem of the flower",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "photograph",
-        },
-        "context": Object {
-          "point": Array [
-            0,
-            200,
-          ],
-          "type": "point2D",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "7",
-    "note": "this is the base of the flower",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
-        "members": Array [
-          Object {
+      ],
+      "connectionType": "self",
+      "id": "6",
+      "note": "this is the stem of the flower",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
             "id": "2",
-            "type": "term",
+            "type": "photograph",
           },
-          Object {
-            "id": "3",
-            "type": "term",
+          "context": Object {
+            "point": Array [
+              0,
+              200,
+            ],
+            "type": "point2D",
           },
-          Object {
-            "id": "102",
-            "type": "spatialFeature",
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "7",
+      "note": "this is the base of the flower",
+      "tags": Array [
+        Object {
+          "id": "2",
+          "label": "animals",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "term",
+            },
+            Object {
+              "id": "3",
+              "type": "term",
+            },
+            Object {
+              "id": "102",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2004",
+              "type": "note",
+            },
+            Object {
+              "id": "7",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "bibliographicReference",
+            },
+          ],
+        },
+      ],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "24",
+            "type": "book",
           },
-          Object {
-            "id": "2004",
-            "type": "note",
+          "context": Object {
+            "pageIdentifiers": Array [
+              "ix",
+            ],
+            "type": "pageRange",
           },
-          Object {
-            "id": "7",
-            "type": "note",
-          },
-          Object {
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "8",
+      "note": "this section is the best part of an illustrated book about birds",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
             "id": "1",
             "type": "bibliographicReference",
           },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "24",
-          "type": "book",
+          "context": Object {
+            "type": "general",
+          },
+          "role": "self",
         },
-        "context": Object {
-          "pageIdentifiers": Array [
-            "ix",
+      ],
+      "connectionType": "self",
+      "id": "9",
+      "note": "found this in the archives",
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
           ],
-          "type": "pageRange",
         },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "8",
-    "note": "this section is the best part of an illustrated book about birds",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "9",
-    "note": "found this in the archives",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-        "members": Array [
-          Object {
-            "id": "1",
-            "type": "term",
-          },
-          Object {
-            "id": "23",
-            "type": "book",
-          },
-          Object {
-            "id": "24",
-            "type": "book",
-          },
-          Object {
-            "id": "1",
-            "type": "vocabularyList",
-          },
-          Object {
-            "id": "100",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2005",
-            "type": "note",
-          },
-          Object {
-            "id": "9",
-            "type": "note",
-          },
-          Object {
-            "id": "11",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "song",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 300,
-            "outPoint": 500,
-          },
-          "type": "timeRange",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "10",
-    "note": "this is a song",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
-        },
-        "context": Object {
-          "charRange": Array [
-            0,
-            2,
-          ],
-          "target": "title",
-          "type": "textField",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "11",
-    "note": "this is an awesome show",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-        "members": Array [
-          Object {
-            "id": "1",
-            "type": "term",
-          },
-          Object {
-            "id": "23",
-            "type": "book",
-          },
-          Object {
-            "id": "24",
-            "type": "book",
-          },
-          Object {
-            "id": "1",
-            "type": "vocabularyList",
-          },
-          Object {
-            "id": "100",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2005",
-            "type": "note",
-          },
-          Object {
-            "id": "9",
-            "type": "note",
-          },
-          Object {
-            "id": "11",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 650,
-            "outPoint": 1230,
-          },
-          "type": "timeRange",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "12",
-    "note": "important clip from the show",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "13",
-    "note": "this book is hard to track down",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "term",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "14",
-    "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "24",
-          "type": "book",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "15",
-    "note": "This page is about bears",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "vocabularyList",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "16",
-    "note": "This is the first letter of the list name",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "110",
-          "type": "transcribedAudio",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "17",
-    "note": "this clip talks about songs",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "photograph",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "18",
-    "note": "this is the stem of the flower",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "photograph",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "19",
-    "note": "this is the base of the flower",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "24",
-          "type": "book",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "20",
-    "note": "this section is the best part of an illustrated book about birds",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "song",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "21",
-    "note": "this is a song",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "22",
-    "note": "this is an awesome show",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "23",
-    "note": "important clip from the show",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "term",
-        },
-        "context": Object {
-          "charRange": Array [
-            0,
-            3,
-          ],
-          "target": "term",
-          "type": "textField",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "vocabularyList",
-        },
-        "context": Object {
-          "charRange": Array [
-            0,
-            1,
-          ],
-          "target": "name",
-          "type": "textField",
-        },
-        "role": "from",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "2000",
-    "note": "That is why term/2 is related to vocabularyList/2",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "vocabularyList",
-        },
-        "context": Object {
-          "charRange": Array [
-            0,
-            1,
-          ],
-          "target": "name",
-          "type": "textField",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "110",
-          "type": "transcribedAudio",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 11000,
-            "outPoint": 12950,
-          },
-          "type": "timeRange",
-        },
-        "role": "from",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "2001",
-    "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
-        "members": Array [
-          Object {
-            "id": "2",
-            "type": "vocabularyList",
-          },
-          Object {
-            "id": "101",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2001",
-            "type": "note",
-          },
-          Object {
-            "id": "1",
-            "type": "note",
-          },
-          Object {
-            "id": "1",
-            "type": "mediaItem",
-          },
-          Object {
+      ],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
             "id": "1",
             "type": "song",
           },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "110",
-          "type": "transcribedAudio",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 11000,
-            "outPoint": 12950,
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 300,
+              "outPoint": 500,
+            },
+            "type": "timeRange",
           },
-          "type": "timeRange",
+          "role": "self",
         },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "24",
-          "type": "book",
-        },
-        "context": Object {
-          "pageIdentifiers": Array [
-            "ix",
-          ],
-          "type": "pageRange",
-        },
-        "role": "from",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "2002",
-    "note": "That is why transcribedAudio/110 is related to book/24",
-    "tags": Array [
-      Object {
-        "id": "4",
-        "label": "songs",
-        "members": Array [
-          Object {
+      ],
+      "connectionType": "self",
+      "id": "10",
+      "note": "this is a song",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
             "id": "1",
-            "type": "photograph",
+            "type": "mediaItem",
           },
-          Object {
-            "id": "2002",
-            "type": "note",
-          },
-          Object {
-            "id": "3",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "24",
-          "type": "book",
-        },
-        "context": Object {
-          "pageIdentifiers": Array [
-            "ix",
-          ],
-          "type": "pageRange",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "photograph",
-        },
-        "context": Object {
-          "lines": Array [
-            Array [
-              Array [
-                0,
-                200,
-              ],
-              Array [
-                100,
-                300,
-              ],
-              Array [
-                200,
-                400,
-              ],
-              Array [
-                250,
-                475,
-              ],
+          "context": Object {
+            "charRange": Array [
+              0,
+              2,
             ],
+            "target": "title",
+            "type": "textField",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "11",
+      "note": "this is an awesome show",
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
           ],
-          "type": "freeMultiline",
         },
-        "role": "from",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "2003",
-    "note": "That is why book/24 is related to photograph/2",
-    "tags": Array [
-      Object {
-        "id": "3",
-        "label": "placenames",
-        "members": Array [
-          Object {
-            "id": "0",
-            "type": "photograph",
+      ],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "mediaItem",
           },
-          Object {
-            "id": "110",
-            "type": "transcribedAudio",
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 650,
+              "outPoint": 1230,
+            },
+            "type": "timeRange",
           },
-          Object {
-            "id": "2003",
-            "type": "note",
-          },
-          Object {
-            "id": "5",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "photograph",
+          "role": "self",
         },
-        "context": Object {
-          "lines": Array [
-            Array [
-              Array [
-                0,
-                200,
-              ],
-              Array [
-                100,
-                300,
-              ],
-              Array [
-                200,
-                400,
-              ],
-              Array [
-                250,
-                475,
-              ],
-            ],
-          ],
-          "type": "freeMultiline",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "300",
-          "type": "spatialFeature",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "from",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "2004",
-    "note": "That is why photograph/2 is related to spatialFeature/300",
-    "tags": Array [
-      Object {
-        "id": "2",
-        "label": "animals",
-        "members": Array [
-          Object {
-            "id": "2",
-            "type": "term",
-          },
-          Object {
-            "id": "3",
-            "type": "term",
-          },
-          Object {
-            "id": "102",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2004",
-            "type": "note",
-          },
-          Object {
-            "id": "7",
-            "type": "note",
-          },
-          Object {
+      ],
+      "connectionType": "self",
+      "id": "12",
+      "note": "important clip from the show",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
             "id": "1",
             "type": "bibliographicReference",
           },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "300",
-          "type": "spatialFeature",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "song",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 300,
-            "outPoint": 500,
+          "context": Object {
+            "type": "general",
           },
-          "type": "timeRange",
+          "role": "self",
         },
-        "role": "from",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "2005",
-    "note": "That is why spatialFeature/300 is related to song/1",
-    "tags": Array [
-      Object {
-        "id": "1",
-        "label": "plants",
-        "members": Array [
-          Object {
-            "id": "1",
+      ],
+      "connectionType": "self",
+      "id": "13",
+      "note": "this book is hard to track down",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
             "type": "term",
           },
-          Object {
-            "id": "23",
-            "type": "book",
+          "context": Object {
+            "type": "general",
           },
-          Object {
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "14",
+      "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
             "id": "24",
             "type": "book",
           },
-          Object {
-            "id": "1",
+          "context": Object {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "15",
+      "note": "This page is about bears",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
             "type": "vocabularyList",
           },
-          Object {
-            "id": "100",
+          "context": Object {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "16",
+      "note": "This is the first letter of the list name",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "110",
+            "type": "transcribedAudio",
+          },
+          "context": Object {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "17",
+      "note": "this clip talks about songs",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
+            "type": "photograph",
+          },
+          "context": Object {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "18",
+      "note": "this is the stem of the flower",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
+            "type": "photograph",
+          },
+          "context": Object {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "19",
+      "note": "this is the base of the flower",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "24",
+            "type": "book",
+          },
+          "context": Object {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "20",
+      "note": "this section is the best part of an illustrated book about birds",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "song",
+          },
+          "context": Object {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "21",
+      "note": "this is a song",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "mediaItem",
+          },
+          "context": Object {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "22",
+      "note": "this is an awesome show",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "mediaItem",
+          },
+          "context": Object {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "23",
+      "note": "important clip from the show",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
+            "type": "term",
+          },
+          "context": Object {
+            "charRange": Array [
+              0,
+              3,
+            ],
+            "target": "term",
+            "type": "textField",
+          },
+          "role": "to",
+        },
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
+            "type": "vocabularyList",
+          },
+          "context": Object {
+            "charRange": Array [
+              0,
+              1,
+            ],
+            "target": "name",
+            "type": "textField",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "2000",
+      "note": "That is why term/2 is related to vocabularyList/2",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
+            "type": "vocabularyList",
+          },
+          "context": Object {
+            "charRange": Array [
+              0,
+              1,
+            ],
+            "target": "name",
+            "type": "textField",
+          },
+          "role": "to",
+        },
+        Object {
+          "compositeIdentifier": Object {
+            "id": "110",
+            "type": "transcribedAudio",
+          },
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "2001",
+      "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
+      "tags": Array [
+        Object {
+          "id": "5",
+          "label": "legends",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "101",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2001",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "mediaItem",
+            },
+            Object {
+              "id": "1",
+              "type": "song",
+            },
+          ],
+        },
+      ],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "110",
+            "type": "transcribedAudio",
+          },
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "to",
+        },
+        Object {
+          "compositeIdentifier": Object {
+            "id": "24",
+            "type": "book",
+          },
+          "context": Object {
+            "pageIdentifiers": Array [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "2002",
+      "note": "That is why transcribedAudio/110 is related to book/24",
+      "tags": Array [
+        Object {
+          "id": "4",
+          "label": "songs",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "photograph",
+            },
+            Object {
+              "id": "2002",
+              "type": "note",
+            },
+            Object {
+              "id": "3",
+              "type": "note",
+            },
+          ],
+        },
+      ],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "24",
+            "type": "book",
+          },
+          "context": Object {
+            "pageIdentifiers": Array [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "to",
+        },
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
+            "type": "photograph",
+          },
+          "context": Object {
+            "lines": Array [
+              Array [
+                Array [
+                  0,
+                  200,
+                ],
+                Array [
+                  100,
+                  300,
+                ],
+                Array [
+                  200,
+                  400,
+                ],
+                Array [
+                  250,
+                  475,
+                ],
+              ],
+            ],
+            "type": "freeMultiline",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "2003",
+      "note": "That is why book/24 is related to photograph/2",
+      "tags": Array [
+        Object {
+          "id": "3",
+          "label": "placenames",
+          "members": Array [
+            Object {
+              "id": "0",
+              "type": "photograph",
+            },
+            Object {
+              "id": "110",
+              "type": "transcribedAudio",
+            },
+            Object {
+              "id": "2003",
+              "type": "note",
+            },
+            Object {
+              "id": "5",
+              "type": "note",
+            },
+          ],
+        },
+      ],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
+            "type": "photograph",
+          },
+          "context": Object {
+            "lines": Array [
+              Array [
+                Array [
+                  0,
+                  200,
+                ],
+                Array [
+                  100,
+                  300,
+                ],
+                Array [
+                  200,
+                  400,
+                ],
+                Array [
+                  250,
+                  475,
+                ],
+              ],
+            ],
+            "type": "freeMultiline",
+          },
+          "role": "to",
+        },
+        Object {
+          "compositeIdentifier": Object {
+            "id": "300",
             "type": "spatialFeature",
           },
-          Object {
-            "id": "2005",
-            "type": "note",
+          "context": Object {
+            "type": "general",
           },
-          Object {
-            "id": "9",
-            "type": "note",
-          },
-          Object {
-            "id": "11",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "song",
+          "role": "from",
         },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 300,
-            "outPoint": 500,
-          },
-          "type": "timeRange",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
+      ],
+      "connectionType": "dual",
+      "id": "2004",
+      "note": "That is why photograph/2 is related to spatialFeature/300",
+      "tags": Array [
+        Object {
           "id": "2",
-          "type": "term",
-        },
-        "context": Object {
-          "charRange": Array [
-            0,
-            3,
+          "label": "animals",
+          "members": Array [
+            Object {
+              "id": "2",
+              "type": "term",
+            },
+            Object {
+              "id": "3",
+              "type": "term",
+            },
+            Object {
+              "id": "102",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2004",
+              "type": "note",
+            },
+            Object {
+              "id": "7",
+              "type": "note",
+            },
+            Object {
+              "id": "1",
+              "type": "bibliographicReference",
+            },
           ],
-          "target": "term",
-          "type": "textField",
         },
-        "role": "from",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "2006",
-    "note": "That is why song/1 is related to term/2",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 100,
-            "outPoint": 1200,
+      ],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "300",
+            "type": "spatialFeature",
           },
-          "type": "timeRange",
+          "context": Object {
+            "type": "general",
+          },
+          "role": "to",
         },
-        "role": "from",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "term",
+        Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "song",
+          },
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 300,
+              "outPoint": 500,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
         },
-        "context": Object {
-          "charRange": Array [
-            1,
-            4,
+      ],
+      "connectionType": "dual",
+      "id": "2005",
+      "note": "That is why spatialFeature/300 is related to song/1",
+      "tags": Array [
+        Object {
+          "id": "1",
+          "label": "plants",
+          "members": Array [
+            Object {
+              "id": "1",
+              "type": "term",
+            },
+            Object {
+              "id": "23",
+              "type": "book",
+            },
+            Object {
+              "id": "24",
+              "type": "book",
+            },
+            Object {
+              "id": "1",
+              "type": "vocabularyList",
+            },
+            Object {
+              "id": "100",
+              "type": "spatialFeature",
+            },
+            Object {
+              "id": "2005",
+              "type": "note",
+            },
+            Object {
+              "id": "9",
+              "type": "note",
+            },
+            Object {
+              "id": "11",
+              "type": "note",
+            },
           ],
-          "target": "term",
-          "type": "textField",
         },
-        "role": "to",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "3001",
-    "note": "this media item mentions a word in the term",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
-        },
-        "context": Object {
-          "type": "identity",
-        },
-        "role": "from",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "24",
-          "type": "book",
-        },
-        "context": Object {
-          "type": "identity",
-        },
-        "role": "to",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "3002",
-    "note": "here is the digital version of the book!",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "mediaItem",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 300,
-            "outPoint": 1800,
+      ],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "song",
           },
-          "type": "timeRange",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "24",
-          "type": "book",
-        },
-        "context": Object {
-          "pageIdentifiers": Array [
-            "ix",
-          ],
-          "type": "pageRange",
-        },
-        "role": "from",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "3101",
-    "note": "this selection from the media item portrays the events in the book",
-    "tags": Array [],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "bibliographicReference",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "1",
-          "type": "song",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 500,
-            "outPoint": 778.4,
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 300,
+              "outPoint": 500,
+            },
+            "type": "timeRange",
           },
-          "type": "timeRange",
+          "role": "to",
         },
-        "role": "from",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "3102",
-    "note": "this library book has the lyrics from the song, but we do not have access to the book",
-    "tags": Array [],
-  },
-]
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
+            "type": "term",
+          },
+          "context": Object {
+            "charRange": Array [
+              0,
+              3,
+            ],
+            "target": "term",
+            "type": "textField",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "2006",
+      "note": "That is why song/1 is related to term/2",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "mediaItem",
+          },
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 100,
+              "outPoint": 1200,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
+        },
+        Object {
+          "compositeIdentifier": Object {
+            "id": "2",
+            "type": "term",
+          },
+          "context": Object {
+            "charRange": Array [
+              1,
+              4,
+            ],
+            "target": "term",
+            "type": "textField",
+          },
+          "role": "to",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "3001",
+      "note": "this media item mentions a word in the term",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "bibliographicReference",
+          },
+          "context": Object {
+            "type": "identity",
+          },
+          "role": "from",
+        },
+        Object {
+          "compositeIdentifier": Object {
+            "id": "24",
+            "type": "book",
+          },
+          "context": Object {
+            "type": "identity",
+          },
+          "role": "to",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "3002",
+      "note": "here is the digital version of the book!",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "mediaItem",
+          },
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 300,
+              "outPoint": 1800,
+            },
+            "type": "timeRange",
+          },
+          "role": "to",
+        },
+        Object {
+          "compositeIdentifier": Object {
+            "id": "24",
+            "type": "book",
+          },
+          "context": Object {
+            "pageIdentifiers": Array [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "3101",
+      "note": "this selection from the media item portrays the events in the book",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "bibliographicReference",
+          },
+          "context": Object {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "song",
+          },
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 500,
+              "outPoint": 778.4,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "3102",
+      "note": "this library book has the lyrics from the song, but we do not have access to the book",
+      "tags": Array [],
+    },
+  ],
+  "indexScopedActions": Array [],
+}
 `;
 
 exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: bibliographicReference should return the expected result 1`] = `

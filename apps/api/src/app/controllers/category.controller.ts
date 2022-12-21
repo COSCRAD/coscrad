@@ -8,6 +8,10 @@ import { CategoryTreeViewModel } from '../../view-models/buildViewModelForResour
 import httpStatusCodes from '../constants/httpStatusCodes';
 import { CATEGORY_TREE_INDEX_ROUTE } from './constants';
 
+/**
+ * TODO [https://www.pivotaltracker.com/story/show/184098924]
+ * We need a `CategoryQueryService`.
+ */
 @ApiTags('tree of knowledge (categories)')
 @Controller(CATEGORY_TREE_INDEX_ROUTE)
 export class CategoryController {

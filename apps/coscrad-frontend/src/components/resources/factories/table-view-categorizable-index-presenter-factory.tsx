@@ -3,6 +3,7 @@ import {
     ICategorizableIndexQueryResult,
     ISpatialFeatureViewModel,
 } from '@coscrad/api-interfaces';
+import { NoteIndexPresenter } from '../../notes/note-index.presenter';
 import { BibliographicReferenceIndexPresenter } from '../bibliographic-references/bibliographic-reference-index.presenter';
 import { BookIndexPresenter } from '../books/book-index.presenter';
 import { MediaItemIndexPresenter } from '../media-items/media-item-index.presenter';
@@ -74,6 +75,9 @@ export const tableViewCategorizableIndexPresenterFactory: CategorizableIndexPres
 
         case CategorizableType.vocabularyList:
             return VocabularyListIndexPresenter as unknown as CategorizableIndexPresenter<T>;
+
+        case CategorizableType.note:
+            return NoteIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         default:
             throw new Error(`Failed to build index presenter for: ${categorizableType}`);

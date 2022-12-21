@@ -6,7 +6,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
-import { buildResourceDetailPageRendererForTest } from '../test-utils';
+import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 import { buildDummyBooks } from './test-utils/build-dummy-books';
 
 const dummyBooks = buildDummyBooks();
@@ -24,7 +24,7 @@ const dummyIndexResponse = buildMockIndexResponse(
 
 const mockGetNotesHandler = buildMockGetNotesHandler();
 
-const act = buildResourceDetailPageRendererForTest(ResourceType.book);
+const act = buildCategorizableDetailPageRendererForTest(ResourceType.book);
 
 describe('book detail', () => {
     describe('when the API request succeeds', () => {
