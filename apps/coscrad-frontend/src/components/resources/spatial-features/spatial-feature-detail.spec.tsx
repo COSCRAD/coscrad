@@ -6,7 +6,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
-import { buildResourceDetailPageRendererForTest } from '../test-utils';
+import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 import { buildDummySpatialFeatures } from './test-utils/build-dummy-spatial-features';
 
 const dummySpatialFeatures = buildDummySpatialFeatures();
@@ -17,7 +17,7 @@ const { id: idToFind } = referenceSpatialFeatureToFind;
 
 const endpoint = `${getConfig().apiUrl}/Resources/spatialFeatures`;
 
-const act = buildResourceDetailPageRendererForTest(ResourceType.spatialFeature);
+const act = buildCategorizableDetailPageRendererForTest(ResourceType.spatialFeature);
 
 const mockGetNotesHandler = buildMockGetNotesHandler();
 

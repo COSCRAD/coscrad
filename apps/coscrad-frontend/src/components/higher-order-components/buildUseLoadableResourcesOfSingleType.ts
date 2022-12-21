@@ -5,7 +5,7 @@ import {
     ICategorizableIndexQueryResult,
 } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
-import { useLoadableNotesWithStandardFormat } from '../../store/slices/notes/hooks/use-loadable-notes-with-standard-format';
+import { useLoadableNotes } from '../../store/slices/notes/hooks';
 import {
     useLoadableBibliographicReferences,
     useLoadableSongs,
@@ -34,7 +34,7 @@ const lookupTable: {
     [CategorizableType.term]: useLoadableTerms,
     [CategorizableType.transcribedAudio]: useLoadableTranscribedAudioItems,
     [CategorizableType.vocabularyList]: useLoadableVocabularyLists,
-    [CategorizableType.note]: useLoadableNotesWithStandardFormat,
+    [CategorizableType.note]: useLoadableNotes,
 };
 
 /**

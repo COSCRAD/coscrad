@@ -53,7 +53,6 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     },
     [CategorizableType.note]: NoteDetailFullViewPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
-    [CategorizableType.note]: NoteDetailFullViewPresenter,
 };
 
 /**

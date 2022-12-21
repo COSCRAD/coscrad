@@ -1,11 +1,9 @@
-import { CategorizableType } from '@coscrad/api-interfaces';
+import { isResourceType } from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { Route } from 'react-router-dom';
 import { FilteredCategorizableIndexContainer } from '../components/higher-order-components';
 import { buildUseLoadableForSingleCategorizableType } from '../components/higher-order-components/buildUseLoadableResourcesOfSingleType';
-import { ResourcePage } from '../components/higher-order-components/resource-page';
-import { NoteDetailContainer } from '../components/notes/note-detail.container';
-import { NoteIndexContainer } from '../components/notes/note-index.container';
+import { CategorizablePage } from '../components/higher-order-components/categorizable-page';
 import { fullViewCategorizablePresenterFactory } from '../components/resources/factories/full-view-categorizable-presenter-factory';
 import { tableViewCategorizableIndexPresenterFactory } from '../components/resources/factories/table-view-categorizable-index-presenter-factory';
 import { thumbnailCategorizableDetailPresenterFactory } from '../components/resources/factories/thumbnail-categorizable-detail-presenter-factory';
@@ -17,20 +15,9 @@ export const IndexToDetailFlowRoutes = () => {
     const { indexToDetailFlows } = useContext(ConfigurableContentContext);
 
     return indexToDetailFlows.map(({ categorizableType, detailViewType, indexFilter }) => {
-        /**
-         * TODO [https://www.pivotaltracker.com/story/show/184069659]
-         * Fix this assymetry- it prevents our filtered index approach for notes
-         */
-        if (categorizableType === CategorizableType.note) {
-            return (
-                <>
-                    <Route path={routes.notes.index} element={<NoteIndexContainer />} />
-                    <Route path={routes.notes.detail()} element={<NoteDetailContainer />} />
-                </>
-            );
-        }
-
-        const routeBuilder = routes.resources.ofType(categorizableType);
+        const routeBuilder = isResourceType(categorizableType)
+            ? routes.resources.ofType(categorizableType)
+            : routes.notes;
 
         /**
          * TODO Use a switch, lookup table, or OOP & polymorphism as soon as
@@ -63,8 +50,8 @@ export const IndexToDetailFlowRoutes = () => {
                 <Route
                     path={routeBuilder.detail()}
                     element={
-                        <ResourcePage
-                            resourceType={categorizableType}
+                        <CategorizablePage
+                            categorizableType={categorizableType}
                             detailPresenterFactory={detailPresenterFactory}
                         />
                     }
