@@ -20,19 +20,41 @@ const isOptional = true;
 export class Term extends Resource {
     readonly type: ResourceType = ResourceType.term;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'text (language)',
+        description: 'the term in the language',
+    })
     readonly term?: string;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'text (colonial language)',
+        description: 'the text in the colonial language',
+    })
     readonly termEnglish?: string;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'contributor ID',
+        description: 'reference to the contributor for this term',
+    })
     readonly contributorId: AggregateId;
 
-    @NonEmptyString({ isOptional })
+    /**
+     * TODO Make this a mediaItemId
+     */
+    @NonEmptyString({
+        isOptional,
+        label: 'Audio Filename',
+        description: 'the name of the audio file',
+    })
     readonly audioFilename?: string;
 
-    @NonEmptyString({ isOptional })
+    @NonEmptyString({
+        isOptional,
+        label: 'Source Project',
+        description: 'the name of the project through which the term was collected',
+    })
     readonly sourceProject?: string;
 
     // The constructor should only be called after validating the input DTO

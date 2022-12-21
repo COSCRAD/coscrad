@@ -16,7 +16,10 @@ export class JournalArticleBibliographicReference
 {
     readonly type = ResourceType.bibliographicReference;
 
-    @NestedDataType(JournalArticleBibliographicReferenceData)
+    @NestedDataType(JournalArticleBibliographicReferenceData, {
+        label: 'reference data',
+        description: 'citation information for the referenced journal article',
+    })
     readonly data: JournalArticleBibliographicReferenceData;
 
     constructor(dto: DTO<JournalArticleBibliographicReference>) {

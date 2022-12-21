@@ -7,6 +7,9 @@ import { UUID } from '@coscrad/data-types';
     description: 'Publish a song for the world!',
 })
 export class PublishSong implements ICommand {
-    @UUID()
+    @UUID({
+        label: 'ID',
+        description: 'unique identifier of the song to publish',
+    })
     readonly id: string;
 }

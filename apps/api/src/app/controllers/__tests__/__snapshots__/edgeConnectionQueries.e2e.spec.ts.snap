@@ -8,19 +8,25 @@ Object {
   "schema": Object {
     "connectedResources": Object {
       "complexDataType": "NESTED_TYPE",
+      "description": "the 1 (self note) or 2 (dual connection) resources that this note connects",
       "isArray": true,
       "isOptional": false,
+      "label": "connected resources",
       "schema": Object {
         "compositeIdentifier": Object {
           "coscradDataType": "COMPOSITE_IDENTIFIER",
+          "description": "composite identifier of the members's resource",
           "isArray": false,
           "isOptional": false,
+          "label": "composite identifier",
         },
         "context": Object {
           "complexDataType": "UNION_TYPE",
+          "description": "contextualizes this resource as a member of this connection",
           "discriminantPath": "type",
           "isArray": false,
           "isOptional": false,
+          "label": "context",
           "schemaDefinitions": Array [
             Object {
               "discriminant": "freeMultiline",
@@ -54,10 +60,12 @@ Object {
         },
         "role": Object {
           "complexDataType": "ENUM",
+          "description": "is",
           "enumLabel": "Edge Connection Member Role",
           "enumName": "EDGE_CONNECTION_MEMBER_ROLE",
           "isArray": false,
           "isOptional": false,
+          "label": "role",
           "labelsAndValues": Array [
             Object {
               "label": "from",
@@ -77,13 +85,17 @@ Object {
     },
     "id": Object {
       "coscradDataType": "NON_EMPTY_STRING",
+      "description": "unique identifier",
       "isArray": false,
       "isOptional": false,
+      "label": "ID",
     },
     "note": Object {
       "coscradDataType": "NON_EMPTY_STRING",
+      "description": "",
       "isArray": false,
       "isOptional": false,
+      "label": "note text",
     },
   },
   "type": "note",
