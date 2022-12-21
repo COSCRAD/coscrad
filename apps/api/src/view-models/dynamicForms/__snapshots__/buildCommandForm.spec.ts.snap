@@ -4,32 +4,32 @@ exports[`buildCommandForm should return the expected result 1`] = `
 Object {
   "fields": Array [
     Object {
-      "description": "add description",
-      "label": "add label",
+      "description": "a unique identifier for this media item",
+      "label": "media item ID (generated)",
       "name": "id",
       "type": "TEXT_FIELD",
     },
     Object {
-      "description": "add description",
-      "label": "add label",
+      "description": "title of the media item in the language",
+      "label": "title (language)",
       "name": "title",
       "type": "TEXT_FIELD",
     },
     Object {
-      "description": "add description",
-      "label": "add label",
+      "description": "title of the media item in the colonial language",
+      "label": "title (colonial language)",
       "name": "titleEnglish",
       "type": "TEXT_FIELD",
     },
     Object {
-      "description": "add description",
-      "label": "add label",
+      "description": "an acknowledgement of each person who contributed to creating and producing this song",
+      "label": "contributions",
       "name": "contributions",
       "type": "JSON_INPUT",
     },
     Object {
-      "description": "add description",
-      "label": "add label",
+      "description": "a web URL link to a digital version of this media item for playback",
+      "label": "audio link",
       "name": "url",
       "type": "TEXT_FIELD",
     },
@@ -50,8 +50,8 @@ Object {
       "type": "STATIC_SELECT",
     },
     Object {
-      "description": "add description",
-      "label": "add label",
+      "description": "raw data from a third-party system for posterity",
+      "label": "raw data",
       "name": "rawData",
       "type": "JSON_INPUT",
     },

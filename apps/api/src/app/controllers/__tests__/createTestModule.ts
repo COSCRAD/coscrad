@@ -12,6 +12,7 @@ import { BibliographicReferenceQueryService } from '../../../domain/services/que
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../../domain/services/query-services/coscrad-user-query.service';
+import { EdgeConnectionQueryService } from '../../../domain/services/query-services/edge-connection-query.service';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
@@ -96,6 +97,20 @@ export default async (
                     return new RepositoryProvider(new DatabaseProvider(arangoConnectionProvider));
                 },
                 inject: [ArangoConnectionProvider],
+            },
+            {
+                provide: EdgeConnectionQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService,
+                    configService: ConfigService
+                ) =>
+                    new EdgeConnectionQueryService(
+                        repositoryProvider,
+                        commandInfoService,
+                        configService
+                    ),
+                inject: [RepositoryProvider, CommandInfoService, ConfigService],
             },
             {
                 provide: MediaItemQueryService,

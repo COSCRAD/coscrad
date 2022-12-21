@@ -6,7 +6,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
-import { buildResourceDetailPageRendererForTest } from '../test-utils';
+import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 
 jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
     /* eslint-disable-next-line */
@@ -26,7 +26,7 @@ const allTerms = [termToFind];
 
 const endpoint = `${getConfig().apiUrl}/resources/terms`;
 
-const act = buildResourceDetailPageRendererForTest(ResourceType.term);
+const act = buildCategorizableDetailPageRendererForTest(ResourceType.term);
 
 describe('Term Detail', () => {
     describe('when the API request is valid', () => {
