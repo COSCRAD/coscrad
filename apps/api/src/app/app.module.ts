@@ -12,11 +12,11 @@ import { validate } from './config/env.validation';
 import { CategoryController } from './controllers/category.controller';
 import { CommandController } from './controllers/command/command.controller';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
-import { EdgeConnectionController } from './controllers/edgeConnection.controller';
 import { ResourceDescriptionController } from './controllers/resources/resource-description.controller';
 import { TagController } from './controllers/tag.controller';
 import { BibliographicReferenceModule } from './domain-modules/bibliographic-reference.module';
 import { BookModule } from './domain-modules/book.module';
+import { EdgeConnectionModule } from './domain-modules/edge-connection.module';
 import { MediaItemModule } from './domain-modules/media-item.module';
 import { PhotographModule } from './domain-modules/photograph.module';
 import { SongModule } from './domain-modules/song.module';
@@ -40,6 +40,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         CommandModule,
         IdGenerationModule,
         UserManagementModule,
+        EdgeConnectionModule,
         MediaItemModule,
         SongModule,
         TermModule,
@@ -54,7 +55,6 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         AppController,
         CategoryController,
         ResourceDescriptionController,
-        EdgeConnectionController,
         TagController,
         CommandController,
     ],

@@ -1,5 +1,6 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { CategorizableType } from '@coscrad/api-interfaces';
 import { IMaybeLoadable } from '../../store/slices/interfaces/maybe-loadable.interface';
+import { useLoadableNoteById } from '../../store/slices/notes/hooks';
 import {
     useLoadableBibliographicReferenceById,
     useLoadableSongById,
@@ -19,27 +20,30 @@ type UseLoadableById = (id: string) => IMaybeLoadable<unknown>;
  * resource detail container's responsibility to know what ID it is a container
  * for.
  */
-const lookupTable: { [K in ResourceType]: UseLoadableById } = {
-    [ResourceType.bibliographicReference]: useLoadableBibliographicReferenceById,
-    [ResourceType.book]: useLoadableBookById,
-    [ResourceType.mediaItem]: useLoadableMediaItemById,
-    [ResourceType.photograph]: useLoadablePhotographById,
-    [ResourceType.song]: useLoadableSongById,
-    [ResourceType.spatialFeature]: useLoadableSpatialFeatureById,
-    [ResourceType.term]: useLoadableTermById,
-    [ResourceType.transcribedAudio]: useLoadableTranscribedAudioItemById,
-    [ResourceType.vocabularyList]: useLoadableVocabularyListById,
+const lookupTable: { [K in CategorizableType]: UseLoadableById } = {
+    [CategorizableType.bibliographicReference]: useLoadableBibliographicReferenceById,
+    [CategorizableType.book]: useLoadableBookById,
+    [CategorizableType.mediaItem]: useLoadableMediaItemById,
+    [CategorizableType.photograph]: useLoadablePhotographById,
+    [CategorizableType.song]: useLoadableSongById,
+    [CategorizableType.spatialFeature]: useLoadableSpatialFeatureById,
+    [CategorizableType.term]: useLoadableTermById,
+    [CategorizableType.transcribedAudio]: useLoadableTranscribedAudioItemById,
+    [CategorizableType.vocabularyList]: useLoadableVocabularyListById,
+    [CategorizableType.note]: useLoadableNoteById,
 };
 
 /**
  * We might want to bring the search logic here, and out of `SelectedResourcesContainer`
  */
-export const buildUseLoadableSearchResult = (resourceType: ResourceType): UseLoadableById => {
-    const lookupResult = lookupTable[resourceType];
+export const buildUseLoadableSearchResult = (
+    categorizableType: CategorizableType
+): UseLoadableById => {
+    const lookupResult = lookupTable[categorizableType];
 
     if (!lookupResult) {
         throw new Error(
-            `Failed to find a custom hook for searching by ID for resource type: ${resourceType}`
+            `Failed to find a custom hook for searching by ID for categorizable of type: ${categorizableType}`
         );
     }
 
