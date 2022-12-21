@@ -1,7 +1,6 @@
 import {
     CategorizableType,
     ICategorizableIndexQueryResult,
-    ICommandFormAndLabels,
     INoteViewModel,
     WithTags,
 } from '@coscrad/api-interfaces';
@@ -51,10 +50,6 @@ export class EdgeConnectionQueryService {
 
         const validDomainModels = queryResult.filter(validAggregateOrThrow);
 
-        const viewModels = validDomainModels.map(
-            (edgeConnectionDomainModel) => new NoteViewModel(edgeConnectionDomainModel)
-        );
-
         const tagFetchResult = await this.repositoryProvider.getTagRepository().fetchMany();
 
         const allTags = tagFetchResult.filter(validAggregateOrThrow);
@@ -62,16 +57,13 @@ export class EdgeConnectionQueryService {
         const mixinTags = (viewModel: NoteViewModel): WithTags<INoteViewModel> =>
             mixTagsIntoViewModel(viewModel, allTags, CategorizableType.note);
 
-        const viewModelsWithTags = viewModels.map(mixinTags);
-
         const indexScopedActions = this.commandInfoService.getCommandInfo(EdgeConnection);
 
         return {
             indexScopedActions,
-            entities: viewModelsWithTags.map((viewModel) => ({
-                ...viewModel,
-                // TODO Mixin the actions here!!!!
-                actions: [] as ICommandFormAndLabels[],
+            entities: validDomainModels.map((domainModel) => ({
+                ...mixinTags(new NoteViewModel(domainModel)),
+                actions: this.commandInfoService.getCommandInfo(domainModel),
             })),
         };
     }
