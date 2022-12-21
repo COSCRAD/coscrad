@@ -1,9 +1,9 @@
+import { isResourceType } from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { Route } from 'react-router-dom';
-import { isResourceType } from '../../../../libs/api-interfaces/src';
 import { FilteredCategorizableIndexContainer } from '../components/higher-order-components';
 import { buildUseLoadableForSingleCategorizableType } from '../components/higher-order-components/buildUseLoadableResourcesOfSingleType';
-import { ResourcePage } from '../components/higher-order-components/resource-page';
+import { CategorizablePage } from '../components/higher-order-components/categorizable-page';
 import { fullViewCategorizablePresenterFactory } from '../components/resources/factories/full-view-categorizable-presenter-factory';
 import { tableViewCategorizableIndexPresenterFactory } from '../components/resources/factories/table-view-categorizable-index-presenter-factory';
 import { thumbnailCategorizableDetailPresenterFactory } from '../components/resources/factories/thumbnail-categorizable-detail-presenter-factory';
@@ -50,7 +50,7 @@ export const IndexToDetailFlowRoutes = () => {
                 <Route
                     path={routeBuilder.detail()}
                     element={
-                        <ResourcePage
+                        <CategorizablePage
                             categorizableType={categorizableType}
                             detailPresenterFactory={detailPresenterFactory}
                         />

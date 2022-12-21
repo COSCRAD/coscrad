@@ -38,7 +38,7 @@ export const useLoadableConnectionsToResource = (
 
     const isTargetCompositeIdentifier = compositeIdentifierMatches(compositeIdentifierToMatch);
 
-    const searchResult = data.filter(
+    const searchResult = data.entities.filter(
         ({ connectedResources, connectionType }: INoteViewModel) =>
             connectionType === EdgeConnectionType.dual &&
             connectedResources.some(({ compositeIdentifier }) =>

@@ -1,48 +1,37 @@
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from '../../app/hooks';
-import { RootState } from '../../store';
-import { fetchNotes } from '../../store/slices/notes/thunks';
+import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
+import { useLoadableNoteById } from '../../store/slices/notes/hooks';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
-import { ErrorDisplay } from '../error-display/error-display';
 import { CategorizablesOfMultipleTypeContainer } from '../higher-order-components';
-import { Loading } from '../Loading';
+import { displayLoadableSearchResult } from '../higher-order-components/display-loadable-search-result';
 import { fullViewCategorizablePresenterFactory } from '../resources/factories/full-view-categorizable-presenter-factory';
 import { NoteDetailFullViewPresenter } from './note-detail.full-view.presenter';
 
 export const NoteDetailContainer = (): JSX.Element => {
+    const id = useIdFromLocation();
+
+    const loadableNote = useLoadableNoteById(id);
+
+    const Presenter = displayLoadableSearchResult(NoteDetailFullViewPresenter);
+
     /**
-     * TODO Once Notes follow the standard `IIndexQueryResult` structure, refactor
-     * using the same abstractions as in resource index-to-detail flows.
+     * TODO Now might be a good time for a helper that composes loadables.
      */
-    const idFromLocation = useIdFromLocation();
-
-    const dispatch = useAppDispatch();
-
-    const { data: allNotes, isLoading, errorInfo } = useSelector((state: RootState) => state.notes);
-
-    useEffect(() => {
-        if (allNotes === null) dispatch(fetchNotes());
-    }, [allNotes, dispatch]);
-
-    if (errorInfo) return <ErrorDisplay {...errorInfo} />;
-
-    if (isLoading || allNotes === null) return <Loading />;
-
-    const note = allNotes.find(({ id }) => id === idFromLocation);
-
-    // Make this render a <NotFound />
-    if (!note) return <div>Not Found</div>;
-
     return (
         <div>
-            <NoteDetailFullViewPresenter {...note} />
-            <CategorizablesOfMultipleTypeContainer
-                detailPresenterFactory={fullViewCategorizablePresenterFactory}
-                members={note.connectedResources.map(
-                    ({ compositeIdentifier }) => compositeIdentifier
-                )}
-            />
+            <Presenter {...loadableNote} />
+            {loadableNote.data && loadableNote.data !== NOT_FOUND && (
+                <CategorizablesOfMultipleTypeContainer
+                    detailPresenterFactory={fullViewCategorizablePresenterFactory}
+                    members={loadableNote.data.connectedResources.map(
+                        ({ compositeIdentifier }) => compositeIdentifier
+                    )}
+                    heading={`${
+                        loadableNote.data.connectedResources.length > 1
+                            ? 'Connects the following resources'
+                            : 'About the following resource'
+                    }`}
+                />
+            )}
         </div>
     );
 };

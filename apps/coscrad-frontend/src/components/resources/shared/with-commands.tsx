@@ -1,13 +1,16 @@
-import { IBaseViewModel, IDetailQueryResult } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { CommandPanel } from '../../commands';
 
 export const WithCommands =
-    (WrappedComponent: FunctionalComponent<IDetailQueryResult<IBaseViewModel>>) =>
-    (props: IDetailQueryResult<IBaseViewModel>) =>
+    <TProps,>(
+        WrappedComponent: FunctionalComponent<TProps>,
+        mapPropsToActions: (props: TProps) => ICommandFormAndLabels[]
+    ) =>
+    (props: TProps) =>
         (
             <div>
-                {WrappedComponent(props as unknown as T)}
-                <CommandPanel actions={props.actions} />
+                {WrappedComponent(props)}
+                <CommandPanel actions={mapPropsToActions(props)} />
             </div>
         );
