@@ -1,48 +1,33 @@
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from '../../app/hooks';
-import { RootState } from '../../store';
-import { fetchNotes } from '../../store/slices/notes/thunks';
+import { useLoadableNoteById } from '../../store/slices/notes/hooks';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
-import { ErrorDisplay } from '../error-display/error-display';
 import { CategorizablesOfMultipleTypeContainer } from '../higher-order-components';
-import { Loading } from '../Loading';
-import { fullViewCategorizablePresenterFactory } from '../resources/factories/full-view-categorizable-presenter-factory';
+import { displayLoadableSearchResult } from '../higher-order-components/display-loadable-search-result';
 import { NoteDetailFullViewPresenter } from './note-detail.full-view.presenter';
 
 export const NoteDetailContainer = (): JSX.Element => {
-    /**
-     * TODO Once Notes follow the standard `IIndexQueryResult` structure, refactor
-     * using the same abstractions as in resource index-to-detail flows.
-     */
-    const idFromLocation = useIdFromLocation();
+    const id = useIdFromLocation();
 
-    const dispatch = useAppDispatch();
+    const loadableNote = useLoadableNoteById(id);
 
-    const { data: allNotes, isLoading, errorInfo } = useSelector((state: RootState) => state.notes);
+    const Presenter = displayLoadableSearchResult(NoteDetailFullViewPresenter);
 
-    useEffect(() => {
-        if (allNotes === null) dispatch(fetchNotes());
-    }, [allNotes, dispatch]);
-
-    if (errorInfo) return <ErrorDisplay {...errorInfo} />;
-
-    if (isLoading || allNotes === null) return <Loading />;
-
-    const note = allNotes.find(({ id }) => id === idFromLocation);
-
-    // Make this render a <NotFound />
-    if (!note) return <div>Not Found</div>;
+    const AssociatedResourcesPanel = displayLoadableSearchResult(
+        CategorizablesOfMultipleTypeContainer,
+        ({ connectedResources }) =>
+            connectedResources.map(({ compositeIdentifier }) => ({
+                compositeIdentifier,
+                heading:
+                    connectedResources.length > 1
+                        ? 'Connects the following resources'
+                        : 'About the following resource',
+            }))
+    );
 
     return (
         <div>
-            <NoteDetailFullViewPresenter {...note} />
-            <CategorizablesOfMultipleTypeContainer
-                detailPresenterFactory={fullViewCategorizablePresenterFactory}
-                members={note.connectedResources.map(
-                    ({ compositeIdentifier }) => compositeIdentifier
-                )}
-            />
+            <Presenter {...loadableNote} />
+
+            <AssociatedResourcesPanel {...loadableNote} />
         </div>
     );
 };

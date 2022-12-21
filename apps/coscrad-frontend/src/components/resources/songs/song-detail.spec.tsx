@@ -6,7 +6,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
-import { buildResourceDetailPageRendererForTest } from '../test-utils';
+import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 import { buildDummySongs } from './test-utils/build-dummy-songs';
 
 jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
@@ -28,7 +28,7 @@ const dummyIndexResponse = buildMockIndexResponse(
     []
 );
 
-const act = buildResourceDetailPageRendererForTest(ResourceType.song);
+const act = buildCategorizableDetailPageRendererForTest(ResourceType.song);
 
 const mockGetNotesHandler = buildMockGetNotesHandler();
 
