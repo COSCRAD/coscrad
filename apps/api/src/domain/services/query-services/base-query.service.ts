@@ -19,6 +19,7 @@ import { Resource } from '../../models/resource.entity';
 import { validAggregateOrThrow } from '../../models/shared/functional';
 import { Tag } from '../../models/tag/tag.entity';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
+import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { ISpecification } from '../../repositories/interfaces/specification.interface';
 import { AggregateId, isAggregateId } from '../../types/AggregateId';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
@@ -34,7 +35,7 @@ export abstract class BaseQueryService<
     protected abstract readonly type: ResourceType;
 
     constructor(
-        @Inject(RepositoryProvider) protected readonly repositoryProvider: RepositoryProvider,
+        @Inject(RepositoryProvider) protected readonly repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
     ) {}
 

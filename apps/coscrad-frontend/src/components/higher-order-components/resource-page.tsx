@@ -1,9 +1,8 @@
-import {
-    CategorizableType,
-    CategorizableTypeToViewModel,
-    ResourceType,
-} from '@coscrad/api-interfaces';
+import { CategorizableType, CategorizableTypeToViewModel } from '@coscrad/api-interfaces';
+import { useContext } from 'react';
+import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
+import { WithCommands } from '../resources/shared';
 import { AggregateDetailContainer } from './aggregate-detail-container';
 
 type DetailPresenter<T extends CategorizableType> = (
@@ -11,7 +10,7 @@ type DetailPresenter<T extends CategorizableType> = (
 ) => JSX.Element;
 
 interface ResourcePageProps<T extends CategorizableType> {
-    resourceType: ResourceType;
+    categorizableType: CategorizableType;
     detailPresenterFactory: (categorizableType: T) => DetailPresenter<T>;
 }
 
@@ -26,16 +25,33 @@ interface ResourcePageProps<T extends CategorizableType> {
  * We may want to put this in `/Components/Resources/Shared`.
  */
 export const ResourcePage = <T extends CategorizableType>({
-    resourceType,
+    categorizableType,
     detailPresenterFactory,
 }: ResourcePageProps<T>): JSX.Element => {
     const id = useIdFromLocation();
 
-    const compositeIdentifier = { type: resourceType, id };
+    const { shouldEnableWebOfKnowledgeForResources } = useContext(ConfigurableContentContext);
+
+    // TODO Determine this from user's roles
+    const shouldShowCommands = true;
+
+    const compositeIdentifier = { type: categorizableType, id };
+
+    const EnhancedAggregateDetailContainer = (
+        [
+            [WithCommands, shouldShowCommands],
+            // [WithWebOfKnowledge, shouldEnableWebOfKnowledgeForResources],
+        ] as const
+    ).reduce(
+        (PartiallyDecoratedComponent, [Wrap, predicate]) =>
+            predicate ? Wrap(PartiallyDecoratedComponent) : PartiallyDecoratedComponent,
+
+        AggregateDetailContainer
+    );
 
     return (
         <div>
-            <AggregateDetailContainer
+            <EnhancedAggregateDetailContainer
                 compositeIdentifier={compositeIdentifier}
                 detailPresenterFactory={detailPresenterFactory}
             />

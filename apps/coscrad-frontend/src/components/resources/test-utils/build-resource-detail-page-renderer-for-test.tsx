@@ -17,7 +17,7 @@ export const buildResourceDetailPageRendererForTest =
                 idInLocation,
                 `/${routes.resources.ofType(resourceType).detail()}/`,
                 <ResourcePage
-                    resourceType={resourceType}
+                    categorizableType={resourceType}
                     detailPresenterFactory={fullViewCategorizablePresenterFactory}
                 />
             )

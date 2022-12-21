@@ -5,9 +5,9 @@ import {
     IEdgeConnectionMember,
     INoteViewModel,
 } from '@coscrad/api-interfaces';
+import { NoteIndexState } from '../../store/slices/notes/types/note-index-state';
 import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
-import { HasData } from '../higher-order-components';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
 
 const formatCompositeIentifier = ({ type, id }: ICompositeIdentifier): string => `${type}/${id}`;
@@ -52,7 +52,7 @@ const DisplayConnectedResourcesInfo = ({
     return <div>{fromMessage}</div>;
 };
 
-export const NoteIndexPresenter = ({ data: notes }: HasData<INoteViewModel[]>): JSX.Element => {
+export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Element => {
     const headingLabels: HeadingLabel<INoteViewModel>[] = [
         {
             propertyKey: 'id',
