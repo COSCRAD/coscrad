@@ -8,14 +8,14 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "unique identifier of the user who will be granted read access to this resource",
+            "label": "user ID",
             "name": "userId",
             "type": "TEXT_FIELD",
           },
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "the composite identifier of the resource to which the user will receive access",
+            "label": "resource composite identifier",
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
@@ -86,14 +86,14 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "unique identifier of the user who will be granted read access to this resource",
+            "label": "user ID",
             "name": "userId",
             "type": "TEXT_FIELD",
           },
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "the composite identifier of the resource to which the user will receive access",
+            "label": "resource composite identifier",
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
@@ -171,14 +171,14 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "unique identifier of the user who will be granted read access to this resource",
+            "label": "user ID",
             "name": "userId",
             "type": "TEXT_FIELD",
           },
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "the composite identifier of the resource to which the user will receive access",
+            "label": "resource composite identifier",
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
@@ -243,14 +243,14 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "unique identifier of the user who will be granted read access to this resource",
+            "label": "user ID",
             "name": "userId",
             "type": "TEXT_FIELD",
           },
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "the composite identifier of the resource to which the user will receive access",
+            "label": "resource composite identifier",
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
@@ -298,14 +298,14 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "unique identifier of the user who will be granted read access to this resource",
+            "label": "user ID",
             "name": "userId",
             "type": "TEXT_FIELD",
           },
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "the composite identifier of the resource to which the user will receive access",
+            "label": "resource composite identifier",
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
@@ -368,14 +368,14 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "unique identifier of the user who will be granted read access to this resource",
+            "label": "user ID",
             "name": "userId",
             "type": "TEXT_FIELD",
           },
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "the composite identifier of the resource to which the user will receive access",
+            "label": "resource composite identifier",
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
@@ -449,14 +449,14 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "unique identifier of the user who will be granted read access to this resource",
+            "label": "user ID",
             "name": "userId",
             "type": "TEXT_FIELD",
           },
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "the composite identifier of the resource to which the user will receive access",
+            "label": "resource composite identifier",
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
@@ -482,14 +482,14 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "unique identifier of the user who will be granted read access to this resource",
+            "label": "user ID",
             "name": "userId",
             "type": "TEXT_FIELD",
           },
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "the composite identifier of the resource to which the user will receive access",
+            "label": "resource composite identifier",
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },
@@ -541,14 +541,14 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "unique identifier of the user who will be granted read access to this resource",
+            "label": "user ID",
             "name": "userId",
             "type": "TEXT_FIELD",
           },
           Object {
-            "description": "add description",
-            "label": "add label",
+            "description": "the composite identifier of the resource to which the user will receive access",
+            "label": "resource composite identifier",
             "name": "resourceCompositeIdentifier",
             "type": "JSON_INPUT",
           },

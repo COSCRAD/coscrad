@@ -69,13 +69,18 @@ describe('When querying for edge connections', () => {
 
             expect(result.status).toBe(httpStatusCodes.ok);
 
-            expect(result.body?.length).toBe(connections.length);
+            expect(result.body.entities.length).toBe(connections.length);
 
             expect(result.body).toMatchSnapshot();
         });
     });
 
-    describe(`GET /connections/selfNotes`, () => {
+    /**
+     * We removed this, currently unused, endpoint when refactoring to use
+     * a proper query service (remove domain logic from the controller), so we are
+     * skipping this test.
+     */
+    describe.skip(`GET /connections/selfNotes`, () => {
         describe(`when the resource composite id is valid`, () => {
             Object.values(ResourceType).forEach((resourceType) =>
                 describe(`for a resource of type: ${resourceType}`, () => {
@@ -120,7 +125,9 @@ describe('When querying for edge connections', () => {
 
                         expect(queryResult.status).toBe(httpStatusCodes.ok);
 
-                        expect(queryResult.body.length).toBe(expectedNumberOfFoundConnections);
+                        expect(queryResult.body.entities.length).toBe(
+                            expectedNumberOfFoundConnections
+                        );
 
                         expect(queryResult.body).toMatchSnapshot();
                     });
@@ -153,7 +160,12 @@ describe('When querying for edge connections', () => {
         });
     });
 
-    describe(`GET /connections/forResource`, () => {
+    /**
+     * We removed this, currently unused, endpoint when refactoring to use
+     * a proper query service (remove domain logic from the controller), so we are
+     * skipping this test.
+     */
+    describe.skip(`GET /connections/forResource`, () => {
         describe(`when the id for the resource is invalid`, () => {
             it(`should return a 500`, async () => {
                 return await request(app.getHttpServer())

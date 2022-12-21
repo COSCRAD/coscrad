@@ -6,7 +6,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
-import { buildResourceDetailPageRendererForTest } from '../test-utils';
+import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 
 jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
     /* eslint-disable-next-line */
@@ -37,7 +37,7 @@ const dummyTranscribedAudioItems: ITranscribedAudioViewModel[] = [
 
 const endpoint = `${getConfig().apiUrl}/resources/transcribedAudioItems`;
 
-const act = buildResourceDetailPageRendererForTest(ResourceType.transcribedAudio);
+const act = buildCategorizableDetailPageRendererForTest(ResourceType.transcribedAudio);
 
 const mockGetNotesHandler = buildMockGetNotesHandler();
 

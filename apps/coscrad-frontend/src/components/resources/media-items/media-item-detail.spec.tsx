@@ -6,7 +6,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
-import { buildResourceDetailPageRendererForTest } from '../test-utils';
+import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 import { buildDummyMediaItems } from './test-utils/build-dummy-media-items';
 
 jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
@@ -27,7 +27,7 @@ const dummyIndexResponse = buildMockIndexResponse(
     []
 );
 
-const act = buildResourceDetailPageRendererForTest(ResourceType.mediaItem);
+const act = buildCategorizableDetailPageRendererForTest(ResourceType.mediaItem);
 const mockGetNotesHandler = buildMockGetNotesHandler();
 
 describe('media item detail', () => {
