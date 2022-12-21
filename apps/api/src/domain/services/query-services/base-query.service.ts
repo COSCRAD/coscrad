@@ -4,7 +4,6 @@ import {
     IIndexQueryResult,
     WithTags,
 } from '@coscrad/api-interfaces';
-import { CoscradUserRole } from '@coscrad/data-types';
 import { Inject } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import mixTagsIntoViewModel from '../../../app/controllers/utilities/mixTagsIntoViewModel';
@@ -24,35 +23,9 @@ import { ISpecification } from '../../repositories/interfaces/specification.inte
 import { AggregateId, isAggregateId } from '../../types/AggregateId';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
+import { buildAccessFilter } from './utilities/buildAccessFilter';
 
 type ViewModelWithTags<T> = WithTags<T>;
-
-type ResourceFilter = (resource: Resource) => boolean;
-
-const buildAccessFilter = (userWithGroups?: CoscradUserWithGroups): ResourceFilter => {
-    if (isNullOrUndefined(userWithGroups)) return (resource: Resource) => resource.published;
-
-    if (!(userWithGroups instanceof CoscradUserWithGroups)) {
-        throw new InternalError(`Invalid user with groups encountered: ${userWithGroups}`);
-    }
-
-    const { roles } = userWithGroups;
-
-    if (!roles) {
-        throw new InternalError(`Invalid user with groups encountered: ${userWithGroups.toDTO()}`);
-    }
-
-    return userWithGroups.roles.includes(CoscradUserRole.projectAdmin) ||
-        userWithGroups.roles.includes(CoscradUserRole.superAdmin)
-        ? (_: Resource) => true
-        : (resource: Resource) =>
-              resource.published ||
-              resource.queryAccessControlList.canUser(userWithGroups.id) ||
-              userWithGroups.groups.some(({ id: groupId }) =>
-                  resource.queryAccessControlList.canGroup(groupId)
-              );
-};
 
 export abstract class BaseQueryService<
     TDomainModel extends Resource,

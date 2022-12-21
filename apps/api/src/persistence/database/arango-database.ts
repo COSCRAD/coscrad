@@ -30,9 +30,6 @@ const interpretQueryOperatorForAQL = (operator: QueryOperator): string => {
     return lookupResult;
 };
 
-/**
- * TODO It seems we should sanatize inputs here.
- */
 export class ArangoDatabase {
     #db: Database;
 
