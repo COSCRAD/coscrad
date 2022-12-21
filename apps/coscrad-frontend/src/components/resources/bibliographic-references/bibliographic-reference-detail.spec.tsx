@@ -6,7 +6,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
-import { buildResourceDetailPageRendererForTest } from '../test-utils';
+import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 import { buildDummyBibliographicReferences } from './test-utils/build-dummy-bibliographic-references';
 
 const dummyBibliographicReferences = buildDummyBibliographicReferences();
@@ -17,7 +17,7 @@ const { id: idToFind } = referenceToFind;
 
 const endpoint = `${getConfig().apiUrl}/Resources/bibliographicReferences`;
 
-const act = buildResourceDetailPageRendererForTest(ResourceType.bibliographicReference);
+const act = buildCategorizableDetailPageRendererForTest(ResourceType.bibliographicReference);
 
 const mockGetNotesHandler = buildMockGetNotesHandler();
 

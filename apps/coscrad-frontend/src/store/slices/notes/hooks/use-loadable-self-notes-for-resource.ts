@@ -44,7 +44,7 @@ export const useLoadableSelfNotesForResource = (
     // The following helper is curried
     const isTargetCompositeIdentifier = compositeIdentifierMatches(compositeIdentifierToMatch);
 
-    const selfNotesForThisResource = data
+    const selfNotesForThisResource = data.entities
         .filter(
             ({ connectedResources: relatedResources, connectionType }: INoteViewModel) =>
                 connectionType === EdgeConnectionType.self &&

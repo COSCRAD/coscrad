@@ -16,6 +16,7 @@ import { assertElementWithEveryIdRenderedForIndex } from '../../../../../utils/t
 import { buildMockSuccessfulGETHandler } from '../../../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../../../utils/test-utils/setup-test-server';
+import { buildMockIndexResponse } from '../../../../../utils/test-utils/test-data';
 import { SelfNotesPanelContainer } from './self-notes-panel.container';
 
 const resourceOfFocus = buildDummySongs()[0];
@@ -56,7 +57,10 @@ describe(`Self Notes Panel`, () => {
             setupTestServer(
                 buildMockSuccessfulGETHandler({
                     endpoint: noteEndpoint,
-                    response: dummyNotes,
+                    response: buildMockIndexResponse(
+                        dummyNotes.map((note) => [note, []]),
+                        []
+                    ),
                 })
             );
 
@@ -77,7 +81,7 @@ describe(`Self Notes Panel`, () => {
             setupTestServer(
                 buildMockSuccessfulGETHandler({
                     endpoint: noteEndpoint,
-                    response: [],
+                    response: buildMockIndexResponse([], []),
                 })
             );
 

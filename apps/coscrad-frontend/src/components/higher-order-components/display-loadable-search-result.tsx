@@ -7,13 +7,17 @@ import { MapLoadedDataToProps } from './types';
 
 export const displayLoadableSearchResult =
     <T, U>(
-        WrappedPresenterComponent: FunctionalComponent<U>,
+        // A component that depends on the data already being loaded
+        WrappedComponent: FunctionalComponent<U>,
         /**
+         * Optional mapping from the loaded data to the dependent component's
+         * props.
+         *
          * This "Inversion of Control" provides flexibility. For example,
          * we typically prefer to nest array data within an object. In case no
          * map is provided, the default behaviour is to treat the loadable as the props.
          */
-        mapLoadedDataToPresenterProps?: MapLoadedDataToProps<T, U>
+        mapLoadedDataToProps?: MapLoadedDataToProps<T, U>
     ) =>
     (searchResult: IMaybeLoadable<T>) => {
         const { data } = searchResult;
@@ -21,8 +25,8 @@ export const displayLoadableSearchResult =
         if (data === NOT_FOUND) return <NotFoundPresenter />;
 
         return displayLoadableWithErrorsAndLoading(
-            WrappedPresenterComponent,
-            mapLoadedDataToPresenterProps
+            WrappedComponent,
+            mapLoadedDataToProps
             // We have already checked for the case that NOT_FOUND is provided
             // we may want to tighten up types here
         )(searchResult as ILoadable<T>);
