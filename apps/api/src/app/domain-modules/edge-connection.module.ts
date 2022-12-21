@@ -1,5 +1,5 @@
+import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
-import { CommandModule } from '../../../../../libs/commands/src';
 import { EdgeConnectionQueryService } from '../../domain/services/query-services/edge-connection-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
