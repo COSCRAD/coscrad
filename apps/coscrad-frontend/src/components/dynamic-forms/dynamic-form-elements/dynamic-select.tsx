@@ -8,6 +8,10 @@ import {
 } from '@coscrad/api-interfaces';
 import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
 import { buildUseLoadableForSingleCategorizableType } from '../../higher-order-components/buildUseLoadableResourcesOfSingleType';
+import {
+    AggregateStringSummarizer,
+    aggregateStringSummarizerFactory,
+} from '../../resources/factories/aggregate-string-summarizer-factory';
 import { StaticSelect } from './static-select';
 
 type SimpleFormField = Omit<IFormField, 'options'>;
@@ -16,17 +20,18 @@ interface DynamicSelectProps {
     aggregateType: AggregateType;
     simpleFormField: SimpleFormField;
     onNewSelection?: (name: string, value: string | boolean) => void;
+    currentValue: string;
 }
 
-const buildFormFieldFromEntities = (
-    entities: IDetailQueryResult<IBaseViewModel>[],
-    simpleFormField: SimpleFormField
+const buildFormFieldFromEntities = <T extends IDetailQueryResult<IBaseViewModel>>(
+    entities: T[],
+    simpleFormField: SimpleFormField,
+    stringSummarizer: AggregateStringSummarizer<T>
 ): IFormField => ({
     ...simpleFormField,
     options: entities.map((entity) => ({
         value: entity.id,
-        // TODO We need a summary view for every aggregate
-        display: `Entity: ${entity.id}`,
+        display: stringSummarizer(entity),
     })),
 });
 
@@ -34,6 +39,7 @@ export const DynamicSelect = ({
     aggregateType,
     simpleFormField,
     onNewSelection,
+    currentValue,
 }: DynamicSelectProps): JSX.Element => {
     if (!isResourceType(aggregateType)) {
         throw new Error(
@@ -41,6 +47,8 @@ export const DynamicSelect = ({
         );
     }
     const loadableModels = buildUseLoadableForSingleCategorizableType(aggregateType)();
+
+    const stringSummarizer = aggregateStringSummarizerFactory(aggregateType);
 
     const SelectPresenter = ({
         entities,
@@ -50,8 +58,9 @@ export const DynamicSelect = ({
         simpleFormField: SimpleFormField;
     }) => (
         <StaticSelect
-            formField={buildFormFieldFromEntities(entities, simpleFormField)}
+            formField={buildFormFieldFromEntities(entities, simpleFormField, stringSummarizer)}
             onNewSelection={onNewSelection}
+            currentValue={currentValue}
         />
     );
 

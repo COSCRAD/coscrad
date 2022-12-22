@@ -13,6 +13,9 @@ export const CommandPanel = ({ actions }: CommandProps) => {
 
     const [formState, updateForm] = useFormState();
 
+    // Do not render if there are no available actions
+    if (actions.length === 0) return null;
+
     const selectedCommand = actions.find((action) => action.type === selectedCommandType);
 
     if (selectedCommandType === null)
@@ -60,6 +63,7 @@ export const CommandPanel = ({ actions }: CommandProps) => {
                         setSelectedCommandType(null);
                     }}
                     onFieldUpdate={updateForm}
+                    formState={formState}
                 />
             </div>
         </>
