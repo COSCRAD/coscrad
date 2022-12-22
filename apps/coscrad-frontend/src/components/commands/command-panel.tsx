@@ -1,14 +1,19 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { AggregateCompositeIdentifier, ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { useState } from 'react';
 import { DynamicForm } from '../dynamic-forms/dynamic-form';
 import { useFormState } from '../dynamic-forms/form-state';
 import { CommandButton } from './command-button';
 
-interface CommandProps {
+export const INDEX_COMMAND_CONTEXT = 'index';
+
+type CommandContext = typeof INDEX_COMMAND_CONTEXT | AggregateCompositeIdentifier;
+
+interface CommandPanelProps {
     actions: ICommandFormAndLabels[];
+    commandContext: CommandContext;
 }
 
-export const CommandPanel = ({ actions }: CommandProps) => {
+export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => {
     const [selectedCommandType, setSelectedCommandType] = useState<string>(null);
 
     const [formState, updateForm] = useFormState();
@@ -54,11 +59,24 @@ export const CommandPanel = ({ actions }: CommandProps) => {
                      * an `ok` button via either this panel or a modal.
                      */
                     onSubmitForm={() => {
-                        console.log(
-                            `You submitted: ${selectedCommand.type} with payload: ${JSON.stringify(
-                                formState
-                            )}`
-                        );
+                        const autoFillFields =
+                            commandContext === INDEX_COMMAND_CONTEXT
+                                ? {}
+                                : {
+                                      compositeIdentifier: commandContext,
+                                  };
+
+                        const commandFsa = {
+                            type: selectedCommand.type,
+                            payload: {
+                                ...autoFillFields,
+                                ...formState,
+                            },
+                        };
+
+                        console.log({
+                            submittedCommandWithFSA: commandFsa,
+                        });
 
                         setSelectedCommandType(null);
                     }}

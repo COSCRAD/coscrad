@@ -1,6 +1,6 @@
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
-import { CommandPanel } from '../commands';
+import { CommandPanel, INDEX_COMMAND_CONTEXT } from '../commands';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 
 export interface AggregateIndexContainerProps<T, UPresenterProps = T> {
@@ -22,7 +22,13 @@ export const AggregateIndexContainer = <T, U = T>({
             <Presenter {...loadableModels} />
             {/* TODO [https://www.pivotaltracker.com/story/show/183456862] */}
             {/* @ts-expect-error fix index response types */}
-            {loadableModels.data?.actions && <CommandPanel actions={loadableModels.data.actions} />}
+            {loadableModels.data?.actions && (
+                <CommandPanel
+                    // @ts-expect-error fix index response types
+                    actions={loadableModels.data.actions}
+                    commandContext={INDEX_COMMAND_CONTEXT}
+                />
+            )}
         </div>
     );
 };

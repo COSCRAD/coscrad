@@ -1,3 +1,4 @@
+export * from './aggregate-composite-identifier';
 export * from './aggregate-type.enum';
 export * from './base.view-model.interface';
 export * from './categorizable-composite-identifier';

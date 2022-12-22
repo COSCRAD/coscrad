@@ -52,8 +52,13 @@ export const CategorizablePage = <T extends CategorizableType>({
 
     const EnhancedDetailPresenterFactory = shouldShowCommands
         ? (categorizableType: CategorizableType) =>
-              // @ts-expect-error FIX ME
-              WithCommands(detailPresenterFactory(categorizableType), ({ actions }) => actions)
+              WithCommands(
+                  // @ts-expect-error FIX ME
+                  detailPresenterFactory(categorizableType),
+                  // @ts-expect-error FIX ME
+                  ({ actions }) => actions,
+                  (_) => compositeIdentifier
+              )
         : detailPresenterFactory;
 
     return (

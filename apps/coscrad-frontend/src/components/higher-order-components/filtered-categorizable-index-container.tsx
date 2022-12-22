@@ -6,6 +6,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
+import { INDEX_COMMAND_CONTEXT } from '../commands';
 import { WithCommands } from '../resources/shared';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 
@@ -40,10 +41,10 @@ export const FilteredCategorizableIndexContainer = <
 
     const IndexPresenterWithCommands = WithCommands(
         IndexPresenter,
-        //  @ts-expect-error fix me
-
+        // @ts-expect-error fix me
         ({ indexScopedActions }: ICategorizableIndexQueryResult<IBaseViewModel>) =>
-            indexScopedActions
+            indexScopedActions,
+        (_) => INDEX_COMMAND_CONTEXT
     );
 
     // Wrap in error and pending presentation
