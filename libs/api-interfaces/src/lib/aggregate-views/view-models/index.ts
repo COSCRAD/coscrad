@@ -1,5 +1,7 @@
+export * from './aggregate-type.enum';
 export * from './base.view-model.interface';
 export * from './categorizable-composite-identifier';
+export * from './categorizable-type.enum';
 export * from './category-tree';
 export * from './has-id.interface';
 export * from './note';

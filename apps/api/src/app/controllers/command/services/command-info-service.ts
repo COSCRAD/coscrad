@@ -2,6 +2,7 @@ import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { CommandHandlerService, CommandMetadataBase } from '@coscrad/commands';
 import { ClassSchema, getCoscradDataSchema } from '@coscrad/data-types';
 import { Injectable } from '@nestjs/common';
+import { Aggregate } from '../../../../domain/models/aggregate.entity';
 import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
 import isStringWithNonzeroLength from '../../../../lib/utilities/isStringWithNonzeroLength';
@@ -11,7 +12,7 @@ import { INDEX_SCOPED_COMMANDS } from '../command-info/constants';
 type CommandTypeFilter = (commandType: string) => boolean;
 
 const buildCommandTypeFilter = (
-    context?: DomainModelCtor | CommandWriteContext | string[]
+    context?: DomainModelCtor | DetailScopedCommandWriteContext | string[]
 ): CommandTypeFilter => {
     if (isNullOrUndefined(context)) return (_: string) => true;
 
@@ -32,12 +33,15 @@ type CommandInfo = CommandMetadataBase & {
     schema: ClassSchema;
 };
 
-interface CommandWriteContext {
-    getAvailableCommands(): string[];
-}
+export type DetailScopedCommandWriteContext = Aggregate;
 
-const isCommandWriteContext = (input: unknown): input is CommandWriteContext =>
-    typeof (input as CommandWriteContext).getAvailableCommands === 'function';
+type IndexScopedCommandWriteContext = DomainModelCtor;
+
+export const isCommandWriteContext = (input: unknown): input is DetailScopedCommandWriteContext =>
+    typeof (input as DetailScopedCommandWriteContext).getAvailableCommands === 'function';
+
+// TODO remove string[]
+export type CommandContext = IndexScopedCommandWriteContext | DetailScopedCommandWriteContext;
 
 @Injectable()
 export class CommandInfoService {
@@ -46,11 +50,8 @@ export class CommandInfoService {
     // TODO Unit test the filtering logic
     getCommandInfo(): ICommandFormAndLabels[];
     getCommandInfo(context: DomainModelCtor): ICommandFormAndLabels[];
-    getCommandInfo(context: CommandWriteContext): ICommandFormAndLabels[];
-    getCommandInfo(context: string[]): ICommandFormAndLabels[];
-    getCommandInfo(
-        context?: DomainModelCtor | CommandWriteContext | string[]
-    ): ICommandFormAndLabels[] {
+    getCommandInfo(context: DetailScopedCommandWriteContext): ICommandFormAndLabels[];
+    getCommandInfo(context?: CommandContext): ICommandFormAndLabels[] {
         const commandTypeFilter = buildCommandTypeFilter(context);
 
         const allCommandsAndMeta = this.commandHandlerService.getAllCommandCtorsAndMetadata();
@@ -66,7 +67,7 @@ export class CommandInfoService {
                 label,
                 description,
                 type,
-                form: buildCommandForm(schema),
+                form: buildCommandForm(schema, context),
             }));
     }
 }
