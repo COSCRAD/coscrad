@@ -16,6 +16,14 @@ Object {
     "isOptional": true,
     "label": "label for property: averageRating",
   },
+  "catalogId": Object {
+    "coscradDataType": "UUID",
+    "description": "description of property: catalogId",
+    "isArray": false,
+    "isOptional": false,
+    "label": "label for property: catalogId",
+    "referenceTo": "widget",
+  },
   "creatorType": Object {
     "complexDataType": "ENUM",
     "description": "description of property: creatorType",
@@ -148,6 +156,14 @@ Object {
     "isOptional": true,
     "label": "label for property: optionalRawData",
   },
+  "parentWidgetId": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "description of property: parentWidgetId",
+    "isArray": false,
+    "isOptional": false,
+    "label": "label for property: parentWidgetId",
+    "referenceTo": "widget",
+  },
   "primaryWhatsit": Object {
     "complexDataType": "NESTED_TYPE",
     "description": "description of property: primaryWhatsit",
@@ -230,6 +246,14 @@ Object {
         "label": "label for property: whatsitName",
       },
     },
+  },
+  "siblingWidgetIds": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "description of property: siblingWidgetIds",
+    "isArray": true,
+    "isOptional": false,
+    "label": "label for property: siblingWidgetIds",
+    "referenceTo": "widget",
   },
   "specSheetUrl": Object {
     "coscradDataType": "URL",

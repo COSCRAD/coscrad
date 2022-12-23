@@ -1,4 +1,4 @@
-import { CategorizableType, CategorizableTypeToViewModel } from '@coscrad/api-interfaces';
+import { AggregateTypeToViewModel, CategorizableType } from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
@@ -10,7 +10,7 @@ import {
 } from './aggregate-detail-container';
 
 type DetailPresenter<T extends CategorizableType> = (
-    viewModel: CategorizableTypeToViewModel[T]
+    viewModel: AggregateTypeToViewModel[T]
 ) => JSX.Element;
 
 interface ResourcePageProps<T extends CategorizableType> {
@@ -45,15 +45,20 @@ export const CategorizablePage = <T extends CategorizableType>({
 
     const EnhancedAggregateDetailContainer = shouldEnableWebOfKnowledgeForResources
         ? // @ts-expect-error FIX ME
-          WithWebOfKnowledge<AggregateDetailContainerProps<CategorizableTypeToViewModel<T>>>(
+          WithWebOfKnowledge<AggregateDetailContainerProps<AggregateTypeToViewModel<T>>>(
               AggregateDetailContainer
           )
         : AggregateDetailContainer;
 
     const EnhancedDetailPresenterFactory = shouldShowCommands
         ? (categorizableType: CategorizableType) =>
-              // @ts-expect-error FIX ME
-              WithCommands(detailPresenterFactory(categorizableType), ({ actions }) => actions)
+              WithCommands(
+                  // @ts-expect-error FIX ME
+                  detailPresenterFactory(categorizableType),
+                  // @ts-expect-error FIX ME
+                  ({ actions }) => actions,
+                  (_) => compositeIdentifier
+              )
         : detailPresenterFactory;
 
     return (

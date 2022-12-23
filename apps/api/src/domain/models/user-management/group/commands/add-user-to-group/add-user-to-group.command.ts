@@ -1,6 +1,7 @@
 import { Command, ICommand } from '@coscrad/commands';
-import { UUID } from '@coscrad/data-types';
+import { ReferenceTo, UUID } from '@coscrad/data-types';
 import { AggregateId } from '../../../../../types/AggregateId';
+import { AggregateType } from '../../../../../types/AggregateType';
 
 @Command({
     type: 'ADD_USER_TO_GROUP',
@@ -14,6 +15,7 @@ export class AddUserToGroup implements ICommand {
     })
     readonly groupId: AggregateId;
 
+    @ReferenceTo(AggregateType.user)
     @UUID({
         label: 'user ID',
         description: 'the ID of the user that will be added to this group',
