@@ -1,17 +1,26 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { AggregateCompositeIdentifier, ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { useState } from 'react';
 import { DynamicForm } from '../dynamic-forms/dynamic-form';
 import { useFormState } from '../dynamic-forms/form-state';
 import { CommandButton } from './command-button';
 
-interface CommandProps {
+export const INDEX_COMMAND_CONTEXT = 'index';
+
+type CommandContext = typeof INDEX_COMMAND_CONTEXT | AggregateCompositeIdentifier;
+
+interface CommandPanelProps {
     actions: ICommandFormAndLabels[];
+    // Remove this if it isn't used in ID generation
+    commandContext: CommandContext;
 }
 
-export const CommandPanel = ({ actions }: CommandProps) => {
+export const CommandPanel = ({ actions }: CommandPanelProps) => {
     const [selectedCommandType, setSelectedCommandType] = useState<string>(null);
 
     const [formState, updateForm] = useFormState();
+
+    // Do not render if there are no available actions
+    if (actions.length === 0) return null;
 
     const selectedCommand = actions.find((action) => action.type === selectedCommandType);
 
@@ -31,7 +40,7 @@ export const CommandPanel = ({ actions }: CommandProps) => {
     const {
         label,
         description,
-        form: { fields },
+        form: { fields, prepopulatedFields },
     } = selectedCommand;
 
     return (
@@ -51,15 +60,22 @@ export const CommandPanel = ({ actions }: CommandProps) => {
                      * an `ok` button via either this panel or a modal.
                      */
                     onSubmitForm={() => {
-                        console.log(
-                            `You submitted: ${selectedCommand.type} with payload: ${JSON.stringify(
-                                formState
-                            )}`
-                        );
+                        const commandFsa = {
+                            type: selectedCommand.type,
+                            payload: {
+                                ...(prepopulatedFields || {}),
+                                ...formState,
+                            },
+                        };
+
+                        console.log({
+                            submittedCommandWithFSA: commandFsa,
+                        });
 
                         setSelectedCommandType(null);
                     }}
                     onFieldUpdate={updateForm}
+                    formState={formState}
                 />
             </div>
         </>

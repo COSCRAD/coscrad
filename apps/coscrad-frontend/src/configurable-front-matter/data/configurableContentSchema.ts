@@ -1,6 +1,6 @@
 import {
+    AggregateTypeToViewModel,
     CategorizableType,
-    CategorizableTypeToViewModel,
     CoscradDataType,
     FromCoscradDataType,
     ICategorizableDetailQueryResult,
@@ -36,7 +36,7 @@ export enum DetailViewType {
 type IndexToDetailFlowDefinition<T extends CategorizableType> = {
     categorizableType: T;
     indexFilter?: (
-        viewModel: ICategorizableDetailQueryResult<CategorizableTypeToViewModel[T]>
+        viewModel: ICategorizableDetailQueryResult<AggregateTypeToViewModel[T]>
     ) => boolean;
     detailViewType: DetailViewType;
 };

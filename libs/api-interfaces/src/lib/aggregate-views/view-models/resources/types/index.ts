@@ -1,1 +1,1 @@
-export * from './categorizable-type-to-view-model';
+export * from './aggregate-type-to-view-model';
