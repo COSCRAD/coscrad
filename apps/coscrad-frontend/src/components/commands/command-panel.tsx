@@ -1,12 +1,20 @@
-import { AggregateCompositeIdentifier, ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import {
+    AggregateCompositeIdentifier,
+    AggregateType,
+    ICommandFormAndLabels,
+    isAggregateType,
+} from '@coscrad/api-interfaces';
 import { useState } from 'react';
+import { useLoadableGeneratedId } from '../../store/slices/id-generation';
 import { DynamicForm } from '../dynamic-forms/dynamic-form';
 import { useFormState } from '../dynamic-forms/form-state';
+import { ErrorDisplay } from '../error-display/error-display';
+import { Loading } from '../Loading';
 import { CommandButton } from './command-button';
 
 export const INDEX_COMMAND_CONTEXT = 'index';
 
-type CommandContext = typeof INDEX_COMMAND_CONTEXT | AggregateCompositeIdentifier;
+export type CommandContext = AggregateType | AggregateCompositeIdentifier;
 
 interface CommandPanelProps {
     actions: ICommandFormAndLabels[];
@@ -14,13 +22,20 @@ interface CommandPanelProps {
     commandContext: CommandContext;
 }
 
-export const CommandPanel = ({ actions }: CommandPanelProps) => {
+export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => {
     const [selectedCommandType, setSelectedCommandType] = useState<string>(null);
 
     const [formState, updateForm] = useFormState();
 
+    const { isLoading, errorInfo, data: generatedId } = useLoadableGeneratedId();
+
     // Do not render if there are no available actions
     if (actions.length === 0) return null;
+
+    // TODO Use one of our helpers for this
+    if (errorInfo) return <ErrorDisplay {...errorInfo} />;
+
+    if (isLoading || generatedId === null) return <Loading />;
 
     const selectedCommand = actions.find((action) => action.type === selectedCommandType);
 
@@ -40,7 +55,7 @@ export const CommandPanel = ({ actions }: CommandPanelProps) => {
     const {
         label,
         description,
-        form: { fields, prepopulatedFields },
+        form: { fields },
     } = selectedCommand;
 
     return (
@@ -63,7 +78,9 @@ export const CommandPanel = ({ actions }: CommandPanelProps) => {
                         const commandFsa = {
                             type: selectedCommand.type,
                             payload: {
-                                ...(prepopulatedFields || {}),
+                                aggregateCompositeIdentifier: isAggregateType(commandContext)
+                                    ? { type: commandContext, id: generatedId }
+                                    : commandContext,
                                 ...formState,
                             },
                         };

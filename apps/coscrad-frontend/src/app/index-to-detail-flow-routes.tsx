@@ -44,6 +44,7 @@ export const IndexToDetailFlowRoutes = () => {
                                 categorizableType
                             )}
                             filter={indexFilter}
+                            aggregateType={categorizableType}
                         />
                     }
                 />

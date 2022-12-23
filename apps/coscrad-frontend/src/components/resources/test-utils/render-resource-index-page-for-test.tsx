@@ -9,8 +9,10 @@ export const renderResourceIndexPageForTest = (resourceType: ResourceType) =>
     renderWithProviders(
         <MemoryRouter>
             <FilteredCategorizableIndexContainer
+                // @ts-expect-error investigate the type error here
                 useLoadableModels={buildUseLoadableForSingleCategorizableType(resourceType)}
                 IndexPresenter={tableViewCategorizableIndexPresenterFactory(resourceType)}
+                aggregateType={resourceType}
             />
         </MemoryRouter>
     );
