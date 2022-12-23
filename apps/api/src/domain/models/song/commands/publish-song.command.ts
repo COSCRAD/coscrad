@@ -1,6 +1,5 @@
 import { Command, ICommand } from '@coscrad/commands';
-import { ReferenceTo, UUID } from '@coscrad/data-types';
-import { AggregateType } from '../../../types/AggregateType';
+import { UUID } from '@coscrad/data-types';
 
 @Command({
     type: 'PUBLISH_SONG',
@@ -8,7 +7,6 @@ import { AggregateType } from '../../../types/AggregateType';
     description: 'Publish a song for the world!',
 })
 export class PublishSong implements ICommand {
-    @ReferenceTo(AggregateType.mediaItem)
     @UUID({
         label: 'ID',
         description: 'unique identifier of the song to publish',
