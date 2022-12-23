@@ -1,34 +1,30 @@
 import { IFormField, IValueAndDisplay } from '@coscrad/api-interfaces';
 import { FormGroup, MenuItem, Select } from '@mui/material';
-import { useState } from 'react';
 
 // TODO Make this configurable
 const NO_SELECTION_PLACEHOLDER = '-SELECT-';
 
-interface VocabularyListSelectProps {
+interface StaticSelectProps {
     formField: IFormField;
     onNewSelection?: (name: string, value: string | boolean) => void;
-    initialValue?: string;
+    currentValue?: string;
 }
 
 export const StaticSelect = ({
     formField: { name, options, label },
     onNewSelection,
-    initialValue,
-}: VocabularyListSelectProps): JSX.Element => {
-    const [currentValue, setCurrentValue] = useState<string>(null);
-
+    currentValue,
+}: StaticSelectProps): JSX.Element => {
     const menuItems = options as IValueAndDisplay<string>[];
 
     return (
         <FormGroup>
             <Select
-                value={currentValue || initialValue || ''}
+                value={currentValue || ''}
                 label={label}
                 name={name}
                 onChange={(changeEvent) => {
                     onNewSelection(changeEvent.target.name, changeEvent.target.value);
-                    setCurrentValue(changeEvent.target.value);
                 }}
             >
                 {/* Include a null selection placeholder to represent unselected state */}

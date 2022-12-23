@@ -9,4 +9,5 @@ export enum FormFieldType {
     yearPicker = 'YEAR_PICKER',
     staticSelect = 'STATIC_SELECT', // Corresponds to a dropdown
     switch = 'SWITCH', // Corresponds to a switch
+    dynamicSelect = 'DYNAMIC_SELECT',
 }

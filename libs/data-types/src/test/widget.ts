@@ -8,6 +8,7 @@ import {
     NonNegativeFiniteNumber,
     PositiveInteger,
     RawDataObject,
+    ReferenceTo,
     Union,
     Year,
 } from '../lib/decorators';
@@ -125,6 +126,18 @@ export class Widget {
         strength: 67.3,
     };
 
+    @ReferenceTo('widget')
+    @NonEmptyString({ ...buildDummyLabelAndDescription('parentWidgetId') })
+    parentWidgetId = '123';
+
+    @ReferenceTo('widget')
+    @UUID({ ...buildDummyLabelAndDescription('catalogId') })
+    catalogId = '25c5824f-6b4b-4341-bb60-3145d8109577';
+
+    @ReferenceTo('widget')
+    @NonEmptyString({ isArray: true, ...buildDummyLabelAndDescription('siblingWidgetIds') })
+    siblingWidgetIds = ['1', '2', '33'];
+
     constructor(dto: Widget) {
         Object.assign(this, dto);
     }
@@ -183,4 +196,10 @@ export const buildValidWidgetDto = (): Widget => ({
         type: 'one',
         strength: 85,
     },
+
+    catalogId: '25c5824f-6b4b-4341-bb60-3145d8109577',
+
+    parentWidgetId: '55',
+
+    siblingWidgetIds: ['4', '33'],
 });

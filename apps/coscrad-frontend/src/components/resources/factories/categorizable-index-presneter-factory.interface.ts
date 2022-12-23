@@ -1,11 +1,11 @@
 import {
+    AggregateTypeToViewModel,
     CategorizableType,
-    CategorizableTypeToViewModel,
     ICategorizableIndexQueryResult,
 } from '@coscrad/api-interfaces';
 
 export type CategorizableIndexPresenter<T extends CategorizableType> = (
-    indexResult: ICategorizableIndexQueryResult<CategorizableTypeToViewModel[T]>
+    indexResult: ICategorizableIndexQueryResult<AggregateTypeToViewModel[T]>
 ) => JSX.Element;
 
 export interface CategorizableIndexPresenterFactory {

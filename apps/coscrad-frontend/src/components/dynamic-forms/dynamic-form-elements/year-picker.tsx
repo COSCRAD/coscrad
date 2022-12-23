@@ -9,6 +9,8 @@ const CURRENT_YEAR = new Date().getFullYear();
 
 interface YearPickerProps {
     formField: IFormField;
+    onNewSelection: (name: string, value: string | boolean) => void;
+    currentValue: number;
 }
 
 /**
@@ -21,6 +23,8 @@ interface YearPickerProps {
  */
 export const YearPicker = ({
     formField: { name, label, description, type },
+    onNewSelection,
+    currentValue,
 }: YearPickerProps): JSX.Element => {
     const numberOfOptions = CURRENT_YEAR - STARTING_DATE_TO_PICK + 1;
 
@@ -41,6 +45,10 @@ export const YearPicker = ({
     };
 
     return (
-        <StaticSelect formField={formFieldForStaticSelect} initialValue={CURRENT_YEAR.toString()} />
+        <StaticSelect
+            formField={formFieldForStaticSelect}
+            currentValue={currentValue?.toString() || CURRENT_YEAR.toString()}
+            onNewSelection={onNewSelection}
+        />
     );
 };
