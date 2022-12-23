@@ -9,9 +9,9 @@ import { formatBilingualText } from '../vocabulary-lists/utils/formatBilingualTe
 
 export type AggregateStringSummarizer<T extends IBaseViewModel> = (viewModel: T) => string;
 
-export const aggregateStringSummarizerFactory = <T extends AggregateType>(
-    aggregateType: T
-    // TODO Do we need `AggregateTypeToViewModel<T>`?
+export const aggregateStringSummarizerFactory = (
+    aggregateType: AggregateType
+    // TODO correlate the return type with aggregate type
 ): AggregateStringSummarizer<IBaseViewModel> => {
     if (aggregateType === AggregateType.bibliographicReference)
         return (viewModel: IBibliographicReferenceViewModel) => {

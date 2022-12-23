@@ -8,7 +8,6 @@ import { AggregateType } from '../../../types/AggregateType';
     description: 'Publish a song for the world!',
 })
 export class PublishSong implements ICommand {
-    // TODO Remove `ReferenceTo` decorator- just for testing since we don't have a visible command with an external reference
     @ReferenceTo(AggregateType.mediaItem)
     @UUID({
         label: 'ID',

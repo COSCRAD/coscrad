@@ -5,19 +5,15 @@ import { Injectable } from '@nestjs/common';
 import { Aggregate } from '../../../../domain/models/aggregate.entity';
 import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
-import isStringWithNonzeroLength from '../../../../lib/utilities/isStringWithNonzeroLength';
 import { buildCommandForm } from '../../../../view-models/dynamicForms';
 import { INDEX_SCOPED_COMMANDS } from '../command-info/constants';
 
 type CommandTypeFilter = (commandType: string) => boolean;
 
 const buildCommandTypeFilter = (
-    context?: DomainModelCtor | DetailScopedCommandWriteContext | string[]
+    context?: DomainModelCtor | DetailScopedCommandWriteContext
 ): CommandTypeFilter => {
     if (isNullOrUndefined(context)) return (_: string) => true;
-
-    if (Array.isArray(context) && context.every(isStringWithNonzeroLength))
-        return (commandType: string) => context.includes(commandType);
 
     if (isCommandWriteContext(context))
         return (commandType: string) => context.getAvailableCommands().includes(commandType);
@@ -40,7 +36,6 @@ type IndexScopedCommandWriteContext = DomainModelCtor;
 export const isCommandWriteContext = (input: unknown): input is DetailScopedCommandWriteContext =>
     typeof (input as DetailScopedCommandWriteContext).getAvailableCommands === 'function';
 
-// TODO remove string[]
 export type CommandContext = IndexScopedCommandWriteContext | DetailScopedCommandWriteContext;
 
 @Injectable()

@@ -53,13 +53,6 @@ export const buildFormFieldForCommandPayloadProp = (
 
         if (typeof referenceTo === 'string') {
             if (!isAggregateType(referenceTo)) {
-                console.log({
-                    coscradDataType,
-                    referenceTo,
-                    propertyTypeDefinition,
-                    nameLabelAndDescription,
-                });
-
                 throw new InternalError(
                     `Command refers to aggregate with invalid type: ${referenceTo}`
                 );

@@ -10,10 +10,11 @@ type CommandContext = typeof INDEX_COMMAND_CONTEXT | AggregateCompositeIdentifie
 
 interface CommandPanelProps {
     actions: ICommandFormAndLabels[];
+    // Remove this if it isn't used in ID generation
     commandContext: CommandContext;
 }
 
-export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => {
+export const CommandPanel = ({ actions }: CommandPanelProps) => {
     const [selectedCommandType, setSelectedCommandType] = useState<string>(null);
 
     const [formState, updateForm] = useFormState();
@@ -39,7 +40,7 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
     const {
         label,
         description,
-        form: { fields },
+        form: { fields, prepopulatedFields },
     } = selectedCommand;
 
     return (
@@ -59,17 +60,10 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
                      * an `ok` button via either this panel or a modal.
                      */
                     onSubmitForm={() => {
-                        const autoFillFields =
-                            commandContext === INDEX_COMMAND_CONTEXT
-                                ? {}
-                                : {
-                                      compositeIdentifier: commandContext,
-                                  };
-
                         const commandFsa = {
                             type: selectedCommand.type,
                             payload: {
-                                ...autoFillFields,
+                                ...(prepopulatedFields || {}),
                                 ...formState,
                             },
                         };

@@ -1,13 +1,10 @@
 import {
     IBaseViewModel,
     ICategorizableDetailQueryResult,
-    ICategorizableIndexQueryResult,
     IIndexQueryResult,
 } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
-import { INDEX_COMMAND_CONTEXT } from '../commands';
-import { WithCommands } from '../resources/shared';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 
 export interface FilteredAggregateIndexContainerProps<
@@ -39,16 +36,8 @@ export const FilteredCategorizableIndexContainer = <
               }
             : loadableModels;
 
-    const IndexPresenterWithCommands = WithCommands(
-        IndexPresenter,
-        // @ts-expect-error fix me
-        ({ indexScopedActions }: ICategorizableIndexQueryResult<IBaseViewModel>) =>
-            indexScopedActions,
-        (_) => INDEX_COMMAND_CONTEXT
-    );
-
     // Wrap in error and pending presentation
-    const Presenter = displayLoadableWithErrorsAndLoading(IndexPresenterWithCommands);
+    const Presenter = displayLoadableWithErrorsAndLoading(IndexPresenter);
 
     return <Presenter {...filteredLoadableModels} />;
 };
