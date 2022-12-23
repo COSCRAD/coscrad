@@ -1,6 +1,6 @@
 import {
+    AggregateTypeToViewModel,
     CategorizableType,
-    CategorizableTypeToViewModel,
     IBaseViewModel,
     ICategorizableIndexQueryResult,
 } from '@coscrad/api-interfaces';
@@ -23,7 +23,7 @@ type UseLoadableResourcesOfSingleType<T extends IBaseViewModel> = () => ILoadabl
 >;
 
 const lookupTable: {
-    [K in CategorizableType]: UseLoadableResourcesOfSingleType<CategorizableTypeToViewModel[K]>;
+    [K in CategorizableType]: UseLoadableResourcesOfSingleType<AggregateTypeToViewModel[K]>;
 } = {
     [CategorizableType.bibliographicReference]: useLoadableBibliographicReferences,
     [CategorizableType.book]: useLoadableBooks,
@@ -47,7 +47,7 @@ const lookupTable: {
  */
 export const buildUseLoadableForSingleCategorizableType = <T extends CategorizableType>(
     resourceType: T
-): UseLoadableResourcesOfSingleType<CategorizableTypeToViewModel[T]> => {
+): UseLoadableResourcesOfSingleType<AggregateTypeToViewModel[T]> => {
     const lookupResult = lookupTable[resourceType];
 
     if (!lookupResult) {

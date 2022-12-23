@@ -1,3 +1,4 @@
+import { ICoscradUserGroupViewModel } from '@coscrad/api-interfaces';
 import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { CoscradUserGroup } from '../../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
@@ -6,7 +7,7 @@ import { CoscradUserViewModel } from './coscrad-user.view-model';
 
 const FromUserGroup = FromDomainModel(CoscradUserGroup);
 
-export class CoscradUserGroupViewModel extends BaseViewModel {
+export class CoscradUserGroupViewModel extends BaseViewModel implements ICoscradUserGroupViewModel {
     @FromUserGroup
     readonly label: string;
 

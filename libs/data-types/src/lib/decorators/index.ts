@@ -8,6 +8,7 @@ export * from './NonEmptyString';
 export * from './NonNegativeFiniteNumber';
 export * from './PositiveInteger';
 export * from './RawData';
+export * from './ReferenceTo';
 export * from './Union';
 export * from './URL';
 export * from './UUID';
