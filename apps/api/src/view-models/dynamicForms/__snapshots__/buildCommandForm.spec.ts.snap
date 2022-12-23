@@ -56,5 +56,6 @@ Object {
       "type": "JSON_INPUT",
     },
   ],
+  "prepopulatedFields": Object {},
 }
 `;

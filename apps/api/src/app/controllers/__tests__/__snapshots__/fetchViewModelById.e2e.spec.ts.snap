@@ -20,6 +20,12 @@ Object {
             "type": "JSON_INPUT",
           },
         ],
+        "prepopulatedFields": Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "bibliographicReference",
+          },
+        },
       },
       "label": "Grant Read Access to User",
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
@@ -98,6 +104,12 @@ Object {
             "type": "JSON_INPUT",
           },
         ],
+        "prepopulatedFields": Object {
+          "compositeIdentifier": Object {
+            "id": "23",
+            "type": "book",
+          },
+        },
       },
       "label": "Grant Read Access to User",
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
@@ -183,6 +195,12 @@ Object {
             "type": "JSON_INPUT",
           },
         ],
+        "prepopulatedFields": Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "mediaItem",
+          },
+        },
       },
       "label": "Grant Read Access to User",
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
@@ -255,6 +273,12 @@ Object {
             "type": "JSON_INPUT",
           },
         ],
+        "prepopulatedFields": Object {
+          "compositeIdentifier": Object {
+            "id": "0",
+            "type": "photograph",
+          },
+        },
       },
       "label": "Grant Read Access to User",
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
@@ -310,6 +334,12 @@ Object {
             "type": "JSON_INPUT",
           },
         ],
+        "prepopulatedFields": Object {
+          "compositeIdentifier": Object {
+            "id": "1",
+            "type": "song",
+          },
+        },
       },
       "label": "Grant Read Access to User",
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
@@ -380,6 +410,12 @@ Object {
             "type": "JSON_INPUT",
           },
         ],
+        "prepopulatedFields": Object {
+          "compositeIdentifier": Object {
+            "id": "100",
+            "type": "spatialFeature",
+          },
+        },
       },
       "label": "Grant Read Access to User",
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
@@ -461,6 +497,12 @@ Object {
             "type": "JSON_INPUT",
           },
         ],
+        "prepopulatedFields": Object {
+          "compositeIdentifier": Object {
+            "id": "11",
+            "type": "term",
+          },
+        },
       },
       "label": "Grant Read Access to User",
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
@@ -494,6 +536,12 @@ Object {
             "type": "JSON_INPUT",
           },
         ],
+        "prepopulatedFields": Object {
+          "compositeIdentifier": Object {
+            "id": "110",
+            "type": "transcribedAudio",
+          },
+        },
       },
       "label": "Grant Read Access to User",
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
@@ -553,6 +601,12 @@ Object {
             "type": "JSON_INPUT",
           },
         ],
+        "prepopulatedFields": Object {
+          "compositeIdentifier": Object {
+            "id": "4567",
+            "type": "vocabularyList",
+          },
+        },
       },
       "label": "Grant Read Access to User",
       "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",

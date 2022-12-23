@@ -5,6 +5,7 @@ import { CategoryTreePresenter } from './category-tree.presenter';
 
 export const CategoryTreeContainer: FunctionalComponent = (): JSX.Element => (
     <AggregateIndexContainer
+        // @ts-expect-error TODO deal with this asymmetric API
         useLoadableModels={useLoadableCategoryTree}
         IndexPresenter={CategoryTreePresenter}
     />
