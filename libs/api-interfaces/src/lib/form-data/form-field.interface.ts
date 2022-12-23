@@ -1,4 +1,4 @@
-import { IValueAndDisplay } from '../aggregate-views';
+import { AggregateType, IValueAndDisplay } from '../aggregate-views';
 import { FormFieldType } from './form-field-type.enum';
 
 export interface IFormField<T = unknown> {
@@ -6,5 +6,6 @@ export interface IFormField<T = unknown> {
     name: string;
     label: string;
     description: string;
-    options?: IValueAndDisplay<T>[];
+    // TODO Correlate with form field type
+    options?: IValueAndDisplay<T>[] | { aggregateType: AggregateType };
 }

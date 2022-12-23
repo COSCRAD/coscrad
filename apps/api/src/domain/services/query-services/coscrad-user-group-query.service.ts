@@ -1,4 +1,8 @@
-import { IDetailQueryResult, IIndexQueryResult } from '@coscrad/api-interfaces';
+import {
+    ICoscradUserGroupViewModel,
+    IDetailQueryResult,
+    IIndexQueryResult,
+} from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { isInternalError } from '../../../lib/errors/InternalError';
@@ -32,7 +36,7 @@ export class CoscradUserGroupQueryService {
 
     async fetchById(
         groupId: AggregateId
-    ): Promise<Maybe<IDetailQueryResult<CoscradUserGroupViewModel>>> {
+    ): Promise<Maybe<IDetailQueryResult<ICoscradUserGroupViewModel>>> {
         const [userGroupSearchResult, userSearchResult] = await Promise.all([
             this.userGroupRepository.fetchById(groupId),
             this.userRepository.fetchMany(),
@@ -54,7 +58,7 @@ export class CoscradUserGroupQueryService {
 
     async fetchMany(
         specification?: ISpecification<CoscradUserGroup>
-    ): Promise<IIndexQueryResult<CoscradUserGroupViewModel>> {
+    ): Promise<IIndexQueryResult<ICoscradUserGroupViewModel>> {
         const [allResults, allUsers] = await Promise.all([
             this.userGroupRepository.fetchMany(specification),
             this.userRepository.fetchMany(),

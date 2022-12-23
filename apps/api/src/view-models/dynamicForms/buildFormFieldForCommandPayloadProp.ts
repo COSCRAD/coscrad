@@ -1,4 +1,4 @@
-import { FormFieldType, IFormField } from '@coscrad/api-interfaces';
+import { FormFieldType, IFormField, isAggregateType } from '@coscrad/api-interfaces';
 import {
     ComplexCoscradDataType,
     CoscradDataType,
@@ -49,7 +49,20 @@ export const buildFormFieldForCommandPayloadProp = (
     nameLabelAndDescription: NameLabelAndDescription
 ): IFormField => {
     if (isSimpleCoscradPropertyTypeDefinition(propertyTypeDefinition)) {
-        const { coscradDataType } = propertyTypeDefinition;
+        const { coscradDataType, referenceTo } = propertyTypeDefinition;
+
+        if (typeof referenceTo === 'string') {
+            if (!isAggregateType(referenceTo)) {
+                throw new InternalError(
+                    `Command refers to aggregate with invalid type: ${referenceTo}`
+                );
+            }
+
+            return {
+                ...buildSimpleFormField(FormFieldType.dynamicSelect, nameLabelAndDescription),
+                options: { aggregateType: referenceTo },
+            };
+        }
 
         const lookupResult = lookupTable[coscradDataType];
 
