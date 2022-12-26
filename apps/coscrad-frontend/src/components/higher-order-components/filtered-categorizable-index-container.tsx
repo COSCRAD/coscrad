@@ -1,30 +1,37 @@
 import {
+    CategorizableType,
     IBaseViewModel,
     ICategorizableDetailQueryResult,
+    IDetailQueryResult,
     IIndexQueryResult,
+    WithTags,
 } from '@coscrad/api-interfaces';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
+import { CommandPanel } from '../commands';
+import { buildUseLoadableForSingleCategorizableType } from './buildUseLoadableResourcesOfSingleType';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 
 export interface FilteredAggregateIndexContainerProps<
-    T extends ICategorizableDetailQueryResult<IBaseViewModel>,
-    UPresenterProps = T
+    T extends WithTags<IBaseViewModel>,
+    UPresenterProps = IDetailQueryResult<T>
 > {
-    useLoadableModels: () => ILoadable<IIndexQueryResult<T>>;
     IndexPresenter: FunctionalComponent<UPresenterProps>;
     preFilter?: (model: T) => boolean;
+    aggregateType: CategorizableType;
 }
 
 export const FilteredCategorizableIndexContainer = <
-    T extends ICategorizableDetailQueryResult<IBaseViewModel>,
+    T extends ICategorizableDetailQueryResult<WithTags<IBaseViewModel>>,
     U = T
 >({
-    useLoadableModels,
     IndexPresenter,
     preFilter,
+    aggregateType,
 }: FilteredAggregateIndexContainerProps<T, U>): JSX.Element => {
-    const loadableModels = useLoadableModels();
+    const loadableModels = buildUseLoadableForSingleCategorizableType(
+        aggregateType
+    )() as unknown as ILoadable<IIndexQueryResult<T>>;
 
     const filteredLoadableModels =
         typeof preFilter === 'function' && loadableModels.data !== null
@@ -39,5 +46,16 @@ export const FilteredCategorizableIndexContainer = <
     // Wrap in error and pending presentation
     const Presenter = displayLoadableWithErrorsAndLoading(IndexPresenter);
 
-    return <Presenter {...filteredLoadableModels} />;
+    return (
+        <div>
+            <Presenter {...filteredLoadableModels} />
+            {/* TODO [TODO [https://www.pivotaltracker.com/story/show/184107132] Use loadable display helper] */}
+            {loadableModels.data?.indexScopedActions && (
+                <CommandPanel
+                    actions={loadableModels.data.indexScopedActions}
+                    commandContext={aggregateType}
+                />
+            )}
+        </div>
+    );
 };
