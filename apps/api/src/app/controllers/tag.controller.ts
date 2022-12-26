@@ -1,13 +1,10 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Tag } from '../../domain/models/tag/tag.entity';
+import { TagQueryService } from '../../domain/services/query-services/tag-query.service';
 import { isAggregateId } from '../../domain/types/AggregateId';
-import { InternalError, isInternalError } from '../../lib/errors/InternalError';
-import { isNotFound } from '../../lib/types/not-found';
-import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
-import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
-import { TagViewModel } from '../../view-models/buildViewModelForResource/viewModels';
+import { InternalError } from '../../lib/errors/InternalError';
 import httpStatusCodes from '../constants/httpStatusCodes';
+import sendInternalResultAsHttpResponse from './resources/common/sendInternalResultAsHttpResponse';
 
 export const TAG_INDEX_ROUTE = 'tags';
 
@@ -20,7 +17,7 @@ export const TAG_INDEX_ROUTE = 'tags';
 @ApiTags('tags')
 @Controller(TAG_INDEX_ROUTE)
 export class TagController {
-    constructor(private readonly repositoryProvider: RepositoryProvider) {}
+    constructor(private readonly tagQueryService: TagQueryService) {}
 
     @Get('/:id')
     async fetchById(@Res() res, @Param('id') id: string) {
@@ -29,33 +26,15 @@ export class TagController {
                 .status(httpStatusCodes.badRequest)
                 .send(new InternalError(`Invalid tag ID: ${id}`));
 
-        const result = await this.repositoryProvider.getTagRepository().fetchById(id);
+        const result = await this.tagQueryService.fetchById(id);
 
-        if (isInternalError(result)) return res.status(httpStatusCodes.badRequest).send(result);
-
-        if (isNotFound(result)) return res.status(httpStatusCodes.notFound).send();
-
-        const viewModel = cloneToPlainObject(new TagViewModel(result));
-
-        return res.status(httpStatusCodes.ok).send(viewModel);
+        return sendInternalResultAsHttpResponse(res, result);
     }
 
     @Get('')
-    async fetchMay(@Res() res) {
-        const result = await this.repositoryProvider.getTagRepository().fetchMany();
+    async fetchMany(@Res() res) {
+        const result = await this.tagQueryService.fetchMany();
 
-        const allErrors = result.filter(isInternalError);
-
-        if (allErrors.length > 0)
-            return res
-                .status(httpStatusCodes.internalError)
-                .send(allErrors.reduce((msg, error) => msg + '\n' + error.toString(), ''));
-
-        // Can we make the above condition a typeguard and avoid casting?
-        const allTags = result as Tag[];
-
-        const viewModels = allTags.map((tag) => new TagViewModel(tag));
-
-        return res.status(httpStatusCodes.ok).send(viewModels);
+        return sendInternalResultAsHttpResponse(res, result);
     }
 }
