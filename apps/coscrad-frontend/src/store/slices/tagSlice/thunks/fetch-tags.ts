@@ -1,14 +1,9 @@
-import { ITagViewModel } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../../config';
 import { createFetchThunk } from '../../utils/create-fetch-thunk';
 import { TAGS } from '../constants';
+import { TagIndexState } from '../types/tag-index-state';
 
-/**
- * TODO[https://www.pivotaltracker.com/story/show/183618856]
- * We will need to update the generic here once we are ready to consume
- * the tags via the standard API.
- */
-export const fetchTags = createFetchThunk<ITagViewModel[]>(
+export const fetchTags = createFetchThunk<TagIndexState>(
     `${TAGS}/fetch`,
     `${getConfig().apiUrl}/tags`
 );

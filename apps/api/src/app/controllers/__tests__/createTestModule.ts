@@ -17,6 +17,7 @@ import { MediaItemQueryService } from '../../../domain/services/query-services/m
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';
+import { TagQueryService } from '../../../domain/services/query-services/tag-query.service';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { TranscribedAudioQueryService } from '../../../domain/services/query-services/transribed-audio-query.service';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
@@ -111,6 +112,14 @@ export default async (
                         configService
                     ),
                 inject: [RepositoryProvider, CommandInfoService, ConfigService],
+            },
+            {
+                provide: TagQueryService,
+                useFactory: (
+                    repositoryProvider: RepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new TagQueryService(repositoryProvider, commandInfoService),
+                inject: [RepositoryProvider, CommandInfoService],
             },
             {
                 provide: MediaItemQueryService,
