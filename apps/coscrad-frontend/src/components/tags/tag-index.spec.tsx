@@ -6,6 +6,7 @@ import { buildMockSuccessfulGETHandler } from '../../utils/test-utils/build-mock
 import { testContainerComponentErrorHandling } from '../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { renderWithProviders } from '../../utils/test-utils/render-with-providers';
 import { setupTestServer } from '../../utils/test-utils/setup-test-server';
+import { buildMockIndexResponse } from '../../utils/test-utils/test-data';
 import { TagIndexContainer } from './tag-index.container';
 import { buildDummyTags } from './test-utils';
 
@@ -30,7 +31,10 @@ describe(`Tag Index`, () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({
                 endpoint,
-                response: dummyTags,
+                response: buildMockIndexResponse(
+                    dummyTags.map((tag) => [tag, []]),
+                    []
+                ),
             })
         );
 
