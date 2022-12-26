@@ -1,3 +1,4 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import {
     SpatialFeatureIndexState,
     useLoadableSpatialFeatures,
@@ -29,5 +30,6 @@ export const SpatialFeatureIndexContainer = ({
     <AggregateIndexContainer
         useLoadableModels={useLoadableSpatialFeatures}
         IndexPresenter={SpatialFeatureIndexPresenter || ConcreteSpatialFeatureIndexPresenter}
+        aggregateType={AggregateType.spatialFeature}
     />
 );

@@ -1,18 +1,6 @@
 import { HttpStatusCode, IHttpErrorInfo } from '@coscrad/api-interfaces';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-
-const buildAuthenticationHeaders = (accessToken: string) => {
-    const contentTypeHeaders = {
-        'content-type': 'application/json',
-    };
-
-    if (typeof accessToken !== 'string' || accessToken.length === 0) return contentTypeHeaders;
-
-    return {
-        ...contentTypeHeaders,
-        Authorization: `Bearer ${accessToken}`,
-    };
-};
+import { buildAuthenticationHeaders } from './build-authentication-headers';
 
 /**
  *
