@@ -1,3 +1,4 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import { useLoadableCategoryTree } from '../../store/slices/categories/hooks/use-loadable-category-tree';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { AggregateIndexContainer } from '../higher-order-components/aggregate-index-container';
@@ -8,5 +9,6 @@ export const CategoryTreeContainer: FunctionalComponent = (): JSX.Element => (
         // @ts-expect-error TODO deal with this asymmetric API
         useLoadableModels={useLoadableCategoryTree}
         IndexPresenter={CategoryTreePresenter}
+        aggregateType={AggregateType.category}
     />
 );
