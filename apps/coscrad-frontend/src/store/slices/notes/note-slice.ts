@@ -6,10 +6,6 @@ import { fetchNotes } from './thunks';
 import { NoteSliceState } from './types';
 import { NoteIndexState } from './types/note-index-state';
 
-/**
- * TODO[https://www.pivotaltracker.com/story/show/183618856]
- * Remove `WithTags` in favor of `IIndexQueryResult`.
- */
 const initialState: NoteSliceState = buildInitialLoadableState<NoteIndexState>();
 
 export const noteSlice = createSlice({
