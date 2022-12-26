@@ -19,6 +19,11 @@ interface CommandExecutorProps {
 export const CommandExecutor = (props: CommandExecutorProps): JSX.Element => {
     const { commandContext } = props;
 
+    /**
+     * The backend expects us to attach an `aggregateCompositeIdentifier` to
+     * every index-scoped command and this `UUID must have been generated via the
+     *  ID generation endpoint.
+     */
     const loadableGeneratedId = useLoadableGeneratedId();
 
     const Form = displayLoadableWithErrorsAndLoading(

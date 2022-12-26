@@ -18,7 +18,6 @@ export type CommandContext = AggregateType | AggregateCompositeIdentifier;
 
 interface CommandPanelProps {
     actions: ICommandFormAndLabels[];
-    // Remove this if it isn't used in ID generation
     commandContext: CommandContext;
 }
 
@@ -32,7 +31,10 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
     // Do not render if there are no available actions
     if (actions.length === 0) return null;
 
-    // TODO Use one of our helpers for this
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/184107132]
+     * Use `displayLoadable` helper here
+     */
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;
 
     if (isLoading || generatedId === null) return <Loading />;
