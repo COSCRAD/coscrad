@@ -1,4 +1,4 @@
-import { ValidateNested } from '@coscrad/validation';
+import { IsNonEmptyObject, ValidateNested } from '@coscrad/validation';
 import { Type } from 'class-transformer';
 import { IsDefined } from 'class-validator';
 import { ComplexCoscradDataType } from '../types/ComplexDataTypes/ComplexCoscradDataType';
@@ -18,6 +18,15 @@ export function NestedDataType(
         const { isArray, isOptional } = options;
 
         const validationOptions = { each: isArray };
+
+        /**
+         * For some reason, class-validator returns a false-negative whenever
+         * we have a nested, non-array, property, unless we also wrap with the
+         * following.
+         */
+        if (!isArray) {
+            IsNonEmptyObject()(target, propertyKey);
+        }
 
         if (!isOptional) {
             IsDefined(validationOptions)(target, propertyKey);

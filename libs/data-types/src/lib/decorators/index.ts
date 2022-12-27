@@ -1,6 +1,7 @@
 export * from './CompositeIdentifier';
 export * from './DiscriminatedBy';
 export * from './Enum';
+export * from './FixedValue';
 export * from './FromDomainModel';
 export * from './ISBN';
 export * from './NestedDataType';
