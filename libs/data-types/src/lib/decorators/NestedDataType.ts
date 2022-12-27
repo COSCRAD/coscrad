@@ -1,6 +1,6 @@
 import { IsNonEmptyObject, ValidateNested } from '@coscrad/validation';
 import { Type } from 'class-transformer';
-import { IsDefined } from 'class-validator';
+import { IsDefined, IsOptional } from 'class-validator';
 import { ComplexCoscradDataType } from '../types/ComplexDataTypes/ComplexCoscradDataType';
 import { NestedTypeDefinition } from '../types/ComplexDataTypes/NestedTypeDefinition';
 import { getCoscradDataSchema } from '../utilities';
@@ -27,6 +27,8 @@ export function NestedDataType(
         if (!isArray) {
             IsNonEmptyObject()(target, propertyKey);
         }
+
+        if (isOptional) IsOptional()(target, propertyKey);
 
         if (!isOptional) {
             IsDefined(validationOptions)(target, propertyKey);

@@ -31,7 +31,7 @@ export class CreateJournalArticleBibliographicReferenceCommandHandler extends Ba
     }
 
     protected createNewInstance({
-        id,
+        aggregateCompositeIdentifier: { id },
         title,
         creators,
         abstract,

@@ -40,7 +40,7 @@ export class CreateGroupCommandHandler extends BaseCreateCommandHandler<CoscradU
     }
 
     protected createNewInstance({
-        id,
+        aggregateCompositeIdentifier: { id },
         label,
         description,
     }: CreateGroup): ResultOrError<CoscradUserGroup> {

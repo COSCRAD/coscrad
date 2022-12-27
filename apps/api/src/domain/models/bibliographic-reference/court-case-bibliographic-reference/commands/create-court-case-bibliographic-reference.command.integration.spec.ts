@@ -7,6 +7,7 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { DTO } from '../../../../../types/DTO';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
+import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../../types/ResourceType';
 import getValidBibliographicReferenceInstanceForTest from '../../../../__tests__/utilities/getValidBibliographicReferenceInstanceForTest';
@@ -46,7 +47,7 @@ const buildValidCommandFSA = (
 ): FluxStandardAction<DTO<CreateCourtCaseBibliographicReference>> => ({
     type: commandType,
     payload: {
-        id,
+        aggregateCompositeIdentifier: { id, type: AggregateType.bibliographicReference },
         rawData: {
             foo: 'hello world court case',
         },
@@ -104,7 +105,9 @@ describe(`The command: ${commandType}`, () => {
                 buildValidCommandFSA,
                 initialState,
                 systemUserId: dummySystemUserId,
-                checkStateOnSuccess: async ({ id }: CreateCourtCaseBibliographicReference) => {
+                checkStateOnSuccess: async ({
+                    aggregateCompositeIdentifier: { id },
+                }: CreateCourtCaseBibliographicReference) => {
                     await assertResourcePersistedProperly(idManager, testRepositoryProvider, {
                         id,
                         type: ResourceType.bibliographicReference,
@@ -144,7 +147,10 @@ describe(`The command: ${commandType}`, () => {
                 systemUserId: dummySystemUserId,
                 buildCommandFSA: (_: AggregateId) =>
                     dummyFSAFactory.build(_, {
-                        id: existingCourtCaseBibliographicReference.id,
+                        aggregateCompositeIdentifier: {
+                            type: AggregateType.bibliographicReference,
+                            id: existingCourtCaseBibliographicReference.id,
+                        },
                     }),
                 initialState: new DeluxeInMemoryStore({
                     bibliographicReference: [existingCourtCaseBibliographicReference],

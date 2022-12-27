@@ -10,12 +10,34 @@ import {
     Year,
 } from '@coscrad/data-types';
 import { IsNonEmptyArray } from '@coscrad/validation';
-import { AggregateId } from '../../../../../types/AggregateId';
+import { Equals } from 'class-validator';
+import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
+import { AggregateType } from '../../../../../types/AggregateType';
 import { ICreateCommand } from '../../../../shared/command-handlers/interfaces/create-command.interface';
 import BibliographicReferenceCreator from '../../../common/bibliographic-reference-creator.entity';
 
 // convenient shorthand
 const isOptional = true;
+
+class BookBibliographicReferenceCompositeId {
+    /**
+     * This is a hack. It circumvents our `CoscradDataTypes` and may
+     * cause problems for
+     * - Schema management
+     * - Anyone using our API directly (not via front-end)
+     *
+     * The simple answer is that you always have to tack on an
+     * `aggregateCompositeIdentifier`.
+     */
+    @Equals(AggregateType.bibliographicReference)
+    type = AggregateType.bibliographicReference;
+
+    @UUID({
+        label: 'ID',
+        description: 'unique identifier',
+    })
+    id: string;
+}
 
 @Command({
     type: 'CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE',
@@ -23,11 +45,13 @@ const isOptional = true;
     description: 'Creates a new book bibliographic reference',
 })
 export class CreateBookBibliographicReference implements ICreateCommand {
-    @UUID({
-        label: 'ID (generated)',
-        description: 'unique identifier for the new book bibliographic reference',
+    @NestedDataType(BookBibliographicReferenceCompositeId, {
+        label: 'Composite Identifier',
+        description: 'system-wide unique identifier',
     })
-    readonly id: AggregateId;
+    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier<
+        typeof AggregateType.bibliographicReference
+    >;
 
     @RawDataObject({
         isOptional,

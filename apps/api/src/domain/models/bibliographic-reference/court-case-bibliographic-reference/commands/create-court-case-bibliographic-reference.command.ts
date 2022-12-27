@@ -1,7 +1,29 @@
 import { Command } from '@coscrad/commands';
-import { NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
-import { AggregateId } from '../../../../types/AggregateId';
+import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
+import { Equals } from 'class-validator';
+import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
+import { AggregateType } from '../../../../types/AggregateType';
 import { ICreateCommand } from '../../../shared/command-handlers/interfaces/create-command.interface';
+
+class CourtCaseBibliographicReferenceCompositeId {
+    /**
+     * This is a hack. It circumvents our `CoscradDataTypes` and may
+     * cause problems for
+     * - Schema management
+     * - Anyone using our API directly (not via front-end)
+     *
+     * The simple answer is that you always have to tack on an
+     * `aggregateCompositeIdentifier`.
+     */
+    @Equals(AggregateType.bibliographicReference)
+    type = AggregateType.bibliographicReference;
+
+    @UUID({
+        label: 'ID',
+        description: 'unique identifier',
+    })
+    id: string;
+}
 
 const isOptional = true;
 
@@ -11,11 +33,13 @@ const isOptional = true;
     description: 'Creates a new court case bibliographic reference',
 })
 export class CreateCourtCaseBibliographicReference implements ICreateCommand {
-    @UUID({
-        label: 'ID (generated)',
-        description: 'a unique identifier for the new court case bibliographic reference',
+    @NestedDataType(CourtCaseBibliographicReferenceCompositeId, {
+        label: 'Composite Identifier',
+        description: 'system-wide unique identifier',
     })
-    readonly id: AggregateId;
+    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier<
+        typeof AggregateType.bibliographicReference
+    >;
 
     @RawDataObject({
         isOptional,

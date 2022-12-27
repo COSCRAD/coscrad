@@ -1,12 +1,38 @@
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
 import { IsNonEmptyArray } from '@coscrad/validation';
-import { AggregateId } from '../../../../types/AggregateId';
+import { Equals } from 'class-validator';
+import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
+import { AggregateType } from '../../../../types/AggregateType';
 import { ICreateCommand } from '../../../shared/command-handlers/interfaces/create-command.interface';
 import BibliographicReferenceCreator from '../../common/bibliographic-reference-creator.entity';
 
 // convenient shorthand
 const isOptional = true;
+
+class JournalArticleBibliographicReferenceCompositeId {
+    /**
+     * This is a hack. It circumvents our `CoscradDataTypes` and may
+     * cause problems for
+     * - Schema management
+     * - Anyone using our API directly (not via front-end)
+     *
+     * The simple answer is that you always have to tack on an
+     * `aggregateCompositeIdentifier`.
+     *
+     * take Equals from @coscrad/validation
+     *
+     * share this class with other bibliographic reference models
+     */
+    @Equals(AggregateType.bibliographicReference)
+    type = AggregateType.bibliographicReference;
+
+    @UUID({
+        label: 'ID',
+        description: 'unique identifier',
+    })
+    id: string;
+}
 
 @Command({
     type: 'CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE',
@@ -14,11 +40,13 @@ const isOptional = true;
     description: 'Creates a new journal article bibliographic reference',
 })
 export class CreateJournalArticleBibliographicReference implements ICreateCommand {
-    @UUID({
-        label: 'ID (generated)',
-        description: 'unique identifier of the new journal article bibliographic reference',
+    @NestedDataType(JournalArticleBibliographicReferenceCompositeId, {
+        label: 'Composite Identifier',
+        description: 'system-wide unique identifier',
     })
-    readonly id: AggregateId;
+    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier<
+        typeof AggregateType.bibliographicReference
+    >;
 
     @RawDataObject({
         isOptional,

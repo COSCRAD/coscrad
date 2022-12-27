@@ -5,7 +5,7 @@ import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeI
 import { AggregateType } from '../../../types/AggregateType';
 import { ICreateCommand } from '../../shared/command-handlers/interfaces/create-command.interface';
 
-class TagId {
+class TagCompositeId {
     /**
      * This is a bit of a hack. It circumvents our `CoscradDataTypes` and may
      * cause problems for
@@ -27,7 +27,7 @@ class TagId {
 
 @Command({ type: 'CREATE_TAG', label: 'Create Tag', description: 'Creates a new tag' })
 export class CreateTag implements ICreateCommand {
-    @NestedDataType(TagId, {
+    @NestedDataType(TagCompositeId, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',
     })
