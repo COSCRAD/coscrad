@@ -35,7 +35,7 @@ export class RegisterUserCommandHandler extends BaseCreateCommandHandler<Coscrad
     }
 
     protected createNewInstance({
-        id,
+        aggregateCompositeIdentifier: { id },
         userIdFromAuthProvider,
         username,
     }: RegisterUser): ResultOrError<CoscradUser> {

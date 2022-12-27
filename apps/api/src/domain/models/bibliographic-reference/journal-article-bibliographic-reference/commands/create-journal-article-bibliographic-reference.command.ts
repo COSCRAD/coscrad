@@ -1,9 +1,11 @@
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, RawDataObject, URL } from '@coscrad/data-types';
 import { IsNonEmptyArray } from '@coscrad/validation';
-import { AggregateId } from '../../../../types/AggregateId';
+import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
+import { AggregateType } from '../../../../types/AggregateType';
 import { ICreateCommand } from '../../../shared/command-handlers/interfaces/create-command.interface';
 import BibliographicReferenceCreator from '../../common/bibliographic-reference-creator.entity';
+import { BibliographicReferenceCompositeIdentifier } from '../../shared/BibliographicReferenceCompositeIdentifier';
 
 // convenient shorthand
 const isOptional = true;
@@ -14,11 +16,13 @@ const isOptional = true;
     description: 'Creates a new journal article bibliographic reference',
 })
 export class CreateJournalArticleBibliographicReference implements ICreateCommand {
-    @UUID({
-        label: 'ID (generated)',
-        description: 'unique identifier of the new journal article bibliographic reference',
+    @NestedDataType(BibliographicReferenceCompositeIdentifier, {
+        label: 'Composite Identifier',
+        description: 'system-wide unique identifier',
     })
-    readonly id: AggregateId;
+    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier<
+        typeof AggregateType.bibliographicReference
+    >;
 
     @RawDataObject({
         isOptional,

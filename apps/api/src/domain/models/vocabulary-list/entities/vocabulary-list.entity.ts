@@ -37,6 +37,7 @@ export class VocabularyList extends Resource {
     readonly nameEnglish?: string;
 
     @NestedDataType(VocabularyListEntry, {
+        isArray: true,
         label: 'entries',
         description: 'all terms in this vocabulary list with corresponding filter properties',
     })

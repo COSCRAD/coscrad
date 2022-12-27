@@ -1,7 +1,29 @@
 import { Command } from '@coscrad/commands';
-import { NonEmptyString, UUID } from '@coscrad/data-types';
-import { AggregateId } from '../../../../../types/AggregateId';
+import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { Equals } from '@coscrad/validation';
+import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
+import { AggregateType } from '../../../../../types/AggregateType';
 import { ICreateCommand } from '../../../../shared/command-handlers/interfaces/create-command.interface';
+
+class UserCompositeId {
+    /**
+     * This is a bit of a hack. It circumvents our `CoscradDataTypes` and may
+     * cause problems for
+     * - Schema management
+     * - Anyone using our API directly (not via front-end)
+     *
+     * The simple answer is that you always have to tack on an
+     * `aggregateCompositeIdentifier`.
+     */
+    @Equals(AggregateType.user)
+    type = AggregateType.user;
+
+    @UUID({
+        label: 'ID',
+        description: 'unique identifier',
+    })
+    id: string;
+}
 
 @Command({
     type: 'REGISTER_USER',
@@ -10,11 +32,11 @@ import { ICreateCommand } from '../../../../shared/command-handlers/interfaces/c
         'Register a new COSCRAD user after the user has been registered with the auth provider',
 })
 export class RegisterUser implements ICreateCommand {
-    @UUID({
-        label: 'ID (generated)',
-        description: 'the internal unique ID of the user to register',
+    @NestedDataType(UserCompositeId, {
+        label: 'Composite Identifier',
+        description: 'system-wide unique identifier',
     })
-    readonly id: AggregateId;
+    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier<typeof AggregateType.user>;
 
     @NonEmptyString({
         label: "auth provider's ID",

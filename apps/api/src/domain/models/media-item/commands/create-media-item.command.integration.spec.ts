@@ -14,6 +14,8 @@ import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidator
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandFailsDueToTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
+import { AggregateType } from '../../../types/AggregateType';
+import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
@@ -24,6 +26,7 @@ import { assertEventRecordPersisted } from '../../__tests__/command-helpers/asse
 import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
 import { MediaItem } from '../entities/media-item.entity';
 import { CreateMediaItem } from './create-media-item.command';
 import { CreateMediaItemCommandHandler } from './create-media-item.command-handler';
@@ -33,7 +36,7 @@ const commandType = 'CREATE_MEDIA_ITEM';
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateMediaItem>> => ({
     type: commandType,
     payload: {
-        id,
+        aggregateCompositeIdentifier: { id, type: AggregateType.mediaItem },
         title: 'Fishing Video',
         titleEnglish: 'Fishing Video (Engl)',
         contributions: [
@@ -64,9 +67,9 @@ const buildInvalidFSA = (
     },
 });
 
-const emptyInitialState = buildInMemorySnapshot({});
+const emptyInitialState = new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat();
 
-const dummyAdminUserId = buildDummyUuid();
+const dummyAdminUserId = dummyUuid;
 
 describe('CreateMediaItem', () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -115,7 +118,9 @@ describe('CreateMediaItem', () => {
                 systemUserId: dummyAdminUserId,
                 buildValidCommandFSA,
                 initialState: emptyInitialState,
-                checkStateOnSuccess: async ({ id }: CreateMediaItem) => {
+                checkStateOnSuccess: async ({
+                    aggregateCompositeIdentifier: { id },
+                }: CreateMediaItem) => {
                     const idStatus = await idManager.status(id);
 
                     expect(idStatus).toBe(NotAvailable);
