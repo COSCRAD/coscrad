@@ -6,13 +6,14 @@ import {
     PositiveInteger,
     RawDataObject,
     URL,
-    UUID,
     Year,
 } from '@coscrad/data-types';
 import { IsNonEmptyArray } from '@coscrad/validation';
-import { AggregateId } from '../../../../../types/AggregateId';
+import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
+import { AggregateType } from '../../../../../types/AggregateType';
 import { ICreateCommand } from '../../../../shared/command-handlers/interfaces/create-command.interface';
 import BibliographicReferenceCreator from '../../../common/bibliographic-reference-creator.entity';
+import { BibliographicReferenceCompositeIdentifier } from '../../../shared/BibliographicReferenceCompositeIdentifier';
 
 // convenient shorthand
 const isOptional = true;
@@ -23,11 +24,13 @@ const isOptional = true;
     description: 'Creates a new book bibliographic reference',
 })
 export class CreateBookBibliographicReference implements ICreateCommand {
-    @UUID({
-        label: 'ID (generated)',
-        description: 'unique identifier for the new book bibliographic reference',
+    @NestedDataType(BibliographicReferenceCompositeIdentifier, {
+        label: 'Composite Identifier',
+        description: 'system-wide unique identifier',
     })
-    readonly id: AggregateId;
+    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier<
+        typeof AggregateType.bibliographicReference
+    >;
 
     @RawDataObject({
         isOptional,

@@ -35,7 +35,7 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateGro
     type: commandType,
 
     payload: {
-        id,
+        aggregateCompositeIdentifier: { id, type: AggregateType.userGroup },
         label: 'teachers',
         description: 'this group is for teachers from community schools',
     },
@@ -108,7 +108,9 @@ describe('CreateGroup', () => {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
                 initialState,
-                checkStateOnSuccess: async ({ id }: CreateGroup) => {
+                checkStateOnSuccess: async ({
+                    aggregateCompositeIdentifier: { id },
+                }: CreateGroup) => {
                     const userGroupSearchResult = await testRepositoryProvider
                         .getUserGroupRepository()
                         .fetchById(id);

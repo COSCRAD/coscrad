@@ -9,9 +9,12 @@ Array [
       "userId": "1",
     },
     "payload": Object {
+      "aggregateCompositeIdentifier": Object {
+        "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0004",
+        "type": "song",
+      },
       "audioURL": "https://www.mysound.org/song.mp3",
       "contributions": Array [],
-      "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0004",
       "lyrics": "la la la",
       "title": "test-song-name (language)",
       "titleEnglish": "test-song-name (English)",
