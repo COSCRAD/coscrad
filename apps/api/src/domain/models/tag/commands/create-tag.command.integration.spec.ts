@@ -132,7 +132,7 @@ describe(`The command: ${commandType}`, () => {
                     /**
                      * TODO
                      * Consider making `assertResourcePersistedProperly`
-                     * into `assertAggregatePersistedProperly1.
+                     * into `assertAggregatePersistedProperly`.
                      */
                     const idStatus = await idManager.status(id);
 

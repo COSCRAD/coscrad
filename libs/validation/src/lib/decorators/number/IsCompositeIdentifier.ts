@@ -39,9 +39,8 @@ export function IsCompositeIdentifier<TIdType extends string | number>(
         {
             name: isCompositeIdentifier.name,
             validator: {
-                validate: (value, _): boolean => {
-                    return isCompositeIdentifier(AllowedTypesEnum, idTypeGuard, value);
-                },
+                validate: (value, _): boolean =>
+                    isCompositeIdentifier(AllowedTypesEnum, idTypeGuard, value),
                 defaultMessage: buildMessage(
                     (eachPrefix) => eachPrefix + '$property must be a composite identifier',
                     validationOptions

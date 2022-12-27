@@ -1,6 +1,6 @@
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
-import { Equals } from 'class-validator';
+import { Equals } from '@coscrad/validation';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 import { ICreateCommand } from '../../shared/command-handlers/interfaces/create-command.interface';
