@@ -30,7 +30,7 @@ export class CreateCourtCaseBibliographicReferenceCommandHandler extends BaseCre
     }
 
     protected createNewInstance({
-        id,
+        aggregateCompositeIdentifier: { id },
         caseName,
         abstract,
         dateDecided,

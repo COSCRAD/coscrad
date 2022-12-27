@@ -925,7 +925,7 @@ Object {
   "entries": Object {
     "complexDataType": "NESTED_TYPE",
     "description": "all terms in this vocabulary list with corresponding filter properties",
-    "isArray": false,
+    "isArray": true,
     "isOptional": false,
     "label": "entries",
     "schema": Object {

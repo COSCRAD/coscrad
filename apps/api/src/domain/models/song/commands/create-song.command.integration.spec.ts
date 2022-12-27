@@ -16,6 +16,7 @@ import {
     assertCommandPayloadTypeError,
 } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
+import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
@@ -35,7 +36,7 @@ const createSongCommandType = 'CREATE_SONG';
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateSong>> => ({
     type: createSongCommandType,
     payload: {
-        id,
+        aggregateCompositeIdentifier: { id, type: AggregateType.song },
         title: 'test-song-name (language)',
         titleEnglish: 'test-song-name (English)',
         contributions: [],
@@ -104,7 +105,9 @@ describe('CreateSong', () => {
                 buildValidCommandFSA,
                 initialState,
                 systemUserId: dummySystemUserId,
-                checkStateOnSuccess: async ({ id }: CreateSong) => {
+                checkStateOnSuccess: async ({
+                    aggregateCompositeIdentifier: { id },
+                }: CreateSong) => {
                     const idStatus = await idManager.status(id);
 
                     expect(idStatus).toBe(NotAvailable);
@@ -150,7 +153,10 @@ describe('CreateSong', () => {
         describe('when the id property has an invalid type (number[])', () => {
             it('should return an error', async () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) => buildInvalidFSA(id, { id: [99] }),
+                    buildCommandFSA: (id: AggregateId) =>
+                        buildInvalidFSA(id, {
+                            aggregateCompositeIdentifier: { id: [99], type: AggregateType.song },
+                        }),
                     initialState,
                     systemUserId: dummySystemUserId,
                     checkError: (error) => {

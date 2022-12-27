@@ -11,8 +11,11 @@ CoscradUserGroup {
         "userId": "system4d-3b7d-4bad-9bdd-2b0d70userid",
       },
       "payload": Object {
+        "aggregateCompositeIdentifier": Object {
+          "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0001",
+          "type": "userGroup",
+        },
         "description": "this group is for teachers from community schools",
-        "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0001",
         "label": "teachers",
       },
       "type": "USER_GROUP_CREATED",
