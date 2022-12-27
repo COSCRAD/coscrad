@@ -4,6 +4,7 @@ export * from './base.view-model.interface';
 export * from './categorizable-composite-identifier';
 export * from './categorizable-type.enum';
 export * from './category-tree';
+export * from './composite-identifier.interface';
 export * from './has-id.interface';
 export * from './note';
 export * from './resources';

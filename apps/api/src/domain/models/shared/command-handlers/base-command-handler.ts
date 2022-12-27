@@ -6,6 +6,7 @@ import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
+import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { InMemorySnapshot } from '../../../types/ResourceType';
 import { Aggregate } from '../../aggregate.entity';
@@ -20,7 +21,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
     protected abstract readonly repositoryForCommandsTargetAggregate: IRepositoryForAggregate<TAggregate>;
 
     constructor(
-        protected readonly repositoryProvider: RepositoryProvider,
+        @Inject(RepositoryProvider) protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {}
 

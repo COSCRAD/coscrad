@@ -1,7 +1,9 @@
 import { Command } from '@coscrad/commands';
-import { NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
-import { AggregateId } from '../../../../types/AggregateId';
+import { NestedDataType, NonEmptyString, RawDataObject, URL } from '@coscrad/data-types';
+import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
+import { AggregateType } from '../../../../types/AggregateType';
 import { ICreateCommand } from '../../../shared/command-handlers/interfaces/create-command.interface';
+import { BibliographicReferenceCompositeIdentifier } from '../../shared/BibliographicReferenceCompositeIdentifier';
 
 const isOptional = true;
 
@@ -11,11 +13,13 @@ const isOptional = true;
     description: 'Creates a new court case bibliographic reference',
 })
 export class CreateCourtCaseBibliographicReference implements ICreateCommand {
-    @UUID({
-        label: 'ID (generated)',
-        description: 'a unique identifier for the new court case bibliographic reference',
+    @NestedDataType(BibliographicReferenceCompositeIdentifier, {
+        label: 'Composite Identifier',
+        description: 'system-wide unique identifier',
     })
-    readonly id: AggregateId;
+    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier<
+        typeof AggregateType.bibliographicReference
+    >;
 
     @RawDataObject({
         isOptional,
