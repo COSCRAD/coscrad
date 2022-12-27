@@ -38,7 +38,7 @@ export class CreateBookBibliographicReferenceCommandHandler extends BaseCreateCo
     }
 
     protected createNewInstance({
-        id,
+        aggregateCompositeIdentifier: { id },
         title,
         creators,
         abstract,

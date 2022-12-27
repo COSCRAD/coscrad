@@ -1,3 +1,4 @@
+import { CompositeIdentifier } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
@@ -11,6 +12,7 @@ import TestRepositoryProvider from '../../../../../../persistence/repositories/_
 import { DTO } from '../../../../../../types/DTO';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../../types/AggregateId';
+import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../../../types/ResourceType';
 import AggregateIdAlreadyInUseError from '../../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
@@ -45,12 +47,19 @@ const existingInstance = getValidBibliographicReferenceInstanceForTest(
 
 const testDatabaseName = generateDatabaseNameForTestSuite();
 
+const buildCompositeId = (
+    id: AggregateId
+): CompositeIdentifier<typeof AggregateType.bibliographicReference> => ({
+    type: AggregateType.bibliographicReference,
+    id,
+});
+
 const buildValidCommandFSA = (
     id: AggregateId
 ): FluxStandardAction<DTO<CreateBookBibliographicReference>> => ({
     type: commandType,
     payload: {
-        id,
+        aggregateCompositeIdentifier: buildCompositeId(id),
         title: 'old dusty book',
         creators: [
             {
@@ -117,11 +126,14 @@ describe(`The command: ${commandType}`, () => {
                 buildValidCommandFSA,
                 initialState,
                 systemUserId: dummySystemUserId,
-                checkStateOnSuccess: async ({ id }: CreateBookBibliographicReference) => {
-                    await assertResourcePersistedProperly(idManager, testRepositoryProvider, {
-                        id,
-                        type: ResourceType.bibliographicReference,
-                    });
+                checkStateOnSuccess: async ({
+                    aggregateCompositeIdentifier: { id },
+                }: CreateBookBibliographicReference) => {
+                    await assertResourcePersistedProperly(
+                        idManager,
+                        testRepositoryProvider,
+                        buildCompositeId(id)
+                    );
                 },
             });
         });
@@ -150,7 +162,7 @@ describe(`The command: ${commandType}`, () => {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: (_: AggregateId) =>
                         dummyCommandFSAFactory.build(_, {
-                            id: existingInstance.id,
+                            aggregateCompositeIdentifier: buildCompositeId(existingInstance.id),
                         }),
                     initialState: new DeluxeInMemoryStore({
                         bibliographicReference: [existingInstance],
@@ -217,7 +229,7 @@ describe(`The command: ${commandType}`, () => {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: (_: AggregateId) =>
                         dummyCommandFSAFactory.build(dummyNewUuid, {
-                            id: dummyNewUuid,
+                            aggregateCompositeIdentifier: buildCompositeId(dummyNewUuid),
                         }),
                     initialState,
                     checkError: (error: InternalError) =>

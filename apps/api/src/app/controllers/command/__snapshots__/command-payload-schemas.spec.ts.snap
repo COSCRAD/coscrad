@@ -29,6 +29,22 @@ Object {
     "isOptional": true,
     "label": "abstract",
   },
+  "aggregateCompositeIdentifier": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "system-wide unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "Composite Identifier",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
+  },
   "creators": Object {
     "complexDataType": "NESTED_TYPE",
     "description": "the authors of the referenced book",
@@ -67,13 +83,6 @@ Object {
         ],
       },
     },
-  },
-  "id": Object {
-    "coscradDataType": "UUID",
-    "description": "unique identifier for the new book bibliographic reference",
-    "isArray": false,
-    "isOptional": false,
-    "label": "ID (generated)",
   },
   "isbn": Object {
     "coscradDataType": "ISBN",
@@ -143,6 +152,22 @@ Object {
     "isOptional": true,
     "label": "abstract",
   },
+  "aggregateCompositeIdentifier": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "system-wide unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "Composite Identifier",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
+  },
   "caseName": Object {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the name of the court case",
@@ -163,13 +188,6 @@ Object {
     "isArray": false,
     "isOptional": true,
     "label": "date decided",
-  },
-  "id": Object {
-    "coscradDataType": "UUID",
-    "description": "a unique identifier for the new court case bibliographic reference",
-    "isArray": false,
-    "isOptional": false,
-    "label": "ID (generated)",
   },
   "pages": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -203,6 +221,22 @@ Object {
     "isArray": false,
     "isOptional": true,
     "label": "abstract",
+  },
+  "aggregateCompositeIdentifier": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "system-wide unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "Composite Identifier",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
   },
   "creators": Object {
     "complexDataType": "NESTED_TYPE",
@@ -249,13 +283,6 @@ Object {
     "isArray": false,
     "isOptional": true,
     "label": "DOI",
-  },
-  "id": Object {
-    "coscradDataType": "UUID",
-    "description": "unique identifier of the new journal article bibliographic reference",
-    "isArray": false,
-    "isOptional": false,
-    "label": "ID (generated)",
   },
   "issn": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -311,6 +338,22 @@ Object {
 
 exports[`command payload schemas The schema for command CREATE_MEDIA_ITEM should have the expected value 1`] = `
 Object {
+  "aggregateCompositeIdentifier": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "system-wide unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "Composite Identifier",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
+  },
   "contributions": Object {
     "complexDataType": "NESTED_TYPE",
     "description": "an acknowledgement of each person who contributed to creating and producing this song",
@@ -333,13 +376,6 @@ Object {
         "label": "role",
       },
     },
-  },
-  "id": Object {
-    "coscradDataType": "UUID",
-    "description": "a unique identifier for this media item",
-    "isArray": false,
-    "isOptional": false,
-    "label": "media item ID (generated)",
   },
   "mimeType": Object {
     "complexDataType": "ENUM",
@@ -393,6 +429,22 @@ Object {
 
 exports[`command payload schemas The schema for command CREATE_SONG should have the expected value 1`] = `
 Object {
+  "aggregateCompositeIdentifier": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "system-wide unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "Composite Identifier",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
+  },
   "audioURL": Object {
     "coscradDataType": "URL",
     "description": "a web URL link to the audio for this song",
@@ -422,13 +474,6 @@ Object {
         "label": "role",
       },
     },
-  },
-  "id": Object {
-    "coscradDataType": "UUID",
-    "description": "unique identifier for the song that will be created",
-    "isArray": false,
-    "isOptional": false,
-    "label": "ID (generated)",
   },
   "lyrics": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -463,19 +508,28 @@ Object {
 
 exports[`command payload schemas The schema for command CREATE_USER_GROUP should have the expected value 1`] = `
 Object {
+  "aggregateCompositeIdentifier": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "system-wide unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "Composite Identifier",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
+  },
   "description": Object {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a summary of the purpose of this group (what its members have in common)",
     "isArray": false,
     "isOptional": false,
     "label": "description",
-  },
-  "id": Object {
-    "coscradDataType": "UUID",
-    "description": "unique identifier for the new user group",
-    "isArray": false,
-    "isOptional": false,
-    "label": "ID (generated)",
   },
   "label": Object {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -567,12 +621,21 @@ Object {
 
 exports[`command payload schemas The schema for command REGISTER_USER should have the expected value 1`] = `
 Object {
-  "id": Object {
-    "coscradDataType": "UUID",
-    "description": "the internal unique ID of the user to register",
+  "aggregateCompositeIdentifier": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "system-wide unique identifier",
     "isArray": false,
     "isOptional": false,
-    "label": "ID (generated)",
+    "label": "Composite Identifier",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
   },
   "userIdFromAuthProvider": Object {
     "coscradDataType": "NON_EMPTY_STRING",
