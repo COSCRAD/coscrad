@@ -1,15 +1,20 @@
 import { CompositeIdentifier, NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
+import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
+import TagLabelAlreadyInUseError from '../../domainModelValidators/errors/tag/TagLabelAlreadyInUseError';
+import { isValid, Valid } from '../../domainModelValidators/Valid';
 import { HasLabel } from '../../interfaces/HasAggregateIdAndLabel';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../types/AggregateId';
 import { AggregateType } from '../../types/AggregateType';
 import { CategorizableType, isCategorizableType } from '../../types/CategorizableType';
+import { InMemorySnapshot } from '../../types/ResourceType';
 import { Aggregate } from '../aggregate.entity';
 import { CategorizableCompositeIdentifier } from '../categories/types/ResourceOrNoteCompositeIdentifier';
+import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
 
 @RegisterIndexScopedCommands([])
 export class Tag extends Aggregate implements HasLabel {
@@ -46,6 +51,22 @@ export class Tag extends Aggregate implements HasLabel {
 
     getAvailableCommands(): string[] {
         return [];
+    }
+
+    validateExternalState(externalState: InMemorySnapshot): ValidationResult {
+        const baseValidationErrors = super.validateExternalState(externalState);
+
+        const labelCollisionErrors = externalState.tag
+            .filter(({ label }) => label === this.label)
+            .map(({ id, label }) => new TagLabelAlreadyInUseError(label, id));
+
+        // There must be a better pattern for composing these
+        const allErrors = [
+            ...(isValid(baseValidationErrors) ? [] : baseValidationErrors.innerErrors),
+            ...labelCollisionErrors,
+        ];
+
+        return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
     }
 
     protected validateComplexInvariants(): InternalError[] {

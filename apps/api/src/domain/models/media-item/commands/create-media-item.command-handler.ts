@@ -37,7 +37,14 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
     }
 
     protected createNewInstance(command: CreateMediaItem): ResultOrError<MediaItem> {
-        const { id, title, titleEnglish, url, contributions, mimeType } = command;
+        const {
+            aggregateCompositeIdentifier: { id },
+            title,
+            titleEnglish,
+            url,
+            contributions,
+            mimeType,
+        } = command;
 
         const createDto: DTO<MediaItem> = {
             id,

@@ -8,6 +8,7 @@ import { CreateSongCommandHandler } from '../../../domain/models/song/commands/c
 import { Song } from '../../../domain/models/song/song.entity';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { buildFakeTimersConfig } from '../../../domain/models/__tests__/utilities/buildFakeTimersConfig';
+import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
@@ -23,7 +24,7 @@ const commandEndpoint = `/commands`;
 const buildValidCommandFSA = (id: string): FluxStandardAction<DTO<CreateSong>> => ({
     type: 'CREATE_SONG',
     payload: {
-        id,
+        aggregateCompositeIdentifier: { id, type: AggregateType.song },
         title: 'test-song-name (language)',
         titleEnglish: 'test-song-name (English)',
         contributions: [],
@@ -131,11 +132,11 @@ describe('The Command Controller', () => {
 
             const result = await testRepositoryProvider
                 .forResource<Song>(ResourceType.song)
-                .fetchById(validPayload.id);
+                .fetchById(validPayload.aggregateCompositeIdentifier.id);
 
             const test = result as Song;
 
-            expect(test.id).toBe(validPayload.id);
+            expect(test.id).toBe(validPayload.aggregateCompositeIdentifier.id);
 
             // A create event should be the only one in the song's history
             expect(test.eventHistory).toHaveLength(1);

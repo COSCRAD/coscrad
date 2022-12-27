@@ -9,6 +9,7 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { DTO } from '../../../../../types/DTO';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
+import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../../types/ResourceType';
 import getValidBibliographicReferenceInstanceForTest from '../../../../__tests__/utilities/getValidBibliographicReferenceInstanceForTest';
@@ -47,7 +48,7 @@ const buildValidCommandFSA = (
 ): FluxStandardAction<DTO<CreateJournalArticleBibliographicReference>> => ({
     type: commandType,
     payload: {
-        id,
+        aggregateCompositeIdentifier: { id, type: AggregateType.bibliographicReference },
         rawData: {
             foo: 'hello world',
         },
@@ -114,7 +115,9 @@ describe(`The command: ${commandType}`, () => {
                 buildValidCommandFSA,
                 initialState,
                 systemUserId: dummySystemUserId,
-                checkStateOnSuccess: async ({ id }: CreateJournalArticleBibliographicReference) => {
+                checkStateOnSuccess: async ({
+                    aggregateCompositeIdentifier: { id },
+                }: CreateJournalArticleBibliographicReference) => {
                     await assertResourcePersistedProperly(idManager, testRepositoryProvider, {
                         id,
                         type: ResourceType.bibliographicReference,
@@ -153,7 +156,10 @@ describe(`The command: ${commandType}`, () => {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: (_: AggregateId) =>
                         dummyFSAFactory.build(_, {
-                            id: existingJournalArticleBibliographicReference.id,
+                            aggregateCompositeIdentifier: {
+                                id: existingJournalArticleBibliographicReference.id,
+                                type: AggregateType.bibliographicReference,
+                            },
                         }),
                     initialState: new DeluxeInMemoryStore({
                         bibliographicReference: [existingJournalArticleBibliographicReference],

@@ -30,7 +30,7 @@ const commandType = 'REGISTER_USER';
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<RegisterUser>> => ({
     type: commandType,
     payload: {
-        id,
+        aggregateCompositeIdentifier: { id, type: AggregateType.user },
         userIdFromAuthProvider: 'prov|847686859040',
         username: 'jb823',
     },
@@ -113,7 +113,9 @@ describe('RegisterUser', () => {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
                 initialState,
-                checkStateOnSuccess: async ({ id }: RegisterUser) => {
+                checkStateOnSuccess: async ({
+                    aggregateCompositeIdentifier: { id },
+                }: RegisterUser) => {
                     const userSearchResult = await testRepositoryProvider
                         .getUserRepository()
                         .fetchById(id);
@@ -190,7 +192,10 @@ describe('RegisterUser', () => {
 
                 await assertCreateCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
-                    buildCommandFSA: (_: AggregateId) => buildInvalidFSA(bogusId, { id: bogusId }),
+                    buildCommandFSA: (_: AggregateId) =>
+                        buildInvalidFSA(bogusId, {
+                            aggregateCompositeIdentifier: { id: bogusId, type: AggregateType.user },
+                        }),
                     initialState,
                 });
             });
