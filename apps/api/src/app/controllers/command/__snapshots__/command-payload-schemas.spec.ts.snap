@@ -2,12 +2,21 @@
 
 exports[`command payload schemas The schema for command ADD_USER_TO_GROUP should have the expected value 1`] = `
 Object {
-  "groupId": Object {
-    "coscradDataType": "UUID",
-    "description": "the ID of the group to which the user will be added",
+  "aggregateCompositeIdentifier": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "system-wide unique identifier",
     "isArray": false,
     "isOptional": false,
-    "label": "group ID",
+    "label": "Composite Identifier",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
   },
   "userId": Object {
     "coscradDataType": "UUID",
@@ -543,6 +552,22 @@ Object {
 
 exports[`command payload schemas The schema for command GRANT_RESOURCE_READ_ACCESS_TO_USER should have the expected value 1`] = `
 Object {
+  "aggregateCompositeIdentifier": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "system-wide unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "Composite Identifier",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
+  },
   "resourceCompositeIdentifier": Object {
     "coscradDataType": "COMPOSITE_IDENTIFIER",
     "description": "the composite identifier of the resource to which the user will receive access",
@@ -550,18 +575,27 @@ Object {
     "isOptional": false,
     "label": "resource composite identifier",
   },
-  "userId": Object {
-    "coscradDataType": "UUID",
-    "description": "unique identifier of the user who will be granted read access to this resource",
-    "isArray": false,
-    "isOptional": false,
-    "label": "user ID",
-  },
 }
 `;
 
 exports[`command payload schemas The schema for command GRANT_USER_ROLE should have the expected value 1`] = `
 Object {
+  "aggregateCompositeIdentifier": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "system-wide unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "Composite Identifier",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
+  },
   "role": Object {
     "complexDataType": "ENUM",
     "description": "the role that will be granted to this user",
@@ -584,13 +618,6 @@ Object {
         "value": "superAdmin",
       },
     ],
-  },
-  "userId": Object {
-    "coscradDataType": "UUID",
-    "description": "the ID of the user who will be granted the new role",
-    "isArray": false,
-    "isOptional": false,
-    "label": "user ID",
   },
 }
 `;

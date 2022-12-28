@@ -93,12 +93,7 @@ export class Song extends Resource implements ITimeBoundable {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        const allCommands = ['PUBLISH_SONG'];
-
-        // There's no reason to publish a Song that is already published.
-        if (this.published) return [];
-
-        return allCommands;
+        return [];
     }
 
     protected validateComplexInvariants(): InternalError[] {

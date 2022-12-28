@@ -1,21 +1,23 @@
-import { Command, ICommand } from '@coscrad/commands';
-import { CompositeIdentifier, UUID } from '@coscrad/data-types';
-import { AggregateId, isAggregateId } from '../../../../types/AggregateId';
+import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import { Command } from '@coscrad/commands';
+import { CompositeIdentifier, NestedDataType } from '@coscrad/data-types';
+import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
+import { isAggregateId } from '../../../../types/AggregateId';
 import { ResourceCompositeIdentifier } from '../../../../types/ResourceCompositeIdentifier';
 import { ResourceType } from '../../../../types/ResourceType';
+import { UserCompositeIdentifier } from '../../../user-management/user/commands/user-composite-identifier';
 
 @Command({
     type: 'GRANT_RESOURCE_READ_ACCESS_TO_USER',
     label: 'Grant Read Access to User',
     description: 'Allow a user to view (but not edit) a given resource',
 })
-export class GrantResourceReadAccessToUser implements ICommand {
-    @UUID({
-        label: 'user ID',
-        description:
-            'unique identifier of the user who will be granted read access to this resource',
+export class GrantResourceReadAccessToUser implements ICommandBase {
+    @NestedDataType(UserCompositeIdentifier, {
+        label: 'Composite Identifier',
+        description: 'system-wide unique identifier',
     })
-    readonly userId: AggregateId;
+    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier<typeof AggregateType.user>;
 
     @CompositeIdentifier(ResourceType, isAggregateId, {
         label: 'resource composite identifier',
