@@ -1,4 +1,5 @@
-import { Command, ICommand } from '@coscrad/commands';
+import { ICommandBase } from '@coscrad/api-interfaces';
+import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { TagCompositeIdentifier } from '../tag-composite-identifier';
@@ -8,7 +9,7 @@ import { TagCompositeIdentifier } from '../tag-composite-identifier';
     label: 'Relabel Tag',
     description: 'changes the label for a tag while maintaining its membership',
 })
-export class RelabelTag implements ICommand {
+export class RelabelTag implements ICommandBase {
     @NestedDataType(TagCompositeIdentifier, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',

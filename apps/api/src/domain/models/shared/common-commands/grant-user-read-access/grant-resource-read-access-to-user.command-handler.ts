@@ -37,7 +37,10 @@ export class GrantResourceReadAccessToUserCommandHandler implements ICommandHand
 
         if (!isValid(typeValidationResult)) return typeValidationResult;
 
-        const { userId, resourceCompositeIdentifier } = command;
+        const {
+            aggregateCompositeIdentifier: { id: userId },
+            resourceCompositeIdentifier,
+        } = command;
 
         const { type: resourceType, id } = resourceCompositeIdentifier;
 

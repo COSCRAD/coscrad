@@ -1,4 +1,3 @@
-import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
@@ -15,7 +14,13 @@ import { MediaItem } from '../entities/media-item.entity';
 import { MediaItemPublished } from './media-item-published.event';
 import { PublishMediaItem } from './publish-media-item.command';
 
-@CommandHandler(PublishMediaItem)
+/**
+ * This command is deprecated and will be removed in favour of `PUBLISH_RESOURCE`.
+ *
+ * TODO[https://www.pivotaltracker.com/story/show/184111389]
+ * Remove this command handler once the new command has been written.
+ */
+// @CommandHandler(PublishMediaItem)
 export class PublishMediaItemCommandHandler extends BaseUpdateCommandHandler<MediaItem> {
     protected readonly aggregateType = ResourceType.mediaItem;
 
@@ -30,10 +35,6 @@ export class PublishMediaItemCommandHandler extends BaseUpdateCommandHandler<Med
         this.repositoryForCommandsTargetAggregate = this.repositoryProvider.forResource<MediaItem>(
             ResourceType.mediaItem
         );
-    }
-
-    protected getAggregateIdFromCommand({ id }: PublishMediaItem): string {
-        return id;
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

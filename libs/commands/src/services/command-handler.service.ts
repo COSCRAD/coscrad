@@ -56,7 +56,9 @@ export class CommandHandlerService {
     }
 
     #getAllCommandCtors() {
-        return [...this.#handlers.values()]
+        const allHandlers = [...this.#handlers.values()];
+
+        return allHandlers
             .map((handler) => Object.getPrototypeOf(handler).constructor)
             .map((handlerCtor) => getCommandFromHandlerMetadata(handlerCtor));
     }

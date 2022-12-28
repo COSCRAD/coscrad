@@ -1,3 +1,4 @@
+import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import {
     CoscradEnum,
@@ -12,7 +13,6 @@ import {
 import { Equals } from '@coscrad/validation';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
-import { ICreateCommand } from '../../shared/command-handlers/interfaces/create-command.interface';
 import { ContributorAndRole } from '../../song/ContributorAndRole';
 
 class MediaItemCompositeId {
@@ -40,7 +40,7 @@ class MediaItemCompositeId {
     label: 'Create Media Item',
     description: 'Creates a new media item',
 })
-export class CreateMediaItem implements ICreateCommand {
+export class CreateMediaItem implements ICommandBase {
     /**
      * TODO
      * We need a migration for this schema change. The migration will

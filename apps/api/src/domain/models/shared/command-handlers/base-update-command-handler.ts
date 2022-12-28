@@ -1,4 +1,4 @@
-import { ICommand } from '@coscrad/commands';
+import { ICommandBase } from '@coscrad/api-interfaces';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { AggregateId } from '../../../types/AggregateId';
@@ -19,9 +19,15 @@ export abstract class BaseUpdateCommandHandler<
 > extends BaseCommandHandler<TAggregate> {
     protected abstract aggregateType: AggregateType;
 
-    protected abstract getAggregateIdFromCommand(command: ICommand): AggregateId;
+    private getAggregateIdFromCommand({
+        aggregateCompositeIdentifier: { id },
+    }: ICommandBase): AggregateId {
+        return id;
+    }
 
-    protected async fetchInstanceToUpdate(command: ICommand): Promise<ResultOrError<TAggregate>> {
+    protected async fetchInstanceToUpdate(
+        command: ICommandBase
+    ): Promise<ResultOrError<TAggregate>> {
         const id = this.getAggregateIdFromCommand(command);
 
         const searchResult = await this.repositoryForCommandsTargetAggregate.fetchById(id);
@@ -32,14 +38,14 @@ export abstract class BaseUpdateCommandHandler<
         return searchResult;
     }
 
-    protected createOrFetchWriteContext(command: ICommand): Promise<ResultOrError<TAggregate>> {
+    protected createOrFetchWriteContext(command: ICommandBase): Promise<ResultOrError<TAggregate>> {
         return this.fetchInstanceToUpdate(command);
     }
 
     // TODO There's still lots of overlap with the `create` command handler base- move to base class
     protected async persist(
         instance: TAggregate,
-        command: ICommand,
+        command: ICommandBase,
         systemUserId: AggregateId
     ): Promise<void> {
         // generate a unique ID for the event

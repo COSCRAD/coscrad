@@ -31,10 +31,6 @@ export class GrantUserRoleCommandHandler extends BaseUpdateCommandHandler<Coscra
         this.repositoryForCommandsTargetAggregate = this.repositoryProvider.getUserRepository();
     }
 
-    protected getAggregateIdFromCommand({ userId }: GrantUserRole): string {
-        return userId;
-    }
-
     protected actOnInstance(
         user: CoscradUser,
         { role }: GrantUserRole
