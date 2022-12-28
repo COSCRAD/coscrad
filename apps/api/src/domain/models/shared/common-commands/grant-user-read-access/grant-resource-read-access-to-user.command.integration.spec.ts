@@ -41,7 +41,7 @@ const initialState = buildInMemorySnapshot({
 const validFSA: FluxStandardAction<GrantResourceReadAccessToUser> = {
     type: commandType,
     payload: {
-        userId: existingUser.id,
+        aggregateCompositeIdentifier: { id: existingUser.id, type: AggregateType.user },
         resourceCompositeIdentifier: existingBook.getCompositeIdentifier(),
     },
 };
@@ -112,7 +112,7 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
                             initialState,
                             systemUserId: dummyAdminUserId,
                             checkStateOnSuccess: async ({
-                                userId,
+                                aggregateCompositeIdentifier: { id: userId },
                                 resourceCompositeIdentifier: { type, id },
                             }: GrantResourceReadAccessToUser) => {
                                 const updatedResourceSearchResult = await testRepositoryProvider
@@ -159,7 +159,7 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
                         expect(error.innerErrors[0]).toEqual(
                             new AggregateNotFoundError({
                                 type: AggregateType.user,
-                                id: validFSA.payload.userId,
+                                id: validFSA.payload.aggregateCompositeIdentifier.id,
                             })
                         );
                     },
@@ -199,7 +199,7 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
                                 existingBook.clone({
                                     queryAccessControlList:
                                         existingBook.queryAccessControlList.allowUser(
-                                            validFSA.payload.userId
+                                            validFSA.payload.aggregateCompositeIdentifier.id
                                         ),
                                 }),
                             ],
@@ -210,7 +210,7 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
 
                         expect(error.innerErrors[0]).toEqual(
                             new UserAlreadyHasReadAccessError(
-                                validFSA.payload.userId,
+                                validFSA.payload.aggregateCompositeIdentifier.id,
                                 validFSA.payload.resourceCompositeIdentifier
                             )
                         );

@@ -1,3 +1,4 @@
+import { ICommandBase } from '@coscrad/api-interfaces';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { isNotAvailable } from '../../../../lib/types/not-available';
@@ -11,7 +12,6 @@ import { Aggregate } from '../../aggregate.entity';
 import UuidNotAvailableForUseError from '../common-command-errors/UuidNotAvailableForUseError';
 import UuidNotGeneratedInternallyError from '../common-command-errors/UuidNotGeneratedInternallyError';
 import { BaseCommandHandler } from './base-command-handler';
-import { ICreateCommand } from './interfaces/create-command.interface';
 
 /**
  * Extend this class if you'd like some guidance when implementing a new `CREATE_X`
@@ -25,11 +25,9 @@ export abstract class BaseCreateCommandHandler<
 > extends BaseCommandHandler<TAggregate> {
     protected abstract readonly aggregateType: AggregateType;
 
-    protected abstract createNewInstance(command: ICreateCommand): ResultOrError<TAggregate>;
+    protected abstract createNewInstance(command: ICommandBase): ResultOrError<TAggregate>;
 
-    protected createOrFetchWriteContext(
-        command: ICreateCommand
-    ): Promise<ResultOrError<TAggregate>> {
+    protected createOrFetchWriteContext(command: ICommandBase): Promise<ResultOrError<TAggregate>> {
         return Promise.resolve(this.createNewInstance(command));
     }
 
@@ -43,7 +41,7 @@ export abstract class BaseCreateCommandHandler<
 
     protected async persist(
         instance: TAggregate,
-        command: ICreateCommand,
+        command: ICommandBase,
         userId: AggregateId
     ): Promise<void> {
         /**
@@ -74,7 +72,7 @@ export abstract class BaseCreateCommandHandler<
      * `create` call to the repository.
      */
     protected async validateAdditionalConstraints(
-        command: ICreateCommand
+        command: ICommandBase
     ): Promise<ValidationResult> {
         const {
             aggregateCompositeIdentifier: { id: newId },

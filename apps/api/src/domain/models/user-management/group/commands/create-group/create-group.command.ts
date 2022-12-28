@@ -1,37 +1,17 @@
+import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
-import { Equals } from '@coscrad/validation';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../../types/AggregateType';
-import { ICreateCommand } from '../../../../shared/command-handlers/interfaces/create-command.interface';
-
-class GroupCompositeId {
-    /**
-     * This is a bit of a hack. It circumvents our `CoscradDataTypes` and may
-     * cause problems for
-     * - Schema management
-     * - Anyone using our API directly (not via front-end)
-     *
-     * The simple answer is that you always have to tack on an
-     * `aggregateCompositeIdentifier`.
-     */
-    @Equals(AggregateType.userGroup)
-    type = AggregateType.userGroup;
-
-    @UUID({
-        label: 'ID',
-        description: 'unique identifier',
-    })
-    id: string;
-}
+import { UserGroupCompositeIdentifier } from '../user-group-composite-identifier';
 
 @Command({
     type: 'CREATE_USER_GROUP',
     label: 'Create User Group',
     description: 'Creates a new user group',
 })
-export class CreateGroup implements ICreateCommand {
-    @NestedDataType(GroupCompositeId, {
+export class CreateGroup implements ICommandBase {
+    @NestedDataType(UserGroupCompositeIdentifier, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',
     })
