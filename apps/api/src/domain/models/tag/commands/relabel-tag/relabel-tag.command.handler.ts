@@ -3,7 +3,6 @@ import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { RepositoryProvider } from '../../../../../persistence/repositories/repository.provider';
 import { ResultOrError } from '../../../../../types/ResultOrError';
-import TagLabelAlreadyInUseError from '../../../../domainModelValidators/errors/tag/TagLabelAlreadyInUseError';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
@@ -13,7 +12,6 @@ import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
-import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { Tag } from '../../tag.entity';
@@ -60,22 +58,7 @@ export class RelabelTagCommandHandler extends BaseUpdateCommandHandler<Tag> {
     }
 
     protected validateExternalState(state: InMemorySnapshot, tag: Tag): InternalError | Valid {
-        const { tag: allTags } = state;
-
-        const otherTags = allTags.filter(
-            (otherTag) => otherTag.getCompositeIdentifier() !== tag.getCompositeIdentifier()
-        );
-
-        const duplicateLabelErrors = otherTags
-            .filter(({ label }) => label === tag.label)
-            .map(
-                (otherTag) =>
-                    new TagLabelAlreadyInUseError(tag.label, otherTag.getCompositeIdentifier().id)
-            );
-
-        return duplicateLabelErrors.length > 0
-            ? new InvalidExternalStateError(duplicateLabelErrors)
-            : Valid;
+        return tag.validateLabelAgainstExternalState(state);
     }
 
     protected buildEvent(command: RelabelTag, eventId: string, userId: string): BaseEvent {
