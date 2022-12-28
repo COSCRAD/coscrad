@@ -1,18 +1,20 @@
-import { Command, ICommand } from '@coscrad/commands';
-import { CoscradEnum, CoscradUserRole, Enum, UUID } from '@coscrad/data-types';
-import { AggregateId } from '../../../../../types/AggregateId';
+import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import { Command } from '@coscrad/commands';
+import { CoscradEnum, CoscradUserRole, Enum, NestedDataType } from '@coscrad/data-types';
+import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
+import { UserCompositeIdentifier } from '../user-composite-identifier';
 
 @Command({
     type: 'GRANT_USER_ROLE',
     label: 'Grant User Role',
     description: 'Grant an additional user role to the user',
 })
-export class GrantUserRole implements ICommand {
-    @UUID({
-        label: 'user ID',
-        description: 'the ID of the user who will be granted the new role',
+export class GrantUserRole implements ICommandBase {
+    @NestedDataType(UserCompositeIdentifier, {
+        label: 'Composite Identifier',
+        description: 'system-wide unique identifier',
     })
-    readonly userId: AggregateId;
+    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier<typeof AggregateType.user>;
 
     @Enum(CoscradEnum.CoscradUserRole, {
         label: 'role',

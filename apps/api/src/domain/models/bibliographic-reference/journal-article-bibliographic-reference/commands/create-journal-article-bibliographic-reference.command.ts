@@ -1,9 +1,9 @@
+import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, RawDataObject, URL } from '@coscrad/data-types';
 import { IsNonEmptyArray } from '@coscrad/validation';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../types/AggregateType';
-import { ICreateCommand } from '../../../shared/command-handlers/interfaces/create-command.interface';
 import BibliographicReferenceCreator from '../../common/bibliographic-reference-creator.entity';
 import { BibliographicReferenceCompositeIdentifier } from '../../shared/BibliographicReferenceCompositeIdentifier';
 
@@ -15,7 +15,7 @@ const isOptional = true;
     label: 'Create Journal Article Bibliographic Reference',
     description: 'Creates a new journal article bibliographic reference',
 })
-export class CreateJournalArticleBibliographicReference implements ICreateCommand {
+export class CreateJournalArticleBibliographicReference implements ICommandBase {
     @NestedDataType(BibliographicReferenceCompositeIdentifier, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',

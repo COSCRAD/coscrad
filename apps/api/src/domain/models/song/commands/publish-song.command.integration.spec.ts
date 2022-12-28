@@ -42,7 +42,12 @@ const buildFullState = (song: Song) =>
         },
     });
 
-describe('PublishSong', () => {
+/**
+ * This command is deprecated and will be removed in favour of `PUBLISH_RESOURCE`.
+ *
+ * TODO Remove this test once the new command has been written.
+ */
+describe.skip('PublishSong', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
     let commandHandlerService: CommandHandlerService;

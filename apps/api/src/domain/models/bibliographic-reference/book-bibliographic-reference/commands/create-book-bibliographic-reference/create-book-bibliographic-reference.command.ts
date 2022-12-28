@@ -1,3 +1,4 @@
+import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import {
     ISBN,
@@ -11,7 +12,6 @@ import {
 import { IsNonEmptyArray } from '@coscrad/validation';
 import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../../types/AggregateType';
-import { ICreateCommand } from '../../../../shared/command-handlers/interfaces/create-command.interface';
 import BibliographicReferenceCreator from '../../../common/bibliographic-reference-creator.entity';
 import { BibliographicReferenceCompositeIdentifier } from '../../../shared/BibliographicReferenceCompositeIdentifier';
 
@@ -23,7 +23,7 @@ const isOptional = true;
     label: 'Create Book Bibliographic Reference',
     description: 'Creates a new book bibliographic reference',
 })
-export class CreateBookBibliographicReference implements ICreateCommand {
+export class CreateBookBibliographicReference implements ICommandBase {
     @NestedDataType(BibliographicReferenceCompositeIdentifier, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',
