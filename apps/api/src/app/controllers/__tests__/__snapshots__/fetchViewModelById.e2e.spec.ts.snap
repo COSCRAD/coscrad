@@ -2,35 +2,7 @@
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/bibliographicReferences/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [
-    Object {
-      "description": "Allow a user to view (but not edit) a given resource",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "description": "unique identifier of the user who will be granted read access to this resource",
-            "label": "user ID",
-            "name": "userId",
-            "type": "TEXT_FIELD",
-          },
-          Object {
-            "description": "the composite identifier of the resource to which the user will receive access",
-            "label": "resource composite identifier",
-            "name": "resourceCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-        ],
-        "prepopulatedFields": Object {
-          "compositeIdentifier": Object {
-            "id": "1",
-            "type": "bibliographicReference",
-          },
-        },
-      },
-      "label": "Grant Read Access to User",
-      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-    },
-  ],
+  "actions": Array [],
   "data": Object {
     "abstract": "This is the abstract, NOT a general note!",
     "creators": Array [
@@ -86,35 +58,7 @@ Object {
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/books/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [
-    Object {
-      "description": "Allow a user to view (but not edit) a given resource",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "description": "unique identifier of the user who will be granted read access to this resource",
-            "label": "user ID",
-            "name": "userId",
-            "type": "TEXT_FIELD",
-          },
-          Object {
-            "description": "the composite identifier of the resource to which the user will receive access",
-            "label": "resource composite identifier",
-            "name": "resourceCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-        ],
-        "prepopulatedFields": Object {
-          "compositeIdentifier": Object {
-            "id": "23",
-            "type": "book",
-          },
-        },
-      },
-      "label": "Grant Read Access to User",
-      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-    },
-  ],
+  "actions": Array [],
   "author": "John Doeburg",
   "id": "23",
   "pages": Array [
@@ -177,35 +121,7 @@ Object {
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/mediaItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [
-    Object {
-      "description": "Allow a user to view (but not edit) a given resource",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "description": "unique identifier of the user who will be granted read access to this resource",
-            "label": "user ID",
-            "name": "userId",
-            "type": "TEXT_FIELD",
-          },
-          Object {
-            "description": "the composite identifier of the resource to which the user will receive access",
-            "label": "resource composite identifier",
-            "name": "resourceCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-        ],
-        "prepopulatedFields": Object {
-          "compositeIdentifier": Object {
-            "id": "1",
-            "type": "mediaItem",
-          },
-        },
-      },
-      "label": "Grant Read Access to User",
-      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-    },
-  ],
+  "actions": Array [],
   "contributions": Array [
     Object {
       "contributorId": "2",
@@ -255,35 +171,7 @@ Object {
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/photographs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [
-    Object {
-      "description": "Allow a user to view (but not edit) a given resource",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "description": "unique identifier of the user who will be granted read access to this resource",
-            "label": "user ID",
-            "name": "userId",
-            "type": "TEXT_FIELD",
-          },
-          Object {
-            "description": "the composite identifier of the resource to which the user will receive access",
-            "label": "resource composite identifier",
-            "name": "resourceCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-        ],
-        "prepopulatedFields": Object {
-          "compositeIdentifier": Object {
-            "id": "0",
-            "type": "photograph",
-          },
-        },
-      },
-      "label": "Grant Read Access to User",
-      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-    },
-  ],
+  "actions": Array [],
   "id": "0",
   "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
   "photographer": "Susie McRealart",
@@ -316,35 +204,7 @@ Object {
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/songs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [
-    Object {
-      "description": "Allow a user to view (but not edit) a given resource",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "description": "unique identifier of the user who will be granted read access to this resource",
-            "label": "user ID",
-            "name": "userId",
-            "type": "TEXT_FIELD",
-          },
-          Object {
-            "description": "the composite identifier of the resource to which the user will receive access",
-            "label": "resource composite identifier",
-            "name": "resourceCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-        ],
-        "prepopulatedFields": Object {
-          "compositeIdentifier": Object {
-            "id": "1",
-            "type": "song",
-          },
-        },
-      },
-      "label": "Grant Read Access to User",
-      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-    },
-  ],
+  "actions": Array [],
   "audioURL": "https://www.myaudio.com/lamb.mp3",
   "contributions": Array [
     "1 (performer)",
@@ -392,35 +252,7 @@ Object {
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/spatialFeatures/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [
-    Object {
-      "description": "Allow a user to view (but not edit) a given resource",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "description": "unique identifier of the user who will be granted read access to this resource",
-            "label": "user ID",
-            "name": "userId",
-            "type": "TEXT_FIELD",
-          },
-          Object {
-            "description": "the composite identifier of the resource to which the user will receive access",
-            "label": "resource composite identifier",
-            "name": "resourceCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-        ],
-        "prepopulatedFields": Object {
-          "compositeIdentifier": Object {
-            "id": "100",
-            "type": "spatialFeature",
-          },
-        },
-      },
-      "label": "Grant Read Access to User",
-      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-    },
-  ],
+  "actions": Array [],
   "geometry": Object {
     "coordinates": Array [
       54.034404852745006,
@@ -479,35 +311,7 @@ Object {
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/terms/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [
-    Object {
-      "description": "Allow a user to view (but not edit) a given resource",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "description": "unique identifier of the user who will be granted read access to this resource",
-            "label": "user ID",
-            "name": "userId",
-            "type": "TEXT_FIELD",
-          },
-          Object {
-            "description": "the composite identifier of the resource to which the user will receive access",
-            "label": "resource composite identifier",
-            "name": "resourceCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-        ],
-        "prepopulatedFields": Object {
-          "compositeIdentifier": Object {
-            "id": "11",
-            "type": "term",
-          },
-        },
-      },
-      "label": "Grant Read Access to User",
-      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-    },
-  ],
+  "actions": Array [],
   "contributor": "",
   "id": "11",
   "tags": Array [],
@@ -518,35 +322,7 @@ Object {
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/transcribedAudioItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [
-    Object {
-      "description": "Allow a user to view (but not edit) a given resource",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "description": "unique identifier of the user who will be granted read access to this resource",
-            "label": "user ID",
-            "name": "userId",
-            "type": "TEXT_FIELD",
-          },
-          Object {
-            "description": "the composite identifier of the resource to which the user will receive access",
-            "label": "resource composite identifier",
-            "name": "resourceCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-        ],
-        "prepopulatedFields": Object {
-          "compositeIdentifier": Object {
-            "id": "110",
-            "type": "transcribedAudio",
-          },
-        },
-      },
-      "label": "Grant Read Access to User",
-      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-    },
-  ],
+  "actions": Array [],
   "audioURL": "https://www.mysound.org/downloads/Gaas.mp3",
   "id": "110",
   "lengthMilliseconds": 20000,
@@ -583,35 +359,7 @@ Object {
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/vocabularyLists/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
-  "actions": Array [
-    Object {
-      "description": "Allow a user to view (but not edit) a given resource",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "description": "unique identifier of the user who will be granted read access to this resource",
-            "label": "user ID",
-            "name": "userId",
-            "type": "TEXT_FIELD",
-          },
-          Object {
-            "description": "the composite identifier of the resource to which the user will receive access",
-            "label": "resource composite identifier",
-            "name": "resourceCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-        ],
-        "prepopulatedFields": Object {
-          "compositeIdentifier": Object {
-            "id": "4567",
-            "type": "vocabularyList",
-          },
-        },
-      },
-      "label": "Grant Read Access to User",
-      "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-    },
-  ],
+  "actions": Array [],
   "entries": Array [
     Object {
       "term": Object {

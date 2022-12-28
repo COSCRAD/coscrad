@@ -1,6 +1,7 @@
 export * from './aggregate-views';
 export * from './categorizable-detail-query-result.interface';
 export * from './categorizable-index-query-result.interface';
+export * from './command-base.interface';
 export * from './command-info.interface';
 export * from './commands';
 export * from './composite-identifier.interface';

@@ -1,8 +1,8 @@
+import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, RawDataObject, URL } from '@coscrad/data-types';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../types/AggregateType';
-import { ICreateCommand } from '../../../shared/command-handlers/interfaces/create-command.interface';
 import { BibliographicReferenceCompositeIdentifier } from '../../shared/BibliographicReferenceCompositeIdentifier';
 
 const isOptional = true;
@@ -12,7 +12,7 @@ const isOptional = true;
     label: 'Create Court Case Bibliographic Reference',
     description: 'Creates a new court case bibliographic reference',
 })
-export class CreateCourtCaseBibliographicReference implements ICreateCommand {
+export class CreateCourtCaseBibliographicReference implements ICommandBase {
     @NestedDataType(BibliographicReferenceCompositeIdentifier, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',

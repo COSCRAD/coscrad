@@ -1,12 +1,7 @@
-import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { Resource } from '../../../domain/models/resource.entity';
-import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
 import idEquals from '../../../domain/models/shared/functional/idEquals';
-import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
-import { PublishSongCommandHandler } from '../../../domain/models/song/commands/publish-song.command-handler';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -22,10 +17,6 @@ describe('GET  (fetch view models)', () => {
     let app: INestApplication;
 
     let testRepositoryProvider: TestRepositoryProvider;
-
-    let commandHandlerService: CommandHandlerService;
-
-    let idManager: IIdManager;
 
     const testData = buildTestData();
 
@@ -46,30 +37,10 @@ describe('GET  (fetch view models)', () => {
     );
 
     beforeAll(async () => {
-        ({ app, testRepositoryProvider, idManager, commandHandlerService } =
-            await setUpIntegrationTest({
-                ARANGO_DB_NAME: testDatabaseName,
-                BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
-            }));
-
-        /**
-         * TODO [https://www.pivotaltracker.com/story/show/182576828]
-         * We should just use the real app module for this.
-         */
-        commandHandlerService.registerHandler(
-            'CREATE_SONG',
-            new CreateSongCommandHandler(testRepositoryProvider, idManager)
-        );
-
-        commandHandlerService.registerHandler(
-            'PUBLISH_SONG',
-            new PublishSongCommandHandler(testRepositoryProvider, idManager)
-        );
-
-        commandHandlerService.registerHandler(
-            'GRANT_RESOURCE_READ_ACCESS_TO_USER',
-            new GrantResourceReadAccessToUserCommandHandler(testRepositoryProvider, idManager)
-        );
+        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
+            ARANGO_DB_NAME: testDatabaseName,
+            BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
+        }));
     });
 
     Object.values(ResourceType).forEach((resourceType) => {
