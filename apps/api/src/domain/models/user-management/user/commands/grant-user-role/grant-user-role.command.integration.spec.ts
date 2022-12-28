@@ -7,8 +7,9 @@ import generateDatabaseNameForTestSuite from '../../../../../../persistence/repo
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../../../../test-data/buildTestData';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
+import { AggregateType } from '../../../../../types/AggregateType';
+import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import buildEmptyInMemorySnapshot from '../../../../../utilities/buildEmptyInMemorySnapshot';
-import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
@@ -30,7 +31,7 @@ const existingUser = buildTestData().user[0].clone({
 const validCommandFSA: FluxStandardAction<GrantUserRole> = {
     type: commandType,
     payload: {
-        userId: existingUser.id,
+        aggregateCompositeIdentifier: { id: existingUser.id, type: AggregateType.user },
         role: CoscradUserRole.projectAdmin,
     },
 };
@@ -102,17 +103,17 @@ describe('GrantUserRole', () => {
                         buildValidCommandFSA: () => ({
                             type: commandType,
                             payload: {
-                                userId: existingUser.id,
+                                aggregateCompositeIdentifier: { id: existingUser.id },
                                 role,
                             },
                         }),
-                        initialState: buildInMemorySnapshot({
+                        initialState: new DeluxeInMemoryStore({
                             user: [
                                 existingUser.clone({
                                     roles: [getDistinctRole(role)],
                                 }),
                             ],
-                        }),
+                        }).fetchFullSnapshotInLegacyFormat(),
                     });
                 });
             });
@@ -142,14 +143,14 @@ describe('GrantUserRole', () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: () => validCommandFSA,
-                    initialState: buildInMemorySnapshot({
+                    initialState: new DeluxeInMemoryStore({
                         user: [
                             existingUser.clone({
                                 // the existing user already has the specified role
                                 roles: [validCommandFSA.payload.role],
                             }),
                         ],
-                    }),
+                    }).fetchFullSnapshotInLegacyFormat(),
                 });
             });
         });

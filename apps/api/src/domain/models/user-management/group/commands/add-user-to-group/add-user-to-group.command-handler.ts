@@ -33,10 +33,6 @@ export class AddUserToGroupCommandHandler extends BaseUpdateCommandHandler<Coscr
             this.repositoryProvider.getUserGroupRepository();
     }
 
-    protected getAggregateIdFromCommand({ groupId }: AddUserToGroup): string {
-        return groupId;
-    }
-
     protected actOnInstance(
         instance: CoscradUserGroup,
         { userId }: AddUserToGroup

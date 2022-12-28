@@ -50,7 +50,7 @@ const initialState = buildInMemorySnapshot({
 const validCommandFSA = {
     type: commandType,
     payload: {
-        groupId: existingGroup.id,
+        aggregateCompositeIdentifier: { id: existingGroup.id, type: AggregateType.userGroup },
         userId: userToAdd.id,
     },
 };
@@ -109,7 +109,10 @@ describe('AddUserToGroup', () => {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
                 initialState,
-                checkStateOnSuccess: async ({ groupId, userId }: AddUserToGroup) => {
+                checkStateOnSuccess: async ({
+                    aggregateCompositeIdentifier: { id: groupId },
+                    userId,
+                }: AddUserToGroup) => {
                     const groupSearchResult = await testRepositoryProvider
                         .getUserGroupRepository()
                         .fetchById(groupId);
