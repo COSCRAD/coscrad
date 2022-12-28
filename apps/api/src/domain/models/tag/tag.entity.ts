@@ -49,21 +49,35 @@ export class Tag extends Aggregate implements HasLabel {
         this.members = cloneToPlainObject(members);
     }
 
+    relabel(newLabel: string) {
+        return this.safeClone<Tag>({
+            label: newLabel,
+        });
+    }
+
     getAvailableCommands(): string[] {
         return [];
+    }
+
+    validateLabelAgainstExternalState(externalState: InMemorySnapshot): ValidationResult {
+        const labelCollisionErrors = externalState.tag
+            .filter(({ label }) => label === this.label)
+            .map(({ id, label }) => new TagLabelAlreadyInUseError(label, id));
+
+        return labelCollisionErrors.length > 0
+            ? new InvalidExternalStateError(labelCollisionErrors)
+            : Valid;
     }
 
     validateExternalState(externalState: InMemorySnapshot): ValidationResult {
         const baseValidationErrors = super.validateExternalState(externalState);
 
-        const labelCollisionErrors = externalState.tag
-            .filter(({ label }) => label === this.label)
-            .map(({ id, label }) => new TagLabelAlreadyInUseError(label, id));
+        const labelValidationResult = this.validateLabelAgainstExternalState(externalState);
 
         // There must be a better pattern for composing these
         const allErrors = [
             ...(isValid(baseValidationErrors) ? [] : baseValidationErrors.innerErrors),
-            ...labelCollisionErrors,
+            ...(isValid(labelValidationResult) ? [] : labelValidationResult.innerErrors),
         ];
 
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;

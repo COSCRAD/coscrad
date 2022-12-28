@@ -52,7 +52,7 @@ const fsaFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
 
 const dummyAdminUserId = buildDummyUuid();
 
-describe('GrantResourceReadAccesstoUser', () => {
+describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
     let app: INestApplication;
 
     let testRepositoryProvider: TestRepositoryProvider;
