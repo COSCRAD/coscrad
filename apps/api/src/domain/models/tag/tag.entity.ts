@@ -49,6 +49,12 @@ export class Tag extends Aggregate implements HasLabel {
         this.members = cloneToPlainObject(members);
     }
 
+    relabel(newLabel: string) {
+        return this.safeClone<Tag>({
+            label: newLabel,
+        });
+    }
+
     getAvailableCommands(): string[] {
         return [];
     }
