@@ -4,12 +4,6 @@ exports[`buildCommandForm should return the expected result 1`] = `
 Object {
   "fields": Array [
     Object {
-      "description": "system-wide unique identifier",
-      "label": "Composite Identifier",
-      "name": "aggregateCompositeIdentifier",
-      "type": "JSON_INPUT",
-    },
-    Object {
       "description": "title of the media item in the language",
       "label": "title (language)",
       "name": "title",
