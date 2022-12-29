@@ -49,7 +49,12 @@ const buildFullSnapshot = (preExistingMediaItem: MediaItem) =>
 
 const initialState = buildFullSnapshot(unpublishedMediaItem);
 
-describe('PublishMediaItem', () => {
+/**
+ * This command is deprecated and will be removed in favour of `PUBLISH_RESOURCE`.
+ *
+ * TODO Remove this test once the new command has been written.
+ */
+describe.skip('PublishMediaItem', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
     let commandHandlerService: CommandHandlerService;

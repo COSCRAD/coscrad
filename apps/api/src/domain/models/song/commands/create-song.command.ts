@@ -1,9 +1,9 @@
+import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
 import { Equals } from '@coscrad/validation';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
-import { ICreateCommand } from '../../shared/command-handlers/interfaces/create-command.interface';
 import { ContributorAndRole } from '../ContributorAndRole';
 
 class SongCompositeId {
@@ -31,7 +31,7 @@ class SongCompositeId {
     label: 'Create Song',
     description: 'Creates a new song',
 })
-export class CreateSong implements ICreateCommand {
+export class CreateSong implements ICommandBase {
     /**
      * TODO
      * We need a migration for this schema change. The migration will

@@ -1,4 +1,3 @@
-import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
@@ -15,7 +14,13 @@ import { Song } from '../song.entity';
 import { PublishSong } from './publish-song.command';
 import { SongPublished } from './song-published.event';
 
-@CommandHandler(PublishSong)
+/**
+ * This command is deprecated and will be removed in favour of `PUBLISH_RESOURCE`.
+ *
+ * TODO[https://www.pivotaltracker.com/story/show/184111389]
+ * Remove this command handler once the new command has been written.
+ */
+// @CommandHandler(PublishSong)
 export class PublishSongCommandHandler extends BaseUpdateCommandHandler<Song> {
     protected readonly aggregateType = ResourceType.song;
 
@@ -30,10 +35,6 @@ export class PublishSongCommandHandler extends BaseUpdateCommandHandler<Song> {
         this.repositoryForCommandsTargetAggregate = this.repositoryProvider.forResource<Song>(
             ResourceType.song
         );
-    }
-
-    protected getAggregateIdFromCommand({ id }: PublishSong): AggregateId {
-        return id;
     }
 
     actOnInstance(song: Song): ResultOrError<Song> {
