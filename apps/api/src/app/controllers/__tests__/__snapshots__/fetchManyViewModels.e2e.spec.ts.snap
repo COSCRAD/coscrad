@@ -10,12 +10,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -23,7 +17,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "bibliographicReference",
               },
@@ -91,12 +85,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -104,7 +92,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "23",
                 "type": "bibliographicReference",
               },
@@ -140,12 +128,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -153,7 +135,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "3",
                 "type": "bibliographicReference",
               },
@@ -203,12 +185,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -216,7 +192,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "bibliographicReference",
               },
@@ -284,12 +260,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -297,7 +267,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "23",
                 "type": "bibliographicReference",
               },
@@ -333,12 +303,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -346,7 +310,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "3",
                 "type": "bibliographicReference",
               },
@@ -396,12 +360,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -409,7 +367,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "23",
                 "type": "book",
               },
@@ -484,12 +442,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -497,7 +449,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "24",
                 "type": "book",
               },
@@ -566,12 +518,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -579,7 +525,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "25",
                 "type": "book",
               },
@@ -617,12 +563,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -630,7 +570,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "23",
                 "type": "book",
               },
@@ -705,12 +645,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -718,7 +652,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "24",
                 "type": "book",
               },
@@ -787,12 +721,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -800,7 +728,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "25",
                 "type": "book",
               },
@@ -838,12 +766,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -851,7 +773,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "mediaItem",
               },
@@ -921,12 +843,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -934,7 +850,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "mediaItem",
               },
@@ -1004,12 +920,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1017,7 +927,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "0",
                 "type": "photograph",
               },
@@ -1062,12 +972,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1075,7 +979,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "photograph",
               },
@@ -1116,12 +1020,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1129,7 +1027,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "2",
                 "type": "photograph",
               },
@@ -1159,12 +1057,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1172,7 +1064,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "0",
                 "type": "photograph",
               },
@@ -1217,12 +1109,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1230,7 +1116,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "photograph",
               },
@@ -1271,12 +1157,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1284,7 +1164,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "2",
                 "type": "photograph",
               },
@@ -1314,12 +1194,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1327,7 +1201,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "song",
               },
@@ -1387,12 +1261,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1400,7 +1268,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "2",
                 "type": "song",
               },
@@ -1437,12 +1305,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1450,7 +1312,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "song",
               },
@@ -1510,12 +1372,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1523,7 +1379,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "2",
                 "type": "song",
               },
@@ -1560,12 +1416,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1573,7 +1423,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "100",
                 "type": "spatialFeature",
               },
@@ -1644,12 +1494,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1657,7 +1501,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "101",
                 "type": "spatialFeature",
               },
@@ -1720,12 +1564,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1733,7 +1571,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "102",
                 "type": "spatialFeature",
               },
@@ -1796,12 +1634,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1809,7 +1641,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "103",
                 "type": "spatialFeature",
               },
@@ -1841,12 +1673,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1854,7 +1680,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "104",
                 "type": "spatialFeature",
               },
@@ -1886,12 +1712,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1899,7 +1719,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "spatialFeature",
               },
@@ -1957,12 +1777,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -1970,7 +1784,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "300",
                 "type": "spatialFeature",
               },
@@ -2026,12 +1840,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2039,7 +1847,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "100",
                 "type": "spatialFeature",
               },
@@ -2110,12 +1918,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2123,7 +1925,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "101",
                 "type": "spatialFeature",
               },
@@ -2186,12 +1988,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2199,7 +1995,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "102",
                 "type": "spatialFeature",
               },
@@ -2262,12 +2058,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2275,7 +2065,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "103",
                 "type": "spatialFeature",
               },
@@ -2307,12 +2097,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2320,7 +2104,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "104",
                 "type": "spatialFeature",
               },
@@ -2352,12 +2136,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2365,7 +2143,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "spatialFeature",
               },
@@ -2423,12 +2201,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2436,7 +2208,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "300",
                 "type": "spatialFeature",
               },
@@ -2492,12 +2264,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2505,7 +2271,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "11",
                 "type": "term",
               },
@@ -2528,12 +2294,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2541,7 +2301,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "12",
                 "type": "term",
               },
@@ -2564,12 +2324,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2577,7 +2331,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "13",
                 "type": "term",
               },
@@ -2600,12 +2354,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2613,7 +2361,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "01",
                 "type": "term",
               },
@@ -2636,12 +2384,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2649,7 +2391,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "02",
                 "type": "term",
               },
@@ -2672,12 +2414,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2685,7 +2421,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "term",
               },
@@ -2747,12 +2483,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2760,7 +2490,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "2",
                 "type": "term",
               },
@@ -2814,12 +2544,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2827,7 +2551,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "3",
                 "type": "term",
               },
@@ -2880,12 +2604,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2893,7 +2611,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "4",
                 "type": "term",
               },
@@ -2923,12 +2641,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2936,7 +2648,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "11",
                 "type": "term",
               },
@@ -2959,12 +2671,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -2972,7 +2678,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "12",
                 "type": "term",
               },
@@ -2995,12 +2701,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3008,7 +2708,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "13",
                 "type": "term",
               },
@@ -3031,12 +2731,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3044,7 +2738,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "01",
                 "type": "term",
               },
@@ -3067,12 +2761,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3080,7 +2768,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "02",
                 "type": "term",
               },
@@ -3103,12 +2791,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3116,7 +2798,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "term",
               },
@@ -3178,12 +2860,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3191,7 +2867,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "2",
                 "type": "term",
               },
@@ -3245,12 +2921,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3258,7 +2928,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "3",
                 "type": "term",
               },
@@ -3311,12 +2981,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3324,7 +2988,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "4",
                 "type": "term",
               },
@@ -3354,12 +3018,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3367,7 +3025,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "110",
                 "type": "transcribedAudio",
               },
@@ -3416,12 +3074,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3429,7 +3081,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "111",
                 "type": "transcribedAudio",
               },
@@ -3456,12 +3108,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3469,7 +3115,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "113",
                 "type": "transcribedAudio",
               },
@@ -3503,12 +3149,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3516,7 +3156,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "110",
                 "type": "transcribedAudio",
               },
@@ -3565,12 +3205,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3578,7 +3212,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "111",
                 "type": "transcribedAudio",
               },
@@ -3605,12 +3239,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3618,7 +3246,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "113",
                 "type": "transcribedAudio",
               },
@@ -3652,12 +3280,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3665,7 +3287,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "4567",
                 "type": "vocabularyList",
               },
@@ -3789,12 +3411,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3802,7 +3418,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "vocabularyList",
               },
@@ -3907,12 +3523,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -3920,7 +3530,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "2",
                 "type": "vocabularyList",
               },
@@ -4024,12 +3634,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -4037,7 +3641,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "4567",
                 "type": "vocabularyList",
               },
@@ -4100,12 +3704,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -4113,7 +3711,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "1",
                 "type": "vocabularyList",
               },
@@ -4195,12 +3793,6 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "system-wide unique identifier",
-                "label": "Composite Identifier",
-                "name": "aggregateCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-              Object {
                 "description": "the composite identifier of the resource to which the user will receive access",
                 "label": "resource composite identifier",
                 "name": "resourceCompositeIdentifier",
@@ -4208,7 +3800,7 @@ Object {
               },
             ],
             "prepopulatedFields": Object {
-              "compositeIdentifier": Object {
+              "aggregateCompositeIdentifier": Object {
                 "id": "2",
                 "type": "vocabularyList",
               },
