@@ -1,4 +1,5 @@
 import {
+    AGGREGATE_COMPOSITE_IDENTIFIER,
     CoscradDataType,
     ICoscradModelSchema,
     IDynamicForm,
@@ -16,19 +17,22 @@ export const buildCommandForm = <T extends Record<string, unknown>>(
 ): IDynamicForm => {
     const prepopulatedFields = isCommandWriteContext(context)
         ? {
-              compositeIdentifier: context.getCompositeIdentifier(),
+              [AGGREGATE_COMPOSITE_IDENTIFIER]: context.getCompositeIdentifier(),
           }
         : {};
 
     const fields: IFormField[] = Object.entries(schema).reduce(
-        (acc: IFormField[], [key, propertySchema]) => [
-            ...acc,
-            buildFormFieldForCommandPayloadProp(propertySchema, {
-                name: key,
-                label: propertySchema.label,
-                description: propertySchema.description,
-            }),
-        ],
+        (acc: IFormField[], [key, propertySchema]) =>
+            key === AGGREGATE_COMPOSITE_IDENTIFIER
+                ? acc
+                : [
+                      ...acc,
+                      buildFormFieldForCommandPayloadProp(propertySchema, {
+                          name: key,
+                          label: propertySchema.label,
+                          description: propertySchema.description,
+                      }),
+                  ],
         []
     );
 
