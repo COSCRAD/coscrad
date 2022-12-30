@@ -114,21 +114,19 @@ describe(commandType, () => {
                             });
                         });
 
-                    describe('when the id property has an invalid type (number[])', () => {
-                        generateCommandFuzzTestCases(PublishResource).forEach(
-                            ({ description, propertyName, invalidValue }) => {
-                                describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
-                                    it('should fail with the appropriate error', async () => {
-                                        await assertCommandFailsDueToTypeError(
-                                            commandAssertionDependencies,
-                                            { propertyName, invalidValue },
-                                            buildCommandFSA()
-                                        );
-                                    });
+                    generateCommandFuzzTestCases(PublishResource).forEach(
+                        ({ description, propertyName, invalidValue }) => {
+                            describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
+                                it('should fail with the appropriate error', async () => {
+                                    await assertCommandFailsDueToTypeError(
+                                        commandAssertionDependencies,
+                                        { propertyName, invalidValue },
+                                        buildCommandFSA()
+                                    );
                                 });
-                            }
-                        );
-                    });
+                            });
+                        }
+                    );
                 });
 
                 describe(`when the ${formatAggregateType(
