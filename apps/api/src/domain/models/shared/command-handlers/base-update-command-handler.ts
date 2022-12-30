@@ -1,6 +1,7 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { Aggregate } from '../../aggregate.entity';
@@ -17,6 +18,9 @@ import { BaseCommandHandler } from './base-command-handler';
 export abstract class BaseUpdateCommandHandler<
     TAggregate extends Aggregate
 > extends BaseCommandHandler<TAggregate> {
+    protected abstract readonly repositoryForCommandsTargetAggregate: IRepositoryForAggregate<TAggregate>;
+
+    // TODO We should be able to get the repository from the `AggregateType`
     protected abstract aggregateType: AggregateType;
 
     private getAggregateIdFromCommand({
