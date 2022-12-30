@@ -3,7 +3,6 @@ import capitalizeFirstLetter from '../../lib/utilities/strings/capitalizeFirstLe
 import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
-import formatResourceCompositeIdentifier from '../../view-models/presentation/formatAggregateCompositeIdentifier';
 import DisallowedContextTypeForResourceError from '../domainModelValidators/errors/context/invalidContextStateErrors/DisallowedContextTypeForResourceError';
 import { Valid } from '../domainModelValidators/Valid';
 import { AggregateId } from '../types/AggregateId';
@@ -13,6 +12,7 @@ import { Aggregate } from './aggregate.entity';
 import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedForGivenResourceType';
 import { EdgeConnectionContext } from './context/context.entity';
 import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
+import ResourceAlreadyPublishedError from './ResourceAlreadyPublishedError';
 import { AccessControlList } from './shared/access-control/access-control-list.entity';
 import UserAlreadyHasReadAccessError from './shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
 
@@ -56,12 +56,7 @@ export abstract class Resource extends Aggregate {
     }
 
     publish<T extends Resource>(this: T): ResultOrError<T> {
-        if (this.published)
-            return new InternalError(
-                `You cannot publish ${formatResourceCompositeIdentifier(
-                    this.getCompositeIdentifier()
-                )} as it is already published`
-            );
+        if (this.published) return new ResourceAlreadyPublishedError(this.getCompositeIdentifier());
 
         return this.safeClone<T>({
             published: true,
