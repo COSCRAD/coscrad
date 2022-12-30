@@ -5,7 +5,6 @@ import { RepositoryProvider } from '../../../../persistence/repositories/reposit
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
-import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { InMemorySnapshot } from '../../../types/ResourceType';
@@ -18,8 +17,6 @@ import validateCommandPayloadType from './utilities/validateCommandPayloadType';
 const buildExecutionError = (allErrors: InternalError[]) => new CommandExecutionError(allErrors);
 
 export abstract class BaseCommandHandler<TAggregate extends Aggregate> implements ICommandHandler {
-    protected abstract readonly repositoryForCommandsTargetAggregate: IRepositoryForAggregate<TAggregate>;
-
     constructor(
         @Inject(RepositoryProvider) protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
