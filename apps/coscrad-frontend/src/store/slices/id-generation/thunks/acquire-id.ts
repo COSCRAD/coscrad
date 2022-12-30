@@ -14,8 +14,6 @@ export const acquireId = createAsyncThunk(`${ID_GENERATION}/ACQUIRE_ID`, async (
         headers: buildAuthenticationHeaders(token),
     });
 
-    console.log({ generateIdResponse: response });
-
     const responseJson = await response.text();
 
     if (response.status !== HttpStatusCode.ok)

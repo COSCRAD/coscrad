@@ -5,7 +5,7 @@ import { ILoadable } from '../interfaces/loadable.interface';
 export const buildReducersForThunk = <TState extends ILoadable<unknown>, UResponsePayload>(
     builder: ActionReducerMapBuilder<TState>,
     // eslint-disable-next-line @typescript-eslint/ban-types
-    thunk: AsyncThunk<UResponsePayload, void, {}>
+    thunk: AsyncThunk<UResponsePayload, void, unknown>
 ): void => {
     // @ts-expect-error fix types
     builder.addCase(thunk.pending, (state: TState, _) => {

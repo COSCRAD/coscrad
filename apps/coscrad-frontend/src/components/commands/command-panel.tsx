@@ -5,6 +5,8 @@ import {
     isAggregateType,
 } from '@coscrad/api-interfaces';
 import { useState } from 'react';
+import { useAppDispatch } from '../../app/hooks';
+import { executeCommand } from '../../store/slices/command-status';
 import { useLoadableGeneratedId } from '../../store/slices/id-generation';
 import { DynamicForm } from '../dynamic-forms/dynamic-form';
 import { useFormState } from '../dynamic-forms/form-state';
@@ -27,6 +29,8 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
     const [formState, updateForm] = useFormState();
 
     const { isLoading, errorInfo, data: generatedId } = useLoadableGeneratedId();
+
+    const dispatch = useAppDispatch();
 
     // Do not render if there are no available actions
     if (actions.length === 0) return null;
@@ -88,8 +92,10 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
                         };
 
                         console.log({
-                            submittedCommandWithFSA: commandFsa,
+                            submittingCommandWithFSA: commandFsa,
                         });
+
+                        dispatch(executeCommand(commandFsa));
 
                         setSelectedCommandType(null);
                     }}
