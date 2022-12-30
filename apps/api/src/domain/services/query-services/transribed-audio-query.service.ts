@@ -6,9 +6,9 @@ import { RepositoryProvider } from '../../../persistence/repositories/repository
 import { TranscribedAudioViewModel } from '../../../view-models/buildViewModelForResource/viewModels/transcribed-audio/transcribed-audio.view-model';
 import { TranscribedAudio } from '../../models/transcribed-audio/entities/transcribed-audio.entity';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import { BaseQueryService } from './base-query.service';
+import { ResourceQueryService } from './resource-query.service';
 
-export class TranscribedAudioQueryService extends BaseQueryService<
+export class TranscribedAudioQueryService extends ResourceQueryService<
     TranscribedAudio,
     ITranscribedAudioViewModel
 > {

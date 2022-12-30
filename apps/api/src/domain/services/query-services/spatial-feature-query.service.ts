@@ -6,9 +6,9 @@ import { Point } from '../../models/spatial-feature/entities/point.entity';
 import { Polygon } from '../../models/spatial-feature/entities/polygon.entity';
 import { ISpatialFeature } from '../../models/spatial-feature/interfaces/spatial-feature.interface';
 import { ResourceType } from '../../types/ResourceType';
-import { BaseQueryService } from './base-query.service';
+import { ResourceQueryService } from './resource-query.service';
 
-export class SpatialFeatureQueryService extends BaseQueryService<
+export class SpatialFeatureQueryService extends ResourceQueryService<
     ISpatialFeature,
     ISpatialFeatureViewModel
 > {

@@ -6,9 +6,9 @@ import { IBibliographicReferenceData } from '../../models/bibliographic-referenc
 import { IBibliographicReference } from '../../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { JournalArticleBibliographicReference } from '../../models/bibliographic-reference/journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference.entity';
 import { ResourceType } from '../../types/ResourceType';
-import { BaseQueryService } from './base-query.service';
+import { ResourceQueryService } from './resource-query.service';
 
-export class BibliographicReferenceQueryService extends BaseQueryService<
+export class BibliographicReferenceQueryService extends ResourceQueryService<
     IBibliographicReference,
     IBibliographicReferenceViewModel
 > {

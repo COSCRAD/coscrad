@@ -43,5 +43,13 @@ describe('When fetching the category tree (/treeOfKnowledge)', () => {
 
             expect(res.body).toMatchSnapshot();
         });
+
+        /**
+         * We aren't yet exposing commands through the query endpoint for
+         * categories, as its API is different and we haven't created these yet.
+         * Once we do so, we should test (as a matter of UX) that we don't
+         * return actions to non-admin users, for whom they will certainly fail.
+         */
+        it.todo('should not return actions for non-admin users');
     });
 });

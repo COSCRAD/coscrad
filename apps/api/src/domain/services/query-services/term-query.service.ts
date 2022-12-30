@@ -6,10 +6,10 @@ import { RepositoryProvider } from '../../../persistence/repositories/repository
 import { TermViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { Term } from '../../models/term/entities/term.entity';
 import { ResourceType } from '../../types/ResourceType';
-import { BaseQueryService } from './base-query.service';
+import { ResourceQueryService } from './resource-query.service';
 
 @Injectable()
-export class TermQueryService extends BaseQueryService<Term, ITermViewModel> {
+export class TermQueryService extends ResourceQueryService<Term, ITermViewModel> {
     protected readonly type = ResourceType.term;
 
     constructor(

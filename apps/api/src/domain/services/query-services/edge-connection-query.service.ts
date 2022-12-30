@@ -15,6 +15,7 @@ import { NoteViewModel } from '../../../view-models/edgeConnectionViewModels/not
 import { buildAllAggregateDescriptions } from '../../../view-models/resourceDescriptions';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
 import { validAggregateOrThrow } from '../../models/shared/functional';
+import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { AggregateType } from '../../types/AggregateType';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
@@ -49,7 +50,9 @@ export class EdgeConnectionQueryService {
     /**
      * In the future, we may want to use Access Control Lists on notes as well.
      */
-    async fetchMany(): Promise<ICategorizableIndexQueryResult<INoteViewModel>> {
+    async fetchMany(
+        systemUser: CoscradUserWithGroups
+    ): Promise<ICategorizableIndexQueryResult<INoteViewModel>> {
         const queryResult = await this.repositoryProvider.getEdgeConnectionRepository().fetchMany();
 
         const validDomainModels = queryResult.filter(validAggregateOrThrow);
@@ -67,7 +70,9 @@ export class EdgeConnectionQueryService {
             indexScopedActions,
             entities: validDomainModels.map((domainModel) => ({
                 ...mixinTags(new NoteViewModel(domainModel)),
-                actions: this.commandInfoService.getCommandInfo(domainModel),
+                actions: systemUser?.isAdmin()
+                    ? this.commandInfoService.getCommandInfo(domainModel)
+                    : [],
             })),
         };
     }

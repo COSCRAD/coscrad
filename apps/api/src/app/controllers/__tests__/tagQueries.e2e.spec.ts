@@ -59,6 +59,8 @@ describe(`Tag Queries`, () => {
 
                 expect(result.body).toMatchSnapshot();
             });
+
+            it.todo('should not return actions to non-admin users');
         });
     });
 
@@ -72,5 +74,7 @@ describe(`Tag Queries`, () => {
 
             expect(res.body).toMatchSnapshot();
         });
+
+        it.todo('should not return actions to non-admin users');
     });
 });

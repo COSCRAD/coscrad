@@ -28,7 +28,7 @@ import { buildAccessFilter } from './utilities/buildAccessFilter';
 
 type ViewModelWithTags<T> = WithTags<T>;
 
-export abstract class BaseQueryService<
+export abstract class ResourceQueryService<
     TDomainModel extends Resource,
     UViewModel extends BaseViewModel
 > {
@@ -110,7 +110,10 @@ export abstract class BaseQueryService<
 
         return {
             ...viewModelWithTags,
-            actions: this.commandInfoService.getCommandInfo(domainModelSearchResult),
+            actions:
+                userWithGroups && userWithGroups.isAdmin()
+                    ? this.commandInfoService.getCommandInfo(domainModelSearchResult)
+                    : [],
         };
     }
 
@@ -131,12 +134,18 @@ export abstract class BaseQueryService<
                 requiredExternalState.tag,
                 this.type
             ),
-            actions: this.commandInfoService.getCommandInfo(instance),
+            actions:
+                userWithGroups && userWithGroups.isAdmin()
+                    ? this.commandInfoService.getCommandInfo(instance)
+                    : [],
         }));
 
         return {
             entities,
-            indexScopedActions: this.getInfoForIndexScopedCommands(),
+            indexScopedActions:
+                userWithGroups && userWithGroups.isAdmin()
+                    ? this.getInfoForIndexScopedCommands()
+                    : [],
         };
     }
 }

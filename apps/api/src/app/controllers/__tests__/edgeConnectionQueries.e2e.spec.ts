@@ -73,6 +73,8 @@ describe('When querying for edge connections', () => {
 
             expect(result.body).toMatchSnapshot();
         });
+
+        it.todo('should not return actions to non-admin users');
     });
 
     /**

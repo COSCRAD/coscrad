@@ -6,9 +6,9 @@ import { RepositoryProvider } from '../../../persistence/repositories/repository
 import { PhotographViewModel } from '../../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
 import { Photograph } from '../../models/photograph/entities/photograph.entity';
 import { ResourceType } from '../../types/ResourceType';
-import { BaseQueryService } from './base-query.service';
+import { ResourceQueryService } from './resource-query.service';
 
-export class PhotographQueryService extends BaseQueryService<Photograph, IPhotographViewModel> {
+export class PhotographQueryService extends ResourceQueryService<Photograph, IPhotographViewModel> {
     protected readonly type = ResourceType.photograph;
 
     constructor(

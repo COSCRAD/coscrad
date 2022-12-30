@@ -11,10 +11,10 @@ import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary
 import IsPublished from '../../repositories/specifications/isPublished';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import { BaseQueryService } from './base-query.service';
+import { ResourceQueryService } from './resource-query.service';
 
 @Injectable()
-export class VocabularyListQueryService extends BaseQueryService<
+export class VocabularyListQueryService extends ResourceQueryService<
     VocabularyList,
     VocabularyListViewModel
 > {
