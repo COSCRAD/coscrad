@@ -1,9 +1,11 @@
-import { ICommandFormAndLabels, IPhotographViewModel } from '@coscrad/api-interfaces';
+import { IPhotographViewModel } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { PhotographViewModel } from '../../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
+import BaseDomainModel from '../../models/BaseDomainModel';
 import { Photograph } from '../../models/photograph/entities/photograph.entity';
 import { ResourceType } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';
@@ -26,7 +28,7 @@ export class PhotographQueryService extends ResourceQueryService<Photograph, IPh
         );
     }
 
-    getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
-        return this.commandInfoService.getCommandInfo(Photograph);
+    getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
+        return [Photograph];
     }
 }

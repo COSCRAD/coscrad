@@ -1,6 +1,7 @@
-import { ICommandFormAndLabels, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
+import { ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { SpatialFeatureViewModel } from '../../../view-models/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
+import BaseDomainModel from '../../models/BaseDomainModel';
 import { Line } from '../../models/spatial-feature/entities/line.entity';
 import { Point } from '../../models/spatial-feature/entities/point.entity';
 import { Polygon } from '../../models/spatial-feature/entities/polygon.entity';
@@ -18,9 +19,7 @@ export class SpatialFeatureQueryService extends ResourceQueryService<
         return new SpatialFeatureViewModel(spatialFeatureInstance);
     }
 
-    getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
-        return ([Line, Point, Polygon] as DomainModelCtor[]).flatMap(
-            (Ctor) => this.commandInfoService.getCommandInfo(Ctor) || []
-        );
+    getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
+        return [Line, Point, Polygon];
     }
 }

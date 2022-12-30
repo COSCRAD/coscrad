@@ -23,6 +23,16 @@ import { GrantResourceReadAccessToUser } from '../../../domain/models/shared/com
 import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
+import { CreateTag } from '../../../domain/models/tag/commands/create-tag.command';
+import { CreateTagCommandHandler } from '../../../domain/models/tag/commands/create-tag.command-handler';
+import {
+    RelabelTag,
+    RelabelTagCommandHandler,
+} from '../../../domain/models/tag/commands/relabel-tag';
+import {
+    CreateGroup,
+    CreateGroupCommandHandler,
+} from '../../../domain/models/user-management/group/commands';
 import { AddUserToGroup } from '../../../domain/models/user-management/group/commands/add-user-to-group/add-user-to-group.command';
 import { AddUserToGroupCommandHandler } from '../../../domain/models/user-management/group/commands/add-user-to-group/add-user-to-group.command-handler';
 import { GrantUserRole } from '../../../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
@@ -262,7 +272,12 @@ export default async (
                 provide: JwtStrategy,
                 useFactory: () => new MockJwtStrategy(testUserWithGroups),
             },
-            // TODO Avoid reduplicate domain module providers here!
+            /**
+             * TODO [https://www.pivotaltracker.com/story/show/182576828]
+             *
+             * Avoid reduplicate domain module providers here! We should use the real
+             * app module to dynamically discover all commands.
+             */
             CreateMediaItem,
             CreateMediaItemCommandHandler,
             CreateSong,
@@ -275,6 +290,8 @@ export default async (
             CreateJournalArticleBibliographicReferenceCommandHandler,
             RegisterUser,
             RegisterUserCommandHandler,
+            CreateGroup,
+            CreateGroupCommandHandler,
             AddUserToGroup,
             AddUserToGroupCommandHandler,
             GrantUserRole,
@@ -283,6 +300,11 @@ export default async (
             GrantResourceReadAccessToUserCommandHandler,
             PublishResource,
             PublishResourceCommandHandler,
+            CreateTag,
+            CreateTagCommandHandler,
+            RelabelTag,
+            RelabelTagCommandHandler,
+            // Next time try importing the domain module!
         ],
 
         controllers: [

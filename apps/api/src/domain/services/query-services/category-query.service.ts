@@ -1,5 +1,5 @@
+import { ICategoryTreeViewModel } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { ICategoryTreeViewModel } from '../../../../../../libs/api-interfaces/src';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { ResultOrError } from '../../../types/ResultOrError';

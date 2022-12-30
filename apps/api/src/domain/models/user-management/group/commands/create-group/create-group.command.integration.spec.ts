@@ -27,7 +27,6 @@ import { dummyUuid } from '../../../../__tests__/utilities/dummyUuid';
 import { CoscradUserGroup } from '../../entities/coscrad-user-group.entity';
 import { UserGroupLabelAlreadyInUseError } from '../../errors/external-state-errors/UserGroupLabelAlreadyInUseError';
 import { CreateGroup } from './create-group.command';
-import { CreateGroupCommandHandler } from './create-group.command-handler';
 
 const commandType = 'CREATE_USER_GROUP';
 
@@ -76,11 +75,6 @@ describe('CreateGroup', () => {
                 },
                 { shouldMockIdGenerator: true }
             ));
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new CreateGroupCommandHandler(testRepositoryProvider, idManager)
-        );
 
         commandAssertionDependencies = {
             testRepositoryProvider,

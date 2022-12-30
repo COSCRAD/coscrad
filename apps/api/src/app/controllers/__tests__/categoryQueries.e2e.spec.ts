@@ -45,6 +45,8 @@ describe('When fetching the category tree (/treeOfKnowledge)', () => {
         });
 
         /**
+         * TODO[https://www.pivotaltracker.com/story/show/184125180]
+         *
          * We aren't yet exposing commands through the query endpoint for
          * categories, as its API is different and we haven't created these yet.
          * Once we do so, we should test (as a matter of UX) that we don't

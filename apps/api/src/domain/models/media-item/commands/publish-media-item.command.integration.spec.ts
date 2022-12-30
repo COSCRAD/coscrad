@@ -5,7 +5,6 @@ import getValidAggregateInstanceForTest from '../../../../domain/__tests__/utili
 import { InternalError } from '../../../../lib/errors/InternalError';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../types/DTO';
-import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { assertCommandPayloadTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
@@ -19,7 +18,6 @@ import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { MediaItem } from '../entities/media-item.entity';
 import { PublishMediaItem } from './publish-media-item.command';
-import { PublishMediaItemCommandHandler } from './publish-media-item.command-handler';
 
 const commandType = 'PUBLISH_MEDIA_ITEM';
 
@@ -61,21 +59,13 @@ describe.skip('PublishMediaItem', () => {
 
     let app: INestApplication;
 
-    let idManager: IIdManager;
-
     let assertionHelperDependencies: Omit<CommandAssertionDependencies, 'idManager'>;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
-            await setUpIntegrationTest({
-                ARANGO_DB_NAME: 'testonly-333',
-                // generateDatabaseNameForTestSuite(),
-            }));
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new PublishMediaItemCommandHandler(testRepositoryProvider, idManager)
-        );
+        ({ testRepositoryProvider, commandHandlerService, app } = await setUpIntegrationTest({
+            ARANGO_DB_NAME: 'testonly-333',
+            // generateDatabaseNameForTestSuite(),
+        }));
 
         assertionHelperDependencies = {
             testRepositoryProvider,

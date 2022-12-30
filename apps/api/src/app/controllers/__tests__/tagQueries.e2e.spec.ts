@@ -65,6 +65,14 @@ describe(`Tag Queries`, () => {
     });
 
     describe(`when fetching all tags`, () => {
+        beforeEach(async () => {
+            await testRepositoryProvider.testSetup();
+        });
+
+        afterEach(async () => {
+            await testRepositoryProvider.testTeardown();
+        });
+
         it('should return the expected result', async () => {
             await testRepositoryProvider.getTagRepository().createMany(testTagData);
 

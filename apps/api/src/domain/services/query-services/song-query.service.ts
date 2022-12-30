@@ -1,6 +1,8 @@
-import { ICommandFormAndLabels, ISongViewModel } from '@coscrad/api-interfaces';
+import { ISongViewModel } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
+import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { SongViewModel } from '../../../view-models/buildViewModelForResource/viewModels/song.view-model';
+import BaseDomainModel from '../../models/BaseDomainModel';
 import { Song } from '../../models/song/song.entity';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';
@@ -13,7 +15,7 @@ export class SongQueryService extends ResourceQueryService<Song, ISongViewModel>
         return new SongViewModel(song);
     }
 
-    getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
-        return this.commandInfoService.getCommandInfo(Song);
+    getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
+        return [Song];
     }
 }

@@ -1,5 +1,7 @@
-import { IBibliographicReferenceViewModel, ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { IBibliographicReferenceViewModel } from '@coscrad/api-interfaces';
+import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
+import BaseDomainModel from '../../models/BaseDomainModel';
 import { BookBibliographicReference } from '../../models/bibliographic-reference/book-bibliographic-reference/entities/book-bibliographic-reference.entity';
 import { CourtCaseBibliographicReference } from '../../models/bibliographic-reference/court-case-bibliographic-reference/entities/court-case-bibliographic-reference.entity';
 import { IBibliographicReferenceData } from '../../models/bibliographic-reference/interfaces/bibliographic-reference-data.interface';
@@ -24,11 +26,11 @@ export class BibliographicReferenceQueryService extends ResourceQueryService<
      * We may want to have a `BibliographicReference` base class or some other
      * mechanism to make the following method closed to modification.
      */
-    getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
+    getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
         return [
             BookBibliographicReference,
             JournalArticleBibliographicReference,
             CourtCaseBibliographicReference,
-        ].flatMap((Ctor) => this.commandInfoService.getCommandInfo(Ctor));
+        ];
     }
 }

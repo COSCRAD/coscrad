@@ -1,12 +1,16 @@
 import {
     CategorizableType,
     ICategorizableIndexQueryResult,
+    ICommandFormAndLabels,
     INoteViewModel,
     WithTags,
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import {
+    CommandContext,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
 import { mixLinkIntoViewModelDescription } from '../../../app/controllers/utilities';
 import mixTagsIntoViewModel from '../../../app/controllers/utilities/mixTagsIntoViewModel';
 import { InternalError } from '../../../lib/errors/InternalError';
@@ -19,6 +23,7 @@ import { CoscradUserWithGroups } from '../../models/user-management/user/entitie
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { AggregateType } from '../../types/AggregateType';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
+import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 /**
  * TODO [https://www.pivotaltracker.com/story/show/184098960]
@@ -64,16 +69,27 @@ export class EdgeConnectionQueryService {
         const mixinTags = (viewModel: NoteViewModel): WithTags<INoteViewModel> =>
             mixTagsIntoViewModel(viewModel, allTags, CategorizableType.note);
 
-        const indexScopedActions = this.commandInfoService.getCommandInfo(EdgeConnection);
+        const indexScopedActions = this.fetchUserActions(systemUser, EdgeConnection);
 
         return {
             indexScopedActions,
             entities: validDomainModels.map((domainModel) => ({
                 ...mixinTags(new NoteViewModel(domainModel)),
-                actions: systemUser?.isAdmin()
-                    ? this.commandInfoService.getCommandInfo(domainModel)
-                    : [],
+                actions: this.fetchUserActions(systemUser, domainModel),
             })),
         };
+    }
+
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/184098960]
+     *
+     * Inherit from a shared base query service and share this logic with other
+     * query services.
+     */
+    private fetchUserActions(
+        systemUser: CoscradUserWithGroups,
+        commandContext: CommandContext
+    ): ICommandFormAndLabels[] {
+        return fetchActionsForUser(this.commandInfoService, systemUser, commandContext);
     }
 }

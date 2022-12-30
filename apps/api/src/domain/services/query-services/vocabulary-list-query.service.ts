@@ -1,10 +1,11 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { isInternalError } from '../../../lib/errors/InternalError';
+import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { VocabularyListViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
+import BaseDomainModel from '../../models/BaseDomainModel';
 import { Tag } from '../../models/tag/tag.entity';
 import { Term } from '../../models/term/entities/term.entity';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
@@ -63,7 +64,7 @@ export class VocabularyListQueryService extends ResourceQueryService<
         }).fetchFullSnapshotInLegacyFormat();
     }
 
-    getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
-        return this.commandInfoService.getCommandInfo(VocabularyList);
+    getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
+        return [VocabularyList];
     }
 }

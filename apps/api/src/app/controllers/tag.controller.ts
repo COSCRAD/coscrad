@@ -14,8 +14,6 @@ export const TAG_INDEX_ROUTE = 'tags';
 /**
  * TODO[https://www.pivotaltracker.com/story/show/183618856]
  * We need to expose Tag commands through Tag queries.
- *
- * Also, we should break the logic here out into a query services, as is done for other aggregates.
  */
 @ApiTags('tags')
 @Controller(TAG_INDEX_ROUTE)
@@ -42,9 +40,6 @@ export class TagController {
     @UseGuards(OptionalJwtAuthGuard)
     @Get('')
     async fetchMany(@Req() req, @Res() res) {
-        console.log({
-            user: JSON.stringify(req.user),
-        });
         const result = await this.tagQueryService.fetchMany(req.user);
 
         return sendInternalResultAsHttpResponse(res, result);

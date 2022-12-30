@@ -1,9 +1,11 @@
-import { ICommandFormAndLabels, ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
+import { ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { TranscribedAudioViewModel } from '../../../view-models/buildViewModelForResource/viewModels/transcribed-audio/transcribed-audio.view-model';
+import BaseDomainModel from '../../models/BaseDomainModel';
 import { TranscribedAudio } from '../../models/transcribed-audio/entities/transcribed-audio.entity';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';
@@ -32,7 +34,7 @@ export class TranscribedAudioQueryService extends ResourceQueryService<
         );
     }
 
-    getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
-        return this.commandInfoService.getCommandInfo(TranscribedAudio);
+    getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
+        return [TranscribedAudio];
     }
 }

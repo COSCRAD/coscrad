@@ -74,6 +74,7 @@ describe('When querying for edge connections', () => {
             expect(result.body).toMatchSnapshot();
         });
 
+        // TODO[https://www.pivotaltracker.com/story/show/184125150]
         it.todo('should not return actions to non-admin users');
     });
 
