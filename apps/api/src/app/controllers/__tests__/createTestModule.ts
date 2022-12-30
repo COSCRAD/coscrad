@@ -7,6 +7,10 @@ import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-aut
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
+import {
+    PublishResource,
+    PublishResourceCommandHandler,
+} from '../../../domain/models/shared/common-commands';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
@@ -240,6 +244,8 @@ export default async (
                 provide: JwtStrategy,
                 useFactory: () => new MockJwtStrategy(testUserWithGroups),
             },
+            PublishResource,
+            PublishResourceCommandHandler,
         ],
 
         controllers: [
