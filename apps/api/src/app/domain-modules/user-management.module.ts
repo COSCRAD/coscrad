@@ -6,10 +6,12 @@ import {
 } from '../../domain/models/shared/common-commands';
 import { GrantResourceReadAccessToUser } from '../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
 import { GrantResourceReadAccessToUserCommandHandler } from '../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
-import { AddUserToGroup } from '../../domain/models/user-management/group/commands/add-user-to-group/add-user-to-group.command';
-import { AddUserToGroupCommandHandler } from '../../domain/models/user-management/group/commands/add-user-to-group/add-user-to-group.command-handler';
-import { CreateGroup } from '../../domain/models/user-management/group/commands/create-group/create-group.command';
-import { CreateGroupCommandHandler } from '../../domain/models/user-management/group/commands/create-group/create-group.command-handler';
+import {
+    AddUserToGroup,
+    AddUserToGroupCommandHandler,
+    CreateGroup,
+    CreateGroupCommandHandler,
+} from '../../domain/models/user-management/group/commands';
 import { GrantUserRole } from '../../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { GrantUserRoleCommandHandler } from '../../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command-handler';
 import { RegisterUser } from '../../domain/models/user-management/user/commands/register-user/register-user.command';

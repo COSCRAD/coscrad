@@ -4,29 +4,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "bibliographicReference",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "data": Object {
         "abstract": "This is the abstract, NOT a general note!",
         "creators": Array [
@@ -79,29 +57,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "23",
-                "type": "bibliographicReference",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "data": Object {
         "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
         "creators": Array [
@@ -122,29 +78,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "3",
-                "type": "bibliographicReference",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "data": Object {
         "abstract": "William, June
 - Nemiah Valley
@@ -179,29 +113,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "bibliographicReference",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "data": Object {
         "abstract": "This is the abstract, NOT a general note!",
         "creators": Array [
@@ -254,29 +166,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "23",
-                "type": "bibliographicReference",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "data": Object {
         "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
         "creators": Array [
@@ -297,29 +187,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "3",
-                "type": "bibliographicReference",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "data": Object {
         "abstract": "William, June
 - Nemiah Valley
@@ -354,29 +222,7 @@ exports[`When fetching multiple resources GET /resources/books when all of the r
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "23",
-                "type": "book",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "author": "John Doeburg",
       "id": "23",
       "pages": Array [
@@ -436,29 +282,7 @@ Object {
       "title": "Three Little Pigs",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "24",
-                "type": "book",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "author": "Jane Donnaldson",
       "id": "24",
       "pages": Array [
@@ -512,29 +336,7 @@ Object {
       "title": "An Adventure Story",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "25",
-                "type": "book",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "author": "Jane Donnaldson",
       "id": "25",
       "pages": Array [
@@ -557,29 +359,7 @@ exports[`When fetching multiple resources GET /resources/books when some of the 
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "23",
-                "type": "book",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "author": "John Doeburg",
       "id": "23",
       "pages": Array [
@@ -639,29 +419,7 @@ Object {
       "title": "Three Little Pigs",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "24",
-                "type": "book",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "author": "Jane Donnaldson",
       "id": "24",
       "pages": Array [
@@ -715,29 +473,7 @@ Object {
       "title": "An Adventure Story",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "25",
-                "type": "book",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "author": "Jane Donnaldson",
       "id": "25",
       "pages": Array [
@@ -760,29 +496,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "mediaItem",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributions": Array [
         Object {
           "contributorId": "2",
@@ -837,29 +551,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "mediaItem",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributions": Array [
         Object {
           "contributorId": "2",
@@ -914,29 +606,7 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "0",
-                "type": "photograph",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "id": "0",
       "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
       "photographer": "Susie McRealart",
@@ -966,29 +636,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "photograph",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "id": "1",
       "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
       "photographer": "Robert McRealart",
@@ -1014,29 +662,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "2",
-                "type": "photograph",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "id": "2",
       "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
       "photographer": "Kenny Tree-Huggens",
@@ -1051,29 +677,7 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "0",
-                "type": "photograph",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "id": "0",
       "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
       "photographer": "Susie McRealart",
@@ -1103,29 +707,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "photograph",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "id": "1",
       "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
       "photographer": "Robert McRealart",
@@ -1151,29 +733,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "2",
-                "type": "photograph",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "id": "2",
       "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
       "photographer": "Kenny Tree-Huggens",
@@ -1188,29 +748,7 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "song",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "audioURL": "https://www.myaudio.com/lamb.mp3",
       "contributions": Array [
         "1 (performer)",
@@ -1255,29 +793,7 @@ Object {
       "titleEnglish": "Mary had a little lamb",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "2",
-                "type": "song",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "audioURL": "https://www.myaudio.com/badsong.wav",
       "contributions": Array [
         "33 (author)",
@@ -1299,29 +815,7 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "song",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "audioURL": "https://www.myaudio.com/lamb.mp3",
       "contributions": Array [
         "1 (performer)",
@@ -1366,29 +860,7 @@ Object {
       "titleEnglish": "Mary had a little lamb",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "2",
-                "type": "song",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "audioURL": "https://www.myaudio.com/badsong.wav",
       "contributions": Array [
         "33 (author)",
@@ -1410,29 +882,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           54.034404852745006,
@@ -1488,29 +938,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "101",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           53.26710566708586,
@@ -1558,29 +986,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "102",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           51.93152097800416,
@@ -1628,29 +1034,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "103",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           51.935065638350636,
@@ -1667,29 +1051,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "104",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           52.12579975880678,
@@ -1706,29 +1068,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           Array [
@@ -1771,29 +1111,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "300",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           Array [
@@ -1834,29 +1152,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "100",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           54.034404852745006,
@@ -1912,29 +1208,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "101",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           53.26710566708586,
@@ -1982,29 +1256,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "102",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           51.93152097800416,
@@ -2052,29 +1304,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "103",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           51.935065638350636,
@@ -2091,29 +1321,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "104",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           52.12579975880678,
@@ -2130,29 +1338,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           Array [
@@ -2195,29 +1381,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "300",
-                "type": "spatialFeature",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "geometry": Object {
         "coordinates": Array [
           Array [
@@ -2258,29 +1422,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "11",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "11",
       "tags": Array [],
@@ -2288,29 +1430,7 @@ Object {
       "termEnglish": "I am singing (Engl)",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "12",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "12",
       "tags": Array [],
@@ -2318,29 +1438,7 @@ Object {
       "termEnglish": "You are singing (Engl)",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "13",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "13",
       "tags": Array [],
@@ -2348,29 +1446,7 @@ Object {
       "termEnglish": "She is singing (Engl)",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "01",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "01",
       "tags": Array [],
@@ -2378,29 +1454,7 @@ Object {
       "termEnglish": "I am not singing (Engl)",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "02",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "02",
       "tags": Array [],
@@ -2408,29 +1462,7 @@ Object {
       "termEnglish": "You are not singing (Engl)",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "1",
       "tags": Array [
@@ -2477,29 +1509,7 @@ Object {
       "termEnglish": "Engl-term-1",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "2",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "2",
       "tags": Array [
@@ -2538,29 +1548,7 @@ Object {
       "termEnglish": "Engl-term-2",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "3",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "3",
       "tags": Array [
@@ -2598,29 +1586,7 @@ Object {
       "term": "Chil-term-no-english",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "4",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "4",
       "tags": Array [],
@@ -2635,29 +1601,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "11",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "11",
       "tags": Array [],
@@ -2665,29 +1609,7 @@ Object {
       "termEnglish": "I am singing (Engl)",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "12",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "12",
       "tags": Array [],
@@ -2695,29 +1617,7 @@ Object {
       "termEnglish": "You are singing (Engl)",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "13",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "13",
       "tags": Array [],
@@ -2725,29 +1625,7 @@ Object {
       "termEnglish": "She is singing (Engl)",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "01",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "01",
       "tags": Array [],
@@ -2755,29 +1633,7 @@ Object {
       "termEnglish": "I am not singing (Engl)",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "02",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "02",
       "tags": Array [],
@@ -2785,29 +1641,7 @@ Object {
       "termEnglish": "You are not singing (Engl)",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "1",
       "tags": Array [
@@ -2854,29 +1688,7 @@ Object {
       "termEnglish": "Engl-term-1",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "2",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "2",
       "tags": Array [
@@ -2915,29 +1727,7 @@ Object {
       "termEnglish": "Engl-term-2",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "3",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "3",
       "tags": Array [
@@ -2975,29 +1765,7 @@ Object {
       "term": "Chil-term-no-english",
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "4",
-                "type": "term",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "contributor": "",
       "id": "4",
       "tags": Array [],
@@ -3012,29 +1780,7 @@ exports[`When fetching multiple resources GET /resources/transcribedAudioItems w
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "110",
-                "type": "transcribedAudio",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "audioURL": "https://www.mysound.org/downloads/Gaas.mp3",
       "id": "110",
       "lengthMilliseconds": 20000,
@@ -3068,29 +1814,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "111",
-                "type": "transcribedAudio",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "audioURL": "https://www.mysound.org/downloads/Chinaay.mp3",
       "id": "111",
       "lengthMilliseconds": 23409,
@@ -3102,29 +1826,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "113",
-                "type": "transcribedAudio",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "audioURL": "https://www.mysound.org/downloads/Kwa.mp3",
       "id": "113",
       "lengthMilliseconds": 32989,
@@ -3143,29 +1845,7 @@ exports[`When fetching multiple resources GET /resources/transcribedAudioItems w
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "110",
-                "type": "transcribedAudio",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "audioURL": "https://www.mysound.org/downloads/Gaas.mp3",
       "id": "110",
       "lengthMilliseconds": 20000,
@@ -3199,29 +1879,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "111",
-                "type": "transcribedAudio",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "audioURL": "https://www.mysound.org/downloads/Chinaay.mp3",
       "id": "111",
       "lengthMilliseconds": 23409,
@@ -3233,29 +1891,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "113",
-                "type": "transcribedAudio",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "audioURL": "https://www.mysound.org/downloads/Kwa.mp3",
       "id": "113",
       "lengthMilliseconds": 32989,
@@ -3274,29 +1910,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "4567",
-                "type": "vocabularyList",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "entries": Array [
         Object {
           "term": Object {
@@ -3405,29 +2019,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "entries": Array [
         Object {
           "term": Object {
@@ -3517,29 +2109,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "2",
-                "type": "vocabularyList",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "entries": Array [
         Object {
           "term": Object {
@@ -3628,29 +2198,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
 Object {
   "entities": Array [
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "4567",
-                "type": "vocabularyList",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "entries": Array [],
       "form": Object {
         "fields": Array [
@@ -3698,29 +2246,7 @@ Object {
       "tags": Array [],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "1",
-                "type": "vocabularyList",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "entries": Array [],
       "form": Object {
         "fields": Array [
@@ -3787,29 +2313,7 @@ Object {
       ],
     },
     Object {
-      "actions": Array [
-        Object {
-          "description": "Allow a user to view (but not edit) a given resource",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "description": "the composite identifier of the resource to which the user will receive access",
-                "label": "resource composite identifier",
-                "name": "resourceCompositeIdentifier",
-                "type": "JSON_INPUT",
-              },
-            ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
-                "id": "2",
-                "type": "vocabularyList",
-              },
-            },
-          },
-          "label": "Grant Read Access to User",
-          "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
-        },
-      ],
+      "actions": Array [],
       "entries": Array [],
       "form": Object {
         "fields": Array [

@@ -23,7 +23,6 @@ import { CoscradUserProfile } from '../../entities/user/coscrad-user-profile.ent
 import { CoscradUser } from '../../entities/user/coscrad-user.entity';
 import { FullName } from '../../entities/user/full-name.entity';
 import { RegisterUser } from './register-user.command';
-import { RegisterUserCommandHandler } from './register-user.command-handler';
 
 const commandType = 'REGISTER_USER';
 
@@ -82,11 +81,6 @@ describe('RegisterUser', () => {
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }));
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new RegisterUserCommandHandler(testRepositoryProvider, idManager)
-        );
 
         commandAssertionDependencies = {
             testRepositoryProvider,

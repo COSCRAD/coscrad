@@ -34,7 +34,6 @@ import { CommandAssertionDependencies } from '../../__tests__/command-helpers/ty
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
 import { CreateTag } from './create-tag.command';
-import { CreateTagCommandHandler } from './create-tag.command-handler';
 
 const commandType = 'CREATE_TAG';
 
@@ -101,11 +100,6 @@ describe(`The command: ${commandType}`, () => {
             commandHandlerService,
             idManager,
         };
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new CreateTagCommandHandler(testRepositoryProvider, idManager)
-        );
     });
 
     afterAll(async () => {
