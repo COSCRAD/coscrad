@@ -20,7 +20,6 @@ import { CommandAssertionDependencies } from '../../../../__tests__/command-help
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import { GrantUserRole } from './grant-user-role.command';
-import { GrantUserRoleCommandHandler } from './grant-user-role.command-handler';
 
 const commandType = 'GRANT_USER_ROLE';
 
@@ -69,11 +68,6 @@ describe('GrantUserRole', () => {
             }).catch((error) => {
                 throw error;
             }));
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new GrantUserRoleCommandHandler(testRepositoryProvider, idManager)
-        );
 
         commandAssertionDependencies = {
             testRepositoryProvider,

@@ -17,7 +17,6 @@ import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { Song } from '../song.entity';
 import { PublishSong } from './publish-song.command';
-import { PublishSongCommandHandler } from './publish-song.command-handler';
 
 const publishSongCommandType = 'PUBLISH_SONG';
 
@@ -63,11 +62,6 @@ describe.skip('PublishSong', () => {
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }));
-
-        commandHandlerService.registerHandler(
-            publishSongCommandType,
-            new PublishSongCommandHandler(testRepositoryProvider, idManager)
-        );
 
         commandAssertionDependencies = {
             testRepositoryProvider,

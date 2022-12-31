@@ -27,7 +27,6 @@ import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserI
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 import { CreateJournalArticleBibliographicReference } from './create-journal-article-bibliographic-reference.command';
-import { CreateJournalArticleBibliographicReferenceCommandHandler } from './create-journal-article-bibliographic-reference.command-handler';
 
 const commandType = 'CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE';
 
@@ -91,14 +90,6 @@ describe(`The command: ${commandType}`, () => {
             commandHandlerService,
             idManager,
         };
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new CreateJournalArticleBibliographicReferenceCommandHandler(
-                testRepositoryProvider,
-                idManager
-            )
-        );
     });
 
     beforeEach(async () => {
