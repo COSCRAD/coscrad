@@ -29,7 +29,6 @@ import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
 import { MediaItem } from '../entities/media-item.entity';
 import { CreateMediaItem } from './create-media-item.command';
-import { CreateMediaItemCommandHandler } from './create-media-item.command-handler';
 
 const commandType = 'CREATE_MEDIA_ITEM';
 
@@ -93,11 +92,6 @@ describe('CreateMediaItem', () => {
             commandHandlerService,
             idManager,
         };
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new CreateMediaItemCommandHandler(testRepositoryProvider, idManager)
-        );
     });
 
     afterAll(async () => {

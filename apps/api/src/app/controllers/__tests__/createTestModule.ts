@@ -7,10 +7,38 @@ import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-aut
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
+import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
+import { CreateBookBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command-handler';
+import { CreateCourtCaseBibliographicReference } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command';
+import { CreateCourtCaseBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command-handler';
+import { CreateJournalArticleBibliographicReference } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command';
+import { CreateJournalArticleBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command-handler';
+import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
+import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item.command-handler';
 import {
     PublishResource,
     PublishResourceCommandHandler,
 } from '../../../domain/models/shared/common-commands';
+import { GrantResourceReadAccessToUser } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command';
+import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
+import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
+import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
+import { CreateTag } from '../../../domain/models/tag/commands/create-tag.command';
+import { CreateTagCommandHandler } from '../../../domain/models/tag/commands/create-tag.command-handler';
+import {
+    RelabelTag,
+    RelabelTagCommandHandler,
+} from '../../../domain/models/tag/commands/relabel-tag';
+import {
+    CreateGroup,
+    CreateGroupCommandHandler,
+} from '../../../domain/models/user-management/group/commands';
+import { AddUserToGroup } from '../../../domain/models/user-management/group/commands/add-user-to-group/add-user-to-group.command';
+import { AddUserToGroupCommandHandler } from '../../../domain/models/user-management/group/commands/add-user-to-group/add-user-to-group.command-handler';
+import { GrantUserRole } from '../../../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
+import { GrantUserRoleCommandHandler } from '../../../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command-handler';
+import { RegisterUser } from '../../../domain/models/user-management/user/commands/register-user/register-user.command';
+import { RegisterUserCommandHandler } from '../../../domain/models/user-management/user/commands/register-user/register-user.command-handler';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
@@ -244,8 +272,39 @@ export default async (
                 provide: JwtStrategy,
                 useFactory: () => new MockJwtStrategy(testUserWithGroups),
             },
+            /**
+             * TODO [https://www.pivotaltracker.com/story/show/182576828]
+             *
+             * Avoid reduplicate domain module providers here! We should use the real
+             * app module to dynamically discover all commands.
+             */
+            CreateMediaItem,
+            CreateMediaItemCommandHandler,
+            CreateSong,
+            CreateSongCommandHandler,
+            CreateBookBibliographicReference,
+            CreateBookBibliographicReferenceCommandHandler,
+            CreateCourtCaseBibliographicReference,
+            CreateCourtCaseBibliographicReferenceCommandHandler,
+            CreateJournalArticleBibliographicReference,
+            CreateJournalArticleBibliographicReferenceCommandHandler,
+            RegisterUser,
+            RegisterUserCommandHandler,
+            CreateGroup,
+            CreateGroupCommandHandler,
+            AddUserToGroup,
+            AddUserToGroupCommandHandler,
+            GrantUserRole,
+            GrantUserRoleCommandHandler,
+            GrantResourceReadAccessToUser,
+            GrantResourceReadAccessToUserCommandHandler,
             PublishResource,
             PublishResourceCommandHandler,
+            CreateTag,
+            CreateTagCommandHandler,
+            RelabelTag,
+            RelabelTagCommandHandler,
+            // Next time try importing the domain module!
         ],
 
         controllers: [

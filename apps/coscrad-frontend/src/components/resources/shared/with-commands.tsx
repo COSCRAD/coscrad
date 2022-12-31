@@ -1,12 +1,12 @@
-import { AggregateCompositeIdentifier, ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
-import { CommandPanel } from '../../commands';
+import { CommandContext, CommandPanel } from '../../commands';
 
 export const WithCommands =
     <TProps,>(
         WrappedComponent: FunctionalComponent<TProps>,
         mapPropsToActions: (props: TProps) => ICommandFormAndLabels[],
-        mapPropsToCommandContext: (props: TProps) => AggregateCompositeIdentifier
+        mapPropsToCommandContext: (props: TProps) => CommandContext
     ) =>
     (props: TProps) =>
         (

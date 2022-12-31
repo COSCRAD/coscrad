@@ -5,9 +5,13 @@ import {
     WithTags,
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import {
+    CommandContext,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
 import mixTagsIntoViewModel from '../../../app/controllers/utilities/mixTagsIntoViewModel';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
+import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
@@ -22,13 +26,15 @@ import { CoscradUserWithGroups } from '../../models/user-management/user/entitie
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { ISpecification } from '../../repositories/interfaces/specification.interface';
 import { AggregateId, isAggregateId } from '../../types/AggregateId';
+import { AggregateTypeToAggregateInstance } from '../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { buildAccessFilter } from './utilities/buildAccessFilter';
+import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 type ViewModelWithTags<T> = WithTags<T>;
 
-export abstract class BaseQueryService<
+export abstract class ResourceQueryService<
     TDomainModel extends Resource,
     UViewModel extends BaseViewModel
 > {
@@ -67,12 +73,18 @@ export abstract class BaseQueryService<
             .fetchMany(specification);
     }
 
+    protected foo: AggregateTypeToAggregateInstance;
+
     abstract buildViewModel(
         domainInstance: TDomainModel,
         externalState: InMemorySnapshot
     ): UViewModel;
 
-    abstract getInfoForIndexScopedCommands(): ICommandFormAndLabels[];
+    /**
+     * Union models have multiple ctors which must all be considered when
+     * collecting index-scoped actions.
+     */
+    abstract getDomainModelCtors(): DomainModelCtor[];
 
     public async fetchById(
         id: unknown,
@@ -110,7 +122,7 @@ export abstract class BaseQueryService<
 
         return {
             ...viewModelWithTags,
-            actions: this.commandInfoService.getCommandInfo(domainModelSearchResult),
+            actions: this.fetchUserActions(userWithGroups, [domainModelSearchResult]),
         };
     }
 
@@ -131,12 +143,27 @@ export abstract class BaseQueryService<
                 requiredExternalState.tag,
                 this.type
             ),
-            actions: this.commandInfoService.getCommandInfo(instance),
+            actions: this.fetchUserActions(userWithGroups, [instance]),
         }));
 
         return {
             entities,
-            indexScopedActions: this.getInfoForIndexScopedCommands(),
+            indexScopedActions: this.fetchUserActions(userWithGroups, this.getDomainModelCtors()),
         };
+    }
+
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/184098960]
+     *
+     * Inherit from a shared base aggregate query service and share this logic with other
+     * query services.
+     */
+    private fetchUserActions(
+        systemUser: CoscradUserWithGroups,
+        commandContexts: CommandContext[]
+    ): ICommandFormAndLabels[] {
+        return commandContexts.flatMap((commandContext) =>
+            fetchActionsForUser(this.commandInfoService, systemUser, commandContext)
+        );
     }
 }

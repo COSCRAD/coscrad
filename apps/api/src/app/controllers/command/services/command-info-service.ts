@@ -46,6 +46,7 @@ export class CommandInfoService {
     getCommandInfo(): ICommandFormAndLabels[];
     getCommandInfo(context: DomainModelCtor): ICommandFormAndLabels[];
     getCommandInfo(context: DetailScopedCommandWriteContext): ICommandFormAndLabels[];
+    getCommandInfo(context: CommandContext): ICommandFormAndLabels[];
     getCommandInfo(context?: CommandContext): ICommandFormAndLabels[] {
         const commandTypeFilter = buildCommandTypeFilter(context);
 

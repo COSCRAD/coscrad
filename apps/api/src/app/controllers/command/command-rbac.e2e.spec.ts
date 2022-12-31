@@ -65,6 +65,11 @@ describe('Role Based Access Control for commands', () => {
                     { shouldMockIdGenerator: true, testUserWithGroups }
                 ));
 
+            /**
+             * TODO[https://www.pivotaltracker.com/story/show/184111389]
+             *
+             * This needs to be replaced with `PUBLISH_RESOURCE`
+             */
             commandHandlerService.registerHandler(
                 'PUBLISH_SONG',
                 new PublishSongCommandHandler(testRepositoryProvider, idManager)
@@ -107,6 +112,11 @@ describe('Role Based Access Control for commands', () => {
                     { shouldMockIdGenerator: true }
                 ));
 
+            /**
+             * TODO[https://www.pivotaltracker.com/story/show/184111389]
+             *
+             * This needs to be replaced with `PUBLISH_RESOURCE`
+             */
             commandHandlerService.registerHandler(
                 'PUBLISH_SONG',
                 new PublishSongCommandHandler(testRepositoryProvider, idManager)
@@ -161,6 +171,11 @@ describe('Role Based Access Control for commands', () => {
                         { shouldMockIdGenerator: true, testUserWithGroups }
                     ));
 
+                /**
+                 * TODO[https://www.pivotaltracker.com/story/show/184111389]
+                 *
+                 * This needs to be replaced with `PUBLISH_RESOURCE`
+                 */
                 commandHandlerService.registerHandler(
                     'PUBLISH_SONG',
                     new PublishSongCommandHandler(testRepositoryProvider, idManager)

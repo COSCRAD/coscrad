@@ -29,7 +29,6 @@ import { CommandAssertionDependencies } from '../../__tests__/command-helpers/ty
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
-import { CreateSongCommandHandler } from './create-song.command-handler';
 
 const createSongCommandType = 'CREATE_SONG';
 
@@ -80,11 +79,6 @@ describe('CreateSong', () => {
             commandHandlerService,
             idManager,
         };
-
-        commandHandlerService.registerHandler(
-            createSongCommandType,
-            new CreateSongCommandHandler(testRepositoryProvider, idManager)
-        );
     });
 
     afterAll(async () => {

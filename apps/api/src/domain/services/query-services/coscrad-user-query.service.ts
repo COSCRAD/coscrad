@@ -27,6 +27,7 @@ export class CoscradUserQueryService {
 
         return {
             ...new CoscradUserViewModel(searchResult),
+            // Only admin users can reach this logic to begin with- no need to filter
             actions: this.commandInfoService.getCommandInfo(searchResult),
         };
     }
@@ -53,6 +54,7 @@ export class CoscradUserQueryService {
 
         return {
             entities: viewModelsAndActions,
+            // Only admin users can reach this logic to begin with- no need to filter
             indexScopedActions: this.commandInfoService.getCommandInfo(CoscradUser),
         };
     }

@@ -26,7 +26,6 @@ import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserI
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 import { CreateCourtCaseBibliographicReference } from './create-court-case-bibliographic-reference.command';
-import { CreateCourtCaseBibliographicReferenceCommandHandler } from './create-court-case-bibliographic-reference.command-handler';
 
 const commandType = 'CREATE_COURT_CASE_BIBLIOGRAPHIC_REFERENCE';
 
@@ -81,14 +80,6 @@ describe(`The command: ${commandType}`, () => {
             commandHandlerService,
             idManager,
         };
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new CreateCourtCaseBibliographicReferenceCommandHandler(
-                testRepositoryProvider,
-                idManager
-            )
-        );
     });
 
     beforeEach(async () => {

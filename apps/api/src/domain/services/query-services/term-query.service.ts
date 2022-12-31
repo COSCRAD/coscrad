@@ -1,15 +1,17 @@
-import { ICommandFormAndLabels, ITermViewModel } from '@coscrad/api-interfaces';
+import { ITermViewModel } from '@coscrad/api-interfaces';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
 import { TermViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
+import BaseDomainModel from '../../models/BaseDomainModel';
 import { Term } from '../../models/term/entities/term.entity';
 import { ResourceType } from '../../types/ResourceType';
-import { BaseQueryService } from './base-query.service';
+import { ResourceQueryService } from './resource-query.service';
 
 @Injectable()
-export class TermQueryService extends BaseQueryService<Term, ITermViewModel> {
+export class TermQueryService extends ResourceQueryService<Term, ITermViewModel> {
     protected readonly type = ResourceType.term;
 
     constructor(
@@ -26,7 +28,7 @@ export class TermQueryService extends BaseQueryService<Term, ITermViewModel> {
         return new TermViewModel(term, baseAudioURL);
     }
 
-    getInfoForIndexScopedCommands(): ICommandFormAndLabels[] {
-        return this.commandInfoService.getCommandInfo(Term);
+    getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
+        return [Term];
     }
 }

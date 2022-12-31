@@ -215,7 +215,32 @@ Array [
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a coscrad admin when querying for user groups when fetching a group by ID when there is a group with the given ID should find the group 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Add an existing user to an existing user group",
+      "form": Object {
+        "fields": Array [
+          Object {
+            "description": "the ID of the user that will be added to this group",
+            "label": "user ID",
+            "name": "userId",
+            "options": Object {
+              "aggregateType": "user",
+            },
+            "type": "DYNAMIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": Object {
+          "aggregateCompositeIdentifier": Object {
+            "id": "1",
+            "type": "userGroup",
+          },
+        },
+      },
+      "label": "Add User to Group",
+      "type": "ADD_USER_TO_GROUP",
+    },
+  ],
   "description": "This group is for members of the community only.",
   "id": "1",
   "label": "community members",
@@ -242,7 +267,32 @@ exports[`User Management Queries when the system user issuing the command is aut
 Object {
   "entities": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Add an existing user to an existing user group",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "the ID of the user that will be added to this group",
+                "label": "user ID",
+                "name": "userId",
+                "options": Object {
+                  "aggregateType": "user",
+                },
+                "type": "DYNAMIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": Object {
+              "aggregateCompositeIdentifier": Object {
+                "id": "1",
+                "type": "userGroup",
+              },
+            },
+          },
+          "label": "Add User to Group",
+          "type": "ADD_USER_TO_GROUP",
+        },
+      ],
       "description": "This group is for members of the community only.",
       "id": "1",
       "label": "community members",
@@ -264,13 +314,72 @@ Object {
       ],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": Array [
+    Object {
+      "description": "Creates a new user group",
+      "form": Object {
+        "fields": Array [
+          Object {
+            "description": "the name of the user group",
+            "label": "label",
+            "name": "label",
+            "type": "TEXT_FIELD",
+          },
+          Object {
+            "description": "a summary of the purpose of this group (what its members have in common)",
+            "label": "description",
+            "name": "description",
+            "type": "TEXT_FIELD",
+          },
+        ],
+        "prepopulatedFields": Object {},
+      },
+      "label": "Create User Group",
+      "type": "CREATE_USER_GROUP",
+    },
+  ],
 }
 `;
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a coscrad admin when querying for users when fetching a user by ID when there is a user with the given ID should find the user 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Grant an additional user role to the user",
+      "form": Object {
+        "fields": Array [
+          Object {
+            "description": "Add property description",
+            "label": "User Role",
+            "name": "COSCRAD_USER_ROLE",
+            "options": Array [
+              Object {
+                "display": "admin",
+                "value": "projectAdmin",
+              },
+              Object {
+                "display": "viewer",
+                "value": "viewer",
+              },
+              Object {
+                "display": "COSCRAD admin",
+                "value": "superAdmin",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": Object {
+          "aggregateCompositeIdentifier": Object {
+            "id": "1",
+            "type": "user",
+          },
+        },
+      },
+      "label": "Grant User Role",
+      "type": "GRANT_USER_ROLE",
+    },
+  ],
   "id": "1",
   "profile": Object {
     "email": "llcj1985@aol.com",
@@ -290,7 +399,43 @@ exports[`User Management Queries when the system user issuing the command is aut
 Object {
   "entities": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Grant an additional user role to the user",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "Add property description",
+                "label": "User Role",
+                "name": "COSCRAD_USER_ROLE",
+                "options": Array [
+                  Object {
+                    "display": "admin",
+                    "value": "projectAdmin",
+                  },
+                  Object {
+                    "display": "viewer",
+                    "value": "viewer",
+                  },
+                  Object {
+                    "display": "COSCRAD admin",
+                    "value": "superAdmin",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": Object {
+              "aggregateCompositeIdentifier": Object {
+                "id": "1",
+                "type": "user",
+              },
+            },
+          },
+          "label": "Grant User Role",
+          "type": "GRANT_USER_ROLE",
+        },
+      ],
       "id": "1",
       "profile": Object {
         "email": "llcj1985@aol.com",
@@ -305,13 +450,61 @@ Object {
       "username": "cool-james",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": Array [
+    Object {
+      "description": "Register a new COSCRAD user after the user has been registered with the auth provider",
+      "form": Object {
+        "fields": Array [
+          Object {
+            "description": "the auth provider's unique ID for this user (the user must be added to the auth provider first)",
+            "label": "auth provider's ID",
+            "name": "userIdFromAuthProvider",
+            "type": "TEXT_FIELD",
+          },
+          Object {
+            "description": "a human-readable text identifier for this user",
+            "label": "username",
+            "name": "username",
+            "type": "TEXT_FIELD",
+          },
+        ],
+        "prepopulatedFields": Object {},
+      },
+      "label": "Register User",
+      "type": "REGISTER_USER",
+    },
+  ],
 }
 `;
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a project admin when querying for user groups when fetching a group by ID when there is a group with the given ID should find the group 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Add an existing user to an existing user group",
+      "form": Object {
+        "fields": Array [
+          Object {
+            "description": "the ID of the user that will be added to this group",
+            "label": "user ID",
+            "name": "userId",
+            "options": Object {
+              "aggregateType": "user",
+            },
+            "type": "DYNAMIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": Object {
+          "aggregateCompositeIdentifier": Object {
+            "id": "1",
+            "type": "userGroup",
+          },
+        },
+      },
+      "label": "Add User to Group",
+      "type": "ADD_USER_TO_GROUP",
+    },
+  ],
   "description": "This group is for members of the community only.",
   "id": "1",
   "label": "community members",
@@ -338,7 +531,32 @@ exports[`User Management Queries when the system user issuing the command is aut
 Object {
   "entities": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Add an existing user to an existing user group",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "the ID of the user that will be added to this group",
+                "label": "user ID",
+                "name": "userId",
+                "options": Object {
+                  "aggregateType": "user",
+                },
+                "type": "DYNAMIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": Object {
+              "aggregateCompositeIdentifier": Object {
+                "id": "1",
+                "type": "userGroup",
+              },
+            },
+          },
+          "label": "Add User to Group",
+          "type": "ADD_USER_TO_GROUP",
+        },
+      ],
       "description": "This group is for members of the community only.",
       "id": "1",
       "label": "community members",
@@ -360,13 +578,72 @@ Object {
       ],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": Array [
+    Object {
+      "description": "Creates a new user group",
+      "form": Object {
+        "fields": Array [
+          Object {
+            "description": "the name of the user group",
+            "label": "label",
+            "name": "label",
+            "type": "TEXT_FIELD",
+          },
+          Object {
+            "description": "a summary of the purpose of this group (what its members have in common)",
+            "label": "description",
+            "name": "description",
+            "type": "TEXT_FIELD",
+          },
+        ],
+        "prepopulatedFields": Object {},
+      },
+      "label": "Create User Group",
+      "type": "CREATE_USER_GROUP",
+    },
+  ],
 }
 `;
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a project admin when querying for users when fetching a user by ID when there is a user with the given ID should find the user 1`] = `
 Object {
-  "actions": Array [],
+  "actions": Array [
+    Object {
+      "description": "Grant an additional user role to the user",
+      "form": Object {
+        "fields": Array [
+          Object {
+            "description": "Add property description",
+            "label": "User Role",
+            "name": "COSCRAD_USER_ROLE",
+            "options": Array [
+              Object {
+                "display": "admin",
+                "value": "projectAdmin",
+              },
+              Object {
+                "display": "viewer",
+                "value": "viewer",
+              },
+              Object {
+                "display": "COSCRAD admin",
+                "value": "superAdmin",
+              },
+            ],
+            "type": "STATIC_SELECT",
+          },
+        ],
+        "prepopulatedFields": Object {
+          "aggregateCompositeIdentifier": Object {
+            "id": "1",
+            "type": "user",
+          },
+        },
+      },
+      "label": "Grant User Role",
+      "type": "GRANT_USER_ROLE",
+    },
+  ],
   "id": "1",
   "profile": Object {
     "email": "llcj1985@aol.com",
@@ -386,7 +663,43 @@ exports[`User Management Queries when the system user issuing the command is aut
 Object {
   "entities": Array [
     Object {
-      "actions": Array [],
+      "actions": Array [
+        Object {
+          "description": "Grant an additional user role to the user",
+          "form": Object {
+            "fields": Array [
+              Object {
+                "description": "Add property description",
+                "label": "User Role",
+                "name": "COSCRAD_USER_ROLE",
+                "options": Array [
+                  Object {
+                    "display": "admin",
+                    "value": "projectAdmin",
+                  },
+                  Object {
+                    "display": "viewer",
+                    "value": "viewer",
+                  },
+                  Object {
+                    "display": "COSCRAD admin",
+                    "value": "superAdmin",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": Object {
+              "aggregateCompositeIdentifier": Object {
+                "id": "1",
+                "type": "user",
+              },
+            },
+          },
+          "label": "Grant User Role",
+          "type": "GRANT_USER_ROLE",
+        },
+      ],
       "id": "1",
       "profile": Object {
         "email": "llcj1985@aol.com",
@@ -401,6 +714,29 @@ Object {
       "username": "cool-james",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": Array [
+    Object {
+      "description": "Register a new COSCRAD user after the user has been registered with the auth provider",
+      "form": Object {
+        "fields": Array [
+          Object {
+            "description": "the auth provider's unique ID for this user (the user must be added to the auth provider first)",
+            "label": "auth provider's ID",
+            "name": "userIdFromAuthProvider",
+            "type": "TEXT_FIELD",
+          },
+          Object {
+            "description": "a human-readable text identifier for this user",
+            "label": "username",
+            "name": "username",
+            "type": "TEXT_FIELD",
+          },
+        ],
+        "prepopulatedFields": Object {},
+      },
+      "label": "Register User",
+      "type": "REGISTER_USER",
+    },
+  ],
 }
 `;
