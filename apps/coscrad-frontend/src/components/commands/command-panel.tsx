@@ -5,6 +5,8 @@ import {
     isAggregateType,
 } from '@coscrad/api-interfaces';
 import { useState } from 'react';
+import { useAppDispatch } from '../../app/hooks';
+import { clearCommandStatus } from '../../store/slices/command-status';
 import { useLoadableGeneratedId } from '../../store/slices/id-generation';
 import { useFormState } from '../dynamic-forms/form-state';
 import { ErrorDisplay } from '../error-display/error-display';
@@ -25,6 +27,8 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
     const [selectedCommandType, setSelectedCommandType] = useState<string>(null);
 
     const [formState, updateForm] = useFormState();
+
+    const dispatch = useAppDispatch();
 
     const { isLoading, errorInfo, data: generatedId } = useLoadableGeneratedId();
 
@@ -64,7 +68,10 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
                     ? { type: commandContext, id: generatedId }
                     : commandContext
             }
-            onAcknowledgeCommandResult={() => setSelectedCommandType(null)}
+            onAcknowledgeCommandResult={() => {
+                setSelectedCommandType(null);
+                dispatch(clearCommandStatus());
+            }}
         />
     );
 };

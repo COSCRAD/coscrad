@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { buildInitialLoadableState } from '../utils';
 import { buildReducersForThunk } from '../utils/build-reducers-for-thunk';
 import { COMMAND_STATUS } from './constants';
@@ -11,11 +11,16 @@ export const initialState: CommandStatusSliceState = buildInitialLoadableState<C
 export const commandStatusSlice = createSlice({
     name: COMMAND_STATUS,
     initialState,
-    reducers: {},
+    reducers: {
+        clearCommandStatus: (_: CommandStatusSliceState, __: PayloadAction) =>
+            buildInitialLoadableState<CommandResult>(),
+    },
     extraReducers: (builder) => {
         // @ts-expect-error FIX types
         buildReducersForThunk(builder, executeCommand);
     },
 });
+
+export const { clearCommandStatus } = commandStatusSlice.actions;
 
 export const commandStatusReducer = commandStatusSlice.reducer;
