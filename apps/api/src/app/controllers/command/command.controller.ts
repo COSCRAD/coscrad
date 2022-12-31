@@ -56,6 +56,7 @@ export class CommandController {
 
         const commandFSATypeValidationResult = validateCommandFSAType(commandFSA);
 
+        // Isn't this duplicating the handler's logic?
         if (!isValid(commandFSATypeValidationResult))
             return res
                 .status(httpStatusCodes.badRequest)

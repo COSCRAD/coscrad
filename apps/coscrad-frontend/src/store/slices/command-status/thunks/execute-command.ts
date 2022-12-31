@@ -21,14 +21,15 @@ export const executeCommand = createAsyncThunk(
             body: JSON.stringify(commandFSA),
         });
 
-        const responseJson = await response.json();
-
         // The command failed or there was some other network / authorization error
-        if (response.status !== HttpStatusCode.ok)
+        if (response.status !== HttpStatusCode.ok) {
+            const responseJson = await response.json();
+
             return thunkApi.rejectWithValue({
                 code: response.status,
                 message: responseJson,
             } as IHttpErrorInfo);
+        }
 
         // The command succeeded
         return Ack;
