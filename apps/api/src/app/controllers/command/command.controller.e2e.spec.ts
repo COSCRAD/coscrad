@@ -68,6 +68,11 @@ describe('The Command Controller', () => {
                 { shouldMockIdGenerator: true, testUserWithGroups }
             ));
 
+        /**
+         * TODO[https://www.pivotaltracker.com/story/show/184111389]
+         *
+         * This needs to be replaced with `PUBLISH_RESOURCE`
+         */
         commandHandlerService.registerHandler(
             'CREATE_SONG',
             new CreateSongCommandHandler(testRepositoryProvider, idManager)

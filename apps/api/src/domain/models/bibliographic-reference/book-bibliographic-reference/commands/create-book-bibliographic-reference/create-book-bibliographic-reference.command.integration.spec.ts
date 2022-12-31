@@ -31,7 +31,6 @@ import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUs
 import { dummyUuid } from '../../../../__tests__/utilities/dummyUuid';
 import { BibliographicReferenceType } from '../../../types/BibliographicReferenceType';
 import { CreateBookBibliographicReference } from './create-book-bibliographic-reference.command';
-import { CreateBookBibliographicReferenceCommandHandler } from './create-book-bibliographic-reference.command-handler';
 
 const commandType = 'CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE';
 
@@ -101,11 +100,6 @@ describe(`The command: ${commandType}`, () => {
             commandHandlerService,
             idManager,
         };
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new CreateBookBibliographicReferenceCommandHandler(testRepositoryProvider, idManager)
-        );
     });
 
     afterAll(async () => {

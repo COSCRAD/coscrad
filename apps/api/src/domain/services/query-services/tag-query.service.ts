@@ -1,6 +1,14 @@
-import { IDetailQueryResult, IIndexQueryResult, ITagViewModel } from '@coscrad/api-interfaces';
+import {
+    ICommandFormAndLabels,
+    IDetailQueryResult,
+    IIndexQueryResult,
+    ITagViewModel,
+} from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import {
+    CommandContext,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
@@ -9,8 +17,10 @@ import { RepositoryProvider } from '../../../persistence/repositories/repository
 import { ResultOrError } from '../../../types/ResultOrError';
 import { TagViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { Tag } from '../../models/tag/tag.entity';
+import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../types/AggregateId';
+import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 /**
  * TODO [https://www.pivotaltracker.com/story/show/184098960]
@@ -23,7 +33,8 @@ export class TagQueryService {
     ) {}
 
     async fetchById(
-        id: AggregateId
+        id: AggregateId,
+        systemUser: CoscradUserWithGroups
     ): Promise<ResultOrError<Maybe<IDetailQueryResult<ITagViewModel>>>> {
         const result = await this.repositoryProvider.getTagRepository().fetchById(id);
 
@@ -37,11 +48,13 @@ export class TagQueryService {
         return {
             // TODO type the following!
             ...(cloneToPlainObject(new TagViewModel(result)) as TagViewModel),
-            actions: this.commandInfoService.getCommandInfo(result),
+            actions: this.fetchUserActions(systemUser, result),
         };
     }
 
-    async fetchMany(): Promise<ResultOrError<IIndexQueryResult<ITagViewModel>>> {
+    async fetchMany(
+        systemUser: CoscradUserWithGroups
+    ): Promise<ResultOrError<IIndexQueryResult<ITagViewModel>>> {
         const result = await this.repositoryProvider.getTagRepository().fetchMany();
 
         const allErrors = result.filter(isInternalError);
@@ -58,9 +71,22 @@ export class TagQueryService {
         return {
             entities: allTags.map((tag) => ({
                 ...cloneToPlainObject(new TagViewModel(tag)),
-                actions: this.commandInfoService.getCommandInfo(tag),
+                actions: this.fetchUserActions(systemUser, tag),
             })),
-            indexScopedActions: this.commandInfoService.getCommandInfo(Tag),
+            indexScopedActions: this.fetchUserActions(systemUser, Tag),
         };
+    }
+
+    /**
+     * TODO [https://www.pivotaltracker.com/story/show/184098960]
+     *
+     * Inherit from a shared base query service and share this logic with other
+     * query services.
+     */
+    private fetchUserActions(
+        systemUser: CoscradUserWithGroups,
+        commandContext: CommandContext
+    ): ICommandFormAndLabels[] {
+        return fetchActionsForUser(this.commandInfoService, systemUser, commandContext);
     }
 }

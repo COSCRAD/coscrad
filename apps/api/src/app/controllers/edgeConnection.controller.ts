@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { EdgeConnectionQueryService } from '../../domain/services/query-services/edge-connection-query.service';
 import { NOTE_INDEX_ROUTE } from './constants';
@@ -22,7 +22,7 @@ export class EdgeConnectionController {
     }
 
     @Get('notes')
-    async fetchManyNotes() {
-        return this.edgeConnectionQueryService.fetchMany();
+    async fetchManyNotes(@Req() req) {
+        return this.edgeConnectionQueryService.fetchMany(req.user);
     }
 }
