@@ -23,7 +23,6 @@ import AggregateNotFoundError from '../../common-command-errors/AggregateNotFoun
 import CommandExecutionError from '../../common-command-errors/CommandExecutionError';
 import UserAlreadyHasReadAccessError from '../../common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
 import { GrantResourceReadAccessToUser } from './grant-resource-read-access-to-user.command';
-import { GrantResourceReadAccessToUserCommandHandler } from './grant-resource-read-access-to-user.command-handler';
 
 const commandType = 'GRANT_RESOURCE_READ_ACCESS_TO_USER';
 
@@ -70,11 +69,6 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
             }).catch((error) => {
                 throw error;
             }));
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new GrantResourceReadAccessToUserCommandHandler(testRepositoryProvider, idManager)
-        );
 
         commandAssertionDependencies = {
             testRepositoryProvider,

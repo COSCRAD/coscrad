@@ -180,6 +180,22 @@ describe('Access Control List and Role Based filtering in resource queries', () 
 
                         assertIndexOkResponse(res, resourcesWhoseViewModelsShouldBeFound);
                     });
+
+                    it('should not find any index actions', async () => {
+                        const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                        expect(res.body.indexScopedActions).toEqual([]);
+                    });
+
+                    it('should not find any detail-scoped actions', async () => {
+                        const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                        const entitiesWithActions = res.body.entities.filter(
+                            ({ actions }) => actions.length > 0
+                        );
+
+                        expect(entitiesWithActions.length).toBe(0);
+                    });
                 });
 
                 describe('when querying for a single resource by ID (fetch by ID)', () => {
@@ -190,6 +206,18 @@ describe('Access Control List and Role Based filtering in resource queries', () 
                                 app,
                                 buildDetailEndpoint
                             );
+                        });
+
+                        it('should not find any actions', async () => {
+                            const resourceToFind = publicResources[0];
+
+                            const res = await request(app.getHttpServer()).get(
+                                buildDetailEndpoint(resourceToFind.id)
+                            );
+
+                            const numberOfAvailableActions = res.body.actions.length;
+
+                            expect(numberOfAvailableActions).toBe(0);
                         });
                     });
 

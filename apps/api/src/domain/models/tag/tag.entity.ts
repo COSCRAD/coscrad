@@ -16,7 +16,7 @@ import { Aggregate } from '../aggregate.entity';
 import { CategorizableCompositeIdentifier } from '../categories/types/ResourceOrNoteCompositeIdentifier';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
 
-@RegisterIndexScopedCommands([])
+@RegisterIndexScopedCommands(['CREATE_TAG'])
 export class Tag extends Aggregate implements HasLabel {
     type = AggregateType.tag;
 
@@ -56,7 +56,7 @@ export class Tag extends Aggregate implements HasLabel {
     }
 
     getAvailableCommands(): string[] {
-        return [];
+        return ['RELABEL_TAG'];
     }
 
     validateLabelAgainstExternalState(externalState: InMemorySnapshot): ValidationResult {

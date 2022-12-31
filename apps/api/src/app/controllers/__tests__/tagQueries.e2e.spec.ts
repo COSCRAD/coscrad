@@ -59,10 +59,20 @@ describe(`Tag Queries`, () => {
 
                 expect(result.body).toMatchSnapshot();
             });
+
+            it.todo('should not return actions to non-admin users');
         });
     });
 
     describe(`when fetching all tags`, () => {
+        beforeEach(async () => {
+            await testRepositoryProvider.testSetup();
+        });
+
+        afterEach(async () => {
+            await testRepositoryProvider.testTeardown();
+        });
+
         it('should return the expected result', async () => {
             await testRepositoryProvider.getTagRepository().createMany(testTagData);
 
@@ -72,5 +82,7 @@ describe(`Tag Queries`, () => {
 
             expect(res.body).toMatchSnapshot();
         });
+
+        it.todo('should not return actions to non-admin users');
     });
 });

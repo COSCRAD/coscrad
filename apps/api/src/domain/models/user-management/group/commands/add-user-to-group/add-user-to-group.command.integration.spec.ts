@@ -23,7 +23,6 @@ import { CommandAssertionDependencies } from '../../../../__tests__/command-help
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import { CoscradUserGroup } from '../../entities/coscrad-user-group.entity';
 import { AddUserToGroup } from './add-user-to-group.command';
-import { AddUserToGroupCommandHandler } from './add-user-to-group.command-handler';
 
 const commandType = 'ADD_USER_TO_GROUP';
 
@@ -78,11 +77,6 @@ describe('AddUserToGroup', () => {
             }).catch((error) => {
                 throw error;
             }));
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new AddUserToGroupCommandHandler(testRepositoryProvider, idManager)
-        );
 
         commandAssertionDependencies = {
             testRepositoryProvider,

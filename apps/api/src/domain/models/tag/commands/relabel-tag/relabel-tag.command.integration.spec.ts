@@ -25,7 +25,6 @@ import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserI
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
 import { Tag } from '../../tag.entity';
 import { RelabelTag } from './relabel-tag.command';
-import { RelabelTagCommandHandler } from './relabel-tag.command.handler';
 
 const commandType = 'RELABEL_TAG';
 
@@ -76,11 +75,6 @@ describe('RELABEL_TAG', () => {
             }).catch((error) => {
                 throw error;
             }));
-
-        commandHandlerService.registerHandler(
-            commandType,
-            new RelabelTagCommandHandler(testRepositoryProvider, idManager)
-        );
 
         commandAssertionDependencies = {
             testRepositoryProvider,
