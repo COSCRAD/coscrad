@@ -2,6 +2,7 @@ import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolki
 import { AUTH, authReducer } from './slices/auth';
 import { categoryTreeReducer } from './slices/categories';
 import { CATEGORY_TREE } from './slices/categories/constants';
+import { commandStatusReducer, COMMAND_STATUS } from './slices/command-status';
 import { idGenerationReducer } from './slices/id-generation';
 import { ID_GENERATION } from './slices/id-generation/constants';
 import { noteReducer, NOTES } from './slices/notes';
@@ -30,6 +31,7 @@ import { TAGS } from './slices/tagSlice/constants';
 export const rootReducer = combineReducers({
     [AUTH]: authReducer,
     [ID_GENERATION]: idGenerationReducer,
+    [COMMAND_STATUS]: commandStatusReducer,
     [RESOURCE_INFO]: resourceInfoReducer,
     [TAGS]: tagReducer,
     [NOTES]: noteReducer,
