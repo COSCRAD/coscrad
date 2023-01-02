@@ -11,11 +11,6 @@ import { buildDummyTerms } from '../resources/terms/test-utils/build-dummy-terms
 import { buildDummyVocabularyLists } from '../resources/vocabulary-lists/test-utils/build-dummy-vocabulary-lists';
 import { CategoryTreeContainer } from './category-tree.container';
 
-const getCompositeIdentifier = ({ type, id }: { type: CategorizableType; id: string }) => ({
-    type,
-    id,
-});
-
 const dummyBooks = buildDummyBooks();
 
 const dummyTerms = buildDummyTerms();

@@ -5,12 +5,14 @@ import {
     isAggregateType,
 } from '@coscrad/api-interfaces';
 import { useState } from 'react';
+import { useAppDispatch } from '../../app/hooks';
+import { clearCommandStatus } from '../../store/slices/command-status';
 import { useLoadableGeneratedId } from '../../store/slices/id-generation';
-import { DynamicForm } from '../dynamic-forms/dynamic-form';
 import { useFormState } from '../dynamic-forms/form-state';
 import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../Loading';
 import { CommandButton } from './command-button';
+import { CommandWorkspace } from './command-workspace';
 
 export const INDEX_COMMAND_CONTEXT = 'index';
 
@@ -25,6 +27,8 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
     const [selectedCommandType, setSelectedCommandType] = useState<string>(null);
 
     const [formState, updateForm] = useFormState();
+
+    const dispatch = useAppDispatch();
 
     const { isLoading, errorInfo, data: generatedId } = useLoadableGeneratedId();
 
@@ -54,49 +58,20 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
             </div>
         );
 
-    const {
-        label,
-        description,
-        form: { fields },
-    } = selectedCommand;
-
     return (
-        <>
-            <h1>Execute Command</h1>
-            <div>
-                <h3>{label}</h3>
-                <br />
-                <p>{description}</p>
-                <br />
-                <DynamicForm
-                    fields={fields}
-                    /**
-                     * TODO [https://www.pivotaltracker.com/story/show/184056544]
-                     * In reality, things are a bit more complex than this. We
-                     * will eventually need to display an `Ack` \ `NAck` and then
-                     * an `ok` button via either this panel or a modal.
-                     */
-                    onSubmitForm={() => {
-                        const commandFsa = {
-                            type: selectedCommand.type,
-                            payload: {
-                                aggregateCompositeIdentifier: isAggregateType(commandContext)
-                                    ? { type: commandContext, id: generatedId }
-                                    : commandContext,
-                                ...formState,
-                            },
-                        };
-
-                        console.log({
-                            submittedCommandWithFSA: commandFsa,
-                        });
-
-                        setSelectedCommandType(null);
-                    }}
-                    onFieldUpdate={updateForm}
-                    formState={formState}
-                />
-            </div>
-        </>
+        <CommandWorkspace
+            selectedCommand={selectedCommand}
+            onFieldUpdate={updateForm}
+            formState={formState}
+            aggregateCompositeIdentifier={
+                isAggregateType(commandContext)
+                    ? { type: commandContext, id: generatedId }
+                    : commandContext
+            }
+            onAcknowledgeCommandResult={() => {
+                setSelectedCommandType(null);
+                dispatch(clearCommandStatus());
+            }}
+        />
     );
 };
