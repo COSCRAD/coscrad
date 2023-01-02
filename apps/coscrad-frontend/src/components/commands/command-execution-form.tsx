@@ -1,21 +1,23 @@
 import { AggregateCompositeIdentifier, ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { useAppDispatch } from '../../app/hooks';
+import { executeCommand } from '../../store/slices/command-status';
 import { DynamicForm } from '../dynamic-forms/dynamic-form';
 
 interface CommandExecutionFormProps {
     selectedCommand: ICommandFormAndLabels;
     onFieldUpdate: (propertyKey: string, value: unknown) => void;
-    onSubmitCommand: () => void;
     formState: Record<string, unknown>;
     aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 }
 
 export const CommandExecutionForm = ({
     selectedCommand,
-    onSubmitCommand,
     onFieldUpdate,
     formState,
     aggregateCompositeIdentifier,
 }: CommandExecutionFormProps): JSX.Element => {
+    const dispatch = useAppDispatch();
+
     const { label, description, form } = selectedCommand;
 
     const { fields } = form;
@@ -33,7 +35,7 @@ export const CommandExecutionForm = ({
             submittedCommandWithFSA: commandFsa,
         });
 
-        onSubmitCommand();
+        dispatch(executeCommand(commandFsa));
     };
 
     return (

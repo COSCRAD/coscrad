@@ -102,7 +102,9 @@ export abstract class Resource extends Aggregate {
      * isntance's state.
      */
     private getAvailableGenericCommands(): string[] {
-        return ['GRANT_RESOURCE_READ_ACCESS_TO_USER'];
+        const alwaysAvailable = ['GRANT_RESOURCE_READ_ACCESS_TO_USER'];
+
+        return [...alwaysAvailable, ...(this.published ? [] : ['PUBLISH_RESOURCE'])];
     }
 
     getAvailableCommands(): string[] {
