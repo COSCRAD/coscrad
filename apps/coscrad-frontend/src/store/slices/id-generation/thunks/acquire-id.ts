@@ -1,13 +1,15 @@
 import { HttpStatusCode, IHttpErrorInfo } from '@coscrad/api-interfaces';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { RootState } from '../../..';
 import { getConfig } from '../../../../config';
 import { buildAuthenticationHeaders } from '../../utils/build-authentication-headers';
+import { selectAuthToken } from '../../utils/select-token';
 import { ID_GENERATION } from '../constants';
 
 export const acquireId = createAsyncThunk(`${ID_GENERATION}/ACQUIRE_ID`, async (_, thunkApi) => {
     const { getState } = thunkApi;
 
-    const token = getState()['auth']?.userAuthInfo?.token;
+    const token = selectAuthToken(getState() as RootState);
 
     const response = await fetch(`${getConfig().apiUrl}/ids`, {
         method: 'POST',

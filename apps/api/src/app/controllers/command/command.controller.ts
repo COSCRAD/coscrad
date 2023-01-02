@@ -11,14 +11,12 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { isValid } from '../../../domain/domainModelValidators/Valid';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import { CommandWithGivenTypeNotFoundExceptionFilter } from '../exception-handling/exception-filters/command-with-given-type-not-found.filter';
 import { NoCommandHandlerForCommandTypeFilter } from '../exception-handling/exception-filters/no-command-handler-for-command-type.filter';
 import sendInternalResultAsHttpResponse from '../resources/common/sendInternalResultAsHttpResponse';
 import { CommandFSA } from './command-fsa/command-fsa.entity';
-import validateCommandFSAType from './command-fsa/validateCommandFSAType';
 
 export const AdminJwtGuard = AuthGuard('jwt');
 
@@ -54,14 +52,12 @@ export class CommandController {
             throw new UnauthorizedException();
         }
 
-        const commandFSATypeValidationResult = validateCommandFSAType(commandFSA);
-
-        // Isn't this duplicating the handler's logic?
-        if (!isValid(commandFSATypeValidationResult))
-            return res
-                .status(httpStatusCodes.badRequest)
-                .send(commandFSATypeValidationResult.toString());
-
+        /**
+         * Note that we defer command type validation to the command handler.
+         * This is because we want to keep the controller free of domain
+         * logic. If we want to drive commands via a CLI, it shouldn't need
+         * to know about http.
+         */
         const { type, payload } = commandFSA;
 
         const result = await this.commandHandlerService.execute(

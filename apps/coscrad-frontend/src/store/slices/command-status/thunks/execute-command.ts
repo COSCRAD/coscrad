@@ -1,7 +1,9 @@
 import { FluxStandardAction, HttpStatusCode, IHttpErrorInfo } from '@coscrad/api-interfaces';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { RootState } from '../../..';
 import { getConfig } from '../../../../config';
 import { buildAuthenticationHeaders } from '../../utils/build-authentication-headers';
+import { selectAuthToken } from '../../utils/select-token';
 import { COMMAND_STATUS } from '../constants';
 import { Ack } from '../types';
 
@@ -10,10 +12,7 @@ export const executeCommand = createAsyncThunk(
     async (commandFSA: FluxStandardAction<unknown, string>, thunkApi) => {
         const { getState } = thunkApi;
 
-        // TODO Share this with `acquireId`
-        const token = getState()['auth']?.userAuthInfo?.token;
-
-        console.log({ postingCommand: commandFSA });
+        const token = selectAuthToken(getState() as RootState);
 
         const response = await fetch(`${getConfig().apiUrl}/commands`, {
             method: 'POST',

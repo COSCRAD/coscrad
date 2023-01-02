@@ -1,5 +1,5 @@
+import { IHttpErrorInfo } from '@coscrad/api-interfaces';
 import { Button, Card, CardContent, Stack } from '@mui/material';
-import { IHttpErrorInfo } from '../../../../../libs/api-interfaces/src';
 
 interface NackNotificationProps {
     _onClick: () => void;

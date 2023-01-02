@@ -29,6 +29,13 @@ export const CommandExecutor = (props: CommandExecutorProps): JSX.Element => {
     const Workspace = displayLoadableWithErrorsAndLoading(
         CommandWorkspace,
         (generatedId: string) => ({
+            /**
+             * The `commandContext` is represented as either an `AggregateType` (index-scoped commands)
+             * or an `AggregateCompositeIdentifier` (detail-scoped commands).
+             * In the former case, we need to complete the rest of the composite
+             * identifier using the `generatedId`. In the latter case, the
+             * `generatedId` is cached in Redux for the next use.
+             */
             aggregateCompositeIdentifier: isAggregateType(commandContext)
                 ? { type: commandContext, id: generatedId }
                 : (commandContext as AggregateCompositeIdentifier),

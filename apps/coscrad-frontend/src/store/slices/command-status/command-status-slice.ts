@@ -16,7 +16,6 @@ export const commandStatusSlice = createSlice({
             buildInitialLoadableState<CommandResult>(),
     },
     extraReducers: (builder) => {
-        // @ts-expect-error FIX types
         buildReducersForThunk(builder, executeCommand);
     },
 });

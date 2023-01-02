@@ -18,6 +18,7 @@ export const CommandWorkspace = (props: CommandWorkspaceProps): JSX.Element => {
 
     const { isLoading, errorInfo, data: commandResult } = useLoadableCommandResult();
 
+    // TODO Use `displayLoadable` helper here
     if (isLoading) return <Loading />;
 
     if (errorInfo !== null)
