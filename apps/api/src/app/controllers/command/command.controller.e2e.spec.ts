@@ -27,7 +27,6 @@ const buildValidCommandFSA = (id: string): FluxStandardAction<DTO<CreateSong>> =
         aggregateCompositeIdentifier: { id, type: AggregateType.song },
         title: 'test-song-name (language)',
         titleEnglish: 'test-song-name (English)',
-        contributions: [],
         lyrics: 'la la la',
         audioURL: 'https://www.mysound.org/song.mp3',
     },

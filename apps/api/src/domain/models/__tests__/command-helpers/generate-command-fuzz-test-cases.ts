@@ -8,8 +8,12 @@ type CommandFuzzTestCase = {
     description: string;
 };
 
-export const generateCommandFuzzTestCases = (CommandCtor: Ctor<ICommand>): CommandFuzzTestCase[] =>
-    Object.entries(getCoscradDataSchema(CommandCtor)).flatMap(([propertyName, propertySchema]) =>
+export const generateCommandFuzzTestCases = (
+    CommandCtor: Ctor<ICommand>
+): CommandFuzzTestCase[] => {
+    const dataSchema = getCoscradDataSchema(CommandCtor);
+
+    return Object.entries(dataSchema).flatMap(([propertyName, propertySchema]) =>
         new FuzzGenerator(propertySchema)
             .generateInvalidValues()
             .map(({ value, description }) => ({
@@ -23,3 +27,4 @@ export const generateCommandFuzzTestCases = (CommandCtor: Ctor<ICommand>): Comma
                 description: 'superfluous (bogus) property key',
             })
     );
+};

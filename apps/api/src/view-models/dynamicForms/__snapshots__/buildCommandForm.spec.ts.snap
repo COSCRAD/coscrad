@@ -16,12 +16,6 @@ Object {
       "type": "TEXT_FIELD",
     },
     Object {
-      "description": "an acknowledgement of each person who contributed to creating and producing this song",
-      "label": "contributions",
-      "name": "contributions",
-      "type": "JSON_INPUT",
-    },
-    Object {
       "description": "a web URL link to a digital version of this media item for playback",
       "label": "audio link",
       "name": "url",
@@ -30,7 +24,7 @@ Object {
     Object {
       "description": "Add property description",
       "label": "MIME Type",
-      "name": "MIME_TYPE",
+      "name": "mimeType",
       "options": Array [
         Object {
           "display": "mp3",

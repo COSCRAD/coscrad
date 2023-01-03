@@ -363,29 +363,6 @@ Object {
       },
     },
   },
-  "contributions": Object {
-    "complexDataType": "NESTED_TYPE",
-    "description": "an acknowledgement of each person who contributed to creating and producing this song",
-    "isArray": true,
-    "isOptional": false,
-    "label": "contributions",
-    "schema": Object {
-      "contributorId": Object {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "unique identifier of the contributor",
-        "isArray": false,
-        "isOptional": false,
-        "label": "contributor ID",
-      },
-      "role": Object {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "a text summary of the contributor's role",
-        "isArray": false,
-        "isOptional": false,
-        "label": "role",
-      },
-    },
-  },
   "mimeType": Object {
     "complexDataType": "ENUM",
     "description": "technical specification of the type of this media item",
@@ -460,29 +437,6 @@ Object {
     "isArray": false,
     "isOptional": false,
     "label": "audio link",
-  },
-  "contributions": Object {
-    "complexDataType": "NESTED_TYPE",
-    "description": "acknowledgement of all contributors who worked on this song",
-    "isArray": true,
-    "isOptional": false,
-    "label": "contributions",
-    "schema": Object {
-      "contributorId": Object {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "unique identifier of the contributor",
-        "isArray": false,
-        "isOptional": false,
-        "label": "contributor ID",
-      },
-      "role": Object {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "a text summary of the contributor's role",
-        "isArray": false,
-        "isOptional": false,
-        "label": "role",
-      },
-    },
   },
   "lyrics": Object {
     "coscradDataType": "NON_EMPTY_STRING",

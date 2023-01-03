@@ -38,16 +38,6 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateMed
         aggregateCompositeIdentifier: { id, type: AggregateType.mediaItem },
         title: 'Fishing Video',
         titleEnglish: 'Fishing Video (Engl)',
-        contributions: [
-            {
-                contributorId: '101',
-                role: 'editor',
-            },
-            {
-                contributorId: '29',
-                role: 'executive producer',
-            },
-        ],
         url: 'https://www.mysoundbox.org/vid.mp4',
         mimeType: MIMEType.mp4,
     },

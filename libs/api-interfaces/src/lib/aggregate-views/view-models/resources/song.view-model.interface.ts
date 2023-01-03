@@ -6,9 +6,6 @@ export interface ISongViewModel extends IBaseViewModel {
 
     titleEnglish?: string;
 
-    // We can eliminate this in favor of notes in the future
-    contributions: string[];
-
     // we may want to consider transcribed audio and three-way text for this
     lyrics?: string;
 

@@ -14,7 +14,6 @@ Array [
         "type": "song",
       },
       "audioURL": "https://www.mysound.org/song.mp3",
-      "contributions": Array [],
       "lyrics": "la la la",
       "title": "test-song-name (language)",
       "titleEnglish": "test-song-name (English)",

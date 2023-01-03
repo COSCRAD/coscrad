@@ -14,7 +14,6 @@ import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
 import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
 import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import idEquals from '../../shared/functional/idEquals';
-import { ContributorAndRole } from '../../song/ContributorAndRole';
 import { MediaItem } from '../entities/media-item.entity';
 import { CreateMediaItem } from './create-media-item.command';
 import { MediaItemCreated } from './media-item-created.event';
@@ -42,7 +41,6 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             title,
             titleEnglish,
             url,
-            contributions,
             mimeType,
         } = command;
 
@@ -52,7 +50,6 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             title,
             titleEnglish,
             url,
-            contributorAndRoles: contributions.map((dto) => new ContributorAndRole(dto)),
             mimeType: mimeType,
             // You must execute `PUBLISH_MEDIA_ITEM` to publish
             published: false,

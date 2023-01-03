@@ -548,13 +548,6 @@ Array [
         "isOptional": false,
         "label": "audio link",
       },
-      "contributions": Object {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "acknowledgement of each person who worked on this song",
-        "isArray": true,
-        "isOptional": false,
-        "label": "contributions",
-      },
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
@@ -605,29 +598,6 @@ Array [
     "label": "Media Item",
     "link": "/resources/mediaItems",
     "schema": Object {
-      "contributions": Object {
-        "complexDataType": "NESTED_TYPE",
-        "description": "acknowledgement of those who worked on creating and producing the media item",
-        "isArray": true,
-        "isOptional": false,
-        "label": "contributions",
-        "schema": Object {
-          "contributorId": Object {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "unique identifier of the contributor",
-            "isArray": false,
-            "isOptional": false,
-            "label": "contributor ID",
-          },
-          "role": Object {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "a text summary of the contributor's role",
-            "isArray": false,
-            "isOptional": false,
-            "label": "role",
-          },
-        },
-      },
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
