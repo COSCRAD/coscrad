@@ -1,5 +1,5 @@
 import { isResourceType } from '@coscrad/api-interfaces';
-import { useContext } from 'react';
+import { Fragment, useContext } from 'react';
 import { Route } from 'react-router-dom';
 import { FilteredCategorizableIndexContainer } from '../components/higher-order-components';
 import { CategorizablePage } from '../components/higher-order-components/categorizable-page';
@@ -30,8 +30,9 @@ export const IndexToDetailFlowRoutes = () => {
                 : fullViewCategorizablePresenterFactory;
 
         return (
-            <>
+            <Fragment key="categorizable-index-to-detail-flows">
                 <Route
+                    key={`${categorizableType}-index`}
                     path={routeBuilder.index}
                     element={
                         <FilteredCategorizableIndexContainer
@@ -44,6 +45,7 @@ export const IndexToDetailFlowRoutes = () => {
                     }
                 />
                 <Route
+                    key={`${categorizableType}-detail`}
                     path={routeBuilder.detail()}
                     element={
                         <CategorizablePage
@@ -52,7 +54,7 @@ export const IndexToDetailFlowRoutes = () => {
                         />
                     }
                 />
-            </>
+            </Fragment>
         );
     });
 };

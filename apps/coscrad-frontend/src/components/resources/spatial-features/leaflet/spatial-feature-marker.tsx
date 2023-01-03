@@ -79,6 +79,12 @@ const shadowUrl = 'https://www.digiteched.com/content/images/2022/12/marker-shad
 interface Props {
     spatialFeature: ISpatialFeatureViewModel;
     handleClick?: (id: string) => void;
+    /**
+     * This marker is tricky to type because we are building our own abstraction
+     * around react-leaflet \ leaflets less polymorphic API for points, lines,
+     * and polygons.
+     */
+    // eslint-disable-next-line
     customEffects: (id: string, marker: any) => void;
 }
 

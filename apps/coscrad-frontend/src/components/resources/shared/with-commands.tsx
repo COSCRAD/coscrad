@@ -8,13 +8,15 @@ export const WithCommands =
         mapPropsToActions: (props: TProps) => ICommandFormAndLabels[],
         mapPropsToCommandContext: (props: TProps) => CommandContext
     ) =>
-    (props: TProps) =>
-        (
+    (props: TProps) => {
+        const actions = mapPropsToActions(props);
+
+        return actions.length > 0 ? (
             <div>
                 {WrappedComponent(props)}
-                <CommandPanel
-                    actions={mapPropsToActions(props)}
-                    commandContext={mapPropsToCommandContext(props)}
-                />
+                <CommandPanel actions={actions} commandContext={mapPropsToCommandContext(props)} />
             </div>
+        ) : (
+            WrappedComponent(props)
         );
+    };
