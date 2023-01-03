@@ -50,7 +50,7 @@ export const FilteredCategorizableIndexContainer = <
         <div>
             <Presenter {...filteredLoadableModels} />
             {/* TODO [TODO [https://www.pivotaltracker.com/story/show/184107132] Use loadable display helper] */}
-            {loadableModels.data?.indexScopedActions && (
+            {loadableModels.data?.indexScopedActions?.length > 0 && (
                 <CommandPanel
                     actions={loadableModels.data.indexScopedActions}
                     commandContext={aggregateType}

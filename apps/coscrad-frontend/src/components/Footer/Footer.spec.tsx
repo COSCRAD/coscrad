@@ -9,7 +9,7 @@ describe('Footer', () => {
         const copyrightHolder = 'Copy Right Holder';
         const myConfigurableContent = { ...dummyConfigurableContent, copyrightHolder };
 
-        const { baseElement } = renderWithProviders(<Footer />, {
+        renderWithProviders(<Footer />, {
             contentConfig: myConfigurableContent,
         });
 

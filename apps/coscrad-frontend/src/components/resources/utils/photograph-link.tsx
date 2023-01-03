@@ -9,7 +9,7 @@ interface PhotographLinkProps {
 export const PhotographLink = ({ id, url }: PhotographLinkProps): JSX.Element => (
     <div className="photograph-link">
         <Link to={id}>
-            <img src={url} />
+            <img src={url} alt={id} />
         </Link>
     </div>
 );

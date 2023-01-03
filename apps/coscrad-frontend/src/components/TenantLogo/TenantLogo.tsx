@@ -6,7 +6,7 @@ export const TenantLogo = (): JSX.Element => {
 
     return (
         <div className="organization-logo">
-            <img src={organizationLogoUrl} />
+            <img src={organizationLogoUrl} alt="organization logo" />
         </div>
     );
 };
