@@ -1,4 +1,4 @@
-import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
+import { NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { isStringWithNonzeroLength } from '@coscrad/validation';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
@@ -33,12 +33,13 @@ export class Song extends Resource implements ITimeBoundable {
     })
     readonly titleEnglish?: string;
 
-    @NestedDataType(ContributorAndRole, {
-        isArray: true,
-        label: 'contributions',
-        description: 'summary of contributions to the creation and recording of the song',
-    })
-    readonly contributions: ContributorAndRole[];
+    // @NestedDataType(ContributorAndRole, {
+    //     isArray: true,
+    //     label: 'contributions',
+    //     description: 'summary of contributions to the creation and recording of the song',
+    // })
+    // @deprecated Remove this in favor of edge connections to a Contributor resource
+    readonly contributions?: ContributorAndRole[];
 
     @NonEmptyString({ isOptional, label: 'lyrics', description: 'the lyrics of the song' })
     // the type of `lyrics` should allow three way translation in future

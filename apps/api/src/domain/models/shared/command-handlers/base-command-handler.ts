@@ -71,7 +71,9 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
     ): Promise<Ack | InternalError> {
         const typeValidationResult = this.validateType(command, commandType);
 
-        if (isInternalError(typeValidationResult)) return typeValidationResult;
+        if (isInternalError(typeValidationResult)) {
+            return typeValidationResult;
+        }
 
         const writeContextInstance = await this.createOrFetchWriteContext(command);
 

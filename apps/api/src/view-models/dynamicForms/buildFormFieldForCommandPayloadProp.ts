@@ -78,13 +78,13 @@ export const buildFormFieldForCommandPayloadProp = (
     const { complexDataType } = propertyTypeDefinition;
 
     if (complexDataType === ComplexCoscradDataType.enum) {
-        const { enumLabel, enumName, labelsAndValues } =
+        const { enumLabel, labelsAndValues } =
             propertyTypeDefinition as unknown as EnumTypeDefinition;
 
         return {
             type: FormFieldType.staticSelect,
             label: enumLabel,
-            name: enumName,
+            name: nameLabelAndDescription.name,
             description: 'Add property description',
             /**
              * TODO [https://www.pivotaltracker.com/story/show/184065854]

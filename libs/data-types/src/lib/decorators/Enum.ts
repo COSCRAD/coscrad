@@ -12,10 +12,12 @@ export function Enum(enumName: CoscradEnum, userOptions: TypeDecoratorOptions): 
     return (target: Object, propertyKey: string | symbol) => {
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
-        WithValidation(
-            IsEnum(getCoscradEnumFromName(enumName), { each: options.isArray }),
-            options
-        )(target, propertyKey);
+        const coscradEnum = getCoscradEnumFromName(enumName);
+
+        WithValidation(IsEnum(coscradEnum, { each: options.isArray }), options)(
+            target,
+            propertyKey
+        );
 
         const enumDataTypeDefinition: EnumTypeDefinition = {
             ...getEnumMetadata(enumName),

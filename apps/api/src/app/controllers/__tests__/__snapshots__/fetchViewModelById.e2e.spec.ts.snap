@@ -122,12 +122,6 @@ Object {
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/mediaItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [],
-  "contributions": Array [
-    Object {
-      "contributorId": "2",
-      "role": "host",
-    },
-  ],
   "id": "1",
   "lengthMilliseconds": 2500,
   "mimeType": "audio/mpeg",
@@ -206,9 +200,6 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 Object {
   "actions": Array [],
   "audioURL": "https://www.myaudio.com/lamb.mp3",
-  "contributions": Array [
-    "1 (performer)",
-  ],
   "id": "1",
   "lengthMilliseconds": 3500,
   "lyrics": "Mary had a little lamb, little lamb.",

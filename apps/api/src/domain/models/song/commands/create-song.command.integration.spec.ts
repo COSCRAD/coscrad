@@ -11,10 +11,7 @@ import { DTO } from '../../../../types/DTO';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import MissingSongTitleError from '../../../domainModelValidators/errors/song/MissingSongTitleError';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
-import {
-    assertCommandFailsDueToTypeError,
-    assertCommandPayloadTypeError,
-} from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
+import { assertCommandFailsDueToTypeError } from '../../../models/__tests__/command-helpers/assert-command-payload-type-error';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
@@ -38,7 +35,6 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateSon
         aggregateCompositeIdentifier: { id, type: AggregateType.song },
         title: 'test-song-name (language)',
         titleEnglish: 'test-song-name (English)',
-        contributions: [],
         lyrics: 'la la la',
         audioURL: 'https://www.mysound.org/song.mp3',
     },
@@ -157,27 +153,6 @@ describe('CreateSong', () => {
                         // TODO Check inner errors
                         expect(error).toBeInstanceOf(InvalidCommandPayloadTypeError);
                     },
-                });
-            });
-        });
-
-        describe('when the required property contributions is missing', () => {
-            it('should return an error', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    buildCommandFSA: (id: AggregateId) => ({
-                        type: createSongCommandType,
-                        payload: {
-                            id,
-                            title: 'test-song-name (language)',
-                            titleEnglish: 'test-song-name (English)',
-                            lyrics: 'la la la',
-                            audioURL: 'https://www.mysound.org/song.mp3',
-                        },
-                    }),
-                    initialState,
-                    systemUserId: dummySystemUserId,
-
-                    checkError: (error) => assertCommandPayloadTypeError(error, 'contributions'),
                 });
             });
         });
