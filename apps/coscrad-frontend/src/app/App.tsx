@@ -17,17 +17,32 @@ export function App() {
         <div className="app">
             <Header />
             <div className="main-content">
-                <Routes>
-                    <Route path={routes.home} element={<Home />} />
-                    <Route path={routes.about} element={<About />} />
-                    <Route path={routes.resources.info} element={<AllResources />} />
-
-                    <Route path={routes.tags.index} element={<TagIndexContainer />} />
-                    <Route path={routes.tags.detail()} element={<TagDetailContainer />} />
-                    <Route path={routes.treeOfKnowledge} element={<CategoryTreeContainer />} />
+                <Routes key="routes">
+                    <Route key="home" path={routes.home} element={<Home />} />
+                    <Route key="about" path={routes.about} element={<About />} />
+                    <Route
+                        key="resource-info"
+                        path={routes.resources.info}
+                        element={<AllResources />}
+                    />
+                    <Route
+                        key="tag-index"
+                        path={routes.tags.index}
+                        element={<TagIndexContainer />}
+                    />
+                    <Route
+                        key="tag-detail"
+                        path={routes.tags.detail()}
+                        element={<TagDetailContainer />}
+                    />
+                    <Route
+                        key="category-tree"
+                        path={routes.treeOfKnowledge}
+                        element={<CategoryTreeContainer />}
+                    />
                     {IndexToDetailFlowRoutes()}
                     {/* The following are temporary or experimental */}
-                    <Route path="MembersOnly" element={<MembersOnly />} />
+                    <Route key="members-only" path="MembersOnly" element={<MembersOnly />} />
                 </Routes>
             </div>
             <Footer></Footer>

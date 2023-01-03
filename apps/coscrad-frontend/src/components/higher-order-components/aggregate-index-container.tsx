@@ -28,7 +28,7 @@ export const AggregateIndexContainer = <T extends IIndexQueryResult<IBaseViewMod
         <div>
             <Presenter {...loadableModels} />
             {/* TODO [https://www.pivotaltracker.com/story/show/183456862] */}
-            {loadableModels.data?.indexScopedActions && (
+            {loadableModels.data?.indexScopedActions?.length > 0 && (
                 <CommandPanel
                     actions={loadableModels.data.indexScopedActions}
                     commandContext={aggregateType}

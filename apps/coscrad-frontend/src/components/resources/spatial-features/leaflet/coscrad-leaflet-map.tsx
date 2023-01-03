@@ -1,4 +1,4 @@
-import { LatLngExpression } from 'leaflet';
+import { LatLngExpression, Map } from 'leaflet';
 import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { INITIAL_CENTRE, INITIAL_ZOOM } from '../constants';
@@ -18,7 +18,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
     onSpatialFeatureSelected,
     selectedSpatialFeatureId,
 }: CoscradMapProps) => {
-    const mapRef: any = useRef();
+    const mapRef = useRef<Map>();
 
     useEffect(() => {
         return;

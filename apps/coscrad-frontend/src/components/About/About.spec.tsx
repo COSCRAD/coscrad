@@ -15,7 +15,7 @@ describe('About', () => {
         const about = 'About my website';
         const myConfigurableContent = { ...dummyConfigurableContent, about };
 
-        const { baseElement } = renderWithProviders(<About />, {
+        renderWithProviders(<About />, {
             contentConfig: myConfigurableContent,
         });
 
