@@ -1,7 +1,7 @@
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { ErrorDisplay } from '../error-display/error-display';
-import { Loading } from '../Loading';
+import { Loading } from '../loading';
 import { MapLoadedDataToProps } from './types';
 
 export type HasData<T> = {

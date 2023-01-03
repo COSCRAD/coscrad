@@ -1,6 +1,6 @@
 import { AggregateCompositeIdentifier, ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { Ack, useLoadableCommandResult } from '../../store/slices/command-status';
-import { Loading } from '../Loading';
+import { Loading } from '../loading';
 import { AckNotification } from './ack-notification';
 import { CommandExecutionForm } from './command-execution-form';
 import { NackNotification } from './nack-notification';

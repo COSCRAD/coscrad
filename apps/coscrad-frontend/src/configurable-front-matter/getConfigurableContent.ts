@@ -1,7 +1,7 @@
-import { ConfigurableContent } from './data/configurableContentSchema';
+import { ConfigurableContent } from './data/configurable-content-schema';
 import { contentConfig } from './data/content.config';
-import { InvalidContentConfigurationException } from './errorHandling/exceptions/InvalidContentConfigurationException';
-import { validateConfigurableContent } from './validation/validateConfigurableContent';
+import { InvalidContentConfigurationException } from './errorHandling/exceptions/invalid-content-configuration.exception';
+import { validateConfigurableContent } from './validation/validate-configurable-content';
 
 export const getConfigurableContent = (): ConfigurableContent => {
     const validationResult = validateConfigurableContent(contentConfig);

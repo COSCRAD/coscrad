@@ -15,6 +15,11 @@ interface MarkerPresenterProps<T = unknown> extends PropsWithChildren {
     spatialFeature: ISpatialFeatureViewModel<T>;
     DetailPresenter: SpatialFeatureDetailPresenter;
     handleClick?: (id: string) => void;
+    /**
+     * It is tricky to type this element reference because we are building
+     * our own abstraction around leaflet \ react-leaflet markers.
+     */
+    /* eslint-disable */
     elRef: any;
 }
 
