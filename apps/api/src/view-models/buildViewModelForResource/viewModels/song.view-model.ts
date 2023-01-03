@@ -1,7 +1,6 @@
 import { ISongViewModel } from '@coscrad/api-interfaces';
-import { FromDomainModel, NonEmptyString, URL } from '@coscrad/data-types';
+import { FromDomainModel, URL } from '@coscrad/data-types';
 import { Song } from '../../../domain/models/song/song.entity';
-import formatContributorAndRole from '../../presentation/formatContributorAndRole';
 import { BaseViewModel } from './base.view-model';
 
 const FromSong = FromDomainModel(Song);
@@ -12,13 +11,6 @@ export class SongViewModel extends BaseViewModel implements ISongViewModel {
 
     @FromSong
     readonly titleEnglish?: string;
-
-    @NonEmptyString({
-        isArray: true,
-        label: 'contributions',
-        description: 'acknowledgement of each person who worked on this song',
-    })
-    readonly contributions: string[];
 
     @FromSong
     readonly lyrics?: string;
@@ -39,7 +31,6 @@ export class SongViewModel extends BaseViewModel implements ISongViewModel {
         id,
         title,
         titleEnglish,
-        contributions: contributorAndRoles,
         lyrics,
         audioURL,
         lengthMilliseconds,
@@ -50,8 +41,6 @@ export class SongViewModel extends BaseViewModel implements ISongViewModel {
         this.title = title;
 
         this.titleEnglish = titleEnglish;
-
-        this.contributions = contributorAndRoles.map(formatContributorAndRole);
 
         this.lyrics = lyrics;
 

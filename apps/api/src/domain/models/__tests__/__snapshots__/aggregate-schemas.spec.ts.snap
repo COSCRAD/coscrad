@@ -393,29 +393,6 @@ Object {
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Media Item  match the snapshot 1`] = `
 Object {
-  "contributorAndRoles": Object {
-    "complexDataType": "NESTED_TYPE",
-    "description": "acknowledgement of those who worked on creating and producing the media item",
-    "isArray": true,
-    "isOptional": false,
-    "label": "contributions",
-    "schema": Object {
-      "contributorId": Object {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "unique identifier of the contributor",
-        "isArray": false,
-        "isOptional": false,
-        "label": "contributor ID",
-      },
-      "role": Object {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "a text summary of the contributor's role",
-        "isArray": false,
-        "isOptional": false,
-        "label": "role",
-      },
-    },
-  },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
@@ -549,29 +526,6 @@ Object {
     "isArray": false,
     "isOptional": false,
     "label": "audio URL",
-  },
-  "contributions": Object {
-    "complexDataType": "NESTED_TYPE",
-    "description": "summary of contributions to the creation and recording of the song",
-    "isArray": true,
-    "isOptional": false,
-    "label": "contributions",
-    "schema": Object {
-      "contributorId": Object {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "unique identifier of the contributor",
-        "isArray": false,
-        "isOptional": false,
-        "label": "contributor ID",
-      },
-      "role": Object {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "a text summary of the contributor's role",
-        "isArray": false,
-        "isOptional": false,
-        "label": "role",
-      },
-    },
   },
   "id": Object {
     "coscradDataType": "NON_EMPTY_STRING",

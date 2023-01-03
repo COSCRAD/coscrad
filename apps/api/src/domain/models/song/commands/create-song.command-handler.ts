@@ -45,7 +45,6 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         aggregateCompositeIdentifier: { id },
         title,
         titleEnglish,
-        contributions,
         lyrics,
         audioURL,
     }: CreateSong): Promise<ResultOrError<Song>> {
@@ -53,7 +52,6 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
             id,
             title,
             titleEnglish,
-            contributions,
             lyrics,
             audioURL,
             published: false,

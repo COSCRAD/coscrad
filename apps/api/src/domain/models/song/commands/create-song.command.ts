@@ -4,7 +4,6 @@ import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscr
 import { Equals } from '@coscrad/validation';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
-import { ContributorAndRole } from '../ContributorAndRole';
 
 class SongCompositeId {
     /**
@@ -68,12 +67,18 @@ export class CreateSong implements ICommandBase {
     })
     readonly titleEnglish?: string;
 
-    @NestedDataType(ContributorAndRole, {
-        isArray: true,
-        label: 'contributions',
-        description: 'acknowledgement of all contributors who worked on this song',
-    })
-    readonly contributions: ContributorAndRole[];
+    /**
+     * TODO This property is being removed in favor of edge connections to a
+     * separate `Contributor` resource.  For now, we use a config to map in
+     * media credits. Be sure to remove this property from existing data. It can
+     * simply be ignored in sourcing V1 events.
+     */
+    // @NestedDataType(ContributorAndRole, {
+    //     isArray: true,
+    //     label: 'contributions',
+    //     description: 'acknowledgement of all contributors who worked on this song',
+    // })
+    // readonly contributions: ContributorAndRole[];
 
     @NonEmptyString({
         isOptional: true,

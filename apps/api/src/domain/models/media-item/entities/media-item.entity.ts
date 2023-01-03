@@ -2,7 +2,6 @@ import {
     CoscradEnum,
     Enum,
     MIMEType,
-    NestedDataType,
     NonEmptyString,
     NonNegativeFiniteNumber,
     URL,
@@ -42,12 +41,13 @@ export class MediaItem extends Resource implements ITimeBoundable {
     })
     readonly titleEnglish?: string;
 
-    @NestedDataType(ContributorAndRole, {
-        isArray: true,
-        label: 'contributions',
-        description: 'acknowledgement of those who worked on creating and producing the media item',
-    })
-    readonly contributorAndRoles: ContributorAndRole[];
+    // @NestedDataType(ContributorAndRole, {
+    //     isArray: true,
+    //     label: 'contributions',
+    //     description: 'acknowledgement of those who worked on creating and producing the media item',
+    // })
+    // @deprecated Remove this property in favor of edge connections to a Contributor resource
+    readonly contributorAndRoles?: ContributorAndRole[];
 
     @URL({
         label: 'url',

@@ -12,13 +12,12 @@ export default (command: ICommand, commandType: string): Valid | InternalError =
      */
     const forbidUnknownValues = commandType === 'GRANT_RESOURCE_READ_ACCESS_TO_USER' ? false : true;
 
+    const commandCtor = Object.getPrototypeOf(command).constructor;
+
     // Validate command type
-    const payloadTypeErrors = buildSimpleValidationFunction(
-        Object.getPrototypeOf(command).constructor,
-        { forbidUnknownValues }
-    )(command).map(
-        (simpleError) => new InternalError(`invalid payload type: ${simpleError.toString()}`)
-    );
+    const payloadTypeErrors = buildSimpleValidationFunction(commandCtor, { forbidUnknownValues })(
+        command
+    ).map((simpleError) => new InternalError(`invalid payload type: ${simpleError.toString()}`));
 
     if (payloadTypeErrors.length > 0) {
         // TODO PAss through the command type

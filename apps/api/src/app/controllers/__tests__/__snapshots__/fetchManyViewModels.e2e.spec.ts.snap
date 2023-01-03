@@ -497,12 +497,6 @@ Object {
   "entities": Array [
     Object {
       "actions": Array [],
-      "contributions": Array [
-        Object {
-          "contributorId": "2",
-          "role": "host",
-        },
-      ],
       "id": "1",
       "lengthMilliseconds": 2500,
       "mimeType": "audio/mpeg",
@@ -552,12 +546,6 @@ Object {
   "entities": Array [
     Object {
       "actions": Array [],
-      "contributions": Array [
-        Object {
-          "contributorId": "2",
-          "role": "host",
-        },
-      ],
       "id": "1",
       "lengthMilliseconds": 2500,
       "mimeType": "audio/mpeg",
@@ -750,9 +738,6 @@ Object {
     Object {
       "actions": Array [],
       "audioURL": "https://www.myaudio.com/lamb.mp3",
-      "contributions": Array [
-        "1 (performer)",
-      ],
       "id": "1",
       "lengthMilliseconds": 3500,
       "lyrics": "Mary had a little lamb, little lamb.",
@@ -795,9 +780,6 @@ Object {
     Object {
       "actions": Array [],
       "audioURL": "https://www.myaudio.com/badsong.wav",
-      "contributions": Array [
-        "33 (author)",
-      ],
       "id": "2",
       "lengthMilliseconds": 33000,
       "lyrics": "Ain't gonna see the light of day, light of day, light of day",
@@ -817,9 +799,6 @@ Object {
     Object {
       "actions": Array [],
       "audioURL": "https://www.myaudio.com/lamb.mp3",
-      "contributions": Array [
-        "1 (performer)",
-      ],
       "id": "1",
       "lengthMilliseconds": 3500,
       "lyrics": "Mary had a little lamb, little lamb.",
@@ -862,9 +841,6 @@ Object {
     Object {
       "actions": Array [],
       "audioURL": "https://www.myaudio.com/badsong.wav",
-      "contributions": Array [
-        "33 (author)",
-      ],
       "id": "2",
       "lengthMilliseconds": 33000,
       "lyrics": "Ain't gonna see the light of day, light of day, light of day",
