@@ -1,4 +1,4 @@
-import { ConfigurableContent } from '../../configurable-front-matter/data/configurableContentSchema';
+import { ConfigurableContent } from '../../configurable-front-matter/data/configurable-content-schema';
 import { contentConfig } from '../../configurable-front-matter/data/content.config.SAMPLE';
 
 export const getDummyConfigurableContent = (): ConfigurableContent => {

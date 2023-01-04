@@ -10,7 +10,7 @@ import { clearCommandStatus } from '../../store/slices/command-status';
 import { useLoadableGeneratedId } from '../../store/slices/id-generation';
 import { useFormState } from '../dynamic-forms/form-state';
 import { ErrorDisplay } from '../error-display/error-display';
-import { Loading } from '../Loading';
+import { Loading } from '../loading';
 import { CommandButton } from './command-button';
 import { CommandWorkspace } from './command-workspace';
 

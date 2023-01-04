@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import App from './app/App';
+import App from './app/app';
 import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
 import { getConfigurableContent } from './configurable-front-matter';
 import { ConfigurableContentProvider } from './configurable-front-matter/configurable-content-provider';

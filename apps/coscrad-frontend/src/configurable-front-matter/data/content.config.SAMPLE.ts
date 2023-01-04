@@ -1,5 +1,5 @@
 import { CategorizableType } from '@coscrad/api-interfaces';
-import { ConfigurableContent, DetailViewType } from './configurableContentSchema';
+import { ConfigurableContent, DetailViewType } from './configurable-content-schema';
 
 export const contentConfig: ConfigurableContent = {
     siteTitle: 'Site Title',
