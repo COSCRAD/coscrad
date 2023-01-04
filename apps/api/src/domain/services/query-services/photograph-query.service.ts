@@ -3,10 +3,11 @@ import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
 import { PhotographViewModel } from '../../../view-models/buildViewModelForResource/viewModels/photograph.view-model';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { Photograph } from '../../models/photograph/entities/photograph.entity';
+import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { ResourceType } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';
 
@@ -14,7 +15,7 @@ export class PhotographQueryService extends ResourceQueryService<Photograph, IPh
     protected readonly type = ResourceType.photograph;
 
     constructor(
-        @Inject(RepositoryProvider) repositoryProvider: RepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER) repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) commandInfoService: CommandInfoService,
         private readonly configService: ConfigService
     ) {

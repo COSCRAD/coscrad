@@ -1,11 +1,12 @@
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
-import { RepositoryProvider } from '../../../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import getInstanceFactoryForResource from '../../../../factories/getInstanceFactoryForResource';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
+import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
 import { ResourceType } from '../../../../types/ResourceType';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { BaseCreateBibliographicReference } from '../../common/commands/base-create-bibliographic-reference.command-handler';
@@ -19,7 +20,7 @@ export class CreateCourtCaseBibliographicReferenceCommandHandler extends BaseCre
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<CourtCaseBibliographicReference>;
 
     constructor(
-        protected readonly repositoryProvider: RepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);

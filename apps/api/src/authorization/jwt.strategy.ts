@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { passportJwtSecret } from 'jwks-rsa';
@@ -6,9 +6,10 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { validAggregateOrThrow } from '../domain/models/shared/functional';
 import { CoscradUserWithGroups } from '../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../domain/models/user-management/user/entities/user/coscrad-user.entity';
+import { IRepositoryProvider } from '../domain/repositories/interfaces/repository-provider.interface';
 import { isInternalError } from '../lib/errors/InternalError';
 import { isNotFound } from '../lib/types/not-found';
-import { RepositoryProvider } from '../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../persistence/constants/persistenceConstants';
 
 /**
  * It is convention for the auth provider to populate the `sub` field on the
@@ -21,7 +22,7 @@ type HasSub = { sub: string };
 export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(
         private readonly configService: ConfigService,
-        private readonly repositoryProvider: RepositoryProvider
+        @Inject(REPOSITORY_PROVIDER) private readonly repositoryProvider: IRepositoryProvider
     ) {
         const issuerURL = configService.get<string>('AUTH0_ISSUER_URL');
         if (!issuerURL) throw new Error('Internal Error: could not determine issuer url');

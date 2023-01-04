@@ -12,9 +12,9 @@ import { getArangoCollectionIDFromResourceType } from '../../database/collection
 import { DatabaseProvider } from '../../database/database.provider';
 import buildEdgeDocumentsFromCategoryNodeDTOs from '../../database/utilities/category/buildEdgeDocumentsFromCategoryNodeDTOs';
 import mapEntityDTOToDatabaseDTO from '../../database/utilities/mapEntityDTOToDatabaseDTO';
-import { RepositoryProvider } from '../repository.provider';
+import { ArangoRepositoryProvider } from '../arango-repository.provider';
 
-export default class TestRepositoryProvider extends RepositoryProvider {
+export default class TestRepositoryProvider extends ArangoRepositoryProvider {
     constructor(databaseProvider: DatabaseProvider) {
         super(databaseProvider);
     }

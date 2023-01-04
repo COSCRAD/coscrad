@@ -14,7 +14,7 @@ import { InternalError, isInternalError } from '../../../lib/errors/InternalErro
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
-import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { TagViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
@@ -41,7 +41,7 @@ export abstract class ResourceQueryService<
     protected abstract readonly type: ResourceType;
 
     constructor(
-        @Inject(RepositoryProvider) protected readonly repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
     ) {}
 

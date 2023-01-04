@@ -3,12 +3,13 @@ import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
 import { VocabularyListViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { Tag } from '../../models/tag/tag.entity';
 import { Term } from '../../models/term/entities/term.entity';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
+import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import IsPublished from '../../repositories/specifications/isPublished';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
@@ -22,7 +23,7 @@ export class VocabularyListQueryService extends ResourceQueryService<
     protected readonly type = ResourceType.vocabularyList;
 
     constructor(
-        @Inject(RepositoryProvider) repositoryProvider: RepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER) repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) commandInfoService: CommandInfoService,
         private readonly configService: ConfigService
     ) {

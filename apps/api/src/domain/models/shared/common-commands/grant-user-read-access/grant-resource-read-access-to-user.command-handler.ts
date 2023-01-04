@@ -3,10 +3,11 @@ import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { isOK, OK } from '../../../../../lib/types/ok';
-import { RepositoryProvider } from '../../../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../../../persistence/constants/persistenceConstants';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { isValid } from '../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
+import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../types/AggregateType';
 import { Resource } from '../../../resource.entity';
@@ -24,7 +25,7 @@ const buildTopLevelError = (innerErrors: InternalError[]): InternalError =>
 @CommandHandler(GrantResourceReadAccessToUser)
 export class GrantResourceReadAccessToUserCommandHandler implements ICommandHandler {
     constructor(
-        protected readonly repositoryProvider: RepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {}
 

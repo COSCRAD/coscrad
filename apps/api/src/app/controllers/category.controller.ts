@@ -1,9 +1,10 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Inject, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Category } from '../../domain/models/categories/entities/category.entity';
+import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
 import { isInternalError } from '../../lib/errors/InternalError';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
-import { RepositoryProvider } from '../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../persistence/constants/persistenceConstants';
 import { CategoryTreeViewModel } from '../../view-models/buildViewModelForResource/viewModels/category-tree.view-model';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import { CATEGORY_TREE_INDEX_ROUTE } from './constants';
@@ -15,7 +16,9 @@ import { CATEGORY_TREE_INDEX_ROUTE } from './constants';
 @ApiTags('tree of knowledge (categories)')
 @Controller(CATEGORY_TREE_INDEX_ROUTE)
 export class CategoryController {
-    constructor(private readonly repositoryProvider: RepositoryProvider) {}
+    constructor(
+        @Inject(REPOSITORY_PROVIDER) private readonly repositoryProvider: IRepositoryProvider
+    ) {}
 
     // TODO Accept category ID and return corresponding subtree
     @Get('')
