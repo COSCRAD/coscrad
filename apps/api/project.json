@@ -3,6 +3,30 @@
     "sourceRoot": "apps/api/src",
     "projectType": "application",
     "targets": {
+        "repl": { 
+        "executor": "@nrwl/webpack:webpack",
+        "outputs": ["{options.outputPath}"],
+        "options": {
+          "target": "node",
+          "compiler": "tsc",
+          "outputPath": "dist/apps/api",
+          "main": "apps/api/src/repl.ts", 
+          "tsConfig": "apps/api/tsconfig.app.json",
+          "assets": []
+        }},
+        "configurations": {
+          "production": {
+            "optimization": true,
+            "extractLicenses": true,
+            "inspect": false,
+            "fileReplacements": [
+              {
+                "replace": "apps/project/src/environments/environment.ts",
+                "with": "apps/project/src/environments/environment.prod.ts"
+              }
+            ]
+          }
+        },
         "build": {
             "executor": "@nrwl/node:webpack",
             "outputs": ["{options.outputPath}"],
@@ -35,9 +59,13 @@
             }
         },
         "serve": {
+            "repl": {
+                "buildTarget": "api:repl"
+            },            
             "executor": "@nrwl/node:node",
             "options": {
-                "buildTarget": "api:build"
+                "buildTarget": "api:build",
+                "buildTargetOptions": {"main": "apps/api/src/repl.ts"}
             }
         },
         "lint": {
