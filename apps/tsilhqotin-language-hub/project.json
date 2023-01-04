@@ -1,5 +1,5 @@
 {
-    "root": "apps/tsilhqotin-language-hub",
+    "name": "tsilhqotin-language-hub",
     "sourceRoot": "apps/tsilhqotin-language-hub/src",
     "projectType": "application",
     "targets": {
@@ -61,7 +61,7 @@
         },
         "test": {
             "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/apps/tsilhqotin-language-hub"],
+            "outputs": ["{workspaceRoot}/coverage/apps/tsilhqotin-language-hub"],
             "options": {
                 "jestConfig": "apps/tsilhqotin-language-hub/jest.config.js",
                 "passWithNoTests": true
