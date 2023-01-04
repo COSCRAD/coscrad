@@ -13,7 +13,7 @@ import { InternalError, isInternalError } from '../../../lib/errors/InternalErro
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
-import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { TagViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import { Tag } from '../../models/tag/tag.entity';
@@ -28,7 +28,7 @@ import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
  */
 export class TagQueryService {
     constructor(
-        @Inject(RepositoryProvider) private readonly repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER) private readonly repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService
     ) {}
 

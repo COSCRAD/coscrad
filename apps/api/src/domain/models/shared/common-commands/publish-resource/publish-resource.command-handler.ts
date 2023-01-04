@@ -2,7 +2,7 @@ import { CommandHandler, ICommand } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
-import { RepositoryProvider } from '../../../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -19,7 +19,7 @@ import { ResourcePublished } from './resource-published.event';
 @CommandHandler(PublishResource)
 export class PublishResourceCommandHandler extends BaseCommandHandler<Resource> {
     constructor(
-        @Inject(RepositoryProvider) protected readonly repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);

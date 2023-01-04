@@ -1,7 +1,7 @@
 import { ICategoryTreeViewModel } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
-import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { CategoryTreeViewModel } from '../../../view-models/buildViewModelForResource/viewModels/category-tree.view-model';
 import { Category } from '../../models/categories/entities/category.entity';
@@ -9,7 +9,7 @@ import { IRepositoryProvider } from '../../repositories/interfaces/repository-pr
 
 export class CategoryQueryService {
     constructor(
-        @Inject(RepositoryProvider) private readonly repositoryProvider: IRepositoryProvider
+        @Inject(REPOSITORY_PROVIDER) private readonly repositoryProvider: IRepositoryProvider
     ) {}
 
     async fetchTree(): Promise<ResultOrError<ICategoryTreeViewModel>> {

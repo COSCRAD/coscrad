@@ -25,7 +25,7 @@ import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate'
 import ArangoCategoryRepository from './ArangoCategoryRepository';
 
 @Injectable()
-export class RepositoryProvider implements IRepositoryProvider {
+export class ArangoRepositoryProvider implements IRepositoryProvider {
     constructor(protected databaseProvider: DatabaseProvider) {}
 
     getEdgeConnectionRepository() {

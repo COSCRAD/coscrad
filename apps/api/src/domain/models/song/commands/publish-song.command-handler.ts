@@ -1,10 +1,11 @@
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../lib/errors/InternalError';
-import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
+import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
@@ -27,7 +28,7 @@ export class PublishSongCommandHandler extends BaseUpdateCommandHandler<Song> {
     protected readonly repositoryForCommandsTargetAggregate: IRepositoryForAggregate<Song>;
 
     constructor(
-        protected readonly repositoryProvider: RepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);
