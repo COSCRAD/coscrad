@@ -1,4 +1,5 @@
 {
+    "name": "tng-dictionary",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "apps/tng-dictionary/src",
     "projectType": "application",
@@ -69,7 +70,7 @@
         },
         "test": {
             "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/apps/tng-dictionary"],
+            "outputs": ["{workspaceRoot}/coverage/apps/tng-dictionary"],
             "options": {
                 "jestConfig": "apps/tng-dictionary/jest.config.ts",
                 "passWithNoTests": true

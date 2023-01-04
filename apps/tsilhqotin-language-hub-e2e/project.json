@@ -1,5 +1,5 @@
 {
-    "root": "apps/tsilhqotin-language-hub-e2e",
+    "name": "tsilhqotin-language-hub-e2e",
     "sourceRoot": "apps/tsilhqotin-language-hub-e2e/src",
     "projectType": "application",
     "targets": {
