@@ -1,5 +1,5 @@
 import { createContext, FC as FunctionalComponent, ReactNode } from 'react';
-import { ConfigurableContent } from './data/configurableContentSchema';
+import { ConfigurableContent } from './data/configurable-content-schema';
 
 export const ConfigurableContentContext = createContext<ConfigurableContent>(null);
 

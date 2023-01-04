@@ -7,7 +7,7 @@ import { fullViewCategorizablePresenterFactory } from '../components/resources/f
 import { tableViewCategorizableIndexPresenterFactory } from '../components/resources/factories/table-view-categorizable-index-presenter-factory';
 import { thumbnailCategorizableDetailPresenterFactory } from '../components/resources/factories/thumbnail-categorizable-detail-presenter-factory';
 import { ConfigurableContentContext } from '../configurable-front-matter/configurable-content-provider';
-import { DetailViewType } from '../configurable-front-matter/data/configurableContentSchema';
+import { DetailViewType } from '../configurable-front-matter/data/configurable-content-schema';
 import { routes } from './routes/routes';
 
 export const IndexToDetailFlowRoutes = () => {

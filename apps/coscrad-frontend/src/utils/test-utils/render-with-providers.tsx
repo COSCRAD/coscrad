@@ -3,7 +3,7 @@ import { render, RenderOptions } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 import { ConfigurableContentProvider } from '../../configurable-front-matter/configurable-content-provider';
-import { ConfigurableContent } from '../../configurable-front-matter/data/configurableContentSchema';
+import { ConfigurableContent } from '../../configurable-front-matter/data/configurable-content-schema';
 import { AppStore, RootState, setupStore } from '../../store';
 import { getDummyConfigurableContent } from './get-dummy-configurable-content';
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
