@@ -56,9 +56,10 @@ import { VocabularyListQueryService } from '../../../domain/services/query-servi
 import { InternalError } from '../../../lib/errors/InternalError';
 import { IdManagementService } from '../../../lib/id-generation/id-management.service';
 import { MockIdManagementService } from '../../../lib/id-generation/mock-id-management.service';
+import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { DatabaseProvider } from '../../../persistence/database/database.provider';
-import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
+import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { DTO } from '../../../types/DTO';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
@@ -125,16 +126,18 @@ export default async (
                 inject: [ConfigService],
             },
             {
-                provide: RepositoryProvider,
+                provide: REPOSITORY_PROVIDER,
                 useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
-                    return new RepositoryProvider(new DatabaseProvider(arangoConnectionProvider));
+                    return new ArangoRepositoryProvider(
+                        new DatabaseProvider(arangoConnectionProvider)
+                    );
                 },
                 inject: [ArangoConnectionProvider],
             },
             {
                 provide: EdgeConnectionQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) =>
@@ -143,45 +146,45 @@ export default async (
                         commandInfoService,
                         configService
                     ),
-                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService, ConfigService],
             },
             {
                 provide: TagQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new TagQueryService(repositoryProvider, commandInfoService),
-                inject: [RepositoryProvider, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService],
             },
             {
                 provide: MediaItemQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new MediaItemQueryService(repositoryProvider, commandInfoService),
-                inject: [RepositoryProvider, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService],
             },
             {
                 provide: SongQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new SongQueryService(repositoryProvider, commandInfoService),
-                inject: [RepositoryProvider, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService],
             },
             {
                 provide: TermQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) => new TermQueryService(repositoryProvider, commandInfoService, configService),
-                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService, ConfigService],
             },
             {
                 provide: VocabularyListQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) =>
@@ -190,12 +193,12 @@ export default async (
                         commandInfoService,
                         configService
                     ),
-                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService, ConfigService],
             },
             {
                 provide: TranscribedAudioQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) =>
@@ -204,20 +207,20 @@ export default async (
                         commandInfoService,
                         configService
                     ),
-                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService, ConfigService],
             },
             {
                 provide: BookQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new BookQueryService(repositoryProvider, commandInfoService),
-                inject: [RepositoryProvider, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService],
             },
             {
                 provide: PhotographQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) =>
@@ -226,47 +229,47 @@ export default async (
                         commandInfoService,
                         configService
                     ),
-                inject: [RepositoryProvider, CommandInfoService, ConfigService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService, ConfigService],
             },
             {
                 provide: SpatialFeatureQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new SpatialFeatureQueryService(repositoryProvider, commandInfoService),
-                inject: [RepositoryProvider, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService],
             },
             {
                 provide: BibliographicReferenceQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new BibliographicReferenceQueryService(repositoryProvider, commandInfoService),
-                inject: [RepositoryProvider, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService],
             },
             {
                 provide: CoscradUserGroupQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new CoscradUserGroupQueryService(repositoryProvider, commandInfoService),
-                inject: [RepositoryProvider, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService],
             },
             {
                 provide: CoscradUserQueryService,
                 useFactory: (
-                    repositoryProvider: RepositoryProvider,
+                    repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new CoscradUserQueryService(repositoryProvider, commandInfoService),
-                inject: [RepositoryProvider, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER, CommandInfoService],
             },
             {
                 provide: 'ID_MANAGER',
-                useFactory: (repositoryProvider: RepositoryProvider) =>
+                useFactory: (repositoryProvider: ArangoRepositoryProvider) =>
                     shouldMockIdGenerator
-                        ? new MockIdManagementService(repositoryProvider.getIdRepository())
-                        : new IdManagementService(repositoryProvider.getIdRepository()),
-                inject: [RepositoryProvider],
+                        ? new MockIdManagementService(repositoryProvider)
+                        : new IdManagementService(repositoryProvider),
+                inject: [REPOSITORY_PROVIDER],
             },
             {
                 provide: JwtStrategy,

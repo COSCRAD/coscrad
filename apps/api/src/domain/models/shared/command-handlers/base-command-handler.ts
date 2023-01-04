@@ -1,7 +1,7 @@
 import { Ack, ICommand, ICommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
-import { RepositoryProvider } from '../../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
@@ -18,7 +18,7 @@ const buildExecutionError = (allErrors: InternalError[]) => new CommandExecution
 
 export abstract class BaseCommandHandler<TAggregate extends Aggregate> implements ICommandHandler {
     constructor(
-        @Inject(RepositoryProvider) protected readonly repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {}
 

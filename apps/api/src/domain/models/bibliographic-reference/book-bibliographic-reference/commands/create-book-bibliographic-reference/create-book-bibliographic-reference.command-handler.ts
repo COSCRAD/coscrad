@@ -1,13 +1,14 @@
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import { RepositoryProvider } from '../../../../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import getInstanceFactoryForResource from '../../../../../factories/getInstanceFactoryForResource';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../../repositories/interfaces/repository-for-aggregate.interface';
+import { IRepositoryProvider } from '../../../../../repositories/interfaces/repository-provider.interface';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceType';
@@ -27,7 +28,7 @@ export class CreateBookBibliographicReferenceCommandHandler extends BaseCreateCo
     aggregateType = AggregateType.bibliographicReference;
 
     constructor(
-        protected readonly repositoryProvider: RepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);

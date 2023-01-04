@@ -4,15 +4,16 @@ import { CommandInfoService } from '../../../app/controllers/command/services/co
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound } from '../../../lib/types/not-found';
-import { RepositoryProvider } from '../../../persistence/repositories/repository.provider';
+import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { CoscradUserViewModel } from '../../../view-models/buildViewModelForResource/viewModels/coscrad-user.view-model';
 import { CoscradUser } from '../../models/user-management/user/entities/user/coscrad-user.entity';
+import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { ISpecification } from '../../repositories/interfaces/specification.interface';
 
 export class CoscradUserQueryService {
     constructor(
-        @Inject(RepositoryProvider) protected readonly repositoryProvider: RepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
     ) {}
 

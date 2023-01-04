@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { IIdManager } from '../../domain/interfaces/id-manager.interface';
+import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
+import { REPOSITORY_PROVIDER } from '../../persistence/constants/persistenceConstants';
 import { InternalError } from '../errors/InternalError';
 import { NotAvailable } from '../types/not-available';
 import { isNotFound, NotFound } from '../types/not-found';
@@ -10,9 +12,11 @@ import { IIdRepository } from './interfaces/id-repository.interface';
 
 @Injectable()
 export class IdManagementService implements IIdManager {
-    constructor(
-        @Inject('ID_REPOSITORY') protected readonly idRepository: IIdRepository<AggregateId>
-    ) {}
+    protected readonly idRepository: IIdRepository<AggregateId>;
+
+    constructor(@Inject(REPOSITORY_PROVIDER) repositoryProvider: IRepositoryProvider) {
+        this.idRepository = repositoryProvider.getIdRepository();
+    }
 
     async generate(): Promise<string> {
         const id = await uuidv4();
