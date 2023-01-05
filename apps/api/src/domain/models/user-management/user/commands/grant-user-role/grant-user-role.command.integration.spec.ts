@@ -97,7 +97,10 @@ describe('GrantUserRole', () => {
                         buildValidCommandFSA: () => ({
                             type: commandType,
                             payload: {
-                                aggregateCompositeIdentifier: { id: existingUser.id },
+                                aggregateCompositeIdentifier: {
+                                    id: existingUser.id,
+                                    type: AggregateType.user,
+                                },
                                 role,
                             },
                         }),
