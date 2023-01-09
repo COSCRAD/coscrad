@@ -27,14 +27,14 @@ class CategorizableCompositeIdentifier {
 })
 export class TagResourceOrNote implements ICommandBase {
     @NestedDataType(TagCompositeIdentifier, {
-        label: 'Composite Identifier',
-        description: 'system-wide unique identifier',
+        label: "Tag's Composite Identifier",
+        description: 'system-wide unique identifier for the tag',
     })
     readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 
     @NestedDataType(CategorizableCompositeIdentifier, {
-        label: 'Composite Identifier',
-        description: 'system-wide unique identifier',
+        label: "Tagged Member's Composite Identifier",
+        description: 'system-wide unique identifier for the resource or note being tagged',
     })
     readonly taggedMemberCompositeIdentifier: CategorizableCompositeIdentifier;
 }

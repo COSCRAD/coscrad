@@ -1,13 +1,12 @@
-import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
-import { INestApplication } from '@nestjs/common';
-import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { FluxStandardAction } from '@coscrad/commands';
+import setUpIntegrationTest, {
+    TestModuleInstances,
+} from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../../types/DTO';
 import formatAggregateType from '../../../../../view-models/presentation/formatAggregateType';
-import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateType, isAggregateType } from '../../../../types/AggregateType';
 import { CategorizableType } from '../../../../types/CategorizableType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
@@ -19,7 +18,6 @@ import { assertCommandError } from '../../../__tests__/command-helpers/assert-co
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
-import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
 import { DuplicateTagError } from '../errors';
@@ -28,39 +26,24 @@ import { TagResourceOrNote } from './tag-resource-or-note.command';
 const commandType = 'TAG_RESOURCE_OR_NOTE';
 
 describe(commandType, () => {
-    let testRepositoryProvider: TestRepositoryProvider;
-
-    let commandHandlerService: CommandHandlerService;
-
-    let app: INestApplication;
-
-    let idManager: IIdManager;
-
-    let commandAssertionDependencies: CommandAssertionDependencies;
+    let commandAssertionDependencies: TestModuleInstances;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
-            await setUpIntegrationTest({
-                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-            }));
-
-        commandAssertionDependencies = {
-            testRepositoryProvider,
-            idManager,
-            commandHandlerService,
-        };
+        commandAssertionDependencies = await setUpIntegrationTest({
+            ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+        });
     });
 
     afterAll(async () => {
-        await app.close();
+        await commandAssertionDependencies.app.close();
     });
 
     beforeEach(async () => {
-        await testRepositoryProvider.testSetup();
+        await commandAssertionDependencies.testRepositoryProvider.testSetup();
     });
 
     afterEach(async () => {
-        await testRepositoryProvider.testTeardown();
+        await commandAssertionDependencies.testRepositoryProvider.testTeardown();
     });
 
     /**

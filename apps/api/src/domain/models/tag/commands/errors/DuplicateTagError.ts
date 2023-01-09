@@ -7,9 +7,9 @@ export class DuplicateTagError extends InternalError {
         tagLabel: string,
         taggedMemberCompositeIdentifier: CategorizableCompositeIdentifier
     ) {
-        const msg = `You cannot tag ${formatAggregateCompositeIdentifier(
+        const msg = `${formatAggregateCompositeIdentifier(
             taggedMemberCompositeIdentifier
-        )} with the tag: ${tagLabel}, as it has already been tagged with this label.`;
+        )} has already been tagged with: ${tagLabel}`;
 
         super(msg);
     }

@@ -10,7 +10,7 @@ import { DTO } from '../../../types/DTO';
 import { EnvironmentVariables } from '../../config/env.validation';
 import createTestModule from './createTestModule';
 
-type TestModuleInstances = {
+export type TestModuleInstances = {
     databaseProvider: DatabaseProvider;
     testRepositoryProvider: TestRepositoryProvider;
     commandHandlerService: CommandHandlerService;
