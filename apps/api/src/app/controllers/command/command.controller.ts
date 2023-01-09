@@ -1,16 +1,20 @@
+import { AGGREGATE_COMPOSITE_IDENTIFIER } from '@coscrad/api-interfaces';
 import { Ack, CommandHandlerService } from '@coscrad/commands';
 import {
     Body,
     Controller,
+    MessageEvent,
     Post,
     Request,
     Res,
+    Sse,
     UnauthorizedException,
     UseFilters,
     UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Observable, Subject } from 'rxjs';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import { CommandWithGivenTypeNotFoundExceptionFilter } from '../exception-handling/exception-filters/command-with-given-type-not-found.filter';
@@ -36,6 +40,8 @@ export const AdminJwtGuard = AuthGuard('jwt');
 @UseFilters(new CommandWithGivenTypeNotFoundExceptionFilter())
 @UseFilters(new NoCommandHandlerForCommandTypeFilter())
 export class CommandController {
+    private readonly commandResultSubject = new Subject<MessageEvent>();
+
     constructor(private readonly commandHandlerService: CommandHandlerService) {}
 
     @ApiBearerAuth('JWT')
@@ -67,6 +73,15 @@ export class CommandController {
 
         if (result !== Ack) return sendInternalResultAsHttpResponse(res, result);
 
+        this.commandResultSubject.next({
+            data: { aggregateCompositeIdentifier: payload[AGGREGATE_COMPOSITE_IDENTIFIER] },
+        });
+
         return res.status(httpStatusCodes.ok).send();
+    }
+
+    @Sse('notifications')
+    commandSuccessNotifications(): Observable<MessageEvent> {
+        return this.commandResultSubject.asObservable();
     }
 }
