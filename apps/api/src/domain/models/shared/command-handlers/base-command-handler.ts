@@ -30,7 +30,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         command: ICommand
     ): Promise<ResultOrError<TAggregate>>;
 
-    protected abstract fetchRequiredExternalState(): Promise<InMemorySnapshot>;
+    protected abstract fetchRequiredExternalState(command?: ICommand): Promise<InMemorySnapshot>;
 
     // TODO Consider putting this on the instance (e.g. an `applyCommand(type,payload)` method)
     protected abstract actOnInstance(
@@ -85,7 +85,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         if (isInternalError(updatedInstance)) return buildExecutionError([updatedInstance]);
 
         // Can we combine this with fetching the write context for performance?
-        const externalState = await this.fetchRequiredExternalState();
+        const externalState = await this.fetchRequiredExternalState(command);
 
         const externalStateValidationResult = this.validateExternalState(
             externalState,
