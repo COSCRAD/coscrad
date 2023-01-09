@@ -2,7 +2,7 @@ import { FluxStandardAction, ICommand } from '@coscrad/commands';
 import { NonEmptyString } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CommandFSA implements FluxStandardAction {
+export class CommandFSA<T extends ICommandBase = ICommandBase> implements FluxStandardAction {
     @ApiProperty()
     @NonEmptyString({
         label: 'type',

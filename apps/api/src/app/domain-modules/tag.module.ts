@@ -1,8 +1,13 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
-import { CreateTag } from '../../domain/models/tag/commands/create-tag.command';
-import { CreateTagCommandHandler } from '../../domain/models/tag/commands/create-tag.command-handler';
-import { RelabelTag, RelabelTagCommandHandler } from '../../domain/models/tag/commands/relabel-tag';
+import {
+    CreateTag,
+    CreateTagCommandHandler,
+    RelabelTag,
+    RelabelTagCommandHandler,
+    TagResourceOrNote,
+    TagResourceOrNoteCommandHandler,
+} from '../../domain/models/tag/commands';
 import { TagQueryService } from '../../domain/services/query-services/tag-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
@@ -19,6 +24,8 @@ import { TagController } from '../controllers/tag.controller';
         CreateTagCommandHandler,
         RelabelTag,
         RelabelTagCommandHandler,
+        TagResourceOrNote,
+        TagResourceOrNoteCommandHandler,
     ],
 })
 export class TagModule {}
