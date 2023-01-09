@@ -639,30 +639,6 @@ Object {
 }
 `;
 
-exports[`command payload schemas The schema for command PUBLISH_MEDIA_ITEM should have the expected value 1`] = `
-Object {
-  "id": Object {
-    "coscradDataType": "UUID",
-    "description": "unique identifier of the media item to publish",
-    "isArray": false,
-    "isOptional": false,
-    "label": "ID",
-  },
-}
-`;
-
-exports[`command payload schemas The schema for command PUBLISH_SONG should have the expected value 1`] = `
-Object {
-  "id": Object {
-    "coscradDataType": "UUID",
-    "description": "unique identifier of the song to publish",
-    "isArray": false,
-    "isOptional": false,
-    "label": "ID",
-  },
-}
-`;
-
 exports[`command payload schemas The schema for command REGISTER_USER should have the expected value 1`] = `
 Object {
   "aggregateCompositeIdentifier": Object {

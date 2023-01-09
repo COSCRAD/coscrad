@@ -1,12 +1,11 @@
-import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
+import { FluxStandardAction } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
-import { PublishSong } from '../../../domain/models/song/commands/publish-song.command';
-import { PublishSongCommandHandler } from '../../../domain/models/song/commands/publish-song.command-handler';
+import { PublishResource } from '../../../domain/models/shared/common-commands';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { dummyUuid } from '../../../domain/models/__tests__/utilities/dummyUuid';
+import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
@@ -29,19 +28,15 @@ describe('Role Based Access Control for commands', () => {
 
     let app: INestApplication;
 
-    let commandHandlerService: CommandHandlerService;
-
-    let idManager: IIdManager;
-
     const existingSong = getValidAggregateInstanceForTest(ResourceType.song).clone({
         id: dummyUuid,
         published: false,
     });
 
-    const validCommandFSA: FluxStandardAction<PublishSong> = {
-        type: 'PUBLISH_SONG',
+    const validCommandFSA: FluxStandardAction<PublishResource> = {
+        type: 'PUBLISH_RESOURCE',
         payload: {
-            id: existingSong.id,
+            aggregateCompositeIdentifier: { type: AggregateType.song, id: existingSong.id },
         },
     };
 
@@ -57,23 +52,12 @@ describe('Role Based Access Control for commands', () => {
         const testUserWithGroups = new CoscradUserWithGroups(ordinaryUser, [userGroup]);
 
         beforeAll(async () => {
-            ({ testRepositoryProvider, app, commandHandlerService, idManager } =
-                await setUpIntegrationTest(
-                    {
-                        ARANGO_DB_NAME: databaseName,
-                    },
-                    { shouldMockIdGenerator: true, testUserWithGroups }
-                ));
-
-            /**
-             * TODO[https://www.pivotaltracker.com/story/show/184111389]
-             *
-             * This needs to be replaced with `PUBLISH_RESOURCE`
-             */
-            commandHandlerService.registerHandler(
-                'PUBLISH_SONG',
-                new PublishSongCommandHandler(testRepositoryProvider, idManager)
-            );
+            ({ testRepositoryProvider, app } = await setUpIntegrationTest(
+                {
+                    ARANGO_DB_NAME: databaseName,
+                },
+                { shouldMockIdGenerator: true, testUserWithGroups }
+            ));
 
             await testRepositoryProvider.testSetup();
 
@@ -104,23 +88,12 @@ describe('Role Based Access Control for commands', () => {
 
     describe('when there is no user on the request (public request)', () => {
         beforeAll(async () => {
-            ({ testRepositoryProvider, app, commandHandlerService, idManager } =
-                await setUpIntegrationTest(
-                    {
-                        ARANGO_DB_NAME: databaseName,
-                    },
-                    { shouldMockIdGenerator: true }
-                ));
-
-            /**
-             * TODO[https://www.pivotaltracker.com/story/show/184111389]
-             *
-             * This needs to be replaced with `PUBLISH_RESOURCE`
-             */
-            commandHandlerService.registerHandler(
-                'PUBLISH_SONG',
-                new PublishSongCommandHandler(testRepositoryProvider, idManager)
-            );
+            ({ testRepositoryProvider, app } = await setUpIntegrationTest(
+                {
+                    ARANGO_DB_NAME: databaseName,
+                },
+                { shouldMockIdGenerator: true }
+            ));
 
             await testRepositoryProvider.addFullSnapshot(
                 buildInMemorySnapshot({
@@ -163,23 +136,12 @@ describe('Role Based Access Control for commands', () => {
             const testUserWithGroups = new CoscradUserWithGroups(adminUser, [userGroup]);
 
             beforeAll(async () => {
-                ({ testRepositoryProvider, app, commandHandlerService, idManager } =
-                    await setUpIntegrationTest(
-                        {
-                            ARANGO_DB_NAME: databaseName,
-                        },
-                        { shouldMockIdGenerator: true, testUserWithGroups }
-                    ));
-
-                /**
-                 * TODO[https://www.pivotaltracker.com/story/show/184111389]
-                 *
-                 * This needs to be replaced with `PUBLISH_RESOURCE`
-                 */
-                commandHandlerService.registerHandler(
-                    'PUBLISH_SONG',
-                    new PublishSongCommandHandler(testRepositoryProvider, idManager)
-                );
+                ({ testRepositoryProvider, app } = await setUpIntegrationTest(
+                    {
+                        ARANGO_DB_NAME: databaseName,
+                    },
+                    { shouldMockIdGenerator: true, testUserWithGroups }
+                ));
 
                 await testRepositoryProvider.testSetup();
 

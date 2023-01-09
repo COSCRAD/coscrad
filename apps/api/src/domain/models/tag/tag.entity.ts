@@ -1,4 +1,5 @@
 import { CompositeIdentifier, NonEmptyString } from '@coscrad/data-types';
+import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
@@ -15,6 +16,7 @@ import { InMemorySnapshot } from '../../types/ResourceType';
 import { Aggregate } from '../aggregate.entity';
 import { CategorizableCompositeIdentifier } from '../categories/types/ResourceOrNoteCompositeIdentifier';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
+import { DuplicateTagError } from './commands/errors';
 
 @RegisterIndexScopedCommands(['CREATE_TAG'])
 export class Tag extends Aggregate implements HasLabel {
@@ -55,6 +57,27 @@ export class Tag extends Aggregate implements HasLabel {
         });
     }
 
+    addMember(taggedMemberCompositeIdentifier: CategorizableCompositeIdentifier) {
+        /**
+         * Note that this is catching what would eventually be an invariant
+         * validation error sooner rather than later.
+         */
+        if (
+            this.members.some(({ type, id }) => {
+                const isMatch =
+                    type === taggedMemberCompositeIdentifier.type &&
+                    id === taggedMemberCompositeIdentifier.id;
+
+                return isMatch;
+            })
+        )
+            return new DuplicateTagError(this.label, taggedMemberCompositeIdentifier);
+
+        return this.safeClone<Tag>({
+            members: this.members.concat(taggedMemberCompositeIdentifier),
+        });
+    }
+
     getAvailableCommands(): string[] {
         return ['RELABEL_TAG'];
     }
@@ -84,10 +107,47 @@ export class Tag extends Aggregate implements HasLabel {
     }
 
     protected validateComplexInvariants(): InternalError[] {
-        return [];
+        /**
+         * TODO This could be a simple invariant rule if we introduce an `@Set` decorator.
+         */
+        const duplicateMembers: AggregateCompositeIdentifier[] = this.members.reduce(
+            (
+                {
+                    seen,
+                    duplicated,
+                }: {
+                    duplicated: AggregateCompositeIdentifier[];
+                    seen: AggregateCompositeIdentifier[];
+                },
+                next: AggregateCompositeIdentifier
+            ) => {
+                if (seen.some((compId) => isDeepStrictEqual(compId, next)))
+                    return {
+                        seen,
+                        duplicated: [...duplicated, next],
+                    };
+
+                return {
+                    seen: [...seen, next],
+                    duplicated,
+                };
+            },
+            {
+                duplicated: [],
+                seen: [],
+            }
+        ).duplicated;
+
+        const buildError = (compositeIdentifier: CategorizableCompositeIdentifier) =>
+            new DuplicateTagError(this.label, compositeIdentifier);
+
+        // TODO test coverage for invariant validator
+        // This will be `[]` if there were no duplicated members
+        return duplicateMembers.map(buildError);
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
-        return this.members;
+        // Avoid shared references
+        return this.members.map(cloneToPlainObject);
     }
 }

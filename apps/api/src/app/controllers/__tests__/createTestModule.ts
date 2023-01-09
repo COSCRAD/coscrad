@@ -23,12 +23,14 @@ import { GrantResourceReadAccessToUser } from '../../../domain/models/shared/com
 import { GrantResourceReadAccessToUserCommandHandler } from '../../../domain/models/shared/common-commands/grant-user-read-access/grant-resource-read-access-to-user.command-handler';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
-import { CreateTag } from '../../../domain/models/tag/commands/create-tag.command';
-import { CreateTagCommandHandler } from '../../../domain/models/tag/commands/create-tag.command-handler';
 import {
+    CreateTag,
+    CreateTagCommandHandler,
     RelabelTag,
     RelabelTagCommandHandler,
-} from '../../../domain/models/tag/commands/relabel-tag';
+    TagResourceOrNote,
+    TagResourceOrNoteCommandHandler,
+} from '../../../domain/models/tag/commands';
 import {
     CreateGroup,
     CreateGroupCommandHandler,
@@ -307,6 +309,8 @@ export default async (
             CreateTagCommandHandler,
             RelabelTag,
             RelabelTagCommandHandler,
+            TagResourceOrNote,
+            TagResourceOrNoteCommandHandler,
             // Next time try importing the domain module!
         ],
 

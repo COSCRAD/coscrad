@@ -5,6 +5,11 @@ import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeI
 import { Aggregate } from '../../aggregate.entity';
 
 export default class InvalidExternalReferenceByAggregateError extends InternalError {
+    /**
+     * Why do we pass the entire aggregate in here? Why not just `HasGetCompositeIdentifier`?
+     * Further, why do we build the composite identifier on the other side for the
+     * `invalidReferences`? This is inconsistent.
+     */
     constructor(aggregate: Aggregate, invalidReferences: AggregateCompositeIdentifier[]) {
         const msg = [
             `${formatAggregateCompositeIdentifier(aggregate.getCompositeIdentifier())}`,
