@@ -25,9 +25,8 @@ export function App() {
         /**
          * TODO Move the following somewhere else. `store`?
          *
-         * TODO Find a pattern that is closed to modification.
-         *
-         * TODO In the meantime, write a test that reminds us to update this
+         * TODO [https://www.pivotaltracker.com/story/show/184183811]
+         * In the meantime, write a test that reminds us to update this
          * with each new resource type.
          */
         const message = JSON.parse(result.data);

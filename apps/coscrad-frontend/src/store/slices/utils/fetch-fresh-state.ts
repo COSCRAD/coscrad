@@ -12,6 +12,9 @@ import { fetchTranscribedAudioItems } from '../resources/transcribed-audio/thunk
 import { fetchVocabularyLists } from '../resources/vocabulary-lists/thunks';
 import { fetchTags } from '../tagSlice/thunks';
 
+/**
+ * TODO Find a pattern that is closed to modification.
+ */
 export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateType): void => {
     switch (aggregateType) {
         case AggregateType.bibliographicReference:
