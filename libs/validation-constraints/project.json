@@ -4,6 +4,16 @@
     "sourceRoot": "libs/validation-constraints/src",
     "projectType": "library",
     "targets": {
+        "build": {
+            "executor": "@nrwl/node:webpack",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/libs/validation-constraints",
+                "tsConfig": "libs/validation-constraints/tsconfig.lib.json",
+                "packageJson": "libs/validation-constraints/package.json",
+                "main": "libs/validation-constraints/src/index.ts"
+            }
+        },
         "lint": {
             "executor": "@nrwl/linter:eslint",
             "outputs": ["{options.outputFile}"],

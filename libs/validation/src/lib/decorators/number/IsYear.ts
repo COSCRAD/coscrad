@@ -1,9 +1,5 @@
-import { buildMessage, isInt, ValidateBy, ValidationOptions } from 'class-validator';
-
-const currentYear = new Date().getFullYear();
-
-export const isYear = (test: unknown): test is number =>
-    typeof test === 'number' && test > 0 && test < currentYear && isInt(test);
+import { isYear } from '@coscrad/validation-constraints';
+import { buildMessage, ValidateBy, ValidationOptions } from 'class-validator';
 
 export function IsYear(validationOptions?: ValidationOptions) {
     return ValidateBy({
