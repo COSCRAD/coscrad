@@ -5,25 +5,43 @@ import {
     buildValidCaseDescription,
     IT_SHOULD_RETURN_THE_EXPECTED_RESULT,
 } from '../__tests__';
-import { isYear } from './is-year';
+import { isNonEmptyObject } from './is-non-empty-object';
 
-const validValues: number[] = [0, 100, 1493, 1864, 1995, 2000, 2022, 2023];
-
-const invalidValues = [
-    true,
-    false,
-    '1999',
-    null,
-    undefined,
-    { foo: 'bar' },
-    -300,
-    299.5,
-    [1999, 2000, 2001],
+const validValues = [
+    {
+        foo: 22,
+        bar: [1, 2, 3],
+    },
+    {
+        baz: {
+            smooth: 'jazz',
+        },
+    },
 ];
 
-describe('isYear', () => {
+const invalidValues = [
+    () => `I'm not an object by *this* definition`,
+    function leftOut() {
+        return `me neither`;
+    },
+    Math.PI,
+    {},
+    402.25,
+    true,
+    false,
+    'hello Mars!',
+    null,
+    undefined,
+    {},
+    [1999, 2000, 2001],
+    Infinity,
+    -Infinity,
+    NaN,
+];
+
+describe('isNonEmptyObject', () => {
     describe('when the value satisfies the constraint', () => {
-        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isYear);
+        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isNonEmptyObject);
 
         validValues.forEach((validValue) => {
             describe(buildValidCaseDescription(validValue), () => {
@@ -33,8 +51,9 @@ describe('isYear', () => {
             });
         });
     });
+
     describe('when the value fails the constraint', () => {
-        const assertConstraintFailure = assertConstraintFailsForPredicate(isYear);
+        const assertConstraintFailure = assertConstraintFailsForPredicate(isNonEmptyObject);
 
         invalidValues.forEach((invalidValue) => {
             describe(buildInvalidCaseDescription(invalidValue), () => {

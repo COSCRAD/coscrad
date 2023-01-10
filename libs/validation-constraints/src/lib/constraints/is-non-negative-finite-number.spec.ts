@@ -5,9 +5,9 @@ import {
     buildValidCaseDescription,
     IT_SHOULD_RETURN_THE_EXPECTED_RESULT,
 } from '../__tests__';
-import { isYear } from './is-year';
+import { isNonNegativeFiniteNumber } from './is-non-negative-finite-number';
 
-const validValues: number[] = [0, 100, 1493, 1864, 1995, 2000, 2022, 2023];
+const validValues: number[] = [0, 1, 14, 300493, 2.998e8, 2022, 5106.77788, 2 / 3];
 
 const invalidValues = [
     true,
@@ -16,14 +16,16 @@ const invalidValues = [
     null,
     undefined,
     { foo: 'bar' },
-    -300,
-    299.5,
     [1999, 2000, 2001],
+    Infinity,
+    -Infinity,
+    NaN,
 ];
 
-describe('isYear', () => {
+describe('isNonNegativeFiniteNumber', () => {
     describe('when the value satisfies the constraint', () => {
-        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isYear);
+        const assertConstraintSatisfied =
+            assertConstraintSatisfiedForPredicate(isNonNegativeFiniteNumber);
 
         validValues.forEach((validValue) => {
             describe(buildValidCaseDescription(validValue), () => {
@@ -33,8 +35,10 @@ describe('isYear', () => {
             });
         });
     });
+
     describe('when the value fails the constraint', () => {
-        const assertConstraintFailure = assertConstraintFailsForPredicate(isYear);
+        const assertConstraintFailure =
+            assertConstraintFailsForPredicate(isNonNegativeFiniteNumber);
 
         invalidValues.forEach((invalidValue) => {
             describe(buildInvalidCaseDescription(invalidValue), () => {

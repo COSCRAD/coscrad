@@ -5,25 +5,35 @@ import {
     buildValidCaseDescription,
     IT_SHOULD_RETURN_THE_EXPECTED_RESULT,
 } from '../__tests__';
-import { isYear } from './is-year';
+import { isNonEmptyString } from './is-non-empty-string';
 
-const validValues: number[] = [0, 100, 1493, 1864, 1995, 2000, 2022, 2023];
+const foo = 'cool';
+
+const validValues = ['Hello World', `I am so ${foo}`, '44.4444', 'Again-'.repeat(100)];
 
 const invalidValues = [
+    '', // empty strings are not allowed
+    () => `I'm not a string!`,
+    function leftOut() {
+        return `How could you think I am a string?`;
+    },
+    Math.PI,
+    {},
+    44.4444,
     true,
     false,
-    '1999',
     null,
     undefined,
-    { foo: 'bar' },
-    -300,
-    299.5,
-    [1999, 2000, 2001],
+    {},
+    ['not', 'a', 'string'],
+    Infinity,
+    -Infinity,
+    NaN,
 ];
 
-describe('isYear', () => {
+describe('isNonEmptyString', () => {
     describe('when the value satisfies the constraint', () => {
-        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isYear);
+        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isNonEmptyString);
 
         validValues.forEach((validValue) => {
             describe(buildValidCaseDescription(validValue), () => {
@@ -33,8 +43,9 @@ describe('isYear', () => {
             });
         });
     });
+
     describe('when the value fails the constraint', () => {
-        const assertConstraintFailure = assertConstraintFailsForPredicate(isYear);
+        const assertConstraintFailure = assertConstraintFailsForPredicate(isNonEmptyString);
 
         invalidValues.forEach((invalidValue) => {
             describe(buildInvalidCaseDescription(invalidValue), () => {

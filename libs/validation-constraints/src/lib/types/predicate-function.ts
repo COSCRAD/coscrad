@@ -1,1 +1,1 @@
-export type PredicateFunction = (input: unknown) => boolean;
+export type PredicateFunction<T = unknown> = (input: T) => boolean;

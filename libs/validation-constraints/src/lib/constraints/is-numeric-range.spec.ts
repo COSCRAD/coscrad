@@ -5,25 +5,28 @@ import {
     buildValidCaseDescription,
     IT_SHOULD_RETURN_THE_EXPECTED_RESULT,
 } from '../__tests__';
-import { isYear } from './is-year';
+import { isNumericRange } from './is-numeric-range';
 
-const validValues: number[] = [0, 100, 1493, 1864, 1995, 2000, 2022, 2023];
-
-const invalidValues = [
-    true,
-    false,
-    '1999',
-    null,
-    undefined,
-    { foo: 'bar' },
-    -300,
-    299.5,
-    [1999, 2000, 2001],
+const validValues: [number, number][] = [
+    [3.3, 3.3],
+    [0, 5],
+    [-102, 102],
+    [-Infinity, Infinity],
+    [-Infinity, 22],
+    [-104.5, Infinity],
+    [-4, 4],
 ];
 
-describe('isYear', () => {
+const invalidValues: [number, number][] = [
+    [6, 5],
+    [102, -Infinity],
+    [Infinity, -Infinity],
+    [4, -4],
+];
+
+describe('isNumericRange', () => {
     describe('when the value satisfies the constraint', () => {
-        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isYear);
+        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isNumericRange);
 
         validValues.forEach((validValue) => {
             describe(buildValidCaseDescription(validValue), () => {
@@ -33,8 +36,9 @@ describe('isYear', () => {
             });
         });
     });
+
     describe('when the value fails the constraint', () => {
-        const assertConstraintFailure = assertConstraintFailsForPredicate(isYear);
+        const assertConstraintFailure = assertConstraintFailsForPredicate(isNumericRange);
 
         invalidValues.forEach((invalidValue) => {
             describe(buildInvalidCaseDescription(invalidValue), () => {

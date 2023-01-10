@@ -5,25 +5,43 @@ import {
     buildValidCaseDescription,
     IT_SHOULD_RETURN_THE_EXPECTED_RESULT,
 } from '../__tests__';
-import { isYear } from './is-year';
+import { isObject } from './is-object';
 
-const validValues: number[] = [0, 100, 1493, 1864, 1995, 2000, 2022, 2023];
-
-const invalidValues = [
-    true,
-    false,
-    '1999',
-    null,
-    undefined,
-    { foo: 'bar' },
-    -300,
-    299.5,
-    [1999, 2000, 2001],
+const validValues = [
+    {
+        foo: undefined,
+        bar: [1, 2, 3],
+    },
+    {
+        baz: {
+            names: ['Bub', 'Bob'],
+        },
+    },
+    // empty objects are allowed
+    {},
 ];
 
-describe('isYear', () => {
+const invalidValues = [
+    999.45,
+    () => `I'm not an object by *this* definition`,
+    function leftOut() {
+        return `me neither`;
+    },
+    Math.PI,
+    true,
+    false,
+    'hello Mars!',
+    null,
+    undefined,
+    [1999, 2000, 2001], // Arrays do not satisfy this constraint
+    Infinity,
+    -Infinity,
+    NaN,
+];
+
+describe('isObject', () => {
     describe('when the value satisfies the constraint', () => {
-        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isYear);
+        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isObject);
 
         validValues.forEach((validValue) => {
             describe(buildValidCaseDescription(validValue), () => {
@@ -34,7 +52,7 @@ describe('isYear', () => {
         });
     });
     describe('when the value fails the constraint', () => {
-        const assertConstraintFailure = assertConstraintFailsForPredicate(isYear);
+        const assertConstraintFailure = assertConstraintFailsForPredicate(isObject);
 
         invalidValues.forEach((invalidValue) => {
             describe(buildInvalidCaseDescription(invalidValue), () => {

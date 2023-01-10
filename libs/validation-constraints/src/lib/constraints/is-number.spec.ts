@@ -5,33 +5,36 @@ import {
     buildValidCaseDescription,
     IT_SHOULD_RETURN_THE_EXPECTED_RESULT,
 } from '../__tests__';
-import { isUndefined } from './';
+import { isNumber } from './is-number';
+
+const validValues: number[] = [0, 1, -1, 14, 300493, 2.998e8, 1995, Infinity, -Infinity, 123.45];
 
 const invalidValues = [
+    NaN, // "Not a Number" is not a number.
     true,
     false,
-    'hello world',
+    '1999',
     null,
-    { foo: 'bar', baz: [2, 3, 4] },
-    -300,
-    299.5,
+    undefined,
+    { foo: 'bar' },
     [1999, 2000, 2001],
-    {},
 ];
 
-describe('isUndefined', () => {
+describe('isNumber', () => {
     describe('when the value satisfies the constraint', () => {
-        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isUndefined);
+        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isNumber);
 
-        describe(buildValidCaseDescription(undefined), () => {
-            it(IT_SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
-                assertConstraintSatisfied(undefined);
+        validValues.forEach((validValue) => {
+            describe(buildValidCaseDescription(validValue), () => {
+                it(IT_SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
+                    assertConstraintSatisfied(validValue);
+                });
             });
         });
     });
 
     describe('when the value fails the constraint', () => {
-        const assertConstraintFailure = assertConstraintFailsForPredicate(isUndefined);
+        const assertConstraintFailure = assertConstraintFailsForPredicate(isNumber);
 
         invalidValues.forEach((invalidValue) => {
             describe(buildInvalidCaseDescription(invalidValue), () => {

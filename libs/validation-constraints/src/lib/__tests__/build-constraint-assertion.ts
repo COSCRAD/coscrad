@@ -1,11 +1,14 @@
 import { PredicateFunction } from '../types';
 
-export type ActAndAssert = (input: unknown) => void;
+export type ActAndAssert<T = unknown> = (input: T) => void;
 
 export const buildConstraintAssertion =
-    (predicateFunction: PredicateFunction, expectedResult: boolean): ActAndAssert =>
-    (value: unknown) => {
+    <T = unknown>(
+        predicateFunction: PredicateFunction<T>,
+        expectedResult: boolean
+    ): ActAndAssert<T> =>
+    (value: T) => {
         const result = predicateFunction(value);
 
-        expect(result).toBe(expectedResult);
+        expect(result).toEqual(expectedResult);
     };

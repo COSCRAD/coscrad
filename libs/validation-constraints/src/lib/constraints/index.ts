@@ -7,7 +7,7 @@ export * from './is-non-empty-object';
 export * from './is-non-empty-string';
 export * from './is-non-negative-finite-number';
 export * from './is-null';
-export * from './is-null-or-uendefined';
+export * from './is-null-or-undefined';
 export * from './is-number';
 export * from './is-number-within-range';
 export * from './is-object';
