@@ -1,5 +1,5 @@
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
-import isStringWithNonzeroLength from '../../../../lib/utilities/isStringWithNonzeroLength';
 import EmptyTargetForTextFieldContextError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/textFieldContext/EmptyTargetForTextFieldContextError';
 import InconsistentCharRangeError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/textFieldContext/InconsistentCharRangeError';
 import { Valid } from '../../../domainModelValidators/Valid';
@@ -12,7 +12,7 @@ export default (model: Resource, context: TextFieldContext): Valid | InternalErr
     const valueOfTargetProperty = model[target];
 
     // TODO where should we handle the case that the target property is not a string?
-    if (!isStringWithNonzeroLength(valueOfTargetProperty))
+    if (!isNonEmptyString(valueOfTargetProperty))
         return new EmptyTargetForTextFieldContextError(model.getCompositeIdentifier(), target);
 
     const [_, finalIndex] = charRange;

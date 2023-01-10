@@ -6,7 +6,7 @@ import {
     NonNegativeFiniteNumber,
     URL,
 } from '@coscrad/data-types';
-import { isStringWithNonzeroLength } from '@coscrad/validation';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
@@ -95,7 +95,7 @@ export class MediaItem extends Resource implements ITimeBoundable {
 
         const allErrors: InternalError[] = [];
 
-        if (!isStringWithNonzeroLength(title) && !isStringWithNonzeroLength(titleEnglish))
+        if (!isNonEmptyString(title) && !isNonEmptyString(titleEnglish))
             allErrors.push(new MediaItemHasNoTitleInAnyLanguageError(id));
 
         return allErrors;

@@ -6,8 +6,10 @@ import {
     EnumTypeDefinition,
     isSimpleCoscradPropertyTypeDefinition,
 } from '@coscrad/data-types';
-import { isNullOrUndefined } from '@coscrad/validation';
-import { getConstraintNamesForCoscradDataType } from '@coscrad/validation-constraints';
+import {
+    getConstraintNamesForCoscradDataType,
+    isNullOrUndefined,
+} from '@coscrad/validation-constraints';
 import { InternalError } from '../../lib/errors/InternalError';
 
 // TODO Move this to a higher level- possibly called CommandPayloadPropertyMeta

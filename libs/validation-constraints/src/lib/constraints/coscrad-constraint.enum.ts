@@ -10,4 +10,10 @@ export enum CoscradConstraint {
     isInteger = 'integer',
     isYear = 'year',
     isBoolean = 'boolean',
+    isUUID = 'UUID',
+    isISBN = 'ISBN',
+    isFiniteNumber = 'finite number',
+    isNonNegative = 'non-negative number',
+    isPositive = 'positive number',
+    isURL = 'URL',
 }

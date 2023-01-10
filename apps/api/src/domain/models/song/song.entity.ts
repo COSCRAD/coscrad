@@ -1,5 +1,5 @@
 import { NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
-import { isStringWithNonzeroLength } from '@coscrad/validation';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
@@ -109,7 +109,7 @@ export class Song extends Resource implements ITimeBoundable {
                 )
             );
 
-        if (!isStringWithNonzeroLength(title) && !isStringWithNonzeroLength(titleEnglish))
+        if (!isNonEmptyString(title) && !isNonEmptyString(titleEnglish))
             allErrors.push(new MissingSongTitleError());
 
         return allErrors;

@@ -4,25 +4,49 @@ exports[`buildCommandForm should return the expected result 1`] = `
 Object {
   "fields": Array [
     Object {
+      "constraints": Array [
+        Object {
+          "message": "must be a non-empty string",
+          "name": "non-empty string",
+        },
+      ],
       "description": "title of the media item in the language",
       "label": "title (language)",
       "name": "title",
       "type": "TEXT_FIELD",
     },
     Object {
+      "constraints": Array [
+        Object {
+          "message": "must be a non-empty string",
+          "name": "non-empty string",
+        },
+      ],
       "description": "title of the media item in the colonial language",
       "label": "title (colonial language)",
       "name": "titleEnglish",
       "type": "TEXT_FIELD",
     },
     Object {
+      "constraints": Array [
+        Object {
+          "message": "must be a URL",
+          "name": "URL",
+        },
+      ],
       "description": "a web URL link to a digital version of this media item for playback",
       "label": "audio link",
       "name": "url",
       "type": "TEXT_FIELD",
     },
     Object {
-      "description": "Add property description",
+      "constraints": Array [
+        Object {
+          "message": "Must be a valid \${propertyLabel}",
+          "name": "IS_ENUM",
+        },
+      ],
+      "description": "technical specification of the type of this media item",
       "label": "MIME Type",
       "name": "mimeType",
       "options": Array [
@@ -38,6 +62,12 @@ Object {
       "type": "STATIC_SELECT",
     },
     Object {
+      "constraints": Array [
+        Object {
+          "message": "must be a object",
+          "name": "object",
+        },
+      ],
       "description": "raw data from a third-party system for posterity",
       "label": "raw data",
       "name": "rawData",

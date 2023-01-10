@@ -1,5 +1,5 @@
 import { NonEmptyString } from '@coscrad/data-types';
-import { isNonEmptyObject } from '@coscrad/validation';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
 import { AggregateId } from '../../types/AggregateId';

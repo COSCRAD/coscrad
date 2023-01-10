@@ -221,6 +221,12 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [
+              Object {
+                "message": "must be a UUID",
+                "name": "UUID",
+              },
+            ],
             "description": "the ID of the user that will be added to this group",
             "label": "user ID",
             "name": "userId",
@@ -273,6 +279,12 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
+                "constraints": Array [
+                  Object {
+                    "message": "must be a UUID",
+                    "name": "UUID",
+                  },
+                ],
                 "description": "the ID of the user that will be added to this group",
                 "label": "user ID",
                 "name": "userId",
@@ -320,12 +332,24 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [
+              Object {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+            ],
             "description": "the name of the user group",
             "label": "label",
             "name": "label",
             "type": "TEXT_FIELD",
           },
           Object {
+            "constraints": Array [
+              Object {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+            ],
             "description": "a summary of the purpose of this group (what its members have in common)",
             "label": "description",
             "name": "description",
@@ -349,7 +373,13 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
-            "description": "Add property description",
+            "constraints": Array [
+              Object {
+                "message": "Must be a valid \${propertyLabel}",
+                "name": "IS_ENUM",
+              },
+            ],
+            "description": "the role that will be granted to this user",
             "label": "User Role",
             "name": "role",
             "options": Array [
@@ -405,7 +435,13 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "Add property description",
+                "constraints": Array [
+                  Object {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                ],
+                "description": "the role that will be granted to this user",
                 "label": "User Role",
                 "name": "role",
                 "options": Array [
@@ -456,12 +492,24 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [
+              Object {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+            ],
             "description": "the auth provider's unique ID for this user (the user must be added to the auth provider first)",
             "label": "auth provider's ID",
             "name": "userIdFromAuthProvider",
             "type": "TEXT_FIELD",
           },
           Object {
+            "constraints": Array [
+              Object {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+            ],
             "description": "a human-readable text identifier for this user",
             "label": "username",
             "name": "username",
@@ -485,6 +533,12 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [
+              Object {
+                "message": "must be a UUID",
+                "name": "UUID",
+              },
+            ],
             "description": "the ID of the user that will be added to this group",
             "label": "user ID",
             "name": "userId",
@@ -537,6 +591,12 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
+                "constraints": Array [
+                  Object {
+                    "message": "must be a UUID",
+                    "name": "UUID",
+                  },
+                ],
                 "description": "the ID of the user that will be added to this group",
                 "label": "user ID",
                 "name": "userId",
@@ -584,12 +644,24 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [
+              Object {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+            ],
             "description": "the name of the user group",
             "label": "label",
             "name": "label",
             "type": "TEXT_FIELD",
           },
           Object {
+            "constraints": Array [
+              Object {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+            ],
             "description": "a summary of the purpose of this group (what its members have in common)",
             "label": "description",
             "name": "description",
@@ -613,7 +685,13 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
-            "description": "Add property description",
+            "constraints": Array [
+              Object {
+                "message": "Must be a valid \${propertyLabel}",
+                "name": "IS_ENUM",
+              },
+            ],
+            "description": "the role that will be granted to this user",
             "label": "User Role",
             "name": "role",
             "options": Array [
@@ -669,7 +747,13 @@ Object {
           "form": Object {
             "fields": Array [
               Object {
-                "description": "Add property description",
+                "constraints": Array [
+                  Object {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                ],
+                "description": "the role that will be granted to this user",
                 "label": "User Role",
                 "name": "role",
                 "options": Array [
@@ -720,12 +804,24 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [
+              Object {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+            ],
             "description": "the auth provider's unique ID for this user (the user must be added to the auth provider first)",
             "label": "auth provider's ID",
             "name": "userIdFromAuthProvider",
             "type": "TEXT_FIELD",
           },
           Object {
+            "constraints": Array [
+              Object {
+                "message": "must be a non-empty string",
+                "name": "non-empty string",
+              },
+            ],
             "description": "a human-readable text identifier for this user",
             "label": "username",
             "name": "username",

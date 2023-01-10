@@ -1,4 +1,4 @@
-import { isPositiveInteger } from '@coscrad/validation';
+import { isPositiveInteger } from '@coscrad/validation-constraints';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { InternalError } from '../errors/InternalError';
 import { IdManagementService } from './id-management.service';

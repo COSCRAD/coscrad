@@ -1,9 +1,15 @@
 import {
     isBoolean,
+    isFiniteNumber,
     isInteger,
+    isISBN,
     isNonEmptyString,
+    isNonNegativeNumber,
     isNullOrUndefined,
     isObject,
+    isPositiveInteger,
+    isURL,
+    isUUID,
     isYear,
 } from '../constraints';
 import { CoscradConstraint } from '../constraints/coscrad-constraint.enum';
@@ -17,6 +23,12 @@ const constraintsLookupTable: { [K in CoscradConstraint]: PredicateFunction } = 
     [CoscradConstraint.isInteger]: isInteger,
     [CoscradConstraint.isObject]: isObject,
     [CoscradConstraint.isYear]: isYear,
+    [CoscradConstraint.isUUID]: isUUID,
+    [CoscradConstraint.isISBN]: isISBN,
+    [CoscradConstraint.isNonNegative]: isNonNegativeNumber,
+    [CoscradConstraint.isFiniteNumber]: isFiniteNumber,
+    [CoscradConstraint.isPositive]: isPositiveInteger,
+    [CoscradConstraint.isURL]: isURL,
 };
 
 export const isConstraintSatisfied = (
