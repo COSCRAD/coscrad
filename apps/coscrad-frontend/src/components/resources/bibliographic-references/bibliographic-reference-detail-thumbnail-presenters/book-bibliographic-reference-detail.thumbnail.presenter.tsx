@@ -2,9 +2,8 @@ import {
     IBibliographicReferenceViewModel,
     IBookBibliographicReferenceData,
 } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Card, CardContent, CardHeader, Divider } from '@mui/material';
-
-const isNullOrUndefined = (input): boolean => input == null || typeof input === 'undefined';
 
 export const BookBibliographicReferenceDetailThumbnailPresenter = ({
     id,

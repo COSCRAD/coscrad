@@ -4,6 +4,7 @@ import {
     ICommandFormAndLabels,
     isAggregateType,
 } from '@coscrad/api-interfaces';
+import { isNull } from '@coscrad/validation-constraints';
 import { useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { clearCommandStatus } from '../../store/slices/command-status';
@@ -41,11 +42,11 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
      */
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;
 
-    if (isLoading || generatedId === null) return <Loading />;
+    if (isLoading || isNull(generatedId)) return <Loading />;
 
     const selectedCommand = actions.find((action) => action.type === selectedCommandType);
 
-    if (selectedCommandType === null)
+    if (isNull(selectedCommandType))
         return (
             <div>
                 <h1>Commands</h1>

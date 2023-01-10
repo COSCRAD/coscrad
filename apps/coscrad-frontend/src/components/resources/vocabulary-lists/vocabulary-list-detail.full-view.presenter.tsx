@@ -3,6 +3,7 @@ import {
     IVocabularyListEntry,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { useReducer } from 'react';
 import { Carousel } from '../../higher-order-components/carousel';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
@@ -76,7 +77,7 @@ export const VocabularyListDetailFullViewPresenter = ({
 
     const filterWithoutNullAndUndefined = Object.entries(filter).reduce(
         (acc, [key, value]) =>
-            value === null || typeof value === 'undefined'
+            isNullOrUndefined(value)
                 ? acc
                 : {
                       ...acc,

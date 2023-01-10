@@ -1,17 +1,18 @@
 import { Auth0Provider } from '@auth0/auth0-react';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { useNavigate } from 'react-router-dom';
 import { getConfig } from '../config';
 
 const Auth0ProviderWithHistory = ({ children }) => {
     const { domain, clientId, audience } = getConfig();
 
-    if (domain === null || typeof domain === 'undefined') {
+    if (isNullOrUndefined(domain)) {
         throw new Error(
             `failed to read domain from auth0 config, process.env: ${JSON.stringify(process.env)}`
         );
     }
 
-    if (clientId === null || typeof clientId === 'undefined') {
+    if (isNullOrUndefined(clientId)) {
         throw new Error('failed to read clientId from auth0 config');
     }
 

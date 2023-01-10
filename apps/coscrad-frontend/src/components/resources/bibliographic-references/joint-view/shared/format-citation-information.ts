@@ -1,7 +1,7 @@
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
+
 const formatDateInformation = (dateInformation: string): string =>
-    dateInformation === null || typeof dateInformation === 'undefined'
-        ? ''
-        : `(${dateInformation})`;
+    isNullOrUndefined(dateInformation) ? '' : `(${dateInformation})`;
 
 export const formatCitationInfromation = (
     valuesToCommaSeparate: string[],

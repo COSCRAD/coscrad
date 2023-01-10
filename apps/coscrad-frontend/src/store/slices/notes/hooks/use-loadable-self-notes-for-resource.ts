@@ -4,6 +4,7 @@ import {
     INoteViewModel,
     ResourceCompositeIdentifier,
 } from '@coscrad/api-interfaces';
+import { isNull } from '@coscrad/validation-constraints';
 import { ILoadable } from '../../interfaces/loadable.interface';
 import { compositeIdentifierMatches } from './composite-identifiers-match';
 import { useLoadableNotes } from './use-loadable-notes';
@@ -34,7 +35,7 @@ export const useLoadableSelfNotesForResource = (
             data: null,
         };
 
-    if (isLoading || data === null)
+    if (isLoading || isNull(data))
         return {
             isLoading,
             errorInfo,

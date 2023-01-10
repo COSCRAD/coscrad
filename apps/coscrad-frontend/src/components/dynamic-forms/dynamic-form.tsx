@@ -24,6 +24,8 @@ export const DynamicForm = ({
                     {fields.map((field) => (
                         <Tooltip title={field.description} arrow placement="right">
                             <div key={field.name}>
+                                {/* TODO Remove the following once we actually make use of the validation */}
+                                <p>constraints: {JSON.stringify(field.constraints)}</p>
                                 <DynamicFormElement
                                     formField={field}
                                     key={field.name}

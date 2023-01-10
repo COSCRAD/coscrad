@@ -1,3 +1,4 @@
+import { isNull } from '@coscrad/validation-constraints';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -26,7 +27,7 @@ export const useLoadable = <TSelectedState, UIndexState>({
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (data === null) dispatch(fetchThunk());
+        if (isNull(data)) dispatch(fetchThunk());
     }, [data, dispatch, fetchThunk]);
 
     return loadable;

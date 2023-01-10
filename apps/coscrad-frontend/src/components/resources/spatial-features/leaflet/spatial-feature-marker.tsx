@@ -1,4 +1,5 @@
 import { GeometricFeatureType, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Icon as LeafletIcon, Marker as LeafletMarker } from 'leaflet';
 import { PropsWithChildren, useEffect, useRef } from 'react';
 import {
@@ -130,7 +131,7 @@ export const buildSpatialFeatureMarker =
 
         const Presenter = lookupTable[geometryType];
 
-        if (Presenter === null || typeof Presenter === 'undefined') {
+        if (isNullOrUndefined(Presenter)) {
             throw new Error(
                 `Failed to build a marker for spatial feature of unknown type: ${geometryType}`
             );
