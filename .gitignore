@@ -49,5 +49,7 @@ Thumbs.db
 auth_config.json
 config.json
 *.config.json
+# consider .coscrad.config.ts?
 *.config.ts
+!jest.config.ts
 configurable-front-matter.json

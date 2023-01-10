@@ -5,36 +5,33 @@ import {
     buildValidCaseDescription,
     IT_SHOULD_RETURN_THE_EXPECTED_RESULT,
 } from '../__tests__';
-import { isYear } from './is-year';
-
-const validValues: number[] = [0, 100, 1493, 1864, 1995, 2000, 2022, 2023];
+import { isUndefined } from './';
 
 const invalidValues = [
     true,
     false,
-    '1999',
+    'hello world',
     null,
-    undefined,
-    { foo: 'bar' },
+    { foo: 'bar', baz: [2, 3, 4] },
     -300,
     299.5,
     [1999, 2000, 2001],
+    {},
 ];
 
 describe('isYear', () => {
     describe('when the value satisfies the constraint', () => {
-        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isYear);
+        const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isUndefined);
 
-        validValues.forEach((validValue) => {
-            describe(buildValidCaseDescription(validValue), () => {
-                it(IT_SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
-                    assertConstraintSatisfied(validValue);
-                });
+        describe(buildValidCaseDescription(undefined), () => {
+            it(IT_SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
+                assertConstraintSatisfied(undefined);
             });
         });
     });
+
     describe('when the value fails the constraint', () => {
-        const assertConstraintFailure = assertConstraintFailsForPredicate(isYear);
+        const assertConstraintFailure = assertConstraintFailsForPredicate(isUndefined);
 
         invalidValues.forEach((invalidValue) => {
             describe(buildInvalidCaseDescription(invalidValues), () => {

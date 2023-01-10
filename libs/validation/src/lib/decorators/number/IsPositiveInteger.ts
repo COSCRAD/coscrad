@@ -1,6 +1,5 @@
-import { buildMessage, isInt, ValidateBy, ValidationOptions } from 'class-validator';
-
-export const isPositiveInteger = (test: unknown): test is number => isInt(test) && test > 0;
+import { isPositiveInteger } from '@coscrad/validation-constraints';
+import { buildMessage, ValidateBy, ValidationOptions } from 'class-validator';
 
 export function IsPositiveInteger(validationOptions?: ValidationOptions) {
     return ValidateBy({
