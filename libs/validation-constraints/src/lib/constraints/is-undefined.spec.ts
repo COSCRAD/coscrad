@@ -3,9 +3,11 @@ import {
     assertConstraintSatisfiedForPredicate,
     buildInvalidCaseDescription,
     buildValidCaseDescription,
-    IT_SHOULD_RETURN_THE_EXPECTED_RESULT,
+    SHOULD_RETURN_THE_EXPECTED_RESULT,
 } from '../__tests__';
 import { isUndefined } from './';
+
+const validValue = undefined;
 
 const invalidValues = [
     true,
@@ -23,9 +25,9 @@ describe('isUndefined', () => {
     describe('when the value satisfies the constraint', () => {
         const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(isUndefined);
 
-        describe(buildValidCaseDescription(undefined), () => {
-            it(IT_SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
-                assertConstraintSatisfied(undefined);
+        describe(buildValidCaseDescription(validValue), () => {
+            it(SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
+                assertConstraintSatisfied(validValue);
             });
         });
     });
@@ -35,7 +37,7 @@ describe('isUndefined', () => {
 
         invalidValues.forEach((invalidValue) => {
             describe(buildInvalidCaseDescription(invalidValue), () => {
-                it(IT_SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
+                it(SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
                     assertConstraintFailure(invalidValue);
                 });
             });

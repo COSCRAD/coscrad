@@ -5,7 +5,6 @@ import { CoscradConstraint } from '../constraints/coscrad-constraint.enum';
 
 const lookupTable: { [K in CoscradDataType]: CoscradConstraint[] } = {
     [CoscradDataType.CompositeIdentifier]: [], // This is auto-populated or a dynamic selection
-    // TODO Update the following
     [CoscradDataType.ISBN]: [CoscradConstraint.isISBN],
     [CoscradDataType.NonEmptyString]: [CoscradConstraint.isNonEmptyString],
     [CoscradDataType.NonNegativeFiniteNumber]: [

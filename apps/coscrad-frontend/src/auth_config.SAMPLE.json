@@ -1,0 +1,6 @@
+{
+    "domain": "<DOMAIN>.auth0.com",
+    "clientId": "<CLIENT ID>",
+    "audience": "https://<AUDIENCE>.tsilhqotinlanguage.ca",
+    "apiUrl": "http://localhost:4567/api"
+  }

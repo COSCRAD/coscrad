@@ -1,7 +1,7 @@
 import {
     assertConstraintFailsForPredicate,
     assertConstraintSatisfiedForPredicate,
-    IT_SHOULD_RETURN_THE_EXPECTED_RESULT,
+    SHOULD_RETURN_THE_EXPECTED_RESULT,
 } from '../__tests__';
 import { isNumberWithinRange } from './is-number-within-range';
 
@@ -37,7 +37,7 @@ describe('isNonEmptyObject', () => {
             const assertConstraintSatisfied = assertConstraintSatisfiedForPredicate(predicate);
 
             describe(buildInputAndRangeDescription(input, range), () => {
-                it(IT_SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
+                it(SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
                     assertConstraintSatisfied(input);
                 });
             });
@@ -51,7 +51,7 @@ describe('isNonEmptyObject', () => {
             const assertConstraintFailure = assertConstraintFailsForPredicate(predicate);
 
             describe(buildInputAndRangeDescription(input, range), () => {
-                it(IT_SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
+                it(SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
                     assertConstraintFailure(input);
                 });
             });

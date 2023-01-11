@@ -1,6 +1,5 @@
 import { isEmptyText } from './isEmptyText';
 
-// TODO Add unit test
 export const formatBilingualText = (
     textInPrimaryLanguage: string,
     textInSecondaryLanguage: string

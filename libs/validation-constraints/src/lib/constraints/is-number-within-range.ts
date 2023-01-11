@@ -1,7 +1,6 @@
 import { isNumber } from './is-number';
 import { isNumericRange } from './is-numeric-range';
 
-// TODO Consider throwing if the passed range is not in the right order, and test this
 export const isNumberWithinRange = (
     input: unknown,
     [startInclusive, endInclusive]: [number, number]

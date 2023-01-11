@@ -3,7 +3,7 @@ import { SongIndexState } from '../../../store/slices/resources/songs/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
-import { formatBilingualText } from '../vocabulary-lists/utils/formatBilingualText';
+import { formatBilingualText } from '../vocabulary-lists/utils';
 
 export const SongIndexPresenter = ({ entities: songs }: SongIndexState) => {
     const headingLabels: HeadingLabel<ISongViewModel>[] = [

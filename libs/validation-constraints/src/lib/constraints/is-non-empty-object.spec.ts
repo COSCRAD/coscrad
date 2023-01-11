@@ -3,7 +3,7 @@ import {
     assertConstraintSatisfiedForPredicate,
     buildInvalidCaseDescription,
     buildValidCaseDescription,
-    IT_SHOULD_RETURN_THE_EXPECTED_RESULT,
+    SHOULD_RETURN_THE_EXPECTED_RESULT,
 } from '../__tests__';
 import { isNonEmptyObject } from './is-non-empty-object';
 
@@ -45,7 +45,7 @@ describe('isNonEmptyObject', () => {
 
         validValues.forEach((validValue) => {
             describe(buildValidCaseDescription(validValue), () => {
-                it(IT_SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
+                it(SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
                     assertConstraintSatisfied(validValue);
                 });
             });
@@ -57,7 +57,7 @@ describe('isNonEmptyObject', () => {
 
         invalidValues.forEach((invalidValue) => {
             describe(buildInvalidCaseDescription(invalidValue), () => {
-                it(IT_SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
+                it(SHOULD_RETURN_THE_EXPECTED_RESULT, () => {
                     assertConstraintFailure(invalidValue);
                 });
             });

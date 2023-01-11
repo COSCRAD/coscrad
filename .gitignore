@@ -47,9 +47,6 @@ Thumbs.db
 
 # front-end configs
 auth_config.json
-config.json
-*.config.json
-# consider .coscrad.config.ts?
-*.config.ts
-!jest.config.ts
-configurable-front-matter.json
+**content.config.ts
+# TODO Be careful not to git-ignore third-party configs
+**config.json
