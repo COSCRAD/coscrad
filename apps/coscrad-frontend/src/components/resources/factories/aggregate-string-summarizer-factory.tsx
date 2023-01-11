@@ -5,7 +5,7 @@ import {
     IMediaItemViewModel,
 } from '@coscrad/api-interfaces';
 import { buildBibliographicReferenceJointViewModel } from '../bibliographic-references/joint-view';
-import { formatBilingualText } from '../vocabulary-lists/utils/formatBilingualText';
+import { formatBilingualText } from '../vocabulary-lists/utils';
 
 export type AggregateStringSummarizer<T extends IBaseViewModel> = (viewModel: T) => string;
 

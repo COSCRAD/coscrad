@@ -1,5 +1,5 @@
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
-import { isStringWithNonzeroLength } from '@coscrad/validation';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
@@ -84,7 +84,7 @@ export class VocabularyList extends Resource {
 
         // TODO Validate vocabulary list variables against entry variables
 
-        if (!isStringWithNonzeroLength(name) && !isStringWithNonzeroLength(nameEnglish))
+        if (!isNonEmptyString(name) && !isNonEmptyString(nameEnglish))
             allErrors.push(new VocabularyListHasNoNameInAnyLanguageError());
 
         if (!Array.isArray(entries) || !entries.length)

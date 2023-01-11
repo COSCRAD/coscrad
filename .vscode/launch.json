@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
             "type": "node",
             "request": "launch",
@@ -75,6 +76,21 @@
             "args": [
                 "test",
                 "tsilhqotin-language-hub",
+                "--testFile=${file}",
+                "--runInBand",
+            ],
+            "console": "internalConsole",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Jest test Validation Constraints lib",
+            "program": "${workspaceFolder}/node_modules/nx/bin/nx.js",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "test",
+                "validation-constraints",
                 "--testFile=${file}",
                 "--runInBand",
             ],

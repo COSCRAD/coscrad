@@ -1,4 +1,4 @@
-import { isStringWithNonzeroLength } from '@coscrad/validation';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { isResourceType, ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
@@ -26,7 +26,7 @@ export const buildIndexPathForAggregate = (aggregateType: AggregateType): string
 
     const lookupResult = nonResourceAggregateTypeToIndexPath[aggregateType];
 
-    if (!isStringWithNonzeroLength(lookupResult)) {
+    if (!isNonEmptyString(lookupResult)) {
         throw new InternalError(
             `There is no route registered for aggregate of type: ${aggregateType}`
         );

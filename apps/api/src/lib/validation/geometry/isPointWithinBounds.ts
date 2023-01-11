@@ -1,12 +1,13 @@
+import { isFiniteNumber, isNumberWithinRange } from '@coscrad/validation-constraints';
 import {
     isPosition2D,
     Position2D,
 } from '../../../domain/models/spatial-feature/types/Coordinates/Position2D';
-import isFiniteNumber from '../../utilities/isFiniteNumber';
-import isNumberWithinRange from './isNumberWithinRange';
 
 /**
  * TODO Generalize this to points in N dimensions, N !== 2
+ *
+ * TODO Move this directory to `@coscrad/validation-constraints`.
  */
 function isPointWithinBounds(
     [x, y]: Position2D,

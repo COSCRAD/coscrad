@@ -1,4 +1,4 @@
-import { isStringWithNonzeroLength } from '@coscrad/validation';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CoscradUserGroupQueryService } from '../../domain/services/query-services/coscrad-user-group-query.service';
@@ -16,7 +16,7 @@ export class CoscradUserGroupController {
     @UseGuards(AdminJwtGuard)
     @Get('/:id')
     async fetchById(@Res() res, @Param('id') id: string) {
-        if (!isStringWithNonzeroLength(id))
+        if (!isNonEmptyString(id))
             return sendInternalResultAsHttpResponse(
                 res,
                 new InternalError(`Invalid group ID: ${id}`)

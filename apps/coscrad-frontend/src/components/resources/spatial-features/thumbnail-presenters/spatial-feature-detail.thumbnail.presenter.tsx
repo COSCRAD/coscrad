@@ -4,6 +4,7 @@ import {
     ISpatialFeatureViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import {
     Card,
@@ -58,7 +59,7 @@ export const SpatialFeatureDetailThumbnailPresenter = (
 
     const CoordinatesTextPresenter = lookupTable[geometryType];
 
-    if (CoordinatesTextPresenter === null || typeof CoordinatesTextPresenter === 'undefined') {
+    if (isNullOrUndefined(CoordinatesTextPresenter)) {
         throw new Error(
             `There is no thumbnail presenter registered for coordinates of geometry type: ${geometryType}`
         );

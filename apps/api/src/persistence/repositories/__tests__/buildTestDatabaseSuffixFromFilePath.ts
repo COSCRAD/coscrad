@@ -1,5 +1,5 @@
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../lib/errors/InternalError';
-import isStringWithNonzeroLength from '../../../lib/utilities/isStringWithNonzeroLength';
 
 const filePathSeparator = '/';
 
@@ -10,7 +10,7 @@ export default (filePath: string): string => {
 
     const fileName = directoriesAndFileName[directoriesAndFileName.length - 1];
 
-    if (!isStringWithNonzeroLength(fileName)) {
+    if (!isNonEmptyString(fileName)) {
         throw new InternalError(`failed to parse file name from path: ${filePath}`);
     }
 

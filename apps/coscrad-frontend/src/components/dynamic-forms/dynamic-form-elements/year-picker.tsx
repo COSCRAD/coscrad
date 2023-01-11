@@ -42,6 +42,12 @@ export const YearPicker = ({
         description,
         type,
         options: selectOptions,
+        constraints: [
+            {
+                name: 'IS_YEAR',
+                message: `Must be a valid year`,
+            },
+        ],
     };
 
     return (

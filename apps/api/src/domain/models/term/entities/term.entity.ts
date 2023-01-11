@@ -1,5 +1,5 @@
 import { NonEmptyString } from '@coscrad/data-types';
-import { isStringWithNonzeroLength } from '@coscrad/validation';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
@@ -103,7 +103,7 @@ export class Term extends Resource {
 
         const { term, termEnglish, id, published } = this;
 
-        if (!isStringWithNonzeroLength(term) && !isStringWithNonzeroLength(termEnglish))
+        if (!isNonEmptyString(term) && !isNonEmptyString(termEnglish))
             allErrors.push(new TermHasNoTextInAnyLanguageError(id));
 
         if (typeof published !== 'boolean')

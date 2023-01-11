@@ -6,7 +6,10 @@ import {
     EnumTypeDefinition,
     isSimpleCoscradPropertyTypeDefinition,
 } from '@coscrad/data-types';
-import { isNullOrUndefined } from '@coscrad/validation';
+import {
+    getConstraintNamesForCoscradDataType,
+    isNullOrUndefined,
+} from '@coscrad/validation-constraints';
 import { InternalError } from '../../lib/errors/InternalError';
 
 // TODO Move this to a higher level- possibly called CommandPayloadPropertyMeta
@@ -33,12 +36,21 @@ const lookupTable: { [K in CoscradDataType]: FormFieldType } = {
 
 const buildSimpleFormField = (
     formFieldType: FormFieldType,
-    { name, label, description }: NameLabelAndDescription
+    { name, label, description }: NameLabelAndDescription,
+    propertyTypeDefinition: CoscradPropertyTypeDefinition
 ): IFormField => ({
     type: formFieldType,
     name,
     label,
     description,
+    constraints: isSimpleCoscradPropertyTypeDefinition(propertyTypeDefinition)
+        ? getConstraintNamesForCoscradDataType(propertyTypeDefinition.coscradDataType).map(
+              (name) => ({
+                  name,
+                  message: `must be a ${name}`,
+              })
+          )
+        : [],
 });
 
 /**
@@ -59,7 +71,11 @@ export const buildFormFieldForCommandPayloadProp = (
             }
 
             return {
-                ...buildSimpleFormField(FormFieldType.dynamicSelect, nameLabelAndDescription),
+                ...buildSimpleFormField(
+                    FormFieldType.dynamicSelect,
+                    nameLabelAndDescription,
+                    propertyTypeDefinition
+                ),
                 options: { aggregateType: referenceTo },
             };
         }
@@ -72,7 +88,7 @@ export const buildFormFieldForCommandPayloadProp = (
             );
         }
 
-        return buildSimpleFormField(lookupResult, nameLabelAndDescription);
+        return buildSimpleFormField(lookupResult, nameLabelAndDescription, propertyTypeDefinition);
     }
 
     const { complexDataType } = propertyTypeDefinition;
@@ -85,12 +101,18 @@ export const buildFormFieldForCommandPayloadProp = (
             type: FormFieldType.staticSelect,
             label: enumLabel,
             name: nameLabelAndDescription.name,
-            description: 'Add property description',
+            description: nameLabelAndDescription.description,
             /**
              * TODO [https://www.pivotaltracker.com/story/show/184065854]
              * consolidate LabelAndValue with DisplayAndValue.
              */
             options: labelsAndValues.map(({ label, value }) => ({ display: label, value })),
+            constraints: [
+                {
+                    name: 'IS_ENUM',
+                    message: 'Must be a valid ${propertyLabel}',
+                },
+            ],
         };
     }
 
@@ -99,7 +121,11 @@ export const buildFormFieldForCommandPayloadProp = (
          * Ideally, we will eliminate nested data from command forms. But for now,
          * we will use a JSON editor as a work around.
          */
-        return buildSimpleFormField(FormFieldType.jsonInput, nameLabelAndDescription);
+        return buildSimpleFormField(
+            FormFieldType.jsonInput,
+            nameLabelAndDescription,
+            propertyTypeDefinition
+        );
     }
 
     if (complexDataType === ComplexCoscradDataType.union) {

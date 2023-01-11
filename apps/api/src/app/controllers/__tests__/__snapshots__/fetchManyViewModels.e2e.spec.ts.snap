@@ -1952,6 +1952,7 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [],
             "description": "choose positive",
             "label": "positive",
             "name": "positive",
@@ -1968,6 +1969,7 @@ Object {
             "type": "SWITCH",
           },
           Object {
+            "constraints": Array [],
             "description": "choose person",
             "label": "person",
             "name": "person",
@@ -2023,6 +2025,7 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [],
             "description": "choose person",
             "label": "person",
             "name": "person",
@@ -2113,6 +2116,7 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [],
             "description": "choose his",
             "label": "his",
             "name": "his",
@@ -2179,6 +2183,7 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [],
             "description": "choose positive",
             "label": "positive",
             "name": "positive",
@@ -2195,6 +2200,7 @@ Object {
             "type": "SWITCH",
           },
           Object {
+            "constraints": Array [],
             "description": "choose person",
             "label": "person",
             "name": "person",
@@ -2227,6 +2233,7 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [],
             "description": "choose person",
             "label": "person",
             "name": "person",
@@ -2294,6 +2301,7 @@ Object {
       "form": Object {
         "fields": Array [
           Object {
+            "constraints": Array [],
             "description": "choose his",
             "label": "his",
             "name": "his",

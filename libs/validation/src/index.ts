@@ -25,5 +25,4 @@ export {
 } from 'class-validator';
 export * from './lib/decorators';
 export * from './lib/interfaces';
-export * from './lib/validationFunctions';
 export { buildSimpleValidationFunction, DiscriminatedUnionValidator };

@@ -1,5 +1,5 @@
+import { isNumberWithinRange } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
-import isNumberWithinRange from '../../../../lib/validation/geometry/isNumberWithinRange';
 import InconsistentTimeRangeError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/timeRangeContext/InconsistentTimeRangeError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';

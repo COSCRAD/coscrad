@@ -1,4 +1,4 @@
-import isFiniteNumber from '../../../../../lib/utilities/isFiniteNumber';
+import { isFiniteNumber } from '@coscrad/validation-constraints';
 
 export type Position2D = [number, number];
 

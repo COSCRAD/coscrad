@@ -19,7 +19,8 @@
             "@coscrad/commands": ["libs/commands/src/index.ts"],
             "@coscrad/data-types": ["libs/data-types/src/index.ts"],
             "@coscrad/media-player": ["libs/media-player/src/index.ts"],
-            "@coscrad/validation": ["libs/validation/src/index.ts"]
+            "@coscrad/validation": ["libs/validation/src/index.ts"],
+            "@coscrad/validation-constraints": ["libs/validation-constraints/src/index.ts"]
         }
     },
     "exclude": ["node_modules", "tmp"]

@@ -4,6 +4,7 @@ import {
     INoteViewModel,
     ResourceCompositeIdentifier,
 } from '@coscrad/api-interfaces';
+import { isNull } from '@coscrad/validation-constraints';
 import { ILoadable } from '../../interfaces/loadable.interface';
 import { compositeIdentifierMatches } from './composite-identifiers-match';
 import { focusDualConnectionOnResource } from './focus-dual-connection-on-resource';
@@ -29,7 +30,7 @@ export const useLoadableConnectionsToResource = (
             data: null,
         };
 
-    if (isLoading || data === null)
+    if (isLoading || isNull(data))
         return {
             isLoading,
             errorInfo,

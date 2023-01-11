@@ -58,6 +58,10 @@ const convertVocabularyListVaraibleToFormElement = ({
     label: name, // do we need a separate label?
     description: `choose ${name}`,
     options: cloneToPlainObject(validValues),
+    /**
+     * Invalid input isn't possible for static select and switch components.
+     */
+    constraints: [],
 });
 
 export class VocabularyListViewModel extends BaseViewModel implements IVocabularyListViewModel {

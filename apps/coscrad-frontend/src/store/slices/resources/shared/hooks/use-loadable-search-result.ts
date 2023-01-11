@@ -1,4 +1,5 @@
 import { IBaseViewModel, IDetailQueryResult, IIndexQueryResult } from '@coscrad/api-interfaces';
+import { isNull } from '@coscrad/validation-constraints';
 import { ILoadable } from '../../../interfaces/loadable.interface';
 import { IMaybeLoadable, NOT_FOUND } from '../../../interfaces/maybe-loadable.interface';
 
@@ -10,7 +11,7 @@ export const useLoadableSearchResult = <T extends IBaseViewModel>(
 
     const { data: allItems, isLoading, errorInfo } = loadableTranscribedAudioItems;
 
-    if (isLoading || errorInfo !== null || allItems === null)
+    if (isLoading || !isNull(errorInfo) || isNull(allItems))
         return {
             isLoading,
             errorInfo,
