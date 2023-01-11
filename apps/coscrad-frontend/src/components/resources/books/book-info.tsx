@@ -2,7 +2,7 @@ import { IBookViewModel } from '@coscrad/api-interfaces';
 
 export const BookInfo = ({ title, subtitle, author, publicationDate }: IBookViewModel) => (
     <div>
-        <h1>{title}</h1>
+        <h4>{title}</h4>
         {subtitle && <h3>{subtitle}</h3>}
         <strong>by</strong> {author}
         <br />

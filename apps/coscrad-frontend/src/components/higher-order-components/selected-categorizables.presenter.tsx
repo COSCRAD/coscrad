@@ -25,7 +25,7 @@ export const SelectedCategorizablesPresenter = <T extends IBaseViewModel>({
     return (
         <div>
             {/* TODO Use a label here */}
-            <h2>{pluralLabelForCategorizableType}</h2>
+            <h3>{pluralLabelForCategorizableType}</h3>
             {viewModels.map((viewModel, index) => (
                 <div key={index}>
                     {viewModel === NOT_FOUND ? <NotFoundPresenter /> : <Presenter {...viewModel} />}
