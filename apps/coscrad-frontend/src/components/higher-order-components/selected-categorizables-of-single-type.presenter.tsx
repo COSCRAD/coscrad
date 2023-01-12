@@ -7,7 +7,7 @@ import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interfac
 import { NotFoundPresenter } from '../not-found';
 import { ICategorizableDetailPresenterFactory } from '../resources/factories/categorizable-detail-presenter-factory.interface';
 
-interface SelectedCategorizablesPresenterProps<T extends IBaseViewModel> {
+export interface SelectedCategorizablesPresenterProps<T extends IBaseViewModel = IBaseViewModel> {
     viewModels: (ICategorizableDetailQueryResult<T> | NOT_FOUND)[];
     presenterFactory: ICategorizableDetailPresenterFactory<ICategorizableDetailQueryResult<T>>;
     categorizableType: CategorizableType;
@@ -24,7 +24,6 @@ export const SelectedCategorizablesPresenter = <T extends IBaseViewModel>({
 
     return (
         <div>
-            {/* TODO Use a label here */}
             <h2>{pluralLabelForCategorizableType}</h2>
             {viewModels.map((viewModel, index) => (
                 <div key={index}>

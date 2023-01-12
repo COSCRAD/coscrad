@@ -1,37 +1,34 @@
-import { AggregateType, CategorizableType } from '@coscrad/api-interfaces';
+import { CategorizableType } from '@coscrad/api-interfaces';
 import { isNull } from '@coscrad/validation-constraints';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
-import { useLoadableTagById } from '../../store/slices/tagSlice/hooks/use-loadable-tag-by-id';
+import { useLoadableNoteById } from '../../store/slices/notes/hooks';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { displayLoadableSearchResult } from '../higher-order-components/display-loadable-search-result';
 import { SelectedCategorizablesOfMultipleTypesPresenter } from '../higher-order-components/selected-categorizables-of-multiple-types.presenter';
 import { useLoadableCategorizables } from '../higher-order-components/use-loadable-categorizables';
 import { thumbnailCategorizableDetailPresenterFactory } from '../resources/factories/thumbnail-categorizable-detail-presenter-factory';
-import { WithCommands } from '../resources/shared';
-import { TagDetailPresenter } from './tag-detail.presenter';
+import { NoteDetailFullViewPresenter } from './note-detail.full-view.presenter';
 
-export const TagDetailContainer = (): JSX.Element => {
+export const NoteDetailPageContainer = (): JSX.Element => {
     const id = useIdFromLocation();
 
-    const loadableTags = useLoadableTagById(id);
+    const loadableNote = useLoadableNoteById(id);
 
-    const { data } = loadableTags;
+    const { data } = loadableNote;
 
-    const compositeIdentifiers = data === NOT_FOUND || isNull(data) ? [] : data.members;
+    const compositeIdentifiers =
+        data === NOT_FOUND || isNull(data)
+            ? []
+            : data.connectedResources.map(({ compositeIdentifier }) => compositeIdentifier);
 
     const loadableCategorizables = useLoadableCategorizables(compositeIdentifiers);
 
-    const DetailPresenter = WithCommands(
-        TagDetailPresenter,
-        ({ actions }) => actions,
-        ({ id }) => ({ type: AggregateType.tag, id })
-    );
+    const NoteDetailPresenter = displayLoadableSearchResult(NoteDetailFullViewPresenter);
 
-    const TagAndCommandsPresenter = displayLoadableSearchResult(DetailPresenter);
-
+    // TODO We need a better way of chaining loadables
     return (
         <>
-            <TagAndCommandsPresenter {...loadableTags}></TagAndCommandsPresenter>
+            <NoteDetailPresenter {...loadableNote} />
             <SelectedCategorizablesOfMultipleTypesPresenter
                 viewModelSnapshot={loadableCategorizables}
                 presenterFactory={thumbnailCategorizableDetailPresenterFactory}

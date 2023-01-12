@@ -15,6 +15,8 @@ const wrapTree = ({
             <Accordion>
                 <AccordionSummary>{label}</AccordionSummary>
                 <AccordionDetails>
+                    {/* TODO Pass the state in as props */}
+                    {/* TODO Use `SelectedCategorizablesOfMultipleTypesPresenter` as in `Notes` and `Tags` flow */}
                     <CategorizablesOfMultipleTypeContainer
                         members={members}
                         detailPresenterFactory={thumbnailCategorizableDetailPresenterFactory}

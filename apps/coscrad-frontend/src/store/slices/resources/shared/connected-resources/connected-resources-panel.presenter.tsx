@@ -65,7 +65,12 @@ export const ConnectedResourcesPanelPresenter = ({
                  * Note that the connected resources panel uses the thumbnail presenters.
                  * If later we'd like to support mobile, we should inject the
                  * correct thumbnail detail presenter factory here based on a config context.
+                 *
+                 * TODO Pass the state in as props
+                 *
+                 * TODO Use `SelectedCategorizablesOfMultipleTypesPresenter` as in `Notes` and `Tags` flow
                  */
+
                 <SelectedCategorizablesOfSingleTypeContainer
                     key={resourceType}
                     categorizableType={resourceType}
