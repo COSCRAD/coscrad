@@ -66,11 +66,13 @@ export const CategorizablesOfManyTypesPanelPresenter = ({
      * Temporary logic for drawer
      */
 
-    const [mobileOpen, setMobileOpen] = useState(false);
+    const [connectedResourcesPanelState, setConnectedResourcesPanelState] = useState(false);
 
     const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
+        setConnectedResourcesPanelState(!connectedResourcesPanelState);
     };
+
+    const drawerWidth = '25%';
 
     return (
         <>
@@ -83,8 +85,12 @@ export const CategorizablesOfManyTypesPanelPresenter = ({
             <Drawer
                 variant="temporary"
                 anchor="right"
-                open={mobileOpen}
+                open={connectedResourcesPanelState}
                 onClose={handleDrawerToggle}
+                sx={{
+                    width: '20%',
+                    [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+                }}
             >
                 <div data-testid={'CategorizablesOfManyTypesPanel'}>
                     <Box sx={{ padding: 2 }}>

@@ -1,7 +1,7 @@
-import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
-import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { Box, IconButton } from '@mui/material';
 import { useEffect, useState } from 'react';
-import styles from './MediaPlayer.module.scss';
 
 export interface MediaPlayerProps {
     audioUrl: string;
@@ -36,23 +36,17 @@ export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
     }, []);
 
     return (
-        <div className={styles['container']}>
+        <Box>
             {audio && (
                 <>
-                    <PlayCircleFilledIcon
-                        className={styles['media-controls']}
-                        onClick={() => safePlay()}
-                    >
-                        Play
-                    </PlayCircleFilledIcon>
-                    <PauseCircleFilledIcon
-                        className={styles['media-controls']}
-                        onClick={() => audio.pause()}
-                    >
-                        Pause
-                    </PauseCircleFilledIcon>
+                    <IconButton aria-label="Play Button">
+                        <PlayArrowIcon onClick={() => safePlay()} fontSize="large" />
+                    </IconButton>
+                    <IconButton aria-label="Pause Button">
+                        <PauseIcon onClick={() => audio.pause()} fontSize="large" />
+                    </IconButton>
                 </>
             )}
-        </div>
+        </Box>
     );
 }

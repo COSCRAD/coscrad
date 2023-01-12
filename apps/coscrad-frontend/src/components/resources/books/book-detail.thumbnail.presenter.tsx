@@ -34,7 +34,7 @@ export const BookDetailThumbnailPresenter = ({
                             )}
                         </div>
                         <div>
-                            <strong>page count:</strong> {pages.length}
+                            <strong>pages count:</strong> {pages.length}
                         </div>
                     </CardContent>
                 </Card>
