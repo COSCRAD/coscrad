@@ -13,7 +13,7 @@ import {
     ViewModelIndexSnapshot,
 } from './use-loadable-categorizables';
 
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 
 interface SelectedCategorizablesOfMultipleTypesPresenterProps<
     T extends IBaseViewModel = IBaseViewModel
@@ -21,19 +21,18 @@ interface SelectedCategorizablesOfMultipleTypesPresenterProps<
     viewModelSnapshot: ViewModelDetailSnapshot;
     presenterFactory: ICategorizableDetailPresenterFactory<ICategorizableDetailQueryResult<T>>;
     getPluralLabelForCategorizableType: (categorizableType: CategorizableType) => string;
+    heading?: string;
 }
 
 export const SelectedCategorizablesOfMultipleTypesPresenter = <T extends IBaseViewModel>({
     viewModelSnapshot,
     presenterFactory,
     getPluralLabelForCategorizableType,
+    heading,
 }: SelectedCategorizablesOfMultipleTypesPresenterProps): JSX.Element => {
-    console.log({
-        viewModelSnapshot,
-    });
-
     return (
         <>
+            <h2>{isNonEmptyString(heading) ? heading : 'Connected Resources'}</h2>
             {Object.entries(viewModelSnapshot)
                 .map(
                     ([key, value]) =>

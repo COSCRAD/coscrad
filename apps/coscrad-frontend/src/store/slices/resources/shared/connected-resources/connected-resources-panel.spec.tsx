@@ -60,7 +60,9 @@ const connectedTerm = dummyTerms[1];
 const connectedBook = buildDummyBooks()[0];
 
 const connectedSpatialFeature = buildDummySpatialFeatures()[0];
-
+/**
+ * Be sure to update this test to work on the new approach.
+ */
 // Make sure that self connections do not come through
 const selfNoteForTerm: INoteViewModel = {
     connectionType: EdgeConnectionType.self,
