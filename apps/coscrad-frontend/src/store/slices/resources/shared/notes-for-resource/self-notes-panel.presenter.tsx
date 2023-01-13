@@ -23,7 +23,7 @@ export const SelfNotesPanelPresenter = ({
         setSelfNotesPanelState(!selfNotesPanelState);
     };
 
-    const drawerWidth = '25%';
+    const drawerWidth = '600px';
 
     return (
         // TODO remove magic string

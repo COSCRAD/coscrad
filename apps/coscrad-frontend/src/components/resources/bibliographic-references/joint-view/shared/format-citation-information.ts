@@ -3,7 +3,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 const formatDateInformation = (dateInformation: string): string =>
     isNullOrUndefined(dateInformation) ? '' : `(${dateInformation})`;
 
-export const formatCitationInfromation = (
+export const formatCitationInformation = (
     valuesToCommaSeparate: string[],
     dateInformation: string
 ): string =>

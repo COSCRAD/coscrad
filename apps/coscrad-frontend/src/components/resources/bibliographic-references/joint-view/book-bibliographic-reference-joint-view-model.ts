@@ -2,7 +2,7 @@ import {
     IBibliographicReferenceViewModel,
     IBookBibliographicReferenceData,
 } from '@coscrad/api-interfaces';
-import { formatCitationInfromation } from './shared';
+import { formatCitationInformation } from './shared';
 import { BibliographicReferenceJointViewModel } from './types';
 
 export const BookBibliographicReferenceJointViewModel = ({
@@ -12,7 +12,7 @@ export const BookBibliographicReferenceJointViewModel = ({
     type: 'Book',
     id,
     title,
-    citation: formatCitationInfromation(
+    citation: formatCitationInformation(
         [publisher, place, numberOfPages.toString(), isbn],
         year.toString()
     ),

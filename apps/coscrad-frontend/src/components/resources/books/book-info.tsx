@@ -1,10 +1,8 @@
 import { IBookViewModel, ResourceType } from '@coscrad/api-interfaces';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { IconButton } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
 import { FloatSpacerDiv, SinglePropertyPresenter } from '../../../utils/generic-components';
-import styles from './BookInfo.module.scss';
+import { ResourceNavLink } from '../shared/resource-nav-link';
+import styles from './book-info.module.scss';
 
 export const BookInfo = ({
     id,
@@ -27,14 +25,12 @@ export const BookInfo = ({
                 {publicationDate && (
                     <SinglePropertyPresenter display="Published" value={publicationDate} />
                 )}
-                <SinglePropertyPresenter display="Page Count" value={pages.length} />
+                <SinglePropertyPresenter display="Pages" value={pages.length} />
             </div>
             <div className={styles['nav-link']}>
-                <Link to={`/${routes.resources.ofType(ResourceType.book).detail(id)}`}>
-                    <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
-                        <ArrowForwardIosIcon color="primary" />
-                    </IconButton>
-                </Link>
+                <ResourceNavLink
+                    linkURL={`/${routes.resources.ofType(ResourceType.book).detail(id)}`}
+                />
             </div>
             <FloatSpacerDiv />
         </>

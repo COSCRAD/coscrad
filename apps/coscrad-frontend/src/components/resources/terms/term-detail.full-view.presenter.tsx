@@ -26,7 +26,7 @@ export const TermDetailFullViewPresenter = ({
             </div>
 
             <div id="media-player">
-                <MediaPlayer listenMessage="Play!" audioUrl={audioURL} />
+                <MediaPlayer audioUrl={audioURL} />
             </div>
         </Card>
     </div>

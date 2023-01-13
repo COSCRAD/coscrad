@@ -72,7 +72,7 @@ export const CategorizablesOfManyTypesPanelPresenter = ({
         setConnectedResourcesPanelState(!connectedResourcesPanelState);
     };
 
-    const drawerWidth = '25%';
+    const drawerWidth = '600px';
 
     return (
         <>

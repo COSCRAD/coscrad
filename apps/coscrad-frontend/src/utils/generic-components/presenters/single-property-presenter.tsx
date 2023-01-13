@@ -9,8 +9,9 @@ export const SinglePropertyPresenter = <T,>({
     value,
     display,
 }: IValueAndDisplay<T>): JSX.Element => (
-    <>
-        <strong>{display}</strong>: {value}
-        <br />
-    </>
+    <div>
+        <>
+            <strong>{display}</strong>: {value}
+        </>
+    </div>
 );

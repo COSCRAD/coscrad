@@ -22,7 +22,7 @@ export const SongDetailThumbnailPresenter = ({
 
             <div className="detail-meta">{buildLyricsStatusMessage(lyrics)}</div>
             <div id="media-player">
-                <MediaPlayer listenMessage="Play" audioUrl={audioURL} />
+                <MediaPlayer audioUrl={audioURL} />
             </div>
         </Card>
         {/* TODO handle audio playback for lists */}

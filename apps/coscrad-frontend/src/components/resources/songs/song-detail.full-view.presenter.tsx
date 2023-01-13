@@ -36,7 +36,7 @@ export const SongDetailFullViewPresenter = ({
                     {typeof lyrics === 'string' && <SongLyrics lyrics={lyrics} />}
                 </div>
                 <div id="media-player">
-                    <MediaPlayer listenMessage="Play" audioUrl={audioURL} />
+                    <MediaPlayer audioUrl={audioURL} />
                 </div>
                 <div className="detail-meta">
                     <CreditsHack resourceId={id} creditsMap={creditsMap} />

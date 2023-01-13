@@ -4,11 +4,10 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Card, CardContent, IconButton } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Card, CardContent } from '@mui/material';
 import { routes } from '../../../app/routes/routes';
 import { FloatSpacerDiv, SinglePropertyPresenter } from '../../../utils/generic-components';
+import { ResourceNavLink } from '../shared/resource-nav-link';
 import { convertMillisecondsToSeconds } from '../utils/math/';
 import styles from './transcribed-audio-detail.thumbnail.presenter.module.scss';
 
@@ -22,7 +21,7 @@ export const TranscribedAudioDetailThumbnailPresenter = ({
             <div className={styles['preview']}>
                 <MediaPlayer audioUrl={audioURL} />
             </div>
-            <div className={styles['meta']} title="View Connected Transcribed Audio">
+            <div className={styles['meta']}>
                 <SinglePropertyPresenter display="Transcribed Audio ID" value={id} />
                 <SinglePropertyPresenter
                     display="Duration"
@@ -30,11 +29,11 @@ export const TranscribedAudioDetailThumbnailPresenter = ({
                 />
             </div>
             <div className={styles['resource-nav-link']}>
-                <Link to={`/${routes.resources.ofType(ResourceType.transcribedAudio).detail(id)}`}>
-                    <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
-                        <ArrowForwardIosIcon />
-                    </IconButton>
-                </Link>
+                <ResourceNavLink
+                    linkURL={`/${routes.resources
+                        .ofType(ResourceType.transcribedAudio)
+                        .detail(id)}`}
+                />
             </div>
             <FloatSpacerDiv />
         </CardContent>
