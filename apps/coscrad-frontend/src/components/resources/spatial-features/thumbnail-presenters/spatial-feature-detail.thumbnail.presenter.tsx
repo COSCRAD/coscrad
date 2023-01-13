@@ -5,24 +5,19 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
+import { Card, CardContent } from '@mui/material';
 import {
-    Card,
-    CardActionArea,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Collapse,
-    Divider,
-} from '@mui/material';
+    FloatSpacerDiv,
+    SinglePropertyPresenter,
+} from 'apps/coscrad-frontend/src/utils/generic-components';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { routes } from '../../../../app/routes/routes';
 import { FunctionalComponent } from '../../../../utils/types/functional-component';
+import { ResourceNavLink } from '../../shared/resource-nav-link';
 import { LineTextPresenter } from './line-text-presenter';
 import { PointTextPresenter } from './point-text-presenter';
 import { PolygonTextPresenter } from './polygon-text-presenter';
-import { toGeoJSON } from './to-geo-json';
+import styles from './spatial-feature-detail.thumbnail.presenter.module.scss';
 
 interface HasCoordinates<T = unknown> {
     coordinates: T;
@@ -66,31 +61,24 @@ export const SpatialFeatureDetailThumbnailPresenter = (
     }
 
     return (
-        <Card data-testid={id}>
+        <Card>
             <CardContent>
-                <CardHeader title={name} />
-                <img height="100px" src={imageUrl} alt={`Spatial Feature ${id}`} />
-                <br />
-                {description}
-                <br />
-
-                <Divider />
-                <CoordinatesTextPresenter coordinates={coordinates} />
-                <Collapse in={isExpanded}>
-                    <h3>GEOJSON</h3>
-                    <pre>{JSON.stringify(toGeoJSON(spatialFeature), null, 2)}</pre>
-                </Collapse>
-                <Link to={`/${routes.resources.ofType(ResourceType.spatialFeature).detail(id)}`}>
-                    View Spatial Feature
-                </Link>
+                <div data-testid={id} className={styles['preview']}>
+                    <img src={imageUrl} alt={`For ${ResourceType.spatialFeature}/${id}`} />
+                </div>
+                <div className={styles['meta']}>
+                    <SinglePropertyPresenter display="Spatial Feature ID" value={id} />
+                    <SinglePropertyPresenter display="Name" value={name} />
+                </div>
+                <div className={styles['resource-nav-link']}>
+                    <ResourceNavLink
+                        linkURL={`/${routes.resources
+                            .ofType(ResourceType.spatialFeature)
+                            .detail(id)}`}
+                    />
+                </div>
+                <FloatSpacerDiv />
             </CardContent>
-            <CardActionArea>
-                <CardActions>
-                    <span aria-label="View Full JSON" onClick={(_) => setIsExpanded(!isExpanded)}>
-                        {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </span>
-                </CardActions>
-            </CardActionArea>
         </Card>
     );
 };

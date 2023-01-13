@@ -1,0 +1,21 @@
+.preview {
+    float: left !important;
+    position: relative !important;
+}
+
+.preview img {
+    width: 150px !important;
+    height: auto !important;
+    border-radius: 5px !important;
+}
+
+.meta {
+    float: left !important;
+    margin-left: 10px !important;
+    position: relative !important;
+}
+
+.map {
+    width: 600px;
+    margin-bottom: 20px;
+}

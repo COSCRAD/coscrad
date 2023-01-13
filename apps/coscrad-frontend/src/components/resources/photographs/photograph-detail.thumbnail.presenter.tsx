@@ -16,7 +16,7 @@ export const PhotographDetailThumbnailPresenter = ({
 }: ICategorizableDetailQueryResult<IPhotographViewModel>): JSX.Element => (
     <Card>
         <CardContent>
-            <div className={styles['preview']}>
+            <div data-testid={id} className={styles['preview']}>
                 <img src={imageURL} alt={`For ${ResourceType.photograph}/${id}`} />
             </div>
             <div className={styles['meta']}>

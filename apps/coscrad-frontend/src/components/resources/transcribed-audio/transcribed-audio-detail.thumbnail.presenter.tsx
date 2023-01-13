@@ -18,7 +18,7 @@ export const TranscribedAudioDetailThumbnailPresenter = ({
 }: ICategorizableDetailQueryResult<ITranscribedAudioViewModel>): JSX.Element => (
     <Card>
         <CardContent>
-            <div className={styles['preview']}>
+            <div data-testid={id} className={styles['preview']}>
                 <MediaPlayer audioUrl={audioURL} />
             </div>
             <div className={styles['meta']}>

@@ -5,13 +5,14 @@ import {
 } from '@coscrad/api-interfaces';
 import { GenericDetailPresenter } from '../../../utils/generic-components/presenters/generic-detail-presenter';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
+import { PolygonSpatialFeatureDetailFullViewPresenter } from './polygon-spatial-feature-detail.full-view.presenter';
 
 type Presenter = FunctionalComponent<ICategorizableDetailQueryResult<ISpatialFeatureViewModel>>;
 
 const lookupTable: { [K in GeometricFeatureType]: Presenter } = {
     [GeometricFeatureType.line]: GenericDetailPresenter,
     [GeometricFeatureType.point]: GenericDetailPresenter,
-    [GeometricFeatureType.polygon]: GenericDetailPresenter,
+    [GeometricFeatureType.polygon]: PolygonSpatialFeatureDetailFullViewPresenter,
 };
 
 export const buildSpatialFeatureDetailPresenter = (

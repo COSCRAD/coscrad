@@ -17,7 +17,7 @@ import { VocabularyListIndexPresenter } from '../vocabulary-lists/vocabulary-lis
 import {
     CategorizableIndexPresenter,
     CategorizableIndexPresenterFactory,
-} from './categorizable-index-presneter-factory.interface';
+} from './categorizable-index-presenter-factory.interface';
 import { thumbnailCategorizableDetailPresenterFactory } from './thumbnail-categorizable-detail-presenter-factory';
 
 /**
