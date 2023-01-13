@@ -23,6 +23,18 @@ interface Props {
 export const CategorizablesOfManyTypesPanelPresenter = ({
     data: categorizablesOfManyTypes,
 }: Props): JSX.Element => {
+    /**
+     * Temporary logic for drawer
+     */
+
+    const [connectedResourcesPanelState, setConnectedResourcesPanelState] = useState(false);
+
+    const handleDrawerToggle = () => {
+        setConnectedResourcesPanelState(!connectedResourcesPanelState);
+    };
+
+    const drawerWidth = '600px';
+
     if (categorizablesOfManyTypes.length === 0)
         return (
             <div data-testid={'categorizablesOfManyTypesPanel'}>
@@ -61,18 +73,6 @@ export const CategorizablesOfManyTypesPanelPresenter = ({
             acc.set(resourceType, [...acc.get(resourceType), id]),
         emptyMap
     );
-
-    /**
-     * Temporary logic for drawer
-     */
-
-    const [connectedResourcesPanelState, setConnectedResourcesPanelState] = useState(false);
-
-    const handleDrawerToggle = () => {
-        setConnectedResourcesPanelState(!connectedResourcesPanelState);
-    };
-
-    const drawerWidth = '600px';
 
     return (
         <>
