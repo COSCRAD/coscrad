@@ -23,7 +23,7 @@ interface DynamicSelectProps {
     currentValue: string;
 }
 
-const buildFormFieldFromEntities = <T extends IDetailQueryResult<IBaseViewModel>>(
+export const buildFormFieldForAggregates = <T extends IDetailQueryResult<IBaseViewModel>>(
     entities: T[],
     simpleFormField: SimpleFormField,
     stringSummarizer: AggregateStringSummarizer<T>
@@ -58,7 +58,7 @@ export const DynamicSelect = ({
         simpleFormField: SimpleFormField;
     }) => (
         <StaticSelect
-            formField={buildFormFieldFromEntities(entities, simpleFormField, stringSummarizer)}
+            formField={buildFormFieldForAggregates(entities, simpleFormField, stringSummarizer)}
             onNewSelection={onNewSelection}
             currentValue={currentValue}
         />

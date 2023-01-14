@@ -3,6 +3,7 @@ import {
     IBaseViewModel,
     IBibliographicReferenceViewModel,
     IMediaItemViewModel,
+    ITagViewModel,
 } from '@coscrad/api-interfaces';
 import { buildBibliographicReferenceJointViewModel } from '../bibliographic-references/joint-view';
 import { formatBilingualText } from '../vocabulary-lists/utils';
@@ -23,6 +24,8 @@ export const aggregateStringSummarizerFactory = (
     if (aggregateType === AggregateType.mediaItem)
         return ({ title, titleEnglish }: IMediaItemViewModel): string =>
             formatBilingualText(title, titleEnglish);
+
+    if (aggregateType === AggregateType.tag) return ({ label }: ITagViewModel): string => label;
 
     // TODO Support string summarizers for other aggregate types as needed
 

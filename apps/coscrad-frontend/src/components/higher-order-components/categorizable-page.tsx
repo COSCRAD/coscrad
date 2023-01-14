@@ -4,6 +4,7 @@ import { ConfigurableContentContext } from '../../configurable-front-matter/conf
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { NoteDetailContainer } from '../notes/note-detail.container';
 import { WithCommands, WithWebOfKnowledge } from '../resources/shared';
+import { TaggerContainer } from '../tags/tagger/tagger.container';
 import {
     AggregateDetailContainer,
     AggregateDetailContainerProps,
@@ -66,6 +67,12 @@ export const CategorizablePage = <T extends CategorizableType>({
             <EnhancedAggregateDetailContainer
                 compositeIdentifier={compositeIdentifier}
                 detailPresenterFactory={EnhancedDetailPresenterFactory}
+            />
+            <TaggerContainer
+                compositeIdentifier={{
+                    type: categorizableType,
+                    id,
+                }}
             />
         </div>
     );
