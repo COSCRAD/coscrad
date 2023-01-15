@@ -15,6 +15,9 @@ export const PolygonSpatialFeatureDetailFullViewPresenter = (
     const { type, coordinates } = geometry;
     const { name, description, imageUrl } = properties;
 
+    /**
+     * TODO: find centre of polygon rather than first point of first linear ring
+     */
     const firstLinearRing = [...(coordinates as MultiPolygon2D)].shift();
     const initialCentreCoordinates = firstLinearRing[0].map((line2D) => line2D) as Position2D;
 

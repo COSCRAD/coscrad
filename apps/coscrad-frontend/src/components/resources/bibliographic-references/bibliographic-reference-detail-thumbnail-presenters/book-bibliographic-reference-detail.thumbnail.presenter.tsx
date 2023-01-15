@@ -22,7 +22,7 @@ export const BookBibliographicReferenceDetailThumbnailPresenter = ({
             </div>
             <div className={styles['meta']}>
                 {title}
-                <SinglePropertyPresenter display="Transcribed Audio ID" value={id} />
+                <SinglePropertyPresenter display="Book Bibliographic Reference ID" value={id} />
 
                 {/* TODO We should have an `OptionalProperty` helper */}
                 {!isNullOrUndefined(numberOfPages) && (
