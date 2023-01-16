@@ -10,10 +10,16 @@ const initialState: IdGenerationSliceState = buildInitialLoadableState<string>()
 export const idGenerationSlice = createSlice({
     name: ID_GENERATION,
     initialState,
-    reducers: {},
+    reducers: {
+        idUsed: () => {
+            return buildInitialLoadableState<string>();
+        },
+    },
     extraReducers: (builder) => {
         buildReducersForThunk(builder, acquireId);
     },
 });
 
 export const idGenerationReducer = idGenerationSlice.reducer;
+
+export const { idUsed } = idGenerationSlice.actions;
