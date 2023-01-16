@@ -6,6 +6,8 @@ export interface SpatialFeatureDetailPresenter {
 }
 
 export interface CoscradMapProps {
+    mapDivWidth: string;
+    mapDivHeight: string;
     spatialFeatures: ISpatialFeatureViewModel[];
     initialCentre?: Position2D;
     initialZoom?: number;

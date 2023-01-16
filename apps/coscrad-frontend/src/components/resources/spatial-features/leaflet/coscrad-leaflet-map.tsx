@@ -1,11 +1,13 @@
 import { LatLngExpression, Map } from 'leaflet';
 import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
-import { INITIAL_CENTRE, INITIAL_ZOOM } from '../constants';
+import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_DIV_HEIGHT, MAP_DIV_WIDTH } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
 import { buildSpatialFeatureMarker } from './spatial-feature-marker';
 
 export const CoscradLeafletMap: ICoscradMap = ({
+    mapDivWidth,
+    mapDivHeight,
     spatialFeatures,
     initialCentre,
     initialZoom,
@@ -31,9 +33,13 @@ export const CoscradLeafletMap: ICoscradMap = ({
 
     const SpatialFeatureMarker = buildSpatialFeatureMarker(spatialFeatureDetailPresenter);
 
+    const mapWidth = mapDivWidth || MAP_DIV_WIDTH;
+
+    const mapHeight = mapDivHeight || MAP_DIV_HEIGHT;
+
     return (
         <MapContainer
-            style={{ height: '600px' }}
+            style={{ width: mapWidth, height: mapHeight }}
             center={initialMapCentreCoordinates || INITIAL_CENTRE}
             zoom={initialZoom || INITIAL_ZOOM}
             // Inject through API?
@@ -41,7 +47,6 @@ export const CoscradLeafletMap: ICoscradMap = ({
             ref={mapRef}
         >
             <TileLayer
-                attribution="&copy; ESRI and Contributors"
                 // Should this be part of the config?
                 url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             />

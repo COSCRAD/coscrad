@@ -1,14 +1,8 @@
-import {
-    CategorizableType,
-    IBookViewModel,
-    ICategorizableDetailQueryResult,
-} from '@coscrad/api-interfaces';
-import { Card, CardContent } from '@mui/material';
+import { CategorizableType } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailFullViewPresenter } from '../../notes/note-detail.full-view.presenter';
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
-import { BookInfo } from '../books/book-info';
-import { BookReader } from '../books/pages';
+import { BookDetailFullViewPresenter } from '../books';
 import { MediaItemDetailFullViewPresenter } from '../media-items/media-item-detail.full-view.presenter';
 import { PhotographDetailFullViewPresenter } from '../photographs/photograph-detail.full-view.presenter';
 import { SongDetailFullViewPresenter } from '../songs/song-detail.full-view.presenter';
@@ -33,24 +27,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
      * TODO Investigate why importing this from the component file leads to a
      * circular dependency.
      */
-    [CategorizableType.book]: (
-        book: ICategorizableDetailQueryResult<IBookViewModel>
-    ): JSX.Element => {
-        const { id, pages } = book;
-
-        return (
-            <div data-testid={id}>
-                <Card>
-                    <CardContent>
-                        {<BookInfo {...book} />}
-                        <div>
-                            <BookReader pages={pages} />
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        );
-    },
+    [CategorizableType.book]: BookDetailFullViewPresenter,
     [CategorizableType.note]: NoteDetailFullViewPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
 };

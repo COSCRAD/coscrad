@@ -1,0 +1,31 @@
+.book-container {
+    background-color: #fff;
+}
+
+.book-container:fullscreen {
+    padding: 30px;
+}
+
+.book-container:fullscreen .book-reader-container {
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.book-reader-container {
+    margin-top: 20px;
+    background-color: #fff;
+    width: 80%;
+}
+
+// .fullscreen-enabled .book-reader-container {
+//     background-color: red;
+// }
+
+.book-actions {
+    z-index: 9999999999;
+    top: 80px;
+    left: 15px;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+}
