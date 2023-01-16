@@ -11,6 +11,9 @@ import {
 } from '../../app/controllers/command/services/command-info-service';
 import { buildFormFieldForCommandPayloadProp } from './buildFormFieldForCommandPayloadProp';
 
+// TODO We should have a SST for `rawData` as a key on all CREATE_X payloads.
+const propertyKeysToOmitFromForms = [AGGREGATE_COMPOSITE_IDENTIFIER, 'rawData'];
+
 export const buildCommandForm = <T extends Record<string, unknown>>(
     schema: ICoscradModelSchema<T, CoscradDataType>,
     context: CommandContext
@@ -23,7 +26,7 @@ export const buildCommandForm = <T extends Record<string, unknown>>(
 
     const fields: IFormField[] = Object.entries(schema).reduce(
         (acc: IFormField[], [key, propertySchema]) =>
-            key === AGGREGATE_COMPOSITE_IDENTIFIER
+            propertyKeysToOmitFromForms.includes(key)
                 ? acc
                 : [
                       ...acc,
