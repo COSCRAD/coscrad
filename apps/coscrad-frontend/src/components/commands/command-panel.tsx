@@ -8,7 +8,7 @@ import { isNull } from '@coscrad/validation-constraints';
 import { useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { clearCommandStatus } from '../../store/slices/command-status';
-import { useLoadableGeneratedId } from '../../store/slices/id-generation';
+import { idUsed, useLoadableGeneratedId } from '../../store/slices/id-generation';
 import { useFormState } from '../dynamic-forms/form-state';
 import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
@@ -69,9 +69,10 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
                     ? { type: commandContext, id: generatedId }
                     : commandContext
             }
-            onAcknowledgeCommandResult={() => {
+            onAcknowledgeCommandResult={(didCommandSucceed: boolean) => {
                 setSelectedCommandType(null);
                 dispatch(clearCommandStatus());
+                if (didCommandSucceed) dispatch(idUsed());
             }}
         />
     );
