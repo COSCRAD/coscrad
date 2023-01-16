@@ -8,7 +8,7 @@ import { NackNotification } from './nack-notification';
 interface CommandWorkspaceProps {
     selectedCommand: ICommandFormAndLabels;
     onFieldUpdate: (propertyKey: string, value: unknown) => void;
-    onAcknowledgeCommandResult: () => void;
+    onAcknowledgeCommandResult: (didCommandSucceed: boolean) => void;
     formState: Record<string, unknown>;
     aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 }
@@ -22,9 +22,15 @@ export const CommandWorkspace = (props: CommandWorkspaceProps): JSX.Element => {
     if (isLoading) return <Loading />;
 
     if (errorInfo !== null)
-        return <NackNotification _onClick={onAcknowledgeCommandResult} errorInfo={errorInfo} />;
+        return (
+            <NackNotification
+                _onClick={() => onAcknowledgeCommandResult(false)}
+                errorInfo={errorInfo}
+            />
+        );
 
-    if (commandResult === Ack) return <AckNotification _onClick={onAcknowledgeCommandResult} />;
+    if (commandResult === Ack)
+        return <AckNotification _onClick={() => onAcknowledgeCommandResult(true)} />;
 
     return <CommandExecutionForm {...props} />;
 };
