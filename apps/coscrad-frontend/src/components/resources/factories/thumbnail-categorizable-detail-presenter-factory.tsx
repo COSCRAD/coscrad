@@ -1,17 +1,8 @@
-import {
-    CategorizableType,
-    IBookViewModel,
-    ICategorizableDetailQueryResult,
-    ResourceType,
-} from '@coscrad/api-interfaces';
-import { Card, CardContent } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { routes } from '../../../app/routes/routes';
+import { CategorizableType } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailThumbnailPresenter } from '../../notes/note-detail.thumbnail.presenter';
 import { BibliographicReferenceDetailThumbnailPresenter } from '../bibliographic-references/bibliographic-reference-detail-thumbnail-presenters';
 import { BookDetailThumbnailPresenter } from '../books';
-import { BookInfo } from '../books/book-info';
 import { MediaItemDetailThumbnailPresenter } from '../media-items/media-item-detail.thumbnail.presenter';
 import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-detail.thumbnail.presenter';
 import { SongDetailThumbnailPresenter } from '../songs';
@@ -36,27 +27,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
      * TODO Investigate why importing this from the component file leads to a
      * circular dependency.
      */
-    [CategorizableType.book]: (
-        book: ICategorizableDetailQueryResult<IBookViewModel>
-    ): JSX.Element => {
-        const { id, pages } = book;
-
-        return (
-            // TODO We may want to automate the link wrapping because it's easy to forget
-            <Link to={`/${routes.resources.ofType(ResourceType.book).detail(id)}`}>
-                <div data-testid={id}>
-                    <Card>
-                        <CardContent>
-                            {<BookInfo {...book} />}
-                            <div>
-                                <strong>page count:</strong> {pages.length}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-            </Link>
-        );
-    },
+    [CategorizableType.book]: BookDetailThumbnailPresenter,
     [CategorizableType.note]: NoteDetailThumbnailPresenter,
 };
 

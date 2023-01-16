@@ -29,9 +29,6 @@ export const BookDetailThumbnailPresenter = ({
                         </div>
                     )}
                 </div>
-                <div>
-                    <strong>page count:</strong> {pages.length}
-                </div>
             </div>
         </Link>
     );
