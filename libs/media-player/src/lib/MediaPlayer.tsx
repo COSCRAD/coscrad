@@ -1,6 +1,8 @@
-import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
-import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import { useEffect, useState } from 'react';
+import {
+    PauseButton,
+    PlayButton,
+} from '../../../../apps/coscrad-frontend/src/styled-components/buttons';
 import styles from './MediaPlayer.module.scss';
 
 export interface MediaPlayerProps {
@@ -39,18 +41,10 @@ export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
         <div className={styles['container']}>
             {audio && (
                 <>
-                    <PlayCircleFilledIcon
-                        className={styles['media-controls']}
-                        onClick={() => safePlay()}
-                    >
-                        Play
-                    </PlayCircleFilledIcon>
-                    <PauseCircleFilledIcon
-                        className={styles['media-controls']}
-                        onClick={() => audio.pause()}
-                    >
+                    <PlayButton onClick={() => safePlay()} />
+                    <PauseButton className={styles['media-controls']} onClick={() => audio.pause()}>
                         Pause
-                    </PauseCircleFilledIcon>
+                    </PauseButton>
                 </>
             )}
         </div>

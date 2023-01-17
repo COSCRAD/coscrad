@@ -5,6 +5,8 @@
  * .container {
  * }
 */
+
+
 #radioButton {
     background: rgb(255, 255, 255);
     height: 50px;
@@ -14,7 +16,7 @@
 }
 
 #radioButton:hover {
-    background: rgb(212, 212, 212);
+    background: rgb(171, 115, 115);
 }
 
 .actionButton {
@@ -24,5 +26,7 @@
 
 .media-controls {
     font-size: 68px !important;
+    margin-bottom: -60px;
+
 }
 

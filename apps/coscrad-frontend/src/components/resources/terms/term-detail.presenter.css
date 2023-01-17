@@ -31,7 +31,7 @@
 }
 
 #media-player {
-    margin: auto !important;
+    margin: 0 auto !important;
     display: inline-block !important;
 }
 

@@ -1,6 +1,7 @@
 import { IFormField, IValueAndDisplay } from '@coscrad/api-interfaces';
-import { MenuItem, Select } from '@mui/material';
+import { InputLabel, MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
+import { FormControlStyled } from '../../../styled-components/select';
 
 const NO_SELECTION_PLACEHOLDER = '-SELECT-';
 
@@ -18,29 +19,32 @@ export const VocabularyListSelect = ({
     const menuItems = options as IValueAndDisplay<string>[];
 
     return (
-        <div>
-            {label}
-            <Select
-                value={currentValue || ''}
-                label={label}
-                name={name}
-                onChange={(changeEvent) => {
-                    onNewSelection(changeEvent.target.name, changeEvent.target.value);
-                    setCurrentValue(changeEvent.target.value);
-                }}
-            >
-                {[
-                    <MenuItem value={null} key={'0'}>
-                        {NO_SELECTION_PLACEHOLDER}
-                    </MenuItem>,
-                ].concat(
-                    ...menuItems.map(({ display: label, value }) => (
-                        <MenuItem key={`${label}-${value}`} value={value}>
-                            {label}
-                        </MenuItem>
-                    ))
-                )}
-            </Select>
+        <div style={{ display: 'inline-block' }}>
+            <FormControlStyled variant="filled" size={'small'}>
+                <InputLabel id="demo-select-small">{label}</InputLabel>
+                <Select
+                    size="small"
+                    value={currentValue || ''}
+                    label={label}
+                    name={name}
+                    onChange={(changeEvent) => {
+                        onNewSelection(changeEvent.target.name, changeEvent.target.value);
+                        setCurrentValue(changeEvent.target.value);
+                    }}
+                >
+                    {[
+                        <MenuItem value={null} key={'0'}>
+                            {NO_SELECTION_PLACEHOLDER}
+                        </MenuItem>,
+                    ].concat(
+                        ...menuItems.map(({ display: label, value }) => (
+                            <MenuItem key={`${label}-${value}`} value={value}>
+                                {label}
+                            </MenuItem>
+                        ))
+                    )}
+                </Select>
+            </FormControlStyled>
         </div>
     );
 };

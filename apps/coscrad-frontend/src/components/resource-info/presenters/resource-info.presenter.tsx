@@ -1,7 +1,8 @@
 import { IAggregateInfo, ResourceType } from '@coscrad/api-interfaces';
-import { Card, CardActionArea, CardActions, CardContent, CardHeader } from '@mui/material';
+import { CardActionArea, CardActions, CardContent, CardHeader } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
+import { PrimaryCard } from '../../../styled-components';
 import './resource-info.presenter.css';
 
 export const ResourceInfoPresenter = ({
@@ -14,7 +15,7 @@ export const ResourceInfoPresenter = ({
  */
 IAggregateInfo<ResourceType>): JSX.Element => (
     <Link to={`/${routes.resources.ofType(resourceType).index}`}>
-        <Card>
+        <PrimaryCard>
             {/* TODO Handle pluralization properly as soon as we have a Resource Type whose plural form is irregular */}
             <CardHeader title={`${label}s`} />
             <CardContent>
@@ -25,7 +26,7 @@ IAggregateInfo<ResourceType>): JSX.Element => (
             <CardActionArea>
                 <CardActions></CardActions>
             </CardActionArea>
-        </Card>
+        </PrimaryCard>
         <br />
     </Link>
 );

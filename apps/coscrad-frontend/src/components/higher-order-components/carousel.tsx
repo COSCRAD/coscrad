@@ -1,7 +1,9 @@
-import { Button, Card, CardActions, CardContent } from '@mui/material';
+import { CardActions, CardContent } from '@mui/material';
 import { useState } from 'react';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 
+import { VocabularyListWrapper } from '../../styled-components';
+import { SkipBackButton, SkipForwardButton } from '../../styled-components/buttons';
 import { cyclicDecrement, cyclicIncrement } from '../../utils/math';
 import { NotFoundPresenter } from '../not-found';
 
@@ -30,25 +32,18 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
     const propsForSelectedItem = propsForItems[indexToUse];
 
     return (
-        <Card>
+        <VocabularyListWrapper>
             <CardContent>
                 <Presenter {...propsForSelectedItem} />
             </CardContent>
-            <CardActions>
-                <Button
-                    disableRipple={true}
+            <CardActions sx={{ margin: '0 auto', display: 'table' }}>
+                <SkipBackButton
                     onClick={(_) => setIndex(cyclicDecrement(indexToUse, numberOfItems))}
-                >
-                    {' '}
-                    Back
-                </Button>
-                <Button
-                    disableRipple={true}
+                ></SkipBackButton>
+                <SkipForwardButton
                     onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}
-                >
-                    Next{' '}
-                </Button>
+                ></SkipForwardButton>
             </CardActions>
-        </Card>
+        </VocabularyListWrapper>
     );
 };

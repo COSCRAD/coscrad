@@ -1,9 +1,11 @@
 import { IBaseViewModel } from '@coscrad/api-interfaces';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { FormControl, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
+import { MenuItem, Select, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { NotFoundPresenter } from '../../../../../components/not-found';
+import { SearchInput } from '../../../../../styled-components/input';
+import { TableFooter, TableSelect, TableStyled } from '../../../../../styled-components/table';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import './generic-index-table-presenter.css';
@@ -52,9 +54,11 @@ export const IndexTable = <T extends IBaseViewModel>({
     heading,
     filterableProperties,
 }: GenericIndexTablePresenterProps<T>) => {
-    if (headingLabels.length === 0) {
+    if (headingLabels.length === 0 || typeof tableData === 'undefined') {
         throw new EmptyIndexTableException();
     }
+
+    console.log({ tableData: JSON.stringify(tableData) });
 
     const [searchValue, setSearchValue] = useState('');
 
@@ -67,6 +71,10 @@ export const IndexTable = <T extends IBaseViewModel>({
                       String(row[propertyKey]).toLowerCase().includes(searchValue.toLowerCase())
                   )
               );
+
+    if (typeof filteredTableData === 'undefined') {
+        throw new Error('table filtering failed');
+    }
 
     // PAGINATION
     // we index pages starting at 0
@@ -114,35 +122,38 @@ export const IndexTable = <T extends IBaseViewModel>({
         paginatedData.length === 0 ? (
             <NotFoundPresenter />
         ) : (
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            {headingLabels.map(({ headingLabel }) => (
-                                <th key={headingLabel}>{headingLabel}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {paginatedData.map((row) => (
-                            <tr key={row.id} data-testid={row.id}>
-                                {headingLabels.map(({ propertyKey }) => (
-                                    // A little inversion of control here
-                                    // We may want to use some currying here
-                                    <td key={String(propertyKey)}>
-                                        {renderCell(row, cellRenderers, propertyKey)}
-                                    </td>
+            <TableStyled>
+                <div className="wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                {headingLabels.map(({ headingLabel }) => (
+                                    <th key={headingLabel}>{headingLabel}</th>
                                 ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+
+                        <tbody>
+                            {paginatedData.map((row) => (
+                                <tr key={row.id} data-testid={row.id}>
+                                    {headingLabels.map(({ propertyKey }) => (
+                                        // A little inversion of control here
+                                        // We may want to use some currying here
+                                        <td key={String(propertyKey)}>
+                                            {renderCell(row, cellRenderers, propertyKey)}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
                 <Typography component={'span'}>
-                    <Paper className="index-footer">
+                    <TableFooter className="index-footer">
                         <span> </span> Rows per page:
-                        <FormControl sx={{ m: 1, width: 60 }} size="small">
+                        <TableSelect sx={{ m: 1, width: 60 }} size="small">
                             <Select
-                                sx={{ notchedOutline: 'none' }}
                                 className="pagination-control"
                                 name="pageSize"
                                 value={pageSize}
@@ -163,7 +174,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                                     </MenuItem>
                                 ))}
                             </Select>
-                        </FormControl>
+                        </TableSelect>
                         Page: {currentPageIndex + 1}/{lastPageIndex + 1}
                         <ArrowBackIosIcon
                             id="pagination-back-arrow"
@@ -188,16 +199,17 @@ export const IndexTable = <T extends IBaseViewModel>({
                         >
                             Next
                         </ArrowForwardIosIcon>
-                    </Paper>
+                    </TableFooter>
                 </Typography>
-            </div>
+            </TableStyled>
         );
 
     return (
         <div>
             <h3>{heading}</h3>
-            <TextField
-                style={{ padding: '0 0 5px 0' }}
+            <SearchInput
+                className="search-input"
+                variant="outlined"
                 size="small"
                 placeholder="Search ..."
                 value={searchValue}
