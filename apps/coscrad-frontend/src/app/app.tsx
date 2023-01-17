@@ -5,7 +5,6 @@ import { Footer } from '../components/footer/footer';
 import { Header } from '../components/header/header';
 import { Home } from '../components/home/home';
 import MembersOnly from '../components/members-only/members-only';
-import { ResourceInfoContainer } from '../components/resource-info/resource-info.container';
 import { TagDetailContainer } from '../components/tags/tag-detail.container';
 import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
@@ -44,11 +43,6 @@ export function App() {
                 <Routes key="routes">
                     <Route key="home" path={routes.home} element={<Home />} />
                     <Route key="about" path={routes.about} element={<About />} />
-                    <Route
-                        key="resource-info"
-                        path={routes.resources.info}
-                        element={<ResourceInfoContainer />}
-                    />
                     <Route
                         key="tag-index"
                         path={routes.tags.index}
