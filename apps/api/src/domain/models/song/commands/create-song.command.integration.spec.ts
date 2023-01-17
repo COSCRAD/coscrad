@@ -24,6 +24,7 @@ import { assertEventRecordPersisted } from '../../__tests__/command-helpers/asse
 import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
+import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
 import { Song } from '../song.entity';
 import { CreateSong } from './create-song.command';
 
@@ -130,7 +131,7 @@ describe('CreateSong', () => {
                         await assertCommandFailsDueToTypeError(
                             assertionHelperDependencies,
                             { propertyName, invalidValue },
-                            buildValidCommandFSA('unused-id')
+                            buildValidCommandFSA(dummyUuid)
                         );
                     });
                 });

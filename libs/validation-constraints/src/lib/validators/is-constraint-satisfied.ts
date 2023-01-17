@@ -19,7 +19,7 @@ import { PredicateFunction } from '../types';
 const constraintsLookupTable: { [K in CoscradConstraint]: PredicateFunction } = {
     [CoscradConstraint.isNonEmptyString]: isNonEmptyString,
     [CoscradConstraint.isBoolean]: isBoolean,
-    [CoscradConstraint.isDefined]: (input: unknown) => !isNullOrUndefined(input),
+    [CoscradConstraint.isRequired]: (input: unknown) => !isNullOrUndefined(input),
     [CoscradConstraint.isInteger]: isInteger,
     [CoscradConstraint.isObject]: isObject,
     [CoscradConstraint.isYear]: isYear,
@@ -29,6 +29,12 @@ const constraintsLookupTable: { [K in CoscradConstraint]: PredicateFunction } = 
     [CoscradConstraint.isFiniteNumber]: isFiniteNumber,
     [CoscradConstraint.isPositive]: isPositiveInteger,
     [CoscradConstraint.isURL]: isURL,
+    [CoscradConstraint.isCompositeIdentifier]: (input: unknown) => {
+        const { type, id } = input as { type: string; id: string };
+
+        // TODO Make the id a `UUID`
+        return [type, id].every(isNonEmptyString);
+    },
 };
 
 export const isConstraintSatisfied = (

@@ -16,6 +16,10 @@ class SongCompositeId {
      * `aggregateCompositeIdentifier`.
      */
     @Equals(AggregateType.song)
+    @NonEmptyString({
+        label: 'type',
+        description: 'song',
+    })
     type = AggregateType.song;
 
     @UUID({

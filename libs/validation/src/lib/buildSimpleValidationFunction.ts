@@ -1,5 +1,8 @@
 import { plainToInstance } from 'class-transformer';
-import { validateSync } from 'class-validator';
+/* eslint-disable-next-line */
+import { getCoscradDataSchema } from '@coscrad/data-types';
+/* eslint-disable-next-line */
+import { validateCoscradModelInstance } from '@coscrad/validation-constraints';
 import { SimpleValidationFunction } from './interfaces/SimpleValidationFunction';
 
 interface Ctor<T> {
@@ -20,24 +23,9 @@ export default (
             enableImplicitConversion: false,
         });
 
-        const additionalOptions = forbidUnknownValues
-            ? {
-                  forbidUnknownValues,
-                  /**
-                   * TODO [https://www.pivotaltracker.com/story/show/182840162]
-                   * Alias the following props in favor of more inclusive identifiers.
-                   */
-                  forbidNonWhitelisted: true,
-                  whitelist: true,
-              }
-            : {};
-
-        return validateSync(instanceToValidate, {
-            validationError: {
-                target: true,
-                value: true,
-            },
-            skipMissingProperties: false,
-            ...additionalOptions,
-        });
+        return validateCoscradModelInstance(
+            getCoscradDataSchema(ModelCtor),
+            instanceToValidate,
+            forbidUnknownValues
+        );
     };

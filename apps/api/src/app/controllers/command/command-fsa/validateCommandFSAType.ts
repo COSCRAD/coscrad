@@ -15,9 +15,9 @@ export default (input: unknown): ResultOrError<Valid> => {
             new InternalError(`Encountered a null or undefined Flux Standard Action`),
         ]);
 
-    const allErrors: InternalError[] = buildSimpleValidationFunction(CommandFSA)(input).map(
-        (simpleError) => new InternalError(simpleError.toString())
-    );
+    const allErrors: InternalError[] = buildSimpleValidationFunction(CommandFSA, {
+        forbidUnknownValues: true,
+    })(input).map((simpleError) => new InternalError(simpleError.toString()));
 
     if (allErrors.length > 0) return buildTopLevelError(allErrors);
 

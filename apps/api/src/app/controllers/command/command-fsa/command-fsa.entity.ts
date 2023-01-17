@@ -1,13 +1,15 @@
 import { FluxStandardAction, ICommand } from '@coscrad/commands';
-import { IsNonEmptyObject, IsStringWithNonzeroLength } from '@coscrad/validation';
+import { NonEmptyString } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CommandFSA implements FluxStandardAction {
     @ApiProperty()
-    @IsStringWithNonzeroLength()
+    @NonEmptyString({
+        label: 'type',
+        description: 'type of command to execute',
+    })
     readonly type: string;
 
     @ApiProperty()
-    @IsNonEmptyObject()
     readonly payload: ICommand;
 }
