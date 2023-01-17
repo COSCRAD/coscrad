@@ -345,6 +345,62 @@ Object {
 }
 `;
 
+exports[`command payload schemas The schema for command CREATE_SONG should have the expected value 1`] = `
+Object {
+  "aggregateCompositeIdentifier": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "system-wide unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "Composite Identifier",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
+  },
+  "audioURL": Object {
+    "coscradDataType": "URL",
+    "description": "a web URL link to the audio for this song",
+    "isArray": false,
+    "isOptional": false,
+    "label": "audio link",
+  },
+  "lyrics": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "plain text representation of this song's lyrics",
+    "isArray": false,
+    "isOptional": true,
+    "label": "lyrics",
+  },
+  "rawData": Object {
+    "coscradDataType": "RAW_DATA",
+    "description": "additional data from a legacy \\\\ third-party system source of the data",
+    "isArray": false,
+    "isOptional": true,
+    "label": "raw data",
+  },
+  "title": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "song's title in the language",
+    "isArray": false,
+    "isOptional": true,
+    "label": "title",
+  },
+  "titleEnglish": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "song's title in the colonial language",
+    "isArray": false,
+    "isOptional": true,
+    "label": "title (colonial language)",
+  },
+}
+`;
+
 exports[`command payload schemas The schema for command CREATE_USER_GROUP should have the expected value 1`] = `
 Object {
   "aggregateCompositeIdentifier": Object {
