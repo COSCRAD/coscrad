@@ -15,10 +15,6 @@ export type NavItemInfo = {
 export const NavBar = (): JSX.Element => {
     const { indexToDetailFlows } = useContext(ConfigurableContentContext);
 
-    const shouldIncludeNotes = indexToDetailFlows.some(
-        ({ categorizableType }) => categorizableType === CategorizableType.note
-    );
-
     // note this may be [] if we haven't included `notes`
     const dynamicLinks = indexToDetailFlows
         .filter(({ categorizableType }) => categorizableType === CategorizableType.note)

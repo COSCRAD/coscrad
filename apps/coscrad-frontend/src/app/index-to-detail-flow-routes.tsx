@@ -1,5 +1,4 @@
 import { isResourceType, ResourceType } from '@coscrad/api-interfaces';
-import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Fragment, useContext } from 'react';
 import { Route } from 'react-router-dom';
 import { FilteredCategorizableIndexContainer } from '../components/higher-order-components';
@@ -20,18 +19,13 @@ export const IndexToDetailFlowRoutes = () => {
         .reduce(
             (acc, { categorizableType: resourceType, label }) => ({
                 ...acc,
-                [resourceType]: label,
+                [resourceType]: label || `${resourceType}s`,
             }),
             {}
         );
 
-    console.log({ resourceTypesAndLabels });
-
     const resourceTypesAndRoutes = indexToDetailFlows
-        .filter(
-            ({ categorizableType, route }) =>
-                !isNullOrUndefined(route) && isResourceType(categorizableType)
-        )
+        .filter(({ categorizableType }) => isResourceType(categorizableType))
         .reduce(
             (acc, { categorizableType: resourceType, route }) => ({
                 ...acc,
@@ -55,11 +49,7 @@ export const IndexToDetailFlowRoutes = () => {
     );
 
     const IndexToDetailFlows = indexToDetailFlows.map(
-        ({ categorizableType, detailViewType, indexFilter, route }) => {
-            const routeBuilder = isResourceType(categorizableType)
-                ? routes.resources.ofType(categorizableType)
-                : routes.notes;
-
+        ({ categorizableType, detailViewType, indexFilter, label }) => {
             /**
              * TODO Use a switch, lookup table, or OOP & polymorphism as soon as
              * you have a third view type.
@@ -71,13 +61,14 @@ export const IndexToDetailFlowRoutes = () => {
                     ? thumbnailCategorizableDetailPresenterFactory
                     : fullViewCategorizablePresenterFactory;
 
-            const indexRoute = isNonEmptyString(route)
-                ? `/resources/${route}/`
-                : routeBuilder.index;
+            const indexRoute = resourceTypesAndRoutes[categorizableType];
 
-            const detailRoute = isNonEmptyString(route)
-                ? `resources/${route}/:id`
-                : routeBuilder.detail();
+            const detailRoute = `${resourceTypesAndRoutes[categorizableType]}/:id`;
+
+            console.log({
+                indexRoute,
+                detailRoute,
+            });
 
             return (
                 <Fragment key="categorizable-index-to-detail-flows">
@@ -95,7 +86,7 @@ export const IndexToDetailFlowRoutes = () => {
                         }
                     />
                     <Route
-                        key={`${categorizableType}-detail`}
+                        key={`${categorizableType}-${label}-detail`}
                         path={detailRoute}
                         element={
                             <CategorizablePage

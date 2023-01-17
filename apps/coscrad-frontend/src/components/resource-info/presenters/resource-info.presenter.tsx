@@ -12,10 +12,10 @@ export const ResourceInfoPresenter = ({
  * We should expose the Schema as part of our own API docs somehow.
  */
 IAggregateInfo<ResourceType> & { route: string }): JSX.Element => (
-    <Link to={route}>
+    <Link to={`/${route}`}>
         <Card>
             {/* TODO Handle pluralization properly as soon as we have a Resource Type whose plural form is irregular */}
-            <CardHeader title={`${label}s`} />
+            <CardHeader title={label} />
             <CardContent>
                 <div className="resource-meta" data-testid={label}>
                     {description}

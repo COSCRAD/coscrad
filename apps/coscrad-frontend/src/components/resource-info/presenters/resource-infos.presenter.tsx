@@ -28,7 +28,7 @@ export const ResourceInfosPresenter: FunctionalComponent<ResourceInfosPresenterP
                         key={info.type}
                         label={resourceTypesAndLabels[info.type]}
                         route={resourceTypesAndRoutes[info.type]}
-                    ></ResourceInfoPresenter>
+                    />
                 ))}
         </Stack>
     </div>
