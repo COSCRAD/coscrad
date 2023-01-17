@@ -49,4 +49,6 @@ type IndexToDetailFlowDefinition<T extends CategorizableType> = {
         viewModel: ICategorizableDetailQueryResult<AggregateTypeToViewModel[T]>
     ) => boolean;
     detailViewType: DetailViewType;
+    label?: string; // custom override for resource label
+    route?: string; // custom route `/resources/${route}`
 };
