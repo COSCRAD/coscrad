@@ -1,4 +1,5 @@
-import { FluxStandardAction, ICommand } from '@coscrad/commands';
+import { ICommandBase } from '@coscrad/api-interfaces';
+import { FluxStandardAction } from '@coscrad/commands';
 import { NonEmptyString } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -11,5 +12,5 @@ export class CommandFSA<T extends ICommandBase = ICommandBase> implements FluxSt
     readonly type: string;
 
     @ApiProperty()
-    readonly payload: ICommand;
+    readonly payload: T;
 }

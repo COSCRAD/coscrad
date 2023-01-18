@@ -4,13 +4,26 @@ import {
     ICommandBase,
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, UUID } from '@coscrad/data-types';
-import { IsEnum } from '@coscrad/validation';
+import { ExternalEnum, NestedDataType, UUID } from '@coscrad/data-types';
+import formatAggregateType from '../../../../../view-models/presentation/formatAggregateType';
 import { AggregateId } from '../../../../types/AggregateId';
 import { TagCompositeIdentifier } from '../tag-composite-identifier';
 
 class CategorizableCompositeIdentifier {
-    @IsEnum(CategorizableType)
+    @ExternalEnum(
+        {
+            enumName: 'Categorizable Type',
+            enumLabel: 'type',
+            labelsAndValues: Object.values(CategorizableType).map((categorizableType) => ({
+                label: formatAggregateType(categorizableType),
+                value: categorizableType,
+            })),
+        },
+        {
+            label: 'type',
+            description: 'Either "note" or the resource type',
+        }
+    )
     type: CategorizableType;
 
     @UUID({

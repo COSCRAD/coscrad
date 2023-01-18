@@ -73,22 +73,6 @@ Object {
       ],
       "type": "STATIC_SELECT",
     },
-    Object {
-      "constraints": Array [
-        Object {
-          "message": "must be a object",
-          "name": "object",
-        },
-        Object {
-          "message": "must be a defined value",
-          "name": "defined value",
-        },
-      ],
-      "description": "raw data from a third-party system for posterity",
-      "label": "raw data",
-      "name": "rawData",
-      "type": "JSON_INPUT",
-    },
   ],
   "prepopulatedFields": Object {},
 }
