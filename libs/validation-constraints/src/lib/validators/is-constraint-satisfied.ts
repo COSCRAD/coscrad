@@ -8,6 +8,7 @@ import {
     isNullOrUndefined,
     isObject,
     isPositiveInteger,
+    isString,
     isURL,
     isUUID,
     isYear,
@@ -23,12 +24,15 @@ const constraintsLookupTable: { [K in CoscradConstraint]: PredicateFunction } = 
     [CoscradConstraint.isInteger]: isInteger,
     [CoscradConstraint.isObject]: isObject,
     [CoscradConstraint.isYear]: isYear,
-    [CoscradConstraint.isUUID]: isUUID,
-    [CoscradConstraint.isISBN]: isISBN,
+    [CoscradConstraint.isUUID]: (input: unknown): input is string =>
+        isString(input) && isUUID(input),
+    [CoscradConstraint.isISBN]: (input: unknown): input is string =>
+        isString(input) && isISBN(input),
     [CoscradConstraint.isNonNegative]: isNonNegativeNumber,
     [CoscradConstraint.isFiniteNumber]: isFiniteNumber,
     [CoscradConstraint.isPositive]: isPositiveInteger,
     [CoscradConstraint.isURL]: isURL,
+    [CoscradConstraint.isString]: isString,
     [CoscradConstraint.isCompositeIdentifier]: (input: unknown) => {
         const { type, id } = input as { type: string; id: string };
 

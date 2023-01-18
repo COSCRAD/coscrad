@@ -880,7 +880,7 @@ Object {
     "complexDataType": "NESTED_TYPE",
     "description": "all terms in this vocabulary list with corresponding filter properties",
     "isArray": true,
-    "isOptional": false,
+    "isOptional": true,
     "label": "entries",
     "schema": Object {
       "termId": Object {
@@ -917,7 +917,7 @@ Object {
     "complexDataType": "NESTED_TYPE",
     "description": "defines a dynamic form that can be used to filter the entries",
     "isArray": true,
-    "isOptional": false,
+    "isOptional": true,
     "label": "filters",
     "schema": Object {
       "name": Object {

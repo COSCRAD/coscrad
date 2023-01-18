@@ -10,7 +10,8 @@ export default {
     testEnvironment: 'node',
     testMatch: ['<rootDir>/**/*.spec.ts', '<rootDir>/**/*.test.ts'],
     transform: {
-        '^.+\\.[tj]s$': 'ts-jest',
+        '^.+\\.(ts|tsx)$': 'ts-jest',
+        '^.+\\.(js|jsx)$': 'babel-jest',
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
     coverageDirectory: '../../coverage/apps/api',

@@ -1,6 +1,5 @@
 import { IJournalArticleBibliographicReferenceData } from '@coscrad/api-interfaces';
 import { DiscriminatedBy, NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
-import { IsNonEmptyArray } from '@coscrad/validation';
 import { DTO } from '../../../../../types/DTO';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
@@ -22,13 +21,10 @@ export default class JournalArticleBibliographicReferenceData
     })
     readonly title: string;
 
-    /**
-     * TODO [https://www.pivotaltracker.com/story/show/183109468]
-     * Support non-empty array based on `isOptional`.
-     */
-    @IsNonEmptyArray()
     @NestedDataType(BibliographicReferenceCreator, {
         isArray: true,
+        // i.e. must be non-empty
+        isOptional: false,
         label: 'creators',
         description: 'the authors of the referenced journal article',
     })

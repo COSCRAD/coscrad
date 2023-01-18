@@ -16,4 +16,5 @@ export enum CoscradConstraint {
     isURL = 'URL',
     isCompositeIdentifier = 'composite identifier',
     isRequired = 'defined value',
+    isString = 'string',
 }

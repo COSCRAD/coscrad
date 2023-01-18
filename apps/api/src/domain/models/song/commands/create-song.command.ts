@@ -1,7 +1,6 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
-import { Equals } from '@coscrad/validation';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 
@@ -15,7 +14,7 @@ class SongCompositeId {
      * The simple answer is that you always have to tack on an
      * `aggregateCompositeIdentifier`.
      */
-    @Equals(AggregateType.song)
+
     @NonEmptyString({
         label: 'type',
         description: 'song',

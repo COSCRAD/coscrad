@@ -38,14 +38,26 @@ type FuzzDataType = keyof typeof fuzzData;
 type DataTypeToFuzz = { [K in CoscradDataType]: FuzzDataType[] };
 
 const dataTypeToValidFuzz: DataTypeToFuzz = {
-    [CoscradDataType.NonEmptyString]: ['url', 'randomString', 'uuid', 'isbn10', 'isbn13'],
+    [CoscradDataType.NonEmptyString]: [
+        'url',
+        'randomString',
+        'uuid',
+        'isbn10',
+        'isbn13',
+        'emptyObject',
+    ],
     [CoscradDataType.NonNegativeFiniteNumber]: [
         'positiveInteger',
         'positiveDecimal',
         'zero',
         'year',
     ],
-    [CoscradDataType.RawData]: ['shallowObject', 'deeplyNestedObject', 'compositeIdentifier'],
+    [CoscradDataType.RawData]: [
+        'shallowObject',
+        'deeplyNestedObject',
+        'compositeIdentifier',
+        'emptyObject',
+    ],
     [CoscradDataType.URL]: ['url'],
     [CoscradDataType.UUID]: ['uuid'],
     [CoscradDataType.CompositeIdentifier]: ['compositeIdentifier'],
@@ -68,13 +80,19 @@ export const generateValidValuesOfType = (
 
     const { coscradDataType, isArray, isOptional } = propertyTypeDefinition;
 
-    const validValues = dataTypeToValidFuzz[coscradDataType];
+    const validValues: unknown[] = dataTypeToValidFuzz[coscradDataType];
 
     if (!Array.isArray(validValues)) {
         throw new FailedToGenerateFuzzForUnsupportedDataTypeException(propertyTypeDefinition);
     }
 
-    if (isOptional) validValues.push(null, undefined);
+    if (isOptional) {
+        if (!isArray) {
+            validValues.push(null, undefined);
+        } else {
+            validValues.push([]);
+        }
+    }
 
     if (isArray) {
         const numberOfElementsInEachArray = 7;

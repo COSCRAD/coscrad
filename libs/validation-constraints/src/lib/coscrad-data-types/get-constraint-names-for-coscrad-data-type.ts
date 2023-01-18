@@ -1,6 +1,6 @@
 /* eslint-disable-next-line */
 import { CoscradDataType } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '../constraints';
+import { isBoolean, isNullOrUndefined } from '../constraints';
 import { CoscradConstraint } from '../constraints/coscrad-constraint.enum';
 
 const lookupTable: { [K in CoscradDataType]: CoscradConstraint[] } = {
@@ -17,6 +17,7 @@ const lookupTable: { [K in CoscradDataType]: CoscradConstraint[] } = {
     [CoscradDataType.UUID]: [CoscradConstraint.isUUID],
     [CoscradDataType.Year]: [CoscradConstraint.isYear],
     [CoscradDataType.BOOLEAN]: [CoscradConstraint.isBoolean],
+    [CoscradDataType.String]: [CoscradConstraint.isString],
 };
 
 type Options = { isArray?: boolean; isOptional?: boolean };
@@ -26,7 +27,7 @@ export const getConstraintNamesForCoscradDataType = (
     coscradDataType: CoscradDataType,
     userOptions?: Options
 ): CoscradConstraint[] => {
-    const { isOptional } = userOptions || { isArray: false, isOptional: false };
+    const isOptional = isBoolean(userOptions?.isOptional) ? userOptions?.isOptional : false;
 
     const constraints = lookupTable[coscradDataType];
 

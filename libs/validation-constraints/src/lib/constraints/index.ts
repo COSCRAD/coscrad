@@ -1,5 +1,6 @@
 export * from './coscrad-constraint.enum';
 export * from './is-boolean';
+export * from './is-enum';
 export * from './is-finite';
 export * from './is-finite-number';
 export * from './is-function';

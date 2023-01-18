@@ -1,10 +1,11 @@
-import { IsCompositeIdentifier, TypeGuard, ValidateNested } from '@coscrad/validation';
 import { CoscradDataType } from '../types';
 
 import appendMetadata from '../utilities/appendMetadata';
 import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
 import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
-import WithValidation from './validation/WithValidation';
+
+// TODO move this to a utility types lib
+type TypeGuard<T> = (input: unknown) => input is T;
 
 export function CompositeIdentifier(
     AllowedTypesEnum: Record<string, string>,
@@ -13,13 +14,6 @@ export function CompositeIdentifier(
 ): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol) => {
         const options = { ...mixinDefaultTypeDecoratorOptions(userOptions) };
-
-        ValidateNested({ each: true })(target, propertyKey);
-
-        WithValidation(
-            IsCompositeIdentifier(AllowedTypesEnum, idTypeGuard, { each: options.isArray }),
-            options
-        );
 
         appendMetadata(target, propertyKey, CoscradDataType.CompositeIdentifier, options);
     };

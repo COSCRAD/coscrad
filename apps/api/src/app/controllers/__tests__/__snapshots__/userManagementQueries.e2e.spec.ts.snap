@@ -226,6 +226,10 @@ Object {
                 "message": "must be a UUID",
                 "name": "UUID",
               },
+              Object {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
             ],
             "description": "the ID of the user that will be added to this group",
             "label": "user ID",
@@ -284,6 +288,10 @@ Object {
                     "message": "must be a UUID",
                     "name": "UUID",
                   },
+                  Object {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
                 ],
                 "description": "the ID of the user that will be added to this group",
                 "label": "user ID",
@@ -337,6 +345,10 @@ Object {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
+              Object {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
             ],
             "description": "the name of the user group",
             "label": "label",
@@ -348,6 +360,10 @@ Object {
               Object {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
+              },
+              Object {
+                "message": "must be a defined value",
+                "name": "defined value",
               },
             ],
             "description": "a summary of the purpose of this group (what its members have in common)",
@@ -497,6 +513,10 @@ Object {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
+              Object {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
             ],
             "description": "the auth provider's unique ID for this user (the user must be added to the auth provider first)",
             "label": "auth provider's ID",
@@ -508,6 +528,10 @@ Object {
               Object {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
+              },
+              Object {
+                "message": "must be a defined value",
+                "name": "defined value",
               },
             ],
             "description": "a human-readable text identifier for this user",
@@ -537,6 +561,10 @@ Object {
               Object {
                 "message": "must be a UUID",
                 "name": "UUID",
+              },
+              Object {
+                "message": "must be a defined value",
+                "name": "defined value",
               },
             ],
             "description": "the ID of the user that will be added to this group",
@@ -596,6 +624,10 @@ Object {
                     "message": "must be a UUID",
                     "name": "UUID",
                   },
+                  Object {
+                    "message": "must be a defined value",
+                    "name": "defined value",
+                  },
                 ],
                 "description": "the ID of the user that will be added to this group",
                 "label": "user ID",
@@ -649,6 +681,10 @@ Object {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
+              Object {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
             ],
             "description": "the name of the user group",
             "label": "label",
@@ -660,6 +696,10 @@ Object {
               Object {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
+              },
+              Object {
+                "message": "must be a defined value",
+                "name": "defined value",
               },
             ],
             "description": "a summary of the purpose of this group (what its members have in common)",
@@ -809,6 +849,10 @@ Object {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
+              Object {
+                "message": "must be a defined value",
+                "name": "defined value",
+              },
             ],
             "description": "the auth provider's unique ID for this user (the user must be added to the auth provider first)",
             "label": "auth provider's ID",
@@ -820,6 +864,10 @@ Object {
               Object {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
+              },
+              Object {
+                "message": "must be a defined value",
+                "name": "defined value",
               },
             ],
             "description": "a human-readable text identifier for this user",

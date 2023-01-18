@@ -1,6 +1,5 @@
 import { CompositeIdentifier, NonEmptyString } from '@coscrad/data-types';
 import { Type } from 'class-transformer';
-import { IsEnum } from 'class-validator';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
@@ -13,7 +12,7 @@ import { CategorizableType, isCategorizableType } from '../../../types/Categoriz
 import { Aggregate } from '../../aggregate.entity';
 
 class CategorizableCompositeIdentifier {
-    @IsEnum(CategorizableType)
+    @ExternalEnum()
     type: CategorizableType;
 
     @NonEmptyString({

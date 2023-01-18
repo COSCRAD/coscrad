@@ -22,7 +22,6 @@ export {
     isUUID,
     IsUUID,
     ValidateNested,
-} from 'class-validator';
-export * from './lib/decorators';
+} from 'validator';
 export * from './lib/interfaces';
 export { buildSimpleValidationFunction, DiscriminatedUnionValidator };

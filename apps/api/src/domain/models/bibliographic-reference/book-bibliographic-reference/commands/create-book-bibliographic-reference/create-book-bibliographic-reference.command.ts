@@ -9,7 +9,6 @@ import {
     URL,
     Year,
 } from '@coscrad/data-types';
-import { IsNonEmptyArray } from '@coscrad/validation';
 import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../../types/AggregateType';
 import BibliographicReferenceCreator from '../../../common/bibliographic-reference-creator.entity';
@@ -53,10 +52,10 @@ export class CreateBookBibliographicReference implements ICommandBase {
     })
     readonly title: string;
 
-    // We might consider sharing some of the property annotation with the domain model.
-    @IsNonEmptyArray()
     @NestedDataType(BibliographicReferenceCreator, {
         isArray: true,
+        // i.e. must not be empty
+        isOptional: false,
         label: 'creators',
         description: 'the authors of the referenced book',
     })

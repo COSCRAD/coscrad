@@ -108,6 +108,10 @@ export const validateCoscradModelProperty = (
                 ({ value }) => value === actualPropertyValue
             );
 
+            if (propertyName === 'type') {
+                isConstraintSatisfied;
+            }
+
             return isConstraintSatisfied
                 ? []
                 : [
@@ -122,13 +126,27 @@ export const validateCoscradModelProperty = (
         }
 
         // recurse
-        if (complexDataType === ComplexCoscradDataType.nested)
-            return validateCoscradModelInstance(
+        if (complexDataType === ComplexCoscradDataType.nested) {
+            const allErrors = validateCoscradModelInstance(
                 propertyTypeDefinition.schema,
                 actualPropertyValue,
                 // TODO Make this default to `true`
                 forbidUnknownValues
             );
+
+            if (allErrors.length > 0)
+                return [
+                    new Error(
+                        `Property ${propertyName} has failed nested validation. Inner Errors: ${allErrors.reduce(
+                            // TODO We need `InternalError` to be part of a shared lib.
+                            (acc, e) => acc.concat('\n').concat(e.toString()),
+                            ''
+                        )}`
+                    ),
+                ];
+
+            return [];
+        }
     }
 
     // investigate why `isComplexCoscradDataTypeDefinition` is not working as a typeguard here

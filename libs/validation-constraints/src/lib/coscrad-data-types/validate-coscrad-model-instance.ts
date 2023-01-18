@@ -1,51 +1,20 @@
 /* eslint-disable-next-line */
 import { ICoscradModelSchema } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '../constraints';
 /* eslint-disable-next-line */
 /* eslint-disable-next-line */
 /* eslint-disable-next-line */
-import { CoscradConstraint } from '../constraints';
-import { isConstraintSatisfied } from '../validators';
 import { validateCoscradModelProperty } from './validate-coscrad-model-property';
-
-const validateSingleConstraint = (
-    propertyName: string,
-    inputValue: unknown,
-    constraintName: CoscradConstraint,
-    validateEachMemberOfArray: boolean
-): Error[] => {
-    if (validateEachMemberOfArray) {
-        if (!Array.isArray(inputValue))
-            return [new Error(`${propertyName} has failed the validation constraint: Is Array`)];
-
-        const arrayValidationerrors = inputValue.reduce(
-            (allErrors: Error[], nextElement: unknown, index) =>
-                isConstraintSatisfied(constraintName, nextElement)
-                    ? allErrors
-                    : allErrors.concat(
-                          new Error(
-                              `${propertyName}[${index}]: ${nextElement} has failed the validation constraint: ${constraintName}`
-                          )
-                      ),
-            []
-        );
-
-        return arrayValidationerrors;
-    }
-
-    return isConstraintSatisfied(constraintName, inputValue)
-        ? []
-        : [
-              new Error(
-                  `${propertyName}: ${inputValue} has failed validation constraint: ${constraintName}`
-              ),
-          ];
-};
 
 export const validateCoscradModelInstance = (
     schema: ICoscradModelSchema,
     instance: any,
     forbidUnknownValues = false
-) => {
+): Error[] => {
+    if (isNullOrUndefined(instance)) {
+        return [new Error(`Expected an instance of a coscrad model, received: ${instance}`)];
+    }
+
     const errorsFromKnownProperties = Object.entries(schema).reduce(
         (allErrors: Error[], [propertyName, coscradDataTypeDefinition]): Error[] => [
             ...allErrors,
