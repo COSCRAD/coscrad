@@ -9,6 +9,7 @@ import { NoteIndexState } from '../../store/slices/notes/types/note-index-state'
 import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
+import { WebTest3D } from './WebTest3D';
 
 const formatCompositeIentifier = ({ type, id }: ICompositeIdentifier): string => `${type}/${id}`;
 
@@ -88,12 +89,15 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
     };
 
     return (
-        <IndexTable
-            headingLabels={headingLabels}
-            tableData={notes}
-            cellRenderersDefinition={cellRenderersDefinition}
-            heading={'Notes'}
-            filterableProperties={['connectionType', 'note']}
-        />
+        <>
+            <IndexTable
+                headingLabels={headingLabels}
+                tableData={notes}
+                cellRenderersDefinition={cellRenderersDefinition}
+                heading={'Notes'}
+                filterableProperties={['connectionType', 'note']}
+            />
+            <WebTest3D data={notes} />
+        </>
     );
 };
