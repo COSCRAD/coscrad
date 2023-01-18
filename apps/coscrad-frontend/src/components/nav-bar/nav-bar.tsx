@@ -19,8 +19,8 @@ export const NavBar = (): JSX.Element => {
     const dynamicLinks = indexToDetailFlows
         .filter(({ categorizableType }) => categorizableType === CategorizableType.note)
         .map(({ label, route }) => ({
-            link: route,
-            label,
+            link: route || routes.notes.index,
+            label: label || 'Notes',
         }));
 
     // We may want an enum \ constants for our routes
