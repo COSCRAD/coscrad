@@ -1,4 +1,4 @@
-import { isResourceType, ResourceType } from '@coscrad/api-interfaces';
+import { CategorizableType, isResourceType } from '@coscrad/api-interfaces';
 import { Fragment, useContext } from 'react';
 import { Route } from 'react-router-dom';
 import { FilteredCategorizableIndexContainer } from '../components/higher-order-components';
@@ -24,16 +24,22 @@ export const IndexToDetailFlowRoutes = () => {
             {}
         );
 
-    const resourceTypesAndRoutes = indexToDetailFlows
-        .filter(({ categorizableType }) => isResourceType(categorizableType))
-        .reduce(
-            (acc, { categorizableType: resourceType, route }) => ({
+    const resourceTypesAndRoutes = indexToDetailFlows.reduce(
+        (acc, { categorizableType, route }) => {
+            if (categorizableType === CategorizableType.note) {
+                return {
+                    ...acc,
+                    [CategorizableType.note]: route || routes.notes.index,
+                };
+            }
+
+            return {
                 ...acc,
-                [resourceType]:
-                    route || routes.resources.ofType(resourceType as ResourceType).index,
-            }),
-            {}
-        );
+                [categorizableType]: route || routes.resources.ofType(categorizableType).index,
+            };
+        },
+        {}
+    );
 
     const Menu = (
         <Route
@@ -64,11 +70,6 @@ export const IndexToDetailFlowRoutes = () => {
             const indexRoute = resourceTypesAndRoutes[categorizableType];
 
             const detailRoute = `${resourceTypesAndRoutes[categorizableType]}/:id`;
-
-            console.log({
-                indexRoute,
-                detailRoute,
-            });
 
             return (
                 <Fragment key="categorizable-index-to-detail-flows">
