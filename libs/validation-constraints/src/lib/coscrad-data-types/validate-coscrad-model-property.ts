@@ -108,10 +108,6 @@ export const validateCoscradModelProperty = (
                 ({ value }) => value === actualPropertyValue
             );
 
-            if (propertyName === 'type') {
-                isConstraintSatisfied;
-            }
-
             return isConstraintSatisfied
                 ? []
                 : [
