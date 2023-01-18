@@ -14,8 +14,8 @@ export function NestedDataType(
         const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
         /**
-         * This is necessary because `class-validator` piggybacks on the
-         * `class-transformer` decorator for nested validation.
+         * This used to be necessary because `class-validator` piggybacks on the
+         * `class-transformer` decorator for nested validation. We no longer use `class-validator`.
          *
          * See [here](https://stackoverflow.com/questions/58343262/class-validator-validate-array-of-objects)
          * for more info.

@@ -1,30 +1,54 @@
 import { isString } from './is-string';
 
-const issn = '^\\d{4}-?\\d{3}[\\dX]$';
-
-const require_hyphen = false;
-
-const case_sensitive = false;
+const isbn10Maybe = /^(?:[0-9]{9}X|[0-9]{10})$/;
+const isbn13Maybe = /^(?:[0-9]{13})$/;
+const factor = [1, 3];
 
 /**
- * See Validator.js
- * https://github.com/validatorjs/validator.js/blob/master/src/lib/isISSN.js
+ * Implementation inspired by validator.js (subsequently refactored to our coding style using TDD)
+ *
+ * Section 3.1 of the following is helpful in understanding the structure of an ISBN:
+ * https://www.rfc-editor.org/rfc/rfc2288
  */
-export default function isISSN(input: unknown) {
+// TODO[test-coverage]
+export const isISBN = (input: unknown, version?: '10' | '13'): boolean => {
     if (!isString(input)) return false;
 
-    const testIssn = require_hyphen ? issn.replace('?', '') : issn;
-
-    const regExp: RegExp = case_sensitive ? new RegExp(testIssn) : new RegExp(testIssn, 'i');
-
-    if (!regExp.test(input)) {
-        return false;
+    if (!version) {
+        return isISBN(input, '10') || isISBN(input, '13');
     }
-    const digits = input.replace('-', '').toUpperCase();
+
+    const sanitized = input.replace(/[\s-]+/g, '');
+
     let checksum = 0;
-    for (let i = 0; i < digits.length; i++) {
-        const digit = digits[i];
-        checksum += (digit === 'X' ? 10 : +digit) * (8 - i);
+
+    let i;
+
+    if (version === '10') {
+        if (!isbn10Maybe.test(sanitized)) {
+            return false;
+        }
+        for (i = 0; i < 9; i++) {
+            checksum += (i + 1) * parseInt(sanitized.charAt(i));
+        }
+        if (sanitized.charAt(9) === 'X') {
+            checksum += 10 * 10;
+        } else {
+            checksum += 10 * parseInt(sanitized.charAt(9));
+        }
+        if (checksum % 11 === 0) {
+            return !!sanitized;
+        }
+    } else if (version === '13') {
+        if (!isbn13Maybe.test(sanitized)) {
+            return false;
+        }
+        for (i = 0; i < 12; i++) {
+            checksum += factor[i % 2] * parseInt(sanitized.charAt(i));
+        }
+        if (parseInt(sanitized.charAt(12)) - ((10 - (checksum % 10)) % 10) === 0) {
+            return !!sanitized;
+        }
     }
-    return checksum % 11 === 0;
-}
+    return false;
+};

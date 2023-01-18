@@ -1,4 +1,4 @@
-import { isNotEmptyObject, isObject, isUUID } from 'class-validator';
+import { isNonEmptyObject, isObject, isUUID } from '@coscrad/validation-constraints';
 import { GlobalConfig } from './global.config';
 import { consolidateMessagesForErrors, createArrayValidator } from './utils';
 import { validateExternalLink } from './validateExternalLink';
@@ -8,7 +8,7 @@ export const isStringWithNonzeroLength = (input: unknown): input is string =>
     typeof input === 'string' && input.length > 0;
 
 const validateCreditsLookupTable = (input: unknown): input is Record<string, string> => {
-    if (!isObject(input) || !isNotEmptyObject(input)) return false;
+    if (!isObject(input) || !isNonEmptyObject(input)) return false;
 
     return Object.entries(input).every(
         ([key, value]) => isUUID(key) && isStringWithNonzeroLength(value)

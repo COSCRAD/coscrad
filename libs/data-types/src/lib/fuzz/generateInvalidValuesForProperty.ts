@@ -21,7 +21,7 @@ const fuzzData = {
     deeplyNestedObject: { foo: 5, bar: { baz: 'hello world', yaz: [1, 44, -23.4] } },
     emptyArray: [],
     url: `https://www.mysite.com/hello.mp3`,
-    randomString: 'this is some really 343434938298392 random string!',
+    arbitraryString: 'this is some really 343434938298392 random string!',
     uuid: `249d797b-1f18-49d3-8de0-9e338783306b`,
     null: null,
     undefined: undefined,
@@ -40,7 +40,7 @@ type DataTypeToFuzz = { [K in CoscradDataType]: FuzzDataType[] };
 const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.NonEmptyString]: [
         'url',
-        'randomString',
+        'arbitraryString',
         'uuid',
         'isbn10',
         'isbn13',
@@ -65,6 +65,7 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.PositiveInteger]: ['year', 'positiveInteger'],
     [CoscradDataType.ISBN]: ['isbn10', 'isbn13'],
     [CoscradDataType.BOOLEAN]: ['true', 'false'],
+    [CoscradDataType.String]: ['emptyString', 'arbitraryString', 'uuid', 'isbn10', 'isbn13'],
 };
 
 export const generateValidValuesOfType = (

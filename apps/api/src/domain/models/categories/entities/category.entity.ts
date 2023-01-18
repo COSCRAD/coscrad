@@ -1,9 +1,15 @@
-import { CompositeIdentifier, NonEmptyString } from '@coscrad/data-types';
+import {
+    ComplexCoscradDataType,
+    CompositeIdentifier,
+    ExternalEnum,
+    NonEmptyString,
+} from '@coscrad/data-types';
 import { Type } from 'class-transformer';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
+import formatAggregateType from '../../../../view-models/presentation/formatAggregateType';
 import { HasLabel } from '../../../interfaces/HasAggregateIdAndLabel';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
@@ -12,7 +18,21 @@ import { CategorizableType, isCategorizableType } from '../../../types/Categoriz
 import { Aggregate } from '../../aggregate.entity';
 
 class CategorizableCompositeIdentifier {
-    @ExternalEnum()
+    @ExternalEnum(
+        {
+            complexDataType: ComplexCoscradDataType.enum,
+            enumName: 'CategorizableType',
+            enumLabel: 'Reosurce Type or Note',
+            labelsAndValues: Object.values(CategorizableType).map((ct) => ({
+                label: formatAggregateType(ct),
+                value: ct,
+            })),
+        },
+        {
+            label: 'Resource Type or Note',
+            description: 'Specifies whether this is a note or a specific kind of resource',
+        }
+    )
     type: CategorizableType;
 
     @NonEmptyString({

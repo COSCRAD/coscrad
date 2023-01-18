@@ -9,7 +9,6 @@ import {
 } from '@coscrad/data-types';
 import { validateCoscradModelInstance } from '@coscrad/validation-constraints';
 import { plainToInstance } from 'class-transformer';
-import { IsString } from 'class-validator';
 import { Environment } from './constants/Environment';
 import { Scheme } from './constants/Scheme';
 
@@ -44,7 +43,10 @@ export class EnvironmentVariables {
     })
     ARANGO_DB_HOST_SCHEME: Scheme;
 
-    @IsString()
+    @String({
+        label: 'Arango DB host domain',
+        description: "the domain part of Arango's rest endpoint",
+    })
     ARANGO_DB_HOST_DOMAIN: string;
 
     @PositiveInteger({

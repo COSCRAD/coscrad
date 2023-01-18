@@ -16,8 +16,6 @@ export const buildBibliographicReferenceSubtypeFuzzTestCases = (
     )
         .filter(([propertyName, _]) => propertyName !== 'type')
         .flatMap(([propertyName, propertySchema]) => {
-            console.log({ propertyName });
-
             const validInstance = getValidBibliographicReferenceInstanceForTest(
                 bibliographicReferenceType
             );

@@ -6,6 +6,7 @@ export * from './is-finite-number';
 export * from './is-function';
 export * from './is-integer';
 export * from './is-isbn';
+export * from './is-issn';
 export * from './is-non-empty-object';
 export * from './is-non-empty-string';
 export * from './is-non-negative-finite-number';

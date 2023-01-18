@@ -59,6 +59,7 @@ export default class JournalArticleBibliographicReferenceData
     })
     readonly url?: string;
 
+    // TODO Support ISSN data type \ validation
     @NonEmptyString({
         isOptional,
         label: 'ISSN',

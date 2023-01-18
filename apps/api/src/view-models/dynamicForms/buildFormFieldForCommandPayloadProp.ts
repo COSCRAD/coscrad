@@ -32,6 +32,7 @@ const lookupTable: { [K in CoscradDataType]: FormFieldType } = {
     [CoscradDataType.UUID]: FormFieldType.textField,
     [CoscradDataType.Year]: FormFieldType.yearPicker,
     [CoscradDataType.BOOLEAN]: FormFieldType.switch,
+    [CoscradDataType.String]: FormFieldType.textField,
 };
 
 const buildSimpleFormField = (
