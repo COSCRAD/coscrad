@@ -1,6 +1,6 @@
 /* eslint-disable-next-line */
 import { CoscradDataType } from '@coscrad/api-interfaces';
-import { CoscradConstraint, isBoolean, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { CoscradConstraint, isNullOrUndefined } from '@coscrad/validation-constraints';
 
 const lookupTable: { [K in CoscradDataType]: CoscradConstraint[] } = {
     [CoscradDataType.CompositeIdentifier]: [CoscradConstraint.isCompositeIdentifier], // This is auto-populated or a dynamic selection
@@ -19,18 +19,18 @@ const lookupTable: { [K in CoscradDataType]: CoscradConstraint[] } = {
     [CoscradDataType.String]: [CoscradConstraint.isString],
 };
 
-type Options = { isArray?: boolean; isOptional?: boolean };
+type Options = { isArray: boolean; isOptional: boolean };
 
 // Consider moving to `data-types` lib
 export const getConstraintNamesForCoscradDataType = (
     coscradDataType: CoscradDataType,
-    userOptions?: Options
+    userOptions: Options
 ): CoscradConstraint[] => {
-    const isOptional = isBoolean(userOptions?.isOptional) ? userOptions?.isOptional : false;
+    const { isOptional } = userOptions;
 
     const constraints = lookupTable[coscradDataType];
 
-    const additionalConstraints = [...(isOptional ? [] : [CoscradConstraint.isRequired])];
+    const additionalConstraints = [...(isOptional === true ? [] : [CoscradConstraint.isRequired])];
 
     if (isNullOrUndefined(constraints)) {
         throw new Error(

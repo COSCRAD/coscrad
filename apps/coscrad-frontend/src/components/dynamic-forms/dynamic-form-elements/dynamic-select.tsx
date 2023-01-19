@@ -21,6 +21,7 @@ interface DynamicSelectProps {
     simpleFormField: SimpleFormField;
     onNewSelection?: (name: string, value: string | boolean) => void;
     currentValue: string;
+    required: boolean;
 }
 
 const buildFormFieldFromEntities = <T extends IDetailQueryResult<IBaseViewModel>>(
@@ -40,6 +41,7 @@ export const DynamicSelect = ({
     simpleFormField,
     onNewSelection,
     currentValue,
+    required = false,
 }: DynamicSelectProps): JSX.Element => {
     if (!isResourceType(aggregateType)) {
         throw new Error(
@@ -61,6 +63,7 @@ export const DynamicSelect = ({
             formField={buildFormFieldFromEntities(entities, simpleFormField, stringSummarizer)}
             onNewSelection={onNewSelection}
             currentValue={currentValue}
+            required={required}
         />
     );
 
