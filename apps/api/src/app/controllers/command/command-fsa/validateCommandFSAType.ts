@@ -1,4 +1,4 @@
-import { buildSimpleValidationFunction } from '@coscrad/validation';
+import { getCoscradDataSchema, validateCoscradModelInstance } from '@coscrad/data-types';
 import { Valid } from '../../../../domain/domainModelValidators/Valid';
 import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../../../lib/errors/InternalError';
@@ -15,9 +15,12 @@ export default (input: unknown): ResultOrError<Valid> => {
             new InternalError(`Encountered a null or undefined Flux Standard Action`),
         ]);
 
-    const allErrors: InternalError[] = buildSimpleValidationFunction(CommandFSA, {
-        forbidUnknownValues: true,
-    })(input).map((simpleError) => new InternalError(simpleError.toString()));
+    const allErrors: InternalError[] = validateCoscradModelInstance(
+        getCoscradDataSchema(CommandFSA),
+        input,
+        // this should be on an object- fix the API
+        true
+    ).map((simpleError) => new InternalError(simpleError.toString()));
 
     if (allErrors.length > 0) return buildTopLevelError(allErrors);
 

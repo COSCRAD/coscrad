@@ -2,7 +2,7 @@ import { plainToInstance } from 'class-transformer';
 /* eslint-disable-next-line */
 import { getCoscradDataSchema } from '@coscrad/data-types';
 /* eslint-disable-next-line */
-import { validateCoscradModelInstance } from '@coscrad/validation-constraints';
+import { validateCoscradModelInstance } from '@coscrad/data-types';
 import { SimpleValidationFunction } from './interfaces/SimpleValidationFunction';
 
 interface Ctor<T> {

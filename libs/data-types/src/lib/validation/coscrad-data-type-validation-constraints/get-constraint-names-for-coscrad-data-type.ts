@@ -1,7 +1,6 @@
 /* eslint-disable-next-line */
 import { CoscradDataType } from '@coscrad/api-interfaces';
-import { isBoolean, isNullOrUndefined } from '../constraints';
-import { CoscradConstraint } from '../constraints/coscrad-constraint.enum';
+import { CoscradConstraint, isBoolean, isNullOrUndefined } from '@coscrad/validation-constraints';
 
 const lookupTable: { [K in CoscradDataType]: CoscradConstraint[] } = {
     [CoscradDataType.CompositeIdentifier]: [CoscradConstraint.isCompositeIdentifier], // This is auto-populated or a dynamic selection

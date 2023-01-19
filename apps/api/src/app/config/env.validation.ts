@@ -6,8 +6,8 @@ import {
     PositiveInteger,
     String,
     URL,
+    validateCoscradModelInstance,
 } from '@coscrad/data-types';
-import { validateCoscradModelInstance } from '@coscrad/validation-constraints';
 import { plainToInstance } from 'class-transformer';
 import { Environment } from './constants/Environment';
 import { Scheme } from './constants/Scheme';

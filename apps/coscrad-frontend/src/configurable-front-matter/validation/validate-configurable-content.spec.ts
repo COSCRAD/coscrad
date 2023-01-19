@@ -1,11 +1,5 @@
-import { CoscradDataType } from '@coscrad/api-interfaces';
-import { FuzzGenerator } from '@coscrad/data-types';
 import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
-import {
-    ConfigurableContent,
-    ConfigurableContentSchema,
-    configurableContentSchema,
-} from '../data/configurable-content-schema';
+import { ConfigurableContent } from '../data/configurable-content-schema';
 import { InvalidConfigurationPropertyError } from '../errorHandling/errors/invalid-configuration-property.error';
 import { validateConfigurableContent } from './validate-configurable-content';
 
@@ -24,27 +18,33 @@ const buildInvalidContentConfig = (
     ...overrides,
 });
 
-const invalidProps: [keyof ConfigurableContent, unknown, CoscradDataType][] = Object.entries(
-    configurableContentSchema
-).flatMap(([propertyName, coscradDataType]) =>
-    new FuzzGenerator({
-        coscradDataType,
-        isOptional: false,
-        isArray: false,
-        // TODO Consider hiding these 2 props from the `FuzzGenerator`
-        label: 'dummy prop label',
-        description: 'dummy prop description',
-    })
-        .generateInvalidValues()
-        .map(
-            (invalidValue: unknown) =>
-                [propertyName, invalidValue, coscradDataType] as [
-                    keyof ConfigurableContentSchema,
-                    unknown,
-                    CoscradDataType
-                ]
-        )
-);
+/**
+ * Ideally, we would use our fuzz generator here. However, we do not want to
+ * introduce the @coscrad/data-types lib to the front-end until we have sorted
+ * out tree-shaking or supporting decorators in the front-end build.
+ */
+const invalidProps = [];
+// const invalidProps: [keyof ConfigurableContent, unknown, CoscradDataType][] = Object.entries(
+//     configurableContentSchema
+// ).flatMap(([propertyName, coscradDataType]) =>
+//     new FuzzGenerator({
+//         coscradDataType,
+//         isOptional: false,
+//         isArray: false,
+//         // TODO Consider hiding these 2 props from the `FuzzGenerator`
+//         label: 'dummy prop label',
+//         description: 'dummy prop description',
+//     })
+//         .generateInvalidValues()
+//         .map(
+//             (invalidValue: unknown) =>
+//                 [propertyName, invalidValue, coscradDataType] as [
+//                     keyof ConfigurableContentSchema,
+//                     unknown,
+//                     CoscradDataType
+//                 ]
+//         )
+// );
 
 const invalidConfigsAndExpectedErrors: [Overrides<ConfigurableContent>, Error[]][] = invalidProps
     .filter(([propertyName, _]) => !['songIdToCredits', 'videoIdToCredits'].includes(propertyName))

@@ -5,7 +5,7 @@ const buildValidationError = (message: string): SimpleValidationError => ({
     toString: () => message,
 });
 
-export default class DiscriminatedUnionValidator {
+export class DiscriminatedUnionValidator {
     #discriminantToValidationFunction: Map<string, SimpleValidationFunction> = new Map();
 
     readonly #allDiscriminants: string[];

@@ -1,6 +1,6 @@
 /* eslint-disable-next-line */
 import { ICoscradModelSchema } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '../constraints';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 /* eslint-disable-next-line */
 /* eslint-disable-next-line */
 /* eslint-disable-next-line */
@@ -40,7 +40,11 @@ export const validateCoscradModelInstance = (
                   })
                   .map(
                       (propertyKey) =>
-                          new Error(`The property ${propertyKey} is not part of the schema`)
+                          new Error(
+                              `The property ${propertyKey} is not part of the schema: \n ${JSON.stringify(
+                                  schema
+                              )}`
+                          )
                   )
             : []),
         ...errorsFromKnownProperties,

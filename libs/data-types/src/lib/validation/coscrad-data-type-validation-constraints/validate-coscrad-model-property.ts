@@ -9,8 +9,11 @@ import { ComplexCoscradDataType, SimpleCoscradPropertyTypeDefinition } from '@co
 import { isDeepStrictEqual } from 'util';
 /* eslint-disable-next-line */
 /* eslint-disable-next-line */
-import { CoscradConstraint, isNullOrUndefined } from '../constraints';
-import { isConstraintSatisfied } from '../validators';
+import {
+    CoscradConstraint,
+    isConstraintSatisfied,
+    isNullOrUndefined,
+} from '@coscrad/validation-constraints';
 import { getConstraintNamesForCoscradDataType } from './get-constraint-names-for-coscrad-data-type';
 import { validateCoscradModelInstance } from './validate-coscrad-model-instance';
 

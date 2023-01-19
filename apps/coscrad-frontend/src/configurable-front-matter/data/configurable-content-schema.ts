@@ -1,32 +1,42 @@
 import {
     AggregateTypeToViewModel,
     CategorizableType,
-    CoscradDataType,
-    FromCoscradDataType,
     ICategorizableDetailQueryResult,
 } from '@coscrad/api-interfaces';
+import { CoscradConstraint } from '@coscrad/validation-constraints';
 
-/**
- * We may want to refactor this to include the standard
- * `isOptional` and `isArray` options, in which case the values
- * below should be complex objects, not strings.
- */
-export const configurableContentSchema = {
-    siteTitle: CoscradDataType.NonEmptyString,
-    subTitle: CoscradDataType.NonEmptyString,
-    about: CoscradDataType.NonEmptyString,
-    siteDescription: CoscradDataType.NonEmptyString,
-    siteHomeImageUrl: CoscradDataType.NonEmptyString,
-    copyrightHolder: CoscradDataType.NonEmptyString,
-    organizationLogoUrl: CoscradDataType.NonEmptyString,
-    // This is a hack. We need to represent contributors as a resource in our system and then use notes to relay this info
-    // We may want to make this optional or allow an empty array
-    songIdToCredits: CoscradDataType.RawData,
-    videoIdToCredits: CoscradDataType.RawData,
-    shouldEnableWebOfKnowledgeForResources: CoscradDataType.BOOLEAN,
-} as const;
+export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
+    indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
+    siteTitle: string;
+    subTitle: string;
+    about: string;
+    siteDescription: string;
+    siteHomeImageUrl: string;
+    copyrightHolder: string;
+    organizationLogoUrl: string;
+    songIdToCredits: Record<string, string>;
+    videoIdToCredits: Record<string, string>;
+    shouldEnableWebOfKnowledgeForResources: boolean;
+};
 
-export type ConfigurableContentSchema = typeof configurableContentSchema;
+export const configurableContentPropertiesAndConstraints: {
+    [K in keyof ConfigurableContent]: CoscradConstraint[];
+} = {
+    siteTitle: [CoscradConstraint.isNonEmptyString],
+    subTitle: [CoscradConstraint.isNonEmptyString],
+    about: [CoscradConstraint.isNonEmptyString],
+    siteDescription: [CoscradConstraint.isNonEmptyString],
+    siteHomeImageUrl: [CoscradConstraint.isURL],
+    copyrightHolder: [CoscradConstraint.isNonEmptyString],
+    organizationLogoUrl: [CoscradConstraint.isURL],
+    songIdToCredits: [CoscradConstraint.isObject],
+    videoIdToCredits: [CoscradConstraint.isObject],
+    shouldEnableWebOfKnowledgeForResources: [CoscradConstraint.isBoolean],
+    // This is a tough one to constrain. We may need to manually specify the validation logic.
+    indexToDetailFlows: [],
+};
+
+export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
 
 export enum DetailViewType {
     fullView = 'full-view',
@@ -39,12 +49,4 @@ type IndexToDetailFlowDefinition<T extends CategorizableType> = {
         viewModel: ICategorizableDetailQueryResult<AggregateTypeToViewModel[T]>
     ) => boolean;
     detailViewType: DetailViewType;
-};
-
-export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
-    indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
-} & {
-    [K in keyof typeof configurableContentSchema]: FromCoscradDataType<
-        typeof configurableContentSchema[K]
-    >;
 };
