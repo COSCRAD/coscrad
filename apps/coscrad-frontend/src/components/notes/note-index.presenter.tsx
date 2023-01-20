@@ -5,11 +5,17 @@ import {
     IEdgeConnectionMember,
     INoteViewModel,
 } from '@coscrad/api-interfaces';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import { IconButton } from '@mui/material';
+import { useCallback, useState } from 'react';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { NoteIndexState } from '../../store/slices/notes/types/note-index-state';
 import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
-import { WebTest3D } from './WebTest3D';
+import styles from './note-index.presenter.module.scss';
+import { WebTestBreakdown } from './WebTestBreakdown';
 
 const formatCompositeIentifier = ({ type, id }: ICompositeIdentifier): string => `${type}/${id}`;
 
@@ -54,6 +60,16 @@ const DisplayConnectedResourcesInfo = ({
 };
 
 export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Element => {
+    const fullScreenHandle = useFullScreenHandle();
+    const [screenState, setScreenState] = useState(false);
+
+    const fullScreenChange = useCallback(
+        (state) => {
+            setScreenState(state);
+        },
+        [fullScreenHandle]
+    );
+
     const headingLabels: HeadingLabel<INoteViewModel>[] = [
         {
             propertyKey: 'id',
@@ -97,7 +113,30 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
                 heading={'Notes'}
                 filterableProperties={['connectionType', 'note']}
             />
-            <WebTest3D data={notes} />
+            {/* <WebNoteTest entities={notes} indexScopedActions={[]} /> */}
+            <FullScreen
+                className={styles['web3d-container']}
+                handle={fullScreenHandle}
+                onChange={fullScreenChange}
+            >
+                <div className={styles['book-actions']}>
+                    {!screenState && (
+                        <IconButton onClick={fullScreenHandle.enter}>
+                            <FullscreenIcon />
+                        </IconButton>
+                    )}
+                    {screenState && (
+                        <IconButton onClick={fullScreenHandle.exit}>
+                            <FullscreenExitIcon />
+                        </IconButton>
+                    )}
+                    View Web Visualization
+                </div>
+                {/* <BabelTest /> */}
+                {/* <TransformNode /> */}
+                {/* <WebTest3D entities={notes} indexScopedActions={[]} /> */}
+                <WebTestBreakdown />
+            </FullScreen>
         </>
     );
 };
