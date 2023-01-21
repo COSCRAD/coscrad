@@ -14,15 +14,15 @@ export type ResourceNode = {
 
 export type ConnectionByID = [Identifier, Identifier];
 
-interface WebTestBreakdownProps {
+interface WebTestBreakdownTwoProps {
     nodes: ResourceNode[];
     connectionsById: ConnectionByID[];
 }
 
-export const WebTestBreakdown = ({
+export const WebTestBreakdownTwo = ({
     nodes,
     connectionsById,
-}: WebTestBreakdownProps): JSX.Element => {
+}: WebTestBreakdownTwoProps): JSX.Element => {
     const scene = useScene();
 
     // console.log({ connectionsById });
@@ -49,7 +49,7 @@ export const WebTestBreakdown = ({
         return edgeEndPoints;
     };
 
-    const getNodeSpheres = () => {
+    const getWeb = () => {
         let nodeSpheres = nodes.map(({ id, coordinates }, index) => {
             const position = new Vector3(coordinates[0], coordinates[1], coordinates[2]);
 
@@ -70,10 +70,6 @@ export const WebTestBreakdown = ({
             );
         });
 
-        return nodeSpheres;
-    };
-
-    const getEdgeLines = () => {
         let edgeLines = connectionsById.map((edgeById, index) => {
             const pointsData = getEdgeEndPoints(edgeById[0], edgeById[1]);
 
@@ -90,11 +86,10 @@ export const WebTestBreakdown = ({
             );
         });
 
-        return edgeLines;
+        return nodeSpheres.concat(edgeLines);
     };
 
-    const nodeSpheres = getNodeSpheres();
-    const edgeLines = getEdgeLines();
+    const web = getWeb();
     // const nodeSpheres = <lines name="bog1" points={[new Vector3(0, 1, 3)]} />;
     // const edgeLines = <lines name="bog2" points={[new Vector3(0, 1, 3)]} />;
 
@@ -110,8 +105,7 @@ export const WebTestBreakdown = ({
                         radius={8}
                     />
                     <hemisphericLight name="light1" intensity={0.7} direction={Vector3.Forward()} />
-                    {nodeSpheres}
-                    {edgeLines}
+                    {web}
                 </Scene>
             </Engine>
         </div>

@@ -14,8 +14,10 @@ import { NoteIndexState } from '../../store/slices/notes/types/note-index-state'
 import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
+import { Web3DTestThreeReact } from './BabylonJSTest/Web3DTestThreeReact';
 import styles from './note-index.presenter.module.scss';
-import { WebTestBreakdown } from './WebTestBreakdown';
+import { prepareBabylonJSDataFrame } from './prepareBabylonJSDataFrame';
+import { ConnectionByID, ResourceNode } from './WebTestBreakdown';
 
 const formatCompositeIentifier = ({ type, id }: ICompositeIdentifier): string => `${type}/${id}`;
 
@@ -104,6 +106,36 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
             connectionType === EdgeConnectionType.self ? 'Single Resource Note' : 'Connecting Note',
     };
 
+    const babylonJSDataFrame = prepareBabylonJSDataFrame(notes);
+
+    // console.log({ babylonJSDataFrame });
+
+    const testResourceNodes: ResourceNode[] = [
+        { id: 'Book/1', coordinates: [1, 4, 3] },
+        { id: 'MediaItem/2', coordinates: [5, -5, 1] },
+        { id: 'Audio/3', coordinates: [2, 3, 1] },
+        { id: 'Journal/4', coordinates: [8, 5, 6] },
+        { id: 'Song/5', coordinates: [-4, -3, 1] },
+        { id: 'Book/6', coordinates: [2, -6, 5] },
+        { id: 'Audio/7', coordinates: [3, 8, -1] },
+        { id: 'Journal/8', coordinates: [7, 2, 6] },
+    ];
+
+    const testResourceNodes2 = babylonJSDataFrame.resourceNodes;
+
+    const testConnectionsById: ConnectionByID[] = [
+        ['Book/1', 'MediaItem/2'],
+        ['Audio/3', 'Book/1'],
+        ['Journal/8', 'Book/1'],
+        ['Song/5', 'Audio/3'],
+        ['MediaItem/2', 'Book/6'],
+        ['Journal/8', 'MediaItem/2'],
+        ['MediaItem/2', 'Song/5'],
+        ['Audio/7', 'Journal/4'],
+    ];
+
+    const testConnectionsById2: ConnectionByID[] = babylonJSDataFrame.connectionsByID;
+
     return (
         <>
             <IndexTable
@@ -113,7 +145,6 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
                 heading={'Notes'}
                 filterableProperties={['connectionType', 'note']}
             />
-            {/* <WebNoteTest entities={notes} indexScopedActions={[]} /> */}
             <FullScreen
                 className={styles['web3d-container']}
                 handle={fullScreenHandle}
@@ -134,8 +165,18 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
                 </div>
                 {/* <BabelTest /> */}
                 {/* <TransformNode /> */}
-                {/* <WebTest3D entities={notes} indexScopedActions={[]} /> */}
-                <WebTestBreakdown />
+                {/* <WebTest3D
+                    resourceNodes={babylonJSDataFrame.resourceNodes}
+                    noteEdges={babylonJSDataFrame.noteEdges}
+                /> */}
+                {/* <WebTestBreakdownTwo
+                    nodes={testResourceNodes2}
+                    connectionsById={testConnectionsById2}
+                /> */}
+                <Web3DTestThreeReact
+                    nodes={testResourceNodes2}
+                    connectionsById={testConnectionsById2}
+                />
             </FullScreen>
         </>
     );
