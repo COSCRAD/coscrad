@@ -47,7 +47,7 @@ export const prepareBabylonJSDataFrame = (notes): BabylonJSDataFrame => {
             return acc;
         }, [])
         .reduce((acc, currentValue, index) => {
-            const factor = index % 2 === 0 ? -(index + 4) : index + 4;
+            const factor = index % 2 === 0 ? -(index + 14) : index + 8;
             const emptyArray = [0, 0, 0];
             const coords = emptyArray.reduce((coordAcc, coordCurrent) => {
                 return [...coordAcc, Math.round(factor * Math.random() + Math.random() * 6)];
