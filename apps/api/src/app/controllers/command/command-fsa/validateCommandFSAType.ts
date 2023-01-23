@@ -18,8 +18,7 @@ export default (input: unknown): ResultOrError<Valid> => {
     const allErrors: InternalError[] = validateCoscradModelInstance(
         getCoscradDataSchema(CommandFSA),
         input,
-        // this should be on an object- fix the API
-        true
+        { forbidUnknownValues: true }
     ).map((simpleError) => new InternalError(simpleError.toString()));
 
     if (allErrors.length > 0) return buildTopLevelError(allErrors);

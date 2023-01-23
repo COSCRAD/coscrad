@@ -8,7 +8,6 @@ import {
 import { ComplexCoscradDataType, SimpleCoscradPropertyTypeDefinition } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
 /* eslint-disable-next-line */
-/* eslint-disable-next-line */
 import {
     CoscradConstraint,
     isConstraintSatisfied,
@@ -20,29 +19,8 @@ import { validateCoscradModelInstance } from './validate-coscrad-model-instance'
 const validateSingleConstraint = (
     propertyName: string,
     inputValue: unknown,
-    constraintName: CoscradConstraint,
-    validateEachMemberOfArray: boolean
+    constraintName: CoscradConstraint
 ): Error[] => {
-    // TODO Do I need this?
-    if (validateEachMemberOfArray) {
-        if (!Array.isArray(inputValue))
-            return [new Error(`${propertyName} has failed the validation constraint: Is Array`)];
-
-        const arrayValidationerrors = inputValue.reduce(
-            (allErrors: Error[], nextElement: unknown, index) =>
-                isConstraintSatisfied(constraintName, nextElement)
-                    ? allErrors
-                    : allErrors.concat(
-                          new Error(
-                              `${propertyName}[${index}]: ${nextElement} has failed the validation constraint: ${constraintName}`
-                          )
-                      ),
-            []
-        );
-
-        return arrayValidationerrors;
-    }
-
     return isConstraintSatisfied(constraintName, inputValue)
         ? []
         : [
@@ -62,7 +40,7 @@ const validateArray = (
     if (!Array.isArray(inputValue))
         return [new Error(`${propertyName} has failed the validation constraint: Is Array`)];
 
-    // Double check that if it's not optional it has length!
+    // Double check that if it's not optional it has length
     if (isOptional && isDeepStrictEqual(inputValue, [])) return [];
 
     // At this point, we are safe to validate each member and collect the results
@@ -80,8 +58,7 @@ export const validateCoscradModelProperty = (
     propertyTypeDefinition: CoscradPropertyTypeDefinition,
     propertyName: string,
     actualPropertyValue: any,
-    // TODO Make this default to `true` so we are explicit about opting out
-    forbidUnknownValues = false
+    forbidUnknownValues: boolean
 ): Error[] => {
     const { isOptional, isArray } = propertyTypeDefinition;
 
@@ -129,8 +106,7 @@ export const validateCoscradModelProperty = (
             const allErrors = validateCoscradModelInstance(
                 propertyTypeDefinition.schema,
                 actualPropertyValue,
-                // TODO Make this default to `true`
-                forbidUnknownValues
+                { forbidUnknownValues }
             );
 
             if (allErrors.length > 0)
@@ -159,12 +135,15 @@ export const validateCoscradModelProperty = (
         );
     }
 
-    const constraints = getConstraintNamesForCoscradDataType(coscradDataType as CoscradDataType);
+    const constraints = getConstraintNamesForCoscradDataType(coscradDataType as CoscradDataType, {
+        isOptional,
+        isArray,
+    });
 
     return constraints.reduce(
         (allErrors: Error[], constraintName) => [
             ...allErrors,
-            ...validateSingleConstraint(propertyName, actualPropertyValue, constraintName, isArray),
+            ...validateSingleConstraint(propertyName, actualPropertyValue, constraintName),
         ],
         []
     );

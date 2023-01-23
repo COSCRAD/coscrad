@@ -1,13 +1,12 @@
 import { ICommandBase, ResourceType } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { ComplexCoscradDataType, ExternalEnum, NestedDataType, UUID } from '@coscrad/data-types';
+import { ExternalEnum, NestedDataType, UUID } from '@coscrad/data-types';
 import formatAggregateType from '../../../../../view-models/presentation/formatAggregateType';
 import { AggregateId } from '../../../../types/AggregateId';
 
 class ResourceCompositeIdentifier {
     @ExternalEnum(
         {
-            complexDataType: ComplexCoscradDataType.enum,
             enumLabel: 'resource type',
             enumName: 'ResourceType',
             labelsAndValues: Object.values(ResourceType).map((resourceType) => ({

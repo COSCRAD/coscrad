@@ -1,9 +1,4 @@
-import {
-    ComplexCoscradDataType,
-    CompositeIdentifier,
-    ExternalEnum,
-    NonEmptyString,
-} from '@coscrad/data-types';
+import { CompositeIdentifier, ExternalEnum, NonEmptyString } from '@coscrad/data-types';
 import { Type } from 'class-transformer';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
@@ -20,7 +15,6 @@ import { Aggregate } from '../../aggregate.entity';
 class CategorizableCompositeIdentifier {
     @ExternalEnum(
         {
-            complexDataType: ComplexCoscradDataType.enum,
             enumName: 'CategorizableType',
             enumLabel: 'Reosurce Type or Note',
             labelsAndValues: Object.values(CategorizableType).map((ct) => ({

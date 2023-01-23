@@ -33,22 +33,6 @@ const validDTO: DTO<Category> = {
 };
 
 const invalidTestCases: InvalidTestCase[] = [
-    /**
-     * TODO [https://www.pivotaltracker.com/story/show/183014320]
-     * Test that the factory handles the following cases:
-     * - the dto is null
-     * - the dto is undefined
-     */
-    // {
-    //     description: 'when the label is an empty string',
-    //     dto: {
-    //         ...validDTO,
-    //         label: '',
-    //     },
-    //     expectedError: buildTopLevelError(validDTO.id, [
-    //         // TODO Check inner error
-    //     ]),
-    // },
     {
         description: 'when one the category members is of an invalid type',
         dto: {

@@ -23,9 +23,7 @@ export default (
             enableImplicitConversion: false,
         });
 
-        return validateCoscradModelInstance(
-            getCoscradDataSchema(ModelCtor),
-            instanceToValidate,
-            forbidUnknownValues
-        );
+        return validateCoscradModelInstance(getCoscradDataSchema(ModelCtor), instanceToValidate, {
+            forbidUnknownValues,
+        });
     };

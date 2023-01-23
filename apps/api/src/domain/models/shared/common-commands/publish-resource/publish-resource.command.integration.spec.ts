@@ -127,6 +127,16 @@ describe(commandType, () => {
                             });
                         }
                     );
+
+                    describe.only('when there is a bogusProperty', () => {
+                        it('should fail with the expected error', async () => {
+                            await assertCommandFailsDueToTypeError(
+                                commandAssertionDependencies,
+                                { propertyName: 'bogusProperty', invalidValue: 99 },
+                                buildCommandFSA()
+                            );
+                        });
+                    });
                 });
 
                 describe(`when the ${formatAggregateType(

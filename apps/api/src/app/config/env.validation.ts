@@ -1,4 +1,3 @@
-import { CoscradComplexDataType } from '@coscrad/api-interfaces';
 import {
     ExternalEnum,
     getCoscradDataSchema,
@@ -15,7 +14,6 @@ import { Scheme } from './constants/Scheme';
 export class EnvironmentVariables {
     @ExternalEnum(
         {
-            complexDataType: CoscradComplexDataType.enum,
             enumLabel: 'Node Environment',
             enumName: `Environment`,
             labelsAndValues: Object.values(Environment).map((envName) => ({
@@ -25,14 +23,14 @@ export class EnvironmentVariables {
         },
         {
             label: 'Node Environment',
-            description: 'Is the server running in production, staging, testing?',
+            description: 'is the server running in production, staging, testing?',
         }
     )
     NODE_ENV: Environment;
 
     @PositiveInteger({
         label: 'Node Port',
-        description: 'The port on which Node (Express) will listen for requests',
+        description: 'the port on which Node (Express) will listen for requests',
     })
     NODE_PORT: number;
 
@@ -81,19 +79,19 @@ export class EnvironmentVariables {
 
     @URL({
         label: 'Auth0 Issuer URL',
-        description: 'The issuer URL from Auth0',
+        description: 'the issuer URL from Auth0',
     })
     AUTH0_ISSUER_URL: string;
 
     @URL({
         label: 'Auth0 Audience',
-        description: 'The audience of the Auth0 App',
+        description: 'the audience of the Auth0 App',
     })
     AUTH0_AUDIENCE: string;
 
     @URL({
         label: 'Base Digital Asset URL',
-        description: 'Some media hyperlinks are dynamically constructed and use this prefix',
+        description: 'some media hyperlinks are dynamically constructed and use this prefix',
     })
     BASE_DIGITAL_ASSET_URL: string;
 
@@ -111,7 +109,10 @@ export const validate = (config: Record<string, unknown>): EnvironmentVariables 
 
     const errors = validateCoscradModelInstance(
         getCoscradDataSchema(EnvironmentVariables),
-        configToValidate
+        configToValidate,
+        {
+            forbidUnknownValues: false,
+        }
     );
 
     if (errors.length > 0) {

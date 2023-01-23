@@ -1,5 +1,5 @@
 import { AggregateType } from '@coscrad/api-interfaces';
-import { ComplexCoscradDataType, ExternalEnum, UUID } from '@coscrad/data-types';
+import { ExternalEnum, UUID } from '@coscrad/data-types';
 
 export class TagCompositeIdentifier {
     /**
@@ -13,7 +13,6 @@ export class TagCompositeIdentifier {
      */
     @ExternalEnum(
         {
-            complexDataType: ComplexCoscradDataType.enum,
             enumLabel: 'type',
             enumName: 'type',
             labelsAndValues: [

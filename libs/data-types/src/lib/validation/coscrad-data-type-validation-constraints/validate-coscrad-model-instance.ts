@@ -2,14 +2,17 @@
 import { ICoscradModelSchema } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 /* eslint-disable-next-line */
-/* eslint-disable-next-line */
-/* eslint-disable-next-line */
 import { validateCoscradModelProperty } from './validate-coscrad-model-property';
+import { validateUnlistedProperties } from './validateUnlistedProperties';
+
+export type CoscradModelValidatorOptions = {
+    forbidUnknownValues: boolean;
+};
 
 export const validateCoscradModelInstance = (
     schema: ICoscradModelSchema,
     instance: any,
-    forbidUnknownValues = false
+    { forbidUnknownValues }: CoscradModelValidatorOptions
 ): Error[] => {
     if (isNullOrUndefined(instance)) {
         return [new Error(`Expected an instance of a coscrad model, received: ${instance}`)];
@@ -29,24 +32,8 @@ export const validateCoscradModelInstance = (
     );
 
     return [
-        ...(forbidUnknownValues
-            ? Object.keys(instance)
-                  .filter((propertyKey) => {
-                      const isPropInSchema = Object.keys(schema).some(
-                          (knownPropertyKey) => knownPropertyKey === propertyKey
-                      );
-
-                      return !isPropInSchema;
-                  })
-                  .map(
-                      (propertyKey) =>
-                          new Error(
-                              `The property ${propertyKey} is not part of the schema: \n ${JSON.stringify(
-                                  schema
-                              )}`
-                          )
-                  )
-            : []),
+        // The schema is the source of truth for the known keys
+        ...validateUnlistedProperties(instance, Object.keys(schema), { forbidUnknownValues }),
         ...errorsFromKnownProperties,
     ];
 };
