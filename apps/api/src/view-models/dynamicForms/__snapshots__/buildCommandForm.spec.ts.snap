@@ -9,10 +9,6 @@ Object {
           "message": "must be a non-empty string",
           "name": "non-empty string",
         },
-        Object {
-          "message": "must be a defined value",
-          "name": "defined value",
-        },
       ],
       "description": "title of the media item in the language",
       "label": "title (language)",
@@ -24,10 +20,6 @@ Object {
         Object {
           "message": "must be a non-empty string",
           "name": "non-empty string",
-        },
-        Object {
-          "message": "must be a defined value",
-          "name": "defined value",
         },
       ],
       "description": "title of the media item in the colonial language",

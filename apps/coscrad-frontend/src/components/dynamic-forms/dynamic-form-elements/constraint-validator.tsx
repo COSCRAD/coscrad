@@ -2,7 +2,6 @@ interface ConstraintValidationProps {
     errorMessages: string[];
 }
 
-// TODO block submission if the validation fails.
 export const ConstraintValidationResultPresenter = ({
     errorMessages,
 }: ConstraintValidationProps): JSX.Element => {

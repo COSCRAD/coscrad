@@ -106,10 +106,7 @@ describe('validateFrontMatterData', () => {
 
         invalidProps.forEach(({ propertyName, description, invalidValue }) => {
             describe(`when ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
-                const invalidConfig = {
-                    ...validContentConfig,
-                    [propertyName]: invalidValue,
-                };
+                const invalidConfig = buildInvalidContentConfig({ [propertyName]: invalidValue });
 
                 it('should return the expected errors', () => {
                     const result = validateConfigurableContent(invalidConfig);

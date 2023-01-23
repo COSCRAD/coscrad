@@ -79,10 +79,6 @@ export const DynamicFormElement = ({
             </>
         );
 
-    /**
-     * TODO[https://www.pivotaltracker.com/story/show/184056535]
-     * We need separate validation rules based on `CoscradDataTypes`<div className=""></div>
-     */
     if (type === FormFieldType.numericInput)
         return (
             <TextInput

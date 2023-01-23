@@ -4,13 +4,13 @@ import {
     IDetailQueryResult,
     IFormField,
     IIndexQueryResult,
-    isResourceType,
+    isResourceType
 } from '@coscrad/api-interfaces';
 import { displayLoadableWithErrorsAndLoading } from '../../higher-order-components';
 import { buildUseLoadableForSingleCategorizableType } from '../../higher-order-components/buildUseLoadableResourcesOfSingleType';
 import {
     AggregateStringSummarizer,
-    aggregateStringSummarizerFactory,
+    aggregateStringSummarizerFactory
 } from '../../resources/factories/aggregate-string-summarizer-factory';
 import { StaticSelect } from './static-select';
 
@@ -41,7 +41,7 @@ export const DynamicSelect = ({
     simpleFormField,
     onNewSelection,
     currentValue,
-    required = false,
+    required
 }: DynamicSelectProps): JSX.Element => {
     if (!isResourceType(aggregateType)) {
         throw new Error(

@@ -15,7 +15,7 @@ export const StaticSelect = ({
     formField: { name, options, label },
     onNewSelection,
     currentValue,
-    required = false,
+    required,
 }: StaticSelectProps): JSX.Element => {
     const menuItems = options as IValueAndDisplay<string>[];
 

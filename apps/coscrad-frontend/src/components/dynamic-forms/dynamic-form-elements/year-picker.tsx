@@ -26,7 +26,7 @@ export const YearPicker = ({
     formField: { name, label, description, type },
     onNewSelection,
     currentValue,
-    required = false,
+    required,
 }: YearPickerProps): JSX.Element => {
     const numberOfOptions = CURRENT_YEAR - STARTING_DATE_TO_PICK + 1;
 

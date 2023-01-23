@@ -28,7 +28,7 @@ const validateField = (field: IFormField, value: unknown): string[] =>
                 ? accValidationMessage
                 : accValidationMessage.concat(
                       constraint.name === CoscradConstraint.isRequired
-                          ? // TOD Move this logic to the back-end
+                          ? // TODO Move this logic to the back-end
                             '**required'
                           : constraint.message
                   ),
