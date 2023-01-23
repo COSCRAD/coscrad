@@ -33,6 +33,8 @@ export const prepareBabylonJSDataFrame = (notes): BabylonJSDataFrame => {
 
     const connectedResources = dualNotes.map((note) => note.connectedResources);
 
+    const radius = 12;
+
     const resourceNodes = connectedResources
         .map((connection) =>
             connection.map((resource) =>
@@ -47,10 +49,10 @@ export const prepareBabylonJSDataFrame = (notes): BabylonJSDataFrame => {
             return acc;
         }, [])
         .reduce((acc, currentValue, index) => {
-            const factor = index % 2 === 0 ? -(index + 14) : index + 8;
+            const factor = index % 2 === 0 ? -(index + 100) : index + 98;
             const emptyArray = [0, 0, 0];
             const coords = emptyArray.reduce((coordAcc, coordCurrent) => {
-                return [...coordAcc, Math.round(factor * Math.random() + Math.random() * 6)];
+                return [...coordAcc, Math.round(Math.random() * index) * (Math.PI / 180)];
             }, []);
 
             return [...acc, { id: currentValue, coordinates: coords }];

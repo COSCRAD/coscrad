@@ -43,7 +43,7 @@ export const Web3DTestThreeReact = ({
             0,
             0,
             0,
-            new BABYLON.Vector3(0, 0, 60),
+            new BABYLON.Vector3(4, 20, 100),
             scene
         );
         // This targets the camera to scene origin
@@ -56,20 +56,79 @@ export const Web3DTestThreeReact = ({
         light.intensity = 0.7;
         // Our built-in 'sphere' shape. Params: name, subdivs, size, scene
 
-        var sphereColor = new BABYLON.StandardMaterial('sphereColor');
-        sphereColor.diffuseColor = new BABYLON.Color3(0.04, 0.86, 0.97);
-        sphereColor.alpha = 0.8;
+        //Set font type
+        var font_type = 'Arial';
 
-        const spheres = [];
+        //Set width an height for plane
+        var boxWidth = 10;
+        var boxHeight = 3;
+        var boxDepth = 1;
+
+        const rectangles = [];
+        const texts = [];
         for (let i = 0; i < nodes.length; i++) {
-            spheres[i] = BABYLON.MeshBuilder.CreateSphere(
-                `sphere${i}`,
-                { diameter: 2, segments: 32 },
+            const boxCoordinates = convertRaw3DCoordinatesToVector3(nodes[i].coordinates);
+
+            rectangles[i] = BABYLON.MeshBuilder.CreateSphere(`box${i}`, { diameter: 10 }, scene);
+
+            //Set width and height for dynamic texture using same multiplier
+            const fontFactor = 20;
+            var DTWidth = boxWidth * fontFactor;
+            var DTHeight = boxHeight * fontFactor;
+
+            //Set text
+            texts[i] = nodes[i].id;
+
+            //Create dynamic texture
+            var dynamicTexture = new BABYLON.DynamicTexture(
+                'DynamicTexture',
+                { width: DTWidth, height: DTHeight },
                 scene
             );
 
-            spheres[i].material = sphereColor;
-            spheres[i].position = convertRaw3DCoordinatesToVector3(nodes[i].coordinates);
+            //Check width of text for given font type at any size of font
+            var ctx = dynamicTexture.getContext();
+            var size = 5; //any value will work
+            ctx.font = size + 'px ' + font_type;
+            var textWidth = ctx.measureText(texts[i]).width;
+
+            //Calculate ratio of text width to size of font used
+            var ratio = textWidth / size;
+
+            //set font to be actually used to write text on dynamic texture
+            var font_size = Math.floor(DTWidth / (ratio * 1.9)); //size of multiplier (1) can be adjusted, increase for smaller text
+            var font = font_size + 'px ' + font_type;
+
+            //Draw text
+            const textOpt = texts[i];
+            const xOpt = null;
+            const yOpt = null;
+            const fontOpt = font;
+            const colorOpt = '#000000';
+            const canvasColorOpt = '#ffffff';
+            const intertYOpt = true;
+            const updateOpt = true;
+
+            dynamicTexture.drawText(
+                textOpt,
+                xOpt,
+                yOpt,
+                fontOpt,
+                colorOpt,
+                canvasColorOpt,
+                intertYOpt,
+                updateOpt
+            );
+            // dynamicTexture.drawText(texts[i], null, null, font, '#000000', '#ffffff', true);
+
+            //create material
+            var mat = new BABYLON.StandardMaterial('mat', scene);
+            mat.diffuseTexture = dynamicTexture;
+            dynamicTexture.wAng = BABYLON.Tools.ToRadians(-180);
+
+            //apply material
+            rectangles[i].material = mat;
+            rectangles[i].position = boxCoordinates;
         }
 
         const lineColors = [
