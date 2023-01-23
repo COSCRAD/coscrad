@@ -216,9 +216,7 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
         /**
          * TODO [https://www.pivotaltracker.com/story/show/182840154]
          *
-         * We should add fuzz test cases- but this will cause problems currently
-         * because of the composite identifier decorator not playing nice
-         * with class-validator's "forbidUnknownProps" validation.
+         * We should add fuzz test cases.
          *
          * see `validateCommandPayloadType.ts` for more info.
          */

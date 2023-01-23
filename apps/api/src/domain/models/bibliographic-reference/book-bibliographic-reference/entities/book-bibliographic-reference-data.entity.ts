@@ -8,7 +8,6 @@ import {
     URL,
     Year,
 } from '@coscrad/data-types';
-import { IsNonEmptyArray } from '@coscrad/validation';
 import { DTO } from '../../../../../types/DTO';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
@@ -30,8 +29,8 @@ export default class BookBibliographicReferenceData
     })
     readonly title: string;
 
-    @IsNonEmptyArray()
     @NestedDataType(BibliographicReferenceCreator, {
+        isOptional: false,
         isArray: true,
         label: 'creators',
         description: 'those responsible for creating this work',

@@ -1,4 +1,4 @@
-import { isUUID } from '@coscrad/validation';
+import { isUUID } from '@coscrad/validation-constraints';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { IIdManager } from '../../../domain/interfaces/id-manager.interface';

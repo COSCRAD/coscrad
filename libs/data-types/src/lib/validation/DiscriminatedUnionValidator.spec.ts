@@ -1,6 +1,7 @@
-import { ValidationError } from 'class-validator';
 import DiscriminatedUnionValidator from './DiscriminatedUnionValidator';
 import { SimpleValidationFunction } from './interfaces/SimpleValidationFunction';
+
+class ValidationError extends Error {}
 
 describe(`DescriminatedUnionValidator`, () => {
     class Circle {

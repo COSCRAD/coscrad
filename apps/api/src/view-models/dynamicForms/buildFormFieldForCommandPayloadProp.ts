@@ -4,12 +4,10 @@ import {
     CoscradDataType,
     CoscradPropertyTypeDefinition,
     EnumTypeDefinition,
+    getConstraintNamesForCoscradDataType,
     isSimpleCoscradPropertyTypeDefinition,
 } from '@coscrad/data-types';
-import {
-    getConstraintNamesForCoscradDataType,
-    isNullOrUndefined,
-} from '@coscrad/validation-constraints';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { InternalError } from '../../lib/errors/InternalError';
 
 // TODO Move this to a higher level- possibly called CommandPayloadPropertyMeta
@@ -32,6 +30,7 @@ const lookupTable: { [K in CoscradDataType]: FormFieldType } = {
     [CoscradDataType.UUID]: FormFieldType.textField,
     [CoscradDataType.Year]: FormFieldType.yearPicker,
     [CoscradDataType.BOOLEAN]: FormFieldType.switch,
+    [CoscradDataType.String]: FormFieldType.textField,
 };
 
 const buildSimpleFormField = (

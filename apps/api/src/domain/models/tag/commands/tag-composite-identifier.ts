@@ -1,6 +1,5 @@
 import { AggregateType } from '@coscrad/api-interfaces';
-import { UUID } from '@coscrad/data-types';
-import { Equals } from '@coscrad/validation';
+import { ExternalEnum, UUID } from '@coscrad/data-types';
 
 export class TagCompositeIdentifier {
     /**
@@ -12,7 +11,22 @@ export class TagCompositeIdentifier {
      * The simple answer is that you always have to tack on an
      * `aggregateCompositeIdentifier`.
      */
-    @Equals(AggregateType.tag)
+    @ExternalEnum(
+        {
+            enumLabel: 'type',
+            enumName: 'type',
+            labelsAndValues: [
+                {
+                    label: 'tag',
+                    value: AggregateType.tag,
+                },
+            ],
+        },
+        {
+            label: 'type',
+            description: 'type',
+        }
+    )
     type = AggregateType.tag;
 
     @UUID({

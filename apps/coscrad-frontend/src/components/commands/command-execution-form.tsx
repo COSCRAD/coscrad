@@ -31,10 +31,6 @@ export const CommandExecutionForm = ({
             },
         };
 
-        console.log({
-            submittedCommandWithFSA: commandFsa,
-        });
-
         dispatch(executeCommand(commandFsa));
     };
 

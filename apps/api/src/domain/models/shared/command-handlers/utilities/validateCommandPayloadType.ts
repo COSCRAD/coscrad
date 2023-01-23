@@ -1,22 +1,17 @@
 import { ICommand } from '@coscrad/commands';
-import { buildSimpleValidationFunction } from '@coscrad/validation';
+import { getCoscradDataSchema, validateCoscradModelInstance } from '@coscrad/data-types';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import InvalidCommandPayloadTypeError from '../../common-command-errors/InvalidCommandPayloadTypeError';
 
 export default (command: ICommand, commandType: string): Valid | InternalError => {
-    /**
-     * TODO [https://www.pivotaltracker.com/story/show/182840154]
-     * Remove this hack that has to do with the 'whitelist' failing for
-     * `CompositeIdentifier` payload prop.
-     */
-    const forbidUnknownValues = commandType === 'GRANT_RESOURCE_READ_ACCESS_TO_USER' ? false : true;
-
     const commandCtor = Object.getPrototypeOf(command).constructor;
 
     // Validate command type
-    const payloadTypeErrors = buildSimpleValidationFunction(commandCtor, { forbidUnknownValues })(
-        command
+    const payloadTypeErrors = validateCoscradModelInstance(
+        getCoscradDataSchema(commandCtor),
+        command,
+        { forbidUnknownValues: true }
     ).map((simpleError) => new InternalError(`invalid payload type: ${simpleError.toString()}`));
 
     if (payloadTypeErrors.length > 0) {

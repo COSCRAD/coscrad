@@ -1,5 +1,4 @@
-import { UUID } from '@coscrad/data-types';
-import { Equals } from '@coscrad/validation';
+import { NonEmptyString, UUID } from '@coscrad/data-types';
 import { AggregateType } from '../../../types/AggregateType';
 
 export class BibliographicReferenceCompositeIdentifier {
@@ -12,7 +11,11 @@ export class BibliographicReferenceCompositeIdentifier {
      * The simple answer is that you always have to tack on an
      * `aggregateCompositeIdentifier`.
      */
-    @Equals(AggregateType.bibliographicReference)
+    @NonEmptyString({
+        label: 'type',
+        description:
+            'sub-type of bibliographic reference (e.g., book, journal article, or court case)',
+    })
     type = AggregateType.bibliographicReference;
 
     @UUID({

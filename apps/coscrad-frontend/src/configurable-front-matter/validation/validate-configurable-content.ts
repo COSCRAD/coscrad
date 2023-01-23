@@ -1,15 +1,42 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { configurableContentSchema } from '../data/configurable-content-schema';
-import { buildConfigValidationFunction } from './build-config-validation-function';
+import {
+    CoscradConstraint,
+    isConstraintSatisfied,
+    isNullOrUndefined,
+} from '@coscrad/validation-constraints';
+import { configurableContentPropertiesAndConstraints } from '../data/configurable-content-schema';
 
-export const isErrorArray = (input: unknown): input is Error[] =>
-    Array.isArray(input) && input.every((item) => item instanceof Error);
+export const validateConfigurableContent = (instance: unknown): Error[] =>
+    Object.entries(configurableContentPropertiesAndConstraints).reduce(
+        (accumulatedErrors: Error[], [propertyName, constraints]) => {
+            if (isNullOrUndefined(instance)) {
+                return [new Error(`A content config must be defined`)];
+            }
 
-export const validateConfigurableContent = (input: unknown): Error[] => {
-    if (isNullOrUndefined(input))
-        return [new Error(`Encountered a null or undefined content config.`)];
+            const propertyValue = instance[propertyName];
 
-    const simpleValidationResults = buildConfigValidationFunction(configurableContentSchema)(input);
+            if (isNullOrUndefined(propertyValue)) {
+                return constraints.includes(CoscradConstraint.isRequired)
+                    ? [
+                          new Error(
+                              `The required property: ${propertyName} is missing from the content config`
+                          ),
+                      ]
+                    : [];
+            }
 
-    return simpleValidationResults;
-};
+            const newConstraintErrors = constraints.reduce(
+                (allErrors: Error[], constraint) =>
+                    isConstraintSatisfied(constraint, propertyValue)
+                        ? allErrors
+                        : allErrors.concat(
+                              new Error(
+                                  `Configurable content property: ${propertyName} does not satisfy the validation constraint: ${constraint}`
+                              )
+                          ),
+                []
+            );
+
+            return accumulatedErrors.concat(...newConstraintErrors);
+        },
+        []
+    );

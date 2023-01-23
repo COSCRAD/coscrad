@@ -4,8 +4,6 @@
  */
 export enum CoscradConstraint {
     isNonEmptyString = 'non-empty string',
-    // i.e. not `null` or `undefined`
-    isDefined = 'defined',
     isObject = 'object',
     isInteger = 'integer',
     isYear = 'year',
@@ -16,4 +14,7 @@ export enum CoscradConstraint {
     isNonNegative = 'non-negative number',
     isPositive = 'positive number',
     isURL = 'URL',
+    isCompositeIdentifier = 'composite identifier',
+    isRequired = 'defined value',
+    isString = 'string',
 }

@@ -1,4 +1,5 @@
 export enum CoscradDataType {
+    String = 'STRING',
     NonEmptyString = 'NON_EMPTY_STRING',
     UUID = 'UUID',
     URL = 'URL',

@@ -6,6 +6,8 @@ type CoscradDataTypeToTypeScriptType = {
         id: string;
         type: string;
     };
+    [CoscradDataType.BOOLEAN]: boolean;
+    [CoscradDataType.CompositeIdentifier]: { type: string; id: string };
     [CoscradDataType.ISBN]: string;
     [CoscradDataType.NonEmptyString]: string;
     [CoscradDataType.NonNegativeFiniteNumber]: number;
@@ -14,7 +16,7 @@ type CoscradDataTypeToTypeScriptType = {
     [CoscradDataType.URL]: string;
     [CoscradDataType.UUID]: string;
     [CoscradDataType.Year]: number;
-    [CoscradDataType.BOOLEAN]: boolean;
+    [CoscradDataType.String]: string;
 };
 
 export type FromCoscradDataType<T extends CoscradDataType> = CoscradDataTypeToTypeScriptType[T];

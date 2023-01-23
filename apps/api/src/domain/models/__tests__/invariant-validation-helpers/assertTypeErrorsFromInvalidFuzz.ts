@@ -19,29 +19,32 @@ export default <TAggregate extends Aggregate>(
 
     const buildInvalidDto = createInvalidAggregateFactory(new AggregateCtor(validDto));
 
-    Object.entries(userGroupDataSchema).forEach(([propertyName, propertySchema]) => {
-        describe(`when the property: ${propertyName} is invalid`, () => {
-            const invalidValuesToUse = new FuzzGenerator(
-                propertySchema as SimpleCoscradPropertyTypeDefinition
-            ).generateInvalidValues();
+    Object.entries(userGroupDataSchema)
+        // it's not possible to set invalid type properties as they are always hard-wired
+        .filter(([propertyName, _]) => propertyName !== 'type')
+        .forEach(([propertyName, propertySchema]) => {
+            describe(`when the property: ${propertyName} is invalid`, () => {
+                const invalidValuesToUse = new FuzzGenerator(
+                    propertySchema as SimpleCoscradPropertyTypeDefinition
+                ).generateInvalidValues();
 
-            invalidValuesToUse.forEach(({ value, description }): void => {
-                describe(`when given the invalid value: ${JSON.stringify(
-                    value
-                )} (${description})`, () => {
-                    it('should return the expected error', () => {
-                        const invalidDto = buildInvalidDto({
-                            [propertyName]: value,
-                        } as DTO<TAggregate>);
+                invalidValuesToUse.forEach(({ value, description }): void => {
+                    describe(`when given the invalid value: ${JSON.stringify(
+                        value
+                    )} (${description})`, () => {
+                        it('should return the expected error', () => {
+                            const invalidDto = buildInvalidDto({
+                                [propertyName]: value,
+                            } as DTO<TAggregate>);
 
-                        const invalidInstance = new AggregateCtor(invalidDto);
+                            const invalidInstance = new AggregateCtor(invalidDto);
 
-                        const result = invalidInstance.validateInvariants();
+                            const result = invalidInstance.validateInvariants();
 
-                        assertCoscradDataTypeAndTopLevelError(result, 'id', TopLevelErrorCtor);
+                            assertCoscradDataTypeAndTopLevelError(result, 'id', TopLevelErrorCtor);
+                        });
                     });
                 });
             });
         });
-    });
 };

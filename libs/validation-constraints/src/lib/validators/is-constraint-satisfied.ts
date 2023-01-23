@@ -8,6 +8,7 @@ import {
     isNullOrUndefined,
     isObject,
     isPositiveInteger,
+    isString,
     isURL,
     isUUID,
     isYear,
@@ -19,16 +20,25 @@ import { PredicateFunction } from '../types';
 const constraintsLookupTable: { [K in CoscradConstraint]: PredicateFunction } = {
     [CoscradConstraint.isNonEmptyString]: isNonEmptyString,
     [CoscradConstraint.isBoolean]: isBoolean,
-    [CoscradConstraint.isDefined]: (input: unknown) => !isNullOrUndefined(input),
+    [CoscradConstraint.isRequired]: (input: unknown) => !isNullOrUndefined(input),
     [CoscradConstraint.isInteger]: isInteger,
     [CoscradConstraint.isObject]: isObject,
     [CoscradConstraint.isYear]: isYear,
-    [CoscradConstraint.isUUID]: isUUID,
-    [CoscradConstraint.isISBN]: isISBN,
+    [CoscradConstraint.isUUID]: (input: unknown): input is string =>
+        isString(input) && isUUID(input),
+    [CoscradConstraint.isISBN]: (input: unknown): input is string =>
+        isString(input) && isISBN(input),
     [CoscradConstraint.isNonNegative]: isNonNegativeNumber,
     [CoscradConstraint.isFiniteNumber]: isFiniteNumber,
     [CoscradConstraint.isPositive]: isPositiveInteger,
     [CoscradConstraint.isURL]: isURL,
+    [CoscradConstraint.isString]: isString,
+    [CoscradConstraint.isCompositeIdentifier]: (input: unknown) => {
+        const { type, id } = input as { type: string; id: string };
+
+        // TODO Make the id a `UUID`
+        return [type, id].every(isNonEmptyString);
+    },
 };
 
 export const isConstraintSatisfied = (

@@ -38,6 +38,8 @@ export class VocabularyList extends Resource {
 
     @NestedDataType(VocabularyListEntry, {
         isArray: true,
+        // i.e. can be empty
+        isOptional: true,
         label: 'entries',
         description: 'all terms in this vocabulary list with corresponding filter properties',
     })
@@ -45,6 +47,8 @@ export class VocabularyList extends Resource {
 
     @NestedDataType(VocabularyListVariable, {
         isArray: true,
+        // i.e. can be empty
+        isOptional: true,
         label: 'filters',
         description: 'defines a dynamic form that can be used to filter the entries',
     })

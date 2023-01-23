@@ -1,6 +1,6 @@
-import { buildSimpleValidationFunction } from '@coscrad/validation';
 import 'reflect-metadata';
 import getCoscradDataSchema from '../lib/utilities/getCoscradDataSchema';
+import buildSimpleValidationFunction from '../lib/validation/buildSimpleValidationFunction';
 
 import { buildValidWidgetDto, Widget } from './widget';
 describe('NonEmptyString', () => {

@@ -10,7 +10,6 @@ import {
     URL,
     UUID,
 } from '@coscrad/data-types';
-import { Equals } from '@coscrad/validation';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 
@@ -24,7 +23,10 @@ class MediaItemCompositeId {
      * The simple answer is that you always have to tack on an
      * `aggregateCompositeIdentifier`.
      */
-    @Equals(AggregateType.mediaItem)
+    @NonEmptyString({
+        label: 'type',
+        description: 'song',
+    })
     type = AggregateType.mediaItem;
 
     @UUID({

@@ -1,4 +1,4 @@
-import { isEnum, isURL } from 'class-validator';
+import { isEnum, isURL } from '@coscrad/validation-constraints';
 import AppInfo from '../AppInfo';
 import AppLink from '../AppLink';
 import { AppPlatform } from '../AppPlatform';
@@ -21,7 +21,7 @@ const validateAppLink = (input: unknown): AppLink | Error[] => {
     if (!isURL(url))
         allErrors.push(new Error(`App info: \nlinks: url must be a valid URL. Received: ${url}`));
 
-    if (!isEnum(platform, AppPlatform))
+    if (!isEnum(AppPlatform, platform))
         allErrors.push(
             new Error(
                 `App info: \nlinks: platform must be one of: ${Object.values(

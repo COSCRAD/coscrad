@@ -1,5 +1,4 @@
-import { UUID } from '@coscrad/data-types';
-import { Equals } from '@coscrad/validation';
+import { NonEmptyString, UUID } from '@coscrad/data-types';
 import { AggregateType } from '../../../../types/AggregateType';
 
 export class UserGroupCompositeIdentifier {
@@ -12,7 +11,10 @@ export class UserGroupCompositeIdentifier {
      * The simple answer is that you always have to tack on an
      * `aggregateCompositeIdentifier`.
      */
-    @Equals(AggregateType.userGroup)
+    @NonEmptyString({
+        label: 'type',
+        description: 'user group',
+    })
     type = AggregateType.userGroup;
 
     @UUID({

@@ -9,6 +9,10 @@ Object {
           "message": "must be a non-empty string",
           "name": "non-empty string",
         },
+        Object {
+          "message": "must be a defined value",
+          "name": "defined value",
+        },
       ],
       "description": "title of the media item in the language",
       "label": "title (language)",
@@ -21,6 +25,10 @@ Object {
           "message": "must be a non-empty string",
           "name": "non-empty string",
         },
+        Object {
+          "message": "must be a defined value",
+          "name": "defined value",
+        },
       ],
       "description": "title of the media item in the colonial language",
       "label": "title (colonial language)",
@@ -32,6 +40,10 @@ Object {
         Object {
           "message": "must be a URL",
           "name": "URL",
+        },
+        Object {
+          "message": "must be a defined value",
+          "name": "defined value",
         },
       ],
       "description": "a web URL link to a digital version of this media item for playback",
@@ -66,6 +78,10 @@ Object {
         Object {
           "message": "must be a object",
           "name": "object",
+        },
+        Object {
+          "message": "must be a defined value",
+          "name": "defined value",
         },
       ],
       "description": "raw data from a third-party system for posterity",

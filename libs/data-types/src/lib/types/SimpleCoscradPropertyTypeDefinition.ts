@@ -3,6 +3,10 @@ import { CoscradDataType, ISimpleCoscradPropertyTypeDefinition } from '@coscrad/
 import { isBoolean } from '@coscrad/validation-constraints';
 import { isCoscradDataType } from './CoscradDataType';
 
+/**
+ * Note that importing this from `validation-constraints` would lead to circular build deps for `api`.
+ */
+
 export type SimpleCoscradPropertyTypeDefinition =
     ISimpleCoscradPropertyTypeDefinition<CoscradDataType>;
 

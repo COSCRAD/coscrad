@@ -1,7 +1,6 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, RawDataObject, URL } from '@coscrad/data-types';
-import { IsNonEmptyArray } from '@coscrad/validation';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../types/AggregateType';
 import BibliographicReferenceCreator from '../../common/bibliographic-reference-creator.entity';
@@ -46,13 +45,10 @@ export class CreateJournalArticleBibliographicReference implements ICommandBase 
     })
     readonly title: string;
 
-    /**
-     * TODO [https://www.pivotaltracker.com/story/show/183109468]
-     * Support non-empty array based on `isOptional`.
-     */
-    @IsNonEmptyArray()
     @NestedDataType(BibliographicReferenceCreator, {
         isArray: true,
+        // i.e. must be non-empty
+        isOptional: false,
         label: 'creators',
         description: 'the authors of the referenced journal article',
     })

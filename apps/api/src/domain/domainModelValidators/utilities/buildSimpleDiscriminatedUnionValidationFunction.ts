@@ -1,4 +1,4 @@
-import { DiscriminatedUnionValidator, SimpleValidationFunction } from '@coscrad/validation';
+import { DiscriminatedUnionValidator, SimpleValidationFunction } from '@coscrad/data-types';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import validateSimpleInvariants from './validateSimpleInvariants';

@@ -1,5 +1,3 @@
-import { isEnum } from '@coscrad/validation';
-
 /**
  * // TODO[https://www.pivotaltracker.com/story/show/183765745]
  * We may want to exclude this lib from actually knowing the enum.
@@ -9,4 +7,5 @@ import { MIMEType } from '@coscrad/api-interfaces';
 
 export { MIMEType };
 
-export const isMIMEType = (input: unknown): input is MIMEType => isEnum(input, MIMEType);
+export const isMIMEType = (input: unknown): input is MIMEType =>
+    Object.entries(MIMEType).some((mimeType) => mimeType === input);

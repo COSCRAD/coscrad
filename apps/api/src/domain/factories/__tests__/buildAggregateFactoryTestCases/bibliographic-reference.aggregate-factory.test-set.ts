@@ -19,7 +19,10 @@ const validCases: AggregateFactoryValidTestCase<typeof aggregateType>[] =
 
 const fuzzTestCasesForAllSubtypes = Object.values(BibliographicReferenceType).flatMap(
     (bibliographicReferenceType) =>
-        buildBibliographicReferenceSubtypeFuzzTestCases(bibliographicReferenceType)
+        buildBibliographicReferenceSubtypeFuzzTestCases(bibliographicReferenceType).filter(
+            // it's impossible to get an invalid sub-type because the constructor hard-wires this
+            ({ description }) => !description.includes('data.type')
+        )
 );
 
 export const buildBibliographicReferenceFactoryTestSet = (): FactoryTestSuiteForAggregate<
