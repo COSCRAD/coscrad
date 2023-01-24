@@ -8,12 +8,14 @@ interface StaticSelectProps {
     formField: IFormField;
     onNewSelection?: (name: string, value: string | boolean) => void;
     currentValue?: string;
+    required: boolean;
 }
 
 export const StaticSelect = ({
     formField: { name, options, label },
     onNewSelection,
     currentValue,
+    required,
 }: StaticSelectProps): JSX.Element => {
     const menuItems = options as IValueAndDisplay<string>[];
 
@@ -26,6 +28,7 @@ export const StaticSelect = ({
                 onChange={(changeEvent) => {
                     onNewSelection(changeEvent.target.name, changeEvent.target.value);
                 }}
+                required={required}
             >
                 {/* Include a null selection placeholder to represent unselected state */}
                 {[

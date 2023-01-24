@@ -11,6 +11,7 @@ interface YearPickerProps {
     formField: IFormField;
     onNewSelection: (name: string, value: string | boolean) => void;
     currentValue: number;
+    required: boolean;
 }
 
 /**
@@ -25,6 +26,7 @@ export const YearPicker = ({
     formField: { name, label, description, type },
     onNewSelection,
     currentValue,
+    required,
 }: YearPickerProps): JSX.Element => {
     const numberOfOptions = CURRENT_YEAR - STARTING_DATE_TO_PICK + 1;
 
@@ -55,6 +57,7 @@ export const YearPicker = ({
             formField={formFieldForStaticSelect}
             currentValue={currentValue?.toString() || CURRENT_YEAR.toString()}
             onNewSelection={onNewSelection}
+            required={required}
         />
     );
 };

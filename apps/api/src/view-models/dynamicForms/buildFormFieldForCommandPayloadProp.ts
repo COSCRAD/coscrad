@@ -43,12 +43,13 @@ const buildSimpleFormField = (
     label,
     description,
     constraints: isSimpleCoscradPropertyTypeDefinition(propertyTypeDefinition)
-        ? getConstraintNamesForCoscradDataType(propertyTypeDefinition.coscradDataType).map(
-              (name) => ({
-                  name,
-                  message: `must be a ${name}`,
-              })
-          )
+        ? getConstraintNamesForCoscradDataType(propertyTypeDefinition.coscradDataType, {
+              isArray: propertyTypeDefinition.isArray,
+              isOptional: propertyTypeDefinition.isOptional,
+          }).map((name) => ({
+              name,
+              message: `must be a ${name}`,
+          }))
         : [],
 });
 
