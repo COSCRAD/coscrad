@@ -1,6 +1,5 @@
 import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
 import { ConfigurableContent } from '../data/configurable-content-schema';
-import { InvalidConfigurationPropertyError } from '../errorHandling/errors/invalid-configuration-property.error';
 import { validateConfigurableContent } from './validate-configurable-content';
 
 // Reads the sample config, which will also be validated here
@@ -9,6 +8,12 @@ const validContentConfig = getDummyConfigurableContent();
 // TODO Break this into utility types lib
 type Overrides<T> = {
     [K in keyof T]?: unknown;
+};
+
+type InvalidProps = {
+    propertyName: string;
+    invalidValue: unknown;
+    description: string;
 };
 
 const buildInvalidContentConfig = (
@@ -23,41 +28,54 @@ const buildInvalidContentConfig = (
  * introduce the @coscrad/data-types lib to the front-end until we have sorted
  * out tree-shaking or supporting decorators in the front-end build.
  */
-const invalidProps = [];
-// const invalidProps: [keyof ConfigurableContent, unknown, CoscradDataType][] = Object.entries(
-//     configurableContentSchema
-// ).flatMap(([propertyName, coscradDataType]) =>
-//     new FuzzGenerator({
-//         coscradDataType,
-//         isOptional: false,
-//         isArray: false,
-//         // TODO Consider hiding these 2 props from the `FuzzGenerator`
-//         label: 'dummy prop label',
-//         description: 'dummy prop description',
-//     })
-//         .generateInvalidValues()
-//         .map(
-//             (invalidValue: unknown) =>
-//                 [propertyName, invalidValue, coscradDataType] as [
-//                     keyof ConfigurableContentSchema,
-//                     unknown,
-//                     CoscradDataType
-//                 ]
-//         )
-// );
-
-const invalidConfigsAndExpectedErrors: [Overrides<ConfigurableContent>, Error[]][] = invalidProps
-    .filter(([propertyName, _]) => !['songIdToCredits', 'videoIdToCredits'].includes(propertyName))
-    .map(([propertyName, invalidValue, coscradDataType]) => [
-        buildInvalidContentConfig({ [propertyName]: invalidValue }),
-        [
-            new InvalidConfigurationPropertyError({
-                propertyName,
-                propertyType: coscradDataType,
-                invalidReceivedValue: invalidValue,
-            }),
-        ],
-    ]);
+const invalidProps: InvalidProps[] = [
+    {
+        propertyName: 'siteTitle',
+        invalidValue: 88,
+        description: 'number',
+    },
+    {
+        propertyName: 'subTitle',
+        invalidValue: '',
+        description: 'empty string',
+    },
+    {
+        propertyName: 'about',
+        invalidValue: ['foo'],
+        description: 'string array',
+    },
+    {
+        propertyName: 'siteDescription',
+        invalidValue: 900,
+        description: 'number',
+    },
+    {
+        propertyName: 'siteHomeImageUrl',
+        invalidValue: 'totally awesome picture',
+        description: 'plain string',
+    },
+    {
+        propertyName: 'copyrightHolder',
+        invalidValue: [900, 100, 300],
+        description: 'numeric array',
+    },
+    {
+        propertyName: 'organizationLogoUrl',
+        invalidValue: { foo: 9 },
+        description: 'object',
+    },
+    {
+        propertyName: 'songIdToCredits',
+        invalidValue: ['I did this one'],
+        description: 'string array',
+    },
+    {
+        propertyName: 'videoIdToCredits',
+        invalidValue: 909,
+        description: 'number',
+    },
+    // TODO test \ tighten up validation around index-to-detail flows
+];
 
 describe('validateFrontMatterData', () => {
     describe('when the content config is valid (using the sample  config)', () => {
@@ -86,22 +104,21 @@ describe('validateFrontMatterData', () => {
             })
         );
 
-        invalidConfigsAndExpectedErrors.forEach(([invalidConfig, expectedErrors]) => {
-            it('should return the expected errors', () => {
-                const result = validateConfigurableContent(invalidConfig);
+        invalidProps.forEach(({ propertyName, description, invalidValue }) => {
+            describe(`when ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                const invalidConfig = buildInvalidContentConfig({ [propertyName]: invalidValue });
 
-                if (expectedErrors.length === 0) {
-                    throw new Error(
-                        `You must specify at least one expected error for an invalid case.`
-                    );
-                }
+                it('should return the expected errors', () => {
+                    const result = validateConfigurableContent(invalidConfig);
 
-                expectedErrors.forEach((expectedError, index) =>
-                    expect(result[index]).toEqual(expectedError)
-                );
+                    expect(result.length).toBe(1);
 
-                // just in case there are additional errors in the result
-                expect(result.length).toBe(expectedErrors.length);
+                    expect(result[0]).toBeInstanceOf(Error);
+
+                    const actualError = result[0];
+
+                    expect(actualError.toString().includes(propertyName)).toBe(true);
+                });
             });
         });
     });
