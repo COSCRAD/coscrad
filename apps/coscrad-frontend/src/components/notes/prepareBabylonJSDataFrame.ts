@@ -7,6 +7,13 @@ const compositeIdentifierToStringID = (compositeIdentifier) => {
 
 const isDual = (type) => (type === EdgeConnectionType.dual ? true : false);
 
+const range = (start, stop, step) =>
+    Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step);
+
+const radians = (angle) => {
+    return angle * (Math.PI / 180);
+};
+
 export type Raw3DCoordinates = [number, number, number];
 
 export type EndPointCoordinates = [Raw3DCoordinates, Raw3DCoordinates];
@@ -33,7 +40,19 @@ export const prepareBabylonJSDataFrame = (notes): BabylonJSDataFrame => {
 
     const connectedResources = dualNotes.map((note) => note.connectedResources);
 
-    const radius = 12;
+    const radius = 50;
+
+    const circumferencePositions = range(1, 360, 360 / connectedResources.length);
+
+    const sphericalPathCoordinates = circumferencePositions.reduce((acc, currentValue) => {
+        const spherePathCoordinate = [
+            Math.sin(radians(currentValue)) * radius,
+            Math.cos(radians(currentValue)) * radius,
+            currentValue / radius, // Anything 0 or above is fine for black point
+        ];
+
+        return [...acc, spherePathCoordinate];
+    }, []);
 
     const resourceNodes = connectedResources
         .map((connection) =>
@@ -49,12 +68,7 @@ export const prepareBabylonJSDataFrame = (notes): BabylonJSDataFrame => {
             return acc;
         }, [])
         .reduce((acc, currentValue, index) => {
-            const factor = index % 2 === 0 ? -(index + 100) : index + 98;
-            const emptyArray = [0, 0, 0];
-            const coords = emptyArray.reduce((coordAcc, coordCurrent) => {
-                return [...coordAcc, Math.round(Math.random() * index) * (Math.PI / 180)];
-            }, []);
-
+            const coords = sphericalPathCoordinates[index];
             return [...acc, { id: currentValue, coordinates: coords }];
         }, []);
 

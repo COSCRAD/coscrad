@@ -64,12 +64,12 @@ export const Web3DTestThreeReact = ({
         var boxHeight = 3;
         var boxDepth = 1;
 
-        const rectangles = [];
+        const spheres = [];
         const texts = [];
         for (let i = 0; i < nodes.length; i++) {
             const boxCoordinates = convertRaw3DCoordinatesToVector3(nodes[i].coordinates);
 
-            rectangles[i] = BABYLON.MeshBuilder.CreateSphere(`box${i}`, { diameter: 10 }, scene);
+            spheres[i] = BABYLON.MeshBuilder.CreateSphere(`box${i}`, { diameter: 10 }, scene);
 
             //Set width and height for dynamic texture using same multiplier
             const fontFactor = 20;
@@ -96,12 +96,12 @@ export const Web3DTestThreeReact = ({
             var ratio = textWidth / size;
 
             //set font to be actually used to write text on dynamic texture
-            var font_size = Math.floor(DTWidth / (ratio * 1.9)); //size of multiplier (1) can be adjusted, increase for smaller text
+            var font_size = Math.floor(DTWidth / (ratio * 2)); //size of multiplier (1) can be adjusted, increase for smaller text
             var font = font_size + 'px ' + font_type;
 
             //Draw text
             const textOpt = texts[i];
-            const xOpt = null;
+            const xOpt = 1;
             const yOpt = null;
             const fontOpt = font;
             const colorOpt = '#000000';
@@ -119,16 +119,15 @@ export const Web3DTestThreeReact = ({
                 intertYOpt,
                 updateOpt
             );
-            // dynamicTexture.drawText(texts[i], null, null, font, '#000000', '#ffffff', true);
 
             //create material
             var mat = new BABYLON.StandardMaterial('mat', scene);
             mat.diffuseTexture = dynamicTexture;
-            dynamicTexture.wAng = BABYLON.Tools.ToRadians(-180);
+            dynamicTexture.wAng = BABYLON.Tools.ToRadians(180);
 
             //apply material
-            rectangles[i].material = mat;
-            rectangles[i].position = boxCoordinates;
+            spheres[i].material = mat;
+            spheres[i].position = boxCoordinates;
         }
 
         const lineColors = [
