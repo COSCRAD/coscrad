@@ -31,7 +31,7 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = <T extends IBaseVi
     heading,
 }: SelectedCategorizablesOfMultipleTypesPresenterProps): JSX.Element => {
     return (
-        <>
+        <div data-testid="multiple-categorizables-view">
             <h2>{isNonEmptyString(heading) ? heading : 'Connected Resources'}</h2>
             {Object.entries(viewModelSnapshot)
                 .map(
@@ -70,6 +70,6 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = <T extends IBaseVi
                         );
                     }
                 )}
-        </>
+        </div>
     );
 };

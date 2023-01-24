@@ -16,12 +16,18 @@ export const ConnectedResourcesPanel = ({
 
     const { data: connections } = loadableConnections;
 
-    console.log({ connections });
-
     const compositeIdentifiers =
         connections?.map(({ compositeIdentifier }) => compositeIdentifier) || [];
 
     const loadableConnectedResources = useLoadableCategorizables(compositeIdentifiers);
+
+    if (compositeIdentifiers.length === 0)
+        return (
+            <div>
+                <h2>Connected Resources</h2>
+                No Connections Found
+            </div>
+        );
 
     return SelectedCategorizablesOfMultipleTypesPresenter({
         viewModelSnapshot: loadableConnectedResources,

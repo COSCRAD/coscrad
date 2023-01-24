@@ -89,6 +89,7 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
 
     return (
         <IndexTable
+            data-testid="note-index"
             headingLabels={headingLabels}
             tableData={notes}
             cellRenderersDefinition={cellRenderersDefinition}
