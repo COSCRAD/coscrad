@@ -24,7 +24,7 @@ interface SelectedCategorizablesOfMultipleTypesPresenterProps<
     heading?: string;
 }
 
-export const SelectedCategorizablesOfMultipleTypesPresenter = <T extends IBaseViewModel>({
+export const SelectedCategorizablesOfMultipleTypesPresenter = ({
     viewModelSnapshot,
     presenterFactory,
     getPluralLabelForCategorizableType,

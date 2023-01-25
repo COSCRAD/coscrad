@@ -1,4 +1,6 @@
+import { UniquelyIdentifiableType } from '../../domain/interfaces/id-manager.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
+import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../lib/errors/InternalError';
 import { IIdRepository } from '../../lib/id-generation/interfaces/id-repository.interface';
 import { UuidDocument } from '../../lib/id-generation/types/UuidDocument';
@@ -6,45 +8,76 @@ import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { ArangoDatabase } from '../database/arango-database';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
-import { DatabaseProvider } from '../database/database.provider';
-import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
-import mapEntityDTOToDatabaseDTO, {
-    DatabaseDocument,
-} from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseProvider } from '../database/database.provider';
 
-type IdDocument = DatabaseDocument<{ id: AggregateId; isAvailable: boolean }>;
+type DatabaseUuidDocument = Omit<UuidDocument, 'sequenceNumber' | 'id'> & {
+    _key: string;
+    uuid: string;
+};
 
-export class ArangoIdRepository implements IIdRepository<AggregateId> {
+const mapDatabaseDocumentToUuidDocument = ({
+    _key,
+    timeGenerated,
+    timeUsed,
+    usedBy,
+    uuid,
+}: DatabaseUuidDocument): UuidDocument => ({
+    id: uuid,
+    sequenceNumber: _key,
+    timeGenerated,
+    timeUsed,
+    usedBy,
+});
+
+const mapUuidDocumentToDatabaseDocument = ({
+    id,
+    timeGenerated,
+    timeUsed,
+    sequenceNumber,
+}: UuidDocument): DatabaseUuidDocument =>
+    ({
+        uuid: id,
+        timeGenerated,
+        timeUsed,
+        ...(isNullOrUndefined(sequenceNumber) ? {} : { _key: sequenceNumber }),
+    } as DatabaseUuidDocument);
+
+export class ArangoIdRepository implements IIdRepository {
     private readonly arangoDatabase: ArangoDatabase;
 
-    constructor(private readonly databaseProvider: DatabaseProvider) {
+    constructor(databaseProvider: ArangoDatabaseProvider) {
         this.arangoDatabase = databaseProvider.getDBInstance();
     }
 
-    async fetchById(id: AggregateId): Promise<Maybe<UuidDocument<string>>> {
-        const result = await this.arangoDatabase.fetchById<
-            DatabaseDocument<UuidDocument<AggregateId>>
-        >(id, ArangoCollectionId.uuids);
+    async fetchById(id: AggregateId): Promise<Maybe<UuidDocument>> {
+        const allIds = await this.arangoDatabase.fetchMany<DatabaseUuidDocument>(
+            ArangoCollectionId.uuids
+        );
+
+        const result = allIds.find(({ uuid }) => uuid === id) || NotFound;
 
         if (isNotFound(result)) return NotFound;
 
-        const { id: docId, isAvailable } =
-            mapDatabaseDTOToEntityDTO<UuidDocument<AggregateId>>(result);
-
-        return { id: docId, isAvailable };
+        return mapDatabaseDocumentToUuidDocument(result);
     }
 
     async create(id: AggregateId): Promise<void> {
-        await this.arangoDatabase.create(
-            mapEntityDTOToDatabaseDTO({
-                id,
-                isAvailable: true,
-            }),
-            ArangoCollectionId.uuids
-        );
+        const databaseDocument = mapUuidDocumentToDatabaseDocument({
+            id,
+            timeGenerated: new Date().toISOString(),
+            // TODO fix types- there's no sequence number yet on creation
+        } as UuidDocument);
+
+        await this.arangoDatabase.create(databaseDocument, ArangoCollectionId.uuids);
     }
 
-    async reserve(id: AggregateId): Promise<void> {
+    async reserve({
+        id,
+        type,
+    }: {
+        id: AggregateId;
+        type: UniquelyIdentifiableType;
+    }): Promise<void> {
         const result = await this.fetchById(id);
 
         if (isNotFound(result)) {
@@ -53,16 +86,20 @@ export class ArangoIdRepository implements IIdRepository<AggregateId> {
             );
         }
 
-        const { isAvailable } = result;
+        const { usedBy } = result;
+
+        const isAvailable = isNullOrUndefined(usedBy);
 
         if (!isAvailable) {
             throw new InternalError(`Cannot reserve id: ${id} as it is already in use`);
         }
 
-        await this.arangoDatabase.update<Partial<IdDocument>>(
-            id,
+        await this.arangoDatabase.update<Partial<UuidDocument>>(
+            // The sequence number is the Arango document _key
+            result.sequenceNumber,
             {
-                isAvailable: false,
+                usedBy: type,
+                timeUsed: new Date().toISOString(),
             },
             ArangoCollectionId.uuids
         );

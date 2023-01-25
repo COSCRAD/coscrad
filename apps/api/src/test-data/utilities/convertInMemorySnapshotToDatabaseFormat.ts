@@ -1,5 +1,4 @@
 import { toDto } from '../../domain/models/shared/functional/index';
-import { AggregateId } from '../../domain/types/AggregateId';
 import {
     InMemorySnapshot,
     InMemorySnapshotOfResources,
@@ -17,7 +16,7 @@ import mapEntityDTOToDatabaseDTO from '../../persistence/database/utilities/mapE
 type InMemoryDatabaseSnapshot = {
     document: {
         [K in Exclude<ArangoCollectionId, 'uuids'>]: unknown[];
-    } & { uuids: UuidDocument<AggregateId>[] };
+    } & { uuids: UuidDocument[] };
 
     edge: {
         [K in ArangoEdgeCollectionId]: Record<string, unknown>[];

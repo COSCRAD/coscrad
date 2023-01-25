@@ -9,13 +9,13 @@ import { ArangoCollectionId } from '../../database/collection-references/ArangoC
 import { getAllArangoDocumentCollectionIDs } from '../../database/collection-references/ArangoDocumentCollectionId';
 import { getAllArangoEdgeCollectionIDs } from '../../database/collection-references/ArangoEdgeCollectionId';
 import { getArangoCollectionIDFromResourceType } from '../../database/collection-references/getArangoCollectionIDFromResourceType';
-import { DatabaseProvider } from '../../database/database.provider';
+import { ArangoDatabaseProvider } from '../../database/database.provider';
 import buildEdgeDocumentsFromCategoryNodeDTOs from '../../database/utilities/category/buildEdgeDocumentsFromCategoryNodeDTOs';
 import mapEntityDTOToDatabaseDTO from '../../database/utilities/mapEntityDTOToDatabaseDTO';
 import { ArangoRepositoryProvider } from '../arango-repository.provider';
 
 export default class TestRepositoryProvider extends ArangoRepositoryProvider {
-    constructor(databaseProvider: DatabaseProvider) {
+    constructor(databaseProvider: ArangoDatabaseProvider) {
         super(databaseProvider);
     }
 

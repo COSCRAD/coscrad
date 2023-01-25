@@ -5,7 +5,7 @@ import { IUserRepository } from '../../domain/repositories/interfaces/user-repos
 import { Maybe } from '../../lib/types/maybe';
 import { NotFound } from '../../lib/types/not-found';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
-import { DatabaseProvider } from '../database/database.provider';
+import { ArangoDatabaseProvider } from '../database/database.provider';
 import mapDatabaseDocumentToAggregateDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
 import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate';
@@ -14,7 +14,7 @@ export class ArangoCoscradUserRepository
     extends ArangoRepositoryForAggregate<CoscradUser>
     implements IUserRepository
 {
-    constructor(arangoDatabaseProvider: DatabaseProvider) {
+    constructor(arangoDatabaseProvider: ArangoDatabaseProvider) {
         super(
             arangoDatabaseProvider,
             ArangoCollectionId.users,
