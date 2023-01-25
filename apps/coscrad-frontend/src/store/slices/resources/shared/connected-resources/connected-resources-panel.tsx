@@ -1,8 +1,8 @@
 import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
-import { displayLoadableWithErrorsAndLoading } from '../../../../../components/higher-order-components';
-import { wrapArrayProps } from '../../../../../utils/prop-manipulation/wrap-array-props';
+import { SelectedCategorizablesOfMultipleTypesPresenter } from '../../../../../components/higher-order-components/selected-categorizables-of-multiple-types.presenter';
+import { useLoadableCategorizables } from '../../../../../components/higher-order-components/use-loadable-categorizables';
+import { thumbnailCategorizableDetailPresenterFactory } from '../../../../../components/resources/factories/thumbnail-categorizable-detail-presenter-factory';
 import { useLoadableConnectionsToResource } from '../../../notes/hooks';
-import { ConnectedResourcesPanelPresenter } from './connected-resources-panel.presenter';
 
 export interface ConnectedResourcesPanelProps {
     compositeIdentifier: ResourceCompositeIdentifier;
@@ -13,10 +13,25 @@ export const ConnectedResourcesPanel = ({
 }: ConnectedResourcesPanelProps): JSX.Element => {
     const loadableConnections = useLoadableConnectionsToResource(compositeIdentifier);
 
-    const Presenter = displayLoadableWithErrorsAndLoading(
-        ConnectedResourcesPanelPresenter,
-        wrapArrayProps
-    );
+    const { data: connections } = loadableConnections;
 
-    return <Presenter {...loadableConnections} />;
+    const compositeIdentifiers =
+        connections?.map(({ compositeIdentifier }) => compositeIdentifier) || [];
+
+    const loadableConnectedResources = useLoadableCategorizables(compositeIdentifiers);
+
+    if (compositeIdentifiers.length === 0)
+        return (
+            <div>
+                <h2>Connected Resources</h2>
+                No Connections Found
+            </div>
+        );
+
+    return SelectedCategorizablesOfMultipleTypesPresenter({
+        viewModelSnapshot: loadableConnectedResources,
+        presenterFactory: thumbnailCategorizableDetailPresenterFactory,
+        // TODO Deal with this properly
+        getPluralLabelForCategorizableType: (categorizableType) => `${categorizableType}s`,
+    });
 };

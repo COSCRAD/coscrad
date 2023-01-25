@@ -2,7 +2,7 @@ import { AggregateTypeToViewModel, CategorizableType } from '@coscrad/api-interf
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
-import { NoteDetailContainer } from '../notes/note-detail.container';
+import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { WithCommands, WithWebOfKnowledge } from '../resources/shared';
 import {
     AggregateDetailContainer,
@@ -34,7 +34,7 @@ export const CategorizablePage = <T extends CategorizableType>({
     const { shouldEnableWebOfKnowledgeForResources } = useContext(ConfigurableContentContext);
 
     if (categorizableType === CategorizableType.note) {
-        return <NoteDetailContainer />;
+        return <NoteDetailPageContainer />;
     }
 
     // TODO Determine this from user's roles
