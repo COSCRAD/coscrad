@@ -40,7 +40,7 @@ export class TagController {
     @UseGuards(OptionalJwtAuthGuard)
     @Get('')
     async fetchMany(@Req() req, @Res() res) {
-        const result = await this.tagQueryService.fetchMany(req.user);
+        const result = await this.tagQueryService.fetchMany(req?.user || undefined);
 
         return sendInternalResultAsHttpResponse(res, result);
     }

@@ -8,7 +8,7 @@ import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interfac
 import { ICategorizableDetailPresenterFactory } from '../resources/factories/categorizable-detail-presenter-factory.interface';
 import { buildUseLoadableForSingleCategorizableType } from './buildUseLoadableResourcesOfSingleType';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
-import { SelectedCategorizablesPresenter } from './selected-categorizables.presenter';
+import { SelectedCategorizablesPresenter } from './selected-categorizables-of-single-type.presenter';
 
 interface SelectedResourceContainerProps<T> {
     categorizableType: CategorizableType;

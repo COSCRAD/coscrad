@@ -1,4 +1,4 @@
-import { isNull } from '@coscrad/validation-constraints';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { ErrorDisplay } from '../error-display/error-display';
@@ -26,7 +26,7 @@ export const displayLoadableWithErrorsAndLoading =
             return <ErrorDisplay {...errorInfo}></ErrorDisplay>;
         }
 
-        if (isLoading || isNull(data)) return <Loading></Loading>;
+        if (isLoading || isNullOrUndefined(data)) return <Loading></Loading>;
 
         // default to the identity map if no map is provided (this typically is what we want with non-array loaded data)
         const props = mapLoadedDataToPresenterProps

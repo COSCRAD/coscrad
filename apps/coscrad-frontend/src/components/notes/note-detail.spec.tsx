@@ -5,7 +5,7 @@ import { testContainerComponentErrorHandling } from '../../utils/test-utils/comm
 import { setupTestServer } from '../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../utils/test-utils/test-data';
 import { withDetailRoute } from '../../utils/test-utils/with-detail-route';
-import { NoteDetailContainer } from './note-detail.container';
+import { NoteDetailPageContainer } from './note-detail-page.container';
 import { buildDummyNotes } from './test-utils/build-dummy-notes';
 
 const dummyNotes = buildDummyNotes();
@@ -20,7 +20,7 @@ const endpoint = `${getConfig().apiUrl}/connections/notes`;
 const noteToFind = dummyNotes[0];
 
 const act = () =>
-    renderWithProviders(withDetailRoute(noteToFind.id, `/Notes/`, <NoteDetailContainer />));
+    renderWithProviders(withDetailRoute(noteToFind.id, `/Notes/`, <NoteDetailPageContainer />));
 
 describe(`Note detail flow`, () => {
     describe('when the API request is valid', () => {
