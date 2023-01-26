@@ -5,10 +5,18 @@ import { Scheme } from '../../app/config/constants/Scheme';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { DTO } from '../../types/DTO';
 import ArangoDatabaseConfiguration from './ArangoDatabaseConfiguration';
-import { getAllArangoCollectionIDs } from './collection-references/ArangoCollectionId';
+import {
+    ArangoCollectionId,
+    getAllArangoCollectionIDs,
+} from './collection-references/ArangoCollectionId';
 import { isArangoEdgeCollectionCollectionID } from './collection-references/ArangoEdgeCollectionId';
 import DatabaseAlreadyInitializedError from './errors/DatabaseAlreadyInitializedError';
 import DatabaseNotYetInitializedError from './errors/DatabaseNotYetInitializedError';
+
+/**
+ * TODO Consider making this configurable
+ */
+const SEQUENTIAL_ID_OFFSET = 100;
 
 // Alias for more clarity from the outside; TODO wrap `Database` with simpler API?
 export type ArangoConnection = Database;
@@ -159,6 +167,20 @@ export class ArangoConnectionProvider {
         const doesCollectionExist = await this.#doesCollectionExist(collectionName);
 
         if (doesCollectionExist) return;
+
+        if (collectionName === ArangoCollectionId.uuids) {
+            await this.#connection.createCollection(ArangoCollectionId.uuids, {
+                // investigate why these options aren't taking effect
+                keyOptions: {
+                    type: 'autoincrement',
+                    increment: 1,
+                    offset: SEQUENTIAL_ID_OFFSET,
+                    allowUserKeys: false,
+                },
+            });
+
+            return;
+        }
 
         /**
          * TODO [https://www.pivotaltracker.com/story/show/182132515]
