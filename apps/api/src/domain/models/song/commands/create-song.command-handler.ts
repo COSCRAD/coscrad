@@ -10,7 +10,7 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
-import { IIdManager } from '../../../interfaces/id-manager.interface';
+import { EVENT, IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../types/AggregateId';
@@ -129,13 +129,13 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
 
-        await this.idManager.use(eventId);
+        await this.idManager.use({ id: eventId, type: EVENT });
 
         /**
          * This doesn't feel like the right place to do this. Consider tying
          * this in with the `create` method on the repositories.
          */
-        await this.idManager.use(command.aggregateCompositeIdentifier.id);
+        await this.idManager.use(command.aggregateCompositeIdentifier);
 
         const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(
             this.buildEvent(command, eventId, systemUserId)

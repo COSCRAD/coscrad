@@ -6,7 +6,7 @@ import { isOK, OK } from '../../../../../lib/types/ok';
 import { REPOSITORY_PROVIDER } from '../../../../../persistence/constants/persistenceConstants';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { isValid } from '../../../../domainModelValidators/Valid';
-import { IIdManager } from '../../../../interfaces/id-manager.interface';
+import { EVENT, IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../types/AggregateType';
@@ -99,7 +99,7 @@ export class GrantResourceReadAccessToUserCommandHandler implements ICommandHand
          * We do this first because it's better to have an unused ID marked as used
          * than a used ID marked as available in case of failure.
          */
-        await this.idManager.use(eventId);
+        await this.idManager.use({ id: eventId, type: EVENT });
 
         await this.repositoryProvider.forResource(resourceType).update(updatedResourceWithEvents);
 

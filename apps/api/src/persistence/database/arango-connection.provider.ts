@@ -5,10 +5,15 @@ import { Scheme } from '../../app/config/constants/Scheme';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { DTO } from '../../types/DTO';
 import ArangoDatabaseConfiguration from './ArangoDatabaseConfiguration';
-import { getAllArangoCollectionIDs } from './collection-references/ArangoCollectionId';
+import {
+    ArangoCollectionId,
+    getAllArangoCollectionIDs,
+} from './collection-references/ArangoCollectionId';
 import { isArangoEdgeCollectionCollectionID } from './collection-references/ArangoEdgeCollectionId';
 import DatabaseAlreadyInitializedError from './errors/DatabaseAlreadyInitializedError';
 import DatabaseNotYetInitializedError from './errors/DatabaseNotYetInitializedError';
+
+// const UUID_SEQUENCE_NUMBER_OFFSET = 3000;
 
 // Alias for more clarity from the outside; TODO wrap `Database` with simpler API?
 export type ArangoConnection = Database;
@@ -159,6 +164,59 @@ export class ArangoConnectionProvider {
         const doesCollectionExist = await this.#doesCollectionExist(collectionName);
 
         if (doesCollectionExist) return;
+
+        if (collectionName === ArangoCollectionId.uuids) {
+            await this.#connection.createCollection(
+                collectionName
+                /**
+                 * TODO Control the offset \ increment
+                 * Currently, we are having trouble getting these options to work in ArangoDB.
+                 * We have confirmed, however that the values are indeed being set via the
+                 * REST API call made by ArangoJS by reading the values back.
+                 *
+                 * Is Arango setting but silently ignoring the offset? We've tried
+                 * 1000, 3000, 1000000. Ideally, we want 5-8 digit sequence numbers
+                 * so they are easy to read by researchers and easy to machine label
+                 * via ASR (spoken digit recognition). For now, we can add a large
+                 * offset (presentation) to the sequence number for this purpose.
+                 *
+                 * Perhaps there is a limit on the offset? If so, we should write
+                 * our own validation and fail fast.
+                 *
+                 * As for the increment, it seems to have no effect whatsover.
+                 * We have tested by creating documents directly in Arango dashboard.
+                 * If an attempted write fails, there would normally be gaps. However,
+                 * even when creating simple empty documents with no fails at the
+                 * level of writing new documents, there are large gaps of ~15-25
+                 * in sequence numbers. Perhaps this is due to internal implementation
+                 * of their storage engine? We should research this more.
+                 *
+                 * We don't want to build our own sequential ID generator on top of
+                 * the UUID generation scheme. This is complex enough.
+                 *
+                 *
+                 */
+                // {
+                //     keyOptions: {
+                //         offset: UUID_SEQUENCE_NUMBER_OFFSET,
+                //         // We hard-wire this because there is no reason to ever use anything else
+                //         increment: 1,
+                //     },
+                // }
+            );
+
+            // const {
+            //     keyOptions: { offset, increment },
+            // } = await this.#connection.collection(ArangoCollectionId.uuids).properties();
+
+            // if (offset !== UUID_SEQUENCE_NUMBER_OFFSET || increment !== 1) {
+            //     throw new InternalError(
+            //         `Failed to initialize the UUIDs collection. Failed to set key options.`
+            //     );
+            // }
+
+            return;
+        }
 
         /**
          * TODO [https://www.pivotaltracker.com/story/show/182132515]

@@ -9,24 +9,21 @@ import { ICategoryRepository } from '../../domain/repositories/interfaces/catego
 import { IRepositoryForAggregate } from '../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
 import { IUserRepository } from '../../domain/repositories/interfaces/user-repository.interface';
-import { AggregateId } from '../../domain/types/AggregateId';
 import { ResourceType } from '../../domain/types/ResourceType';
-import { IIdRepository } from '../../lib/id-generation/interfaces/id-repository.interface';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { getArangoCollectionIDFromResourceType } from '../database/collection-references/getArangoCollectionIDFromResourceType';
-import { DatabaseProvider } from '../database/database.provider';
+import { ArangoDatabaseProvider } from '../database/database.provider';
 import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapArangoEdgeDocumentToEdgeConnectionDTO';
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDTO';
 import { ArangoCoscradUserRepository } from './arango-coscrad-user-repository';
-import { ArangoIdRepository } from './arango-id-repository';
 import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate';
 import ArangoCategoryRepository from './ArangoCategoryRepository';
 
 @Injectable()
 export class ArangoRepositoryProvider implements IRepositoryProvider {
-    constructor(protected databaseProvider: DatabaseProvider) {}
+    constructor(protected databaseProvider: ArangoDatabaseProvider) {}
 
     getEdgeConnectionRepository() {
         return new ArangoRepositoryForAggregate<EdgeConnection>(
@@ -50,10 +47,6 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
 
     getCategoryRepository(): ICategoryRepository {
         return new ArangoCategoryRepository(this.databaseProvider);
-    }
-
-    getIdRepository(): IIdRepository<AggregateId> {
-        return new ArangoIdRepository(this.databaseProvider);
     }
 
     getUserRepository(): IUserRepository {

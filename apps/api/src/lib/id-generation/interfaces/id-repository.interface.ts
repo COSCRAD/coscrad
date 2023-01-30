@@ -1,10 +1,15 @@
+import { UniquelyIdentifiableType } from '../../../domain/interfaces/id-manager.interface';
+import { AggregateId } from '../../../domain/types/AggregateId';
 import { Maybe } from '../../types/maybe';
 import { UuidDocument } from '../types/UuidDocument';
 
-export interface IIdRepository<TIdFormat> {
-    create(id: TIdFormat): Promise<void>;
+// Dependency injection token
+export const ID_RESPOSITORY_TOKEN = 'IdRepository';
 
-    reserve(id: TIdFormat): Promise<void>;
+export interface IIdRepository {
+    create(id: AggregateId): Promise<void>;
 
-    fetchById(id: TIdFormat): Promise<Maybe<UuidDocument<TIdFormat>>>;
+    reserve({ id, type }: { id: AggregateId; type: UniquelyIdentifiableType }): Promise<void>;
+
+    fetchById(id: AggregateId): Promise<Maybe<UuidDocument>>;
 }

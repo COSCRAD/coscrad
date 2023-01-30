@@ -13,7 +13,6 @@ import { TranscribedAudio } from '../models/transcribed-audio/entities/transcrib
 import { CoscradUserGroup } from '../models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../models/user-management/user/entities/user/coscrad-user.entity';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
-import { AggregateId } from './AggregateId';
 
 import { ResourceType } from '@coscrad/api-interfaces';
 
@@ -54,5 +53,5 @@ export type InMemorySnapshot = {
     category: Category[];
     user: CoscradUser[];
     userGroup: CoscradUserGroup[];
-    uuid: UuidDocument<AggregateId>[];
+    uuid: UuidDocument[];
 };

@@ -6,7 +6,10 @@ import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/se
 import { assertResourcePersistedProperly } from '../../../../../../domain/models/__tests__/command-helpers/assert-resource-persisted-properly';
 import getValidBibliographicReferenceInstanceForTest from '../../../../../../domain/__tests__/utilities/getValidBibliographicReferenceInstanceForTest';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
+import { IIdRepository } from '../../../../../../lib/id-generation/interfaces/id-repository.interface';
 import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
+import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
+import { ArangoIdRepository } from '../../../../../../persistence/repositories/arango-id-repository';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../../../types/DTO';
@@ -81,6 +84,10 @@ const dummyCommandFSAFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
 describe(`The command: ${commandType}`, () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
+    let idRepository: IIdRepository;
+
     let commandHandlerService: CommandHandlerService;
 
     let app: INestApplication;
@@ -90,7 +97,7 @@ describe(`The command: ${commandType}`, () => {
     let assertionHelperDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+        ({ testRepositoryProvider, commandHandlerService, idManager, app, databaseProvider } =
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: testDatabaseName,
             }));
@@ -100,6 +107,8 @@ describe(`The command: ${commandType}`, () => {
             commandHandlerService,
             idManager,
         };
+
+        idRepository = new ArangoIdRepository(databaseProvider);
     });
 
     afterAll(async () => {
@@ -215,9 +224,9 @@ describe(`The command: ${commandType}`, () => {
                  * IdRepository has a non-standard repository API, we elected
                  * to do this additional setup for the current test case here.
                  */
-                await testRepositoryProvider.getIdRepository().create(dummyNewUuid);
+                await idRepository.create(dummyNewUuid);
 
-                await testRepositoryProvider.getIdRepository().reserve(dummyNewUuid);
+                await idRepository.reserve({ id: dummyNewUuid, type: AggregateType.term });
 
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,

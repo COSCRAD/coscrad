@@ -6,7 +6,7 @@ import { NotFound } from '../../lib/types/not-found';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import buildTestData from '../../test-data/buildTestData';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
-import { DatabaseProvider } from '../database/database.provider';
+import { ArangoDatabaseProvider } from '../database/database.provider';
 import mapCategoryDTOToArangoDocument from '../database/utilities/category/mapCategoryDTOToArangoDocument';
 import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from './__tests__/TestRepositoryProvider';
@@ -16,7 +16,7 @@ describe('Repository provider > getCategoryRepository', () => {
 
     const testData = buildTestData();
 
-    let databaseProvider: DatabaseProvider;
+    let databaseProvider: ArangoDatabaseProvider;
 
     let testRepositoryProvider: TestRepositoryProvider;
 

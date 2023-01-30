@@ -2,7 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ArangoRepositoryProvider } from '../repositories/arango-repository.provider';
 import { ArangoConnectionProvider } from './arango-connection.provider';
-import { DatabaseProvider } from './database.provider';
+import { ArangoDatabaseProvider } from './database.provider';
 
 @Global()
 @Module({
@@ -10,7 +10,7 @@ import { DatabaseProvider } from './database.provider';
     // TODO Should the repositories have their own module?
     providers: [
         ConfigService,
-        DatabaseProvider,
+        ArangoDatabaseProvider,
         ArangoRepositoryProvider,
         ArangoConnectionProvider,
     ],

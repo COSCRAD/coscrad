@@ -8,7 +8,7 @@ import { isNotFound, NotFound } from '../../lib/types/not-found';
 import { DTO } from '../../types/DTO';
 import { ArangoDatabase } from '../database/arango-database';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
-import { DatabaseProvider } from '../database/database.provider';
+import { ArangoDatabaseProvider } from '../database/database.provider';
 import { CategoryDocument } from '../database/types/CategoryDocument';
 import { HasArangoDocumentDirectionAttributes } from '../database/types/HasArangoDocumentDirectionAttributes';
 import buildCategoryDTOsFromDatabaseDocuments from '../database/utilities/category/buildCategoryDTOsFromDatabaseDocuments';
@@ -21,7 +21,7 @@ export default class ArangoCategoryRepository implements ICategoryRepository {
 
     #arangoDB: ArangoDatabase;
 
-    constructor(arangoDatabaseProvider: DatabaseProvider) {
+    constructor(arangoDatabaseProvider: ArangoDatabaseProvider) {
         this.#arangoDB = arangoDatabaseProvider.getDBInstance();
     }
 
