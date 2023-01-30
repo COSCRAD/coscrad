@@ -1,13 +1,17 @@
-import { isUUID } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isUUID } from '@coscrad/validation-constraints';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
+import { AggregateType } from '../../../domain/types/AggregateType';
 import { InternalError } from '../../../lib/errors/InternalError';
+import { IIdRepository } from '../../../lib/id-generation/interfaces/id-repository.interface';
+import { UuidDocument } from '../../../lib/id-generation/types/UuidDocument';
 import { NotAvailable } from '../../../lib/types/not-available';
 import { NotFound } from '../../../lib/types/not-found';
 import { OK } from '../../../lib/types/ok';
 import { ArangoCollectionId } from '../../../persistence/database/collection-references/ArangoCollectionId';
-import { DatabaseProvider } from '../../../persistence/database/database.provider';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
+import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import setUpIntegrationTest from './setUpIntegrationTest';
@@ -17,9 +21,11 @@ describe('When generating a new ID (POST /ids)', () => {
 
     let app: INestApplication;
 
-    let databaseProvider: DatabaseProvider;
+    let databaseProvider: ArangoDatabaseProvider;
 
     let testRepositoryProvider: TestRepositoryProvider;
+
+    let testIdRepository: IIdRepository;
 
     let idManager: IIdManager;
 
@@ -30,6 +36,8 @@ describe('When generating a new ID (POST /ids)', () => {
         }));
 
         await testRepositoryProvider.testSetup();
+
+        testIdRepository = new ArangoIdRepository(databaseProvider);
     });
 
     afterAll(async () => {
@@ -61,12 +69,15 @@ describe('When generating a new ID (POST /ids)', () => {
             it('should correctly persist the ID in the database', async () => {
                 const newId = await idManager.generate();
 
-                const persistedId = await testRepositoryProvider.getIdRepository().fetchById(newId);
+                const persistedIdDocument = (await testIdRepository.fetchById(
+                    newId
+                )) as UuidDocument;
 
-                expect(persistedId).toEqual({
-                    id: newId,
-                    isAvailable: true,
-                });
+                expect(persistedIdDocument.id).toBe(newId);
+
+                expect(persistedIdDocument.usedBy).toBe(undefined);
+
+                expect(isNonEmptyString(persistedIdDocument.timeGenerated)).toBe(true);
             });
         });
     });
@@ -78,14 +89,17 @@ describe('When generating a new ID (POST /ids)', () => {
 
                 const id = res.text;
 
-                await idManager.use(id);
+                const type = AggregateType.user;
 
-                const updatedIdDoc = await testRepositoryProvider.getIdRepository().fetchById(id);
+                await idManager.use({ id, type });
 
-                expect(updatedIdDoc).toEqual({
-                    id,
-                    isAvailable: false,
-                });
+                const updatedIdDoc = (await testIdRepository.fetchById(id)) as UuidDocument;
+
+                expect(updatedIdDoc.id).toBe(id);
+
+                expect(updatedIdDoc.usedBy).toBe(type);
+
+                expect(isNonEmptyString(updatedIdDoc.timeUsed)).toBe(true);
             });
         });
 
@@ -95,14 +109,16 @@ describe('When generating a new ID (POST /ids)', () => {
 
                 const id = res.text;
 
+                const type = AggregateType.term;
+
                 // use the ID for the first time
-                await idManager.use(id);
+                await idManager.use({ id, type });
 
                 expect.assertions(1);
 
                 try {
                     // attempt to use the ID for a second time
-                    await idManager.use(id);
+                    await idManager.use({ id, type });
                 } catch (error) {
                     expect(error).toBeInstanceOf(InternalError);
                 }
@@ -126,7 +142,9 @@ describe('When generating a new ID (POST /ids)', () => {
 
                     const id = res.text;
 
-                    await idManager.use(id);
+                    const type = AggregateType.vocabularyList;
+
+                    await idManager.use({ id, type });
 
                     const result = await idManager.status(id);
 

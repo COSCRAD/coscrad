@@ -1,22 +1,17 @@
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { IIdManager } from '../../domain/interfaces/id-manager.interface';
-import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
+import { IIdManager, UniquelyIdentifiableType } from '../../domain/interfaces/id-manager.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
-import { REPOSITORY_PROVIDER } from '../../persistence/constants/persistenceConstants';
 import { InternalError } from '../errors/InternalError';
 import { NotAvailable } from '../types/not-available';
 import { isNotFound, NotFound } from '../types/not-found';
 import { isOK, OK } from '../types/ok';
-import { IIdRepository } from './interfaces/id-repository.interface';
+import { ID_RESPOSITORY_TOKEN, IIdRepository } from './interfaces/id-repository.interface';
 
 @Injectable()
 export class IdManagementService implements IIdManager {
-    protected readonly idRepository: IIdRepository<AggregateId>;
-
-    constructor(@Inject(REPOSITORY_PROVIDER) repositoryProvider: IRepositoryProvider) {
-        this.idRepository = repositoryProvider.getIdRepository();
-    }
+    constructor(@Inject(ID_RESPOSITORY_TOKEN) protected readonly idRepository: IIdRepository) {}
 
     async generate(): Promise<string> {
         const id = await uuidv4();
@@ -37,9 +32,9 @@ export class IdManagementService implements IIdManager {
 
         if (isNotFound(idDoc)) return NotFound;
 
-        const { isAvailable } = idDoc;
+        const { usedBy } = idDoc;
 
-        if (!isAvailable) return NotAvailable;
+        if (isNonEmptyString(usedBy)) return NotAvailable;
 
         /**
          * The requested id exists (has been generated with our system) and is
@@ -48,7 +43,7 @@ export class IdManagementService implements IIdManager {
         return Promise.resolve(OK);
     }
 
-    async use(id: AggregateId): Promise<void> {
+    async use({ id, type }: { id: AggregateId; type: UniquelyIdentifiableType }): Promise<void> {
         const status = await this.status(id);
 
         if (!isOK(status)) {
@@ -66,6 +61,6 @@ export class IdManagementService implements IIdManager {
          * transaction along with the create write for the domain model document
          * with the given ID.
          */
-        return this.idRepository.reserve(id);
+        return this.idRepository.reserve({ id, type });
     }
 }

@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthorizationModule } from '../authorization/authorization.module';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
-import { DatabaseProvider } from '../persistence/database/database.provider';
+import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { ArangoRepositoryProvider } from '../persistence/repositories/arango-repository.provider';
 import { AppController } from './app.controller';
@@ -27,7 +27,7 @@ import { UserManagementModule } from './domain-modules/user-management.module';
 import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
 
 @Module({
-    providers: [DatabaseProvider, ArangoRepositoryProvider, CommandInfoService],
+    providers: [ArangoDatabaseProvider, ArangoRepositoryProvider, CommandInfoService],
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,

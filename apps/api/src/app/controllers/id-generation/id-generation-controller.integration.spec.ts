@@ -1,8 +1,11 @@
-import { isUUID } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isUUID } from '@coscrad/validation-constraints';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { IIdRepository } from '../../../lib/id-generation/interfaces/id-repository.interface';
+import { UuidDocument } from '../../../lib/id-generation/types/UuidDocument';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
+import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
 
 describe('POST /ids', () => {
@@ -10,13 +13,17 @@ describe('POST /ids', () => {
 
     let app: INestApplication;
 
-    let testRepositoryProvider: TestRepositoryProvider;
+    let databaseProvider: ArangoDatabaseProvider;
+
+    let idRepository: IIdRepository;
 
     beforeAll(async () => {
-        ({ app, testRepositoryProvider } = await setUpIntegrationTest({
+        ({ app, databaseProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
             BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads',
         }));
+
+        idRepository = new ArangoIdRepository(databaseProvider);
     });
 
     afterAll(async () => {
@@ -35,12 +42,15 @@ describe('POST /ids', () => {
         it('should correctly persist the ID in the database', async () => {
             const res = await request(app.getHttpServer()).post(`/ids`);
 
-            const persistedId = await testRepositoryProvider.getIdRepository().fetchById(res.text);
+            const persistedId = (await idRepository.fetchById(res.text)) as UuidDocument;
 
-            expect(persistedId).toEqual({
-                id: res.text,
-                isAvailable: true,
-            });
+            expect(persistedId.id).toBe(res.text);
+
+            expect(persistedId.usedBy).toBeUndefined();
+
+            expect(isNonEmptyString(persistedId.timeGenerated)).toBe(true);
+
+            expect(persistedId.timeUsed).toBeUndefined();
         });
     });
 });

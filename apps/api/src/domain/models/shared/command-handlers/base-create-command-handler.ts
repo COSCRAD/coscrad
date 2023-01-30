@@ -6,6 +6,7 @@ import { isNotFound } from '../../../../lib/types/not-found';
 import { isOK } from '../../../../lib/types/ok';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
+import { EVENT } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
@@ -54,12 +55,12 @@ export abstract class BaseCreateCommandHandler<
          * This doesn't feel like the right place to do this. Consider tying
          * this in with the `create` method on the repositories.
          */
-        await this.idManager.use(command.aggregateCompositeIdentifier.id);
+        await this.idManager.use(command.aggregateCompositeIdentifier);
 
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
 
-        await this.idManager.use(eventId);
+        await this.idManager.use({ id: eventId, type: EVENT });
 
         const event = this.buildEvent(command, eventId, userId);
 

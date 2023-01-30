@@ -4,14 +4,14 @@ import { IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
-import { DatabaseProvider } from '../../../persistence/database/database.provider';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../types/DTO';
 import { EnvironmentVariables } from '../../config/env.validation';
 import createTestModule from './createTestModule';
 
 export type TestModuleInstances = {
-    databaseProvider: DatabaseProvider;
+    databaseProvider: ArangoDatabaseProvider;
     testRepositoryProvider: TestRepositoryProvider;
     commandHandlerService: CommandHandlerService;
     app: INestApplication;
@@ -36,7 +36,7 @@ export default async (
     const arangoConnectionProvider =
         moduleRef.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 
-    const databaseProvider = new DatabaseProvider(arangoConnectionProvider);
+    const databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
     const testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
 

@@ -5,15 +5,8 @@ import { ArangoDatabase } from './arango-database';
 import { ArangoDatabaseForCollection } from './arango-database-for-collection';
 import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
 
-/**
- * TODO [https://www.pivotaltracker.com/story/show/181559601]
- *
- * Rename this `ArangoDatabaseProvider`, as this is our
- * Arango specific implementation. Do this after we update our approach
- * to dependency injection.
- */
 @Injectable()
-export class DatabaseProvider {
+export class ArangoDatabaseProvider {
     readonly #databaseConnection: ArangoConnection;
 
     #arangoInstance: ArangoDatabase;

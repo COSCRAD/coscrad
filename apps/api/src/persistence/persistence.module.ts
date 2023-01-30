@@ -1,8 +1,10 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
 import { REPOSITORY_PROVIDER } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
-import { DatabaseProvider } from './database/database.provider';
+import { ArangoDatabaseProvider } from './database/database.provider';
+import { ArangoIdRepository } from './repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from './repositories/arango-repository.provider';
 
 @Global()
@@ -25,7 +27,7 @@ export class PersistenceModule {
             provide: REPOSITORY_PROVIDER,
             useFactory: async (arangoConnectionProvider: ArangoConnectionProvider) => {
                 const repositoryProvider = new ArangoRepositoryProvider(
-                    new DatabaseProvider(arangoConnectionProvider)
+                    new ArangoDatabaseProvider(arangoConnectionProvider)
                 );
 
                 return repositoryProvider;
@@ -33,11 +35,18 @@ export class PersistenceModule {
             inject: [ArangoConnectionProvider],
         };
 
+        const idRepositoryProvider = {
+            provide: ID_RESPOSITORY_TOKEN,
+            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                new ArangoIdRepository(new ArangoDatabaseProvider(arangoConnectionProvider)),
+            inject: [ArangoConnectionProvider],
+        };
+
         return {
             module: PersistenceModule,
             imports: [ConfigModule],
-            providers: [arangoConnectionProvider, repositoryProvider],
-            exports: [arangoConnectionProvider, repositoryProvider],
+            providers: [arangoConnectionProvider, repositoryProvider, idRepositoryProvider],
+            exports: [arangoConnectionProvider, repositoryProvider, idRepositoryProvider],
             global: true,
         };
     }

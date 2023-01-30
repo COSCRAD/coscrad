@@ -5,7 +5,7 @@ import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER } from '../../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import { IIdManager } from '../../../../interfaces/id-manager.interface';
+import { EVENT, IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
@@ -69,7 +69,7 @@ export class PublishResourceCommandHandler extends BaseCommandHandler<Resource> 
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
 
-        await this.idManager.use(eventId);
+        await this.idManager.use({ id: eventId, type: EVENT });
 
         const event = this.buildEvent(command, eventId, userId);
 

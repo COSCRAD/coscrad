@@ -2,7 +2,21 @@ import { NotAvailable } from '../../lib/types/not-available';
 import { NotFound } from '../../lib/types/not-found';
 import { OK } from '../../lib/types/ok';
 import { AggregateId } from '../types/AggregateId';
+import { AggregateType } from '../types/AggregateType';
 import { IIdGenerator } from './id-generator.interface';
+
+/**
+ * Currently, we are storing events on the snapshots of domain models. If we
+ * move to full CQRS, we will have a separate events collection (actually, we will
+ * have only an events table and the rest will be event sourced!). We still want
+ * to track if a UUID was used for an event and not a standard Aggregate.
+ */
+export const EVENT = 'event';
+export type EVENT = typeof EVENT;
+
+export type UniquelyIdentifiableType = AggregateType | EVENT;
+
+export const ID_MANAGER_TOKEN = 'ID_MANAGER';
 
 export interface IIdManager extends IIdGenerator {
     /**
@@ -19,6 +33,9 @@ export interface IIdManager extends IIdGenerator {
     /**
      *
      * @param id The system-generated ID that should be marked as in-use
+     *
+     * When we mark the id as inUse, we also want to track the aggregate it is used
+     * by.
      */
-    use(id: AggregateId): Promise<void>;
+    use({ id }: { type: UniquelyIdentifiableType; id: AggregateId }): Promise<void>;
 }

@@ -1,6 +1,7 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { EVENT } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
@@ -55,7 +56,7 @@ export abstract class BaseUpdateCommandHandler<
         // generate a unique ID for the event
         const eventId = await this.idManager.generate();
 
-        await this.idManager.use(eventId);
+        await this.idManager.use({ id: eventId, type: EVENT });
 
         const event = this.buildEvent(command, eventId, systemUserId);
 

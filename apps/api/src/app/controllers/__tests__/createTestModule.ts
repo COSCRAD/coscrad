@@ -7,6 +7,7 @@ import { MockJwtAdminAuthGuard } from '../../../authorization/mock-jwt-admin-aut
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
+import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
 import { CreateBookBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command-handler';
 import { CreateCourtCaseBibliographicReference } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command';
@@ -60,7 +61,8 @@ import { IdManagementService } from '../../../lib/id-generation/id-management.se
 import { MockIdManagementService } from '../../../lib/id-generation/mock-id-management.service';
 import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
-import { DatabaseProvider } from '../../../persistence/database/database.provider';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
+import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { DTO } from '../../../types/DTO';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
@@ -131,7 +133,7 @@ export default async (
                 provide: REPOSITORY_PROVIDER,
                 useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
                     return new ArangoRepositoryProvider(
-                        new DatabaseProvider(arangoConnectionProvider)
+                        new ArangoDatabaseProvider(arangoConnectionProvider)
                     );
                 },
                 inject: [ArangoConnectionProvider],
@@ -266,12 +268,20 @@ export default async (
                 inject: [REPOSITORY_PROVIDER, CommandInfoService],
             },
             {
-                provide: 'ID_MANAGER',
-                useFactory: (repositoryProvider: ArangoRepositoryProvider) =>
+                provide: ID_MANAGER_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
                     shouldMockIdGenerator
-                        ? new MockIdManagementService(repositoryProvider)
-                        : new IdManagementService(repositoryProvider),
-                inject: [REPOSITORY_PROVIDER],
+                        ? new MockIdManagementService(
+                              new ArangoIdRepository(
+                                  new ArangoDatabaseProvider(arangoConnectionProvider)
+                              )
+                          )
+                        : new IdManagementService(
+                              new ArangoIdRepository(
+                                  new ArangoDatabaseProvider(arangoConnectionProvider)
+                              )
+                          ),
+                inject: [ArangoConnectionProvider],
             },
             {
                 provide: JwtStrategy,

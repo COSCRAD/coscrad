@@ -11,7 +11,7 @@ import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
 import { ArangoDatabaseForCollection } from '../database/arango-database-for-collection';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
-import { DatabaseProvider } from '../database/database.provider';
+import { ArangoDatabaseProvider } from '../database/database.provider';
 import { DatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDTO';
 
 /**
@@ -34,7 +34,7 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
     #mapEntityDTOToDocument: (dto: DTO<TEntity>) => DatabaseDocument<TEntity>;
 
     constructor(
-        arangoDatabaseProvider: DatabaseProvider,
+        arangoDatabaseProvider: ArangoDatabaseProvider,
         collectionName: ArangoCollectionId,
         instanceFactory: InstanceFactory<TEntity>,
         documentToEntity,
