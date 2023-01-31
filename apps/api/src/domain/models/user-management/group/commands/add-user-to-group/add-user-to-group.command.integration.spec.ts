@@ -10,7 +10,7 @@ import { DTO } from '../../../../../../types/DTO';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../../types/AggregateType';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
-import InvalidExternalReferenceByAggregateError from '../../../../categories/errors/InvalidExternalReferenceInCategoryError';
+import InvalidExternalReferenceByAggregateError from '../../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
@@ -144,9 +144,10 @@ describe('AddUserToGroup', () => {
                     checkError: (error: InternalError) => {
                         assertExternalStateError(
                             error,
-                            new InvalidExternalReferenceByAggregateError(existingGroup, [
-                                { id: validCommandFSA.payload.userId, type: AggregateType.user },
-                            ])
+                            new InvalidExternalReferenceByAggregateError(
+                                existingGroup.getCompositeIdentifier(),
+                                [{ id: validCommandFSA.payload.userId, type: AggregateType.user }]
+                            )
                         );
                     },
                 });

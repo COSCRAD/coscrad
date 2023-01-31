@@ -3,6 +3,10 @@ import { AggregateType } from '../domain/types/AggregateType';
 import { CategorizableType } from '../domain/types/CategorizableType';
 import { ResourceType } from '../domain/types/ResourceType';
 import { DTO } from '../types/DTO';
+import {
+    convertAggregatesIdToUuid,
+    convertSequenceNumberToUuid,
+} from './utilities/convertSequentialIdToUuid';
 
 const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
     {
@@ -82,7 +86,7 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
                 id: '0',
             },
             {
-                type: CategorizableType.transcribedAudio,
+                type: CategorizableType.audioItem,
                 id: '110',
             },
             {
@@ -160,4 +164,15 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
  * run `validateTestData.spec.ts` to ensure your test data satisfies all domain
  * invariants.
  */
-export default (): Tag[] => allTagsDTOs.map((dto) => new Tag({ ...dto, type: AggregateType.tag }));
+export default (): Tag[] =>
+    allTagsDTOs
+        .map((dto) => new Tag({ ...dto, type: AggregateType.tag }))
+        .map(convertAggregatesIdToUuid)
+        .map((tag) =>
+            tag.clone({
+                members: tag.members.map((member) => ({
+                    ...member,
+                    id: convertSequenceNumberToUuid(parseInt(member.id)),
+                })),
+            })
+        );

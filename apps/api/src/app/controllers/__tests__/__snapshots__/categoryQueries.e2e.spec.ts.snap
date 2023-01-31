@@ -11,32 +11,32 @@ Object {
               "children": Array [
                 Object {
                   "children": Array [],
-                  "id": "8",
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
                   "label": "wolves",
                   "members": Array [
                     Object {
-                      "id": "101",
+                      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
                       "type": "spatialFeature",
                     },
                   ],
                 },
                 Object {
                   "children": Array [],
-                  "id": "10",
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
                   "label": "domestic dogs",
                   "members": Array [
                     Object {
-                      "id": "1",
+                      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                       "type": "photograph",
                     },
                   ],
                 },
               ],
-              "id": "4",
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
               "label": "canines",
               "members": Array [
                 Object {
-                  "id": "2",
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                   "type": "term",
                 },
               ],
@@ -45,71 +45,71 @@ Object {
               "children": Array [
                 Object {
                   "children": Array [],
-                  "id": "6",
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
                   "label": "big cats",
                   "members": Array [],
                 },
                 Object {
                   "children": Array [],
-                  "id": "7",
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
                   "label": "domestic cats",
                   "members": Array [
                     Object {
-                      "id": "2",
+                      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                       "type": "vocabularyList",
                     },
                     Object {
-                      "id": "0",
+                      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
                       "type": "photograph",
                     },
                   ],
                 },
               ],
-              "id": "5",
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
               "label": "felines",
               "members": Array [],
             },
             Object {
               "children": Array [],
-              "id": "11",
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "label": "rodents",
               "members": Array [
                 Object {
-                  "id": "24",
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                   "type": "book",
                 },
               ],
             },
           ],
-          "id": "2",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "label": "mammals",
           "members": Array [
             Object {
-              "id": "1",
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
             Object {
-              "id": "23",
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
             Object {
-              "id": "1",
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "song",
             },
           ],
         },
         Object {
           "children": Array [],
-          "id": "3",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "label": "birds",
           "members": Array [],
         },
       ],
-      "id": "1",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "label": "animals",
       "members": Array [
         Object {
-          "id": "1",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "vocabularyList",
         },
       ],
@@ -122,55 +122,55 @@ Object {
               "children": Array [
                 Object {
                   "children": Array [],
-                  "id": "15",
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
                   "label": "tools",
                   "members": Array [
                     Object {
-                      "id": "110",
+                      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                       "type": "transcribedAudio",
                     },
                   ],
                 },
               ],
-              "id": "16",
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
               "label": "adornments",
               "members": Array [],
             },
             Object {
               "children": Array [],
-              "id": "17",
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
               "label": "clothing",
               "members": Array [
                 Object {
-                  "id": "1",
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                   "type": "note",
                 },
               ],
             },
             Object {
               "children": Array [],
-              "id": "18",
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
               "label": "tools",
               "members": Array [],
             },
           ],
-          "id": "13",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
           "label": "props",
           "members": Array [],
         },
         Object {
           "children": Array [],
-          "id": "14",
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
           "label": "wardrobe",
           "members": Array [],
         },
       ],
-      "id": "12",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
       "label": "film",
       "members": Array [],
     },
   ],
-  "id": "0",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
   "label": "tree of knowledge",
   "members": Array [],
 }

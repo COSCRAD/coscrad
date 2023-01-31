@@ -1,5 +1,6 @@
 import { Book } from '../domain/models/book/entities/book.entity';
 import { ResourceType } from '../domain/types/ResourceType';
+import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
 
 const dtos = [
     {
@@ -59,4 +60,4 @@ const dtos = [
         } as const)
 );
 
-export default (): Book[] => dtos.map((dto) => new Book(dto));
+export default (): Book[] => dtos.map((dto) => new Book(dto)).map(convertAggregatesIdToUuid);

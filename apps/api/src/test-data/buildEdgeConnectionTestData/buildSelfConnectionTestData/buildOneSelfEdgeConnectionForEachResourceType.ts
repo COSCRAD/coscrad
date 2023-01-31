@@ -88,7 +88,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                 role,
                 compositeIdentifier: {
                     id: '110',
-                    type: ResourceType.transcribedAudio,
+                    type: ResourceType.audioItem,
                 },
                 context: new TimeRangeContext({
                     type: EdgeConnectionContextType.timeRange,

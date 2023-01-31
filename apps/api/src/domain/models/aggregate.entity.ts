@@ -15,7 +15,7 @@ import { DeluxeInMemoryStore } from '../types/DeluxeInMemoryStore';
 import { HasAggregateId } from '../types/HasAggregateId';
 import { InMemorySnapshot, isResourceType } from '../types/ResourceType';
 import BaseDomainModel from './BaseDomainModel';
-import InvalidExternalReferenceByAggregateError from './categories/errors/InvalidExternalReferenceInCategoryError';
+import InvalidExternalReferenceByAggregateError from './categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateIdAlreadyInUseError from './shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from './shared/common-command-errors/InvalidExternalStateError';
 import { BaseEvent } from './shared/events/base-event.entity';
@@ -107,7 +107,10 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
         );
 
         return invalidReferences.length > 0
-            ? new InvalidExternalReferenceByAggregateError(this, invalidReferences)
+            ? new InvalidExternalReferenceByAggregateError(
+                  this.getCompositeIdentifier(),
+                  invalidReferences
+              )
             : Valid;
     }
 

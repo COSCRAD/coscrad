@@ -1,6 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { Resource } from '../../../domain/models/resource.entity';
+import { AggregateType } from '../../../domain/types/AggregateType';
+import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -98,17 +100,26 @@ describe('When fetching multiple resources', () => {
                     );
 
                 beforeEach(async () => {
-                    await testRepositoryProvider.addResourcesOfSingleType(resourceType, [
-                        ...unpublishedResourcesToAdd,
-                        ...publishedResourcesToAdd,
-                    ]);
-
-                    await testRepositoryProvider.getTagRepository().createMany(tagTestData);
+                    await testRepositoryProvider.addFullSnapshot(
+                        new DeluxeInMemoryStore({
+                            resources: {
+                                ...testDataWithAllResourcesPublished,
+                                [resourceType]: [
+                                    ...unpublishedResourcesToAdd,
+                                    ...publishedResourcesToAdd,
+                                ],
+                            },
+                            [AggregateType.tag]: tagTestData,
+                        }).fetchFullSnapshotInLegacyFormat()
+                    );
                 });
 
                 it('should return the expected number of results', async () => {
                     const res = await request(app.getHttpServer()).get(endpointUnderTest);
 
+                    if (resourceType === ResourceType.transcribedAudio) {
+                        console.log('hereeeee');
+                    }
                     expect(res.body.entities.length).toBe(publishedResourcesToAdd.length);
 
                     // Sanity check

@@ -3,7 +3,7 @@ import { RESOURCES_ROUTE_PREFIX } from '../resources/constants';
 
 // For irregular plural forms or forms that lead to awkward grammar
 const exceptions: Partial<Record<ResourceType, string>> = {
-    [ResourceType.transcribedAudio]: 'transcribedAudioItems',
+    [ResourceType.audioItem]: 'transcribedAudioItems',
 };
 
 // `${baseResourcesPath}/${buildViewModelPathForResourceType(resourceType)}`

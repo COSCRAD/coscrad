@@ -20,7 +20,7 @@ const resourceTypeAndLabel: AggregateTypeAndLabel = {
     [ResourceType.song]: 'Song',
     [ResourceType.spatialFeature]: 'Spatial Feature',
     [ResourceType.term]: 'Term',
-    [ResourceType.transcribedAudio]: 'Transcribed Audio Item',
+    [ResourceType.audioItem]: 'Transcribed Audio Item',
     [ResourceType.vocabularyList]: 'Vocabulary List',
 };
 

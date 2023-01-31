@@ -6,7 +6,7 @@ const resourceTypeToArangoCollectionID: {
 } = {
     [ResourceType.term]: ArangoResourceCollectionId.terms,
     [ResourceType.vocabularyList]: ArangoResourceCollectionId.vocabulary_lists,
-    [ResourceType.transcribedAudio]: ArangoResourceCollectionId.transcribed_audio,
+    [ResourceType.audioItem]: ArangoResourceCollectionId.transcribed_audio,
     [ResourceType.book]: ArangoResourceCollectionId.books,
     [ResourceType.photograph]: ArangoResourceCollectionId.photographs,
     [ResourceType.spatialFeature]: ArangoResourceCollectionId.spatial_features,

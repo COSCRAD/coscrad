@@ -167,19 +167,42 @@ Array [
         "isOptional": false,
         "label": "length (ms)",
       },
-      "plainText": Object {
+      "mimeType": Object {
+        "complexDataType": "ENUM",
+        "description": "the media format type",
+        "enumLabel": "MIME type",
+        "enumName": "MIMEType",
+        "isArray": false,
+        "isOptional": false,
+        "label": "MIME type",
+        "labelsAndValues": Array [
+          Object {
+            "label": "mp3",
+            "value": "audio/mpeg",
+          },
+          Object {
+            "label": "mp4",
+            "value": "video/mp4",
+          },
+          Object {
+            "label": "png",
+            "value": "image/png",
+          },
+        ],
+      },
+      "name": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "name of the transcript",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+      },
+      "text": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a plain-text representation of the transcript",
         "isArray": false,
         "isOptional": false,
         "label": "plain text",
-      },
-      "start": Object {
-        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-        "description": "the starting counter of the audio file in milliseconds",
-        "isArray": false,
-        "isOptional": false,
-        "label": "start (ms)",
       },
     },
     "type": "transcribedAudio",
@@ -615,8 +638,8 @@ Array [
       "mimeType": Object {
         "complexDataType": "ENUM",
         "description": "technical specification of the format of the media item",
-        "enumLabel": "MIME Type",
-        "enumName": "MIME_TYPE",
+        "enumLabel": "MIME type",
+        "enumName": "MIMEType",
         "isArray": false,
         "isOptional": false,
         "label": "MIME type",
@@ -628,6 +651,10 @@ Array [
           Object {
             "label": "mp4",
             "value": "video/mp4",
+          },
+          Object {
+            "label": "png",
+            "value": "image/png",
           },
         ],
       },

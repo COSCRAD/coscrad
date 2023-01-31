@@ -3,360 +3,359 @@
         "tags": [
             {
                 "type": "tag",
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "label": "plants",
                 "members": [
                     {
                         "type": "term",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
                     {
                         "type": "book",
-                        "id": "23"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023"
                     },
                     {
                         "type": "book",
-                        "id": "24"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024"
                     },
                     {
                         "type": "vocabularyList",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
                     {
                         "type": "spatialFeature",
-                        "id": "100"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100"
                     },
                     {
                         "type": "note",
-                        "id": "2005"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005"
                     },
                     {
                         "type": "note",
-                        "id": "9"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009"
                     },
                     {
                         "type": "note",
-                        "id": "11"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011"
                     }
                 ]
             },
             {
                 "type": "tag",
-                "_key": "2",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "eventHistory": [],
                 "label": "animals",
                 "members": [
                     {
                         "type": "term",
-                        "id": "2"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
                     },
                     {
                         "type": "term",
-                        "id": "3"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003"
                     },
                     {
                         "type": "spatialFeature",
-                        "id": "102"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102"
                     },
                     {
                         "type": "note",
-                        "id": "2004"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004"
                     },
                     {
                         "type": "note",
-                        "id": "7"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007"
                     },
                     {
                         "type": "bibliographicReference",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     }
                 ]
             },
             {
                 "type": "tag",
-                "_key": "3",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
                 "eventHistory": [],
                 "label": "placenames",
                 "members": [
                     {
                         "type": "photograph",
-                        "id": "0"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000"
                     },
                     {
                         "type": "transcribedAudio",
-                        "id": "110"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110"
                     },
                     {
                         "type": "note",
-                        "id": "2003"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003"
                     },
                     {
                         "type": "note",
-                        "id": "5"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005"
                     }
                 ]
             },
             {
                 "type": "tag",
-                "_key": "4",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
                 "eventHistory": [],
                 "label": "songs",
                 "members": [
                     {
                         "type": "photograph",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
                     {
                         "type": "note",
-                        "id": "2002"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002"
                     },
                     {
                         "type": "note",
-                        "id": "3"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003"
                     }
                 ]
             },
             {
                 "type": "tag",
-                "_key": "5",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
                 "eventHistory": [],
                 "label": "legends",
                 "members": [
                     {
                         "type": "vocabularyList",
-                        "id": "2"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
                     },
                     {
                         "type": "spatialFeature",
-                        "id": "101"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101"
                     },
                     {
                         "type": "note",
-                        "id": "2001"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001"
                     },
                     {
                         "type": "note",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
                     {
                         "type": "mediaItem",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
                     {
                         "type": "song",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     }
                 ]
             },
             {
                 "type": "tag",
-                "_key": "6",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
                 "eventHistory": [],
                 "label": "law",
                 "members": [
                     {
                         "type": "bibliographicReference",
-                        "id": "3"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003"
                     }
                 ]
             }
         ],
         "categories": [
             {
-                "_key": "0",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
                 "label": "tree of knowledge",
                 "members": [],
                 "type": "category"
             },
             {
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "label": "animals",
                 "members": [
                     {
                         "type": "vocabularyList",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     }
                 ],
                 "type": "category"
             },
             {
-                "_key": "2",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "label": "mammals",
                 "members": [
                     {
                         "type": "term",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
                     {
                         "type": "book",
-                        "id": "23"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023"
                     },
                     {
                         "type": "song",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     }
                 ],
                 "type": "category"
             },
             {
-                "_key": "3",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
                 "label": "birds",
                 "members": [],
                 "type": "category"
             },
             {
-                "_key": "4",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
                 "label": "canines",
                 "members": [
                     {
                         "type": "term",
-                        "id": "2"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
                     }
                 ],
                 "type": "category"
             },
             {
-                "_key": "5",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
                 "label": "felines",
                 "members": [],
                 "type": "category"
             },
             {
-                "_key": "6",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
                 "label": "big cats",
                 "members": [],
                 "type": "category"
             },
             {
-                "_key": "7",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
                 "label": "domestic cats",
                 "members": [
                     {
                         "type": "vocabularyList",
-                        "id": "2"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
                     },
                     {
                         "type": "photograph",
-                        "id": "0"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000"
                     }
                 ],
                 "type": "category"
             },
             {
-                "_key": "8",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
                 "label": "wolves",
                 "members": [
                     {
                         "type": "spatialFeature",
-                        "id": "101"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101"
                     }
                 ],
                 "type": "category"
             },
             {
-                "_key": "9",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
                 "label": "songs",
                 "members": [
                     {
                         "type": "term",
-                        "id": "3"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003"
                     },
                     {
                         "type": "spatialFeature",
-                        "id": "102"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102"
                     },
                     {
                         "type": "bibliographicReference",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     },
                     {
                         "type": "mediaItem",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     }
                 ],
                 "type": "category"
             },
             {
-                "_key": "10",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
                 "label": "domestic dogs",
                 "members": [
                     {
                         "type": "photograph",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     }
                 ],
                 "type": "category"
             },
             {
-                "_key": "11",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
                 "label": "rodents",
                 "members": [
                     {
                         "type": "book",
-                        "id": "24"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024"
                     }
                 ],
                 "type": "category"
             },
             {
-                "_key": "12",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
                 "label": "film",
                 "members": [],
                 "type": "category"
             },
             {
-                "_key": "13",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
                 "label": "props",
                 "members": [],
                 "type": "category"
             },
             {
-                "_key": "14",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
                 "label": "wardrobe",
                 "members": [],
                 "type": "category"
             },
             {
-                "_key": "15",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
                 "label": "tools",
                 "members": [
                     {
                         "type": "transcribedAudio",
-                        "id": "110"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110"
                     }
                 ],
                 "type": "category"
             },
             {
-                "_key": "16",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
                 "label": "adornments",
                 "members": [],
                 "type": "category"
             },
             {
-                "_key": "17",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
                 "label": "clothing",
                 "members": [
                     {
                         "type": "note",
-                        "id": "1"
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                     }
                 ],
                 "type": "category"
             },
             {
-                "_key": "18",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
                 "label": "tools",
                 "members": [],
                 "type": "category"
             }
         ],
-        "uuids": [],
         "users": [
             {
                 "type": "user",
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "profile": {
                     "email": "llcj1985@aol.com",
@@ -375,11 +374,11 @@
         "groups": [
             {
                 "type": "userGroup",
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "label": "community members",
                 "userIds": [
-                    "1"
+                    "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
                 ],
                 "description": "This group is for members of the community only."
             }
@@ -387,72 +386,7 @@
         "terms": [
             {
                 "type": "term",
-                "_key": "11",
-                "eventHistory": [],
-                "published": true,
-                "queryAccessControlList": {
-                    "allowedUserIds": [],
-                    "allowedGroupIds": []
-                },
-                "term": "I am singing (lang)",
-                "termEnglish": "I am singing (Engl)",
-                "contributorId": "Sarah Smith"
-            },
-            {
-                "type": "term",
-                "_key": "12",
-                "eventHistory": [],
-                "published": true,
-                "queryAccessControlList": {
-                    "allowedUserIds": [],
-                    "allowedGroupIds": []
-                },
-                "term": "You are singing (lang)",
-                "termEnglish": "You are singing (Engl)",
-                "contributorId": "Sarah Smith"
-            },
-            {
-                "type": "term",
-                "_key": "13",
-                "eventHistory": [],
-                "published": true,
-                "queryAccessControlList": {
-                    "allowedUserIds": [],
-                    "allowedGroupIds": []
-                },
-                "term": "She is singing (lang)",
-                "termEnglish": "She is singing (Engl)",
-                "contributorId": "Sarah Smith"
-            },
-            {
-                "type": "term",
-                "_key": "01",
-                "eventHistory": [],
-                "published": true,
-                "queryAccessControlList": {
-                    "allowedUserIds": [],
-                    "allowedGroupIds": []
-                },
-                "term": "I am not singing (lang)",
-                "termEnglish": "I am not singing (Engl)",
-                "contributorId": "Sarah Smith"
-            },
-            {
-                "type": "term",
-                "_key": "02",
-                "eventHistory": [],
-                "published": true,
-                "queryAccessControlList": {
-                    "allowedUserIds": [],
-                    "allowedGroupIds": []
-                },
-                "term": "You are not singing (lang)",
-                "termEnglish": "You are not singing (Engl)",
-                "contributorId": "Sarah Smith"
-            },
-            {
-                "type": "term",
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -465,7 +399,7 @@
             },
             {
                 "type": "term",
-                "_key": "2",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -478,7 +412,7 @@
             },
             {
                 "type": "term",
-                "_key": "3",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
                 "eventHistory": [],
                 "published": false,
                 "queryAccessControlList": {
@@ -490,7 +424,7 @@
             },
             {
                 "type": "term",
-                "_key": "4",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
                 "eventHistory": [],
                 "published": false,
                 "queryAccessControlList": {
@@ -501,12 +435,77 @@
                 },
                 "term": "My Secret Term",
                 "contributorId": "This will be removed soon"
+            },
+            {
+                "type": "term",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "I am singing (lang)",
+                "termEnglish": "I am singing (Engl)",
+                "contributorId": "Sarah Smith"
+            },
+            {
+                "type": "term",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "You are singing (lang)",
+                "termEnglish": "You are singing (Engl)",
+                "contributorId": "Sarah Smith"
+            },
+            {
+                "type": "term",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "She is singing (lang)",
+                "termEnglish": "She is singing (Engl)",
+                "contributorId": "Sarah Smith"
+            },
+            {
+                "type": "term",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "I am not singing (lang)",
+                "termEnglish": "I am not singing (Engl)",
+                "contributorId": "Sarah Smith"
+            },
+            {
+                "type": "term",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "term": "You are not singing (lang)",
+                "termEnglish": "You are not singing (Engl)",
+                "contributorId": "Sarah Smith"
             }
         ],
         "vocabulary_lists": [
             {
                 "type": "vocabularyList",
-                "_key": "4567",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -517,38 +516,38 @@
                 "nameEnglish": "To Sing (Engl)",
                 "entries": [
                     {
-                        "termId": "11",
+                        "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
                         "variableValues": {
                             "positive": true,
-                            "person": "1"
+                            "person": "11"
                         }
                     },
                     {
-                        "termId": "12",
-                        "variableValues": {
-                            "positive": true,
-                            "person": "2"
-                        }
-                    },
-                    {
-                        "termId": "13",
-                        "variableValues": {
-                            "positive": true,
-                            "person": "3"
-                        }
-                    },
-                    {
-                        "termId": "01",
+                        "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
                         "variableValues": {
                             "positive": false,
-                            "person": "1"
+                            "person": "12"
                         }
                     },
                     {
-                        "termId": "02",
+                        "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
                         "variableValues": {
                             "positive": false,
-                            "person": "2"
+                            "person": "13"
+                        }
+                    },
+                    {
+                        "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+                        "variableValues": {
+                            "positive": true,
+                            "person": "01"
+                        }
+                    },
+                    {
+                        "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+                        "variableValues": {
+                            "positive": false,
+                            "person": "02"
                         }
                     }
                 ],
@@ -589,7 +588,7 @@
             },
             {
                 "type": "vocabularyList",
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -600,13 +599,13 @@
                 "nameEnglish": "test VL 1 engl",
                 "entries": [
                     {
-                        "termId": "1",
+                        "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                         "variableValues": {
                             "person": "11"
                         }
                     },
                     {
-                        "termId": "2",
+                        "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                         "variableValues": {
                             "person": "12"
                         }
@@ -631,7 +630,7 @@
             },
             {
                 "type": "vocabularyList",
-                "_key": "2",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -641,13 +640,13 @@
                 "name": "test VL 2 CHIL- no engl name",
                 "entries": [
                     {
-                        "termId": "2",
+                        "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                         "variableValues": {
                             "his": false
                         }
                     },
                     {
-                        "termId": "1",
+                        "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                         "variableValues": {
                             "his": true
                         }
@@ -674,86 +673,143 @@
         "transcribed_audio": [
             {
                 "type": "transcribedAudio",
-                "_key": "110",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "audioFilename": "Gaas",
+                "name": {
+                    "items": [
+                        {
+                            "languageId": "eng",
+                            "role": "original",
+                            "text": "The Wooden Boy"
+                        }
+                    ]
+                },
+                "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "lengthMilliseconds": 20000,
-                "startMilliseconds": 0,
                 "transcript": {
-                    "timeRanges": [
+                    "participants": [
+                        {
+                            "initials": "JHC",
+                            "name": "Jimmy H. Cricket"
+                        }
+                    ],
+                    "items": [
                         {
                             "inPoint": 12000,
                             "outPoint": 15550,
-                            "data": "There once was a little wooden boy."
+                            "text": "There once was a little wooden boy.",
+                            "label": "JHC"
                         },
                         {
                             "inPoint": 18300,
                             "outPoint": 19240,
-                            "data": "His name was Pinocchio."
+                            "text": "His name was Pinocchio",
+                            "label": "JHC"
                         }
                     ]
                 }
             },
             {
                 "type": "transcribedAudio",
-                "_key": "111",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "audioFilename": "Chinaay",
+                "name": {
+                    "items": [
+                        {
+                            "languageId": "clc",
+                            "role": "original",
+                            "text": "Down at the River"
+                        }
+                    ]
+                },
+                "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "lengthMilliseconds": 23409,
-                "startMilliseconds": 0,
                 "transcript": {
-                    "timeRanges": [
+                    "participants": [
+                        {
+                            "initials": "BL",
+                            "name": "Bob LeRob"
+                        },
+                        {
+                            "initials": "SD",
+                            "name": "Sue DeDue"
+                        }
+                    ],
+                    "items": [
                         {
                             "inPoint": 3400,
                             "outPoint": 3670,
-                            "data": "While she went down to the river"
+                            "text": "While she went down to the river",
+                            "label": "BL"
                         },
                         {
                             "inPoint": 3700,
                             "outPoint": 3980,
-                            "data": "someone had already filled the water tank."
+                            "text": "someone had already filled the water tank.",
+                            "label": "SD"
                         },
                         {
                             "inPoint": 4010,
                             "outPoint": 4290,
-                            "data": "These were the types of problems we had."
+                            "text": "These were the types of problems we had.",
+                            "label": "BL"
                         }
                     ]
                 }
             },
             {
                 "type": "transcribedAudio",
-                "_key": "113",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "audioFilename": "Kwa",
+                "name": {
+                    "items": [
+                        {
+                            "languageId": "hai",
+                            "role": "original",
+                            "text": "Learning about Protocols"
+                        }
+                    ]
+                },
+                "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "lengthMilliseconds": 32989,
-                "startMilliseconds": 0,
                 "transcript": {
-                    "timeRanges": [
+                    "participants": [
+                        {
+                            "initials": "E1",
+                            "name": "Elder 1"
+                        },
+                        {
+                            "initials": "E2",
+                            "name": "Elder 2"
+                        }
+                    ],
+                    "items": [
                         {
                             "inPoint": 120,
                             "outPoint": 848,
-                            "data": "this type of spoon is used in ceremonies"
+                            "text": "this type of spoon is used in ceremonies",
+                            "label": "E1"
                         },
                         {
                             "inPoint": 930,
                             "outPoint": 1080,
-                            "data": "by members of the opposite clan of the house chief"
+                            "text": "by members of the opposite clan of the house chief",
+                            "label": "E2"
                         }
                     ]
                 }
@@ -762,7 +818,7 @@
         "books": [
             {
                 "type": "book",
-                "_key": "23",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -788,7 +844,7 @@
             },
             {
                 "type": "book",
-                "_key": "24",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -808,7 +864,7 @@
             },
             {
                 "type": "book",
-                "_key": "25",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
                 "eventHistory": [],
                 "published": false,
                 "queryAccessControlList": {
@@ -830,7 +886,7 @@
         "photographs": [
             {
                 "type": "photograph",
-                "_key": "0",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -846,7 +902,7 @@
             },
             {
                 "type": "photograph",
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -862,7 +918,7 @@
             },
             {
                 "type": "photograph",
-                "_key": "2",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -880,7 +936,7 @@
         "spatial_features": [
             {
                 "type": "spatialFeature",
-                "_key": "100",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -902,7 +958,7 @@
             },
             {
                 "type": "spatialFeature",
-                "_key": "101",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -924,7 +980,7 @@
             },
             {
                 "type": "spatialFeature",
-                "_key": "102",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -946,7 +1002,7 @@
             },
             {
                 "type": "spatialFeature",
-                "_key": "103",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110103",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -968,7 +1024,7 @@
             },
             {
                 "type": "spatialFeature",
-                "_key": "104",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110104",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -990,7 +1046,7 @@
             },
             {
                 "type": "spatialFeature",
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -1038,7 +1094,7 @@
             },
             {
                 "type": "spatialFeature",
-                "_key": "300",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -1078,7 +1134,7 @@
         "bibliographic_references": [
             {
                 "type": "bibliographicReference",
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -1105,7 +1161,7 @@
             },
             {
                 "type": "bibliographicReference",
-                "_key": "23",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -1131,7 +1187,7 @@
             },
             {
                 "type": "bibliographicReference",
-                "_key": "3",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -1152,7 +1208,7 @@
         "songs": [
             {
                 "type": "song",
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -1174,7 +1230,7 @@
             },
             {
                 "type": "song",
-                "_key": "2",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "eventHistory": [],
                 "published": false,
                 "queryAccessControlList": {
@@ -1200,7 +1256,7 @@
         "media_items": [
             {
                 "type": "mediaItem",
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "published": true,
                 "queryAccessControlList": {
@@ -1224,80 +1280,80 @@
     "edge": {
         "category_edges": [
             {
-                "_to": "categories/1",
-                "_from": "categories/0"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000"
             },
             {
-                "_to": "categories/12",
-                "_from": "categories/0"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000"
             },
             {
-                "_to": "categories/2",
-                "_from": "categories/1"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
             },
             {
-                "_to": "categories/3",
-                "_from": "categories/1"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
             },
             {
-                "_to": "categories/4",
-                "_from": "categories/2"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
             },
             {
-                "_to": "categories/5",
-                "_from": "categories/2"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
             },
             {
-                "_to": "categories/11",
-                "_from": "categories/2"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"
             },
             {
-                "_to": "categories/8",
-                "_from": "categories/4"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004"
             },
             {
-                "_to": "categories/10",
-                "_from": "categories/4"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004"
             },
             {
-                "_to": "categories/6",
-                "_from": "categories/5"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005"
             },
             {
-                "_to": "categories/7",
-                "_from": "categories/5"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005"
             },
             {
-                "_to": "categories/13",
-                "_from": "categories/12"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012"
             },
             {
-                "_to": "categories/14",
-                "_from": "categories/12"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012"
             },
             {
-                "_to": "categories/16",
-                "_from": "categories/13"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013"
             },
             {
-                "_to": "categories/17",
-                "_from": "categories/13"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013"
             },
             {
-                "_to": "categories/18",
-                "_from": "categories/13"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013"
             },
             {
-                "_to": "categories/15",
-                "_from": "categories/16"
+                "_to": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+                "_from": "categories/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016"
             }
         ],
         "resource_edge_connections": [
             {
-                "_to": "terms/2",
-                "_from": "terms/2",
+                "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "1",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1316,10 +1372,10 @@
                 "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
             },
             {
-                "_to": "books/24",
-                "_from": "books/24",
+                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "2",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1336,10 +1392,10 @@
                 "note": "This page is about bears"
             },
             {
-                "_to": "vocabulary_lists/2",
-                "_from": "vocabulary_lists/2",
+                "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "3",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1358,10 +1414,10 @@
                 "note": "This is the first letter of the list name"
             },
             {
-                "_to": "spatial_features/300",
-                "_from": "spatial_features/300",
+                "_to": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+                "_from": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
                 "type": "note",
-                "_key": "4",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1375,10 +1431,10 @@
                 "note": "there is a placename for this point at the base of the mountain"
             },
             {
-                "_to": "transcribed_audio/110",
-                "_from": "transcribed_audio/110",
+                "_to": "transcribed_audio/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+                "_from": "transcribed_audio/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "type": "note",
-                "_key": "5",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1396,10 +1452,10 @@
                 "note": "this clip talks about songs"
             },
             {
-                "_to": "photographs/2",
-                "_from": "photographs/2",
+                "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "6",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1433,10 +1489,10 @@
                 "note": "this is the stem of the flower"
             },
             {
-                "_to": "photographs/2",
-                "_from": "photographs/2",
+                "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "7",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1454,10 +1510,10 @@
                 "note": "this is the base of the flower"
             },
             {
-                "_to": "books/24",
-                "_from": "books/24",
+                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "8",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1474,10 +1530,10 @@
                 "note": "this section is the best part of an illustrated book about birds"
             },
             {
-                "_to": "bibliographic_references/1",
-                "_from": "bibliographic_references/1",
+                "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1491,10 +1547,10 @@
                 "note": "found this in the archives"
             },
             {
-                "_to": "songs/1",
-                "_from": "songs/1",
+                "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "10",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1512,10 +1568,10 @@
                 "note": "this is a song"
             },
             {
-                "_to": "media_items/1",
-                "_from": "media_items/1",
+                "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "11",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1534,10 +1590,10 @@
                 "note": "this is an awesome show"
             },
             {
-                "_to": "media_items/1",
-                "_from": "media_items/1",
+                "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "12",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1555,10 +1611,10 @@
                 "note": "important clip from the show"
             },
             {
-                "_to": "bibliographic_references/1",
-                "_from": "bibliographic_references/1",
+                "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "13",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1572,10 +1628,10 @@
                 "note": "this book is hard to track down"
             },
             {
-                "_to": "terms/2",
-                "_from": "terms/2",
+                "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "14",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1589,10 +1645,10 @@
                 "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
             },
             {
-                "_to": "books/24",
-                "_from": "books/24",
+                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "15",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1606,10 +1662,10 @@
                 "note": "This page is about bears"
             },
             {
-                "_to": "vocabulary_lists/2",
-                "_from": "vocabulary_lists/2",
+                "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "16",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1623,10 +1679,10 @@
                 "note": "This is the first letter of the list name"
             },
             {
-                "_to": "transcribed_audio/110",
-                "_from": "transcribed_audio/110",
+                "_to": "transcribed_audio/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+                "_from": "transcribed_audio/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "type": "note",
-                "_key": "17",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1640,10 +1696,10 @@
                 "note": "this clip talks about songs"
             },
             {
-                "_to": "photographs/2",
-                "_from": "photographs/2",
+                "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "18",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1657,10 +1713,10 @@
                 "note": "this is the stem of the flower"
             },
             {
-                "_to": "photographs/2",
-                "_from": "photographs/2",
+                "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "19",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1674,10 +1730,10 @@
                 "note": "this is the base of the flower"
             },
             {
-                "_to": "books/24",
-                "_from": "books/24",
+                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "20",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1691,10 +1747,10 @@
                 "note": "this section is the best part of an illustrated book about birds"
             },
             {
-                "_to": "songs/1",
-                "_from": "songs/1",
+                "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "21",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1708,10 +1764,10 @@
                 "note": "this is a song"
             },
             {
-                "_to": "media_items/1",
-                "_from": "media_items/1",
+                "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "22",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1725,10 +1781,10 @@
                 "note": "this is an awesome show"
             },
             {
-                "_to": "media_items/1",
-                "_from": "media_items/1",
+                "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "23",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1742,10 +1798,10 @@
                 "note": "important clip from the show"
             },
             {
-                "_to": "terms/2",
-                "_from": "vocabulary_lists/2",
+                "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "2000",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112000",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -1775,10 +1831,10 @@
                 "note": "That is why term/2 is related to vocabularyList/2"
             },
             {
-                "_to": "vocabulary_lists/2",
-                "_from": "transcribed_audio/110",
+                "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "transcribed_audio/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "type": "note",
-                "_key": "2001",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -1807,10 +1863,10 @@
                 "note": "That is why vocabularyList/2 is related to transcribedAudio/110"
             },
             {
-                "_to": "transcribed_audio/110",
-                "_from": "books/24",
+                "_to": "transcribed_audio/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "2002",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -1837,10 +1893,10 @@
                 "note": "That is why transcribedAudio/110 is related to book/24"
             },
             {
-                "_to": "books/24",
-                "_from": "photographs/2",
+                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "2003",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -1883,10 +1939,10 @@
                 "note": "That is why book/24 is related to photograph/2"
             },
             {
-                "_to": "photographs/2",
-                "_from": "spatial_features/300",
+                "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
                 "type": "note",
-                "_key": "2004",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -1926,10 +1982,10 @@
                 "note": "That is why photograph/2 is related to spatialFeature/300"
             },
             {
-                "_to": "spatial_features/300",
-                "_from": "songs/1",
+                "_to": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+                "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "2005",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -1953,10 +2009,10 @@
                 "note": "That is why spatialFeature/300 is related to song/1"
             },
             {
-                "_to": "songs/1",
-                "_from": "terms/2",
+                "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "2006",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -1985,10 +2041,10 @@
                 "note": "That is why song/1 is related to term/2"
             },
             {
-                "_from": "media_items/1",
-                "_to": "terms/2",
+                "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "3001",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113001",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -2017,10 +2073,10 @@
                 "note": "this media item mentions a word in the term"
             },
             {
-                "_from": "bibliographic_references/1",
-                "_to": "books/24",
+                "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "3002",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113002",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -2040,10 +2096,10 @@
                 "note": "here is the digital version of the book!"
             },
             {
-                "_to": "media_items/1",
-                "_from": "books/24",
+                "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "3101",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113101",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [
@@ -2070,10 +2126,10 @@
                 "note": "this selection from the media item portrays the events in the book"
             },
             {
-                "_to": "bibliographic_references/1",
-                "_from": "songs/1",
+                "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "3102",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113102",
                 "eventHistory": [],
                 "connectionType": "dual",
                 "members": [

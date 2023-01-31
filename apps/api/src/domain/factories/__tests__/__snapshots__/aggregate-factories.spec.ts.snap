@@ -21,7 +21,7 @@ BookBibliographicReference {
   },
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
-  "id": "1",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": Array [],
@@ -46,7 +46,7 @@ CourtCaseBibliographicReference {
   },
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
-  "id": "3",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": Array [],
@@ -76,7 +76,7 @@ JournalArticleBibliographicReference {
   },
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
-  "id": "23",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": Array [],
@@ -91,7 +91,7 @@ Book {
   "author": "John Doeburg",
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
-  "id": "23",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
   "pages": Array [
     BookPage {
       "identifier": "1",
@@ -126,7 +126,7 @@ MediaItem {
   ],
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
-  "id": "1",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 2500,
   "mimeType": "audio/mpeg",
   "published": true,
@@ -150,7 +150,7 @@ Photograph {
   "eventHistory": Array [],
   "filename": "Adiitsii-Running",
   "getCompositeIdentifier": [Function],
-  "id": "0",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
   "photographer": "Susie McRealart",
   "published": true,
   "queryAccessControlList": AccessControlList {
@@ -172,7 +172,7 @@ Song {
   ],
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
-  "id": "1",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 3500,
   "lyrics": "Mary had a little lamb, little lamb.",
   "published": true,
@@ -224,7 +224,7 @@ Line {
     "type": "LineString",
   },
   "getCompositeIdentifier": [Function],
-  "id": "1",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "properties": SpatialFeatureProperties {
     "description": "One amazing hike!",
     "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -250,7 +250,7 @@ Point {
     "type": "Point",
   },
   "getCompositeIdentifier": [Function],
-  "id": "100",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
   "properties": SpatialFeatureProperties {
     "description": "Description for point 100",
     "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -292,7 +292,7 @@ Polygon {
     "type": "Polygon",
   },
   "getCompositeIdentifier": [Function],
-  "id": "300",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
   "properties": SpatialFeatureProperties {
     "description": "Description for point 300",
     "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -310,46 +310,62 @@ Polygon {
 exports[`Aggregate factories when attempting to build an instance of type: term from a DTO when the DTO is valid when the dto is valid should succeed 1`] = `
 Term {
   "audioFilename": undefined,
-  "contributorId": "Sarah Smith",
+  "contributorId": "John Doe",
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
-  "id": "11",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": Array [],
     "allowedUserIds": Array [],
   },
   "sourceProject": undefined,
-  "term": "I am singing (lang)",
-  "termEnglish": "I am singing (Engl)",
+  "term": "Chil-term-1",
+  "termEnglish": "Engl-term-1",
   "type": "term",
 }
 `;
 
 exports[`Aggregate factories when attempting to build an instance of type: transcribedAudio from a DTO when the DTO is valid valid transribed audio DTO should succeed 1`] = `
-TranscribedAudio {
-  "audioFilename": "Gaas",
+AudioItem {
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
-  "id": "110",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "lengthMilliseconds": 20000,
+  "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+  "name": MultiLingualText {
+    "items": Array [
+      MultiLingualTextItem {
+        "languageId": "eng",
+        "role": "original",
+        "text": "The Wooden Boy",
+      },
+    ],
+  },
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": Array [],
     "allowedUserIds": Array [],
   },
-  "startMilliseconds": 0,
   "transcript": Transcript {
-    "timeRanges": Array [
-      MediaTimeRange {
-        "data": "There once was a little wooden boy.",
+    "items": Array [
+      TranscriptItem {
         "inPoint": 12000,
+        "label": "JHC",
         "outPoint": 15550,
+        "text": "There once was a little wooden boy.",
       },
-      MediaTimeRange {
-        "data": "His name was Pinocchio.",
+      TranscriptItem {
         "inPoint": 18300,
+        "label": "JHC",
         "outPoint": 19240,
+        "text": "His name was Pinocchio",
+      },
+    ],
+    "participants": Array [
+      TranscriptParticipant {
+        "initials": "JHC",
+        "name": "Jimmy H. Cricket",
       },
     ],
   },
@@ -361,44 +377,44 @@ exports[`Aggregate factories when attempting to build an instance of type: vocab
 VocabularyList {
   "entries": Array [
     VocabularyListEntry {
-      "termId": "11",
+      "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
       "variableValues": Object {
-        "person": "1",
+        "person": "11",
         "positive": true,
       },
     },
     VocabularyListEntry {
-      "termId": "12",
+      "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
       "variableValues": Object {
-        "person": "2",
-        "positive": true,
-      },
-    },
-    VocabularyListEntry {
-      "termId": "13",
-      "variableValues": Object {
-        "person": "3",
-        "positive": true,
-      },
-    },
-    VocabularyListEntry {
-      "termId": "01",
-      "variableValues": Object {
-        "person": "1",
+        "person": "12",
         "positive": false,
       },
     },
     VocabularyListEntry {
-      "termId": "02",
+      "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
       "variableValues": Object {
-        "person": "2",
+        "person": "13",
+        "positive": false,
+      },
+    },
+    VocabularyListEntry {
+      "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+      "variableValues": Object {
+        "person": "01",
+        "positive": true,
+      },
+    },
+    VocabularyListEntry {
+      "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+      "variableValues": Object {
+        "person": "02",
         "positive": false,
       },
     },
   ],
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
-  "id": "4567",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
   "name": "To Sing (lang)",
   "nameEnglish": "To Sing (Engl)",
   "published": true,

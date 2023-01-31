@@ -4,6 +4,7 @@ import { CategorizableType } from '../../../../../domain/types/CategorizableType
 import { ResourceType } from '../../../../../domain/types/ResourceType';
 import { Ctor } from '../../../../../lib/types/Ctor';
 import { NoteViewModel } from '../../../../edgeConnectionViewModels/note.view-model';
+import { AudioItemViewModel } from '../../audio-item/audio-item.view-model';
 import { BaseViewModel } from '../../base.view-model';
 import { BibliographicReferenceViewModel } from '../../bibliographic-reference/bibliographic-reference.view-model';
 import { BookViewModel } from '../../book.view-model';
@@ -15,7 +16,6 @@ import { SongViewModel } from '../../song.view-model';
 import { SpatialFeatureViewModel } from '../../spatial-data/spatial-feature.view-model';
 import { TagViewModel } from '../../tag.view-model';
 import { TermViewModel } from '../../term.view-model';
-import { TranscribedAudioViewModel } from '../../transcribed-audio/transcribed-audio.view-model';
 import { VocabularyListViewModel } from '../../vocabulary-list.view-model';
 
 export const aggregateTypeToViewModelCtor: { [K in AggregateType]: Ctor<BaseViewModel> } = {
@@ -26,7 +26,7 @@ export const aggregateTypeToViewModelCtor: { [K in AggregateType]: Ctor<BaseView
     [ResourceType.song]: SongViewModel,
     [ResourceType.spatialFeature]: SpatialFeatureViewModel,
     [ResourceType.term]: TermViewModel,
-    [ResourceType.transcribedAudio]: TranscribedAudioViewModel,
+    [ResourceType.audioItem]: AudioItemViewModel,
     [ResourceType.vocabularyList]: VocabularyListViewModel,
     [CategorizableType.note]: NoteViewModel,
     [AggregateType.category]: CategoryTreeViewModel,

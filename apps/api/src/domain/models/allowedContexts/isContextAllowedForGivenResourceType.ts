@@ -25,7 +25,7 @@ const resourceTypeToAllowedContextTypes = {
         // EdgeConnectionContextType.freeMultiline,
     ],
     [ResourceType.term]: [EdgeConnectionContextType.general, EdgeConnectionContextType.textField],
-    [ResourceType.transcribedAudio]: [
+    [ResourceType.audioItem]: [
         EdgeConnectionContextType.general,
         EdgeConnectionContextType.timeRange,
     ],

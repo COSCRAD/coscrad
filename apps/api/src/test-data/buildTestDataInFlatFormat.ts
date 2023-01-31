@@ -1,6 +1,7 @@
 import { AggregateType } from '../domain/types/AggregateType';
 import { PartialSnapshot } from '../domain/types/PartialSnapshot';
 import { ResourceType } from '../domain/types/ResourceType';
+import buildTranscribedAudioTestData from './buildAudioItemTestData';
 import buildBibliographicReferenceTestData from './buildBibliographicReferenceTestData';
 import buildBookTestData from './buildBookTestData';
 import buildCategoryTestData from './buildCategoryTestData';
@@ -11,7 +12,6 @@ import buildSongTestData from './buildSongTestData';
 import buildSpatialFeatureTestData from './buildSpatialFeatureTestData';
 import buildTagTestData from './buildTagTestData';
 import buildTermTestData from './buildTermTestData';
-import buildTranscribedAudioTestData from './buildTranscribedAudioTestData';
 import buildUserGroupTestData from './buildUserGroupTestData';
 import buildUserTestData from './buildUserTestData';
 import buildVocabularyListTestData from './buildVocabularyListTestData';
@@ -20,7 +20,7 @@ export default (): PartialSnapshot => ({
     // Resources
     [ResourceType.term]: buildTermTestData(),
     [ResourceType.vocabularyList]: buildVocabularyListTestData(),
-    [ResourceType.transcribedAudio]: buildTranscribedAudioTestData(),
+    [ResourceType.audioItem]: buildTranscribedAudioTestData(),
     [ResourceType.book]: buildBookTestData(),
     [ResourceType.photograph]: buildPhotographTestData(),
     [ResourceType.spatialFeature]: buildSpatialFeatureTestData(),

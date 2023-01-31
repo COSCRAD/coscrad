@@ -1,7 +1,7 @@
 export enum ResourceType {
     term = 'term',
     vocabularyList = 'vocabularyList',
-    transcribedAudio = 'transcribedAudio',
+    audioItem = 'audioItem',
     book = 'book',
     photograph = 'photograph',
     spatialFeature = 'spatialFeature',

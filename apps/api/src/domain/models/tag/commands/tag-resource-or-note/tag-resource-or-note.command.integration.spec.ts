@@ -11,7 +11,7 @@ import { AggregateType, isAggregateType } from '../../../../types/AggregateType'
 import { CategorizableType } from '../../../../types/CategorizableType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceInCategoryError';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
@@ -150,9 +150,10 @@ describe(commandType, () => {
                                 assertErrorAsExpected(
                                     error,
                                     new CommandExecutionError([
-                                        new InvalidExternalReferenceByAggregateError(tagToUpdate, [
-                                            categorizableToTag.getCompositeIdentifier(),
-                                        ]),
+                                        new InvalidExternalReferenceByAggregateError(
+                                            tagToUpdate.getCompositeIdentifier(),
+                                            [categorizableToTag.getCompositeIdentifier()]
+                                        ),
                                     ])
                                 );
                             },

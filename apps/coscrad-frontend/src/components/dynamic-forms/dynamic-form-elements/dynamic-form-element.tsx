@@ -7,6 +7,7 @@ import {
 import { useState } from 'react';
 import { ErrorDisplay } from '../../error-display/error-display';
 import { DynamicSelect } from './dynamic-select';
+import { NumericInput } from './numeric-input';
 import { StaticSelect } from './static-select';
 import { TextInput } from './text-input';
 import { YearPicker } from './year-picker';
@@ -81,11 +82,11 @@ export const DynamicFormElement = ({
 
     if (type === FormFieldType.numericInput)
         return (
-            <TextInput
+            <NumericInput
                 formField={formField}
                 onInputChange={onElementChangeWithValidation}
                 required={required}
-            ></TextInput>
+            ></NumericInput>
         );
 
     if (type === FormFieldType.yearPicker)
