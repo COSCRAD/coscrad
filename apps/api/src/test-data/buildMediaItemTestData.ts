@@ -2,6 +2,7 @@ import { MIMEType } from '@coscrad/data-types';
 import { MediaItem } from '../domain/models/media-item/entities/media-item.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { DTO } from '../types/DTO';
+import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
 
 const dtos: DTO<MediaItem>[] = [
     {
@@ -22,4 +23,4 @@ const dtos: DTO<MediaItem>[] = [
     },
 ];
 
-export default () => dtos.map((dto) => new MediaItem(dto));
+export default () => dtos.map((dto) => new MediaItem(dto)).map(convertAggregatesIdToUuid);

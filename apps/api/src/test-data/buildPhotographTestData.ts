@@ -1,5 +1,6 @@
 import { Photograph } from '../domain/models/photograph/entities/photograph.entity';
 import { ResourceType } from '../domain/types/ResourceType';
+import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
 
 const dtos = [
     {
@@ -29,12 +30,14 @@ const dtos = [
 ];
 
 export default (): Photograph[] =>
-    dtos.map(
-        (dto, index) =>
-            new Photograph({
-                ...dto,
-                id: `${index}`,
-                published: true,
-                type: ResourceType.photograph,
-            })
-    );
+    dtos
+        .map(
+            (dto, index) =>
+                new Photograph({
+                    ...dto,
+                    id: `${index}`,
+                    published: true,
+                    type: ResourceType.photograph,
+                })
+        )
+        .map(convertAggregatesIdToUuid);

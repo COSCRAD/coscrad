@@ -12,10 +12,10 @@ import {
     useLoadableSpatialFeatures,
     useLoadableTerms,
 } from '../../store/slices/resources';
+import { useLoadableAudioItems } from '../../store/slices/resources/audio-item/hooks/use-loadable-audio-items';
 import { useLoadableBooks } from '../../store/slices/resources/books';
 import { useLoadableMediaItems } from '../../store/slices/resources/media-items';
 import { useLoadablePhotographs } from '../../store/slices/resources/photographs/hooks';
-import { useLoadableTranscribedAudioItems } from '../../store/slices/resources/transcribed-audio/hooks/use-loadable-transcribed-audio-items';
 import { useLoadableVocabularyLists } from '../../store/slices/resources/vocabulary-lists/hooks';
 
 type UseLoadableResourcesOfSingleType<T extends IBaseViewModel> = () => ILoadable<
@@ -32,7 +32,7 @@ const lookupTable: {
     [CategorizableType.song]: useLoadableSongs,
     [CategorizableType.spatialFeature]: useLoadableSpatialFeatures,
     [CategorizableType.term]: useLoadableTerms,
-    [CategorizableType.transcribedAudio]: useLoadableTranscribedAudioItems,
+    [CategorizableType.audioItem]: useLoadableAudioItems,
     [CategorizableType.vocabularyList]: useLoadableVocabularyLists,
     [CategorizableType.note]: useLoadableNotes,
 };

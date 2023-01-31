@@ -14,7 +14,7 @@ import { fetchFreshState } from '../../store/slices/utils/fetch-fresh-state';
 
 // Hack alert- we need a mapping layer to give us the plurals for our redux slice names
 type PluralCategorizableType = `${
-    | Exclude<CategorizableType, typeof CategorizableType.transcribedAudio>
+    | Exclude<CategorizableType, typeof CategorizableType.audioItem>
     | 'transcribedAudioItem'}s`;
 
 export type ViewModelIndexSnapshot = Pick<RootState, PluralCategorizableType>;

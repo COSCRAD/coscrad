@@ -77,6 +77,8 @@ const checkThatDetailQueryDoesNotFind = async (
         .expect(httpStatusCodes.notFound);
 };
 
+const fullSnapshotOfResources = buildTestData().resources;
+
 describe('Access Control List and Role Based filtering in resource queries', () => {
     Object.values(ResourceType).forEach((resourceType) => {
         const endpointUnderTest = `/${buildViewModelPathForResourceType(resourceType)}`;
@@ -163,6 +165,7 @@ describe('Access Control List and Role Based filtering in resource queries', () 
                             user: [dummyUser],
                             userGroup: [dummyGroup],
                             resources: {
+                                ...fullSnapshotOfResources,
                                 [resourceType]: allResourcesOfCurrentType,
                             },
                         })
@@ -282,6 +285,7 @@ describe('Access Control List and Role Based filtering in resource queries', () 
                                 user: [dummyAdminUser],
                                 userGroup: [dummyGroup],
                                 resources: {
+                                    ...fullSnapshotOfResources,
                                     [resourceType]: allResourcesOfCurrentType,
                                 },
                             })
@@ -349,6 +353,7 @@ describe('Access Control List and Role Based filtering in resource queries', () 
                     await testRepositoryProvider.addFullSnapshot(
                         buildInMemorySnapshot({
                             resources: {
+                                ...fullSnapshotOfResources,
                                 [resourceType]: allResourcesOfCurrentType,
                             },
                         })

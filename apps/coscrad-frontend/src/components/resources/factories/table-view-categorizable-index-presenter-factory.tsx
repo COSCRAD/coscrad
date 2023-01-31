@@ -4,6 +4,7 @@ import {
     ISpatialFeatureViewModel,
 } from '@coscrad/api-interfaces';
 import { NoteIndexPresenter } from '../../notes/note-index.presenter';
+import { TranscribedAudioIndexPresenter } from '../audio-item/audio-item-index.presenter';
 import { BibliographicReferenceIndexPresenter } from '../bibliographic-references/bibliographic-reference-index.presenter';
 import { BookIndexPresenter } from '../books/book-index.presenter';
 import { MediaItemIndexPresenter } from '../media-items/media-item-index.presenter';
@@ -12,7 +13,6 @@ import { SongIndexPresenter } from '../songs/song-index.presenter';
 import { CoscradLeafletMap } from '../spatial-features/leaflet';
 import { SpatialFeatureIndexPresenter } from '../spatial-features/spatial-feature-index.presenter';
 import { TermIndexPresenter } from '../terms/term-index.presenter';
-import { TranscribedAudioIndexPresenter } from '../transcribed-audio/transcribed-audio-index.presenter';
 import { VocabularyListIndexPresenter } from '../vocabulary-lists/vocabulary-list-index.presenter';
 import {
     CategorizableIndexPresenter,
@@ -70,7 +70,7 @@ export const tableViewCategorizableIndexPresenterFactory: CategorizableIndexPres
         case CategorizableType.term:
             return TermIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
-        case CategorizableType.transcribedAudio:
+        case CategorizableType.audioItem:
             return TranscribedAudioIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.vocabularyList:

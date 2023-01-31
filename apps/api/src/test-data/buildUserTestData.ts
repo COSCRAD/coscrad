@@ -3,6 +3,7 @@ import { CoscradUserProfile } from '../domain/models/user-management/user/entiti
 import { CoscradUser } from '../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { AggregateType } from '../domain/types/AggregateType';
 import { DTO } from '../types/DTO';
+import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
 
 const dummyProfile: DTO<CoscradUserProfile> = {
     name: {
@@ -23,4 +24,5 @@ const dtos: DTO<CoscradUser>[] = [
     },
 ];
 
-export default (): CoscradUser[] => dtos.map((dto) => new CoscradUser(dto));
+export default (): CoscradUser[] =>
+    dtos.map((dto) => new CoscradUser(dto)).map(convertAggregatesIdToUuid);

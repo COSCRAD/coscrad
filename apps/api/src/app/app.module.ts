@@ -13,6 +13,7 @@ import { CategoryController } from './controllers/category.controller';
 import { CommandController } from './controllers/command/command.controller';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
 import { ResourceDescriptionController } from './controllers/resources/resource-description.controller';
+import { AudioItemModule } from './domain-modules/audio-item.module';
 import { BibliographicReferenceModule } from './domain-modules/bibliographic-reference.module';
 import { BookModule } from './domain-modules/book.module';
 import { EdgeConnectionModule } from './domain-modules/edge-connection.module';
@@ -22,7 +23,6 @@ import { SongModule } from './domain-modules/song.module';
 import { SpatialFeatureModule } from './domain-modules/spatial-feature.module';
 import { TagModule } from './domain-modules/tag.module';
 import { TermModule } from './domain-modules/term.module';
-import { TranscribedAudioModule } from './domain-modules/transcribed-audio.module';
 import { UserManagementModule } from './domain-modules/user-management.module';
 import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
 
@@ -47,7 +47,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         TermModule,
         VocabularyListModule,
         BookModule,
-        TranscribedAudioModule,
+        AudioItemModule,
         PhotographModule,
         BibliographicReferenceModule,
         SpatialFeatureModule,

@@ -6,6 +6,10 @@ import { VocabularyListEntry } from '../domain/models/vocabulary-list/vocabulary
 import { ResourceType } from '../domain/types/ResourceType';
 import { DTO } from '../types/DTO';
 import { buildTermsForVocabularyList } from './buildTermTestData';
+import {
+    convertAggregatesIdToUuid,
+    convertSequenceNumberToUuid,
+} from './utilities/convertSequentialIdToUuid';
 
 const terms = buildTermsForVocabularyList();
 
@@ -13,10 +17,10 @@ const buildEntryForTerm = (term: Term): VocabularyListEntry => {
     const { id } = term;
 
     // 1 positive = true, 2 positive = false (negative form)
-    const positive = id[0] === '1';
+    const positive = id.slice(-1) === '1';
 
     // 1 - first person, etc.
-    const person = id[1];
+    const person = id.slice(-2);
 
     return new VocabularyListEntry({
         termId: id,
@@ -83,13 +87,13 @@ const vocabularyListDTOs = [
         published: true,
         entries: [
             {
-                termId: '1',
+                termId: convertSequenceNumberToUuid(1),
                 variableValues: {
                     person: '11',
                 },
             },
             {
-                termId: '2',
+                termId: convertSequenceNumberToUuid(2),
                 variableValues: {
                     person: '12',
                 },
@@ -119,13 +123,13 @@ const vocabularyListDTOs = [
         published: true,
         entries: [
             {
-                termId: '2',
+                termId: convertSequenceNumberToUuid(2),
                 variableValues: {
                     his: false,
                 },
             },
             {
-                termId: '1',
+                termId: convertSequenceNumberToUuid(1),
                 variableValues: {
                     his: true,
                 },
@@ -156,6 +160,6 @@ const vocabularyListDTOs = [
  * invariants.
  */
 export default (): VocabularyList[] =>
-    vocabularyListDTOs.map(
-        (dto) => new VocabularyList({ ...dto, type: ResourceType.vocabularyList })
-    );
+    vocabularyListDTOs
+        .map((dto) => new VocabularyList({ ...dto, type: ResourceType.vocabularyList }))
+        .map(convertAggregatesIdToUuid);
