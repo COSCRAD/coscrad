@@ -1,6 +1,5 @@
 import {
-    CoscradEnum,
-    Enum,
+    ExternalEnum,
     MIMEType,
     NonEmptyString,
     NonNegativeFiniteNumber,
@@ -55,10 +54,17 @@ export class MediaItem extends Resource implements ITimeBoundable {
     })
     readonly url: string;
 
-    @Enum(CoscradEnum.MIMEType, {
-        label: 'MIME type',
-        description: 'technical specification of the format of the media item',
-    })
+    @ExternalEnum(
+        {
+            labelsAndValues: Object.entries(MIMEType).map(([label, value]) => ({ label, value })),
+            enumLabel: 'MIME type',
+            enumName: 'MIMEType',
+        },
+        {
+            label: 'MIME type',
+            description: 'technical specification of the format of the media item',
+        }
+    )
     readonly mimeType: MIMEType;
 
     @NonNegativeFiniteNumber({

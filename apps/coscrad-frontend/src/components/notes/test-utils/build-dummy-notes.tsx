@@ -75,7 +75,7 @@ const dualEdgeConnections: INoteViewModel[] = [
     },
     {
         id: '112',
-        note: `This is why term 5 is related to audio transcript 8`,
+        note: `This is why term 5 is related to audio item 8`,
         connectedResources: [
             buildMemberWithGeneralContext(
                 {
@@ -86,7 +86,7 @@ const dualEdgeConnections: INoteViewModel[] = [
             ),
             buildMemberWithGeneralContext(
                 {
-                    type: ResourceType.transcribedAudio,
+                    type: ResourceType.audioItem,
                     id: '8',
                 },
                 EdgeConnectionMemberRole.to

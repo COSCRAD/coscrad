@@ -1,6 +1,10 @@
 import { CoscradUserGroup } from '../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { AggregateType } from '../domain/types/AggregateType';
 import { DTO } from '../types/DTO';
+import {
+    convertAggregatesIdToUuid,
+    convertSequenceNumberToUuid,
+} from './utilities/convertSequentialIdToUuid';
 
 const dtos: DTO<CoscradUserGroup>[] = [
     {
@@ -12,4 +16,12 @@ const dtos: DTO<CoscradUserGroup>[] = [
     },
 ];
 
-export default (): CoscradUserGroup[] => dtos.map((dto) => new CoscradUserGroup(dto));
+export default (): CoscradUserGroup[] =>
+    dtos
+        .map((dto) => new CoscradUserGroup(dto))
+        .map(convertAggregatesIdToUuid)
+        .map((userGroup) =>
+            userGroup.clone({
+                userIds: userGroup.userIds.map(parseInt).map(convertSequenceNumberToUuid),
+            })
+        );

@@ -1,4 +1,5 @@
 import { UuidDocument } from '../../lib/id-generation/types/UuidDocument';
+import { AudioItem } from '../models/audio-item/entities/audio-item.entity';
 import { IBibliographicReference } from '../models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { Book } from '../models/book/entities/book.entity';
 import { Category } from '../models/categories/entities/category.entity';
@@ -9,7 +10,6 @@ import { Song } from '../models/song/song.entity';
 import { ISpatialFeature } from '../models/spatial-feature/interfaces/spatial-feature.interface';
 import { Tag } from '../models/tag/tag.entity';
 import { Term } from '../models/term/entities/term.entity';
-import { TranscribedAudio } from '../models/transcribed-audio/entities/transcribed-audio.entity';
 import { CoscradUserGroup } from '../models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../models/user-management/user/entities/user/coscrad-user.entity';
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
@@ -25,7 +25,7 @@ export const isResourceType = (input: unknown): input is ResourceType =>
 export type ResourceTypeToResourceModel = {
     term: Term;
     vocabularyList: VocabularyList;
-    transcribedAudio: TranscribedAudio;
+    audioItem: AudioItem;
     book: Book;
     photograph: Photograph;
     spatialFeature: ISpatialFeature;
