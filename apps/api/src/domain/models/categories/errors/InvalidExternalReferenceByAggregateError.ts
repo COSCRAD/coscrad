@@ -2,7 +2,6 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import formatAggregateCompositeIdentifier from '../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import formatArrayAsList from '../../../../view-models/presentation/shared/formatArrayAsList';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
-import { Aggregate } from '../../aggregate.entity';
 
 export default class InvalidExternalReferenceByAggregateError extends InternalError {
     /**
@@ -10,13 +9,22 @@ export default class InvalidExternalReferenceByAggregateError extends InternalEr
      * Further, why do we build the composite identifier on the other side for the
      * `invalidReferences`? This is inconsistent.
      */
-    constructor(aggregate: Aggregate, invalidReferences: AggregateCompositeIdentifier[]) {
+    constructor(
+        aggregateCompositeIdentifier: AggregateCompositeIdentifier,
+        invalidReferences: AggregateCompositeIdentifier[],
+        /**
+         * Sometimes the reference is invalid not because the related aggregate
+         * doesn't exist, but because its state is wrong (e.g. media item has
+         * invalid MIME type)
+         */
+        innerErrors?: InternalError[]
+    ) {
         const msg = [
-            `${formatAggregateCompositeIdentifier(aggregate.getCompositeIdentifier())}`,
+            `${formatAggregateCompositeIdentifier(aggregateCompositeIdentifier)}`,
             `references the following composite keys, which don't exist`,
             formatArrayAsList(invalidReferences, (ref) => formatAggregateCompositeIdentifier(ref)),
         ].join(' ');
 
-        super(msg);
+        super(msg, innerErrors);
     }
 }

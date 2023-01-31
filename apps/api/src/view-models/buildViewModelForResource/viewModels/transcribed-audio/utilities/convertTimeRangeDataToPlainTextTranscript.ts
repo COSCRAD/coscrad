@@ -1,8 +1,8 @@
-import { MediaTimeRange } from '../../../../../domain/models/transcribed-audio/entities/MediaTimeRange';
+import { TranscriptItem } from '../../../../../domain/models/transcribed-audio/entities/MediaTimeRange';
 
-export default (timeranges: MediaTimeRange[]): string =>
+export default (timeranges: TranscriptItem[]): string =>
     timeranges.reduce(
-        (accumulatedPlainText, { inPoint, outPoint, data }) =>
+        (accumulatedPlainText, { inPoint, outPoint, text: data }) =>
             accumulatedPlainText.concat(`\n[${inPoint}] ${data} [${outPoint}]`),
         ''
     );

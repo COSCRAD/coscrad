@@ -10,7 +10,7 @@ import { InMemorySnapshot } from '../../../types/ResourceType';
 import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import { Term } from '../../term/entities/term.entity';
 import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
-import InvalidExternalReferenceByAggregateError from '../errors/InvalidExternalReferenceInCategoryError';
+import InvalidExternalReferenceByAggregateError from '../errors/InvalidExternalReferenceByAggregateError';
 import { Category } from './category.entity';
 
 const buildTopLevelError = (idAndLabel: HasLabel, innerErrors) =>
@@ -95,7 +95,7 @@ const invalidTestCases: InvalidTestCase[] = [
         }),
         externalState: validSnapshot,
         expectedError: buildTopLevelError(validCategory, [
-            new InvalidExternalReferenceByAggregateError(validCategory, [
+            new InvalidExternalReferenceByAggregateError(validCategory.getCompositeIdentifier(), [
                 missingTerm.getCompositeIdentifier(),
             ]),
         ]),
@@ -109,7 +109,7 @@ const invalidTestCases: InvalidTestCase[] = [
         }),
         externalState: validSnapshot,
         expectedError: buildTopLevelError(validCategory, [
-            new InvalidExternalReferenceByAggregateError(validCategory, [
+            new InvalidExternalReferenceByAggregateError(validCategory.getCompositeIdentifier(), [
                 missingTerm.getCompositeIdentifier(),
             ]),
         ]),
@@ -121,7 +121,7 @@ const invalidTestCases: InvalidTestCase[] = [
         }),
         externalState: validSnapshot,
         expectedError: buildTopLevelError(validCategory, [
-            new InvalidExternalReferenceByAggregateError(validCategory, [
+            new InvalidExternalReferenceByAggregateError(validCategory.getCompositeIdentifier(), [
                 { type: AggregateType.category, id: 'BOGUS-CHILD-CATEGOR-ID-BOO' },
             ]),
         ]),

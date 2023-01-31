@@ -9,9 +9,9 @@ import BaseDomainModel from '../../BaseDomainModel';
 type MediaTimestamp = number;
 
 // Update later
-type MediaData = string;
+type CoscradText = string;
 
-export class MediaTimeRange extends BaseDomainModel {
+export class TranscriptItem<T extends string = string> extends BaseDomainModel {
     @NonNegativeFiniteNumber({
         label: 'in point',
         description: 'starting time stamp',
@@ -24,41 +24,45 @@ export class MediaTimeRange extends BaseDomainModel {
     })
     readonly outPoint: MediaTimestamp;
 
-    // TODO Calling this property `data` is probably a bad idea
     // TODO Abstract over different data types
     @NonEmptyString({
-        isOptional: true,
         label: 'text data',
         description: 'text for this time range',
     })
-    readonly data?: MediaData;
+    readonly text: CoscradText;
 
-    constructor(dto: DTO<MediaTimeRange>) {
+    @NonEmptyString({
+        label: 'label',
+        description: 'the label for the current timestamped item',
+    })
+    readonly label: string;
+
+    constructor(dto: DTO<TranscriptItem<T>>) {
         super();
 
         if (!dto) return;
 
-        const { inPoint, outPoint, data } = dto;
+        const { inPoint, outPoint, text: data } = dto;
 
         this.inPoint = inPoint;
 
         this.outPoint = outPoint;
 
         // TODO - clone if using a reference type for data
-        if (data) this.data = data;
+        if (data) this.text = data;
     }
 
     hasData(): boolean {
-        return !isNullOrUndefined(this.data);
+        return !isNullOrUndefined(this.text);
     }
 
-    getData(): Maybe<MediaData> {
-        return this.hasData() ? this.data : NotFound;
+    getData(): Maybe<CoscradText> {
+        return this.hasData() ? this.text : NotFound;
     }
 
-    setData(newData: MediaData) {
-        return this.clone<MediaTimeRange>({
+    setData<T extends CoscradText>(newData: T) {
+        return this.clone<TranscriptItem<T>>({
             data: newData,
-        });
+        } as unknown as TranscriptItem<T>);
     }
 }

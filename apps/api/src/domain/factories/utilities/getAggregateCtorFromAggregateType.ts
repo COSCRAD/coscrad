@@ -9,7 +9,7 @@ import { Photograph } from '../../models/photograph/entities/photograph.entity';
 import { Song } from '../../models/song/song.entity';
 import { Tag } from '../../models/tag/tag.entity';
 import { Term } from '../../models/term/entities/term.entity';
-import { TranscribedAudio } from '../../models/transcribed-audio/entities/transcribed-audio.entity';
+import { Transcript } from '../../models/transcribed-audio/entities/transcribed-audio.entity';
 import { CoscradUserGroup } from '../../models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../../models/user-management/user/entities/user/coscrad-user.entity';
 import { VocabularyList } from '../../models/vocabulary-list/entities/vocabulary-list.entity';
@@ -34,7 +34,7 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.photograph]: Photograph,
     [AggregateType.song]: Song,
     [AggregateType.term]: Term,
-    [AggregateType.transcribedAudio]: TranscribedAudio,
+    [AggregateType.transcribedAudio]: Transcript,
     [AggregateType.vocabularyList]: VocabularyList,
     [AggregateType.category]: Category,
 };

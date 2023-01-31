@@ -33,6 +33,10 @@ import {
     TagResourceOrNoteCommandHandler,
 } from '../../../domain/models/tag/commands';
 import {
+    CreateTranscript,
+    CreateTranscriptCommandHandler,
+} from '../../../domain/models/transcribed-audio/commands';
+import {
     CreateGroup,
     CreateGroupCommandHandler,
 } from '../../../domain/models/user-management/group/commands';
@@ -322,6 +326,8 @@ export default async (
             TagResourceOrNote,
             TagResourceOrNoteCommandHandler,
             // Next time try importing the domain module!
+            CreateTranscript,
+            CreateTranscriptCommandHandler,
         ],
 
         controllers: [

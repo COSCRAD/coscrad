@@ -1,8 +1,8 @@
-import { MediaTimeRange } from '../../../../../domain/models/transcribed-audio/entities/MediaTimeRange';
+import { TranscriptItem } from '../../../../../domain/models/transcribed-audio/entities/MediaTimeRange';
 import convertTimeRangeDataToPlainTextTranscript from './convertTimeRangeDataToPlainTextTranscript';
 
 // TODO- add this to the test data and import it here!
-const testTranscript: MediaTimeRange[] = [
+const testTranscript: TranscriptItem[] = [
     'Once upon a time, not long ago, there lived three dogs.',
     'Each of these dogs had a collar of a different color.',
     'One of these dogs did not obey his caller.',
@@ -15,7 +15,7 @@ const testTranscript: MediaTimeRange[] = [
         outPoint: index * 500 + 400,
         data: text,
     }))
-    .map((dto) => new MediaTimeRange(dto));
+    .map((dto) => new TranscriptItem(dto));
 
 describe('convertTimeRangeDataToPlainTextTranscript', () => {
     describe('when the input is an empty array', () => {

@@ -1,9 +1,12 @@
 import { IBaseViewModel } from '../base.view-model.interface';
+import { MIMEType } from './media-items';
 
 export interface ITranscribedAudioViewModel extends IBaseViewModel {
+    name: string;
+
     audioURL: string;
 
-    start: number;
+    mimeType: MIMEType;
 
     lengthMilliseconds: number;
 
@@ -14,5 +17,5 @@ export interface ITranscribedAudioViewModel extends IBaseViewModel {
      * TODO We should decide what format is useful for our current
      * needs.
      */
-    plainText: string;
+    text: string;
 }

@@ -1,13 +1,17 @@
-import { ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
-import { NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
+import { ITranscribedAudioViewModel, MIMEType } from '@coscrad/api-interfaces';
+import { ExternalEnum, NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
-import { TranscribedAudio } from '../../../../domain/models/transcribed-audio/entities/transcribed-audio.entity';
+import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
+import { Transcript } from '../../../../domain/models/transcribed-audio/entities/transcribed-audio.entity';
 import { BaseViewModel } from '../base.view-model';
-import buildFullDigitalAssetURL from '../utilities/buildFullDigitalAssetURL';
 import convertTimeRangeDataToPlainTextTranscript from './utilities/convertTimeRangeDataToPlainTextTranscript';
 
 export class TranscribedAudioViewModel extends BaseViewModel implements ITranscribedAudioViewModel {
-    readonly #baseAudioURL: string;
+    @NonEmptyString({
+        label: 'name',
+        description: 'name of the transcript',
+    })
+    readonly name: string;
 
     @ApiProperty({
         example: 'https://www.mysounds.com/3pigs.mp3',
@@ -19,17 +23,18 @@ export class TranscribedAudioViewModel extends BaseViewModel implements ITranscr
     })
     readonly audioURL: string;
 
-    @ApiProperty({
-        example: 0,
-        description: 'the starting counter in milliseconds (to allow for an offset)',
-    })
-
-    // TODO consider removing this
-    @NonNegativeFiniteNumber({
-        label: 'start (ms)',
-        description: 'the starting counter of the audio file in milliseconds',
-    })
-    readonly start: number;
+    @ExternalEnum(
+        {
+            labelsAndValues: Object.entries(MIMEType).map(([label, value]) => ({ label, value })),
+            enumLabel: 'MIME type',
+            enumName: 'MIMEType',
+        },
+        {
+            label: 'MIME type',
+            description: 'the media format type',
+        }
+    )
+    readonly mimeType: MIMEType;
 
     @ApiProperty({
         example: 13450,
@@ -45,7 +50,6 @@ export class TranscribedAudioViewModel extends BaseViewModel implements ITranscr
         example: 'Once upon a time, there were three little pigs. They lived in the forest.',
         description: 'A plain text representation of the transcript',
     })
-
     /**
      * TODO Support multiple transcript formats:
      * - time-alligned
@@ -57,34 +61,24 @@ export class TranscribedAudioViewModel extends BaseViewModel implements ITranscr
         label: 'plain text',
         description: 'a plain-text representation of the transcript',
     })
-    readonly plainText: string;
+    readonly text: string;
 
     // TODO Also return the raw time stamp data?
 
     constructor(
-        {
-            id,
-            transcript: { timeRanges },
-            audioFilename,
-            startMilliseconds,
-            lengthMilliseconds,
-        }: TranscribedAudio,
-        baseAudioURL: string
+        { id, items, mediaItemId, lengthMilliseconds }: Transcript,
+        allMediaItems: MediaItem[]
     ) {
         super({ id });
 
-        this.start = startMilliseconds;
-
         this.lengthMilliseconds = lengthMilliseconds;
 
-        this.plainText = convertTimeRangeDataToPlainTextTranscript(timeRanges);
+        this.text = convertTimeRangeDataToPlainTextTranscript(items);
 
-        this.#baseAudioURL = baseAudioURL;
+        const { url, mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
 
-        if (audioFilename) this.audioURL = this.#buildAudioURL(audioFilename);
-    }
+        this.audioURL = url;
 
-    #buildAudioURL(filename: string, extension = 'mp3'): string {
-        return buildFullDigitalAssetURL(this.#baseAudioURL, filename, extension);
+        this.mimeType = mimeType;
     }
 }
