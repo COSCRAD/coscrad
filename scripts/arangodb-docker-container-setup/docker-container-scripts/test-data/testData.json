@@ -1215,8 +1215,8 @@
                         "role": "host"
                     }
                 ],
-                "url": "https://www.metalmondays.com/1.mp3",
-                "mimeType": "audio/mpeg",
+                "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=516_4d28711347.wav",
+                "mimeType": "\taudio/x-wav",
                 "lengthMilliseconds": 2500
             }
         ]

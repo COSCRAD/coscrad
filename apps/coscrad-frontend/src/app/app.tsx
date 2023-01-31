@@ -1,4 +1,5 @@
 import { isAggregateType } from '@coscrad/api-interfaces';
+import { ThemeProvider } from '@emotion/react';
 import { Route, Routes } from 'react-router-dom';
 import { About } from '../components/about/about';
 import { Footer } from '../components/footer/footer';
@@ -9,6 +10,7 @@ import { TagDetailContainer } from '../components/tags/tag-detail.container';
 import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
 import { getConfig } from '../config';
+import theme from '../emotion-components/theme';
 import { fetchFreshState } from '../store/slices/utils/fetch-fresh-state';
 import './app.css';
 import { useAppDispatch } from './hooks';
@@ -40,28 +42,30 @@ export function App() {
         <div className="app">
             <Header />
             <div className="main-content">
-                <Routes key="routes">
-                    <Route key="home" path={routes.home} element={<Home />} />
-                    <Route key="about" path={routes.about} element={<About />} />
-                    <Route
-                        key="tag-index"
-                        path={routes.tags.index}
-                        element={<TagIndexContainer />}
-                    />
-                    <Route
-                        key="tag-detail"
-                        path={routes.tags.detail()}
-                        element={<TagDetailContainer />}
-                    />
-                    <Route
-                        key="category-tree"
-                        path={routes.treeOfKnowledge}
-                        element={<CategoryTreeContainer />}
-                    />
-                    {IndexToDetailFlowRoutes()}
-                    {/* The following are temporary or experimental */}
-                    <Route key="members-only" path="MembersOnly" element={<MembersOnly />} />
-                </Routes>
+                <ThemeProvider theme={theme}>
+                    <Routes key="routes">
+                        <Route key="home" path={routes.home} element={<Home />} />
+                        <Route key="about" path={routes.about} element={<About />} />
+                        <Route
+                            key="tag-index"
+                            path={routes.tags.index}
+                            element={<TagIndexContainer />}
+                        />
+                        <Route
+                            key="tag-detail"
+                            path={routes.tags.detail()}
+                            element={<TagDetailContainer />}
+                        />
+                        <Route
+                            key="category-tree"
+                            path={routes.treeOfKnowledge}
+                            element={<CategoryTreeContainer />}
+                        />
+                        {IndexToDetailFlowRoutes()}
+                        {/* The following are temporary or experimental */}
+                        <Route key="members-only" path="MembersOnly" element={<MembersOnly />} />
+                    </Routes>
+                </ThemeProvider>
             </div>
             <Footer></Footer>
         </div>

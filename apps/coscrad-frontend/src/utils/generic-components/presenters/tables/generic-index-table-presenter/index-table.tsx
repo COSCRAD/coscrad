@@ -1,9 +1,9 @@
 import { IBaseViewModel } from '@coscrad/api-interfaces';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { FormControl, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
+import { useTheme } from '@emotion/react';
+import { FormControl, MenuItem, Select, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { NotFoundPresenter } from '../../../../../components/not-found';
+import { BackArrowIcon, ForwardArrowIcon } from '../../../../../emotion-components/buttons';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import './generic-index-table-presenter.css';
@@ -52,6 +52,8 @@ export const IndexTable = <T extends IBaseViewModel>({
     heading,
     filterableProperties,
 }: GenericIndexTablePresenterProps<T>) => {
+    const theme = useTheme();
+
     if (headingLabels.length === 0) {
         throw new EmptyIndexTableException();
     }
@@ -137,8 +139,8 @@ export const IndexTable = <T extends IBaseViewModel>({
                         ))}
                     </tbody>
                 </table>
-                <Typography component={'span'}>
-                    <Paper className="index-footer">
+                <div>
+                    <footer className="index-footer">
                         <span> </span> Rows per page:
                         <FormControl sx={{ m: 1, width: 60 }} size="small">
                             <Select
@@ -165,7 +167,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                             </Select>
                         </FormControl>
                         Page: {currentPageIndex + 1}/{lastPageIndex + 1}
-                        <ArrowBackIosIcon
+                        <BackArrowIcon
                             id="pagination-back-arrow"
                             className="pagination-arrow"
                             onClick={() =>
@@ -175,8 +177,8 @@ export const IndexTable = <T extends IBaseViewModel>({
                             }
                         >
                             Prev
-                        </ArrowBackIosIcon>
-                        <ArrowForwardIosIcon
+                        </BackArrowIcon>
+                        <ForwardArrowIcon
                             id="pagination-front-arrow"
                             className="pagination-arrow"
                             style={{ verticalAlign: 'sub' }}
@@ -187,9 +189,9 @@ export const IndexTable = <T extends IBaseViewModel>({
                             }
                         >
                             Next
-                        </ArrowForwardIosIcon>
-                    </Paper>
-                </Typography>
+                        </ForwardArrowIcon>
+                    </footer>
+                </div>
             </div>
         );
 
