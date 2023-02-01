@@ -1,20 +1,20 @@
 import {
+    IAudioItemViewModel,
     ICategorizableDetailQueryResult,
-    ITranscribedAudioViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
 import { FloatSpacerDiv, SinglePropertyPresenter } from '../../../utils/generic-components';
-import { convertMillisecondsToSeconds } from '../utils/math/';
-import './transcribed-audio-detail.thumbnail.presenter.css';
+import { convertMillisecondsToSeconds } from '../utils/math';
+import './audio-item-detail.thumbnail.presenter.css';
 
-export const TranscribedAudioDetailThumbnailPresenter = ({
+export const AudioItemDetailThumbnailPresenter = ({
     id,
     lengthMilliseconds,
     audioURL,
-}: ICategorizableDetailQueryResult<ITranscribedAudioViewModel>): JSX.Element => (
+}: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => (
     <div className="detail-thumbnail-container">
         <Link to={`/${routes.resources.ofType(ResourceType.transcribedAudio).detail(id)}`}>
             <div

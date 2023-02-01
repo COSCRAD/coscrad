@@ -3,12 +3,12 @@ import { AppDispatch } from '../..';
 import { fetchCategoryTree } from '../categories';
 import { fetchNotes } from '../notes/thunks';
 import { fetchBibliographicReferences, fetchTerms } from '../resources';
+import { fetchAudioItems } from '../resources/audio-item/thunks/fetch-audio-items';
 import { fetchBooks } from '../resources/books/thunks';
 import { fetchMediaItems } from '../resources/media-items/thunks';
 import { fetchPhotographs } from '../resources/photographs/thunks';
 import { fetchSongs } from '../resources/songs/thunks';
 import { fetchSpatialFeatures } from '../resources/spatial-features/thunks';
-import { fetchTranscribedAudioItems } from '../resources/transcribed-audio/thunks/fetch-transcribed-audio-items';
 import { fetchVocabularyLists } from '../resources/vocabulary-lists/thunks';
 import { fetchTags } from '../tagSlice/thunks';
 
@@ -58,7 +58,7 @@ export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateT
             break;
 
         case AggregateType.transcribedAudio:
-            dispatch(fetchTranscribedAudioItems());
+            dispatch(fetchAudioItems());
             break;
 
         case AggregateType.vocabularyList:

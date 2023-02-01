@@ -7,10 +7,10 @@ import {
     useLoadableSpatialFeatureById,
     useLoadableTermById,
 } from '../../store/slices/resources';
+import { useLoadableAudioItemById } from '../../store/slices/resources/audio-item/hooks/use-loadable-audio-item-by-id';
 import { useLoadableBookById } from '../../store/slices/resources/books';
 import { useLoadableMediaItemById } from '../../store/slices/resources/media-items';
 import { useLoadablePhotographById } from '../../store/slices/resources/photographs/hooks';
-import { useLoadableTranscribedAudioItemById } from '../../store/slices/resources/transcribed-audio/hooks/use-loadable-transcribed-audio-item-by-id';
 import { useLoadableVocabularyListById } from '../../store/slices/resources/vocabulary-lists/hooks/useLoadableVocabularyListById';
 
 type UseLoadableById = (id: string) => IMaybeLoadable<unknown>;
@@ -28,7 +28,7 @@ const lookupTable: { [K in CategorizableType]: UseLoadableById } = {
     [CategorizableType.song]: useLoadableSongById,
     [CategorizableType.spatialFeature]: useLoadableSpatialFeatureById,
     [CategorizableType.term]: useLoadableTermById,
-    [CategorizableType.transcribedAudio]: useLoadableTranscribedAudioItemById,
+    [CategorizableType.transcribedAudio]: useLoadableAudioItemById,
     [CategorizableType.vocabularyList]: useLoadableVocabularyListById,
     [CategorizableType.note]: useLoadableNoteById,
 };

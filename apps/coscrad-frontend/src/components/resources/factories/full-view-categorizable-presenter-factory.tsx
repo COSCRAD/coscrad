@@ -6,6 +6,7 @@ import {
 import { Card, CardContent } from '@mui/material';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailFullViewPresenter } from '../../notes/note-detail.full-view.presenter';
+import { AudioItemDetailFullViewPresenter } from '../audio-item/audio-item-detail.full-view.presenter';
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
 import { BookInfo } from '../books/book-info';
 import { BookReader } from '../books/pages';
@@ -14,7 +15,6 @@ import { PhotographDetailFullViewPresenter } from '../photographs/photograph-det
 import { SongDetailFullViewPresenter } from '../songs/song-detail.full-view.presenter';
 import { SpatialFeatureDetailThumbnailPresenter } from '../spatial-features/thumbnail-presenters';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
-import { TranscribedAudioDetailFullViewPresenter } from '../transcribed-audio/transcribed-audio-detail.full-view.presenter';
 import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocabulary-list-detail.full-view.presenter';
 
 /**
@@ -27,7 +27,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.song]: SongDetailFullViewPresenter,
     [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
     [CategorizableType.term]: TermDetailFullViewPresenter,
-    [CategorizableType.transcribedAudio]: TranscribedAudioDetailFullViewPresenter,
+    [CategorizableType.transcribedAudio]: AudioItemDetailFullViewPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailFullViewPresenter,
     /**
      * TODO Investigate why importing this from the component file leads to a

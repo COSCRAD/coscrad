@@ -1,4 +1,4 @@
-import { ITranscribedAudioViewModel, ResourceType } from '@coscrad/api-interfaces';
+import { IAudioItemViewModel, MIMEType, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -13,13 +13,14 @@ jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
 
 jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => Promise.resolve());
 
-const dummyTranscribedAudioItems: ITranscribedAudioViewModel[] = [
+const dummyTranscribedAudioItems: IAudioItemViewModel[] = [
     {
         id: '44',
         audioURL: 'https://www.soundbox.org/123.mp3',
-        start: 0,
         lengthMilliseconds: 5600,
-        plainText: '[0:01] Blah blah blah [0:05]',
+        text: '[0:01] Blah blah blah [0:05]',
+        name: 'Awesome Audio Interview',
+        mimeType: MIMEType.mp3,
     },
 ];
 

@@ -1,4 +1,4 @@
-import { ITranscribedAudioViewModel, ResourceType } from '@coscrad/api-interfaces';
+import { IAudioItemViewModel, MIMEType, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -16,21 +16,23 @@ jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => P
 
 const idToFind = '44';
 
-const transcribedAudioToFind: ITranscribedAudioViewModel = {
+const transcribedAudioToFind: IAudioItemViewModel = {
     id: idToFind,
     audioURL: 'https://www.soundbox.org/123.mp3',
-    start: 0,
     lengthMilliseconds: 5600,
-    plainText: '[0:01] Blah blah blah [0:05]',
+    text: '[0:01] Blah blah blah [0:05]',
+    name: 'Test Audio 1',
+    mimeType: MIMEType.mp3,
 };
 
-const dummyTranscribedAudioItems: ITranscribedAudioViewModel[] = [
+const dummyTranscribedAudioItems: IAudioItemViewModel[] = [
     {
         id: '90',
         audioURL: 'https://www.soundbox.org/1245.mp3',
-        start: 0,
         lengthMilliseconds: 56500,
-        plainText: '[0:03] testing, this is a test! [0:05]',
+        text: '[0:03] testing, this is a test! [0:05]',
+        name: 'Test Audio 2',
+        mimeType: MIMEType.mp3,
     },
     transcribedAudioToFind,
 ];
@@ -41,7 +43,7 @@ const act = buildCategorizableDetailPageRendererForTest(ResourceType.transcribed
 
 const mockGetNotesHandler = buildMockGetNotesHandler();
 
-describe('transribed audio detail', () => {
+describe('audio item detail', () => {
     describe('when the API request is valid', () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({

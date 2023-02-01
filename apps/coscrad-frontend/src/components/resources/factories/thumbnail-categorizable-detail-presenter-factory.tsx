@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailThumbnailPresenter } from '../../notes/note-detail.thumbnail.presenter';
+import { AudioItemDetailThumbnailPresenter } from '../audio-item/audio-item-detail.thumbnail.presenter';
 import { BibliographicReferenceDetailThumbnailPresenter } from '../bibliographic-references/bibliographic-reference-detail-thumbnail-presenters';
 import { BookDetailThumbnailPresenter } from '../books';
 import { BookInfo } from '../books/book-info';
@@ -17,7 +18,6 @@ import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-de
 import { SongDetailThumbnailPresenter } from '../songs';
 import { SpatialFeatureDetailThumbnailPresenter } from '../spatial-features/thumbnail-presenters';
 import { TermDetailThumbnailPresenter } from '../terms/term-detail.thumbnail.presenter';
-import { TranscribedAudioDetailThumbnailPresenter } from '../transcribed-audio/transcribed-audio-detail.thumbnail.presenter';
 import { VocabularyListDetailThumbnailPresenter } from '../vocabulary-lists/vocabulary-list-detail.thumbnail.presenter';
 
 // TODO Define thumbnail specific presenters
@@ -30,7 +30,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.song]: SongDetailThumbnailPresenter,
     [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
     [CategorizableType.term]: TermDetailThumbnailPresenter,
-    [CategorizableType.transcribedAudio]: TranscribedAudioDetailThumbnailPresenter,
+    [CategorizableType.transcribedAudio]: AudioItemDetailThumbnailPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailThumbnailPresenter,
     /**
      * TODO Investigate why importing this from the component file leads to a

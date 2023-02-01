@@ -1,5 +1,5 @@
-import { ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
-import { TranscribedAudioIndexState } from '../../../store/slices/resources/transcribed-audio/types';
+import { IAudioItemViewModel } from '@coscrad/api-interfaces';
+import { AudioItemIndexState } from '../../../store/slices/resources/audio-item/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
@@ -7,8 +7,8 @@ import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seco
 
 export const TranscribedAudioIndexPresenter = ({
     entities: transcribedAudioItems,
-}: TranscribedAudioIndexState) => {
-    const headingLabels: HeadingLabel<ITranscribedAudioViewModel>[] = [
+}: AudioItemIndexState) => {
+    const headingLabels: HeadingLabel<IAudioItemViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
         {
             propertyKey: 'lengthMilliseconds',
@@ -30,11 +30,11 @@ export const TranscribedAudioIndexPresenter = ({
         { propertyKey: 'text', headingLabel: 'Transcript' },
     ];
 
-    const cellRenderersDefinition: CellRenderersDefinition<ITranscribedAudioViewModel> = {
+    const cellRenderersDefinition: CellRenderersDefinition<IAudioItemViewModel> = {
         id: renderAggregateIdCell,
-        lengthMilliseconds: ({ lengthMilliseconds }: ITranscribedAudioViewModel) =>
+        lengthMilliseconds: ({ lengthMilliseconds }: IAudioItemViewModel) =>
             renderMediaLengthInSeconds(lengthMilliseconds),
-        // audioURL: ({ audioURL }: ITranscribedAudioViewModel) =>
+        // audioURL: ({ audioURL }: IAudioItemViewModel) =>
         //     renderTranscribedAudioMediaCell(audioURL),
     };
 

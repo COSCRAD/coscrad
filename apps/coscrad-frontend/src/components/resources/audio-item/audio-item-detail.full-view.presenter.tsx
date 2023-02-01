@@ -1,19 +1,16 @@
-import {
-    ICategorizableDetailQueryResult,
-    ITranscribedAudioViewModel,
-} from '@coscrad/api-interfaces';
+import { IAudioItemViewModel, ICategorizableDetailQueryResult } from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
 import { FloatSpacerDiv } from '../../../utils/generic-components';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
-import { convertMillisecondsToSeconds } from '../utils/math/';
-import './transcribed-audio-detail.full-view.presenter.css';
+import { convertMillisecondsToSeconds } from '../utils/math';
+import './audio-item-detail.full-view.presenter.css';
 
-export const TranscribedAudioDetailFullViewPresenter = ({
+export const AudioItemDetailFullViewPresenter = ({
     id,
     lengthMilliseconds,
     audioURL,
     text: plainText,
-}: ICategorizableDetailQueryResult<ITranscribedAudioViewModel>): JSX.Element => (
+}: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => (
     <div className="detail-full-view-container" title="View Connected Photograph" data-testid={id}>
         <div className="detail-full-view-media-container">
             <MediaPlayer audioUrl={audioURL} />
