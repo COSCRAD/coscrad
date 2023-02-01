@@ -11,19 +11,17 @@ import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCas
 
 const validCases = buildAllValidTestCasesForResource(ResourceType.transcribedAudio);
 
-const validAudioStartPoint = 100;
-
 const validTranscribedAudio = validCases[0].resource.clone({
-    lengthMilliseconds: validAudioStartPoint,
+    lengthMilliseconds: 0,
 });
 
 const timeRangeWithInvalidOutPoint: TimeRangeWithoutData = {
-    inPoint: validAudioStartPoint,
+    inPoint: 0,
     outPoint: validTranscribedAudio.length() + 200,
 };
 
 const timeRangeWithInvalidInPoint: TimeRangeWithoutData = {
-    inPoint: validAudioStartPoint - 10,
+    inPoint: -10,
     outPoint: validTranscribedAudio.length(),
 };
 

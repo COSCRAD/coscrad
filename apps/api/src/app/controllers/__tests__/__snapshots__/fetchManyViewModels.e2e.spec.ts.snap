@@ -1394,276 +1394,6 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /resources/spatialFeatures when some of the resources are unpublished should return the expected number of results 2`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
-          54.034404852745006,
-          -132.17563335558532,
-        ],
-        "type": "Point",
-      },
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
-      "properties": Object {
-        "description": "Description for point 100",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-        "name": "Name of Point with ID: 100",
-      },
-      "tags": Array [
-        Object {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "label": "plants",
-          "members": Array [
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "term",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-              "type": "book",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-              "type": "book",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "vocabularyList",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
-              "type": "spatialFeature",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
-              "type": "note",
-            },
-          ],
-        },
-      ],
-    },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
-          53.26710566708586,
-          -131.99142447847115,
-        ],
-        "type": "Point",
-      },
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
-      "properties": Object {
-        "description": "Description for point 101",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-        "name": "Name of Point with ID: 101",
-      },
-      "tags": Array [
-        Object {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
-          "label": "legends",
-          "members": Array [
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-              "type": "vocabularyList",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
-              "type": "spatialFeature",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "mediaItem",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "song",
-            },
-          ],
-        },
-      ],
-    },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
-          51.93152097800416,
-          -123.14042112774867,
-        ],
-        "type": "Point",
-      },
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
-      "properties": Object {
-        "description": "Description for point 102",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-        "name": "Name of Point with ID: 102",
-      },
-      "tags": Array [
-        Object {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-          "label": "animals",
-          "members": Array [
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-              "type": "term",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "term",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
-              "type": "spatialFeature",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "bibliographicReference",
-            },
-          ],
-        },
-      ],
-    },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
-          51.935065638350636,
-          -122.50936316168337,
-        ],
-        "type": "Point",
-      },
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110103",
-      "properties": Object {
-        "description": "Description for point 103",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-        "name": "Name of Point with ID: 103",
-      },
-      "tags": Array [],
-    },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
-          52.12579975880678,
-          -123.68132823530952,
-        ],
-        "type": "Point",
-      },
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110104",
-      "properties": Object {
-        "description": "Description for point 104",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-        "name": "Name of Point with ID: 104",
-      },
-      "tags": Array [],
-    },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
-          Array [
-            52.3,
-            -124.2,
-          ],
-          Array [
-            52.35,
-            -124.85,
-          ],
-          Array [
-            52.21,
-            -124.9,
-          ],
-          Array [
-            52.05,
-            -125.1,
-          ],
-          Array [
-            52.15,
-            -125.1,
-          ],
-          Array [
-            52.33,
-            -125.22,
-          ],
-          Array [
-            52.45,
-            -125.39,
-          ],
-        ],
-        "type": "LineString",
-      },
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "properties": Object {
-        "description": "One amazing hike!",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-        "name": "Windy Path",
-      },
-      "tags": Array [],
-    },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
-          Array [
-            Array [
-              52.47,
-              -123.6,
-            ],
-            Array [
-              52.42,
-              -123.95,
-            ],
-            Array [
-              52.05,
-              -123.95,
-            ],
-            Array [
-              52.05,
-              -123.685,
-            ],
-          ],
-        ],
-        "type": "Polygon",
-      },
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-      "properties": Object {
-        "description": "Description for point 300",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
-        "name": "Point with ID: 300 Name",
-      },
-      "tags": Array [],
-    },
-  ],
-  "indexScopedActions": Array [],
-}
-`;
-
 exports[`When fetching multiple resources GET /resources/terms when all of the resources are published should fetch multiple resources of type term 1`] = `
 Object {
   "entities": Array [
@@ -2022,185 +1752,6 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /resources/terms when some of the resources are unpublished should return the expected number of results 2`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
-      "contributor": "",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "tags": Array [
-        Object {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "label": "plants",
-          "members": Array [
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "term",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-              "type": "book",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-              "type": "book",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "vocabularyList",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
-              "type": "spatialFeature",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
-              "type": "note",
-            },
-          ],
-        },
-      ],
-      "term": "Chil-term-1",
-      "termEnglish": "Engl-term-1",
-    },
-    Object {
-      "actions": Array [],
-      "contributor": "",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "tags": Array [
-        Object {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-          "label": "animals",
-          "members": Array [
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-              "type": "term",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "term",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
-              "type": "spatialFeature",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "bibliographicReference",
-            },
-          ],
-        },
-      ],
-      "term": "Chil-term-2",
-      "termEnglish": "Engl-term-2",
-    },
-    Object {
-      "actions": Array [],
-      "contributor": "",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-      "tags": Array [
-        Object {
-          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-          "label": "animals",
-          "members": Array [
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-              "type": "term",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-              "type": "term",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
-              "type": "spatialFeature",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
-              "type": "note",
-            },
-            Object {
-              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-              "type": "bibliographicReference",
-            },
-          ],
-        },
-      ],
-      "term": "Chil-term-no-english",
-    },
-    Object {
-      "actions": Array [],
-      "contributor": "",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
-      "tags": Array [],
-      "term": "My Secret Term",
-    },
-    Object {
-      "actions": Array [],
-      "contributor": "",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
-      "tags": Array [],
-      "term": "I am singing (lang)",
-      "termEnglish": "I am singing (Engl)",
-    },
-    Object {
-      "actions": Array [],
-      "contributor": "",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
-      "tags": Array [],
-      "term": "You are singing (lang)",
-      "termEnglish": "You are singing (Engl)",
-    },
-    Object {
-      "actions": Array [],
-      "contributor": "",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
-      "tags": Array [],
-      "term": "She is singing (lang)",
-      "termEnglish": "She is singing (Engl)",
-    },
-    Object {
-      "actions": Array [],
-      "contributor": "",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-      "tags": Array [],
-      "term": "I am not singing (lang)",
-      "termEnglish": "I am not singing (Engl)",
-    },
-    Object {
-      "actions": Array [],
-      "contributor": "",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
-      "tags": Array [],
-      "term": "You are not singing (lang)",
-      "termEnglish": "You are not singing (Engl)",
-    },
-  ],
-  "indexScopedActions": Array [],
-}
-`;
-
 exports[`When fetching multiple resources GET /resources/transcribedAudioItems when all of the resources are published should fetch multiple resources of type transcribedAudio 1`] = `
 Object {
   "entities": Array [
@@ -2248,60 +1799,37 @@ Object {
   "entities": Array [
     Object {
       "actions": Array [],
-      "audioURL": "https://www.mysound.org/downloads/Gaas.mp3",
-      "id": "110",
+      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "lengthMilliseconds": 20000,
-      "plainText": "
+      "mimeType": "audio/mpeg",
+      "tags": Array [],
+      "text": "
 [12000] There once was a little wooden boy. [15550]
-[18300] His name was Pinocchio. [19240]",
-      "start": 0,
-      "tags": Array [
-        Object {
-          "id": "3",
-          "label": "placenames",
-          "members": Array [
-            Object {
-              "id": "0",
-              "type": "photograph",
-            },
-            Object {
-              "id": "110",
-              "type": "transcribedAudio",
-            },
-            Object {
-              "id": "2003",
-              "type": "note",
-            },
-            Object {
-              "id": "5",
-              "type": "note",
-            },
-          ],
-        },
-      ],
+[18300] His name was Pinocchio [19240]",
     },
     Object {
       "actions": Array [],
-      "audioURL": "https://www.mysound.org/downloads/Chinaay.mp3",
-      "id": "111",
+      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "lengthMilliseconds": 23409,
-      "plainText": "
+      "mimeType": "audio/mpeg",
+      "tags": Array [],
+      "text": "
 [3400] While she went down to the river [3670]
 [3700] someone had already filled the water tank. [3980]
 [4010] These were the types of problems we had. [4290]",
-      "start": 0,
-      "tags": Array [],
     },
     Object {
       "actions": Array [],
-      "audioURL": "https://www.mysound.org/downloads/Kwa.mp3",
-      "id": "113",
+      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "lengthMilliseconds": 32989,
-      "plainText": "
+      "mimeType": "audio/mpeg",
+      "tags": Array [],
+      "text": "
 [120] this type of spoon is used in ceremonies [848]
 [930] by members of the opposite clan of the house chief [1080]",
-      "start": 0,
-      "tags": Array [],
     },
   ],
   "indexScopedActions": Array [],
@@ -2605,7 +2133,68 @@ Object {
   "entities": Array [
     Object {
       "actions": Array [],
-      "entries": Array [],
+      "entries": Array [
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+            "term": "I am singing (lang)",
+            "termEnglish": "I am singing (Engl)",
+          },
+          "variableValues": Object {
+            "person": "11",
+            "positive": true,
+          },
+        },
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+            "term": "You are singing (lang)",
+            "termEnglish": "You are singing (Engl)",
+          },
+          "variableValues": Object {
+            "person": "12",
+            "positive": false,
+          },
+        },
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
+            "term": "She is singing (lang)",
+            "termEnglish": "She is singing (Engl)",
+          },
+          "variableValues": Object {
+            "person": "13",
+            "positive": false,
+          },
+        },
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+            "term": "I am not singing (lang)",
+            "termEnglish": "I am not singing (Engl)",
+          },
+          "variableValues": Object {
+            "person": "01",
+            "positive": true,
+          },
+        },
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+            "term": "You are not singing (lang)",
+            "termEnglish": "You are not singing (Engl)",
+          },
+          "variableValues": Object {
+            "person": "02",
+            "positive": false,
+          },
+        },
+      ],
       "form": Object {
         "fields": Array [
           Object {
@@ -2655,7 +2244,30 @@ Object {
     },
     Object {
       "actions": Array [],
-      "entries": Array [],
+      "entries": Array [
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "term": "Chil-term-1",
+            "termEnglish": "Engl-term-1",
+          },
+          "variableValues": Object {
+            "person": "11",
+          },
+        },
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "term": "Chil-term-2",
+            "termEnglish": "Engl-term-2",
+          },
+          "variableValues": Object {
+            "person": "12",
+          },
+        },
+      ],
       "form": Object {
         "fields": Array [
           Object {
@@ -2723,7 +2335,30 @@ Object {
     },
     Object {
       "actions": Array [],
-      "entries": Array [],
+      "entries": Array [
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "term": "Chil-term-2",
+            "termEnglish": "Engl-term-2",
+          },
+          "variableValues": Object {
+            "his": false,
+          },
+        },
+        Object {
+          "term": Object {
+            "contributor": "",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "term": "Chil-term-1",
+            "termEnglish": "Engl-term-1",
+          },
+          "variableValues": Object {
+            "his": true,
+          },
+        },
+      ],
       "form": Object {
         "fields": Array [
           Object {
