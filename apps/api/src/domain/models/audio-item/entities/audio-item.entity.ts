@@ -5,7 +5,6 @@ import {
     ReferenceTo,
     UUID,
 } from '@coscrad/data-types';
-import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
@@ -88,7 +87,7 @@ export class AudioItem<T extends CoscradText = string> extends Resource {
 
         this.lengthMilliseconds = lengthMilliseconds;
 
-        this.transcript = isNonEmptyObject(transcript) ? new Transcript(transcript) : null;
+        this.transcript = !isNullOrUndefined(transcript) ? new Transcript(transcript) : null;
     }
 
     protected validateComplexInvariants(): InternalError[] {
