@@ -96,11 +96,9 @@ exports[` 1`] = `
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -163,7 +161,7 @@ exports[` 1`] = `
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -175,7 +173,7 @@ exports[` 1`] = `
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -186,8 +184,8 @@ exports[` 1`] = `
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -291,11 +289,9 @@ exports[` 2`] = `
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -358,7 +354,7 @@ exports[` 2`] = `
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -370,7 +366,7 @@ exports[` 2`] = `
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -381,8 +377,8 @@ exports[` 2`] = `
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -489,11 +485,9 @@ exports[` 2`] = `
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -556,7 +550,7 @@ exports[` 2`] = `
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -568,7 +562,7 @@ exports[` 2`] = `
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -579,8 +573,8 @@ exports[` 2`] = `
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -684,11 +678,9 @@ exports[` 3`] = `
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -751,7 +743,7 @@ exports[` 3`] = `
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -763,7 +755,7 @@ exports[` 3`] = `
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -774,8 +766,8 @@ exports[` 3`] = `
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -882,11 +874,9 @@ exports[` 3`] = `
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -949,7 +939,7 @@ exports[` 3`] = `
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -961,7 +951,7 @@ exports[` 3`] = `
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -972,8 +962,8 @@ exports[` 3`] = `
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -1074,11 +1064,9 @@ exports[` 3`] = `
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -1141,7 +1129,7 @@ exports[` 3`] = `
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -1153,7 +1141,7 @@ exports[` 3`] = `
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -1164,8 +1152,8 @@ exports[` 3`] = `
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -1305,11 +1293,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -1372,7 +1358,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -1384,7 +1370,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -1395,8 +1381,8 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -1538,11 +1524,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -1605,7 +1589,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -1617,7 +1601,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -1628,8 +1612,8 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -1733,11 +1717,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -1800,7 +1782,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -1812,7 +1794,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -1823,8 +1805,8 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -1931,11 +1913,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -1998,7 +1978,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -2010,7 +1990,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -2021,8 +2001,8 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -2123,11 +2103,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -2190,7 +2168,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -2202,7 +2180,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -2213,8 +2191,8 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -2343,11 +2321,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </tr>
             </tbody>
           </table>
-          <span
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 index-footer css-1ps6pg7-MuiPaper-root"
+          <div>
+            <footer
+              class="index-footer"
             >
               <span>
                  
@@ -2410,7 +2386,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               1
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-16bduli-MuiSvgIcon-root"
                 data-testid="ArrowBackIosIcon"
                 focusable="false"
                 id="pagination-back-arrow"
@@ -2422,7 +2398,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               </svg>
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-qx8lgf-MuiSvgIcon-root"
                 data-testid="ArrowForwardIosIcon"
                 focusable="false"
                 id="pagination-front-arrow"
@@ -2433,8 +2409,8 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
                 />
               </svg>
-            </div>
-          </span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
