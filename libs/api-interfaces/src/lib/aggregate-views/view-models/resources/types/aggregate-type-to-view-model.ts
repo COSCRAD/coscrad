@@ -23,7 +23,7 @@ export type AggregateTypeToViewModel = {
     [AggregateType.song]: ISongViewModel;
     [AggregateType.spatialFeature]: ISpatialFeatureViewModel;
     [AggregateType.term]: ITermViewModel;
-    [AggregateType.transcribedAudio]: IAudioItemViewModel;
+    [AggregateType.audioItem]: IAudioItemViewModel;
     [AggregateType.vocabularyList]: IVocabularyListViewModel;
     // Notes, which along with Resources form "Categorizables"
     [AggregateType.note]: INoteViewModel;

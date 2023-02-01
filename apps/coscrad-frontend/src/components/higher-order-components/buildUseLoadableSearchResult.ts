@@ -28,7 +28,7 @@ const lookupTable: { [K in CategorizableType]: UseLoadableById } = {
     [CategorizableType.song]: useLoadableSongById,
     [CategorizableType.spatialFeature]: useLoadableSpatialFeatureById,
     [CategorizableType.term]: useLoadableTermById,
-    [CategorizableType.transcribedAudio]: useLoadableAudioItemById,
+    [CategorizableType.audioItem]: useLoadableAudioItemById,
     [CategorizableType.vocabularyList]: useLoadableVocabularyListById,
     [CategorizableType.note]: useLoadableNoteById,
 };

@@ -26,7 +26,7 @@ const dummyTranscribedAudioItems: IAudioItemViewModel[] = [
 
 const endpoint = `${getConfig().apiUrl}/resources/transcribedAudioItems`;
 
-const act = () => renderResourceIndexPageForTest(ResourceType.transcribedAudio);
+const act = () => renderResourceIndexPageForTest(ResourceType.audioItem);
 
 describe('Transcribed Audio Index', () => {
     describe('when the API request is valid', () => {

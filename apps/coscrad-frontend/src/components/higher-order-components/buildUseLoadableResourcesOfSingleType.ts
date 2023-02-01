@@ -32,7 +32,7 @@ const lookupTable: {
     [CategorizableType.song]: useLoadableSongs,
     [CategorizableType.spatialFeature]: useLoadableSpatialFeatures,
     [CategorizableType.term]: useLoadableTerms,
-    [CategorizableType.transcribedAudio]: useLoadableAudioItems,
+    [CategorizableType.audioItem]: useLoadableAudioItems,
     [CategorizableType.vocabularyList]: useLoadableVocabularyLists,
     [CategorizableType.note]: useLoadableNotes,
 };

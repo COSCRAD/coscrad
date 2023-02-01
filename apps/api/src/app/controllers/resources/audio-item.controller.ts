@@ -10,7 +10,7 @@ import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpR
 import { RESOURCES_ROUTE_PREFIX } from './constants';
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
-@Controller(buildViewModelPathForResourceType(ResourceType.transcribedAudio))
+@Controller(buildViewModelPathForResourceType(ResourceType.audioItem))
 export class AudioItemController {
     constructor(private readonly audioItemQueryService: AudioItemQueryService) {}
 

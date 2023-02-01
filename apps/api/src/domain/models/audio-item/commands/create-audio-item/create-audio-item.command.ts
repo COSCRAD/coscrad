@@ -18,7 +18,7 @@ export class AudioItemCompositeIdentifier {
         label: 'type',
         description: 'transcript',
     })
-    type = AggregateType.transcribedAudio;
+    type = AggregateType.audioItem;
 
     @UUID({
         label: 'ID',
@@ -46,11 +46,11 @@ export class CreateAudioItem implements ICommandBase {
     })
     readonly name: MultiLingualText;
 
+    @ReferenceTo(AggregateType.mediaItem)
     @UUID({
         label: 'media item ID',
         description: `the ID of the transcript's media item`,
     })
-    @ReferenceTo(AggregateType.mediaItem)
     readonly mediaItemId: AggregateId;
 
     @NonNegativeFiniteNumber({

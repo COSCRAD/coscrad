@@ -34,7 +34,7 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.photograph]: Photograph,
     [AggregateType.song]: Song,
     [AggregateType.term]: Term,
-    [AggregateType.transcribedAudio]: AudioItem,
+    [AggregateType.audioItem]: AudioItem,
     [AggregateType.vocabularyList]: VocabularyList,
     [AggregateType.category]: Category,
 };

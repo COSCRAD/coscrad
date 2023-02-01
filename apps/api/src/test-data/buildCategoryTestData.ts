@@ -168,7 +168,7 @@ export default (): Category[] => {
             label: 'tools',
             members: [
                 {
-                    type: CategorizableType.transcribedAudio,
+                    type: CategorizableType.audioItem,
                     id: '110',
                 },
             ],

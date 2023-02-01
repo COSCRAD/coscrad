@@ -86,7 +86,7 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
                 id: '0',
             },
             {
-                type: CategorizableType.transcribedAudio,
+                type: CategorizableType.audioItem,
                 id: '110',
             },
             {

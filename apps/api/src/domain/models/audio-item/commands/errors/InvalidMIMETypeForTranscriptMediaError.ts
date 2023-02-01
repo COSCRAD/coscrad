@@ -8,7 +8,7 @@ export class InvalidMIMETypeForTranscriptMediaError extends InternalError {
         super(
             `You cannot add a media item with the disallowed MIME type: ${invalidMimeType} to ${formatAggregateCompositeIdentifier(
                 {
-                    type: AggregateType.transcribedAudio,
+                    type: AggregateType.audioItem,
                     id: transcriptId,
                 }
             )}`

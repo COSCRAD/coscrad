@@ -128,5 +128,5 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
 
 export default () =>
     partialDtos
-        .map((partialDto) => new AudioItem({ ...partialDto, type: ResourceType.transcribedAudio }))
+        .map((partialDto) => new AudioItem({ ...partialDto, type: ResourceType.audioItem }))
         .map(convertAggregatesIdToUuid);

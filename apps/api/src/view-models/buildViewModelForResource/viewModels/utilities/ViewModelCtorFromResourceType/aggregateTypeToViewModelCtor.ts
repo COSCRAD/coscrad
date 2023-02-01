@@ -26,7 +26,7 @@ export const aggregateTypeToViewModelCtor: { [K in AggregateType]: Ctor<BaseView
     [ResourceType.song]: SongViewModel,
     [ResourceType.spatialFeature]: SpatialFeatureViewModel,
     [ResourceType.term]: TermViewModel,
-    [ResourceType.transcribedAudio]: AudioItemViewModel,
+    [ResourceType.audioItem]: AudioItemViewModel,
     [ResourceType.vocabularyList]: VocabularyListViewModel,
     [CategorizableType.note]: NoteViewModel,
     [AggregateType.category]: CategoryTreeViewModel,

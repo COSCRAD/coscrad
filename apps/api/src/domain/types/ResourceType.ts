@@ -25,7 +25,7 @@ export const isResourceType = (input: unknown): input is ResourceType =>
 export type ResourceTypeToResourceModel = {
     term: Term;
     vocabularyList: VocabularyList;
-    transcribedAudio: AudioItem;
+    audioItem: AudioItem;
     book: Book;
     photograph: Photograph;
     spatialFeature: ISpatialFeature;

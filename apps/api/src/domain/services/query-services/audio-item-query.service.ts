@@ -15,7 +15,7 @@ import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';
 
 export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudioItemViewModel> {
-    protected readonly type = ResourceType.transcribedAudio;
+    protected readonly type = ResourceType.audioItem;
 
     constructor(
         @Inject(REPOSITORY_PROVIDER) repositoryProvider: IRepositoryProvider,

@@ -70,7 +70,7 @@ export const tableViewCategorizableIndexPresenterFactory: CategorizableIndexPres
         case CategorizableType.term:
             return TermIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
-        case CategorizableType.transcribedAudio:
+        case CategorizableType.audioItem:
             return TranscribedAudioIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.vocabularyList:

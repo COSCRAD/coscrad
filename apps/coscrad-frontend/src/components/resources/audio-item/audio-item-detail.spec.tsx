@@ -39,7 +39,7 @@ const dummyTranscribedAudioItems: IAudioItemViewModel[] = [
 
 const endpoint = `${getConfig().apiUrl}/resources/transcribedAudioItems`;
 
-const act = buildCategorizableDetailPageRendererForTest(ResourceType.transcribedAudio);
+const act = buildCategorizableDetailPageRendererForTest(ResourceType.audioItem);
 
 const mockGetNotesHandler = buildMockGetNotesHandler();
 

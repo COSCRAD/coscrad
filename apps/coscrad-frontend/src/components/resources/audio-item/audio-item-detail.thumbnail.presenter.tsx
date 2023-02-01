@@ -16,7 +16,7 @@ export const AudioItemDetailThumbnailPresenter = ({
     audioURL,
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => (
     <div className="detail-thumbnail-container">
-        <Link to={`/${routes.resources.ofType(ResourceType.transcribedAudio).detail(id)}`}>
+        <Link to={`/${routes.resources.ofType(ResourceType.audioItem).detail(id)}`}>
             <div
                 className="detail-thumbnail-meta-container"
                 title="View Connected Transcribed Audio"

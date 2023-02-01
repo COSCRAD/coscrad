@@ -20,7 +20,7 @@ import InvalidExternalReferenceByAggregateError from '../../categories/errors/In
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
 import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
-import { CREATE_TRANSCRIPT } from '../commands';
+import { CREATE_AUDIO_ITEM, CREATE_TRANSCRIPT } from '../commands';
 import { InvalidMIMETypeForTranscriptMediaError } from '../commands/errors';
 import { Transcript } from './transcript.entity';
 
@@ -28,10 +28,9 @@ export type CoscradTimeStamp = number;
 
 export type CoscradText = string;
 
-// TODO `CREATE_AUDIO_ITEM`
-@RegisterIndexScopedCommands([])
+@RegisterIndexScopedCommands([CREATE_AUDIO_ITEM])
 export class AudioItem<T extends CoscradText = string> extends Resource {
-    readonly type = ResourceType.transcribedAudio;
+    readonly type = ResourceType.audioItem;
 
     @NestedDataType(MultiLingualText, {
         label: 'name',

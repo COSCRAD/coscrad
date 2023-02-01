@@ -20,7 +20,7 @@ export default (): PartialSnapshot => ({
     // Resources
     [ResourceType.term]: buildTermTestData(),
     [ResourceType.vocabularyList]: buildVocabularyListTestData(),
-    [ResourceType.transcribedAudio]: buildTranscribedAudioTestData(),
+    [ResourceType.audioItem]: buildTranscribedAudioTestData(),
     [ResourceType.book]: buildBookTestData(),
     [ResourceType.photograph]: buildPhotographTestData(),
     [ResourceType.spatialFeature]: buildSpatialFeatureTestData(),

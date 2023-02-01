@@ -22,7 +22,7 @@ import { AudioItemCreated } from './transcript-created.event';
 export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<AudioItem> {
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<AudioItem>;
 
-    protected aggregateType: AggregateType = AggregateType.transcribedAudio;
+    protected aggregateType: AggregateType = AggregateType.audioItem;
 
     constructor(
         @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
@@ -31,7 +31,7 @@ export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<Audi
         super(repositoryProvider, idManager);
 
         this.repositoryForCommandsTargetAggregate = this.repositoryProvider.forResource<AudioItem>(
-            ResourceType.transcribedAudio
+            ResourceType.audioItem
         );
     }
 
@@ -42,7 +42,7 @@ export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<Audi
         lengthMilliseconds,
     }: CreateAudioItem) {
         return new AudioItem({
-            type: AggregateType.transcribedAudio,
+            type: AggregateType.audioItem,
             id,
             name,
             mediaItemId,

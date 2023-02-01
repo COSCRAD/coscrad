@@ -1,1 +1,1 @@
-export const AUDIO_ITEMS = 'transcribedAudioItems';
+export const AUDIO_ITEMS = 'audioItems';

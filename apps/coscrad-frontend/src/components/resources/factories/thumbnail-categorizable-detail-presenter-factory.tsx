@@ -30,7 +30,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.song]: SongDetailThumbnailPresenter,
     [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
     [CategorizableType.term]: TermDetailThumbnailPresenter,
-    [CategorizableType.transcribedAudio]: AudioItemDetailThumbnailPresenter,
+    [CategorizableType.audioItem]: AudioItemDetailThumbnailPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailThumbnailPresenter,
     /**
      * TODO Investigate why importing this from the component file leads to a
