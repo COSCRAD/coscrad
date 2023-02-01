@@ -1,5 +1,6 @@
 import { Song } from '../domain/models/song/song.entity';
 import { ResourceType } from '../domain/types/ResourceType';
+import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
 
 export default (): Song[] =>
     [
@@ -39,11 +40,13 @@ export default (): Song[] =>
                 },
             ],
         },
-    ].map(
-        (partialDTO, index) =>
-            new Song({
-                ...partialDTO,
-                id: `${index + 1}`,
-                type: ResourceType.song,
-            })
-    );
+    ]
+        .map(
+            (partialDTO, index) =>
+                new Song({
+                    ...partialDTO,
+                    id: `${index + 1}`,
+                    type: ResourceType.song,
+                })
+        )
+        .map(convertAggregatesIdToUuid);

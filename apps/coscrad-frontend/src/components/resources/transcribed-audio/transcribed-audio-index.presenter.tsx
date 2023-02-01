@@ -27,7 +27,7 @@ export const TranscribedAudioIndexPresenter = ({
          * show the entire transcript here. Instead, we want to show a
          * title and maybe the participants, and so on.
          */
-        { propertyKey: 'plainText', headingLabel: 'Transcript' },
+        { propertyKey: 'text', headingLabel: 'Transcript' },
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<ITranscribedAudioViewModel> = {
@@ -44,7 +44,7 @@ export const TranscribedAudioIndexPresenter = ({
             tableData={transcribedAudioItems}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Audio Transcripts'}
-            filterableProperties={['plainText']}
+            filterableProperties={['text']}
         />
     );
 };

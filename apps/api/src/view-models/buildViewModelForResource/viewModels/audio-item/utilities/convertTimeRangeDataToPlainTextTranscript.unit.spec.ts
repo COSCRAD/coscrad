@@ -1,4 +1,4 @@
-import { TranscriptItem } from '../../../../../domain/models/transcribed-audio/entities/MediaTimeRange';
+import { TranscriptItem } from '../../../../../domain/models/audio-item/entities/MediaTimeRange';
 import convertTimeRangeDataToPlainTextTranscript from './convertTimeRangeDataToPlainTextTranscript';
 
 // TODO- add this to the test data and import it here!
@@ -13,7 +13,8 @@ const testTranscript: TranscriptItem[] = [
     .map((text, index) => ({
         inPoint: index * 500,
         outPoint: index * 500 + 400,
-        data: text,
+        text,
+        label: 'FOO',
     }))
     .map((dto) => new TranscriptItem(dto));
 

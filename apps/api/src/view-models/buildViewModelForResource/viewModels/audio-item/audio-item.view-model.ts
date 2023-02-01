@@ -1,12 +1,12 @@
-import { ITranscribedAudioViewModel, MIMEType } from '@coscrad/api-interfaces';
+import { IAudioItemViewModel, MIMEType } from '@coscrad/api-interfaces';
 import { ExternalEnum, NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
+import { AudioItem } from '../../../../domain/models/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
-import { Transcript } from '../../../../domain/models/transcribed-audio/entities/transcribed-audio.entity';
 import { BaseViewModel } from '../base.view-model';
 import convertTimeRangeDataToPlainTextTranscript from './utilities/convertTimeRangeDataToPlainTextTranscript';
 
-export class TranscribedAudioViewModel extends BaseViewModel implements ITranscribedAudioViewModel {
+export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewModel {
     @NonEmptyString({
         label: 'name',
         description: 'name of the transcript',
@@ -66,14 +66,15 @@ export class TranscribedAudioViewModel extends BaseViewModel implements ITranscr
     // TODO Also return the raw time stamp data?
 
     constructor(
-        { id, items, mediaItemId, lengthMilliseconds }: Transcript,
+        { id, transcript, mediaItemId, lengthMilliseconds }: AudioItem,
         allMediaItems: MediaItem[]
     ) {
         super({ id });
 
         this.lengthMilliseconds = lengthMilliseconds;
 
-        this.text = convertTimeRangeDataToPlainTextTranscript(items);
+        // TODO Encapsulte this on transcript- we shouldn't need to access it's items directly
+        this.text = convertTimeRangeDataToPlainTextTranscript(transcript.items);
 
         const { url, mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
 

@@ -1,82 +1,55 @@
 import {
     MIMEType,
     NestedDataType,
-    NonEmptyString,
     NonNegativeFiniteNumber,
     ReferenceTo,
+    UUID,
 } from '@coscrad/data-types';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../../types/DTO';
+import { MultiLingualText } from '../../../common/entities/multi-lingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import BaseDomainModel from '../../BaseDomainModel';
 import InvalidExternalReferenceByAggregateError from '../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
 import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
+import { CREATE_TRANSCRIPT } from '../commands';
 import { InvalidMIMETypeForTranscriptMediaError } from '../commands/errors';
-import { TranscriptItem } from './MediaTimeRange';
-
-class TranscriptParticipant extends BaseDomainModel {
-    @NonEmptyString({
-        label: 'speaker label',
-        description: 'a label (e.g., initials) for this speaker',
-    })
-    readonly label: string;
-
-    @NonEmptyString({
-        label: 'id',
-        description: "the participant's id, for now their name",
-    })
-    // This should eventually point to a "Person" model
-    // For now we'll simply put the Participant's name here
-    readonly id: AggregateId;
-
-    constructor({ label, id }: DTO<TranscriptParticipant>) {
-        super();
-
-        this.label = label;
-
-        this.id = id;
-    }
-}
+import { Transcript } from './transcript.entity';
 
 export type CoscradTimeStamp = number;
 
 export type CoscradText = string;
 
+// TODO `CREATE_AUDIO_ITEM`
 @RegisterIndexScopedCommands([])
-export class Transcript<T extends CoscradText = string> extends Resource {
+export class AudioItem<T extends CoscradText = string> extends Resource {
     readonly type = ResourceType.transcribedAudio;
 
-    /**
-     * TODO Make this multi-lingual text
-     */
-    @NonEmptyString({
+    @NestedDataType(MultiLingualText, {
         label: 'name',
         description: 'the name of the transcript',
     })
-    readonly name: string;
+    readonly name: MultiLingualText;
 
-    // TODO Validate that there are not duplicate IDs here
-    participants: TranscriptParticipant[];
-
-    @NestedDataType(TranscriptItem, {
-        isArray: true,
+    @NestedDataType(Transcript, {
+        isOptional: true,
         label: 'items',
         description: 'time stamps with text and speaker labels',
     })
     // TODO rename this, as it includes the data as well
-    items: TranscriptItem<T>[];
+    readonly transcript?: Transcript<T>;
 
     // TODO Make this UUID
-    @NonEmptyString({
+    @UUID({
         label: 'media item ID',
         description: `ID of the transcript's media item`,
     })
@@ -85,7 +58,7 @@ export class Transcript<T extends CoscradText = string> extends Resource {
      * or video file (and not a photograph, for example).
      */
     @ReferenceTo(AggregateType.mediaItem)
-    mediaItemId: AggregateId;
+    readonly mediaItemId: AggregateId;
 
     // TODO ensure that items are consistent with this property
     /**
@@ -100,26 +73,22 @@ export class Transcript<T extends CoscradText = string> extends Resource {
         label: 'length (ms)',
         description: `the length of the transcript's media item in milliseconds`,
     })
-    lengthMilliseconds: CoscradTimeStamp;
+    readonly lengthMilliseconds: CoscradTimeStamp;
 
-    constructor(dto: DTO<Transcript<T>>) {
+    constructor(dto: DTO<AudioItem<T>>) {
         super(dto);
 
         if (!dto) return;
 
-        const { items, name, participants, mediaItemId, lengthMilliseconds } = dto;
+        const { name, mediaItemId, lengthMilliseconds, transcript } = dto;
 
-        this.name = name;
+        this.name = new MultiLingualText(name);
 
         this.mediaItemId = mediaItemId;
 
         this.lengthMilliseconds = lengthMilliseconds;
 
-        this.participants = Array.isArray(participants)
-            ? participants.map((p) => new TranscriptParticipant(p))
-            : null;
-
-        this.items = Array.isArray(items) ? items.map((item) => new TranscriptItem(item)) : null;
+        this.transcript = isNonEmptyObject(transcript) ? new Transcript(transcript) : null;
     }
 
     protected validateComplexInvariants(): InternalError[] {
@@ -150,7 +119,7 @@ export class Transcript<T extends CoscradText = string> extends Resource {
 
         const { mimeType } = myMediaItem;
 
-        if (!this.isMIMETypeAllowedForTranscript(mimeType))
+        if (!this.isMIMETypeAllowed(mimeType))
             return new InvalidExternalReferenceByAggregateError(
                 this.getCompositeIdentifier(),
                 [
@@ -161,21 +130,35 @@ export class Transcript<T extends CoscradText = string> extends Resource {
                 ],
                 [new InvalidMIMETypeForTranscriptMediaError(this.id, mimeType)]
             );
+
+        return Valid;
     }
 
     validateTimeRangeContext(timeRangeContext: TimeRangeContext): Valid | InternalError {
         return validateTimeRangeContextForModel(this, timeRangeContext);
     }
 
+    length() {
+        return this.lengthMilliseconds;
+    }
+
     getTimeBounds(): [number, number] {
         return [0, this.lengthMilliseconds];
     }
 
-    protected getResourceSpecificAvailableCommands(): string[] {
-        return [];
+    hasTranscript(): boolean {
+        return !isNullOrUndefined(this.transcript);
     }
 
-    private isMIMETypeAllowedForTranscript(mimeType: MIMEType): boolean {
+    protected getResourceSpecificAvailableCommands(): string[] {
+        const availableCommandIds: string[] = [];
+
+        if (!this.hasTranscript) availableCommandIds.push(CREATE_TRANSCRIPT);
+
+        return availableCommandIds;
+    }
+
+    private isMIMETypeAllowed(mimeType: MIMEType): boolean {
         return [MIMEType.mp3, MIMEType.mp4].includes(mimeType);
     }
 }

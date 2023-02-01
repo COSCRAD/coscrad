@@ -7,11 +7,13 @@ import {
     ReferenceTo,
     UUID,
 } from '@coscrad/data-types';
-import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
-import { AggregateId } from '../../../types/AggregateId';
-import { CoscradTimeStamp } from '../entities/transcribed-audio.entity';
+import { MultiLingualText } from '../../../../common/entities/multi-lingual-text';
+import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
+import { AggregateId } from '../../../../types/AggregateId';
+import { CoscradTimeStamp } from '../../entities/audio-item.entity';
+import { CREATE_AUDIO_ITEM } from '../constants';
 
-export class TranscriptCompositeId {
+export class AudioItemCompositeIdentifier {
     @NonEmptyString({
         label: 'type',
         description: 'transcript',
@@ -26,23 +28,23 @@ export class TranscriptCompositeId {
 }
 
 @Command({
-    type: 'CREATE_TRANSCRIPT',
-    label: 'Create Transcript',
-    description: 'Create a new audio or video transcript',
+    type: CREATE_AUDIO_ITEM,
+    label: 'Create Audio Item',
+    description: 'Create a new audio item',
 })
-export class CreateTranscript implements ICommandBase {
+export class CreateAudioItem implements ICommandBase {
     // This must be generated via our ID system and appended to the payload
-    @NestedDataType(TranscriptCompositeId, {
+    @NestedDataType(AudioItemCompositeIdentifier, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',
     })
     readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 
-    @NonEmptyString({
+    @NestedDataType(MultiLingualText, {
         label: 'name',
         description: 'the name of the transcript',
     })
-    readonly name: string;
+    readonly name: MultiLingualText;
 
     @UUID({
         label: 'media item ID',

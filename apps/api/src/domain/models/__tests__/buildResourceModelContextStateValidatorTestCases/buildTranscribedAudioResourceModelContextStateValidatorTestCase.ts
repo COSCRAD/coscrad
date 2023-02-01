@@ -14,17 +14,17 @@ const validCases = buildAllValidTestCasesForResource(ResourceType.transcribedAud
 const validAudioStartPoint = 100;
 
 const validTranscribedAudio = validCases[0].resource.clone({
-    startMilliseconds: validAudioStartPoint,
+    lengthMilliseconds: validAudioStartPoint,
 });
 
 const timeRangeWithInvalidOutPoint: TimeRangeWithoutData = {
     inPoint: validAudioStartPoint,
-    outPoint: validTranscribedAudio.getEndMilliseconds() + 200,
+    outPoint: validTranscribedAudio.length() + 200,
 };
 
 const timeRangeWithInvalidInPoint: TimeRangeWithoutData = {
     inPoint: validAudioStartPoint - 10,
-    outPoint: validTranscribedAudio.getEndMilliseconds(),
+    outPoint: validTranscribedAudio.length(),
 };
 
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [

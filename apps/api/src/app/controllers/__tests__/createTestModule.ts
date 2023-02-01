@@ -8,6 +8,10 @@ import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
+import {
+    CreateAudioItem,
+    CreateAudioItemCommandHandler,
+} from '../../../domain/models/audio-item/commands';
 import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
 import { CreateBookBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command-handler';
 import { CreateCourtCaseBibliographicReference } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command';
@@ -33,10 +37,6 @@ import {
     TagResourceOrNoteCommandHandler,
 } from '../../../domain/models/tag/commands';
 import {
-    CreateTranscript,
-    CreateTranscriptCommandHandler,
-} from '../../../domain/models/transcribed-audio/commands';
-import {
     CreateGroup,
     CreateGroupCommandHandler,
 } from '../../../domain/models/user-management/group/commands';
@@ -47,6 +47,7 @@ import { GrantUserRoleCommandHandler } from '../../../domain/models/user-managem
 import { RegisterUser } from '../../../domain/models/user-management/user/commands/register-user/register-user.command';
 import { RegisterUserCommandHandler } from '../../../domain/models/user-management/user/commands/register-user/register-user.command-handler';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { AudioItemQueryService } from '../../../domain/services/query-services/audio-item-query.service';
 import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
 import { CoscradUserGroupQueryService } from '../../../domain/services/query-services/coscrad-user-group-query.service';
@@ -58,7 +59,6 @@ import { SongQueryService } from '../../../domain/services/query-services/song-q
 import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';
 import { TagQueryService } from '../../../domain/services/query-services/tag-query.service';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
-import { TranscribedAudioQueryService } from '../../../domain/services/query-services/transribed-audio-query.service';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { IdManagementService } from '../../../lib/id-generation/id-management.service';
@@ -81,6 +81,7 @@ import { CoscradUserGroupController } from '../coscrad-user-group.controller';
 import { CoscradUserController } from '../coscrad-user.controller';
 import { EdgeConnectionController } from '../edgeConnection.controller';
 import { IdGenerationController } from '../id-generation/id-generation.controller';
+import { AudioItemController } from '../resources/audio-item.controller';
 import { BibliographicReferenceController } from '../resources/bibliographic-reference.controller';
 import { BookController } from '../resources/book.controller';
 import { MediaItemController } from '../resources/media-item.controller';
@@ -89,7 +90,6 @@ import { ResourceDescriptionController } from '../resources/resource-description
 import { SongController } from '../resources/song.controller';
 import { SpatialFeatureController } from '../resources/spatial-feature.controller';
 import { TermController } from '../resources/term.controller';
-import { TranscribedAudioController } from '../resources/transcribed-audio.controller';
 import { VocabularyListController } from '../resources/vocabulary-list.controller';
 import { TagController } from '../tag.controller';
 
@@ -204,13 +204,13 @@ export default async (
                 inject: [REPOSITORY_PROVIDER, CommandInfoService, ConfigService],
             },
             {
-                provide: TranscribedAudioQueryService,
+                provide: AudioItemQueryService,
                 useFactory: (
                     repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) =>
-                    new TranscribedAudioQueryService(
+                    new AudioItemQueryService(
                         repositoryProvider,
                         commandInfoService,
                         configService
@@ -326,8 +326,8 @@ export default async (
             TagResourceOrNote,
             TagResourceOrNoteCommandHandler,
             // Next time try importing the domain module!
-            CreateTranscript,
-            CreateTranscriptCommandHandler,
+            CreateAudioItem,
+            CreateAudioItemCommandHandler,
         ],
 
         controllers: [
@@ -338,7 +338,7 @@ export default async (
             SongController,
             TermController,
             VocabularyListController,
-            TranscribedAudioController,
+            AudioItemController,
             BookController,
             PhotographController,
             SpatialFeatureController,

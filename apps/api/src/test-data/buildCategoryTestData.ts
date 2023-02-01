@@ -1,9 +1,14 @@
 import { Category } from '../domain/models/categories/entities/category.entity';
 import { AggregateType } from '../domain/types/AggregateType';
 import { CategorizableType } from '../domain/types/CategorizableType';
+import { InternalError } from '../lib/errors/InternalError';
+import {
+    convertAggregatesIdToUuid,
+    convertSequenceNumberToUuid,
+} from './utilities/convertSequentialIdToUuid';
 
-export default (): Category[] =>
-    [
+export default (): Category[] => {
+    const categories = [
         {
             id: '0',
             label: 'tree of knowledge',
@@ -198,4 +203,29 @@ export default (): Category[] =>
             ...partialDto,
             type: AggregateType.category,
         }))
-        .map((dto) => new Category(dto));
+        .map((dto) => new Category(dto))
+        .map(convertAggregatesIdToUuid)
+        .map((category) =>
+            category.clone({
+                childrenIDs: category.childrenIDs
+                    .map((id) => {
+                        const intId = parseInt(id);
+
+                        if (!Number.isInteger(intId)) {
+                            throw new InternalError(
+                                `Failed to convert sequential id: ${id} to UUID for category: ${category.id} child`
+                            );
+                        }
+
+                        return intId;
+                    })
+                    .map(convertSequenceNumberToUuid),
+                members: category.members.map((member) => ({
+                    ...member,
+                    id: convertSequenceNumberToUuid(parseInt(member.id)),
+                })),
+            })
+        );
+
+    return categories;
+};

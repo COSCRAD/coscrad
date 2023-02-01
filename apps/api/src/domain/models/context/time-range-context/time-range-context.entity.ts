@@ -1,7 +1,7 @@
 import { DiscriminatedBy } from '@coscrad/data-types';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
-import { TranscriptItem } from '../../transcribed-audio/entities/MediaTimeRange';
+import { TranscriptItem } from '../../audio-item/entities/MediaTimeRange';
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 

@@ -42,7 +42,7 @@ export class TranscriptItem<T extends string = string> extends BaseDomainModel {
 
         if (!dto) return;
 
-        const { inPoint, outPoint, text: data } = dto;
+        const { inPoint, outPoint, text: data, label } = dto;
 
         this.inPoint = inPoint;
 
@@ -50,6 +50,8 @@ export class TranscriptItem<T extends string = string> extends BaseDomainModel {
 
         // TODO - clone if using a reference type for data
         if (data) this.text = data;
+
+        this.label = label;
     }
 
     hasData(): boolean {

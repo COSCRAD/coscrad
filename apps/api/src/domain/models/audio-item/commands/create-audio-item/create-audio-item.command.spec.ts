@@ -1,44 +1,64 @@
 import { MIMEType } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
-import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
-import { InternalError } from '../../../../lib/errors/InternalError';
-import { NotAvailable } from '../../../../lib/types/not-available';
-import { NotFound } from '../../../../lib/types/not-found';
-import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
-import { DTO } from '../../../../types/DTO';
-import { IIdManager } from '../../../interfaces/id-manager.interface';
-import { AggregateId } from '../../../types/AggregateId';
-import { AggregateType } from '../../../types/AggregateType';
-import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
-import { ResourceType } from '../../../types/ResourceType';
-import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import InvalidExternalReferenceByAggregateError from '../../categories/errors/InvalidExternalReferenceByAggregateError';
-import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
-import { assertCommandFailsDueToTypeError } from '../../__tests__/command-helpers/assert-command-payload-type-error';
-import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
-import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
-import { assertEventRecordPersisted } from '../../__tests__/command-helpers/assert-event-record-persisted';
-import { DummyCommandFSAFactory } from '../../__tests__/command-helpers/dummy-command-fsa-factory';
-import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/generate-command-fuzz-test-cases';
-import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
-import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
-import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
-import { Transcript } from '../entities/transcribed-audio.entity';
-import { CreateTranscript } from './create-transcript.command';
+import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { InternalError } from '../../../../../lib/errors/InternalError';
+import { NotAvailable } from '../../../../../lib/types/not-available';
+import { NotFound } from '../../../../../lib/types/not-found';
+import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import { DTO } from '../../../../../types/DTO';
+import {
+    MultiLingualText,
+    MultiLingualTextItem,
+    MultiLingualTextItemRole,
+} from '../../../../common/entities/multi-lingual-text';
+import { IIdManager } from '../../../../interfaces/id-manager.interface';
+import { AggregateId } from '../../../../types/AggregateId';
+import { AggregateType } from '../../../../types/AggregateType';
+import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
+import { ResourceType } from '../../../../types/ResourceType';
+import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
+import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
+import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
+import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
+import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
+import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
+import { AudioItem } from '../../entities/audio-item.entity';
+import { CreateAudioItem } from './create-audio-item.command';
 
-const commandType = 'CREATE_TRANSCRIPT';
+const commandType = 'CREATE_AUDIO_ITEM';
 
 const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaItem).clone({
     id: buildDummyUuid(55),
 });
 
-const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateTranscript>> => ({
+const newAudioItemName = new MultiLingualText({
+    items: [
+        {
+            languageId: 'clc',
+            text: 'A Walk in the Park (lang)',
+            role: MultiLingualTextItemRole.original,
+        },
+        {
+            languageId: 'eng',
+            text: 'A Walk in the Park (engl)',
+            role: MultiLingualTextItemRole.freeTranslation,
+        },
+    ].map((itemDto) => new MultiLingualTextItem(itemDto)),
+}).toDTO();
+
+const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateAudioItem>> => ({
     type: commandType,
     payload: {
         aggregateCompositeIdentifier: { id, type: AggregateType.transcribedAudio },
-        name: 'Important Interview',
+        name: newAudioItemName,
         mediaItemId: existingMediaItem.id,
         lengthMilliseconds: 34560,
     },
@@ -46,7 +66,7 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateTra
 
 const buildInvalidCommandFSA = (
     id: AggregateId,
-    payloadOverrides: Partial<Record<keyof CreateTranscript, unknown>> = {}
+    payloadOverrides: Partial<Record<keyof CreateAudioItem, unknown>> = {}
 ) => new DummyCommandFSAFactory(buildValidCommandFSA).build(id, payloadOverrides);
 
 const validInitialState = new DeluxeInMemoryStore({
@@ -54,7 +74,7 @@ const validInitialState = new DeluxeInMemoryStore({
 }).fetchFullSnapshotInLegacyFormat();
 
 const dummyAdminUserId = dummyUuid;
-describe('CreateTransncript', () => {
+describe('CREATE_AUDIO_ITEM', () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
     let commandHandlerService: CommandHandlerService;
@@ -98,22 +118,22 @@ describe('CreateTransncript', () => {
                 initialState: validInitialState,
                 checkStateOnSuccess: async ({
                     aggregateCompositeIdentifier: { id },
-                }: CreateTranscript) => {
+                }: CreateAudioItem) => {
                     const idStatus = await idManager.status(id);
 
                     expect(idStatus).toBe(NotAvailable);
 
-                    const transcriptSearchResult = await testRepositoryProvider
-                        .forResource<Transcript>(ResourceType.transcribedAudio)
+                    const audioItemSearchResult = await testRepositoryProvider
+                        .forResource<AudioItem>(ResourceType.transcribedAudio)
                         .fetchById(id);
 
-                    expect(transcriptSearchResult).not.toBe(NotFound);
+                    expect(audioItemSearchResult).not.toBe(NotFound);
 
-                    expect(transcriptSearchResult).not.toBeInstanceOf(InternalError);
+                    expect(audioItemSearchResult).not.toBeInstanceOf(InternalError);
 
-                    const transcript = transcriptSearchResult as unknown as Transcript;
+                    const audioItem = audioItemSearchResult as unknown as AudioItem;
 
-                    assertEventRecordPersisted(transcript, 'TRANSCRIPT_CREATED', dummyAdminUserId);
+                    assertEventRecordPersisted(audioItem, 'AUDIO_ITEM_CREATED', dummyAdminUserId);
                 },
             });
         });
@@ -121,7 +141,7 @@ describe('CreateTransncript', () => {
 
     describe('when the command is invalid', () => {
         describe('when the command payload type is invalid', () => {
-            generateCommandFuzzTestCases(CreateTranscript).forEach(
+            generateCommandFuzzTestCases(CreateAudioItem).forEach(
                 ({ description, propertyName, invalidValue }) => {
                     describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
                         it('should fail with the appropriate error', async () => {
@@ -153,7 +173,7 @@ describe('CreateTransncript', () => {
             });
         });
 
-        describe('when the MIME type of the media item is not a video or audio format', () => {
+        describe('when the MIME type of the media item is not an audio format', () => {
             const disallowedMIMETypes = Object.values(MIMEType).filter(
                 (mimeType) => ![MIMEType.mp3, MIMEType.mp4].includes(mimeType)
             );
@@ -194,7 +214,7 @@ describe('CreateTransncript', () => {
             });
         });
 
-        describe(`when there is already a transcript with the given ID`, () => {
+        describe(`when there is already an audio item with the given ID`, () => {
             it('should fail with the expected error', async () => {
                 const newId = await idManager.generate();
 

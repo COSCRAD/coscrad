@@ -1,4 +1,4 @@
-import { TranscriptItem } from '../../../../../domain/models/transcribed-audio/entities/MediaTimeRange';
+import { TranscriptItem } from '../../../../../domain/models/audio-item/entities/MediaTimeRange';
 
 export default (timeranges: TranscriptItem[]): string =>
     timeranges.reduce(

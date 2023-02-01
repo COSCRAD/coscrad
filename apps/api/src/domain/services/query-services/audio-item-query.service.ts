@@ -1,23 +1,20 @@
-import { AggregateType, ITranscribedAudioViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, IAudioItemViewModel } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
-import { TranscribedAudioViewModel } from '../../../view-models/buildViewModelForResource/viewModels/transcribed-audio/transcribed-audio.view-model';
+import { AudioItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/audio-item/audio-item.view-model';
+import { AudioItem } from '../../models/audio-item/entities/audio-item.entity';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { validAggregateOrThrow } from '../../models/shared/functional';
-import { Transcript } from '../../models/transcribed-audio/entities/transcribed-audio.entity';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';
 
-export class TranscribedAudioQueryService extends ResourceQueryService<
-    Transcript,
-    ITranscribedAudioViewModel
-> {
+export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudioItemViewModel> {
     protected readonly type = ResourceType.transcribedAudio;
 
     constructor(
@@ -41,13 +38,13 @@ export class TranscribedAudioQueryService extends ResourceQueryService<
     }
 
     buildViewModel(
-        transcribedAudioInstance: Transcript,
+        transcribedAudioInstance: AudioItem,
         { resources: { mediaItem: mediaItems } }: InMemorySnapshot
-    ): ITranscribedAudioViewModel {
-        return new TranscribedAudioViewModel(transcribedAudioInstance, mediaItems);
+    ): IAudioItemViewModel {
+        return new AudioItemViewModel(transcribedAudioInstance, mediaItems);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
-        return [Transcript];
+        return [AudioItem];
     }
 }

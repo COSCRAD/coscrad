@@ -109,6 +109,10 @@ describe('When fetching multiple resources', () => {
                 it('should return the expected number of results', async () => {
                     const res = await request(app.getHttpServer()).get(endpointUnderTest);
 
+                    if (!res.body.entities?.length) {
+                        console.log('woo');
+                    }
+
                     expect(res.body.entities.length).toBe(publishedResourcesToAdd.length);
 
                     // Sanity check

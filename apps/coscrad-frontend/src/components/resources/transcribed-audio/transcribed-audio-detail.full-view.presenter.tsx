@@ -12,7 +12,7 @@ export const TranscribedAudioDetailFullViewPresenter = ({
     id,
     lengthMilliseconds,
     audioURL,
-    plainText,
+    text: plainText,
 }: ICategorizableDetailQueryResult<ITranscribedAudioViewModel>): JSX.Element => (
     <div className="detail-full-view-container" title="View Connected Photograph" data-testid={id}>
         <div className="detail-full-view-media-container">

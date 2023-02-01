@@ -1,7 +1,7 @@
 import { IBaseViewModel } from '../base.view-model.interface';
 import { MIMEType } from './media-items';
 
-export interface ITranscribedAudioViewModel extends IBaseViewModel {
+export interface IAudioItemViewModel extends IBaseViewModel {
     name: string;
 
     audioURL: string;
