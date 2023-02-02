@@ -14,6 +14,10 @@ import {
     CreateTranscript,
     CreateTranscriptCommandHandler,
 } from '../../../domain/models/audio-item/commands';
+import {
+    AddParticipantToTranscript,
+    AddParticipantToTranscriptCommandHandler,
+} from '../../../domain/models/audio-item/commands/transcripts/add-participant-to-transcript';
 import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
 import { CreateBookBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command-handler';
 import { CreateCourtCaseBibliographicReference } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command';
@@ -332,6 +336,8 @@ export default async (
             CreateAudioItemCommandHandler,
             CreateTranscript,
             CreateTranscriptCommandHandler,
+            AddParticipantToTranscript,
+            AddParticipantToTranscriptCommandHandler,
         ],
 
         controllers: [
