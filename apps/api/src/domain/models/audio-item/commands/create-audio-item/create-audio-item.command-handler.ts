@@ -2,7 +2,7 @@ import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
-import { REPOSITORY_PROVIDER } from '../../../../../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { ID_MANAGER_TOKEN, IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -25,7 +25,8 @@ export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<Audi
     protected aggregateType: AggregateType = AggregateType.audioItem;
 
     constructor(
-        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER_TOKEN)
+        protected readonly repositoryProvider: IRepositoryProvider,
         @Inject(ID_MANAGER_TOKEN) protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);

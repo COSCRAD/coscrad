@@ -1,7 +1,7 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
-import { REPOSITORY_PROVIDER } from './constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
 import { ArangoDatabaseProvider } from './database/database.provider';
 import { ArangoIdRepository } from './repositories/arango-id-repository';
@@ -24,7 +24,7 @@ export class PersistenceModule {
         };
 
         const repositoryProvider = {
-            provide: REPOSITORY_PROVIDER,
+            provide: REPOSITORY_PROVIDER_TOKEN,
             useFactory: async (arangoConnectionProvider: ArangoConnectionProvider) => {
                 const repositoryProvider = new ArangoRepositoryProvider(
                     new ArangoDatabaseProvider(arangoConnectionProvider)

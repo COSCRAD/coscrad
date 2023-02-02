@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 import {
     CreateAudioItem,
     CreateAudioItemCommandHandler,
+    CreateTranscript,
+    CreateTranscriptCommandHandler,
 } from '../../domain/models/audio-item/commands';
 import { AudioItemQueryService } from '../../domain/services/query-services/audio-item-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -18,6 +20,8 @@ import { AudioItemController } from '../controllers/resources/audio-item.control
         AudioItemQueryService,
         CreateAudioItem,
         CreateAudioItemCommandHandler,
+        CreateTranscript,
+        CreateTranscriptCommandHandler,
     ],
 })
 export class AudioItemModule {}

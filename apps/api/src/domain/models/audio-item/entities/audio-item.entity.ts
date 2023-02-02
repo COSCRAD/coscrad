@@ -8,7 +8,9 @@ import {
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
+import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultiLingualText } from '../../../common/entities/multi-lingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -20,8 +22,11 @@ import InvalidExternalReferenceByAggregateError from '../../categories/errors/In
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
 import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
-import { CREATE_AUDIO_ITEM, CREATE_TRANSCRIPT } from '../commands';
+import { CREATE_AUDIO_ITEM } from '../commands';
 import { InvalidMIMETypeForTranscriptMediaError } from '../commands/errors';
+import { CREATE_TRANSCRIPT } from '../commands/transcripts/constants';
+import { CannotOverwriteTranscriptError } from '../errors';
+import { TranscriptParticipant } from './transcript-participant';
 import { Transcript } from './transcript.entity';
 
 export type CoscradTimeStamp = number;
@@ -87,6 +92,24 @@ export class AudioItem<T extends CoscradText = string> extends Resource {
         this.lengthMilliseconds = lengthMilliseconds;
 
         this.transcript = !isNullOrUndefined(transcript) ? new Transcript(transcript) : null;
+    }
+
+    createTranscript(): ResultOrError<AudioItem> {
+        if (this.hasTranscript())
+            return new CannotOverwriteTranscriptError(this.getCompositeIdentifier());
+
+        return this.safeClone({
+            transcript: new Transcript({
+                items: [],
+                participants: [],
+            }),
+        } as DeepPartial<DTO<this>>);
+    }
+
+    addParticipantToTranscript(participant: TranscriptParticipant) {
+        return this.safeClone({
+            transcript: this.transcript.addParticipant(participant),
+        } as DeepPartial<DTO<this>>);
     }
 
     protected validateComplexInvariants(): InternalError[] {
