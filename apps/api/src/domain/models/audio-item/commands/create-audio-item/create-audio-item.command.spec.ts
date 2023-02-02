@@ -57,7 +57,7 @@ const newAudioItemName = new MultiLingualText({
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateAudioItem>> => ({
     type: commandType,
     payload: {
-        aggregateCompositeIdentifier: { id, type: AggregateType.transcribedAudio },
+        aggregateCompositeIdentifier: { id, type: AggregateType.audioItem },
         name: newAudioItemName,
         mediaItemId: existingMediaItem.id,
         lengthMilliseconds: 34560,
@@ -124,7 +124,7 @@ describe('CREATE_AUDIO_ITEM', () => {
                     expect(idStatus).toBe(NotAvailable);
 
                     const audioItemSearchResult = await testRepositoryProvider
-                        .forResource<AudioItem>(ResourceType.transcribedAudio)
+                        .forResource<AudioItem>(ResourceType.audioItem)
                         .fetchById(id);
 
                     expect(audioItemSearchResult).not.toBe(NotFound);

@@ -4,7 +4,7 @@ import { CommandInfoService } from '../../../app/controllers/command/services/co
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound } from '../../../lib/types/not-found';
-import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { CoscradUserViewModel } from '../../../view-models/buildViewModelForResource/viewModels/coscrad-user.view-model';
 import { CoscradUser } from '../../models/user-management/user/entities/user/coscrad-user.entity';
@@ -13,7 +13,8 @@ import { ISpecification } from '../../repositories/interfaces/specification.inte
 
 export class CoscradUserQueryService {
     constructor(
-        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER_TOKEN)
+        protected readonly repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
     ) {}
 

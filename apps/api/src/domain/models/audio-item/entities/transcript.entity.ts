@@ -1,4 +1,5 @@
 import { NestedDataType } from '@coscrad/data-types';
+import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 import { TranscriptItem } from './MediaTimeRange';
@@ -35,5 +36,24 @@ export class Transcript<T extends string = string> extends BaseDomainModel {
             : null;
 
         this.items = Array.isArray(items) ? items.map((item) => new TranscriptItem(item)) : null;
+    }
+
+    /**
+     * TODO Every entity (even nested entities that are not the aggregate root)
+     * should be able to validate its own invariants. This would allow us
+     * to call `safeClone` on any `DomainModel`.
+     *
+     * For now, "simple invariants" (i.e. generalized type rules) are
+     * checked in the domain model factories. But complex invariant validation
+     * must be done on the aggregate root (`AudioItem` in this case).
+     */
+    addParticipant(participant: TranscriptParticipant) {
+        // TODO validate that name and initials are unique
+        //    const { name, initials} = participant;
+
+        return this.clone({
+            // avoid shared references by cloning
+            participants: this.participants.concat(participant.clone()),
+        } as DeepPartial<DTO<this>>);
     }
 }

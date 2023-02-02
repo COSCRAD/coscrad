@@ -2,7 +2,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
 import { Environment } from '../../app/config/constants/Environment';
-import { REPOSITORY_PROVIDER } from '../constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../constants/persistenceConstants';
 import { PersistenceModule } from '../persistence.module';
 import { ArangoRepositoryProvider } from './arango-repository.provider';
 
@@ -27,7 +27,7 @@ describe('ArangoRepositoryProvider', () => {
             ],
         }).compile();
 
-        repositoryProvider = moduleRef.get<ArangoRepositoryProvider>(REPOSITORY_PROVIDER);
+        repositoryProvider = moduleRef.get<ArangoRepositoryProvider>(REPOSITORY_PROVIDER_TOKEN);
     });
 
     describe('the constructor', () => {

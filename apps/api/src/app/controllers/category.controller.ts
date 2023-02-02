@@ -4,7 +4,7 @@ import { Category } from '../../domain/models/categories/entities/category.entit
 import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
 import { isInternalError } from '../../lib/errors/InternalError';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
-import { REPOSITORY_PROVIDER } from '../../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../persistence/constants/persistenceConstants';
 import { CategoryTreeViewModel } from '../../view-models/buildViewModelForResource/viewModels/category-tree.view-model';
 import httpStatusCodes from '../constants/httpStatusCodes';
 import { CATEGORY_TREE_INDEX_ROUTE } from './constants';
@@ -17,7 +17,7 @@ import { CATEGORY_TREE_INDEX_ROUTE } from './constants';
 @Controller(CATEGORY_TREE_INDEX_ROUTE)
 export class CategoryController {
     constructor(
-        @Inject(REPOSITORY_PROVIDER) private readonly repositoryProvider: IRepositoryProvider
+        @Inject(REPOSITORY_PROVIDER_TOKEN) private readonly repositoryProvider: IRepositoryProvider
     ) {}
 
     // TODO Accept category ID and return corresponding subtree
