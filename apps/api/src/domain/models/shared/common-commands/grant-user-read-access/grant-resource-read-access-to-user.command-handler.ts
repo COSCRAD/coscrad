@@ -3,7 +3,7 @@ import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { isOK, OK } from '../../../../../lib/types/ok';
-import { REPOSITORY_PROVIDER } from '../../../../../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { isValid } from '../../../../domainModelValidators/Valid';
 import { EVENT, IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -25,7 +25,8 @@ const buildTopLevelError = (innerErrors: InternalError[]): InternalError =>
 @CommandHandler(GrantResourceReadAccessToUser)
 export class GrantResourceReadAccessToUserCommandHandler implements ICommandHandler {
     constructor(
-        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER_TOKEN)
+        protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {}
 

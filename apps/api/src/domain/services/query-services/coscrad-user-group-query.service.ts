@@ -8,7 +8,7 @@ import { CommandInfoService } from '../../../app/controllers/command/services/co
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
-import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { CoscradUserGroupViewModel } from '../../../view-models/buildViewModelForResource/viewModels/coscrad-user-group.view-model';
 import { validAggregateOrThrow } from '../../models/shared/functional';
 import { CoscradUserGroup } from '../../models/user-management/group/entities/coscrad-user-group.entity';
@@ -26,7 +26,8 @@ export class CoscradUserGroupQueryService {
     private readonly userRepository: IRepositoryForAggregate<CoscradUser>;
 
     constructor(
-        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER_TOKEN)
+        protected readonly repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
     ) {
         this.userGroupRepository = repositoryProvider.getUserGroupRepository();

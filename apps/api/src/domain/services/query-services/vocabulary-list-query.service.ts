@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { VocabularyListViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { Tag } from '../../models/tag/tag.entity';
@@ -23,7 +23,7 @@ export class VocabularyListQueryService extends ResourceQueryService<
     protected readonly type = ResourceType.vocabularyList;
 
     constructor(
-        @Inject(REPOSITORY_PROVIDER) repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) commandInfoService: CommandInfoService,
         private readonly configService: ConfigService
     ) {

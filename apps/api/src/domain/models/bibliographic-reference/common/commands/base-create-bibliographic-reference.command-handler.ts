@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
-import { REPOSITORY_PROVIDER } from '../../../../../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
@@ -21,7 +21,8 @@ export abstract class BaseCreateBibliographicReference extends BaseCreateCommand
     >;
 
     constructor(
-        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER_TOKEN)
+        protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);

@@ -3,7 +3,7 @@ import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
-import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { AudioItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/audio-item/audio-item.view-model';
 import { AudioItem } from '../../models/audio-item/entities/audio-item.entity';
 import BaseDomainModel from '../../models/BaseDomainModel';
@@ -18,7 +18,7 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
     protected readonly type = ResourceType.audioItem;
 
     constructor(
-        @Inject(REPOSITORY_PROVIDER) repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) commandInfoService: CommandInfoService,
         private readonly configService: ConfigService
     ) {
