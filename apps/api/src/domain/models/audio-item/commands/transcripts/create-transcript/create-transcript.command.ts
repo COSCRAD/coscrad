@@ -1,8 +1,8 @@
 import { AggregateCompositeIdentifier, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType } from '@coscrad/data-types';
-import { AudioItemCompositeIdentifier } from '../../entities/audio-item-composite-identifier';
-import { CREATE_TRANSCRIPT } from './constants';
+import { AudioItemCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
+import { CREATE_TRANSCRIPT } from '../constants';
 
 @Command({
     type: CREATE_TRANSCRIPT,

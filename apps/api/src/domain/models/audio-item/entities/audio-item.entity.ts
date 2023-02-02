@@ -23,9 +23,10 @@ import { TimeRangeContext } from '../../context/time-range-context/time-range-co
 import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import { CREATE_AUDIO_ITEM } from '../commands';
-import { CREATE_TRANSCRIPT } from '../commands/create-transcript/constants';
 import { InvalidMIMETypeForTranscriptMediaError } from '../commands/errors';
+import { CREATE_TRANSCRIPT } from '../commands/transcripts/constants';
 import { CannotOverwriteTranscriptError } from '../errors';
+import { TranscriptParticipant } from './transcript-participant';
 import { Transcript } from './transcript.entity';
 
 export type CoscradTimeStamp = number;
@@ -102,6 +103,12 @@ export class AudioItem<T extends CoscradText = string> extends Resource {
                 items: [],
                 participants: [],
             }),
+        } as DeepPartial<DTO<this>>);
+    }
+
+    addParticipantToTranscript(participant: TranscriptParticipant) {
+        return this.safeClone({
+            transcript: this.transcript.addParticipant(participant),
         } as DeepPartial<DTO<this>>);
     }
 

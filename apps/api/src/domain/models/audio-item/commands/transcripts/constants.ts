@@ -4,3 +4,5 @@
  * resource `Video` in the future.
  */
 export const CREATE_TRANSCRIPT = 'CREATE_TRANSCRIPT';
+
+export const ADD_PARTICIPANT_TO_TRANSCRIPT = `ADD_PARTICIPANT_TO_TRANSCRIPT`;
