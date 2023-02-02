@@ -14,7 +14,7 @@ import {
 import { mixLinkIntoViewModelDescription } from '../../../app/controllers/utilities';
 import mixTagsIntoViewModel from '../../../app/controllers/utilities/mixTagsIntoViewModel';
 import { InternalError } from '../../../lib/errors/InternalError';
-import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { NoteViewModel } from '../../../view-models/edgeConnectionViewModels/note.view-model';
 import { buildAllAggregateDescriptions } from '../../../view-models/resourceDescriptions';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
@@ -31,7 +31,7 @@ import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
  */
 export class EdgeConnectionQueryService {
     constructor(
-        @Inject(REPOSITORY_PROVIDER) private readonly repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER_TOKEN) private readonly repositoryProvider: IRepositoryProvider,
         @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
         @Inject(ConfigService) private readonly configService: ConfigService
     ) {}

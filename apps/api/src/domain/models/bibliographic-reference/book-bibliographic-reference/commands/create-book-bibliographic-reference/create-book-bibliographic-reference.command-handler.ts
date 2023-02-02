@@ -1,7 +1,7 @@
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
-import { REPOSITORY_PROVIDER } from '../../../../../../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
@@ -28,7 +28,8 @@ export class CreateBookBibliographicReferenceCommandHandler extends BaseCreateCo
     aggregateType = AggregateType.bibliographicReference;
 
     constructor(
-        @Inject(REPOSITORY_PROVIDER) protected readonly repositoryProvider: IRepositoryProvider,
+        @Inject(REPOSITORY_PROVIDER_TOKEN)
+        protected readonly repositoryProvider: IRepositoryProvider,
         @Inject('ID_MANAGER') protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);

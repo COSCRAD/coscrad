@@ -10,4 +10,4 @@ export const TEST_DATABASE_PREFIX = 'testonly';
 export const TEST_DATABASE_NAME_LENGTH = 20;
 
 // dependency injection token
-export const REPOSITORY_PROVIDER = 'REPOSITORY_PROVIDER';
+export const REPOSITORY_PROVIDER_TOKEN = 'REPOSITORY_PROVIDER';

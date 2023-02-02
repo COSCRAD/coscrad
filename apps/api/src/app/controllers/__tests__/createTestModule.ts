@@ -11,7 +11,13 @@ import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interfac
 import {
     CreateAudioItem,
     CreateAudioItemCommandHandler,
+    CreateTranscript,
+    CreateTranscriptCommandHandler,
 } from '../../../domain/models/audio-item/commands';
+import {
+    AddParticipantToTranscript,
+    AddParticipantToTranscriptCommandHandler,
+} from '../../../domain/models/audio-item/commands/transcripts/add-participant-to-transcript';
 import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
 import { CreateBookBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command-handler';
 import { CreateCourtCaseBibliographicReference } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command';
@@ -63,7 +69,7 @@ import { VocabularyListQueryService } from '../../../domain/services/query-servi
 import { InternalError } from '../../../lib/errors/InternalError';
 import { IdManagementService } from '../../../lib/id-generation/id-management.service';
 import { MockIdManagementService } from '../../../lib/id-generation/mock-id-management.service';
-import { REPOSITORY_PROVIDER } from '../../../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
@@ -134,7 +140,7 @@ export default async (
                 inject: [ConfigService],
             },
             {
-                provide: REPOSITORY_PROVIDER,
+                provide: REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
                     return new ArangoRepositoryProvider(
                         new ArangoDatabaseProvider(arangoConnectionProvider)
@@ -154,7 +160,7 @@ export default async (
                         commandInfoService,
                         configService
                     ),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService, ConfigService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: TagQueryService,
@@ -162,7 +168,7 @@ export default async (
                     repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new TagQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
                 provide: MediaItemQueryService,
@@ -170,7 +176,7 @@ export default async (
                     repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new MediaItemQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
                 provide: SongQueryService,
@@ -178,7 +184,7 @@ export default async (
                     repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new SongQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
                 provide: TermQueryService,
@@ -187,7 +193,7 @@ export default async (
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) => new TermQueryService(repositoryProvider, commandInfoService, configService),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService, ConfigService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: VocabularyListQueryService,
@@ -201,7 +207,7 @@ export default async (
                         commandInfoService,
                         configService
                     ),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService, ConfigService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: AudioItemQueryService,
@@ -215,7 +221,7 @@ export default async (
                         commandInfoService,
                         configService
                     ),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService, ConfigService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: BookQueryService,
@@ -223,7 +229,7 @@ export default async (
                     repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new BookQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
                 provide: PhotographQueryService,
@@ -237,7 +243,7 @@ export default async (
                         commandInfoService,
                         configService
                     ),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService, ConfigService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: SpatialFeatureQueryService,
@@ -245,7 +251,7 @@ export default async (
                     repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new SpatialFeatureQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
                 provide: BibliographicReferenceQueryService,
@@ -253,7 +259,7 @@ export default async (
                     repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new BibliographicReferenceQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
                 provide: CoscradUserGroupQueryService,
@@ -261,7 +267,7 @@ export default async (
                     repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new CoscradUserGroupQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
                 provide: CoscradUserQueryService,
@@ -269,7 +275,7 @@ export default async (
                     repositoryProvider: ArangoRepositoryProvider,
                     commandInfoService: CommandInfoService
                 ) => new CoscradUserQueryService(repositoryProvider, commandInfoService),
-                inject: [REPOSITORY_PROVIDER, CommandInfoService],
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
                 provide: ID_MANAGER_TOKEN,
@@ -328,6 +334,10 @@ export default async (
             // Next time try importing the domain module!
             CreateAudioItem,
             CreateAudioItemCommandHandler,
+            CreateTranscript,
+            CreateTranscriptCommandHandler,
+            AddParticipantToTranscript,
+            AddParticipantToTranscriptCommandHandler,
         ],
 
         controllers: [

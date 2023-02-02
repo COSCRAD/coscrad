@@ -1,31 +1,12 @@
 import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import {
-    NestedDataType,
-    NonEmptyString,
-    NonNegativeFiniteNumber,
-    ReferenceTo,
-    UUID,
-} from '@coscrad/data-types';
+import { NestedDataType, NonNegativeFiniteNumber, ReferenceTo, UUID } from '@coscrad/data-types';
 import { MultiLingualText } from '../../../../common/entities/multi-lingual-text';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../../types/AggregateId';
+import { AudioItemCompositeIdentifier } from '../../entities/audio-item-composite-identifier';
 import { CoscradTimeStamp } from '../../entities/audio-item.entity';
 import { CREATE_AUDIO_ITEM } from '../constants';
-
-export class AudioItemCompositeIdentifier {
-    @NonEmptyString({
-        label: 'type',
-        description: 'transcript',
-    })
-    type = AggregateType.audioItem;
-
-    @UUID({
-        label: 'ID',
-        description: 'the transcript ID (generated)',
-    })
-    id: AggregateId;
-}
 
 @Command({
     type: CREATE_AUDIO_ITEM,

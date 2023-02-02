@@ -9,7 +9,7 @@ import { CoscradUser } from '../domain/models/user-management/user/entities/user
 import { IRepositoryProvider } from '../domain/repositories/interfaces/repository-provider.interface';
 import { isInternalError } from '../lib/errors/InternalError';
 import { isNotFound } from '../lib/types/not-found';
-import { REPOSITORY_PROVIDER } from '../persistence/constants/persistenceConstants';
+import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 
 /**
  * It is convention for the auth provider to populate the `sub` field on the
@@ -22,7 +22,7 @@ type HasSub = { sub: string };
 export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(
         private readonly configService: ConfigService,
-        @Inject(REPOSITORY_PROVIDER) private readonly repositoryProvider: IRepositoryProvider
+        @Inject(REPOSITORY_PROVIDER_TOKEN) private readonly repositoryProvider: IRepositoryProvider
     ) {
         const issuerURL = configService.get<string>('AUTH0_ISSUER_URL');
         if (!issuerURL) throw new Error('Internal Error: could not determine issuer url');
