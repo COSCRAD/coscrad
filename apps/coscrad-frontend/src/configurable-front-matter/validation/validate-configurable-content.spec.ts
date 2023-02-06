@@ -74,6 +74,11 @@ const invalidProps: InvalidProps[] = [
         invalidValue: 909,
         description: 'number',
     },
+    {
+        propertyName: 'siteCredits',
+        invalidValue: '',
+        description: 'empty string',
+    }
     // TODO test \ tighten up validation around index-to-detail flows
 ];
 
