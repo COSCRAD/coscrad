@@ -27,15 +27,16 @@ import { InvalidMIMETypeForTranscriptMediaError } from '../commands/errors';
 import { CREATE_TRANSCRIPT } from '../commands/transcripts/constants';
 import { CannotOverwriteTranscriptError } from '../errors';
 import { CannotAddParticipantBeforeCreatingTranscriptError } from '../errors/CannotAddParticipantBeforeCreatingTranscript.error';
+import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
 import { Transcript } from './transcript.entity';
 
 export type CoscradTimeStamp = number;
 
-export type CoscradText = string;
+export type CoscradText = string | MultiLingualText;
 
 @RegisterIndexScopedCommands([CREATE_AUDIO_ITEM])
-export class AudioItem<T extends CoscradText = string> extends Resource {
+export class AudioItem extends Resource {
     readonly type = ResourceType.audioItem;
 
     @NestedDataType(MultiLingualText, {
@@ -50,7 +51,7 @@ export class AudioItem<T extends CoscradText = string> extends Resource {
         description: 'time stamps with text and speaker labels',
     })
     // TODO rename this, as it includes the data as well
-    readonly transcript?: Transcript<T>;
+    readonly transcript?: Transcript;
 
     // TODO Make this UUID
     @UUID({
@@ -79,7 +80,7 @@ export class AudioItem<T extends CoscradText = string> extends Resource {
     })
     readonly lengthMilliseconds: CoscradTimeStamp;
 
-    constructor(dto: DTO<AudioItem<T>>) {
+    constructor(dto: DTO<AudioItem>) {
         super(dto);
 
         if (!dto) return;
@@ -115,6 +116,16 @@ export class AudioItem<T extends CoscradText = string> extends Resource {
             );
 
         const updatedTranscript = this.transcript.addParticipant(participant);
+
+        if (isInternalError(updatedTranscript)) return updatedTranscript;
+
+        return this.safeClone({
+            transcript: updatedTranscript,
+        } as DeepPartial<DTO<this>>);
+    }
+
+    addLineItemToTranscript(newItem: DTO<TranscriptItem>): ResultOrError<this> {
+        const updatedTranscript = this.transcript.addLineItem(new TranscriptItem(newItem));
 
         if (isInternalError(updatedTranscript)) return updatedTranscript;
 

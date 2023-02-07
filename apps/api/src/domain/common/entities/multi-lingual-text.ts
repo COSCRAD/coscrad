@@ -97,4 +97,8 @@ export class MultiLingualText extends BaseDomainModel {
             ? items.map((item) => new MultiLingualTextItem(item))
             : null;
     }
+
+    toString(): string {
+        return this.items.map(({ text, languageId }) => `{${languageId}}: ${text}`).join('\n');
+    }
 }
