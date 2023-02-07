@@ -4,7 +4,7 @@ import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getVa
 import buildNullAndUndefinedAggregateFactoryInvalidTestCases from './common/buildNullAndUndefinedAggregateFactoryInvalidTestCases';
 import { generateFuzzAggregateFactoryTestCases } from './utilities/generate-fuzz-aggregate-factory-test-cases';
 
-const aggregateType = AggregateType.transcribedAudio;
+const aggregateType = AggregateType.audioItem;
 
 const validInstance = getValidAggregateInstanceForTest(aggregateType);
 

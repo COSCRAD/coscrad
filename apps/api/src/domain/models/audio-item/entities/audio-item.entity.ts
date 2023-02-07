@@ -6,7 +6,7 @@ import {
     UUID,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
@@ -26,6 +26,7 @@ import { CREATE_AUDIO_ITEM } from '../commands';
 import { InvalidMIMETypeForTranscriptMediaError } from '../commands/errors';
 import { CREATE_TRANSCRIPT } from '../commands/transcripts/constants';
 import { CannotOverwriteTranscriptError } from '../errors';
+import { CannotAddParticipantBeforeCreatingTranscriptError } from '../errors/CannotAddParticipantBeforeCreatingTranscript.error';
 import { TranscriptParticipant } from './transcript-participant';
 import { Transcript } from './transcript.entity';
 
@@ -91,7 +92,8 @@ export class AudioItem<T extends CoscradText = string> extends Resource {
 
         this.lengthMilliseconds = lengthMilliseconds;
 
-        this.transcript = !isNullOrUndefined(transcript) ? new Transcript(transcript) : null;
+        // It's a bit odd that we allow the invalid value to be set so that our validator catches this
+        this.transcript = !isNullOrUndefined(transcript) ? new Transcript(transcript) : transcript;
     }
 
     createTranscript(): ResultOrError<AudioItem> {
@@ -106,9 +108,18 @@ export class AudioItem<T extends CoscradText = string> extends Resource {
         } as DeepPartial<DTO<this>>);
     }
 
-    addParticipantToTranscript(participant: TranscriptParticipant) {
+    addParticipantToTranscript(participant: TranscriptParticipant): ResultOrError<this> {
+        if (!this.hasTranscript())
+            return new CannotAddParticipantBeforeCreatingTranscriptError(
+                this.getCompositeIdentifier()
+            );
+
+        const updatedTranscript = this.transcript.addParticipant(participant);
+
+        if (isInternalError(updatedTranscript)) return updatedTranscript;
+
         return this.safeClone({
-            transcript: this.transcript.addParticipant(participant),
+            transcript: updatedTranscript,
         } as DeepPartial<DTO<this>>);
     }
 
