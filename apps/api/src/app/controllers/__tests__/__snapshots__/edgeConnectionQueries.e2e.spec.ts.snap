@@ -1015,133 +1015,6 @@ Array [
 ]
 `;
 
-exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: transcribedAudio should return the expected result 1`] = `
-Array [
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "2",
-          "type": "vocabularyList",
-        },
-        "context": Object {
-          "charRange": Array [
-            0,
-            1,
-          ],
-          "target": "name",
-          "type": "textField",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "110",
-          "type": "transcribedAudio",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 11000,
-            "outPoint": 12950,
-          },
-          "type": "timeRange",
-        },
-        "role": "from",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "2001",
-    "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
-    "tags": Array [
-      Object {
-        "id": "5",
-        "label": "legends",
-        "members": Array [
-          Object {
-            "id": "2",
-            "type": "vocabularyList",
-          },
-          Object {
-            "id": "101",
-            "type": "spatialFeature",
-          },
-          Object {
-            "id": "2001",
-            "type": "note",
-          },
-          Object {
-            "id": "1",
-            "type": "note",
-          },
-          Object {
-            "id": "1",
-            "type": "mediaItem",
-          },
-          Object {
-            "id": "1",
-            "type": "song",
-          },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "110",
-          "type": "transcribedAudio",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 11000,
-            "outPoint": 12950,
-          },
-          "type": "timeRange",
-        },
-        "role": "to",
-      },
-      Object {
-        "compositeIdentifier": Object {
-          "id": "24",
-          "type": "book",
-        },
-        "context": Object {
-          "pageIdentifiers": Array [
-            "ix",
-          ],
-          "type": "pageRange",
-        },
-        "role": "from",
-      },
-    ],
-    "connectionType": "dual",
-    "id": "2002",
-    "note": "That is why transcribedAudio/110 is related to book/24",
-    "tags": Array [
-      Object {
-        "id": "4",
-        "label": "songs",
-        "members": Array [
-          Object {
-            "id": "1",
-            "type": "photograph",
-          },
-          Object {
-            "id": "2002",
-            "type": "note",
-          },
-          Object {
-            "id": "3",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-  },
-]
-`;
-
 exports[`When querying for edge connections GET /connections/forResource when the composite id for the resource is valid for a resource of type: vocabularyList should return the expected result 1`] = `
 Array [
   Object {
@@ -1401,7 +1274,7 @@ Object {
         Object {
           "compositeIdentifier": Object {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-            "type": "transcribedAudio",
+            "type": "audioItem",
           },
           "context": Object {
             "timeRange": Object {
@@ -1427,7 +1300,7 @@ Object {
             },
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-              "type": "transcribedAudio",
+              "type": "audioItem",
             },
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
@@ -1805,7 +1678,7 @@ Object {
         Object {
           "compositeIdentifier": Object {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-            "type": "transcribedAudio",
+            "type": "audioItem",
           },
           "context": Object {
             "type": "general",
@@ -1992,7 +1865,7 @@ Object {
         Object {
           "compositeIdentifier": Object {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-            "type": "transcribedAudio",
+            "type": "audioItem",
           },
           "context": Object {
             "timeRange": Object {
@@ -2006,7 +1879,7 @@ Object {
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
-      "note": "That is why vocabularyList/2 is related to transcribedAudio/110",
+      "note": "That is why vocabularyList/2 is related to audioItem/110",
       "tags": Array [
         Object {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
@@ -2046,7 +1919,7 @@ Object {
         Object {
           "compositeIdentifier": Object {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-            "type": "transcribedAudio",
+            "type": "audioItem",
           },
           "context": Object {
             "timeRange": Object {
@@ -2073,7 +1946,7 @@ Object {
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
-      "note": "That is why transcribedAudio/110 is related to book/24",
+      "note": "That is why audioItem/110 is related to book/24",
       "tags": Array [
         Object {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
@@ -2156,7 +2029,7 @@ Object {
             },
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-              "type": "transcribedAudio",
+              "type": "audioItem",
             },
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
@@ -3061,74 +2934,6 @@ Array [
     "connectionType": "self",
     "id": "14",
     "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
-    "tags": Array [],
-  },
-]
-`;
-
-exports[`When querying for edge connections GET /connections/selfNotes when the resource composite id is valid for a resource of type: transcribedAudio should return the expected result 1`] = `
-Array [
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "110",
-          "type": "transcribedAudio",
-        },
-        "context": Object {
-          "timeRange": Object {
-            "inPoint": 11000,
-            "outPoint": 12950,
-          },
-          "type": "timeRange",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "5",
-    "note": "this clip talks about songs",
-    "tags": Array [
-      Object {
-        "id": "3",
-        "label": "placenames",
-        "members": Array [
-          Object {
-            "id": "0",
-            "type": "photograph",
-          },
-          Object {
-            "id": "110",
-            "type": "transcribedAudio",
-          },
-          Object {
-            "id": "2003",
-            "type": "note",
-          },
-          Object {
-            "id": "5",
-            "type": "note",
-          },
-        ],
-      },
-    ],
-  },
-  Object {
-    "connectedResources": Array [
-      Object {
-        "compositeIdentifier": Object {
-          "id": "110",
-          "type": "transcribedAudio",
-        },
-        "context": Object {
-          "type": "general",
-        },
-        "role": "self",
-      },
-    ],
-    "connectionType": "self",
-    "id": "17",
-    "note": "this clip talks about songs",
     "tags": Array [],
   },
 ]

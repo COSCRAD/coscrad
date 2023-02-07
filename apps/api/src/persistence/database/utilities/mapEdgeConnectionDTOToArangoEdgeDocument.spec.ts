@@ -68,7 +68,7 @@ const buildValidTranscribedAudioConnectionMember = (
     role: EdgeConnectionMemberRole
 ): DTO<EdgeConnectionMember<TimeRangeContext>> => ({
     compositeIdentifier: {
-        type: ResourceType.transcribedAudio,
+        type: ResourceType.audioItem,
         id: '15',
     },
     role,

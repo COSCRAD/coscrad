@@ -84,7 +84,7 @@
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000"
                     },
                     {
-                        "type": "transcribedAudio",
+                        "type": "audioItem",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110"
                     },
                     {
@@ -322,7 +322,7 @@
                 "label": "tools",
                 "members": [
                     {
-                        "type": "transcribedAudio",
+                        "type": "audioItem",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110"
                     }
                 ],
@@ -672,7 +672,7 @@
         ],
         "transcribed_audio": [
             {
-                "type": "transcribedAudio",
+                "type": "audioItem",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "eventHistory": [],
                 "published": true,
@@ -715,7 +715,7 @@
                 }
             },
             {
-                "type": "transcribedAudio",
+                "type": "audioItem",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
                 "eventHistory": [],
                 "published": true,
@@ -768,7 +768,7 @@
                 }
             },
             {
-                "type": "transcribedAudio",
+                "type": "audioItem",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
                 "eventHistory": [],
                 "published": true,
@@ -1860,7 +1860,7 @@
                         }
                     }
                 ],
-                "note": "That is why vocabularyList/2 is related to transcribedAudio/110"
+                "note": "That is why vocabularyList/2 is related to audioItem/110"
             },
             {
                 "_to": "transcribed_audio/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
@@ -1890,7 +1890,7 @@
                         }
                     }
                 ],
-                "note": "That is why transcribedAudio/110 is related to book/24"
+                "note": "That is why audioItem/110 is related to book/24"
             },
             {
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
