@@ -1,5 +1,52 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Aggregate factories when attempting to build an instance of type: audioItem from a DTO when the DTO is valid valid transribed audio DTO should succeed 1`] = `
+AudioItem {
+  "eventHistory": Array [],
+  "getCompositeIdentifier": [Function],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+  "lengthMilliseconds": 20000,
+  "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+  "name": MultiLingualText {
+    "items": Array [
+      MultiLingualTextItem {
+        "languageId": "eng",
+        "role": "original",
+        "text": "The Wooden Boy",
+      },
+    ],
+  },
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "transcript": Transcript {
+    "items": Array [
+      TranscriptItem {
+        "inPoint": 12000,
+        "label": "JHC",
+        "outPoint": 15550,
+        "text": "There once was a little wooden boy.",
+      },
+      TranscriptItem {
+        "inPoint": 18300,
+        "label": "JHC",
+        "outPoint": 19240,
+        "text": "His name was Pinocchio",
+      },
+    ],
+    "participants": Array [
+      TranscriptParticipant {
+        "initials": "JHC",
+        "name": "Jimmy H. Cricket",
+      },
+    ],
+  },
+  "type": "audioItem",
+}
+`;
+
 exports[`Aggregate factories when attempting to build an instance of type: bibliographicReference from a DTO when the DTO is valid valid dto for a BibliographicReference of sub-type: Book should succeed 1`] = `
 BookBibliographicReference {
   "data": BookBibliographicReferenceData {
@@ -323,53 +370,6 @@ Term {
   "term": "Chil-term-1",
   "termEnglish": "Engl-term-1",
   "type": "term",
-}
-`;
-
-exports[`Aggregate factories when attempting to build an instance of type: transcribedAudio from a DTO when the DTO is valid valid transribed audio DTO should succeed 1`] = `
-AudioItem {
-  "eventHistory": Array [],
-  "getCompositeIdentifier": [Function],
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-  "lengthMilliseconds": 20000,
-  "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-  "name": MultiLingualText {
-    "items": Array [
-      MultiLingualTextItem {
-        "languageId": "eng",
-        "role": "original",
-        "text": "The Wooden Boy",
-      },
-    ],
-  },
-  "published": true,
-  "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
-  },
-  "transcript": Transcript {
-    "items": Array [
-      TranscriptItem {
-        "inPoint": 12000,
-        "label": "JHC",
-        "outPoint": 15550,
-        "text": "There once was a little wooden boy.",
-      },
-      TranscriptItem {
-        "inPoint": 18300,
-        "label": "JHC",
-        "outPoint": 19240,
-        "text": "His name was Pinocchio",
-      },
-    ],
-    "participants": Array [
-      TranscriptParticipant {
-        "initials": "JHC",
-        "name": "Jimmy H. Cricket",
-      },
-    ],
-  },
-  "type": "transcribedAudio",
 }
 `;
 

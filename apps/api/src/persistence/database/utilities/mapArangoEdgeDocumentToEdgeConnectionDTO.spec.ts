@@ -55,7 +55,7 @@ const selfEdgeConnection: DTO<EdgeConnection> = {
             role: EdgeConnectionMemberRole.self,
             compositeIdentifier: {
                 id: '55',
-                type: ResourceType.transcribedAudio,
+                type: ResourceType.audioItem,
             },
             context: timeRangeContext,
         },
@@ -93,7 +93,7 @@ const dualEdgeConnection: DTO<EdgeConnection> = {
             role: EdgeConnectionMemberRole.from,
             compositeIdentifier: {
                 id: '55',
-                type: ResourceType.transcribedAudio,
+                type: ResourceType.audioItem,
             },
             context: timeRangeContext,
         },

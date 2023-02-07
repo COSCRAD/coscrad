@@ -43,12 +43,14 @@ export class AddParticipantToTranscriptCommandHandler extends BaseUpdateCommandH
         instance: AudioItem<string>,
         { name, initials }: AddParticipantToTranscript
     ): ResultOrError<AudioItem<string>> {
-        return instance.addParticipantToTranscript(
+        const updatedInstance = instance.addParticipantToTranscript(
             new TranscriptParticipant({
                 name,
                 initials,
             })
         );
+
+        return updatedInstance;
     }
 
     protected validateExternalState(
