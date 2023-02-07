@@ -9,7 +9,7 @@ import { ResourceModelContextStateValidatorInvalidTestCase } from '../resourceMo
 import buildAllInvalidTestCasesForResource from '../utilities/buildAllInconsistentContextTypeTestCases';
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
 
-const validCases = buildAllValidTestCasesForResource(ResourceType.transcribedAudio);
+const validCases = buildAllValidTestCasesForResource(ResourceType.audioItem);
 
 const validTranscribedAudio = validCases[0].resource.clone({
     lengthMilliseconds: 0,
@@ -26,7 +26,7 @@ const timeRangeWithInvalidInPoint: TimeRangeWithoutData = {
 };
 
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
-    ...buildAllInvalidTestCasesForResource(ResourceType.transcribedAudio),
+    ...buildAllInvalidTestCasesForResource(ResourceType.audioItem),
     {
         description: `the out point of the time range context is too big`,
         resource: validTranscribedAudio,

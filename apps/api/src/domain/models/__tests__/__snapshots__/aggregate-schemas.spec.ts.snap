@@ -782,7 +782,7 @@ Object {
         "complexDataType": "NESTED_TYPE",
         "description": "time stamps with text and speaker labels",
         "isArray": true,
-        "isOptional": false,
+        "isOptional": true,
         "label": "items",
         "schema": Object {
           "inPoint": Object {
@@ -819,7 +819,7 @@ Object {
         "complexDataType": "NESTED_TYPE",
         "description": "a list of participants and their initials",
         "isArray": true,
-        "isOptional": false,
+        "isOptional": true,
         "label": "participants",
         "schema": Object {
           "initials": Object {

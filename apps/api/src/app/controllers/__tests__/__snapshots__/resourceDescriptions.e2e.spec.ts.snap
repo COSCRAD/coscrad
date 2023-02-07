@@ -205,7 +205,7 @@ Array [
         "label": "plain text",
       },
     },
-    "type": "transcribedAudio",
+    "type": "audioItem",
   },
   Object {
     "description": "A book is a digital representation of a text, organized into pages.",
