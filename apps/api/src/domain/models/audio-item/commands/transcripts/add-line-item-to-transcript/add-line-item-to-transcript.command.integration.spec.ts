@@ -243,7 +243,7 @@ describe(commandType, () => {
                             error,
                             new CommandExecutionError([
                                 new CannotAddInconsistentLineItemError(newLineItem, [
-                                    // TODO validate innerErrors further
+                                    // TODO validate nested innerErrors further
                                 ]),
                             ])
                         );
