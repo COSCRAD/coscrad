@@ -5,6 +5,7 @@ import {
     ReferenceTo,
     UUID,
 } from '@coscrad/data-types';
+import { isNumberWithinRange } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
@@ -25,7 +26,7 @@ import validateTimeRangeContextForModel from '../../shared/contextValidators/val
 import { CREATE_AUDIO_ITEM } from '../commands';
 import { InvalidMIMETypeForTranscriptMediaError } from '../commands/errors';
 import { CREATE_TRANSCRIPT } from '../commands/transcripts/constants';
-import { CannotOverwriteTranscriptError } from '../errors';
+import { CannotOverwriteTranscriptError, TranscriptLineItemOutOfBoundsError } from '../errors';
 import { CannotAddParticipantBeforeCreatingTranscriptError } from '../errors/CannotAddParticipantBeforeCreatingTranscript.error';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
@@ -124,7 +125,16 @@ export class AudioItem extends Resource {
         } as DeepPartial<DTO<this>>);
     }
 
-    addLineItemToTranscript(newItem: DTO<TranscriptItem>): ResultOrError<this> {
+    addLineItemToTranscript(newItemDto: DTO<TranscriptItem>): ResultOrError<this> {
+        const newItem = new TranscriptItem(newItemDto);
+
+        const timeBounds = this.getTimeBounds();
+
+        const { inPoint, outPoint } = newItem;
+
+        if ([inPoint, outPoint].some((point) => !isNumberWithinRange(point, timeBounds)))
+            return new TranscriptLineItemOutOfBoundsError(newItem, timeBounds);
+
         const updatedTranscript = this.transcript.addLineItem(new TranscriptItem(newItem));
 
         if (isInternalError(updatedTranscript)) return updatedTranscript;

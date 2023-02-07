@@ -1,11 +1,15 @@
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { isNumberWithinRange } from '@coscrad/validation-constraints';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultiLingualText } from '../../../common/entities/multi-lingual-text';
+import { Valid } from '../../../domainModelValidators/Valid';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
+import { InvalidTimestampOrderError } from '../errors';
 
 // We can change this later
 type MediaTimestamp = number;
@@ -80,5 +84,15 @@ export class TranscriptItem extends BaseDomainModel {
         const { inPoint, outPoint, text } = this;
 
         return `[${inPoint}] ${text.toString()} [${outPoint}]`;
+    }
+
+    validateInvariants(): ResultOrError<Valid> {
+        const allErrors: InternalError[] = [];
+
+        if (this.inPoint > this.outPoint) allErrors.push(new InvalidTimestampOrderError(this));
+
+        return allErrors.length > 0
+            ? new InternalError(`Encountered an invalid transcript line item`, allErrors)
+            : Valid;
     }
 }

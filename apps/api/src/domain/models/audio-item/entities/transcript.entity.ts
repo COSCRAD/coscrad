@@ -5,6 +5,7 @@ import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { isValid } from '../../../domainModelValidators/Valid';
 import BaseDomainModel from '../../BaseDomainModel';
 import {
     ConflictingLineItemsError,
@@ -12,6 +13,8 @@ import {
     DuplicateTranscriptParticipantInitialsError,
     DuplicateTranscriptParticipantNameError,
 } from '../errors';
+import { CannotAddInconsistentLineItemError } from '../errors/transcript-line-item/cannot-add-inconsistent-line-item.error';
+import { TranscriptParticipantInitialsNotRegisteredError } from '../errors/transcript-participant-initials-not-registered.error';
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
 
@@ -99,13 +102,12 @@ export class Transcript extends BaseDomainModel {
     }
 
     addLineItem(item: TranscriptItem): ResultOrError<this> {
-        const { inPoint, outPoint } = item;
+        const lineItemErrors = this.validateLineItem(item);
 
-        const conflictingExistingItems = this.getConflictingItems({ inPoint, outPoint });
+        if (lineItemErrors.length > 0)
+            return new CannotAddInconsistentLineItemError(item, lineItemErrors);
 
-        if (conflictingExistingItems.length > 0)
-            return new ConflictingLineItemsError(item, conflictingExistingItems);
-
+        // Avoid shared references to individual items by cloning
         const newItems = this.items.concat(item.clone());
 
         return this.clone({
@@ -118,5 +120,27 @@ export class Transcript extends BaseDomainModel {
         outPoint,
     }: Pick<TranscriptItem, 'inPoint' | 'outPoint'>): TranscriptItem[] {
         return this.items.filter((item) => item.conflictsWith({ inPoint, outPoint }));
+    }
+
+    private validateLineItem(newLineItem: TranscriptItem): InternalError[] {
+        const allErrors: InternalError[] = [];
+
+        const itemValidationResult = newLineItem.validateInvariants();
+
+        if (!isValid(itemValidationResult)) allErrors.push(itemValidationResult);
+
+        const conflictingExistingItems = this.getConflictingItems(newLineItem);
+
+        if (conflictingExistingItems.length > 0)
+            allErrors.push(new ConflictingLineItemsError(newLineItem, conflictingExistingItems));
+
+        const { speakerInitials } = newLineItem;
+
+        const participantSearchResult = this.findParticipantByInitials(speakerInitials);
+
+        if (isNotFound(participantSearchResult))
+            allErrors.push(new TranscriptParticipantInitialsNotRegisteredError(speakerInitials));
+
+        return allErrors;
     }
 }
