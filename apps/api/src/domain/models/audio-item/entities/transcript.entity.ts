@@ -1,7 +1,16 @@
 import { NestedDataType } from '@coscrad/data-types';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { Maybe } from '../../../../lib/types/maybe';
+import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import BaseDomainModel from '../../BaseDomainModel';
+import {
+    DuplicateTranscriptParticipantError,
+    DuplicateTranscriptParticipantInitialsError,
+    DuplicateTranscriptParticipantNameError,
+} from '../errors';
 import { TranscriptItem } from './MediaTimeRange';
 import { TranscriptParticipant } from './transcript-participant';
 
@@ -9,6 +18,8 @@ export class Transcript<T extends string = string> extends BaseDomainModel {
     // TODO Validate that there are not duplicate IDs here
     @NestedDataType(TranscriptParticipant, {
         isArray: true,
+        // i.e. can be empty
+        isOptional: true,
         label: 'participants',
         description: 'a list of participants and their initials',
     })
@@ -16,6 +27,8 @@ export class Transcript<T extends string = string> extends BaseDomainModel {
 
     @NestedDataType(TranscriptItem, {
         isArray: true,
+        // i.e. can be empty
+        isOptional: true,
         label: 'items',
         description: 'time stamps with text and speaker labels',
     })
@@ -31,11 +44,10 @@ export class Transcript<T extends string = string> extends BaseDomainModel {
 
         const { items, participants } = dto;
 
-        this.participants = Array.isArray(participants)
-            ? participants.map((p) => new TranscriptParticipant(p))
-            : null;
+        if (Array.isArray(participants))
+            this.participants = participants.map((p) => new TranscriptParticipant(p));
 
-        this.items = Array.isArray(items) ? items.map((item) => new TranscriptItem(item)) : null;
+        if (Array.isArray(items)) this.items = items.map((item) => new TranscriptItem(item));
     }
 
     /**
@@ -47,13 +59,41 @@ export class Transcript<T extends string = string> extends BaseDomainModel {
      * checked in the domain model factories. But complex invariant validation
      * must be done on the aggregate root (`AudioItem` in this case).
      */
-    addParticipant(participant: TranscriptParticipant) {
-        // TODO validate that name and initials are unique
-        //    const { name, initials} = participant;
+    addParticipant(participant: TranscriptParticipant): ResultOrError<this> {
+        const allErrors: InternalError[] = [];
 
-        return this.clone({
-            // avoid shared references by cloning
-            participants: this.participants.concat(participant.clone()),
-        } as DeepPartial<DTO<this>>);
+        // TODO validate that name initials are unique
+        const { initials, name } = participant;
+
+        const searchByInitialsResult = this.findParticipantByInitials(initials);
+
+        // TODO avoid double negative
+        // Is there already a participant with these initials?
+        if (!isNotFound(searchByInitialsResult))
+            allErrors.push(new DuplicateTranscriptParticipantInitialsError(initials));
+
+        const searchByNameResult = this.findParticipantByName(name);
+
+        // TODO avoid double negative
+        // Is there already a participant with these initials?
+        if (!isNotFound(searchByNameResult))
+            allErrors.push(new DuplicateTranscriptParticipantNameError(name));
+
+        return allErrors.length === 0
+            ? this.clone({
+                  // avoid shared references by cloning
+                  participants: this.participants.concat(participant.clone()),
+              } as DeepPartial<DTO<this>>)
+            : new DuplicateTranscriptParticipantError(allErrors);
+    }
+
+    findParticipantByInitials(initials: string): Maybe<TranscriptParticipant> {
+        return (
+            this.participants.find((participant) => participant.initials === initials) || NotFound
+        );
+    }
+
+    findParticipantByName(name: string): Maybe<TranscriptParticipant> {
+        return this.participants.find((participant) => participant.name === name) || NotFound;
     }
 }

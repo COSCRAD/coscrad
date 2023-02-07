@@ -609,7 +609,7 @@ Object {
             },
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-              "type": "transcribedAudio",
+              "type": "audioItem",
             },
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
@@ -680,7 +680,7 @@ Object {
             },
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
-              "type": "transcribedAudio",
+              "type": "audioItem",
             },
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
@@ -1752,7 +1752,7 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /resources/transcribedAudioItems when all of the resources are published should fetch multiple resources of type transcribedAudio 1`] = `
+exports[`When fetching multiple resources GET /resources/transcribedAudioItems when all of the resources are published should fetch multiple resources of type audioItem 1`] = `
 Object {
   "entities": Array [
     Object {
