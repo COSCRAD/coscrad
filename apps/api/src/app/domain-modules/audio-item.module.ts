@@ -1,6 +1,9 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import {
+    AddLineItemToTranscript,
+    AddLineItemtoTranscriptCommandHandler,
+    AddParticipantToTranscriptCommandHandler,
     CreateAudioItem,
     CreateAudioItemCommandHandler,
     CreateTranscript,
@@ -22,6 +25,10 @@ import { AudioItemController } from '../controllers/resources/audio-item.control
         CreateAudioItemCommandHandler,
         CreateTranscript,
         CreateTranscriptCommandHandler,
+        AddLineItemToTranscript,
+        AddLineItemtoTranscriptCommandHandler,
+        AddLineItemtoTranscriptCommandHandler,
+        AddParticipantToTranscriptCommandHandler,
     ],
 })
 export class AudioItemModule {}

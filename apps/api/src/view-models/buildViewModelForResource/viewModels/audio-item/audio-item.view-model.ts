@@ -4,7 +4,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AudioItem } from '../../../../domain/models/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
 import { BaseViewModel } from '../base.view-model';
-import convertTimeRangeDataToPlainTextTranscript from './utilities/convertTimeRangeDataToPlainTextTranscript';
 
 export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewModel {
     @NonEmptyString({
@@ -73,8 +72,8 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
 
         this.lengthMilliseconds = lengthMilliseconds;
 
-        // TODO Encapsulte this on transcript- we shouldn't need to access it's items directly
-        this.text = convertTimeRangeDataToPlainTextTranscript(transcript.items);
+        // TODO Send back the full data structure for rich presentation on the client
+        this.text = transcript.toString();
 
         const { url, mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
 

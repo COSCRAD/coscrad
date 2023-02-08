@@ -40,9 +40,9 @@ export class AddParticipantToTranscriptCommandHandler extends BaseUpdateCommandH
     }
 
     protected actOnInstance(
-        instance: AudioItem<string>,
+        instance: AudioItem,
         { name, initials }: AddParticipantToTranscript
-    ): ResultOrError<AudioItem<string>> {
+    ): ResultOrError<AudioItem> {
         const updatedInstance = instance.addParticipantToTranscript(
             new TranscriptParticipant({
                 name,
@@ -55,7 +55,7 @@ export class AddParticipantToTranscriptCommandHandler extends BaseUpdateCommandH
 
     protected validateExternalState(
         _state: InMemorySnapshot,
-        _instance: AudioItem<string>
+        _instance: AudioItem
     ): InternalError | Valid {
         return Valid;
     }

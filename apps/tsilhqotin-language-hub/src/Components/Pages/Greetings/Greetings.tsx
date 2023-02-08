@@ -107,7 +107,7 @@ export default function Greetings() {
                     >
                         Here
                     </a>{' '}
-                    is a link to the Xeni Gwet’in langauge portal on First Voices. Click “Learn our
+                    is a link to the Xeni Gwet’in language portal on First Voices. Click “Learn our
                     language” to get started. There is a dictionary with many words and phrases as
                     well as stories and songs. These excellent resources for learners were put
                     together by the Jeni Huten Language Committee.
