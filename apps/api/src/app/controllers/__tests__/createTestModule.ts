@@ -9,6 +9,8 @@ import { MockJwtStrategy } from '../../../authorization/mock-jwt.strategy';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
 import {
+    AddLineItemToTranscript,
+    AddLineItemtoTranscriptCommandHandler,
     CreateAudioItem,
     CreateAudioItemCommandHandler,
     CreateTranscript,
@@ -338,6 +340,8 @@ export default async (
             CreateTranscriptCommandHandler,
             AddParticipantToTranscript,
             AddParticipantToTranscriptCommandHandler,
+            AddLineItemToTranscript,
+            AddLineItemtoTranscriptCommandHandler,
         ],
 
         controllers: [

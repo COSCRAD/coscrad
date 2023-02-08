@@ -1763,8 +1763,8 @@ Object {
       "mimeType": "audio/mpeg",
       "tags": Array [],
       "text": "
-[12000] There once was a little wooden boy. [15550]
-[18300] His name was Pinocchio [19240]",
+[12000] {eng}: There once was a little wooden boy. [15550]
+[18300] {eng}: His name was Pinocchio [19240]",
     },
     Object {
       "actions": Array [],
@@ -1774,9 +1774,9 @@ Object {
       "mimeType": "audio/mpeg",
       "tags": Array [],
       "text": "
-[3400] While she went down to the river [3670]
-[3700] someone had already filled the water tank. [3980]
-[4010] These were the types of problems we had. [4290]",
+[3400] {eng}: While she went down to the river [3670]
+[3700] {eng}: someone had already filled the water tank. [3980]
+[4010] {eng}: These were the types of problems we had. [4290]",
     },
     Object {
       "actions": Array [],
@@ -1786,8 +1786,8 @@ Object {
       "mimeType": "audio/mpeg",
       "tags": Array [],
       "text": "
-[120] this type of spoon is used in ceremonies [848]
-[930] by members of the opposite clan of the house chief [1080]",
+[120] {eng}: this type of spoon is used in ceremonies [848]
+[930] {eng}: by members of the opposite clan of the house chief [1080]",
     },
   ],
   "indexScopedActions": Array [],
@@ -1805,8 +1805,8 @@ Object {
       "mimeType": "audio/mpeg",
       "tags": Array [],
       "text": "
-[12000] There once was a little wooden boy. [15550]
-[18300] His name was Pinocchio [19240]",
+[12000] {eng}: There once was a little wooden boy. [15550]
+[18300] {eng}: His name was Pinocchio [19240]",
     },
     Object {
       "actions": Array [],
@@ -1816,9 +1816,9 @@ Object {
       "mimeType": "audio/mpeg",
       "tags": Array [],
       "text": "
-[3400] While she went down to the river [3670]
-[3700] someone had already filled the water tank. [3980]
-[4010] These were the types of problems we had. [4290]",
+[3400] {eng}: While she went down to the river [3670]
+[3700] {eng}: someone had already filled the water tank. [3980]
+[4010] {eng}: These were the types of problems we had. [4290]",
     },
     Object {
       "actions": Array [],
@@ -1828,8 +1828,8 @@ Object {
       "mimeType": "audio/mpeg",
       "tags": Array [],
       "text": "
-[120] this type of spoon is used in ceremonies [848]
-[930] by members of the opposite clan of the house chief [1080]",
+[120] {eng}: this type of spoon is used in ceremonies [848]
+[930] {eng}: by members of the opposite clan of the house chief [1080]",
     },
   ],
   "indexScopedActions": Array [],

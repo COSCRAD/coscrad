@@ -5,16 +5,20 @@ import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { isValid } from '../../../domainModelValidators/Valid';
 import BaseDomainModel from '../../BaseDomainModel';
 import {
+    ConflictingLineItemsError,
     DuplicateTranscriptParticipantError,
     DuplicateTranscriptParticipantInitialsError,
     DuplicateTranscriptParticipantNameError,
 } from '../errors';
-import { TranscriptItem } from './MediaTimeRange';
+import { CannotAddInconsistentLineItemError } from '../errors/transcript-line-item/cannot-add-inconsistent-line-item.error';
+import { TranscriptParticipantInitialsNotRegisteredError } from '../errors/transcript-participant-initials-not-registered.error';
+import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
 
-export class Transcript<T extends string = string> extends BaseDomainModel {
+export class Transcript extends BaseDomainModel {
     // TODO Validate that there are not duplicate IDs here
     @NestedDataType(TranscriptParticipant, {
         isArray: true,
@@ -33,7 +37,7 @@ export class Transcript<T extends string = string> extends BaseDomainModel {
         description: 'time stamps with text and speaker labels',
     })
     // TODO rename this, as it includes the data as well
-    items: TranscriptItem<T>[];
+    items: TranscriptItem[];
 
     // Should we configure allowed languages at the top level?
 
@@ -95,5 +99,48 @@ export class Transcript<T extends string = string> extends BaseDomainModel {
 
     findParticipantByName(name: string): Maybe<TranscriptParticipant> {
         return this.participants.find((participant) => participant.name === name) || NotFound;
+    }
+
+    addLineItem(item: TranscriptItem): ResultOrError<this> {
+        const lineItemErrors = this.validateLineItem(item);
+
+        if (lineItemErrors.length > 0)
+            return new CannotAddInconsistentLineItemError(item, lineItemErrors);
+
+        // Avoid shared references to individual items by cloning
+        const newItems = this.items.concat(item.clone());
+
+        return this.clone({
+            items: newItems,
+        } as DeepPartial<DTO<this>>);
+    }
+
+    private getConflictingItems({
+        inPoint,
+        outPoint,
+    }: Pick<TranscriptItem, 'inPoint' | 'outPoint'>): TranscriptItem[] {
+        return this.items.filter((item) => item.conflictsWith({ inPoint, outPoint }));
+    }
+
+    private validateLineItem(newLineItem: TranscriptItem): InternalError[] {
+        const allErrors: InternalError[] = [];
+
+        const itemValidationResult = newLineItem.validateInvariants();
+
+        if (!isValid(itemValidationResult)) allErrors.push(itemValidationResult);
+
+        const conflictingExistingItems = this.getConflictingItems(newLineItem);
+
+        if (conflictingExistingItems.length > 0)
+            allErrors.push(new ConflictingLineItemsError(newLineItem, conflictingExistingItems));
+
+        const { speakerInitials } = newLineItem;
+
+        const participantSearchResult = this.findParticipantByInitials(speakerInitials);
+
+        if (isNotFound(participantSearchResult))
+            allErrors.push(new TranscriptParticipantInitialsNotRegisteredError(speakerInitials));
+
+        return allErrors;
     }
 }

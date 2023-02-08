@@ -792,13 +792,6 @@ Object {
             "isOptional": false,
             "label": "in point",
           },
-          "label": Object {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "the label for the current timestamped item",
-            "isArray": false,
-            "isOptional": false,
-            "label": "label",
-          },
           "outPoint": Object {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
             "description": "ending time stamp",
@@ -806,12 +799,75 @@ Object {
             "isOptional": false,
             "label": "out point",
           },
-          "text": Object {
+          "speakerInitials": Object {
             "coscradDataType": "NON_EMPTY_STRING",
-            "description": "text for this time range",
+            "description": "the label for the current timestamped item",
             "isArray": false,
             "isOptional": false,
-            "label": "text data",
+            "label": "label",
+          },
+          "text": Object {
+            "complexDataType": "NESTED_TYPE",
+            "description": "multi-lingual text transcription \\\\ translation for this item",
+            "isArray": false,
+            "isOptional": false,
+            "label": "text",
+            "schema": Object {
+              "items": Object {
+                "complexDataType": "NESTED_TYPE",
+                "description": "one item for each provided language",
+                "isArray": true,
+                "isOptional": false,
+                "label": "items",
+                "schema": Object {
+                  "languageId": Object {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "an official identifier of the language",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "langauge code",
+                  },
+                  "role": Object {
+                    "complexDataType": "ENUM",
+                    "description": "role of this text in the translation process",
+                    "enumLabel": "text item role",
+                    "enumName": undefined,
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text item role",
+                    "labelsAndValues": Array [
+                      Object {
+                        "label": "original",
+                        "value": "original",
+                      },
+                      Object {
+                        "label": "glossed to",
+                        "value": "glossed to",
+                      },
+                      Object {
+                        "label": "prompt",
+                        "value": "prompt",
+                      },
+                      Object {
+                        "label": "free translation",
+                        "value": "free translation",
+                      },
+                      Object {
+                        "label": "literal translation",
+                        "value": "literal translation",
+                      },
+                    ],
+                  },
+                  "text": Object {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "plain text in the given language",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text",
+                  },
+                },
+              },
+            },
           },
         },
       },

@@ -13,11 +13,11 @@ import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceTyp
 import { BaseUpdateCommandHandler } from '../../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import { AudioItem } from '../../../entities/audio-item.entity';
-import { CreateTranscript } from './create-transcript.command';
-import { TranscriptCreated } from './transcript-created.event';
+import { AddLineItemToTranscript } from './add-line-item-to-transcript.command';
+import { LineItemAddedToTranscript } from './line-item-added-to-transcript.event';
 
-@CommandHandler(CreateTranscript)
-export class CreateTranscriptCommandHandler extends BaseUpdateCommandHandler<AudioItem> {
+@CommandHandler(AddLineItemToTranscript)
+export class AddLineItemtoTranscriptCommandHandler extends BaseUpdateCommandHandler<AudioItem> {
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<AudioItem>;
 
     protected aggregateType: AggregateType = AggregateType.audioItem;
@@ -40,19 +40,33 @@ export class CreateTranscriptCommandHandler extends BaseUpdateCommandHandler<Aud
 
     protected actOnInstance(
         instance: AudioItem,
-        _command: CreateTranscript
+        {
+            inPointMilliseconds,
+            outPointMilliseconds,
+            text,
+            speakerInitials,
+        }: AddLineItemToTranscript
     ): ResultOrError<AudioItem> {
-        return instance.createTranscript();
+        return instance.addLineItemToTranscript({
+            inPoint: inPointMilliseconds,
+            outPoint: outPointMilliseconds,
+            text,
+            speakerInitials,
+        });
     }
 
     protected validateExternalState(
         _state: InMemorySnapshot,
-        __instance: AudioItem
+        _instance: AudioItem
     ): InternalError | Valid {
         return Valid;
     }
 
-    protected buildEvent(command: CreateTranscript, eventId: string, userId: string): BaseEvent {
-        return new TranscriptCreated(command, eventId, userId);
+    protected buildEvent(
+        command: AddLineItemToTranscript,
+        eventId: string,
+        userId: string
+    ): BaseEvent {
+        return new LineItemAddedToTranscript(command, eventId, userId);
     }
 }
