@@ -25,15 +25,31 @@ AudioItem {
     "items": Array [
       TranscriptItem {
         "inPoint": 12000,
-        "label": "JHC",
         "outPoint": 15550,
-        "text": "There once was a little wooden boy.",
+        "speakerInitials": "JHC",
+        "text": MultiLingualText {
+          "items": Array [
+            MultiLingualTextItem {
+              "languageId": "eng",
+              "role": "original",
+              "text": "There once was a little wooden boy.",
+            },
+          ],
+        },
       },
       TranscriptItem {
         "inPoint": 18300,
-        "label": "JHC",
         "outPoint": 19240,
-        "text": "His name was Pinocchio",
+        "speakerInitials": "JHC",
+        "text": MultiLingualText {
+          "items": Array [
+            MultiLingualTextItem {
+              "languageId": "eng",
+              "role": "original",
+              "text": "His name was Pinocchio",
+            },
+          ],
+        },
       },
     ],
     "participants": Array [

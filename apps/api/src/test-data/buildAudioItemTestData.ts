@@ -22,6 +22,7 @@ const buildSingleLanguageText = (text: string, languageId: string) =>
             }),
         ],
     });
+
 const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
     {
         id: '110',
@@ -41,15 +42,18 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
                     inPoint: 12000,
                     outPoint: 15550,
                     text: 'There once was a little wooden boy.',
-                    label: 'JHC',
+                    speakerInitials: 'JHC',
                 },
                 {
                     inPoint: 18300,
                     outPoint: 19240,
                     text: 'His name was Pinocchio',
-                    label: 'JHC',
+                    speakerInitials: 'JHC',
                 },
-            ],
+            ].map((item) => ({
+                ...item,
+                text: buildSingleLanguageText(item.text, 'eng'),
+            })),
         }),
     },
     {
@@ -71,21 +75,24 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
                     inPoint: 3400,
                     outPoint: 3670,
                     text: 'While she went down to the river',
-                    label: 'BL',
+                    speakerInitials: 'BL',
                 },
                 {
                     inPoint: 3700,
                     outPoint: 3980,
                     text: 'someone had already filled the water tank.',
-                    label: 'SD',
+                    speakerInitials: 'SD',
                 },
                 {
                     inPoint: 4010,
                     outPoint: 4290,
                     text: 'These were the types of problems we had.',
-                    label: 'BL',
+                    speakerInitials: 'BL',
                 },
-            ],
+            ].map((item) => ({
+                ...item,
+                text: buildSingleLanguageText(item.text, 'eng'),
+            })),
         },
         mediaItemId: mediaItems[0].id,
         lengthMilliseconds: 23409,
@@ -110,15 +117,18 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
                     inPoint: 120,
                     outPoint: 848,
                     text: 'this type of spoon is used in ceremonies',
-                    label: 'E1',
+                    speakerInitials: 'E1',
                 },
                 {
                     inPoint: 930,
                     outPoint: 1080,
                     text: 'by members of the opposite clan of the house chief',
-                    label: 'E2',
+                    speakerInitials: 'E2',
                 },
-            ],
+            ].map((item) => ({
+                ...item,
+                text: buildSingleLanguageText(item.text, 'eng'),
+            })),
         },
         mediaItemId: mediaItems[0].id,
         lengthMilliseconds: 32989,
