@@ -3,6 +3,7 @@ import { RESOURCES_ROUTE_PREFIX } from '../resources/constants';
 
 // For irregular plural forms or forms that lead to awkward grammar
 const exceptions: Partial<Record<ResourceType, string>> = {
+    // We could default this to `audioItems` now but need to update the front-end and snapshots in contract tests
     [ResourceType.audioItem]: 'transcribedAudioItems',
 };
 

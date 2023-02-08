@@ -15,7 +15,7 @@ import BaseDomainModel from '../../models/BaseDomainModel';
  * important to capture this information in the database from the point of
  * view of linguistic integrity of the data collected. At a practical level,
  * this distinction helps us avoid misleading learners who take "translations"
- * between langauges too literally.
+ * between languages too literally.
  */
 export enum MultiLingualTextItemRole {
     original = 'original',
@@ -27,7 +27,7 @@ export enum MultiLingualTextItemRole {
 
 export class MultiLingualTextItem extends BaseDomainModel {
     @NonEmptyString({
-        label: 'langauge code',
+        label: 'language code',
         description: 'an official identifier of the language',
     })
     readonly languageId: string;
@@ -96,5 +96,9 @@ export class MultiLingualText extends BaseDomainModel {
         this.items = Array.isArray(items)
             ? items.map((item) => new MultiLingualTextItem(item))
             : null;
+    }
+
+    toString(): string {
+        return this.items.map(({ text, languageId }) => `{${languageId}}: ${text}`).join('\n');
     }
 }

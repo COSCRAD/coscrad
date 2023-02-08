@@ -17,7 +17,6 @@ import { AudioItem } from '../../entities/audio-item.entity';
 import { CreateAudioItem } from './create-audio-item.command';
 import { AudioItemCreated } from './transcript-created.event';
 
-// Note that the generic passed to Transcript can be the broadest union \ base type as we won't add items with this command
 @CommandHandler(CreateAudioItem)
 export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<AudioItem> {
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<AudioItem>;

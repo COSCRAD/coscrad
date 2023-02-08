@@ -1,6 +1,5 @@
 import { NonEmptyString } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
-import { AggregateId } from '../../../types/AggregateId';
 import BaseDomainModel from '../../BaseDomainModel';
 
 export class TranscriptParticipant extends BaseDomainModel {
@@ -16,7 +15,7 @@ export class TranscriptParticipant extends BaseDomainModel {
     })
     // This should eventually refer to a "Person" model by ID
     // For now we'll simply put the Participant's name here
-    readonly name: AggregateId;
+    readonly name: string;
 
     constructor({ initials: label, name: id }: DTO<TranscriptParticipant>) {
         super();
