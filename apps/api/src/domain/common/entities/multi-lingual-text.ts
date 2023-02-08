@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { ExternalEnum, NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { DTO } from '../../../types/DTO';
 import BaseDomainModel from '../../models/BaseDomainModel';
@@ -26,10 +27,20 @@ export enum MultiLingualTextItemRole {
 }
 
 export class MultiLingualTextItem extends BaseDomainModel {
-    @NonEmptyString({
-        label: 'language code',
-        description: 'an official identifier of the language',
-    })
+    @ExternalEnum(
+        {
+            labelsAndValues: Object.entries(LanguageCode).map(([label, value]) => ({
+                label,
+                value,
+            })),
+            enumLabel: 'Language_Code',
+            enumName: 'LangaugeCode',
+        },
+        {
+            label: 'language code',
+            description: 'an official identifier of the language',
+        }
+    )
     readonly languageId: string;
 
     @NonEmptyString({

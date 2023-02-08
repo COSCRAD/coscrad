@@ -58,6 +58,10 @@ export class CommandController {
             throw new UnauthorizedException();
         }
 
+        console.log({
+            executingFsa: JSON.stringify(commandFSA),
+        });
+
         /**
          * Note that we defer command type validation to the command handler.
          * This is because we want to keep the controller free of domain

@@ -1,6 +1,11 @@
 import { AggregateCompositeIdentifier, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
+import {
+    CoscradMultilingualText,
+    NestedDataType,
+    NonEmptyString,
+    NonNegativeFiniteNumber,
+} from '@coscrad/data-types';
 import { DTO } from '../../../../../../types/DTO';
 import { MultiLingualText } from '../../../../../common/entities/multi-lingual-text';
 import { AudioItemCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
@@ -30,7 +35,7 @@ export class AddLineItemToTranscript implements ICommandBase {
     })
     readonly outPointMilliseconds: number;
 
-    @NestedDataType(MultiLingualText, {
+    @CoscradMultilingualText({
         label: 'text',
         description: 'multi-lingual text transcription  translation',
     })

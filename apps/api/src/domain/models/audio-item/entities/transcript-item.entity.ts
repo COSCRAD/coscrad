@@ -80,9 +80,10 @@ export class TranscriptItem extends BaseDomainModel {
     }
 
     toString() {
-        const { inPoint, outPoint, text } = this;
+        const { inPoint, outPoint, text, speakerInitials } = this;
 
-        return `[${inPoint}] ${text.toString()} [${outPoint}]`;
+        // todo remove ? chaining
+        return `[${inPoint}] [${speakerInitials}] ${text?.toString()} [${outPoint}]`;
     }
 
     validateInvariants(): ResultOrError<Valid> {
