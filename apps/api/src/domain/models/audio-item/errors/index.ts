@@ -1,5 +1,5 @@
 export * from './CannotOverwriteTranscriptError';
-export * from './ConflictingLineItems.error';
+export * from './conflicting-line-items.error';
 export * from './DuplicateTranscriptParticipantErrors';
 export * from './DuplicateTranscriptParticipantInitialsError';
 export * from './DuplicateTranscriptParticipantNameError';

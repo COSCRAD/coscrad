@@ -34,8 +34,6 @@ import { Transcript } from './transcript.entity';
 
 export type CoscradTimeStamp = number;
 
-export type CoscradText = string | MultiLingualText;
-
 @RegisterIndexScopedCommands([CREATE_AUDIO_ITEM])
 export class AudioItem extends Resource {
     readonly type = ResourceType.audioItem;

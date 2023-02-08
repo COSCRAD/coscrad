@@ -1,3 +1,7 @@
+import {
+    MultiLingualText,
+    MultiLingualTextItemRole,
+} from '../../../../../domain/common/entities/multi-lingual-text';
 import { TranscriptItem } from '../../../../../domain/models/audio-item/entities/transcript-item.entity';
 import convertTimeRangeDataToPlainTextTranscript from './convertTimeRangeDataToPlainTextTranscript';
 
@@ -10,11 +14,19 @@ const testTranscript: TranscriptItem[] = [
     'One day the dog whose collar was a reddish color got into the collards',
     'to the spite of his caller.',
 ]
-    .map((text, index) => ({
+    .map((plainText, index) => ({
         inPoint: index * 500,
         outPoint: index * 500 + 400,
-        text,
-        label: 'FOO',
+        text: new MultiLingualText({
+            items: [
+                {
+                    text: plainText,
+                    languageId: 'clc',
+                    role: MultiLingualTextItemRole.original,
+                },
+            ],
+        }),
+        speakerInitials: 'FOO',
     }))
     .map((dto) => new TranscriptItem(dto));
 

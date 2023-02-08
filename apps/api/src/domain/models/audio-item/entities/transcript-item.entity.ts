@@ -50,7 +50,6 @@ export class TranscriptItem extends BaseDomainModel {
 
         this.outPoint = outPoint;
 
-        // TODO - clone if using a reference type for data
         if (data) this.text = new MultiLingualText(data);
 
         this.speakerInitials = label;
