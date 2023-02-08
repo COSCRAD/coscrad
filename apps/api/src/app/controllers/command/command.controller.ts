@@ -16,11 +16,16 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Observable, Subject } from 'rxjs';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import { CommandWithGivenTypeNotFoundExceptionFilter } from '../exception-handling/exception-filters/command-with-given-type-not-found.filter';
 import { NoCommandHandlerForCommandTypeFilter } from '../exception-handling/exception-filters/no-command-handler-for-command-type.filter';
 import sendInternalResultAsHttpResponse from '../resources/common/sendInternalResultAsHttpResponse';
 import { CommandFSA } from './command-fsa/command-fsa.entity';
+
+class BulkCommandExecutionRequestBody {
+    readonly fsas: CommandFSA[];
+}
 
 export const AdminJwtGuard = AuthGuard('jwt');
 
@@ -78,6 +83,46 @@ export class CommandController {
         });
 
         return res.status(httpStatusCodes.ok).send();
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
+    @Post('bulk')
+    async executeCommandStream(
+        @Request() req,
+        @Res() res,
+        @Body() { fsas }: BulkCommandExecutionRequestBody
+    ) {
+        const { user } = req;
+
+        if (!user || !(user instanceof CoscradUserWithGroups)) {
+            throw new UnauthorizedException();
+        }
+
+        if (!user.isAdmin()) {
+            throw new UnauthorizedException();
+        }
+
+        if (!Array.isArray(fsas))
+            return res
+                .status(httpStatusCodes.badRequest)
+                .send(new InternalError(`Invalid bulk command request: fsas must be an array`));
+
+        const allErrors: InternalError[] = [];
+
+        for (const fsa of fsas) {
+            const result = await this.commandHandlerService.execute(fsa, { userId: user.id });
+
+            console.log({ fsa, result });
+
+            if (isInternalError(result)) allErrors.push(result);
+        }
+
+        if (allErrors.length === 0) res.status(httpStatusCodes.ok).send();
+
+        return res
+            .status(httpStatusCodes.badRequest)
+            .send(new InternalError(`One or more bulk actions have failed`, allErrors).toString());
     }
 
     @Sse('notifications')

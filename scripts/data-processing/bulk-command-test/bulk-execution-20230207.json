@@ -1,0 +1,46 @@
+{
+    "fsas": [
+        {
+            "type": "CREATE_TRANSCRIPT",
+            "payload": {
+                "aggregateCompositeIdentifier": {
+                    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+                    "type": "audioItem"
+                }
+            }
+        },
+        {
+            "type": "ADD_PARTICIPANT_TO_TRANSCRIPT",
+            "payload": {
+                "aggregateCompositeIdentifier": {
+                    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+                    "type": "audioItem"
+                },
+
+                "initials": "AP",
+                "name": "Aaron Plahn"
+            }
+        },
+        {
+            "type": "ADD_LINE_ITEM_TO_TRANSCRIPT",
+            "payload": {
+                "aggregateCompositeIdentifier": {
+                    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+                    "type": "audioItem"
+                },
+                "inPointMilliseconds": 0.01,
+                "outPointMilliseconds": 0.02,
+                "speakerInitials": "AP",
+                "text": {
+                    "items": [
+                        {
+                            "languageId": "eng",
+                            "text": "hello world",
+                            "role": "original"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
