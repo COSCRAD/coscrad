@@ -45,6 +45,10 @@ export const NavBar = (): JSX.Element => {
             link: routes.treeOfKnowledge,
             label: 'Tree of Knowledge',
         },
+        {
+            link: routes.siteCredits,
+            label: 'Credits'
+        },
         ...dynamicLinks,
     ];
 

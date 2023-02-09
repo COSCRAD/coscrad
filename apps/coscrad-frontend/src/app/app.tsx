@@ -1,6 +1,7 @@
 import { isAggregateType } from '@coscrad/api-interfaces';
 import { Route, Routes } from 'react-router-dom';
 import { About } from '../components/about/about';
+import { Credits } from '../components/credits/credits';
 import { Footer } from '../components/footer/footer';
 import { Header } from '../components/header/header';
 import { Home } from '../components/home/home';
@@ -61,6 +62,7 @@ export function App() {
                     {IndexToDetailFlowRoutes()}
                     {/* The following are temporary or experimental */}
                     <Route key="members-only" path="MembersOnly" element={<MembersOnly />} />
+                    <Route key="credits" path={routes.siteCredits} element={<Credits />} />
                 </Routes>
             </div>
             <Footer></Footer>
