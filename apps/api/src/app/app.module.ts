@@ -12,6 +12,7 @@ import { validate } from './config/env.validation';
 import { CategoryController } from './controllers/category.controller';
 import { CommandController } from './controllers/command/command.controller';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
+import { BulkMediaItemRegistrationModule } from './controllers/preprocessors/bulk-media-item-registration/bulk-media-item-registration.module';
 import { ResourceDescriptionController } from './controllers/resources/resource-description.controller';
 import { AudioItemModule } from './domain-modules/audio-item.module';
 import { BibliographicReferenceModule } from './domain-modules/bibliographic-reference.module';
@@ -51,6 +52,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         PhotographModule,
         BibliographicReferenceModule,
         SpatialFeatureModule,
+        BulkMediaItemRegistrationModule,
     ],
     controllers: [
         AppController,
