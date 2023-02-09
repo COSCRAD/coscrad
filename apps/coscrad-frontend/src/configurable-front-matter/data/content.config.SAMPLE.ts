@@ -20,4 +20,5 @@ export const contentConfig: ConfigurableContent = {
         detailViewType: DetailViewType.fullView,
     })),
     shouldEnableWebOfKnowledgeForResources: true,
+    siteCredits: 'Credits here'
 };

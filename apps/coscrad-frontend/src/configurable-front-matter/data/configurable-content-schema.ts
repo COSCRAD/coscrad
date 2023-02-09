@@ -1,7 +1,7 @@
 import {
     AggregateTypeToViewModel,
     CategorizableType,
-    ICategorizableDetailQueryResult,
+    ICategorizableDetailQueryResult
 } from '@coscrad/api-interfaces';
 import { CoscradConstraint } from '@coscrad/validation-constraints';
 
@@ -17,6 +17,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     songIdToCredits: Record<string, string>;
     videoIdToCredits: Record<string, string>;
     shouldEnableWebOfKnowledgeForResources: boolean;
+    siteCredits: string;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -34,6 +35,7 @@ export const configurableContentPropertiesAndConstraints: {
     shouldEnableWebOfKnowledgeForResources: [CoscradConstraint.isBoolean],
     // This is a tough one to constrain. We may need to manually specify the validation logic.
     indexToDetailFlows: [],
+    siteCredits: [CoscradConstraint.isNonEmptyString]
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;

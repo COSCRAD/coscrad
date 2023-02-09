@@ -18,4 +18,5 @@ export const routes = {
                 `${resourcesBaseRoute}/${getResourceTypeLabelForRoutes(resourceType)}`
             ),
     },
+    siteCredits: 'Credits'
 };
