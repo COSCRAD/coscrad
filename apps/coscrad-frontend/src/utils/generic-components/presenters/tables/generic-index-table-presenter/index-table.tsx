@@ -1,11 +1,21 @@
 import { IBaseViewModel } from '@coscrad/api-interfaces';
+import { SearchRounded } from '@mui/icons-material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { FormControl, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
+import {
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Paper,
+    Select,
+    TextField,
+    Typography
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { NotFoundPresenter } from '../../../../../components/not-found';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
+import { filterTableData, Matchers } from './filter-table-data';
 import './generic-index-table-presenter.css';
 import './index-table.css';
 import { renderCell } from './render-cell';
@@ -15,6 +25,8 @@ import { CellRenderersDefinition } from './types/cell-renderers-definition';
 export const DEFAULT_PAGE_SIZE = 5;
 
 const pageSizeOptions: number[] = [DEFAULT_PAGE_SIZE, 10, 50, 100];
+
+const labelForSearchAllPropertiesOption = 'ALL'
 
 const calculateNumberOfPages = (numberOfRecords: number, pageSize: number) => {
     const quotient = Math.floor(numberOfRecords / pageSize);
@@ -43,7 +55,10 @@ export interface GenericIndexTablePresenterProps<T extends IBaseViewModel> {
     cellRenderersDefinition: CellRenderersDefinition<T>;
     heading: string;
     filterableProperties: (keyof T)[];
+    matchers?: Matchers<T>;
 }
+
+const allProperties = 'allProperties';
 
 export const IndexTable = <T extends IBaseViewModel>({
     headingLabels,
@@ -51,6 +66,7 @@ export const IndexTable = <T extends IBaseViewModel>({
     cellRenderersDefinition,
     heading,
     filterableProperties,
+    matchers = {}, // default to String(value) & case-insensitive search
 }: GenericIndexTablePresenterProps<T>) => {
     if (headingLabels.length === 0) {
         throw new EmptyIndexTableException();
@@ -59,14 +75,18 @@ export const IndexTable = <T extends IBaseViewModel>({
     const [searchValue, setSearchValue] = useState('');
 
     // SEARCH LOGIC
-    const filteredTableData =
-        searchValue.length === 0
-            ? tableData
-            : tableData.filter((row) =>
-                  filterableProperties.some((propertyKey) =>
-                      String(row[propertyKey]).toLowerCase().includes(searchValue.toLowerCase())
-                  )
-              );
+    const [selectedFilterProperty, setSelectedFilterProperty] = useState<
+        typeof allProperties | keyof T
+    >(allProperties);
+
+    const propertiesToFilterBy = selectedFilterProperty === 'allProperties' ? filterableProperties : [selectedFilterProperty]
+
+    const filteredTableData = filterTableData(
+        tableData,
+        propertiesToFilterBy,
+        searchValue,
+        matchers
+    );
 
     // PAGINATION
     // we index pages starting at 0
@@ -193,16 +213,60 @@ export const IndexTable = <T extends IBaseViewModel>({
             </div>
         );
 
+    const searchBar = (
+        <TextField
+            size="small"
+            placeholder="Search..."
+            value={searchValue}
+            onChange={(changeEvent) => setSearchValue(changeEvent.target.value)}
+            InputProps={{
+                endAdornment: <SearchRounded />,
+            }}
+        />
+    )
+
+    const propertiesToSearchSelectField = (
+        <FormControl sx={{ minWidth: 120 }} size={'small'}>
+            <InputLabel>Filter</InputLabel>
+            <Select
+                label={'Filter'}
+                value={selectedFilterProperty}
+                onChange={(changeEvent) => {
+                    const {
+                        target: { value },
+                    } = changeEvent;
+                    setSelectedFilterProperty(value as keyof T);
+                }}
+            >
+                <MenuItem sx={{ minWidth: 120 }} value={'allProperties'}>
+                    {labelForSearchAllPropertiesOption}
+                </MenuItem>
+                {filterableProperties.map((selectedFilterProperty: (keyof T & string)) => (
+                    <MenuItem
+                        key={selectedFilterProperty}
+                        value={selectedFilterProperty}
+                        sx={{ minWidth: 120 }}
+                    >
+                        {
+                            headingLabels.find(
+                                ({ propertyKey: labelPropertyKey }) =>
+                                    labelPropertyKey === selectedFilterProperty
+                            )?.headingLabel
+                        }
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+    )
+
     return (
         <div>
             <h3>{heading}</h3>
-            <TextField
-                style={{ padding: '0 0 5px 0' }}
-                size="small"
-                placeholder="Search ..."
-                value={searchValue}
-                onChange={(event) => setSearchValue(event.target.value)}
-            />
+
+            {propertiesToSearchSelectField}
+
+            {searchBar}
+
             <div className="records-table">{table}</div>
         </div>
     );
