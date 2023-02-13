@@ -1,3 +1,4 @@
+import { ITranscriptItem } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { isNumberWithinRange } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
@@ -5,7 +6,7 @@ import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultiLingualText } from '../../../common/entities/multi-lingual-text';
+import { MultiLingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
@@ -14,7 +15,7 @@ import { InvalidTimestampOrderError } from '../errors';
 // We can change this later
 type MediaTimestamp = number;
 
-export class TranscriptItem extends BaseDomainModel {
+export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
     @NonNegativeFiniteNumber({
         label: 'in point',
         description: 'starting time stamp',
@@ -81,6 +82,8 @@ export class TranscriptItem extends BaseDomainModel {
 
     toString() {
         const { inPoint, outPoint, text, speakerInitials } = this;
+
+        console.log({ speakerInitials });
 
         // todo remove ? chaining
         return `[${inPoint}] [${speakerInitials}] ${text?.toString()} [${outPoint}]`;

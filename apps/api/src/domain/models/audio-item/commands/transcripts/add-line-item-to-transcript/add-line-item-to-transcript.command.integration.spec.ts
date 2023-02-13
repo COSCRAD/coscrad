@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -7,7 +8,7 @@ import TestRepositoryProvider from '../../../../../../persistence/repositories/_
 import {
     MultiLingualText,
     MultiLingualTextItemRole,
-} from '../../../../../common/entities/multi-lingual-text';
+} from '../../../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
@@ -52,12 +53,12 @@ const allTimestamps = Array(numberOfTimestampsToGenerate)
 const dummyText = new MultiLingualText({
     items: [
         {
-            languageId: 'clc',
+            languageId: LanguageCode.chilcotin,
             text: 'lha lha lha',
             role: MultiLingualTextItemRole.original,
         },
         {
-            languageId: 'eng',
+            languageId: LanguageCode.english,
             text: 'bla bla bla',
             role: MultiLingualTextItemRole.literalTranslation,
         },

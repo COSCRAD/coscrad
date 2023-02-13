@@ -31,8 +31,6 @@ export const CommandExecutionForm = ({
             },
         };
 
-        console.log({ newCommandFSA: commandFsa });
-
         dispatch(executeCommand(commandFsa));
     };
 

@@ -7,7 +7,7 @@ import {
     NonNegativeFiniteNumber,
 } from '@coscrad/data-types';
 import { DTO } from '../../../../../../types/DTO';
-import { MultiLingualText } from '../../../../../common/entities/multi-lingual-text';
+import { MultiLingualText } from '../../../../../common/entities/multilingual-text';
 import { AudioItemCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
 import { ADD_LINE_ITEM_TO_TRANSCRIPT } from '../constants';
 

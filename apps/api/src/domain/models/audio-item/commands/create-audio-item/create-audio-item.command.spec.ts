@@ -10,9 +10,9 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { DTO } from '../../../../../types/DTO';
 import {
     MultiLingualText,
-    MultiLingualTextItem,
+    MultilingualTextItem,
     MultiLingualTextItemRole,
-} from '../../../../common/entities/multi-lingual-text';
+} from '../../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
@@ -51,7 +51,7 @@ const newAudioItemName = new MultiLingualText({
             text: 'A Walk in the Park (engl)',
             role: MultiLingualTextItemRole.freeTranslation,
         },
-    ].map((itemDto) => new MultiLingualTextItem(itemDto)),
+    ].map((itemDto) => new MultilingualTextItem(itemDto)),
 }).toDTO();
 
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateAudioItem>> => ({

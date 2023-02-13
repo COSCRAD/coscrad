@@ -1,5 +1,6 @@
 import { IAudioItemViewModel, ICategorizableDetailQueryResult } from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
+import { Stack } from '@mui/material';
 import { FloatSpacerDiv } from '../../../utils/generic-components';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
 import { convertMillisecondsToSeconds } from '../utils/math';
@@ -22,7 +23,12 @@ export const AudioItemDetailFullViewPresenter = ({
                 value={`${convertMillisecondsToSeconds(lengthMilliseconds)} secs`}
             />
             <SinglePropertyPresenter display="Audio Url" value={audioURL} />
-            <SinglePropertyPresenter display="Transcription" value={plainText} />
+            {/* TODO We should send the full MultiLingual text to the front-end in the view model */}
+            <Stack>
+                {plainText.split('\n').map((line) => (
+                    <p>{line}</p>
+                ))}
+            </Stack>
         </div>
         <FloatSpacerDiv />
     </div>

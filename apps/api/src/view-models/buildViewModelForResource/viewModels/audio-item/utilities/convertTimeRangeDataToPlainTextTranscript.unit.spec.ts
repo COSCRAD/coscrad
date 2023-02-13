@@ -1,7 +1,7 @@
 import {
     MultiLingualText,
     MultiLingualTextItemRole,
-} from '../../../../../domain/common/entities/multi-lingual-text';
+} from '../../../../../domain/common/entities/multilingual-text';
 import { TranscriptItem } from '../../../../../domain/models/audio-item/entities/transcript-item.entity';
 import convertTimeRangeDataToPlainTextTranscript from './convertTimeRangeDataToPlainTextTranscript';
 

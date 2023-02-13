@@ -1,7 +1,7 @@
 import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonNegativeFiniteNumber, ReferenceTo, UUID } from '@coscrad/data-types';
-import { MultiLingualText } from '../../../../common/entities/multi-lingual-text';
+import { MultiLingualText } from '../../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AudioItemCompositeIdentifier } from '../../entities/audio-item-composite-identifier';

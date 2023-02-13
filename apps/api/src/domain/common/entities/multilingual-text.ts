@@ -1,32 +1,16 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import {
+    IMultiLingualText,
+    IMultlingualTextItem,
+    LanguageCode,
+    MultiLingualTextItemRole,
+} from '@coscrad/api-interfaces';
 import { ExternalEnum, NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { DTO } from '../../../types/DTO';
 import BaseDomainModel from '../../models/BaseDomainModel';
 
-/**
- * There are several ways we can arrive at multiple translations of a
- * term, starting with an
- * - original
- * - gloss the original term in the context of a larger text
- * - translate to a target (typically indigenous) language based on a prompt (typically in the colonial language)
- * - freely translate a word, phrase, sentence, or larger text from the original to the target language
- * - literally (word for word) translate a passage of text from the original to the target language
- *
- * Within our system, we will encounter all of these situations. It is
- * important to capture this information in the database from the point of
- * view of linguistic integrity of the data collected. At a practical level,
- * this distinction helps us avoid misleading learners who take "translations"
- * between languages too literally.
- */
-export enum MultiLingualTextItemRole {
-    original = 'original',
-    glossedTo = 'glossed to',
-    prompt = 'prompt', // e.g., "How do you say?"
-    freeTranslation = 'free translation',
-    literalTranslation = 'literal translation',
-}
+export { MultiLingualTextItemRole };
 
-export class MultiLingualTextItem extends BaseDomainModel {
+export class MultilingualTextItem extends BaseDomainModel implements IMultlingualTextItem {
     @ExternalEnum(
         {
             labelsAndValues: Object.entries(LanguageCode).map(([label, value]) => ({
@@ -41,7 +25,7 @@ export class MultiLingualTextItem extends BaseDomainModel {
             description: 'an official identifier of the language',
         }
     )
-    readonly languageId: string;
+    readonly languageId: LanguageCode;
 
     @NonEmptyString({
         label: 'text',
@@ -55,9 +39,8 @@ export class MultiLingualTextItem extends BaseDomainModel {
                 value: label,
                 label,
             })),
-            enumLabel: 'text item role', // text significance?
-            // Single source of truth, but is this going too far?
-            enumName: Object.getPrototypeOf(MultiLingualTextItemRole).name,
+            enumLabel: 'text item role',
+            enumName: 'Multilingual Text Item Role',
         },
         {
             description: 'role of this text in the translation process',
@@ -74,7 +57,7 @@ export class MultiLingualTextItem extends BaseDomainModel {
     // })
     // readonly dialect?: string;
 
-    constructor(dto: DTO<MultiLingualTextItem>) {
+    constructor(dto: DTO<MultilingualTextItem>) {
         super();
 
         if (!dto) return;
@@ -89,13 +72,13 @@ export class MultiLingualTextItem extends BaseDomainModel {
     }
 }
 
-export class MultiLingualText extends BaseDomainModel {
-    @NestedDataType(MultiLingualTextItem, {
+export class MultiLingualText extends BaseDomainModel implements IMultiLingualText {
+    @NestedDataType(MultilingualTextItem, {
         label: 'items',
         description: 'one item for each provided language',
         isArray: true,
     })
-    readonly items: MultiLingualTextItem[];
+    readonly items: MultilingualTextItem[];
 
     constructor(dto: DTO<MultiLingualText>) {
         super();
@@ -105,7 +88,7 @@ export class MultiLingualText extends BaseDomainModel {
         const { items } = dto;
 
         this.items = Array.isArray(items)
-            ? items.map((item) => new MultiLingualTextItem(item))
+            ? items.map((item) => new MultilingualTextItem(item))
             : null;
     }
 
