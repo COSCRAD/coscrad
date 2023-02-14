@@ -1,5 +1,5 @@
 import { IMultlingualTextItem } from './multilingual-text-item.interface';
 
-export interface IMultiLingualText {
+export interface IMultilingualText {
     items: IMultlingualTextItem[];
 }

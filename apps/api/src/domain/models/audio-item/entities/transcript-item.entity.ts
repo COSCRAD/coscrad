@@ -6,7 +6,7 @@ import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultiLingualText } from '../../../common/entities/multilingual-text';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
@@ -28,11 +28,11 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
     })
     readonly outPoint: MediaTimestamp;
 
-    @NestedDataType(MultiLingualText, {
+    @NestedDataType(MultilingualText, {
         label: 'text',
         description: 'multi-lingual text transcription \\ translation for this item',
     })
-    readonly text: MultiLingualText;
+    readonly text: MultilingualText;
 
     @NonEmptyString({
         label: 'label',
@@ -51,7 +51,7 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
 
         this.outPoint = outPoint;
 
-        if (data) this.text = new MultiLingualText(data);
+        if (data) this.text = new MultilingualText(data);
 
         this.speakerInitials = label;
     }
@@ -60,11 +60,11 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
         return !isNullOrUndefined(this.text);
     }
 
-    getData(): Maybe<MultiLingualText> {
+    getData(): Maybe<MultilingualText> {
         return this.hasData() ? this.text : NotFound;
     }
 
-    setData<T extends MultiLingualText>(newData: T) {
+    setData<T extends MultilingualText>(newData: T) {
         return this.clone<TranscriptItem>({
             data: newData,
         } as unknown as TranscriptItem);
@@ -82,8 +82,6 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
 
     toString() {
         const { inPoint, outPoint, text, speakerInitials } = this;
-
-        console.log({ speakerInitials });
 
         // todo remove ? chaining
         return `[${inPoint}] [${speakerInitials}] ${text?.toString()} [${outPoint}]`;

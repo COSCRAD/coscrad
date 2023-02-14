@@ -13,7 +13,7 @@
  * this distinction helps us avoid misleading learners who take "translations"
  * between languages too literally.
  */
-export enum MultiLingualTextItemRole {
+export enum MultilingualTextItemRole {
     original = 'original',
     glossedTo = 'glossed to',
     prompt = 'prompt', // e.g., "How do you say?"

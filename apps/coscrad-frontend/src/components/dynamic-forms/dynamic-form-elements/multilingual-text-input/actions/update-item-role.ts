@@ -1,10 +1,10 @@
-import { LanguageCode, MultiLingualTextItemRole } from '@coscrad/api-interfaces';
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { UPDATE_ITEM_ROLE } from './constants';
 
 type UpdateItemRolePayload = {
     languageCode: LanguageCode;
-    newRole: MultiLingualTextItemRole;
+    newRole: MultilingualTextItemRole;
 };
 
 type UpdateItemRoleFSA = PayloadAction<UpdateItemRolePayload>;
@@ -14,7 +14,7 @@ export const isUpdateItemRoleAction = (input: PayloadAction<unknown>): input is 
 
 export const updateItemRole = (
     languageCode: LanguageCode,
-    newRole: MultiLingualTextItemRole
+    newRole: MultilingualTextItemRole
 ): UpdateItemRoleFSA => ({
     type: UPDATE_ITEM_ROLE,
     payload: {

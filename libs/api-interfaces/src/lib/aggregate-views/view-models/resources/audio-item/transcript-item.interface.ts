@@ -1,8 +1,8 @@
-import { IMultiLingualText } from './multilingual-text.interface';
+import { IMultilingualText } from './multilingual-text.interface';
 
 export interface ITranscriptItem {
     inPoint: number;
     outPoint: number;
-    text: IMultiLingualText;
+    text: IMultilingualText;
     speakerInitials: string;
 }

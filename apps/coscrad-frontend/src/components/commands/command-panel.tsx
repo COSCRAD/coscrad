@@ -62,14 +62,7 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
     return (
         <CommandWorkspace
             selectedCommand={selectedCommand}
-            onFieldUpdate={(p: string, v: unknown) => {
-                console.log({
-                    p,
-                    v,
-                });
-
-                updateForm(p, v);
-            }}
+            onFieldUpdate={updateForm}
             formState={formState}
             aggregateCompositeIdentifier={
                 isAggregateType(commandContext)

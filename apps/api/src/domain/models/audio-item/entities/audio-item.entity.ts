@@ -1,4 +1,5 @@
 import {
+    CoscradMultilingualText,
     MIMEType,
     NestedDataType,
     NonNegativeFiniteNumber,
@@ -12,7 +13,7 @@ import { ValidationResult } from '../../../../lib/errors/types/ValidationResult'
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultiLingualText } from '../../../common/entities/multilingual-text';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
@@ -42,11 +43,11 @@ export type CoscradTimeStamp = number;
 export class AudioItem extends Resource {
     readonly type = ResourceType.audioItem;
 
-    @NestedDataType(MultiLingualText, {
+    @CoscradMultilingualText({
         label: 'name',
         description: 'the name of the transcript',
     })
-    readonly name: MultiLingualText;
+    readonly name: MultilingualText;
 
     @NestedDataType(Transcript, {
         isOptional: true,
@@ -90,7 +91,7 @@ export class AudioItem extends Resource {
 
         const { name, mediaItemId, lengthMilliseconds, transcript } = dto;
 
-        this.name = new MultiLingualText(name);
+        this.name = new MultilingualText(name);
 
         this.mediaItemId = mediaItemId;
 
@@ -205,15 +206,21 @@ export class AudioItem extends Resource {
         return !isNullOrUndefined(this.transcript);
     }
 
+    countTranscriptParticipants(): number {
+        if (!this.hasTranscript()) return 0;
+
+        return this.transcript.countParticipants();
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
         const availableCommandIds: string[] = [];
 
-        if (!this.hasTranscript) availableCommandIds.push(CREATE_TRANSCRIPT);
+        if (!this.hasTranscript()) availableCommandIds.push(CREATE_TRANSCRIPT);
 
-        if (this.hasTranscript) availableCommandIds.push(ADD_PARTICIPANT_TO_TRANSCRIPT);
+        if (this.hasTranscript()) availableCommandIds.push(ADD_PARTICIPANT_TO_TRANSCRIPT);
 
         // You can't add a line item without a participant to refer to (by initials)
-        if (this.transcript.countParticipants() > 0)
+        if (this.countTranscriptParticipants() > 0)
             availableCommandIds.push(ADD_LINE_ITEM_TO_TRANSCRIPT);
 
         return availableCommandIds;

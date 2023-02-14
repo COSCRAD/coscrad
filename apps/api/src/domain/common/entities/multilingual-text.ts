@@ -1,8 +1,8 @@
 import {
-    IMultiLingualText,
+    IMultilingualText,
     IMultlingualTextItem,
     LanguageCode,
-    MultiLingualTextItemRole,
+    MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
 import { ExternalEnum, NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { InternalError } from '../../../lib/errors/InternalError';
@@ -14,7 +14,7 @@ import { MultilingualTextHasNoOriginalError } from '../../models/audio-item/erro
 import { MultipleOriginalsInMultilingualTextError } from '../../models/audio-item/errors/multiple-originals-in-multilingual-text.error';
 import BaseDomainModel from '../../models/BaseDomainModel';
 
-export { MultiLingualTextItemRole };
+export { MultilingualTextItemRole };
 
 export class MultilingualTextItem extends BaseDomainModel implements IMultlingualTextItem {
     @ExternalEnum(
@@ -31,7 +31,7 @@ export class MultilingualTextItem extends BaseDomainModel implements IMultlingua
             description: 'an official identifier of the language',
         }
     )
-    readonly languageId: LanguageCode;
+    readonly languageCode: LanguageCode;
 
     @NonEmptyString({
         label: 'text',
@@ -41,7 +41,7 @@ export class MultilingualTextItem extends BaseDomainModel implements IMultlingua
 
     @ExternalEnum(
         {
-            labelsAndValues: Object.values(MultiLingualTextItemRole).map((label) => ({
+            labelsAndValues: Object.values(MultilingualTextItemRole).map((label) => ({
                 value: label,
                 label,
             })),
@@ -53,7 +53,7 @@ export class MultilingualTextItem extends BaseDomainModel implements IMultlingua
             label: 'text item role',
         }
     )
-    readonly role: MultiLingualTextItemRole;
+    readonly role: MultilingualTextItemRole;
 
     // TODO Support (user defined) dialects of the same language - would tags be the better way to do this?
     // @NonEmptyString({
@@ -68,9 +68,9 @@ export class MultilingualTextItem extends BaseDomainModel implements IMultlingua
 
         if (!dto) return;
 
-        const { languageId, role, text } = dto;
+        const { languageCode, role, text } = dto;
 
-        this.languageId = languageId;
+        this.languageCode = languageCode;
 
         this.role = role;
 
@@ -78,7 +78,7 @@ export class MultilingualTextItem extends BaseDomainModel implements IMultlingua
     }
 }
 
-export class MultiLingualText extends BaseDomainModel implements IMultiLingualText {
+export class MultilingualText extends BaseDomainModel implements IMultilingualText {
     @NestedDataType(MultilingualTextItem, {
         label: 'items',
         description: 'one item for each provided language',
@@ -86,7 +86,7 @@ export class MultiLingualText extends BaseDomainModel implements IMultiLingualTe
     })
     readonly items: MultilingualTextItem[];
 
-    constructor(dto: DTO<MultiLingualText>) {
+    constructor(dto: DTO<MultilingualText>) {
         super();
 
         if (!dto) return;
@@ -99,20 +99,20 @@ export class MultiLingualText extends BaseDomainModel implements IMultiLingualTe
     }
 
     toString(): string {
-        return this.items.map(({ text, languageId }) => `{${languageId}}: ${text}`).join('\n');
+        return this.items.map(({ text, languageCode }) => `{${languageCode}}: ${text}`).join('\n');
     }
 
     validateComplexInvariants(): ResultOrError<Valid> {
         const allErrors: InternalError[] = [];
 
         const originalTextItems = this.items.filter(
-            ({ role }) => role === MultiLingualTextItemRole.original
+            ({ role }) => role === MultilingualTextItemRole.original
         );
 
         if (originalTextItems.length > 1)
             allErrors.push(
                 new MultipleOriginalsInMultilingualTextError(
-                    originalTextItems.map(({ languageId }) => languageId)
+                    originalTextItems.map(({ languageCode }) => languageCode)
                 )
             );
 
@@ -126,7 +126,7 @@ export class MultiLingualText extends BaseDomainModel implements IMultiLingualTe
         );
 
         const countsForEachLanguage = this.items.reduce(
-            (accMap, { languageId }) => accMap.set(languageId, accMap.get(languageId) + 1),
+            (accMap, { languageCode }) => accMap.set(languageCode, accMap.get(languageCode) + 1),
             initialItemCountMap
         );
 

@@ -4,7 +4,6 @@ import { UPDATE_ITEM_TEXT } from './constants';
 
 type UpdateItemTextPayload = {
     languageCode: LanguageCode;
-    // TODO fix casing of this enum's name
     newText: string;
 };
 

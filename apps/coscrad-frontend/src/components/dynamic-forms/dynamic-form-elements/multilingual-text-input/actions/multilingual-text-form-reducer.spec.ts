@@ -1,4 +1,4 @@
-import { IMultiLingualText, LanguageCode, MultiLingualTextItemRole } from '@coscrad/api-interfaces';
+import { IMultilingualText, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { PayloadAction } from '@reduxjs/toolkit';
 
 import { multilingualTextFormReducer } from './multilingual-text-form-reducer';
@@ -7,12 +7,12 @@ import { updateItemText } from './update-item-text';
 
 type TestCase = {
     description: string;
-    initialState: IMultiLingualText;
+    initialState: IMultilingualText;
     action: PayloadAction<unknown>;
-    expectedUpdatedState: IMultiLingualText;
+    expectedUpdatedState: IMultilingualText;
 };
 
-const emptyInitialState: IMultiLingualText = {
+const emptyInitialState: IMultilingualText = {
     items: [],
 };
 
@@ -20,11 +20,11 @@ const testCases: TestCase[] = [
     {
         description: `when adding text for the first time`,
         initialState: emptyInitialState,
-        action: updateItemText(LanguageCode.haida, `Haida text`),
+        action: updateItemText(LanguageCode.Haida, `Haida text`),
         expectedUpdatedState: {
             items: [
                 {
-                    languageId: LanguageCode.haida,
+                    languageCode: LanguageCode.Haida,
                     text: `Haida text`,
                     role: null,
                 },
@@ -36,19 +36,19 @@ const testCases: TestCase[] = [
         initialState: {
             items: [
                 {
-                    languageId: LanguageCode.haida,
+                    languageCode: LanguageCode.Haida,
                     text: `Haida text`,
                     role: null,
                 },
             ],
         },
-        action: updateItemRole(LanguageCode.haida, MultiLingualTextItemRole.original),
+        action: updateItemRole(LanguageCode.Haida, MultilingualTextItemRole.original),
         expectedUpdatedState: {
             items: [
                 {
-                    languageId: LanguageCode.haida,
+                    languageCode: LanguageCode.Haida,
                     text: `Haida text`,
-                    role: MultiLingualTextItemRole.original,
+                    role: MultilingualTextItemRole.original,
                 },
             ],
         },
@@ -56,13 +56,13 @@ const testCases: TestCase[] = [
     {
         description: `when adding a role for the first time for a new item`,
         initialState: emptyInitialState,
-        action: updateItemRole(LanguageCode.english, MultiLingualTextItemRole.freeTranslation),
+        action: updateItemRole(LanguageCode.English, MultilingualTextItemRole.freeTranslation),
         expectedUpdatedState: {
             items: [
                 {
-                    languageId: LanguageCode.english,
+                    languageCode: LanguageCode.English,
                     text: null,
-                    role: MultiLingualTextItemRole.freeTranslation,
+                    role: MultilingualTextItemRole.freeTranslation,
                 },
             ],
         },
@@ -72,19 +72,19 @@ const testCases: TestCase[] = [
         initialState: {
             items: [
                 {
-                    languageId: LanguageCode.haida,
+                    languageCode: LanguageCode.Haida,
                     text: null,
-                    role: MultiLingualTextItemRole.original,
+                    role: MultilingualTextItemRole.original,
                 },
             ],
         },
-        action: updateItemText(LanguageCode.haida, `Haida text`),
+        action: updateItemText(LanguageCode.Haida, `Haida text`),
         expectedUpdatedState: {
             items: [
                 {
-                    languageId: LanguageCode.haida,
+                    languageCode: LanguageCode.Haida,
                     text: `Haida text`,
-                    role: MultiLingualTextItemRole.original,
+                    role: MultilingualTextItemRole.original,
                 },
             ],
         },
@@ -94,22 +94,22 @@ const testCases: TestCase[] = [
         initialState: {
             items: [
                 {
-                    languageId: LanguageCode.haida,
+                    languageCode: LanguageCode.Haida,
                     text: `Haida text`,
-                    role: MultiLingualTextItemRole.original,
+                    role: MultilingualTextItemRole.original,
                 },
             ],
         },
-        action: updateItemText(LanguageCode.english, `English translation text`),
+        action: updateItemText(LanguageCode.English, `English translation text`),
         expectedUpdatedState: {
             items: [
                 {
-                    languageId: LanguageCode.haida,
+                    languageCode: LanguageCode.Haida,
                     text: `Haida text`,
-                    role: MultiLingualTextItemRole.original,
+                    role: MultilingualTextItemRole.original,
                 },
                 {
-                    languageId: LanguageCode.english,
+                    languageCode: LanguageCode.English,
                     text: `English translation text`,
                     role: null,
                 },
@@ -121,29 +121,29 @@ const testCases: TestCase[] = [
         initialState: {
             items: [
                 {
-                    languageId: LanguageCode.haida,
+                    languageCode: LanguageCode.Haida,
                     text: `Haida text`,
-                    role: MultiLingualTextItemRole.original,
+                    role: MultilingualTextItemRole.original,
                 },
                 {
-                    languageId: LanguageCode.english,
+                    languageCode: LanguageCode.English,
                     text: `English translation text`,
-                    role: MultiLingualTextItemRole.freeTranslation,
+                    role: MultilingualTextItemRole.freeTranslation,
                 },
             ],
         },
-        action: updateItemText(LanguageCode.english, `New English translation text`),
+        action: updateItemText(LanguageCode.English, `New English translation text`),
         expectedUpdatedState: {
             items: [
                 {
-                    languageId: LanguageCode.haida,
+                    languageCode: LanguageCode.Haida,
                     text: `Haida text`,
-                    role: MultiLingualTextItemRole.original,
+                    role: MultilingualTextItemRole.original,
                 },
                 {
-                    languageId: LanguageCode.english,
+                    languageCode: LanguageCode.English,
                     text: `New English translation text`,
-                    role: MultiLingualTextItemRole.freeTranslation,
+                    role: MultilingualTextItemRole.freeTranslation,
                 },
             ],
         },

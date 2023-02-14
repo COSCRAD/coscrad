@@ -7,8 +7,8 @@ import generateDatabaseNameForTestSuite from '../../../../../../persistence/repo
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../../../types/DTO';
 import {
-    MultiLingualText,
-    MultiLingualTextItemRole,
+    MultilingualText,
+    MultilingualTextItemRole,
 } from '../../../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../../types/AggregateType';
@@ -53,17 +53,17 @@ const allTimestamps = Array(numberOfTimestampsToGenerate)
         audioStart + ((index + 1) * audioLength) / numberOfTimestampsToGenerate - epsilon,
     ]);
 
-const dummyText = new MultiLingualText({
+const dummyText = new MultilingualText({
     items: [
         {
-            languageId: LanguageCode.chilcotin,
+            languageCode: LanguageCode.Chilcotin,
             text: 'lha lha lha',
-            role: MultiLingualTextItemRole.original,
+            role: MultilingualTextItemRole.original,
         },
         {
-            languageId: LanguageCode.english,
+            languageCode: LanguageCode.English,
             text: 'bla bla bla',
-            role: MultiLingualTextItemRole.literalTranslation,
+            role: MultilingualTextItemRole.literalTranslation,
         },
     ],
 }).toDTO();
@@ -85,17 +85,17 @@ const validInitialState = new DeluxeInMemoryStore({
     [AggregateType.audioItem]: [existingAudioItem],
 }).fetchFullSnapshotInLegacyFormat();
 
-const multilingualTextWithMultipleOriginalItems: DTO<MultiLingualText> = {
+const multilingualTextWithMultipleOriginalItems: DTO<MultilingualText> = {
     items: [
         {
-            role: MultiLingualTextItemRole.original,
+            role: MultilingualTextItemRole.original,
             text: 'bla bla',
-            languageId: LanguageCode.english,
+            languageCode: LanguageCode.English,
         },
         {
-            role: MultiLingualTextItemRole.original,
+            role: MultilingualTextItemRole.original,
             text: 'bla bla',
-            languageId: LanguageCode.haida,
+            languageCode: LanguageCode.Haida,
         },
     ],
 };
@@ -108,12 +108,12 @@ const commandFsaWithMultipleOriginalTextItems = commandFSAFactory.build(
     }
 );
 
-const multilingualTextWithNoOriginalItems: DTO<MultiLingualText> = {
+const multilingualTextWithNoOriginalItems: DTO<MultilingualText> = {
     items: [
         {
-            role: MultiLingualTextItemRole.freeTranslation,
+            role: MultilingualTextItemRole.freeTranslation,
             text: 'bla bla',
-            languageId: LanguageCode.english,
+            languageCode: LanguageCode.English,
         },
     ],
 };
@@ -126,17 +126,17 @@ const commandFsaNoOriginalTextItems = commandFSAFactory.build(
     }
 );
 
-const multilingualTextWithDuplicateLanguageItems: DTO<MultiLingualText> = {
+const multilingualTextWithDuplicateLanguageItems: DTO<MultilingualText> = {
     items: [
         {
-            role: MultiLingualTextItemRole.freeTranslation,
+            role: MultilingualTextItemRole.freeTranslation,
             text: 'bla bla',
-            languageId: LanguageCode.english,
+            languageCode: LanguageCode.English,
         },
         {
-            role: MultiLingualTextItemRole.original,
+            role: MultilingualTextItemRole.original,
             text: 'bla bla',
-            languageId: LanguageCode.english,
+            languageCode: LanguageCode.English,
         },
     ],
 };
@@ -382,8 +382,8 @@ describe(commandType, () => {
 
                         const expectedNestedError = new MultipleOriginalsInMultilingualTextError(
                             commandFsaWithMultipleOriginalTextItems.payload.text.items
-                                .filter(({ role }) => role === MultiLingualTextItemRole.original)
-                                .map(({ languageId }) => languageId)
+                                .filter(({ role }) => role === MultilingualTextItemRole.original)
+                                .map(({ languageCode }) => languageCode)
                         );
 
                         expect(error.toString().includes(expectedNestedError.toString()));

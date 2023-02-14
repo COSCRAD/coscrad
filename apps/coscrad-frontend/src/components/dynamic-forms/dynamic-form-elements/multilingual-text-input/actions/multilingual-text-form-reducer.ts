@@ -1,11 +1,11 @@
-import { IMultiLingualText } from '@coscrad/api-interfaces';
+import { IMultilingualText } from '@coscrad/api-interfaces';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { isUpdateItemRoleAction } from './update-item-role';
 import { isUpdateItemTextAction } from './update-item-text';
 
-export const multiLingualTextReducerWtihNotification =
+export const multiLingualTextReducerWithNotification =
     (notify: (propertyValue: unknown) => void) =>
-    (state: IMultiLingualText, fsa: PayloadAction<unknown>): IMultiLingualText => {
+    (state: IMultilingualText, fsa: PayloadAction<unknown>): IMultilingualText => {
         const newState = multilingualTextFormReducer(state, fsa);
 
         notify(newState);
@@ -15,19 +15,19 @@ export const multiLingualTextReducerWtihNotification =
 
 // TODO do these really need to be tsx files?
 export const multilingualTextFormReducer = (
-    state: IMultiLingualText,
+    state: IMultilingualText,
     fsa: PayloadAction<unknown>
-): IMultiLingualText => {
+): IMultilingualText => {
     if (isUpdateItemRoleAction(fsa)) {
         const {
             payload: { languageCode, newRole },
         } = fsa;
 
-        if (!state.items.some(({ languageId }) => languageId === languageCode))
+        if (!state.items.some((item) => languageCode === item.languageCode))
             return {
                 items: state.items.concat(
                     state.items.concat({
-                        languageId: languageCode,
+                        languageCode: languageCode,
                         text: null,
                         role: newRole,
                     })
@@ -36,7 +36,7 @@ export const multilingualTextFormReducer = (
 
         return {
             items: state.items.map((item) =>
-                item.languageId === languageCode
+                item.languageCode === languageCode
                     ? {
                           ...item,
                           role: newRole,
@@ -52,9 +52,9 @@ export const multilingualTextFormReducer = (
         } = fsa;
 
         return {
-            items: state.items.some(({ languageId }) => languageId === languageCode)
+            items: state.items.some((item) => item.languageCode === languageCode)
                 ? state.items.map((item) =>
-                      item.languageId === languageCode
+                      item.languageCode === languageCode
                           ? {
                                 ...item,
                                 text: newText,
@@ -62,7 +62,7 @@ export const multilingualTextFormReducer = (
                           : item
                   )
                 : state.items.concat({
-                      languageId: languageCode,
+                      languageCode: languageCode,
                       text: newText,
                       role: null,
                   }),

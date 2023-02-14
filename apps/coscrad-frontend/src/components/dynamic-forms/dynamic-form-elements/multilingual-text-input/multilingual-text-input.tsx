@@ -1,9 +1,4 @@
-import {
-    IFormField,
-    IMultiLingualText,
-    LanguageCode,
-    MultiLingualTextItemRole,
-} from '@coscrad/api-interfaces';
+import { IFormField, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import {
     Accordion,
     AccordionDetails,
@@ -14,7 +9,7 @@ import {
     TextField,
 } from '@mui/material';
 import { useReducer } from 'react';
-import { multiLingualTextReducerWtihNotification } from './actions/multilingual-text-form-reducer';
+import { multiLingualTextReducerWithNotification } from './actions/multilingual-text-form-reducer';
 import { updateItemRole } from './actions/update-item-role';
 import { updateItemText } from './actions/update-item-text';
 
@@ -29,20 +24,16 @@ interface MultilingualTextInputProps {
 interface SingleLanguageFieldProps {
     name: string;
     label: string;
-    languageId: LanguageCode;
+    languageCode: LanguageCode;
     languageName: string;
-    onInputChange: OnInputChange;
-    formState: IMultiLingualText;
     dispatch: React.Dispatch<unknown>;
 }
 
 const SingleLanguageField = ({
     name,
     label,
-    languageId,
+    languageCode,
     languageName,
-    onInputChange,
-    formState,
     dispatch,
 }: SingleLanguageFieldProps) => (
     <Accordion>
@@ -50,12 +41,10 @@ const SingleLanguageField = ({
         <AccordionDetails>
             <Stack>
                 <TextField
-                    name={`${name}:${languageId}`}
+                    name={`${name}:${languageCode}`}
                     label={label}
                     onChange={(e) => {
-                        dispatch(updateItemText(languageId, e.target.value));
-
-                        onInputChange(name, formState);
+                        dispatch(updateItemText(languageCode, e.target.value));
                     }}
                     required={false}
                 />
@@ -65,13 +54,11 @@ const SingleLanguageField = ({
                     required={true}
                     onChange={(e) => {
                         dispatch(
-                            updateItemRole(languageId, e.target.value as MultiLingualTextItemRole)
+                            updateItemRole(languageCode, e.target.value as MultilingualTextItemRole)
                         );
-
-                        onInputChange(name, formState);
                     }}
                 >
-                    {Object.values(MultiLingualTextItemRole).map((role) => (
+                    {Object.values(MultilingualTextItemRole).map((role) => (
                         <MenuItem value={role} key={role}>
                             {role}
                         </MenuItem>
@@ -93,7 +80,7 @@ export const MultilingualTextInput = ({
     onInputChange,
 }: MultilingualTextInputProps): JSX.Element => {
     const [multilingualText, dispatch] = useReducer(
-        multiLingualTextReducerWtihNotification((propertyValue: unknown) =>
+        multiLingualTextReducerWithNotification((propertyValue: unknown) =>
             onInputChange(name, propertyValue)
         ),
         {
@@ -106,26 +93,24 @@ export const MultilingualTextInput = ({
             current state: {JSON.stringify(multilingualText)}
             {[
                 {
-                    languageId: LanguageCode.haida,
+                    languageCode: LanguageCode.Haida,
                     languageName: 'Haida',
                 },
                 {
-                    languageId: LanguageCode.chilcotin,
+                    languageCode: LanguageCode.Chilcotin,
                     languageName: 'Tŝilhqot’in',
                 },
                 {
-                    languageId: LanguageCode.english,
+                    languageCode: LanguageCode.English,
                     languageName: 'English',
                 },
-            ].map(({ languageId, languageName }) => (
+            ].map(({ languageCode, languageName }) => (
                 <SingleLanguageField
-                    languageId={languageId}
+                    languageCode={languageCode}
                     languageName={languageName}
                     name={name}
                     label={label}
-                    formState={multilingualText}
                     dispatch={dispatch}
-                    onInputChange={onInputChange}
                 />
             ))}
         </>
