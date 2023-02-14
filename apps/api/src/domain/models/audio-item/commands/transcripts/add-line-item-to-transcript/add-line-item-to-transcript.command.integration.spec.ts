@@ -5,6 +5,7 @@ import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/se
 import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import { DTO } from '../../../../../../types/DTO';
 import {
     MultiLingualText,
     MultiLingualTextItemRole,
@@ -22,6 +23,8 @@ import { CommandAssertionDependencies } from '../../../../__tests__/command-help
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { TranscriptLineItemOutOfBoundsError } from '../../../errors';
+import { MultilingualTextHasNoOriginalError } from '../../../errors/multilingual-text-has-no-original.error';
+import { MultipleOriginalsInMultilingualTextError } from '../../../errors/multiple-originals-in-multilingual-text.error';
 import { CannotAddInconsistentLineItemError } from '../../../errors/transcript-line-item/cannot-add-inconsistent-line-item.error';
 import { TranscriptParticipantInitialsNotRegisteredError } from '../../../errors/transcript-participant-initials-not-registered.error';
 import { AddLineItemToTranscript } from './add-line-item-to-transcript.command';
@@ -81,6 +84,70 @@ const commandFSAFactory = new DummyCommandFSAFactory(() => validCommandFSA);
 const validInitialState = new DeluxeInMemoryStore({
     [AggregateType.audioItem]: [existingAudioItem],
 }).fetchFullSnapshotInLegacyFormat();
+
+const multilingualTextWithMultipleOriginalItems: DTO<MultiLingualText> = {
+    items: [
+        {
+            role: MultiLingualTextItemRole.original,
+            text: 'bla bla',
+            languageId: LanguageCode.english,
+        },
+        {
+            role: MultiLingualTextItemRole.original,
+            text: 'bla bla',
+            languageId: LanguageCode.haida,
+        },
+    ],
+};
+
+const commandFsaWithMultipleOriginalTextItems = commandFSAFactory.build(
+    validCommandFSA.payload.aggregateCompositeIdentifier.id,
+    {
+        aggregateCompositeIdentifier: validCommandFSA.payload.aggregateCompositeIdentifier,
+        text: multilingualTextWithMultipleOriginalItems,
+    }
+);
+
+const multilingualTextWithNoOriginalItems: DTO<MultiLingualText> = {
+    items: [
+        {
+            role: MultiLingualTextItemRole.freeTranslation,
+            text: 'bla bla',
+            languageId: LanguageCode.english,
+        },
+    ],
+};
+
+const commandFsaNoOriginalTextItems = commandFSAFactory.build(
+    validCommandFSA.payload.aggregateCompositeIdentifier.id,
+    {
+        aggregateCompositeIdentifier: validCommandFSA.payload.aggregateCompositeIdentifier,
+        text: multilingualTextWithNoOriginalItems,
+    }
+);
+
+const multilingualTextWithDuplicateLanguageItems: DTO<MultiLingualText> = {
+    items: [
+        {
+            role: MultiLingualTextItemRole.freeTranslation,
+            text: 'bla bla',
+            languageId: LanguageCode.english,
+        },
+        {
+            role: MultiLingualTextItemRole.original,
+            text: 'bla bla',
+            languageId: LanguageCode.english,
+        },
+    ],
+};
+
+const commandFsaWithDuplicateItemsForSingleLanguage = commandFSAFactory.build(
+    validCommandFSA.payload.aggregateCompositeIdentifier.id,
+    {
+        aggregateCompositeIdentifier: validCommandFSA.payload.aggregateCompositeIdentifier,
+        text: multilingualTextWithDuplicateLanguageItems,
+    }
+);
 
 describe(commandType, () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -289,6 +356,91 @@ describe(commandType, () => {
                                 ),
                             ])
                         );
+                    },
+                });
+            });
+        });
+
+        describe(`when there is more than one text item with the role "original"`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId,
+                    initialState: validInitialState,
+                    buildCommandFSA: () => commandFsaWithMultipleOriginalTextItems,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                /**
+                                 * TODO Check inner errors. The nesting is starting
+                                 * to get pretty deep. We need to deal with this
+                                 * both from the test point of view but also as a
+                                 * matter of UX.
+                                 */
+                            ])
+                        );
+
+                        const expectedNestedError = new MultipleOriginalsInMultilingualTextError(
+                            commandFsaWithMultipleOriginalTextItems.payload.text.items
+                                .filter(({ role }) => role === MultiLingualTextItemRole.original)
+                                .map(({ languageId }) => languageId)
+                        );
+
+                        expect(error.toString().includes(expectedNestedError.toString()));
+                    },
+                });
+            });
+        });
+
+        describe(`when there is no text item with the role "original"`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId,
+                    initialState: validInitialState,
+                    buildCommandFSA: () => commandFsaNoOriginalTextItems,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                /**
+                                 * TODO Check inner errors. The nesting is starting
+                                 * to get pretty deep. We need to deal with this
+                                 * both from the test point of view but also as a
+                                 * matter of UX.
+                                 */
+                            ])
+                        );
+
+                        const expectedNestedError = new MultilingualTextHasNoOriginalError();
+
+                        expect(error.toString().includes(expectedNestedError.toString()));
+                    },
+                });
+            });
+        });
+
+        describe(`when there are multiple items with the same language`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId,
+                    initialState: validInitialState,
+                    buildCommandFSA: () => commandFsaWithDuplicateItemsForSingleLanguage,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                /**
+                                 * TODO Check inner errors. The nesting is starting
+                                 * to get pretty deep. We need to deal with this
+                                 * both from the test point of view but also as a
+                                 * matter of UX.
+                                 */
+                            ])
+                        );
+
+                        const expectedNestedError = new MultilingualTextHasNoOriginalError();
+
+                        expect(error.toString().includes(expectedNestedError.toString()));
                     },
                 });
             });

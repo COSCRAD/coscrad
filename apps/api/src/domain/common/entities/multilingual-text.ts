@@ -5,7 +5,13 @@ import {
     MultiLingualTextItemRole,
 } from '@coscrad/api-interfaces';
 import { ExternalEnum, NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { InternalError } from '../../../lib/errors/InternalError';
 import { DTO } from '../../../types/DTO';
+import { ResultOrError } from '../../../types/ResultOrError';
+import { Valid } from '../../domainModelValidators/Valid';
+import { DuplicateLanguageInMultilingualTextError } from '../../models/audio-item/errors/duplicate-language-in-multilingual-text.error';
+import { MultilingualTextHasNoOriginalError } from '../../models/audio-item/errors/multilingual-text-has-no-original.error';
+import { MultipleOriginalsInMultilingualTextError } from '../../models/audio-item/errors/multiple-originals-in-multilingual-text.error';
 import BaseDomainModel from '../../models/BaseDomainModel';
 
 export { MultiLingualTextItemRole };
@@ -94,5 +100,45 @@ export class MultiLingualText extends BaseDomainModel implements IMultiLingualTe
 
     toString(): string {
         return this.items.map(({ text, languageId }) => `{${languageId}}: ${text}`).join('\n');
+    }
+
+    validateComplexInvariants(): ResultOrError<Valid> {
+        const allErrors: InternalError[] = [];
+
+        const originalTextItems = this.items.filter(
+            ({ role }) => role === MultiLingualTextItemRole.original
+        );
+
+        if (originalTextItems.length > 1)
+            allErrors.push(
+                new MultipleOriginalsInMultilingualTextError(
+                    originalTextItems.map(({ languageId }) => languageId)
+                )
+            );
+
+        if (originalTextItems.length === 0)
+            allErrors.push(new MultilingualTextHasNoOriginalError());
+
+        // Initialize a map for counting the items with each language
+        const initialItemCountMap = Object.values(LanguageCode).reduce(
+            (accMap, languageCode) => accMap.set(languageCode, 0),
+            new Map<LanguageCode, number>()
+        );
+
+        const countsForEachLanguage = this.items.reduce(
+            (accMap, { languageId }) => accMap.set(languageId, accMap.get(languageId) + 1),
+            initialItemCountMap
+        );
+
+        const languageDuplicationErrors = [...countsForEachLanguage.entries()]
+            .filter(([_key, count]) => count > 1)
+            .map(([key, _count]) => key)
+            .map((key: LanguageCode) => new DuplicateLanguageInMultilingualTextError(key));
+
+        allErrors.push(...languageDuplicationErrors);
+
+        return allErrors.length > 0
+            ? new InternalError(`Encountered an instance of invalid multilingual text`, allErrors)
+            : Valid;
     }
 }

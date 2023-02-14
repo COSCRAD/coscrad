@@ -134,7 +134,7 @@ export class Transcript extends BaseDomainModel implements ITranscript {
     private validateLineItem(newLineItem: TranscriptItem): InternalError[] {
         const allErrors: InternalError[] = [];
 
-        const itemValidationResult = newLineItem.validateInvariants();
+        const itemValidationResult = newLineItem.validateComplexInvariants();
 
         if (!isValid(itemValidationResult)) allErrors.push(itemValidationResult);
 

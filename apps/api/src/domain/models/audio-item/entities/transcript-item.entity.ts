@@ -1,7 +1,7 @@
 import { ITranscriptItem } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { isNumberWithinRange } from '@coscrad/validation-constraints';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
@@ -89,10 +89,14 @@ export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
         return `[${inPoint}] [${speakerInitials}] ${text?.toString()} [${outPoint}]`;
     }
 
-    validateInvariants(): ResultOrError<Valid> {
+    validateComplexInvariants(): ResultOrError<Valid> {
         const allErrors: InternalError[] = [];
 
         if (this.inPoint > this.outPoint) allErrors.push(new InvalidTimestampOrderError(this));
+
+        const textValidationResult = this.text.validateComplexInvariants();
+
+        if (isInternalError(textValidationResult)) allErrors.push(textValidationResult);
 
         return allErrors.length > 0
             ? new InternalError(`Encountered an invalid transcript line item`, allErrors)
