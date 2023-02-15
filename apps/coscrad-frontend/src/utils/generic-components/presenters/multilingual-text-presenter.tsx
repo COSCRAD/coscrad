@@ -5,14 +5,22 @@ export interface MultilingualTextPresenterProps {
 }
 
 export const MultilingualTextPresenter = ({
-    text: { items },
-}: MultilingualTextPresenterProps): JSX.Element => (
-    <>
-        {/* TODO We need to separate the original in some way */}
-        {items.map(({ languageCode, text, role }) => (
-            <div>
-                {`{${languageCode}} [${role}]`} {text}
-            </div>
-        ))}
-    </>
-);
+    text,
+}: MultilingualTextPresenterProps): JSX.Element => {
+    const { items } = text;
+
+    if (!Array.isArray(items)) {
+        throw new Error(`invalid input to Multlingual text!: ${text}`);
+    }
+
+    return (
+        <>
+            {/* TODO We need to separate the original in some way */}
+            {items.map(({ languageCode, text, role }) => (
+                <div>
+                    {`{${languageCode}} [${role}]`} {text}
+                </div>
+            ))}
+        </>
+    );
+};

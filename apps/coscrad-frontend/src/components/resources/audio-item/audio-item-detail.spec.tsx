@@ -1,4 +1,10 @@
-import { IAudioItemViewModel, MIMEType, ResourceType } from '@coscrad/api-interfaces';
+import {
+    IAudioItemViewModel,
+    LanguageCode,
+    MIMEType,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -21,7 +27,20 @@ const transcribedAudioToFind: IAudioItemViewModel = {
     audioURL: 'https://www.soundbox.org/123.mp3',
     lengthMilliseconds: 5600,
     text: '[0:01] Blah blah blah [0:05]',
-    name: 'Test Audio 1',
+    name: {
+        items: [
+            {
+                role: MultilingualTextItemRole.original,
+                languageCode: LanguageCode.Haida,
+                text: 'Test Audio Name 1 in Haida',
+            },
+            {
+                role: MultilingualTextItemRole.freeTranslation,
+                languageCode: LanguageCode.English,
+                text: 'Test Audio Name 1 translated to English',
+            },
+        ],
+    },
     mimeType: MIMEType.mp3,
 };
 
@@ -31,7 +50,20 @@ const dummyTranscribedAudioItems: IAudioItemViewModel[] = [
         audioURL: 'https://www.soundbox.org/1245.mp3',
         lengthMilliseconds: 56500,
         text: '[0:03] testing, this is a test! [0:05]',
-        name: 'Test Audio 2',
+        name: {
+            items: [
+                {
+                    role: MultilingualTextItemRole.original,
+                    languageCode: LanguageCode.Haida,
+                    text: 'Test Audio Name 2 in Haida',
+                },
+                {
+                    role: MultilingualTextItemRole.freeTranslation,
+                    languageCode: LanguageCode.English,
+                    text: 'Test Audio Name 2 translated to English',
+                },
+            ],
+        },
         mimeType: MIMEType.mp3,
     },
     transcribedAudioToFind,

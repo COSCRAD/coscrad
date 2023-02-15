@@ -87,7 +87,7 @@ const invalidProps: InvalidProps[] = [
     {
         propertyName: 'siteCredits',
         invalidValue: undefined,
-        description: 'undefined'
+        description: 'undefined',
     },
     {
         propertyName: 'siteCredits',
