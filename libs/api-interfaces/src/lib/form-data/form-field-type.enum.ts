@@ -10,4 +10,5 @@ export enum FormFieldType {
     staticSelect = 'STATIC_SELECT', // Corresponds to a dropdown
     switch = 'SWITCH', // Corresponds to a switch
     dynamicSelect = 'DYNAMIC_SELECT',
+    multilingualText = 'MULTILINGUAL_TEXT',
 }

@@ -1,7 +1,7 @@
 export interface IBookPage {
     identifier: string;
 
-    // We may want a `MultiLingualText` here instead
+    // We may want a `MultilingualText` here instead
     text: string;
 
     translation: string;

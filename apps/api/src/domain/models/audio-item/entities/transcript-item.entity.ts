@@ -1,11 +1,12 @@
+import { ITranscriptItem } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { isNumberWithinRange } from '@coscrad/validation-constraints';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultiLingualText } from '../../../common/entities/multi-lingual-text';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
@@ -14,7 +15,7 @@ import { InvalidTimestampOrderError } from '../errors';
 // We can change this later
 type MediaTimestamp = number;
 
-export class TranscriptItem extends BaseDomainModel {
+export class TranscriptItem extends BaseDomainModel implements ITranscriptItem {
     @NonNegativeFiniteNumber({
         label: 'in point',
         description: 'starting time stamp',
@@ -27,11 +28,11 @@ export class TranscriptItem extends BaseDomainModel {
     })
     readonly outPoint: MediaTimestamp;
 
-    @NestedDataType(MultiLingualText, {
+    @NestedDataType(MultilingualText, {
         label: 'text',
         description: 'multi-lingual text transcription \\ translation for this item',
     })
-    readonly text: MultiLingualText;
+    readonly text: MultilingualText;
 
     @NonEmptyString({
         label: 'label',
@@ -50,7 +51,7 @@ export class TranscriptItem extends BaseDomainModel {
 
         this.outPoint = outPoint;
 
-        if (data) this.text = new MultiLingualText(data);
+        if (data) this.text = new MultilingualText(data);
 
         this.speakerInitials = label;
     }
@@ -59,11 +60,11 @@ export class TranscriptItem extends BaseDomainModel {
         return !isNullOrUndefined(this.text);
     }
 
-    getData(): Maybe<MultiLingualText> {
+    getData(): Maybe<MultilingualText> {
         return this.hasData() ? this.text : NotFound;
     }
 
-    setData<T extends MultiLingualText>(newData: T) {
+    setData<T extends MultilingualText>(newData: T) {
         return this.clone<TranscriptItem>({
             data: newData,
         } as unknown as TranscriptItem);
@@ -80,15 +81,20 @@ export class TranscriptItem extends BaseDomainModel {
     }
 
     toString() {
-        const { inPoint, outPoint, text } = this;
+        const { inPoint, outPoint, text, speakerInitials } = this;
 
-        return `[${inPoint}] ${text.toString()} [${outPoint}]`;
+        // todo remove ? chaining
+        return `[${inPoint}] [${speakerInitials}] ${text?.toString()} [${outPoint}]`;
     }
 
-    validateInvariants(): ResultOrError<Valid> {
+    validateComplexInvariants(): ResultOrError<Valid> {
         const allErrors: InternalError[] = [];
 
         if (this.inPoint > this.outPoint) allErrors.push(new InvalidTimestampOrderError(this));
+
+        const textValidationResult = this.text.validateComplexInvariants();
+
+        if (isInternalError(textValidationResult)) allErrors.push(textValidationResult);
 
         return allErrors.length > 0
             ? new InternalError(`Encountered an invalid transcript line item`, allErrors)

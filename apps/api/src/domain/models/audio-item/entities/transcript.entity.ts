@@ -1,3 +1,4 @@
+import { ITranscript } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -5,7 +6,6 @@ import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import convertTimeRangeDataToPlainTextTranscript from '../../../../view-models/buildViewModelForResource/viewModels/audio-item/utilities/convertTimeRangeDataToPlainTextTranscript';
 import { isValid } from '../../../domainModelValidators/Valid';
 import BaseDomainModel from '../../BaseDomainModel';
 import {
@@ -19,7 +19,7 @@ import { TranscriptParticipantInitialsNotRegisteredError } from '../errors/trans
 import { TranscriptItem } from './transcript-item.entity';
 import { TranscriptParticipant } from './transcript-participant';
 
-export class Transcript extends BaseDomainModel {
+export class Transcript extends BaseDomainModel implements ITranscript {
     // TODO Validate that there are not duplicate IDs here
     @NestedDataType(TranscriptParticipant, {
         isArray: true,
@@ -121,7 +121,7 @@ export class Transcript extends BaseDomainModel {
     }
 
     toString(): string {
-        return convertTimeRangeDataToPlainTextTranscript(this.items);
+        return this.items.map((item) => item.toString()).join('\n');
     }
 
     private getConflictingItems({
@@ -134,7 +134,7 @@ export class Transcript extends BaseDomainModel {
     private validateLineItem(newLineItem: TranscriptItem): InternalError[] {
         const allErrors: InternalError[] = [];
 
-        const itemValidationResult = newLineItem.validateInvariants();
+        const itemValidationResult = newLineItem.validateComplexInvariants();
 
         if (!isValid(itemValidationResult)) allErrors.push(itemValidationResult);
 

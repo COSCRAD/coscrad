@@ -17,6 +17,8 @@ type CoscradDataTypeToTypeScriptType = {
     [CoscradDataType.UUID]: string;
     [CoscradDataType.Year]: number;
     [CoscradDataType.String]: string;
+    [CoscradDataType.MultilingualText]: unknown;
 };
 
+// is this still used?
 export type FromCoscradDataType<T extends CoscradDataType> = CoscradDataTypeToTypeScriptType[T];

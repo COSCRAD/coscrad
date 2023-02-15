@@ -683,7 +683,7 @@
                 "name": {
                     "items": [
                         {
-                            "languageId": "eng",
+                            "languageCode": "eng",
                             "role": "original",
                             "text": "The Wooden Boy"
                         }
@@ -705,7 +705,7 @@
                             "text": {
                                 "items": [
                                     {
-                                        "languageId": "eng",
+                                        "languageCode": "eng",
                                         "role": "original",
                                         "text": "There once was a little wooden boy."
                                     }
@@ -719,7 +719,7 @@
                             "text": {
                                 "items": [
                                     {
-                                        "languageId": "eng",
+                                        "languageCode": "eng",
                                         "role": "original",
                                         "text": "His name was Pinocchio"
                                     }
@@ -742,7 +742,7 @@
                 "name": {
                     "items": [
                         {
-                            "languageId": "clc",
+                            "languageCode": "clc",
                             "role": "original",
                             "text": "Down at the River"
                         }
@@ -768,7 +768,7 @@
                             "text": {
                                 "items": [
                                     {
-                                        "languageId": "eng",
+                                        "languageCode": "eng",
                                         "role": "original",
                                         "text": "While she went down to the river"
                                     }
@@ -782,7 +782,7 @@
                             "text": {
                                 "items": [
                                     {
-                                        "languageId": "eng",
+                                        "languageCode": "eng",
                                         "role": "original",
                                         "text": "someone had already filled the water tank."
                                     }
@@ -796,7 +796,7 @@
                             "text": {
                                 "items": [
                                     {
-                                        "languageId": "eng",
+                                        "languageCode": "eng",
                                         "role": "original",
                                         "text": "These were the types of problems we had."
                                     }
@@ -819,7 +819,7 @@
                 "name": {
                     "items": [
                         {
-                            "languageId": "hai",
+                            "languageCode": "hai",
                             "role": "original",
                             "text": "Learning about Protocols"
                         }
@@ -845,7 +845,7 @@
                             "text": {
                                 "items": [
                                     {
-                                        "languageId": "eng",
+                                        "languageCode": "eng",
                                         "role": "original",
                                         "text": "this type of spoon is used in ceremonies"
                                     }
@@ -859,7 +859,7 @@
                             "text": {
                                 "items": [
                                     {
-                                        "languageId": "eng",
+                                        "languageCode": "eng",
                                         "role": "original",
                                         "text": "by members of the opposite clan of the house chief"
                                     }

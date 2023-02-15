@@ -1,4 +1,4 @@
-export * from './audio-item.view-model.interface';
+export * from './audio-item';
 export * from './bibliographic-reference';
 export * from './book';
 export * from './media-items';

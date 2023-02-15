@@ -1,8 +1,9 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import {
-    MultiLingualText,
-    MultiLingualTextItem,
-    MultiLingualTextItemRole,
-} from '../domain/common/entities/multi-lingual-text';
+    MultilingualText,
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from '../domain/common/entities/multilingual-text';
 import { AudioItem } from '../domain/models/audio-item/entities/audio-item.entity';
 import { Transcript } from '../domain/models/audio-item/entities/transcript.entity';
 import { ResourceType } from '../domain/types/ResourceType';
@@ -12,13 +13,13 @@ import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid
 
 const mediaItems = buildMediaItemTestData();
 
-const buildSingleLanguageText = (text: string, languageId: string) =>
-    new MultiLingualText({
+const buildSingleLanguageText = (text: string, languageCode: LanguageCode) =>
+    new MultilingualText({
         items: [
-            new MultiLingualTextItem({
+            new MultilingualTextItem({
                 text,
-                languageId: languageId,
-                role: MultiLingualTextItemRole.original,
+                languageCode,
+                role: MultilingualTextItemRole.original,
             }),
         ],
     });
@@ -26,7 +27,7 @@ const buildSingleLanguageText = (text: string, languageId: string) =>
 const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
     {
         id: '110',
-        name: buildSingleLanguageText('The Wooden Boy', 'eng'),
+        name: buildSingleLanguageText('The Wooden Boy', LanguageCode.English),
         mediaItemId: mediaItems[0].id,
         lengthMilliseconds: 20000,
         published: true,
@@ -52,13 +53,13 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
                 },
             ].map((item) => ({
                 ...item,
-                text: buildSingleLanguageText(item.text, 'eng'),
+                text: buildSingleLanguageText(item.text, LanguageCode.English),
             })),
         }),
     },
     {
         id: '111',
-        name: buildSingleLanguageText('Down at the River', 'clc'),
+        name: buildSingleLanguageText('Down at the River', LanguageCode.Chilcotin),
         transcript: {
             participants: [
                 {
@@ -91,7 +92,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
                 },
             ].map((item) => ({
                 ...item,
-                text: buildSingleLanguageText(item.text, 'eng'),
+                text: buildSingleLanguageText(item.text, LanguageCode.English),
             })),
         },
         mediaItemId: mediaItems[0].id,
@@ -100,7 +101,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
     },
     {
         id: '113',
-        name: buildSingleLanguageText('Learning about Protocols', 'hai'),
+        name: buildSingleLanguageText('Learning about Protocols', LanguageCode.Haida),
         transcript: {
             participants: [
                 {
@@ -127,7 +128,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
                 },
             ].map((item) => ({
                 ...item,
-                text: buildSingleLanguageText(item.text, 'eng'),
+                text: buildSingleLanguageText(item.text, LanguageCode.English),
             })),
         },
         mediaItemId: mediaItems[0].id,

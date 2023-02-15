@@ -16,6 +16,7 @@ export enum CoscradDataType {
     PositiveInteger = 'POSITIVE_INTEGER',
     ISBN = 'ISBN',
     BOOLEAN = 'BOOLEAN',
+    MultilingualText = 'MULTILINGUAL_TEXT',
 }
 
 export const isCoscradDataType = (input: unknown): input is CoscradDataType =>

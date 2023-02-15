@@ -1,4 +1,4 @@
-import { MIMEType } from '@coscrad/api-interfaces';
+import { LanguageCode, MIMEType } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -9,10 +9,10 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../../types/DTO';
 import {
-    MultiLingualText,
-    MultiLingualTextItem,
-    MultiLingualTextItemRole,
-} from '../../../../common/entities/multi-lingual-text';
+    MultilingualText,
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from '../../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
@@ -39,19 +39,19 @@ const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaIt
     id: buildDummyUuid(55),
 });
 
-const newAudioItemName = new MultiLingualText({
+const newAudioItemName = new MultilingualText({
     items: [
         {
-            languageId: 'clc',
+            languageCode: LanguageCode.Chilcotin,
             text: 'A Walk in the Park (lang)',
-            role: MultiLingualTextItemRole.original,
+            role: MultilingualTextItemRole.original,
         },
         {
-            languageId: 'eng',
+            languageCode: LanguageCode.English,
             text: 'A Walk in the Park (engl)',
-            role: MultiLingualTextItemRole.freeTranslation,
+            role: MultilingualTextItemRole.freeTranslation,
         },
-    ].map((itemDto) => new MultiLingualTextItem(itemDto)),
+    ].map((itemDto) => new MultilingualTextItem(itemDto)),
 }).toDTO();
 
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateAudioItem>> => ({

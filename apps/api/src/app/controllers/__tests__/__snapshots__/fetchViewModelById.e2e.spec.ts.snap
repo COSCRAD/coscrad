@@ -358,9 +358,8 @@ Object {
   "lengthMilliseconds": 20000,
   "mimeType": "audio/mpeg",
   "tags": Array [],
-  "text": "
-[12000] {eng}: There once was a little wooden boy. [15550]
-[18300] {eng}: His name was Pinocchio [19240]",
+  "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
+[18300] [JHC] {eng}: His name was Pinocchio [19240]",
 }
 `;
 

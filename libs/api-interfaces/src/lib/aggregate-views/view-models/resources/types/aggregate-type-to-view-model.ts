@@ -4,7 +4,7 @@ import { INoteViewModel } from '../../note';
 import { ITagViewModel } from '../../tag.view-model.interface';
 import { ICoscradUserGroupViewModel } from '../../user-management';
 import { ICoscradUserViewModel } from '../../user-management/coscrad-user';
-import { IAudioItemViewModel } from '../audio-item.view-model.interface';
+import { IAudioItemViewModel } from '../audio-item/audio-item.view-model.interface';
 import { IBibliographicReferenceViewModel } from '../bibliographic-reference';
 import { IBookViewModel } from '../book';
 import { IMediaItemViewModel } from '../media-items';
