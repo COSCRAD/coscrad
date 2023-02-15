@@ -191,7 +191,7 @@ Array [
         ],
       },
       "name": Object {
-        "coscradDataType": "NON_EMPTY_STRING",
+        "coscradDataType": "MULTILINGUAL_TEXT",
         "description": "name of the transcript",
         "isArray": false,
         "isOptional": false,

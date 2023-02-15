@@ -148,7 +148,7 @@ describe('CREATE_AUDIO_ITEM', () => {
                             await assertCommandFailsDueToTypeError(
                                 assertionHelperDependencies,
                                 { propertyName, invalidValue },
-                                buildValidCommandFSA('unused-id')
+                                buildValidCommandFSA(buildDummyUuid(789))
                             );
                         });
                     });
@@ -218,7 +218,9 @@ describe('CREATE_AUDIO_ITEM', () => {
             it('should fail with the expected error', async () => {
                 const newId = await idManager.generate();
 
-                await commandHandlerService.execute(buildValidCommandFSA(newId), {
+                const fsa = buildValidCommandFSA(newId);
+
+                await commandHandlerService.execute(fsa, {
                     userId: dummyAdminUserId,
                 });
 

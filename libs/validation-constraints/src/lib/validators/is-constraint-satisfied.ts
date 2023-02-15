@@ -1,3 +1,5 @@
+/* eslint-disable-next-line */
+import { IMultilingualText, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import {
     isBoolean,
     isFiniteNumber,
@@ -38,6 +40,34 @@ const constraintsLookupTable: { [K in CoscradConstraint]: PredicateFunction } = 
 
         // TODO Make the id a `UUID`
         return [type, id].every(isNonEmptyString);
+    },
+    /**
+     * TODO This is a hack. We decided that the complexity of dynamically
+     * generating nested forms was too much. Instead, we decided to make
+     * `CoscradMultilingualText` a `CoscradDataType` and hard-wire the form
+     * on the front-end.
+     *
+     * A down-side of this approach is that constraint-based validation
+     * requires implementing simple-invariant validation here without recourse
+     * to our class annotations. If we are going to take this approach, we
+     * should export the nested entity class from this lib into the back-end
+     * instead.
+     */
+    [CoscradConstraint.isMultilingualText]: (input: unknown) => {
+        if (isNullOrUndefined(input)) return false;
+
+        const { items } = input as IMultilingualText;
+
+        if (!Array.isArray(items)) return false;
+
+        const invalidItems = items.filter(
+            ({ languageCode, role, text }) =>
+                !Object.values(LanguageCode).includes(languageCode) ||
+                !Object.values(MultilingualTextItemRole).includes(role) ||
+                !isNonEmptyString(text)
+        );
+
+        return invalidItems.length === 0;
     },
 };
 

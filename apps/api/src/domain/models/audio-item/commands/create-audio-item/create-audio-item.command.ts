@@ -1,6 +1,12 @@
 import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonNegativeFiniteNumber, ReferenceTo, UUID } from '@coscrad/data-types';
+import {
+    CoscradMultilingualText,
+    NestedDataType,
+    NonNegativeFiniteNumber,
+    ReferenceTo,
+    UUID,
+} from '@coscrad/data-types';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../../types/AggregateId';
@@ -21,7 +27,7 @@ export class CreateAudioItem implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 
-    @NestedDataType(MultilingualText, {
+    @CoscradMultilingualText({
         label: 'name',
         description: 'the name of the transcript',
     })

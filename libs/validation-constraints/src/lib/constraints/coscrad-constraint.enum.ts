@@ -17,4 +17,5 @@ export enum CoscradConstraint {
     isCompositeIdentifier = 'composite identifier',
     isRequired = 'defined value',
     isString = 'string',
+    isMultilingualText = 'isMultilingualText',
 }
