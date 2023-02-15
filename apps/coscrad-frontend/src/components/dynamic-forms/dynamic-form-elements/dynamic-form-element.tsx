@@ -26,7 +26,7 @@ export const DynamicFormElement = ({
     currentValue,
     required,
 }: VocabularyListFormElementProps): JSX.Element => {
-    const [validationMessage, setValidationMessage] = useState('');
+    const [_validationMessage, setValidationMessage] = useState('');
 
     const { type, options } = formField;
 

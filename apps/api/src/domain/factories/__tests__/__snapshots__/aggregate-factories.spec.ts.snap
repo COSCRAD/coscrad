@@ -7,10 +7,10 @@ AudioItem {
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "lengthMilliseconds": 20000,
   "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-  "name": MultiLingualText {
+  "name": MultilingualText {
     "items": Array [
-      MultiLingualTextItem {
-        "languageId": "eng",
+      MultilingualTextItem {
+        "languageCode": "eng",
         "role": "original",
         "text": "The Wooden Boy",
       },
@@ -27,10 +27,10 @@ AudioItem {
         "inPoint": 12000,
         "outPoint": 15550,
         "speakerInitials": "JHC",
-        "text": MultiLingualText {
+        "text": MultilingualText {
           "items": Array [
-            MultiLingualTextItem {
-              "languageId": "eng",
+            MultilingualTextItem {
+              "languageCode": "eng",
               "role": "original",
               "text": "There once was a little wooden boy.",
             },
@@ -41,10 +41,10 @@ AudioItem {
         "inPoint": 18300,
         "outPoint": 19240,
         "speakerInitials": "JHC",
-        "text": MultiLingualText {
+        "text": MultilingualText {
           "items": Array [
-            MultiLingualTextItem {
-              "languageId": "eng",
+            MultilingualTextItem {
+              "languageCode": "eng",
               "role": "original",
               "text": "His name was Pinocchio",
             },

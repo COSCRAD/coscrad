@@ -1,5 +1,4 @@
 import {
-    CoscradMultilingualText,
     MIMEType,
     NestedDataType,
     NonNegativeFiniteNumber,
@@ -43,7 +42,7 @@ export type CoscradTimeStamp = number;
 export class AudioItem extends Resource {
     readonly type = ResourceType.audioItem;
 
-    @CoscradMultilingualText({
+    @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'the name of the transcript',
     })
