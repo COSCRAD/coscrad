@@ -66,6 +66,8 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.ISBN]: ['isbn10', 'isbn13'],
     [CoscradDataType.BOOLEAN]: ['true', 'false'],
     [CoscradDataType.String]: ['emptyString', 'arbitraryString', 'uuid', 'isbn10', 'isbn13'],
+    // TODO Add valid example here
+    [CoscradDataType.MultilingualText]: [],
 };
 
 export const generateValidValuesOfType = (

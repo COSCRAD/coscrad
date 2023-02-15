@@ -153,6 +153,19 @@ export abstract class ResourceQueryService<
         };
     }
 
+    public async validate(userWithGroups?: CoscradUserWithGroups): Promise<Maybe<string[]>> {
+        console.log({
+            userWithGroups,
+        });
+        if (!userWithGroups || !userWithGroups.isAdmin()) return NotFound;
+
+        const searchResult = await this.fetchManyDomainModels();
+
+        const invariantValidationErrors = searchResult.filter(isInternalError);
+
+        return invariantValidationErrors.map((error) => error.toString());
+    }
+
     /**
      * TODO [https://www.pivotaltracker.com/story/show/184098960]
      *

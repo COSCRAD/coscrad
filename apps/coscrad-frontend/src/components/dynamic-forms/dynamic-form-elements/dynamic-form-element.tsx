@@ -7,6 +7,7 @@ import {
 import { useState } from 'react';
 import { ErrorDisplay } from '../../error-display/error-display';
 import { DynamicSelect } from './dynamic-select';
+import { MultilingualTextInput } from './multilingual-text-input/multilingual-text-input';
 import { NumericInput } from './numeric-input';
 import { StaticSelect } from './static-select';
 import { TextInput } from './text-input';
@@ -14,7 +15,7 @@ import { YearPicker } from './year-picker';
 
 type VocabularyListFormElementProps = {
     formField: IFormField;
-    onElementChange?: (key: string, value: string | boolean) => void;
+    onElementChange?: (key: string, value: unknown) => void;
     currentValue: unknown;
     required: boolean;
 };
@@ -25,7 +26,7 @@ export const DynamicFormElement = ({
     currentValue,
     required,
 }: VocabularyListFormElementProps): JSX.Element => {
-    const [validationMessage, setValidationMessage] = useState('');
+    const [_validationMessage, setValidationMessage] = useState('');
 
     const { type, options } = formField;
 
@@ -70,14 +71,11 @@ export const DynamicFormElement = ({
      */
     if (type === FormFieldType.jsonInput)
         return (
-            <>
-                <div>{validationMessage}</div>
-                <TextInput
-                    formField={formField}
-                    onInputChange={onElementChangeWithValidation}
-                    required={required}
-                ></TextInput>
-            </>
+            <TextInput
+                formField={formField}
+                onInputChange={onElementChangeWithValidation}
+                required={required}
+            ></TextInput>
         );
 
     if (type === FormFieldType.numericInput)
@@ -110,6 +108,16 @@ export const DynamicFormElement = ({
                 currentValue={currentValue as string}
                 required={required}
             />
+        );
+    }
+
+    if (type === FormFieldType.multilingualText) {
+        return (
+            <MultilingualTextInput
+                formField={formField}
+                onInputChange={onElementChangeWithValidation}
+                required={required}
+            ></MultilingualTextInput>
         );
     }
 

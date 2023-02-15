@@ -722,18 +722,50 @@ Object {
         "isOptional": false,
         "label": "items",
         "schema": Object {
-          "languageId": Object {
-            "coscradDataType": "NON_EMPTY_STRING",
+          "languageCode": Object {
+            "complexDataType": "ENUM",
             "description": "an official identifier of the language",
+            "enumLabel": "Language_Code",
+            "enumName": "LangaugeCode",
             "isArray": false,
             "isOptional": false,
             "label": "language code",
+            "labelsAndValues": Array [
+              Object {
+                "label": "Chilcotin",
+                "value": "clc",
+              },
+              Object {
+                "label": "Haida",
+                "value": "hai",
+              },
+              Object {
+                "label": "English",
+                "value": "eng",
+              },
+              Object {
+                "label": "French",
+                "value": "fra",
+              },
+              Object {
+                "label": "Chinook",
+                "value": "chn",
+              },
+              Object {
+                "label": "Zapotec",
+                "value": "zap",
+              },
+              Object {
+                "label": "Spanish",
+                "value": "spa",
+              },
+            ],
           },
           "role": Object {
             "complexDataType": "ENUM",
             "description": "role of this text in the translation process",
             "enumLabel": "text item role",
-            "enumName": undefined,
+            "enumName": "Multilingual Text Item Role",
             "isArray": false,
             "isOptional": false,
             "label": "text item role",
@@ -820,18 +852,50 @@ Object {
                 "isOptional": false,
                 "label": "items",
                 "schema": Object {
-                  "languageId": Object {
-                    "coscradDataType": "NON_EMPTY_STRING",
+                  "languageCode": Object {
+                    "complexDataType": "ENUM",
                     "description": "an official identifier of the language",
+                    "enumLabel": "Language_Code",
+                    "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
                     "label": "language code",
+                    "labelsAndValues": Array [
+                      Object {
+                        "label": "Chilcotin",
+                        "value": "clc",
+                      },
+                      Object {
+                        "label": "Haida",
+                        "value": "hai",
+                      },
+                      Object {
+                        "label": "English",
+                        "value": "eng",
+                      },
+                      Object {
+                        "label": "French",
+                        "value": "fra",
+                      },
+                      Object {
+                        "label": "Chinook",
+                        "value": "chn",
+                      },
+                      Object {
+                        "label": "Zapotec",
+                        "value": "zap",
+                      },
+                      Object {
+                        "label": "Spanish",
+                        "value": "spa",
+                      },
+                    ],
                   },
                   "role": Object {
                     "complexDataType": "ENUM",
                     "description": "role of this text in the translation process",
                     "enumLabel": "text item role",
-                    "enumName": undefined,
+                    "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
                     "label": "text item role",

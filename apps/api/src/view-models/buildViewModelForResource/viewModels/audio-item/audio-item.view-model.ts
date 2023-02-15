@@ -73,7 +73,7 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
         this.lengthMilliseconds = lengthMilliseconds;
 
         // TODO Send back the full data structure for rich presentation on the client
-        this.text = transcript.toString();
+        this.text = transcript?.toString() || '';
 
         const { url, mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
 

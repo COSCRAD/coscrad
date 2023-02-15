@@ -1,8 +1,13 @@
 import { AggregateCompositeIdentifier, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
+import {
+    CoscradMultilingualText,
+    NestedDataType,
+    NonEmptyString,
+    NonNegativeFiniteNumber,
+} from '@coscrad/data-types';
 import { DTO } from '../../../../../../types/DTO';
-import { MultiLingualText } from '../../../../../common/entities/multi-lingual-text';
+import { MultilingualText } from '../../../../../common/entities/multilingual-text';
 import { AudioItemCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
 import { ADD_LINE_ITEM_TO_TRANSCRIPT } from '../constants';
 
@@ -30,12 +35,12 @@ export class AddLineItemToTranscript implements ICommandBase {
     })
     readonly outPointMilliseconds: number;
 
-    @NestedDataType(MultiLingualText, {
+    @CoscradMultilingualText({
         label: 'text',
         description: 'multi-lingual text transcription  translation',
     })
     // TODO Decouple from the model- recreate the type here instead of using DTO which will change instantly
-    readonly text: DTO<MultiLingualText>;
+    readonly text: DTO<MultilingualText>;
 
     @NonEmptyString({
         label: 'speaker initials',

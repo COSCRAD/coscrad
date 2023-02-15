@@ -1,4 +1,5 @@
 export * from './CompositeIdentifier';
+export * from './CoscradMultilingualText';
 export * from './DiscriminatedBy';
 export * from './Enum';
 export * from './ExternalEnum';

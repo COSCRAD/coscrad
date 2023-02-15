@@ -6,6 +6,7 @@ import { CREATE_TRANSCRIPT } from '../constants';
 
 @Command({
     type: CREATE_TRANSCRIPT,
+    label: 'Create Transcript',
     // in the future we will support video as well
     description: 'creates a new transcript for an audio item',
 })

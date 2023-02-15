@@ -1,0 +1,3 @@
+export const UPDATE_ITEM_ROLE = 'UPDATE_ITEM_ROLE';
+
+export const UPDATE_ITEM_TEXT = 'UPDATE_ITEM_TEXT';
