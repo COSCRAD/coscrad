@@ -1761,6 +1761,15 @@ Object {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "lengthMilliseconds": 20000,
       "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "The Wooden Boy",
+          },
+        ],
+      },
       "tags": Array [],
       "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
 [18300] [JHC] {eng}: His name was Pinocchio [19240]",
@@ -1771,6 +1780,15 @@ Object {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Down at the River",
+          },
+        ],
+      },
       "tags": Array [],
       "text": "[3400] [BL] {eng}: While she went down to the river [3670]
 [3700] [SD] {eng}: someone had already filled the water tank. [3980]
@@ -1782,6 +1800,15 @@ Object {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "lengthMilliseconds": 32989,
       "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "hai",
+            "role": "original",
+            "text": "Learning about Protocols",
+          },
+        ],
+      },
       "tags": Array [],
       "text": "[120] [E1] {eng}: this type of spoon is used in ceremonies [848]
 [930] [E2] {eng}: by members of the opposite clan of the house chief [1080]",
@@ -1800,6 +1827,15 @@ Object {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "lengthMilliseconds": 20000,
       "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "The Wooden Boy",
+          },
+        ],
+      },
       "tags": Array [],
       "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
 [18300] [JHC] {eng}: His name was Pinocchio [19240]",
@@ -1810,6 +1846,15 @@ Object {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Down at the River",
+          },
+        ],
+      },
       "tags": Array [],
       "text": "[3400] [BL] {eng}: While she went down to the river [3670]
 [3700] [SD] {eng}: someone had already filled the water tank. [3980]
@@ -1821,6 +1866,15 @@ Object {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "lengthMilliseconds": 32989,
       "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "hai",
+            "role": "original",
+            "text": "Learning about Protocols",
+          },
+        ],
+      },
       "tags": Array [],
       "text": "[120] [E1] {eng}: this type of spoon is used in ceremonies [848]
 [930] [E2] {eng}: by members of the opposite clan of the house chief [1080]",
