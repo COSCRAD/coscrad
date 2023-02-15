@@ -1,8 +1,9 @@
 import { IBaseViewModel } from '../../base.view-model.interface';
 import { MIMEType } from '../media-items';
+import { IMultilingualText } from './multilingual-text.interface';
 
 export interface IAudioItemViewModel extends IBaseViewModel {
-    name: string;
+    name: IMultilingualText;
 
     audioURL: string;
 

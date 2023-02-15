@@ -17,8 +17,7 @@ const lookupTable: { [K in CoscradDataType]: CoscradConstraint[] } = {
     [CoscradDataType.Year]: [CoscradConstraint.isYear],
     [CoscradDataType.BOOLEAN]: [CoscradConstraint.isBoolean],
     [CoscradDataType.String]: [CoscradConstraint.isString],
-    // TODO Add constraints here
-    [CoscradDataType.MultilingualText]: [],
+    [CoscradDataType.MultilingualText]: [CoscradConstraint.isMultilingualText],
 };
 
 type Options = { isArray: boolean; isOptional: boolean };
