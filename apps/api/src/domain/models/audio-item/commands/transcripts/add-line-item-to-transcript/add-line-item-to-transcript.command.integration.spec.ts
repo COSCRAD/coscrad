@@ -17,8 +17,10 @@ import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
+import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
 import { DummyCommandFSAFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { TranscriptItem } from '../../../entities/transcript-item.entity';
@@ -66,7 +68,7 @@ const dummyText = new MultilingualText({
             role: MultilingualTextItemRole.literalTranslation,
         },
     ],
-}).toDTO();
+});
 
 const validCommandFSA: FluxStandardAction<AddLineItemToTranscript> = {
     type: commandType,
@@ -196,6 +198,24 @@ describe(commandType, () => {
     });
 
     describe(`when the command is invalid`, () => {
+        describe('when the command payload type is invalid', () => {
+            generateCommandFuzzTestCases(AddLineItemToTranscript).forEach(
+                ({ description, propertyName, invalidValue }) => {
+                    describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                        it('should fail with the appropriate error', async () => {
+                            await assertCommandFailsDueToTypeError(
+                                assertionHelperDependencies,
+                                { propertyName, invalidValue },
+                                commandFSAFactory.build(buildDummyUuid(789), {
+                                    [propertyName]: invalidValue,
+                                })
+                            );
+                        });
+                    });
+                }
+            );
+        });
+
         describe(`when the refrenced audio item does not exist`, () => {
             it('should fail with the expected error', async () => {
                 await assertCommandError(assertionHelperDependencies, {

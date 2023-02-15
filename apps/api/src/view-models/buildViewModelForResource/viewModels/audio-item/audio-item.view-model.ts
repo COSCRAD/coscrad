@@ -1,16 +1,23 @@
 import { IAudioItemViewModel, MIMEType } from '@coscrad/api-interfaces';
-import { ExternalEnum, NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
+import {
+    CoscradMultilingualText,
+    ExternalEnum,
+    NonEmptyString,
+    NonNegativeFiniteNumber,
+    URL,
+} from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
+import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
 import { AudioItem } from '../../../../domain/models/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
 import { BaseViewModel } from '../base.view-model';
 
 export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewModel {
-    @NonEmptyString({
+    @CoscradMultilingualText({
         label: 'name',
         description: 'name of the transcript',
     })
-    readonly name: string;
+    readonly name: MultilingualText;
 
     @ApiProperty({
         example: 'https://www.mysounds.com/3pigs.mp3',
@@ -65,7 +72,7 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
     // TODO Also return the raw time stamp data?
 
     constructor(
-        { id, transcript, mediaItemId, lengthMilliseconds }: AudioItem,
+        { id, transcript, mediaItemId, lengthMilliseconds, name }: AudioItem,
         allMediaItems: MediaItem[]
     ) {
         super({ id });
@@ -80,5 +87,7 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
         this.audioURL = url;
 
         this.mimeType = mimeType;
+
+        this.name = name;
     }
 }
