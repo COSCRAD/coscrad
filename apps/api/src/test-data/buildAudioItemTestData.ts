@@ -4,6 +4,7 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../domain/common/entities/multilingual-text';
+import { Aggregate } from '../domain/models/aggregate.entity';
 import { AudioItem } from '../domain/models/audio-item/entities/audio-item.entity';
 import { Transcript } from '../domain/models/audio-item/entities/transcript.entity';
 import { ResourceType } from '../domain/types/ResourceType';
@@ -140,4 +141,4 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
 export default () =>
     partialDtos
         .map((partialDto) => new AudioItem({ ...partialDto, type: ResourceType.audioItem }))
-        .map(convertAggregatesIdToUuid);
+        .map((audioItemDto) => convertAggregatesIdToUuid(audioItemDto as unknown as Aggregate));

@@ -34,7 +34,7 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.photograph]: Photograph,
     [AggregateType.song]: Song,
     [AggregateType.term]: Term,
-    [AggregateType.audioItem]: AudioItem,
+    [AggregateType.audioItem]: AudioItem as unknown as DomainModelCtor<Aggregate>,
     [AggregateType.vocabularyList]: VocabularyList,
     [AggregateType.category]: Category,
 };

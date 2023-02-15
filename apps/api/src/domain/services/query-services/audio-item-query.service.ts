@@ -45,6 +45,6 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
-        return [AudioItem];
+        return [AudioItem as unknown as DomainModelCtor<BaseDomainModel>];
     }
 }

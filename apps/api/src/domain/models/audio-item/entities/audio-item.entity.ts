@@ -5,13 +5,10 @@ import {
     ReferenceTo,
     UUID,
 } from '@coscrad/data-types';
-import { isNumberWithinRange } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
-import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
-import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -25,21 +22,13 @@ import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import { CREATE_AUDIO_ITEM } from '../commands';
 import { InvalidMIMETypeForTranscriptMediaError } from '../commands/errors';
-import {
-    ADD_LINE_ITEM_TO_TRANSCRIPT,
-    ADD_PARTICIPANT_TO_TRANSCRIPT,
-    CREATE_TRANSCRIPT,
-} from '../commands/transcripts/constants';
-import { CannotOverwriteTranscriptError, TranscriptLineItemOutOfBoundsError } from '../errors';
-import { CannotAddParticipantBeforeCreatingTranscriptError } from '../errors/CannotAddParticipantBeforeCreatingTranscript.error';
-import { TranscriptItem } from './transcript-item.entity';
-import { TranscriptParticipant } from './transcript-participant';
+import { Constructor, ITranscribableBase, Transcribable } from './transcribable.mixin';
 import { Transcript } from './transcript.entity';
 
 export type CoscradTimeStamp = number;
 
 @RegisterIndexScopedCommands([CREATE_AUDIO_ITEM])
-export class AudioItem extends Resource {
+class AudioItemBase extends Resource {
     readonly type = ResourceType.audioItem;
 
     @NestedDataType(MultilingualText, {
@@ -83,7 +72,7 @@ export class AudioItem extends Resource {
     })
     readonly lengthMilliseconds: CoscradTimeStamp;
 
-    constructor(dto: DTO<AudioItem>) {
+    constructor(dto: DTO<AudioItemBase>) {
         super(dto);
 
         if (!dto) return;
@@ -98,52 +87,6 @@ export class AudioItem extends Resource {
 
         // It's a bit odd that we allow the invalid value to be set so that our validator catches this
         this.transcript = !isNullOrUndefined(transcript) ? new Transcript(transcript) : transcript;
-    }
-
-    createTranscript(): ResultOrError<AudioItem> {
-        if (this.hasTranscript())
-            return new CannotOverwriteTranscriptError(this.getCompositeIdentifier());
-
-        return this.safeClone({
-            transcript: new Transcript({
-                items: [],
-                participants: [],
-            }),
-        } as DeepPartial<DTO<this>>);
-    }
-
-    addParticipantToTranscript(participant: TranscriptParticipant): ResultOrError<this> {
-        if (!this.hasTranscript())
-            return new CannotAddParticipantBeforeCreatingTranscriptError(
-                this.getCompositeIdentifier()
-            );
-
-        const updatedTranscript = this.transcript.addParticipant(participant);
-
-        if (isInternalError(updatedTranscript)) return updatedTranscript;
-
-        return this.safeClone({
-            transcript: updatedTranscript,
-        } as DeepPartial<DTO<this>>);
-    }
-
-    addLineItemToTranscript(newItemDto: DTO<TranscriptItem>): ResultOrError<this> {
-        const newItem = new TranscriptItem(newItemDto);
-
-        const timeBounds = this.getTimeBounds();
-
-        const { inPoint, outPoint } = newItem;
-
-        if ([inPoint, outPoint].some((point) => !isNumberWithinRange(point, timeBounds)))
-            return new TranscriptLineItemOutOfBoundsError(newItem, timeBounds);
-
-        const updatedTranscript = this.transcript.addLineItem(new TranscriptItem(newItem));
-
-        if (isInternalError(updatedTranscript)) return updatedTranscript;
-
-        return this.safeClone({
-            transcript: updatedTranscript,
-        } as DeepPartial<DTO<this>>);
     }
 
     protected validateComplexInvariants(): InternalError[] {
@@ -201,26 +144,8 @@ export class AudioItem extends Resource {
         return [0, this.lengthMilliseconds];
     }
 
-    hasTranscript(): boolean {
-        return !isNullOrUndefined(this.transcript);
-    }
-
-    countTranscriptParticipants(): number {
-        if (!this.hasTranscript()) return 0;
-
-        return this.transcript.countParticipants();
-    }
-
     protected getResourceSpecificAvailableCommands(): string[] {
         const availableCommandIds: string[] = [];
-
-        if (!this.hasTranscript()) availableCommandIds.push(CREATE_TRANSCRIPT);
-
-        if (this.hasTranscript()) availableCommandIds.push(ADD_PARTICIPANT_TO_TRANSCRIPT);
-
-        // You can't add a line item without a participant to refer to (by initials)
-        if (this.countTranscriptParticipants() > 0)
-            availableCommandIds.push(ADD_LINE_ITEM_TO_TRANSCRIPT);
 
         return availableCommandIds;
     }
@@ -229,3 +154,8 @@ export class AudioItem extends Resource {
         return [MIMEType.mp3, MIMEType.mp4].includes(mimeType);
     }
 }
+
+// mixin the trasncribable behaviour
+export const AudioItem = Transcribable(AudioItemBase as unknown as Constructor<ITranscribableBase>);
+
+export type AudioItem = InstanceType<typeof AudioItem> & AudioItemBase;
