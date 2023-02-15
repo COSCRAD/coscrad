@@ -6,49 +6,4 @@ body {
 
 a {
     text-decoration: none;
-    color: black;
-    font-weight: bold;
-}
-
-a:hover {
-    color: rgb(56, 56, 56);
-}
-
-header,
-.main-content,
-footer {
-    margin: 0 auto;
-    width: 80%;
-}
-
-.main-content {
-    position: relative;
-}
-
-.main-content img.home-image {
-    width: 30%;
-    height: auto;
-    float: right;
-    position: relative;
-    margin: 7px;
-}
-
-footer {
-    text-align: center;
-    padding-top: 130px;
-    clear: both;
-    position: relative;
-}
-
-footer img {
-    padding: 10px;
-}
-
-.spacer {
-    clear: both;
-    height: 1px;
-}
-
-.video-player {
-    width: 100%;
 }
