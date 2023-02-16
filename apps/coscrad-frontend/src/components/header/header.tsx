@@ -22,16 +22,6 @@ const StyledSiteTitle = styled(Box)`
     }
 `;
 
-// header h1 {
-//     margin-bottom: 3px;
-// }
-
-// header h2 {
-//     font-size: medium;
-//     margin-top: 0px;
-//     margin-left: 7px;
-// }
-
 export const Header = (): JSX.Element => {
     const { siteTitle, subTitle } = useContext(ConfigurableContentContext);
 
@@ -40,7 +30,7 @@ export const Header = (): JSX.Element => {
             <StyledToolbar>
                 <StyledSiteTitle>
                     <Link to="/">
-                        <Typography variant="h6">{siteTitle}</Typography>
+                        <Typography variant="h5">{siteTitle}</Typography>
                     </Link>
                 </StyledSiteTitle>
                 <NavBar></NavBar>

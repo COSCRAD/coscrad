@@ -1,6 +1,6 @@
 import { CategorizableType } from '@coscrad/api-interfaces';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import { Box, IconButton, Menu, MenuItem, styled } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem } from '@mui/material';
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { routes } from '../../app/routes/routes';
@@ -57,17 +57,10 @@ export const NavBar = (): JSX.Element => {
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
-        console.log(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    const StyledBox = styled(Box)({
-        display: 'flex',
-        justifyContent: 'space-between',
-        width: '138px',
-    });
 
     return (
         <Box>
