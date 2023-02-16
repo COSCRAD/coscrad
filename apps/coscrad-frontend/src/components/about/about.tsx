@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 
@@ -8,5 +9,5 @@ export interface AboutProps {
 export const About = (): JSX.Element => {
     const { about } = useContext(ConfigurableContentContext);
 
-    return <div>{about}</div>;
+    return <Typography variant="body1">{about}</Typography>;
 };

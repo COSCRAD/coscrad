@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { AppBar, Toolbar } from '@mui/material';
+import { AppBar, Toolbar, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
@@ -22,6 +22,16 @@ const StyledSiteTitle = styled(Box)`
     }
 `;
 
+// header h1 {
+//     margin-bottom: 3px;
+// }
+
+// header h2 {
+//     font-size: medium;
+//     margin-top: 0px;
+//     margin-left: 7px;
+// }
+
 export const Header = (): JSX.Element => {
     const { siteTitle, subTitle } = useContext(ConfigurableContentContext);
 
@@ -30,8 +40,7 @@ export const Header = (): JSX.Element => {
             <StyledToolbar>
                 <StyledSiteTitle>
                     <Link to="/">
-                        <h1>{siteTitle}</h1>
-                        <h2>{subTitle}</h2>
+                        <Typography variant="h6">{siteTitle}</Typography>
                     </Link>
                 </StyledSiteTitle>
                 <NavBar></NavBar>

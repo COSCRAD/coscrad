@@ -1,51 +1,45 @@
-export type imageAsset = {
+export type ImageAsset = {
+    title: string;
     src: string;
     width: number;
     height: number;
 };
 
 interface ImageInContentProps {
-    image: imageAsset;
-    displayWidth?: number;
-    displayHeight?: number;
+    image: ImageAsset;
+    displayWidth?: string;
+    title?: string;
     alt?: string;
     alignment?: 'left' | 'right';
 }
 
-export const ImageInContent = ({
-    image,
-    alt,
-    displayWidth,
-    displayHeight,
-    alignment,
-}: ImageInContentProps) => {
-    const { src, width, height } = image;
+/**
+ * Could add the caption feature as a part of this.  It could be optional.
+ * The ImageAsset could be the model coming from the digital asset manager in the future
+ * The image could have an optional borderRadius to round the corners
+ * Eventually in the CMS clicking on the image could open it in full screen
+ */
+
+export const ImageInContent = ({ image, alt, displayWidth, alignment }: ImageInContentProps) => {
+    const { title, src, width, height } = image;
 
     const divStyle = {
         width: displayWidth,
-        height: displayHeight,
-    };
+        float: alignment,
+        position: 'relative',
+        margin: '15px',
+    } as React.CSSProperties;
 
     const imgStyle = {
         width: '100%',
         height: 'auto',
+        display: 'block',
+        borderRadius: '7px',
     };
 
     return (
         <div style={divStyle}>
-            <img style={imgStyle} src={src} alt={alt} width={width} height={height} />
+            <img style={imgStyle} src={src} alt={alt} title={title} width={width} height={height} />
         </div>
-        // <Box
-        //     component="img"
-        //     sx={{
-        //         height: { height },
-        //         width: { width },
-        //         maxHeight: { xs: 233, md: 167 },
-        //         maxWidth: { xs: 350, md: 250 },
-        //         float: { alignment },
-        //     }}
-        //     alt={alt}
-        //     src={src}
-        // />
     );
 };
