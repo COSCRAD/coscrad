@@ -3,6 +3,18 @@ import { ResourceType } from '../../types/ResourceType';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
 import { EdgeConnectionContextType } from '../context/types/EdgeConnectionContextType';
 
+/**
+ * Couldn't we have a `getAllowedContextTypes` on the class as a static method?
+ * If not, maybe we can do this with annotation:
+ * @AllowedContextTypes(contextTypes: EdgeConnectionContextType[])
+ *
+ * Better yet
+ * @AllowedContext(contextCtors: Ctor<ContextUnion>p[])
+ *
+ * and then on the Context classes:
+ * @EdgeConnectionContext(contextType)
+ * becomes the source of truth for the various context types.
+ */
 const resourceTypeToAllowedContextTypes = {
     [ResourceType.book]: [
         EdgeConnectionContextType.general,
@@ -28,6 +40,11 @@ const resourceTypeToAllowedContextTypes = {
     [ResourceType.audioItem]: [
         EdgeConnectionContextType.general,
         EdgeConnectionContextType.timeRange,
+    ],
+    [ResourceType.video]: [
+        EdgeConnectionContextType.general,
+        EdgeConnectionContextType.timeRange,
+        // TODO support polygons
     ],
     [ResourceType.vocabularyList]: [
         EdgeConnectionContextType.general,

@@ -21,6 +21,22 @@ const dtos: DTO<MediaItem>[] = [
         published: true,
         type: ResourceType.mediaItem,
     },
+    {
+        id: '2',
+        title: 'video title (in language)',
+        titleEnglish: 'cool video',
+        contributorAndRoles: [
+            {
+                contributorId: '2',
+                role: 'host',
+            },
+        ],
+        url: 'https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4',
+        lengthMilliseconds: 910000,
+        mimeType: MIMEType.mp4,
+        published: true,
+        type: ResourceType.mediaItem,
+    },
 ];
 
 export default () => dtos.map((dto) => new MediaItem(dto)).map(convertAggregatesIdToUuid);

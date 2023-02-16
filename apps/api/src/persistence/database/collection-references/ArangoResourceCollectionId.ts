@@ -10,6 +10,7 @@ export const ArangoResourceCollectionId = {
     bibliographic_references: 'bibliographic_references',
     songs: 'songs',
     media_items: 'media_items',
+    videos: 'videos',
 } as const;
 
 export type ArangoResourceCollectionId = ValueType<typeof ArangoResourceCollectionId>;

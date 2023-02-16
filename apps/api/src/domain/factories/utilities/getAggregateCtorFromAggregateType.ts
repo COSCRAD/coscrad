@@ -2,6 +2,7 @@ import { InternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { Aggregate } from '../../models/aggregate.entity';
 import { AudioItem } from '../../models/audio-item/entities/audio-item.entity';
+import { Video } from '../../models/audio-item/entities/video.entity';
 import { Book } from '../../models/book/entities/book.entity';
 import { Category } from '../../models/categories/entities/category.entity';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
@@ -34,7 +35,9 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.photograph]: Photograph,
     [AggregateType.song]: Song,
     [AggregateType.term]: Term,
-    [AggregateType.audioItem]: AudioItem as unknown as DomainModelCtor<Aggregate>,
+    // These casts are due to the mixin. Note the subtle difference between value (Ctor) and type (Instance type)
+    [AggregateType.audioItem]: AudioItem as unknown as DomainModelCtor<AudioItem>,
+    [AggregateType.video]: Video as unknown as DomainModelCtor<Video>,
     [AggregateType.vocabularyList]: VocabularyList,
     [AggregateType.category]: Category,
 };

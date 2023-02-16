@@ -8,6 +8,7 @@ export enum ResourceType {
     bibliographicReference = 'bibliographicReference',
     song = 'song',
     mediaItem = 'mediaItem',
+    video = 'video',
 }
 
 export const isResourceType = (input: unknown): input is ResourceType =>

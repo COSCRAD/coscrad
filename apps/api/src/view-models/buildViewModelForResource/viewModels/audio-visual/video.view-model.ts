@@ -1,4 +1,4 @@
-import { IAudioItemViewModel, MIMEType } from '@coscrad/api-interfaces';
+import { IVideoViewModel, MIMEType } from '@coscrad/api-interfaces';
 import {
     CoscradMultilingualText,
     ExternalEnum,
@@ -8,14 +8,14 @@ import {
 } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
-import { AudioItem } from '../../../../domain/models/audio-item/entities/audio-item.entity';
+import { Video } from '../../../../domain/models/audio-item/entities/video.entity';
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
 import { BaseViewModel } from '../base.view-model';
 
-export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewModel {
+export class VideoViewModel extends BaseViewModel implements IVideoViewModel {
     @CoscradMultilingualText({
         label: 'name',
-        description: 'name of the transcript',
+        description: 'name of the video',
     })
     readonly name: MultilingualText;
 
@@ -72,7 +72,7 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
     // TODO Also return the raw time stamp data?
 
     constructor(
-        { id, transcript, mediaItemId, lengthMilliseconds, name }: AudioItem,
+        { id, transcript, mediaItemId, lengthMilliseconds, name }: Video,
         allMediaItems: MediaItem[]
     ) {
         super({ id });

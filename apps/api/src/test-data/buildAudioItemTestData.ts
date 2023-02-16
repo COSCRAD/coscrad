@@ -14,7 +14,7 @@ import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid
 
 const mediaItems = buildMediaItemTestData();
 
-const buildSingleLanguageText = (text: string, languageCode: LanguageCode) =>
+export const buildSingleLanguageText = (text: string, languageCode: LanguageCode) =>
     new MultilingualText({
         items: [
             new MultilingualTextItem({

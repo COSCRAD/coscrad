@@ -48,7 +48,12 @@ export default (): Category[] => {
         {
             id: '3',
             label: 'birds',
-            members: [],
+            members: [
+                {
+                    type: CategorizableType.video,
+                    id: '223',
+                },
+            ],
             childrenIDs: [],
         },
         {

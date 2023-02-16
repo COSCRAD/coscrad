@@ -1,10 +1,10 @@
-import { AggregateType, IAudioItemViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, IVideoViewModel } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
-import { AudioItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/audio-visual/audio-item.view-model';
-import { AudioItem } from '../../models/audio-item/entities/audio-item.entity';
+import { VideoViewModel } from '../../../view-models/buildViewModelForResource/viewModels/audio-visual/video.view-model';
+import { Video } from '../../models/audio-item/entities/video.entity';
 import BaseDomainModel from '../../models/BaseDomainModel';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { validAggregateOrThrow } from '../../models/shared/functional';
@@ -13,8 +13,8 @@ import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';
 
-export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudioItemViewModel> {
-    protected readonly type = ResourceType.audioItem;
+export class VideoQueryService extends ResourceQueryService<Video, IVideoViewModel> {
+    protected readonly type = ResourceType.video;
 
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider,
@@ -36,13 +36,13 @@ export class AudioItemQueryService extends ResourceQueryService<AudioItem, IAudi
     }
 
     buildViewModel(
-        transcribedAudioInstance: AudioItem,
+        videoInstance: Video,
         { resources: { mediaItem: mediaItems } }: InMemorySnapshot
-    ): IAudioItemViewModel {
-        return new AudioItemViewModel(transcribedAudioInstance, mediaItems);
+    ): IVideoViewModel {
+        return new VideoViewModel(videoInstance, mediaItems);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
-        return [AudioItem as unknown as DomainModelCtor<BaseDomainModel>];
+        return [Video as unknown as DomainModelCtor<BaseDomainModel>];
     }
 }

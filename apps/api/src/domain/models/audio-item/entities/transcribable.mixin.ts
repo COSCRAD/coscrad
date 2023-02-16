@@ -32,8 +32,22 @@ export interface ITranscribableBase {
     validateComplexInvariants(): InternalError[];
 }
 
+export interface ITranscribable {
+    createTranscript(): ResultOrError<ITranscribableBase>;
+
+    hasTranscript(): boolean;
+
+    addParticipantToTranscript(
+        participant: TranscriptParticipant
+    ): ResultOrError<ITranscribableBase>;
+
+    addLineItemToTranscript(newItemDto: DTO<TranscriptItem>): ResultOrError<ITranscribableBase>;
+
+    countTranscriptParticipants(): number;
+}
+
 export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Base: TBase) {
-    return class NowTranscribable extends Base {
+    return class NowTranscribable extends Base implements ITranscribable {
         createTranscript(): ResultOrError<this> {
             if (this.hasTranscript())
                 return new CannotOverwriteTranscriptError(this.getCompositeIdentifier());
