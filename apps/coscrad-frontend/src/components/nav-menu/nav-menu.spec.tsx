@@ -1,6 +1,6 @@
 import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../utils/test-utils';
-import { NavBar } from './nav-bar';
+import { NavMenu } from './nav-menu';
 
 /**
  *
@@ -13,7 +13,7 @@ describe('NavBar', () => {
     it('should render successfully', () => {
         const { baseElement } = renderWithProviders(
             <MemoryRouter>
-                <NavBar />
+                <NavMenu />
             </MemoryRouter>
         );
         expect(baseElement).toBeTruthy();

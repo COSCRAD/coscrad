@@ -1,11 +1,11 @@
 import { CategorizableType } from '@coscrad/api-interfaces';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import { Box, IconButton, Menu, MenuItem } from '@mui/material';
+import { Box, IconButton, Menu } from '@mui/material';
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { routes } from '../../app/routes/routes';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import AuthenticationButton from '../authentication-button/authentication-button';
+import { NavMenuItem } from './nav-menu-item';
 
 export type NavItemInfo = {
     link: string;
@@ -13,7 +13,7 @@ export type NavItemInfo = {
 };
 
 // TODO: We should have a NavBar container and presenter
-export const NavBar = (): JSX.Element => {
+export const NavMenu = (): JSX.Element => {
     const { indexToDetailFlows } = useContext(ConfigurableContentContext);
 
     // note this may be [] if we haven't included `notes`
@@ -84,10 +84,12 @@ export const NavBar = (): JSX.Element => {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                {navItemInfos.map(({ link, label }, index) => (
-                    <MenuItem onClick={handleClose} key={index}>
-                        <Link to={link}>{label}</Link>
-                    </MenuItem>
+                {navItemInfos.map((navItemInfo, index) => (
+                    <NavMenuItem
+                        index={index}
+                        navItemInfo={navItemInfo}
+                        handleClose={handleClose}
+                    />
                 ))}
             </Menu>
             <AuthenticationButton />

@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
-import { NavBar } from '../nav-bar/nav-bar';
+import { NavMenu } from '../nav-menu/nav-menu';
 
 const StyledAppBar = styled(AppBar)({
     backgroundColor: '#2cb5af',
@@ -33,7 +33,7 @@ export const Header = (): JSX.Element => {
                         <Typography variant="h5">{siteTitle}</Typography>
                     </Link>
                 </StyledSiteTitle>
-                <NavBar></NavBar>
+                <NavMenu></NavMenu>
             </StyledToolbar>
         </StyledAppBar>
     );
