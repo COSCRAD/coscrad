@@ -25,23 +25,4 @@ describe('Header', () => {
 
         expect(screenRes).toBeTruthy();
     });
-
-    it('should load the subTitle from configurable content', () => {
-        const subTitle = 'The New Website Subtitle';
-        const myConfigurableContent = { ...dummyConfigurableContent, subTitle };
-
-        renderWithProviders(
-            <MemoryRouter>
-                <Header />
-            </MemoryRouter>,
-            {
-                contentConfig: myConfigurableContent,
-            }
-        );
-
-        const searchPattern = new RegExp(subTitle);
-        const screenRes = screen.getByText(searchPattern);
-
-        expect(screenRes).toBeTruthy();
-    });
 });

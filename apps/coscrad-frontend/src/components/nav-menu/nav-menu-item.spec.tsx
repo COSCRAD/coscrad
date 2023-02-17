@@ -5,7 +5,6 @@ import { NavItemItemProps, NavMenuItem } from './nav-menu-item';
 const handleClose = () => {};
 
 const dummyNavBarItemProps: NavItemItemProps = {
-    index: 3,
     navItemInfo: {
         link: 'https://samplesite.com',
         label: 'Sample Label',

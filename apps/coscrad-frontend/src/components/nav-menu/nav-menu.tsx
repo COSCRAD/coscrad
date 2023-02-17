@@ -85,11 +85,7 @@ export const NavMenu = (): JSX.Element => {
                 }}
             >
                 {navItemInfos.map((navItemInfo, index) => (
-                    <NavMenuItem
-                        index={index}
-                        navItemInfo={navItemInfo}
-                        handleClose={handleClose}
-                    />
+                    <NavMenuItem key={index} navItemInfo={navItemInfo} handleClose={handleClose} />
                 ))}
             </Menu>
             <AuthenticationButton />

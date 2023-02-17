@@ -23,7 +23,7 @@ const StyledSiteTitle = styled(Box)`
 `;
 
 export const Header = (): JSX.Element => {
-    const { siteTitle, subTitle } = useContext(ConfigurableContentContext);
+    const { siteTitle } = useContext(ConfigurableContentContext);
 
     return (
         <StyledAppBar>
