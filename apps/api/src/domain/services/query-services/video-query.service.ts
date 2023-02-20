@@ -43,6 +43,6 @@ export class VideoQueryService extends ResourceQueryService<Video, IVideoViewMod
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
-        return [Video as unknown as DomainModelCtor<BaseDomainModel>];
+        return [Video as unknown as DomainModelCtor<Video>];
     }
 }

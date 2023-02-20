@@ -47,7 +47,6 @@ class VideoItemBase extends Resource {
         label: 'items',
         description: 'time stamps with text and speaker labels',
     })
-    // TODO rename this, as it includes the data as well
     readonly transcript?: Transcript;
 
     // TODO Make this UUID
@@ -160,7 +159,7 @@ class VideoItemBase extends Resource {
     }
 }
 
-// mixin the trasncribable behaviour
+// mixin the transcribable behaviour
 export const Video = Transcribable(VideoItemBase as unknown as Constructor<ITranscribableBase>);
 
 export type Video = ITranscribable & VideoItemBase;

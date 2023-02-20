@@ -22,7 +22,12 @@ import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import { CREATE_AUDIO_ITEM } from '../commands';
 import { InvalidMIMETypeForTranscriptMediaError } from '../commands/errors';
-import { Constructor, ITranscribableBase, Transcribable } from './transcribable.mixin';
+import {
+    Constructor,
+    ITranscribable,
+    ITranscribableBase,
+    Transcribable,
+} from './transcribable.mixin';
 import { Transcript } from './transcript.entity';
 
 export type CoscradTimeStamp = number;
@@ -42,7 +47,6 @@ class AudioItemBase extends Resource {
         label: 'items',
         description: 'time stamps with text and speaker labels',
     })
-    // TODO rename this, as it includes the data as well
     readonly transcript?: Transcript;
 
     // TODO Make this UUID
@@ -155,7 +159,7 @@ class AudioItemBase extends Resource {
     }
 }
 
-// mixin the trasncribable behaviour
+// mixin the transcribable behaviour
 export const AudioItem = Transcribable(AudioItemBase as unknown as Constructor<ITranscribableBase>);
 
-export type AudioItem = InstanceType<typeof AudioItem> & AudioItemBase;
+export type AudioItem = ITranscribable & AudioItemBase;

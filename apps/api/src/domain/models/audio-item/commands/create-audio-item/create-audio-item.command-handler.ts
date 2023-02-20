@@ -48,7 +48,7 @@ export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<Audi
             mediaItemId,
             lengthMilliseconds,
             published: false,
-        }) as AudioItem;
+        }) as unknown as AudioItem;
     }
 
     protected async fetchRequiredExternalState({

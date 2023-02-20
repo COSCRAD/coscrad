@@ -19,6 +19,9 @@ import { Transcript } from './transcript.entity';
 export type Constructor<T extends {} = {}> = new (...args: any[]) => T;
 
 export interface ITranscribableBase {
+    /**
+     * It's a bit disappointing that we
+     */
     transcript: Transcript;
 
     getCompositeIdentifier(): ResourceCompositeIdentifier;
@@ -47,7 +50,7 @@ export interface ITranscribable {
 }
 
 export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Base: TBase) {
-    return class NowTranscribable extends Base implements ITranscribable {
+    return class WithTranscription extends Base implements ITranscribable {
         createTranscript(): ResultOrError<this> {
             if (this.hasTranscript())
                 return new CannotOverwriteTranscriptError(this.getCompositeIdentifier());
@@ -104,6 +107,10 @@ export function Transcribable<TBase extends Constructor<ITranscribableBase>>(Bas
             return this.transcript.countParticipants();
         }
 
+        /**
+         * Could this be a problem if we are using several mixins? Be careful
+         * when applying a second mixin to a domain class.
+         */
         getResourceSpecificAvailableCommands(): string[] {
             const availableCommandIds: string[] = super.getResourceSpecificAvailableCommands();
 
