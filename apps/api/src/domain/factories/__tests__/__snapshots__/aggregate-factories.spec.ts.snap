@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Aggregate factories when attempting to build an instance of type: audioItem from a DTO when the DTO is valid valid transribed audio DTO should succeed 1`] = `
-AudioItem {
+NowTranscribable {
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",

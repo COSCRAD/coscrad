@@ -9,6 +9,7 @@ const lookupTable: { [K in ResourceType]: string } = {
     [ResourceType.spatialFeature]: 'Map',
     [ResourceType.term]: 'Terms',
     [ResourceType.audioItem]: 'AudioItems',
+    [ResourceType.video]: 'Videos',
     [ResourceType.vocabularyList]: 'VocabularyLists',
 };
 

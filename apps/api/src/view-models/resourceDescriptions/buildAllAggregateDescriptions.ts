@@ -75,6 +75,12 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
     },
 ];
 
+/**
+ * I wonder if we can do this dynamically so that we don't need these
+ * open to modification lookup tables. We could annotate the view model
+ * class with `@ViewModel(resourceType)` then explore the IoC containers to find
+ * all view model schemas at run time.
+ */
 export const buildAllAggregateDescriptions = (): Omit<AggregateInfo, 'link'>[] =>
     resourceDescriptions.map(({ type: resourceType, description }) => ({
         type: resourceType,

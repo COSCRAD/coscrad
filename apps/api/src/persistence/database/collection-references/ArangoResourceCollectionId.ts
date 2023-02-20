@@ -3,13 +3,14 @@ import { ValueType } from '../../../lib/types/valueType';
 export const ArangoResourceCollectionId = {
     terms: 'terms',
     vocabulary_lists: 'vocabulary_lists',
-    transcribed_audio: 'transcribed_audio',
+    transcribed_audio: 'audio_items',
     books: 'books',
     photographs: 'photographs',
     spatial_features: 'spatial_features',
     bibliographic_references: 'bibliographic_references',
     songs: 'songs',
     media_items: 'media_items',
+    videos: 'videos',
 } as const;
 
 export type ArangoResourceCollectionId = ValueType<typeof ArangoResourceCollectionId>;
