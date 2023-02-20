@@ -7,6 +7,7 @@ type AggregateTypeAndLabel = {
     [K in AggregateType]: string;
 };
 
+// I wonder if we could make this a static property on the class?
 const resourceTypeAndLabel: AggregateTypeAndLabel = {
     [AggregateType.note]: 'Note',
     [AggregateType.category]: 'Category',
@@ -21,6 +22,7 @@ const resourceTypeAndLabel: AggregateTypeAndLabel = {
     [ResourceType.spatialFeature]: 'Spatial Feature',
     [ResourceType.term]: 'Term',
     [ResourceType.audioItem]: 'Transcribed Audio Item',
+    [ResourceType.video]: 'Video',
     [ResourceType.vocabularyList]: 'Vocabulary List',
 };
 

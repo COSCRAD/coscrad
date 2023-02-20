@@ -52,7 +52,7 @@ export class AddLineItemtoTranscriptCommandHandler extends BaseUpdateCommandHand
             outPoint: outPointMilliseconds,
             text,
             speakerInitials,
-        });
+        }) as unknown as AudioItem;
     }
 
     protected validateExternalState(

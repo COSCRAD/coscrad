@@ -1084,6 +1084,284 @@ Object {
 }
 `;
 
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Video  match the snapshot 1`] = `
+Object {
+  "id": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "ID",
+  },
+  "lengthMilliseconds": Object {
+    "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+    "description": "the length of the transcript's media item in milliseconds",
+    "isArray": false,
+    "isOptional": false,
+    "label": "length (ms)",
+  },
+  "mediaItemId": Object {
+    "coscradDataType": "UUID",
+    "description": "ID of the transcript's media item",
+    "isArray": false,
+    "isOptional": false,
+    "label": "media item ID",
+  },
+  "name": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "the name of the video",
+    "isArray": false,
+    "isOptional": false,
+    "label": "name",
+    "schema": Object {
+      "items": Object {
+        "complexDataType": "NESTED_TYPE",
+        "description": "one item for each provided language",
+        "isArray": true,
+        "isOptional": false,
+        "label": "items",
+        "schema": Object {
+          "languageCode": Object {
+            "complexDataType": "ENUM",
+            "description": "an official identifier of the language",
+            "enumLabel": "Language_Code",
+            "enumName": "LangaugeCode",
+            "isArray": false,
+            "isOptional": false,
+            "label": "language code",
+            "labelsAndValues": Array [
+              Object {
+                "label": "Chilcotin",
+                "value": "clc",
+              },
+              Object {
+                "label": "Haida",
+                "value": "hai",
+              },
+              Object {
+                "label": "English",
+                "value": "eng",
+              },
+              Object {
+                "label": "French",
+                "value": "fra",
+              },
+              Object {
+                "label": "Chinook",
+                "value": "chn",
+              },
+              Object {
+                "label": "Zapotec",
+                "value": "zap",
+              },
+              Object {
+                "label": "Spanish",
+                "value": "spa",
+              },
+            ],
+          },
+          "role": Object {
+            "complexDataType": "ENUM",
+            "description": "role of this text in the translation process",
+            "enumLabel": "text item role",
+            "enumName": "Multilingual Text Item Role",
+            "isArray": false,
+            "isOptional": false,
+            "label": "text item role",
+            "labelsAndValues": Array [
+              Object {
+                "label": "original",
+                "value": "original",
+              },
+              Object {
+                "label": "glossed to",
+                "value": "glossed to",
+              },
+              Object {
+                "label": "prompt",
+                "value": "prompt",
+              },
+              Object {
+                "label": "free translation",
+                "value": "free translation",
+              },
+              Object {
+                "label": "literal translation",
+                "value": "literal translation",
+              },
+            ],
+          },
+          "text": Object {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "plain text in the given language",
+            "isArray": false,
+            "isOptional": false,
+            "label": "text",
+          },
+        },
+      },
+    },
+  },
+  "transcript": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "time stamps with text and speaker labels",
+    "isArray": false,
+    "isOptional": true,
+    "label": "items",
+    "schema": Object {
+      "items": Object {
+        "complexDataType": "NESTED_TYPE",
+        "description": "time stamps with text and speaker labels",
+        "isArray": true,
+        "isOptional": true,
+        "label": "items",
+        "schema": Object {
+          "inPoint": Object {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "starting time stamp",
+            "isArray": false,
+            "isOptional": false,
+            "label": "in point",
+          },
+          "outPoint": Object {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "ending time stamp",
+            "isArray": false,
+            "isOptional": false,
+            "label": "out point",
+          },
+          "speakerInitials": Object {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "the label for the current timestamped item",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label",
+          },
+          "text": Object {
+            "complexDataType": "NESTED_TYPE",
+            "description": "multi-lingual text transcription \\\\ translation for this item",
+            "isArray": false,
+            "isOptional": false,
+            "label": "text",
+            "schema": Object {
+              "items": Object {
+                "complexDataType": "NESTED_TYPE",
+                "description": "one item for each provided language",
+                "isArray": true,
+                "isOptional": false,
+                "label": "items",
+                "schema": Object {
+                  "languageCode": Object {
+                    "complexDataType": "ENUM",
+                    "description": "an official identifier of the language",
+                    "enumLabel": "Language_Code",
+                    "enumName": "LangaugeCode",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "language code",
+                    "labelsAndValues": Array [
+                      Object {
+                        "label": "Chilcotin",
+                        "value": "clc",
+                      },
+                      Object {
+                        "label": "Haida",
+                        "value": "hai",
+                      },
+                      Object {
+                        "label": "English",
+                        "value": "eng",
+                      },
+                      Object {
+                        "label": "French",
+                        "value": "fra",
+                      },
+                      Object {
+                        "label": "Chinook",
+                        "value": "chn",
+                      },
+                      Object {
+                        "label": "Zapotec",
+                        "value": "zap",
+                      },
+                      Object {
+                        "label": "Spanish",
+                        "value": "spa",
+                      },
+                    ],
+                  },
+                  "role": Object {
+                    "complexDataType": "ENUM",
+                    "description": "role of this text in the translation process",
+                    "enumLabel": "text item role",
+                    "enumName": "Multilingual Text Item Role",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text item role",
+                    "labelsAndValues": Array [
+                      Object {
+                        "label": "original",
+                        "value": "original",
+                      },
+                      Object {
+                        "label": "glossed to",
+                        "value": "glossed to",
+                      },
+                      Object {
+                        "label": "prompt",
+                        "value": "prompt",
+                      },
+                      Object {
+                        "label": "free translation",
+                        "value": "free translation",
+                      },
+                      Object {
+                        "label": "literal translation",
+                        "value": "literal translation",
+                      },
+                    ],
+                  },
+                  "text": Object {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "plain text in the given language",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "participants": Object {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a list of participants and their initials",
+        "isArray": true,
+        "isOptional": true,
+        "label": "participants",
+        "schema": Object {
+          "initials": Object {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "the initials or text identifier for this speaker",
+            "isArray": false,
+            "isOptional": false,
+            "label": "speaker initials",
+          },
+          "name": Object {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "the participant's name",
+            "isArray": false,
+            "isOptional": false,
+            "label": "name",
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Vocabulary List  match the snapshot 1`] = `
 Object {
   "entries": Object {

@@ -69,7 +69,7 @@ const dummyTranscribedAudioItems: IAudioItemViewModel[] = [
     transcribedAudioToFind,
 ];
 
-const endpoint = `${getConfig().apiUrl}/resources/transcribedAudioItems`;
+const endpoint = `${getConfig().apiUrl}/resources/audioItems`;
 
 const act = buildCategorizableDetailPageRendererForTest(ResourceType.audioItem);
 

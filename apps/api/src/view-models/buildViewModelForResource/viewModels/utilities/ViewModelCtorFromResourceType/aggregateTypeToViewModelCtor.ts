@@ -4,7 +4,8 @@ import { CategorizableType } from '../../../../../domain/types/CategorizableType
 import { ResourceType } from '../../../../../domain/types/ResourceType';
 import { Ctor } from '../../../../../lib/types/Ctor';
 import { NoteViewModel } from '../../../../edgeConnectionViewModels/note.view-model';
-import { AudioItemViewModel } from '../../audio-item/audio-item.view-model';
+import { AudioItemViewModel } from '../../audio-visual/audio-item.view-model';
+import { VideoViewModel } from '../../audio-visual/video.view-model';
 import { BaseViewModel } from '../../base.view-model';
 import { BibliographicReferenceViewModel } from '../../bibliographic-reference/bibliographic-reference.view-model';
 import { BookViewModel } from '../../book.view-model';
@@ -27,6 +28,7 @@ export const aggregateTypeToViewModelCtor: { [K in AggregateType]: Ctor<BaseView
     [ResourceType.spatialFeature]: SpatialFeatureViewModel,
     [ResourceType.term]: TermViewModel,
     [ResourceType.audioItem]: AudioItemViewModel,
+    [ResourceType.video]: VideoViewModel,
     [ResourceType.vocabularyList]: VocabularyListViewModel,
     [CategorizableType.note]: NoteViewModel,
     [AggregateType.category]: CategoryTreeViewModel,

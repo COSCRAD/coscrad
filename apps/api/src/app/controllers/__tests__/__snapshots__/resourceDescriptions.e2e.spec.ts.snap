@@ -142,9 +142,9 @@ Array [
     "type": "vocabularyList",
   },
   Object {
-    "description": "A transcribed audio item includes a link to an audio recording and the associated transcript.",
+    "description": "An audio item includes a link for playback and possibly a transcript.",
     "label": "Transcribed Audio Item",
-    "link": "/resources/transcribedAudioItems",
+    "link": "/resources/audioItems",
     "schema": Object {
       "audioURL": Object {
         "coscradDataType": "URL",
@@ -192,7 +192,7 @@ Array [
       },
       "name": Object {
         "coscradDataType": "MULTILINGUAL_TEXT",
-        "description": "name of the transcript",
+        "description": "name of the audio item",
         "isArray": false,
         "isOptional": false,
         "label": "name",
@@ -206,6 +206,72 @@ Array [
       },
     },
     "type": "audioItem",
+  },
+  Object {
+    "description": "An video includes a link for playback and possibly a transcript.",
+    "label": "Video",
+    "link": "/resources/videos",
+    "schema": Object {
+      "audioURL": Object {
+        "coscradDataType": "URL",
+        "description": "a web link to an accompanying digital audio file",
+        "isArray": false,
+        "isOptional": false,
+        "label": "audio link",
+      },
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+      "lengthMilliseconds": Object {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "description": "the length of the accompanying audio file in milliseconds",
+        "isArray": false,
+        "isOptional": false,
+        "label": "length (ms)",
+      },
+      "mimeType": Object {
+        "complexDataType": "ENUM",
+        "description": "the media format type",
+        "enumLabel": "MIME type",
+        "enumName": "MIMEType",
+        "isArray": false,
+        "isOptional": false,
+        "label": "MIME type",
+        "labelsAndValues": Array [
+          Object {
+            "label": "mp3",
+            "value": "audio/mpeg",
+          },
+          Object {
+            "label": "mp4",
+            "value": "video/mp4",
+          },
+          Object {
+            "label": "png",
+            "value": "image/png",
+          },
+        ],
+      },
+      "name": Object {
+        "coscradDataType": "MULTILINGUAL_TEXT",
+        "description": "name of the video",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+      },
+      "text": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a plain-text representation of the transcript",
+        "isArray": false,
+        "isOptional": false,
+        "label": "plain text",
+      },
+    },
+    "type": "video",
   },
   Object {
     "description": "A book is a digital representation of a text, organized into pages.",

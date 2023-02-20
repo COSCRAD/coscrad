@@ -15,7 +15,7 @@ import { BaseViewModel } from '../base.view-model';
 export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewModel {
     @CoscradMultilingualText({
         label: 'name',
-        description: 'name of the transcript',
+        description: 'name of the audio item',
     })
     readonly name: MultilingualText;
 
@@ -56,20 +56,16 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
         example: 'Once upon a time, there were three little pigs. They lived in the forest.',
         description: 'A plain text representation of the transcript',
     })
+
     /**
-     * TODO Support multiple transcript formats:
-     * - time-alligned
-     * - three-way-translations
-     * - general multi-lingual text?
-     * - plain text
+     * TODO [https://www.pivotaltracker.com/story/show/184522235] Expose full
+     * transcript in view model.
      */
     @NonEmptyString({
         label: 'plain text',
         description: 'a plain-text representation of the transcript',
     })
     readonly text: string;
-
-    // TODO Also return the raw time stamp data?
 
     constructor(
         { id, transcript, mediaItemId, lengthMilliseconds, name }: AudioItem,

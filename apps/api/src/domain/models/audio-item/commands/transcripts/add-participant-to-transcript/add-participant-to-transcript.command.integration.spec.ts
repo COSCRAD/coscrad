@@ -46,7 +46,7 @@ const existingAudioItemWithParticipant = existingAudioItem.addParticipantToTrans
         initials: 'ABC',
         name: 'Aaron B. Cool',
     })
-) as AudioItem;
+) as unknown as AudioItem;
 
 const validCommandFSA: FluxStandardAction<AddParticipantToTranscript> = {
     type: commandType,

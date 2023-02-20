@@ -6,5 +6,5 @@ import { AudioItemIndexState } from '../types';
 
 export const fetchAudioItems = createFetchThunk<AudioItemIndexState>(
     buildResourceFetchActionPrefix(AUDIO_ITEMS),
-    `${getApiResourcesBaseRoute()}/transcribedAudioItems`
+    `${getApiResourcesBaseRoute()}/audioItems`
 );
