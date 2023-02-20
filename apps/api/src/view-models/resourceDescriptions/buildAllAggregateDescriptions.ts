@@ -20,8 +20,11 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
     },
     {
         type: ResourceType.audioItem,
-        description:
-            'A transcribed audio item includes a link to an audio recording and the associated transcript.',
+        description: 'An audio item includes a link for playback and possibly a transcript.',
+    },
+    {
+        type: ResourceType.video,
+        description: 'An video includes a link for playback and possibly a transcript.',
     },
     {
         type: ResourceType.book,

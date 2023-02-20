@@ -1,4 +1,10 @@
-import { IAudioItemViewModel, MIMEType, ResourceType } from '@coscrad/api-interfaces';
+import {
+    IAudioItemViewModel,
+    LanguageCode,
+    MIMEType,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -19,12 +25,25 @@ const dummyTranscribedAudioItems: IAudioItemViewModel[] = [
         audioURL: 'https://www.soundbox.org/123.mp3',
         lengthMilliseconds: 5600,
         text: '[0:01] Blah blah blah [0:05]',
-        name: 'Awesome Audio Interview',
+        name: {
+            items: [
+                {
+                    role: MultilingualTextItemRole.original,
+                    languageCode: LanguageCode.Chilcotin,
+                    text: 'Test Audio Name in Chilcotin',
+                },
+                {
+                    role: MultilingualTextItemRole.freeTranslation,
+                    languageCode: LanguageCode.English,
+                    text: 'Test Audio Name translated to English',
+                },
+            ],
+        },
         mimeType: MIMEType.mp3,
     },
 ];
 
-const endpoint = `${getConfig().apiUrl}/resources/transcribedAudioItems`;
+const endpoint = `${getConfig().apiUrl}/resources/audioItems`;
 
 const act = () => renderResourceIndexPageForTest(ResourceType.audioItem);
 

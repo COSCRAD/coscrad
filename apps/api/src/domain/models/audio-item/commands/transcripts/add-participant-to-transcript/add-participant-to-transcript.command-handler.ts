@@ -50,7 +50,7 @@ export class AddParticipantToTranscriptCommandHandler extends BaseUpdateCommandH
             })
         );
 
-        return updatedInstance;
+        return updatedInstance as unknown as AudioItem;
     }
 
     protected validateExternalState(

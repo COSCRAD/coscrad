@@ -3,6 +3,7 @@ import {
     AggregateTypeToAggregateInstance,
 } from '../../../../domain/types/AggregateType';
 import { DTO } from '../../../../types/DTO';
+import { buildAudioItemFactoryTestSet } from './audio-item.aggregate-factory.test-set';
 import { buildBibliographicReferenceFactoryTestSet } from './bibliographic-reference.aggregate-factory.test-set';
 import { buildBookAggregateFactoryTestSet } from './book.aggregate-factory.test-set';
 import { buildMediaItemFactoryTestSet } from './media-item.aggregate-factory.test-set';
@@ -10,7 +11,7 @@ import { buildPhotographFactoryTestSet } from './photograph.aggregate-factory.te
 import { buildSongFactoryTestSet } from './song.aggregate-factory.test-set';
 import { buildSpatialFeatureFactoryTestSet } from './spatial-feature.aggregate-factory.test-set';
 import { buildTermAggregateFactoryTestSet } from './term.aggregate-factory.test-set';
-import { buildTranscribedAudioFactoryTestSet } from './transcribed-audio.aggregate-factory.test-set';
+import { buildVideoFactoryTestSet } from './video.aggregate-factory.test-set';
 import { buildVocabularyListAggregateFactoryTestSet } from './vocabulary-list.aggregate-factory.test-set';
 
 export type AggregateFactoryValidTestCase<TAggregateType extends AggregateType> = {
@@ -38,6 +39,7 @@ export default (): FactoryTestSuiteForAggregate[] => [
     buildSongFactoryTestSet(),
     buildSpatialFeatureFactoryTestSet(),
     buildTermAggregateFactoryTestSet(),
-    buildTranscribedAudioFactoryTestSet(),
+    buildAudioItemFactoryTestSet(),
+    buildVideoFactoryTestSet(),
     buildVocabularyListAggregateFactoryTestSet(),
 ];

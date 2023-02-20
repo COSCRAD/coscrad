@@ -10,7 +10,7 @@ const validInstance = getValidAggregateInstanceForTest(aggregateType);
 
 const validDto = validInstance.toDTO();
 
-export const buildTranscribedAudioFactoryTestSet = (): FactoryTestSuiteForAggregate<
+export const buildAudioItemFactoryTestSet = (): FactoryTestSuiteForAggregate<
     typeof aggregateType
 > => ({
     aggregateType,
