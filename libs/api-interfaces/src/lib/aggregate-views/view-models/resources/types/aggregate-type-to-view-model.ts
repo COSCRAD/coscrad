@@ -4,6 +4,7 @@ import { INoteViewModel } from '../../note';
 import { ITagViewModel } from '../../tag.view-model.interface';
 import { ICoscradUserGroupViewModel } from '../../user-management';
 import { ICoscradUserViewModel } from '../../user-management/coscrad-user';
+import { IVideoViewModel } from '../audio-item';
 import { IAudioItemViewModel } from '../audio-item/audio-item.view-model.interface';
 import { IBibliographicReferenceViewModel } from '../bibliographic-reference';
 import { IBookViewModel } from '../book';
@@ -24,6 +25,7 @@ export type AggregateTypeToViewModel = {
     [AggregateType.spatialFeature]: ISpatialFeatureViewModel;
     [AggregateType.term]: ITermViewModel;
     [AggregateType.audioItem]: IAudioItemViewModel;
+    [AggregateType.video]: IVideoViewModel;
     [AggregateType.vocabularyList]: IVocabularyListViewModel;
     // Notes, which along with Resources form "Categorizables"
     [AggregateType.note]: INoteViewModel;

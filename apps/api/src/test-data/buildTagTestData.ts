@@ -75,6 +75,10 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
                 type: CategorizableType.bibliographicReference,
                 id: '1',
             },
+            {
+                type: CategorizableType.video,
+                id: '223',
+            },
         ],
     },
     {

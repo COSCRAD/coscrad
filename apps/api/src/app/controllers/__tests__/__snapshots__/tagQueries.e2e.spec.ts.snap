@@ -113,6 +113,10 @@ Object {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "bibliographicReference",
         },
+        Object {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+          "type": "video",
+        },
       ],
     },
     Object {

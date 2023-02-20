@@ -1,6 +1,10 @@
 import { isResourceType, ResourceType } from '../../../domain/types/ResourceType';
 import { ArangoResourceCollectionId } from './ArangoResourceCollectionId';
 
+/**
+ * I wonder if we could annotate the resource classes with this info and look
+ * it up dynamically. E.g., `@Resource(resourceType)` `@StoredInArangoCollection(collectionName)`
+ */
 const resourceTypeToArangoCollectionID: {
     [k in ResourceType]: ArangoResourceCollectionId;
 } = {
@@ -13,6 +17,7 @@ const resourceTypeToArangoCollectionID: {
     [ResourceType.bibliographicReference]: ArangoResourceCollectionId.bibliographic_references,
     [ResourceType.song]: ArangoResourceCollectionId.songs,
     [ResourceType.mediaItem]: ArangoResourceCollectionId.media_items,
+    [ResourceType.video]: ArangoResourceCollectionId.videos,
 };
 
 export const getArangoCollectionIDFromResourceType = (

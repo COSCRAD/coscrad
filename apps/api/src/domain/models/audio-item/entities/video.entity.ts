@@ -33,12 +33,12 @@ import { Transcript } from './transcript.entity';
 export type CoscradTimeStamp = number;
 
 @RegisterIndexScopedCommands([CREATE_AUDIO_ITEM])
-class AudioItemBase extends Resource {
-    readonly type = ResourceType.audioItem;
+class VideoItemBase extends Resource {
+    readonly type = ResourceType.video;
 
     @NestedDataType(MultilingualText, {
         label: 'name',
-        description: 'the name of the transcript',
+        description: 'the name of the video',
     })
     readonly name: MultilingualText;
 
@@ -76,7 +76,7 @@ class AudioItemBase extends Resource {
     })
     readonly lengthMilliseconds: CoscradTimeStamp;
 
-    constructor(dto: DTO<AudioItemBase>) {
+    constructor(dto: DTO<VideoItemBase>) {
         super(dto);
 
         if (!dto) return;
@@ -155,11 +155,11 @@ class AudioItemBase extends Resource {
     }
 
     private isMIMETypeAllowed(mimeType: MIMEType): boolean {
-        return [MIMEType.mp3].includes(mimeType);
+        return [MIMEType.mp4].includes(mimeType);
     }
 }
 
 // mixin the transcribable behaviour
-export const AudioItem = Transcribable(AudioItemBase as unknown as Constructor<ITranscribableBase>);
+export const Video = Transcribable(VideoItemBase as unknown as Constructor<ITranscribableBase>);
 
-export type AudioItem = ITranscribable & AudioItemBase;
+export type Video = ITranscribable & VideoItemBase;

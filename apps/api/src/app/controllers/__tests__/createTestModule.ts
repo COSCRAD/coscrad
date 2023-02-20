@@ -67,6 +67,7 @@ import { SongQueryService } from '../../../domain/services/query-services/song-q
 import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';
 import { TagQueryService } from '../../../domain/services/query-services/tag-query.service';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
+import { VideoQueryService } from '../../../domain/services/query-services/video-query.service';
 import { VocabularyListQueryService } from '../../../domain/services/query-services/vocabulary-list-query.service';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { IdManagementService } from '../../../lib/id-generation/id-management.service';
@@ -98,6 +99,7 @@ import { ResourceDescriptionController } from '../resources/resource-description
 import { SongController } from '../resources/song.controller';
 import { SpatialFeatureController } from '../resources/spatial-feature.controller';
 import { TermController } from '../resources/term.controller';
+import { VideoController } from '../resources/video.controller';
 import { VocabularyListController } from '../resources/vocabulary-list.controller';
 import { TagController } from '../tag.controller';
 
@@ -215,14 +217,16 @@ export default async (
                 provide: AudioItemQueryService,
                 useFactory: (
                     repositoryProvider: ArangoRepositoryProvider,
-                    commandInfoService: CommandInfoService,
-                    configService: ConfigService
-                ) =>
-                    new AudioItemQueryService(
-                        repositoryProvider,
-                        commandInfoService,
-                        configService
-                    ),
+                    commandInfoService: CommandInfoService
+                ) => new AudioItemQueryService(repositoryProvider, commandInfoService),
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
+            },
+            {
+                provide: VideoQueryService,
+                useFactory: (
+                    repositoryProvider: ArangoRepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new VideoQueryService(repositoryProvider, commandInfoService),
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
@@ -353,6 +357,7 @@ export default async (
             TermController,
             VocabularyListController,
             AudioItemController,
+            VideoController,
             BookController,
             PhotographController,
             SpatialFeatureController,

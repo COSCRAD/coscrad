@@ -1,5 +1,137 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`When fetching multiple resources GET /resources/audioItems when all of the resources are published should fetch multiple resources of type audioItem 1`] = `
+Object {
+  "entities": Array [
+    Object {
+      "actions": Array [],
+      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+      "lengthMilliseconds": 20000,
+      "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "The Wooden Boy",
+          },
+        ],
+      },
+      "tags": Array [],
+      "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
+[18300] [JHC] {eng}: His name was Pinocchio [19240]",
+    },
+    Object {
+      "actions": Array [],
+      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
+      "lengthMilliseconds": 23409,
+      "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Down at the River",
+          },
+        ],
+      },
+      "tags": Array [],
+      "text": "[3400] [BL] {eng}: While she went down to the river [3670]
+[3700] [SD] {eng}: someone had already filled the water tank. [3980]
+[4010] [BL] {eng}: These were the types of problems we had. [4290]",
+    },
+    Object {
+      "actions": Array [],
+      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
+      "lengthMilliseconds": 32989,
+      "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "hai",
+            "role": "original",
+            "text": "Learning about Protocols",
+          },
+        ],
+      },
+      "tags": Array [],
+      "text": "[120] [E1] {eng}: this type of spoon is used in ceremonies [848]
+[930] [E2] {eng}: by members of the opposite clan of the house chief [1080]",
+    },
+  ],
+  "indexScopedActions": Array [],
+}
+`;
+
+exports[`When fetching multiple resources GET /resources/audioItems when some of the resources are unpublished should return the expected number of results 1`] = `
+Object {
+  "entities": Array [
+    Object {
+      "actions": Array [],
+      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+      "lengthMilliseconds": 20000,
+      "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "The Wooden Boy",
+          },
+        ],
+      },
+      "tags": Array [],
+      "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
+[18300] [JHC] {eng}: His name was Pinocchio [19240]",
+    },
+    Object {
+      "actions": Array [],
+      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
+      "lengthMilliseconds": 23409,
+      "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Down at the River",
+          },
+        ],
+      },
+      "tags": Array [],
+      "text": "[3400] [BL] {eng}: While she went down to the river [3670]
+[3700] [SD] {eng}: someone had already filled the water tank. [3980]
+[4010] [BL] {eng}: These were the types of problems we had. [4290]",
+    },
+    Object {
+      "actions": Array [],
+      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
+      "lengthMilliseconds": 32989,
+      "mimeType": "audio/mpeg",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "hai",
+            "role": "original",
+            "text": "Learning about Protocols",
+          },
+        ],
+      },
+      "tags": Array [],
+      "text": "[120] [E1] {eng}: this type of spoon is used in ceremonies [848]
+[930] [E2] {eng}: by members of the opposite clan of the house chief [1080]",
+    },
+  ],
+  "indexScopedActions": Array [],
+}
+`;
+
 exports[`When fetching multiple resources GET /resources/bibliographicReferences when all of the resources are published should fetch multiple resources of type bibliographicReference 1`] = `
 Object {
   "entities": Array [
@@ -51,6 +183,10 @@ Object {
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
+            },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+              "type": "video",
             },
           ],
         },
@@ -160,6 +296,10 @@ Object {
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
+            },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+              "type": "video",
             },
           ],
         },
@@ -536,6 +676,16 @@ Object {
       "titleEnglish": "Metal Mondays episode 1",
       "url": "https://www.metalmondays.com/1.mp3",
     },
+    Object {
+      "actions": Array [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "lengthMilliseconds": 910000,
+      "mimeType": "video/mp4",
+      "tags": Array [],
+      "title": "video title (in language)",
+      "titleEnglish": "cool video",
+      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+    },
   ],
   "indexScopedActions": Array [],
 }
@@ -584,6 +734,16 @@ Object {
       "title": "episode title (in language)",
       "titleEnglish": "Metal Mondays episode 1",
       "url": "https://www.metalmondays.com/1.mp3",
+    },
+    Object {
+      "actions": Array [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "lengthMilliseconds": 910000,
+      "mimeType": "video/mp4",
+      "tags": Array [],
+      "title": "video title (in language)",
+      "titleEnglish": "cool video",
+      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
     },
   ],
   "indexScopedActions": Array [],
@@ -1005,6 +1165,10 @@ Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+              "type": "video",
+            },
           ],
         },
       ],
@@ -1275,6 +1439,10 @@ Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+              "type": "video",
+            },
           ],
         },
       ],
@@ -1477,6 +1645,10 @@ Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+              "type": "video",
+            },
           ],
         },
       ],
@@ -1515,6 +1687,10 @@ Object {
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
+            },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+              "type": "video",
             },
           ],
         },
@@ -1656,6 +1832,10 @@ Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+              "type": "video",
+            },
           ],
         },
       ],
@@ -1694,6 +1874,10 @@ Object {
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
+            },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+              "type": "video",
             },
           ],
         },
@@ -1752,132 +1936,54 @@ Object {
 }
 `;
 
-exports[`When fetching multiple resources GET /resources/transcribedAudioItems when all of the resources are published should fetch multiple resources of type audioItem 1`] = `
+exports[`When fetching multiple resources GET /resources/videos when all of the resources are published should fetch multiple resources of type video 1`] = `
 Object {
   "entities": Array [
     Object {
       "actions": Array [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
       "lengthMilliseconds": 20000,
-      "mimeType": "audio/mpeg",
+      "mimeType": "video/mp4",
       "name": Object {
         "items": Array [
           Object {
             "languageCode": "eng",
             "role": "original",
-            "text": "The Wooden Boy",
+            "text": "The Demonstration",
           },
         ],
       },
       "tags": Array [],
-      "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
-[18300] [JHC] {eng}: His name was Pinocchio [19240]",
-    },
-    Object {
-      "actions": Array [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
-      "lengthMilliseconds": 23409,
-      "mimeType": "audio/mpeg",
-      "name": Object {
-        "items": Array [
-          Object {
-            "languageCode": "clc",
-            "role": "original",
-            "text": "Down at the River",
-          },
-        ],
-      },
-      "tags": Array [],
-      "text": "[3400] [BL] {eng}: While she went down to the river [3670]
-[3700] [SD] {eng}: someone had already filled the water tank. [3980]
-[4010] [BL] {eng}: These were the types of problems we had. [4290]",
-    },
-    Object {
-      "actions": Array [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
-      "lengthMilliseconds": 32989,
-      "mimeType": "audio/mpeg",
-      "name": Object {
-        "items": Array [
-          Object {
-            "languageCode": "hai",
-            "role": "original",
-            "text": "Learning about Protocols",
-          },
-        ],
-      },
-      "tags": Array [],
-      "text": "[120] [E1] {eng}: this type of spoon is used in ceremonies [848]
-[930] [E2] {eng}: by members of the opposite clan of the house chief [1080]",
+      "text": "[12000] [DM] {eng}: This is how. [15550]
+[18300] [DM] {eng}: It is done [19240]",
     },
   ],
   "indexScopedActions": Array [],
 }
 `;
 
-exports[`When fetching multiple resources GET /resources/transcribedAudioItems when some of the resources are unpublished should return the expected number of results 1`] = `
+exports[`When fetching multiple resources GET /resources/videos when some of the resources are unpublished should return the expected number of results 1`] = `
 Object {
   "entities": Array [
     Object {
       "actions": Array [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
       "lengthMilliseconds": 20000,
-      "mimeType": "audio/mpeg",
+      "mimeType": "video/mp4",
       "name": Object {
         "items": Array [
           Object {
             "languageCode": "eng",
             "role": "original",
-            "text": "The Wooden Boy",
+            "text": "The Demonstration",
           },
         ],
       },
       "tags": Array [],
-      "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
-[18300] [JHC] {eng}: His name was Pinocchio [19240]",
-    },
-    Object {
-      "actions": Array [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
-      "lengthMilliseconds": 23409,
-      "mimeType": "audio/mpeg",
-      "name": Object {
-        "items": Array [
-          Object {
-            "languageCode": "clc",
-            "role": "original",
-            "text": "Down at the River",
-          },
-        ],
-      },
-      "tags": Array [],
-      "text": "[3400] [BL] {eng}: While she went down to the river [3670]
-[3700] [SD] {eng}: someone had already filled the water tank. [3980]
-[4010] [BL] {eng}: These were the types of problems we had. [4290]",
-    },
-    Object {
-      "actions": Array [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
-      "lengthMilliseconds": 32989,
-      "mimeType": "audio/mpeg",
-      "name": Object {
-        "items": Array [
-          Object {
-            "languageCode": "hai",
-            "role": "original",
-            "text": "Learning about Protocols",
-          },
-        ],
-      },
-      "tags": Array [],
-      "text": "[120] [E1] {eng}: this type of spoon is used in ceremonies [848]
-[930] [E2] {eng}: by members of the opposite clan of the house chief [1080]",
+      "text": "[12000] [DM] {eng}: This is how. [15550]
+[18300] [DM] {eng}: It is done [19240]",
     },
   ],
   "indexScopedActions": Array [],
