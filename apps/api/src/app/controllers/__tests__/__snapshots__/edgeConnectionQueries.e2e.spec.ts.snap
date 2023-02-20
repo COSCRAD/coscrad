@@ -1403,6 +1403,10 @@ Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+              "type": "video",
+            },
           ],
         },
       ],
@@ -1620,6 +1624,29 @@ Object {
       "connectedResources": Array [
         Object {
           "compositeIdentifier": Object {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+      "note": "this clip talks about birds",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "term",
           },
@@ -1630,7 +1657,7 @@ Object {
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
       "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
       "tags": Array [],
     },
@@ -1649,7 +1676,7 @@ Object {
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
       "note": "This page is about bears",
       "tags": Array [],
     },
@@ -1668,7 +1695,7 @@ Object {
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
       "note": "This is the first letter of the list name",
       "tags": Array [],
     },
@@ -1687,7 +1714,7 @@ Object {
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
       "note": "this clip talks about songs",
       "tags": Array [],
     },
@@ -1706,7 +1733,7 @@ Object {
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
       "note": "this is the stem of the flower",
       "tags": Array [],
     },
@@ -1725,7 +1752,7 @@ Object {
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
       "note": "this is the base of the flower",
       "tags": Array [],
     },
@@ -1744,7 +1771,7 @@ Object {
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
       "note": "this section is the best part of an illustrated book about birds",
       "tags": Array [],
     },
@@ -1763,7 +1790,7 @@ Object {
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
       "note": "this is a song",
       "tags": Array [],
     },
@@ -1782,7 +1809,7 @@ Object {
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
       "note": "this is an awesome show",
       "tags": Array [],
     },
@@ -1801,8 +1828,27 @@ Object {
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
       "note": "important clip from the show",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": Object {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+      "note": "this clip talks about birds",
       "tags": Array [],
     },
     Object {
@@ -2119,6 +2165,10 @@ Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+              "type": "video",
+            },
           ],
         },
       ],
@@ -2214,6 +2264,43 @@ Object {
         },
         Object {
           "compositeIdentifier": Object {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
+      "note": "That is why song/1 is related to video/223",
+      "tags": Array [],
+    },
+    Object {
+      "actions": Array [],
+      "connectedResources": Array [
+        Object {
+          "compositeIdentifier": Object {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": Object {
+            "timeRange": Object {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "to",
+        },
+        Object {
+          "compositeIdentifier": Object {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "term",
           },
@@ -2229,8 +2316,8 @@ Object {
         },
       ],
       "connectionType": "dual",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
-      "note": "That is why song/1 is related to term/2",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
+      "note": "That is why video/223 is related to term/2",
       "tags": Array [],
     },
     Object {

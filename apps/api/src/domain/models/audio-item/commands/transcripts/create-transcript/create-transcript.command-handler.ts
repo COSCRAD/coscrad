@@ -42,7 +42,7 @@ export class CreateTranscriptCommandHandler extends BaseUpdateCommandHandler<Aud
         instance: AudioItem,
         _command: CreateTranscript
     ): ResultOrError<AudioItem> {
-        return instance.createTranscript();
+        return instance.createTranscript() as unknown as AudioItem;
     }
 
     protected validateExternalState(

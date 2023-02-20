@@ -236,6 +236,25 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             },
         ],
     },
+    {
+        note: 'this clip talks about birds',
+        members: [
+            {
+                role,
+                compositeIdentifier: {
+                    id: '223',
+                    type: ResourceType.video,
+                },
+                context: new TimeRangeContext({
+                    type: EdgeConnectionContextType.timeRange,
+                    timeRange: {
+                        inPoint: 11000,
+                        outPoint: 12950,
+                    },
+                }),
+            },
+        ],
+    },
 ];
 const selfEdgeConnectionInstancesWithSpecificContext = edgeConnectionDTOs.map((partialDTO) => ({
     ...partialDTO,

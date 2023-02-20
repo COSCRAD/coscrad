@@ -111,7 +111,7 @@ const testCases: TestCase[] = [
         input: dualEdgeConnection,
         expectedResult: {
             _from: 'books/1123',
-            _to: 'transcribed_audio/15',
+            _to: 'audio_items/15',
             _key: '123',
             connectionType: EdgeConnectionType.dual,
             eventHistory: [],

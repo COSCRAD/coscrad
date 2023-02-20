@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Aggregate factories when attempting to build an instance of type: audioItem from a DTO when the DTO is valid valid transribed audio DTO should succeed 1`] = `
-AudioItem {
+WithTranscription {
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
@@ -386,6 +386,69 @@ Term {
   "term": "Chil-term-1",
   "termEnglish": "Engl-term-1",
   "type": "term",
+}
+`;
+
+exports[`Aggregate factories when attempting to build an instance of type: video from a DTO when the DTO is valid valid video DTO should succeed 1`] = `
+WithTranscription {
+  "eventHistory": Array [],
+  "getCompositeIdentifier": [Function],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+  "lengthMilliseconds": 20000,
+  "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+  "name": MultilingualText {
+    "items": Array [
+      MultilingualTextItem {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "The Demonstration",
+      },
+    ],
+  },
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "transcript": Transcript {
+    "items": Array [
+      TranscriptItem {
+        "inPoint": 12000,
+        "outPoint": 15550,
+        "speakerInitials": "DM",
+        "text": MultilingualText {
+          "items": Array [
+            MultilingualTextItem {
+              "languageCode": "eng",
+              "role": "original",
+              "text": "This is how.",
+            },
+          ],
+        },
+      },
+      TranscriptItem {
+        "inPoint": 18300,
+        "outPoint": 19240,
+        "speakerInitials": "DM",
+        "text": MultilingualText {
+          "items": Array [
+            MultilingualTextItem {
+              "languageCode": "eng",
+              "role": "original",
+              "text": "It is done",
+            },
+          ],
+        },
+      },
+    ],
+    "participants": Array [
+      TranscriptParticipant {
+        "initials": "DM",
+        "name": "Dee Monstrator",
+      },
+    ],
+  },
+  "type": "video",
 }
 `;
 

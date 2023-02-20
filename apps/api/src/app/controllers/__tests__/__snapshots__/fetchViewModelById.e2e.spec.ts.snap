@@ -1,5 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/audioItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+Object {
+  "actions": Array [],
+  "audioURL": "https://www.metalmondays.com/1.mp3",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+  "lengthMilliseconds": 20000,
+  "mimeType": "audio/mpeg",
+  "name": Object {
+    "items": Array [
+      Object {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "The Wooden Boy",
+      },
+    ],
+  },
+  "tags": Array [],
+  "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
+[18300] [JHC] {eng}: His name was Pinocchio [19240]",
+}
+`;
+
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/bibliographicReferences/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [],
@@ -49,6 +71,10 @@ Object {
         Object {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "bibliographicReference",
+        },
+        Object {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+          "type": "video",
         },
       ],
     },
@@ -350,25 +376,25 @@ Object {
 }
 `;
 
-exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/transcribedAudioItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/videos/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [],
-  "audioURL": "https://www.metalmondays.com/1.mp3",
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+  "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
   "lengthMilliseconds": 20000,
-  "mimeType": "audio/mpeg",
+  "mimeType": "video/mp4",
   "name": Object {
     "items": Array [
       Object {
         "languageCode": "eng",
         "role": "original",
-        "text": "The Wooden Boy",
+        "text": "The Demonstration",
       },
     ],
   },
   "tags": Array [],
-  "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
-[18300] [JHC] {eng}: His name was Pinocchio [19240]",
+  "text": "[12000] [DM] {eng}: This is how. [15550]
+[18300] [DM] {eng}: It is done [19240]",
 }
 `;
 

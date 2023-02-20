@@ -31,8 +31,8 @@ const generalContext = new GeneralContext();
 
 const selfDocument: ArangoEdgeDocument = {
     _key: '5',
-    _to: 'transcribed_audio/55',
-    _from: 'transcribed_audio/55',
+    _to: 'audio_items/55',
+    _from: 'audio_items/55',
     type: AggregateType.note,
     eventHistory: [],
     connectionType: EdgeConnectionType.self,
@@ -66,7 +66,7 @@ const selfEdgeConnection: DTO<EdgeConnection> = {
 const dualEdgeDocument: ArangoEdgeDocument = {
     _key: '234',
     _to: 'books/11',
-    _from: 'transcribed_audio/55',
+    _from: 'audio_items/55',
     connectionType: EdgeConnectionType.dual,
     eventHistory: [],
     type: AggregateType.note,

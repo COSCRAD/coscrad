@@ -15,17 +15,25 @@ import { CoscradUser } from '../models/user-management/user/entities/user/coscra
 import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-list.entity';
 
 import { ResourceType } from '@coscrad/api-interfaces';
+import { Video } from '../models/audio-item/entities/video.entity';
 
 export { ResourceType };
 
 export const isResourceType = (input: unknown): input is ResourceType =>
     Object.values(ResourceType).includes(input as ResourceType);
 
-// We should use this for type inference a few places.
+/**
+ *  We should use this for type inference a few places. But is this really
+ * necessary? What value do we gain?
+ *
+ * I suppose it is critical to define this type so that in tests we get type
+ * safety when we find an instance by `ResourceType`.
+ */
 export type ResourceTypeToResourceModel = {
     term: Term;
     vocabularyList: VocabularyList;
     audioItem: AudioItem;
+    video: Video;
     book: Book;
     photograph: Photograph;
     spatialFeature: ISpatialFeature;

@@ -37,7 +37,6 @@ export class Transcript extends BaseDomainModel implements ITranscript {
         label: 'items',
         description: 'time stamps with text and speaker labels',
     })
-    // TODO rename this, as it includes the data as well
     items: TranscriptItem[];
 
     // Should we configure allowed languages at the top level?

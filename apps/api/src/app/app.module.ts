@@ -13,7 +13,7 @@ import { CategoryController } from './controllers/category.controller';
 import { CommandController } from './controllers/command/command.controller';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
 import { ResourceDescriptionController } from './controllers/resources/resource-description.controller';
-import { AudioItemModule } from './domain-modules/audio-item.module';
+import { AudioVisualModule } from './domain-modules/audio-visual.module';
 import { BibliographicReferenceModule } from './domain-modules/bibliographic-reference.module';
 import { BookModule } from './domain-modules/book.module';
 import { EdgeConnectionModule } from './domain-modules/edge-connection.module';
@@ -47,7 +47,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         TermModule,
         VocabularyListModule,
         BookModule,
-        AudioItemModule,
+        AudioVisualModule,
         PhotographModule,
         BibliographicReferenceModule,
         SpatialFeatureModule,
