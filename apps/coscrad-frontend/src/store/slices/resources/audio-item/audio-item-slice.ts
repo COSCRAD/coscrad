@@ -16,4 +16,4 @@ export const audioItemSlice = createSlice({
     },
 });
 
-export const transcribedAudioReducer = audioItemSlice.reducer;
+export const audioItemReducer = audioItemSlice.reducer;

@@ -16,6 +16,7 @@ import { useLoadableAudioItems } from '../../store/slices/resources/audio-item/h
 import { useLoadableBooks } from '../../store/slices/resources/books';
 import { useLoadableMediaItems } from '../../store/slices/resources/media-items';
 import { useLoadablePhotographs } from '../../store/slices/resources/photographs/hooks';
+import { useLoadableVideos } from '../../store/slices/resources/video/hooks';
 import { useLoadableVocabularyLists } from '../../store/slices/resources/vocabulary-lists/hooks';
 
 type UseLoadableResourcesOfSingleType<T extends IBaseViewModel> = () => ILoadable<
@@ -33,6 +34,7 @@ const lookupTable: {
     [CategorizableType.spatialFeature]: useLoadableSpatialFeatures,
     [CategorizableType.term]: useLoadableTerms,
     [CategorizableType.audioItem]: useLoadableAudioItems,
+    [CategorizableType.video]: useLoadableVideos,
     [CategorizableType.vocabularyList]: useLoadableVocabularyLists,
     [CategorizableType.note]: useLoadableNotes,
 };
