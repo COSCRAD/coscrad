@@ -11,18 +11,22 @@ export interface ResourceDetailThumbnailPresenterProps {
     children: ReactNode;
 }
 
+/**
+ * This generic component is meant to serve as a single-source of truth for
+ * the look and feel of a Resource's thumbnail detail view. We adapt the
+ * view models \ data to this API in the specific thumbnail detail views for
+ * each resource.
+ *
+ * This is WIP. We will solidify the API as we make our first pass of the resources.
+ */
 export const ResourceDetailThumbnailPresenter = ({
     name,
-    audioUrl,
     children,
 }: ResourceDetailThumbnailPresenterProps): JSX.Element => (
     <Card>
         <CardHeader>
             <MultilingualTextPresenter text={name} />
         </CardHeader>
-        {/* <CardMedia>
-            {isNonEmptyString(audioUrl) ? <MediaPlayer audioUrl={audioUrl} /> : null}
-        </CardMedia> */}
         <CardContent>{children}</CardContent>
     </Card>
 );

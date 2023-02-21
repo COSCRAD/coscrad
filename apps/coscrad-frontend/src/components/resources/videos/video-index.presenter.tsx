@@ -1,9 +1,10 @@
-import { IVideoViewModel, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { IVideoViewModel } from '@coscrad/api-interfaces';
 import { VideoIndexState } from '../../../store/slices/resources/video';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
+import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
 export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.Element => {
     const headingLabels: HeadingLabel<IVideoViewModel>[] = [
@@ -19,17 +20,7 @@ export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.
         id: renderAggregateIdCell,
         lengthMilliseconds: ({ lengthMilliseconds }: IVideoViewModel) =>
             renderMediaLengthInSeconds(lengthMilliseconds),
-        name: ({ name }: IVideoViewModel) => {
-            const originalItem = name.items.find(
-                ({ role }) => role === MultilingualTextItemRole.original
-            );
-
-            return (
-                <div>
-                    {originalItem.text} ({originalItem.languageCode})
-                </div>
-            );
-        },
+        name: ({ name }: IVideoViewModel) => renderMultilingualTextCell(name),
     };
 
     return (
