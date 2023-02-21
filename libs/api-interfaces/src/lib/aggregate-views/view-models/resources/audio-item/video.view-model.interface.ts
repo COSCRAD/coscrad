@@ -5,7 +5,7 @@ import { IMultilingualText } from './multilingual-text.interface';
 export interface IVideoViewModel extends IBaseViewModel {
     name: IMultilingualText;
 
-    audioURL: string;
+    videoUrl: string;
 
     mimeType: MIMEType;
 

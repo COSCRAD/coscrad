@@ -16,6 +16,7 @@ const categorizableTypeAndPluralLabel: CategorizableTypeAndPluralLabel = {
     [CategorizableType.spatialFeature]: 'Spatial Features',
     [CategorizableType.term]: 'Terms',
     [CategorizableType.audioItem]: 'Audio Items',
+    [CategorizableType.video]: 'Videos',
     [CategorizableType.vocabularyList]: 'Vocabulary Lists',
     // Notes
     [CategorizableType.note]: 'Notes',

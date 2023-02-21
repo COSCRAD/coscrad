@@ -212,13 +212,6 @@ Array [
     "label": "Video",
     "link": "/resources/videos",
     "schema": Object {
-      "audioURL": Object {
-        "coscradDataType": "URL",
-        "description": "a web link to an accompanying digital audio file",
-        "isArray": false,
-        "isOptional": false,
-        "label": "audio link",
-      },
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
@@ -269,6 +262,13 @@ Array [
         "isArray": false,
         "isOptional": false,
         "label": "plain text",
+      },
+      "videoUrl": Object {
+        "coscradDataType": "URL",
+        "description": "a web link to an accompanying digital video file",
+        "isArray": false,
+        "isOptional": false,
+        "label": "video link",
       },
     },
     "type": "video",
