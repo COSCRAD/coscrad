@@ -379,7 +379,6 @@ Object {
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/videos/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [],
-  "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
   "lengthMilliseconds": 20000,
   "mimeType": "video/mp4",
@@ -395,6 +394,7 @@ Object {
   "tags": Array [],
   "text": "[12000] [DM] {eng}: This is how. [15550]
 [18300] [DM] {eng}: It is done [19240]",
+  "videoUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
 }
 `;
 

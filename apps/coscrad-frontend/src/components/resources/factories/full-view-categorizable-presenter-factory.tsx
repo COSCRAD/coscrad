@@ -15,6 +15,7 @@ import { PhotographDetailFullViewPresenter } from '../photographs/photograph-det
 import { SongDetailFullViewPresenter } from '../songs/song-detail.full-view.presenter';
 import { SpatialFeatureDetailThumbnailPresenter } from '../spatial-features/thumbnail-presenters';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
+import { VideoDetailFullViewPresenter } from '../videos/video-detail.full-view.presenter';
 import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocabulary-list-detail.full-view.presenter';
 
 /**
@@ -28,6 +29,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
     [CategorizableType.term]: TermDetailFullViewPresenter,
     [CategorizableType.audioItem]: AudioItemDetailFullViewPresenter,
+    [CategorizableType.video]: VideoDetailFullViewPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailFullViewPresenter,
     /**
      * TODO Investigate why importing this from the component file leads to a

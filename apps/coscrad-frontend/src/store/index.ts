@@ -15,7 +15,7 @@ import {
     vocabularyListReducer,
     VOCABULARY_LISTS,
 } from './slices/resources';
-import { transcribedAudioReducer } from './slices/resources/audio-item';
+import { audioItemReducer } from './slices/resources/audio-item';
 import { AUDIO_ITEMS } from './slices/resources/audio-item/constants';
 import { BIBLIOGRAPHIC_REFERENCES } from './slices/resources/bibliographic-references/constants';
 import { bookReducer, BOOKS } from './slices/resources/books';
@@ -25,6 +25,8 @@ import { PHOTOGRAPHS } from './slices/resources/photographs/constants';
 import { songReducer, SONGS } from './slices/resources/songs';
 import { SPATIAL_FEATURES } from './slices/resources/spatial-features/constants';
 import { TERMS } from './slices/resources/terms/constants';
+import { videoReducer } from './slices/resources/video';
+import { VIDEOS } from './slices/resources/video/constants';
 import { tagReducer } from './slices/tagSlice';
 import { TAGS } from './slices/tagSlice/constants';
 
@@ -38,7 +40,8 @@ export const rootReducer = combineReducers({
     [CATEGORY_TREE]: categoryTreeReducer,
     [TERMS]: termReducer,
     [PHOTOGRAPHS]: photographReducer,
-    [AUDIO_ITEMS]: transcribedAudioReducer,
+    [AUDIO_ITEMS]: audioItemReducer,
+    [VIDEOS]: videoReducer,
     // For consistency, consider pluralizing the following identifiers (constants from each slice)
     [VOCABULARY_LISTS]: vocabularyListReducer,
     [BIBLIOGRAPHIC_REFERENCES]: bibliographicReferenceReducer,

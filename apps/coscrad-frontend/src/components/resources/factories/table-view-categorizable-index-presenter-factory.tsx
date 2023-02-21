@@ -13,6 +13,7 @@ import { SongIndexPresenter } from '../songs/song-index.presenter';
 import { CoscradLeafletMap } from '../spatial-features/leaflet';
 import { SpatialFeatureIndexPresenter } from '../spatial-features/spatial-feature-index.presenter';
 import { TermIndexPresenter } from '../terms/term-index.presenter';
+import { VideoIndexPresenter } from '../videos';
 import { VocabularyListIndexPresenter } from '../vocabulary-lists/vocabulary-list-index.presenter';
 import {
     CategorizableIndexPresenter,
@@ -72,6 +73,9 @@ export const tableViewCategorizableIndexPresenterFactory: CategorizableIndexPres
 
         case CategorizableType.audioItem:
             return TranscribedAudioIndexPresenter as unknown as CategorizableIndexPresenter<T>;
+
+        case CategorizableType.video:
+            return VideoIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.vocabularyList:
             return VocabularyListIndexPresenter as unknown as CategorizableIndexPresenter<T>;

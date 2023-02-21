@@ -18,6 +18,7 @@ import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-de
 import { SongDetailThumbnailPresenter } from '../songs';
 import { SpatialFeatureDetailThumbnailPresenter } from '../spatial-features/thumbnail-presenters';
 import { TermDetailThumbnailPresenter } from '../terms/term-detail.thumbnail.presenter';
+import { VideoDetailThumbnailPresenter } from '../videos';
 import { VocabularyListDetailThumbnailPresenter } from '../vocabulary-lists/vocabulary-list-detail.thumbnail.presenter';
 
 // TODO Define thumbnail specific presenters
@@ -31,6 +32,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
     [CategorizableType.term]: TermDetailThumbnailPresenter,
     [CategorizableType.audioItem]: AudioItemDetailThumbnailPresenter,
+    [CategorizableType.video]: VideoDetailThumbnailPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailThumbnailPresenter,
     /**
      * TODO Investigate why importing this from the component file leads to a

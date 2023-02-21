@@ -20,14 +20,14 @@ export class VideoViewModel extends BaseViewModel implements IVideoViewModel {
     readonly name: MultilingualText;
 
     @ApiProperty({
-        example: 'https://www.mysounds.com/3pigs.mp3',
-        description: 'a url where the client can fetch the audio file',
+        example: 'https://www.mysounds.com/3pigs.mp4',
+        description: 'a url where the client can fetch the video file',
     })
     @URL({
-        label: 'audio link',
-        description: 'a web link to an accompanying digital audio file',
+        label: 'video link',
+        description: 'a web link to an accompanying digital video file',
     })
-    readonly audioURL: string;
+    readonly videoUrl: string;
 
     @ExternalEnum(
         {
@@ -80,7 +80,7 @@ export class VideoViewModel extends BaseViewModel implements IVideoViewModel {
 
         const { url, mimeType } = allMediaItems.find(({ id }) => id === mediaItemId);
 
-        this.audioURL = url;
+        this.videoUrl = url;
 
         this.mimeType = mimeType;
 
