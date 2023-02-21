@@ -11,6 +11,7 @@ import { useLoadableAudioItemById } from '../../store/slices/resources/audio-ite
 import { useLoadableBookById } from '../../store/slices/resources/books';
 import { useLoadableMediaItemById } from '../../store/slices/resources/media-items';
 import { useLoadablePhotographById } from '../../store/slices/resources/photographs/hooks';
+import { useLoadableVideoById } from '../../store/slices/resources/video/hooks';
 import { useLoadableVocabularyListById } from '../../store/slices/resources/vocabulary-lists/hooks/useLoadableVocabularyListById';
 
 type UseLoadableById = (id: string) => IMaybeLoadable<unknown>;
@@ -29,6 +30,7 @@ const lookupTable: { [K in CategorizableType]: UseLoadableById } = {
     [CategorizableType.spatialFeature]: useLoadableSpatialFeatureById,
     [CategorizableType.term]: useLoadableTermById,
     [CategorizableType.audioItem]: useLoadableAudioItemById,
+    [CategorizableType.video]: useLoadableVideoById,
     [CategorizableType.vocabularyList]: useLoadableVocabularyListById,
     [CategorizableType.note]: useLoadableNoteById,
 };
