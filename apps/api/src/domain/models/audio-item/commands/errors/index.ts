@@ -1,1 +1,1 @@
-export * from './InvalidMIMETypeForTranscriptMediaError';
+export * from './InvalidMIMETypeForAudiovisualResourceError';

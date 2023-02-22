@@ -21,7 +21,7 @@ import { TimeRangeContext } from '../../context/time-range-context/time-range-co
 import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import { CREATE_AUDIO_ITEM } from '../commands';
-import { InvalidMIMETypeForTranscriptMediaError } from '../commands/errors';
+import { InvalidMIMETypeForAudiovisualResourceError } from '../commands/errors';
 import {
     Constructor,
     ITranscribable,
@@ -130,7 +130,12 @@ class AudioItemBase extends Resource {
                         id: this.mediaItemId,
                     },
                 ],
-                [new InvalidMIMETypeForTranscriptMediaError(this.id, mimeType)]
+                [
+                    new InvalidMIMETypeForAudiovisualResourceError(
+                        this.getCompositeIdentifier(),
+                        mimeType
+                    ),
+                ]
             );
 
         return Valid;
