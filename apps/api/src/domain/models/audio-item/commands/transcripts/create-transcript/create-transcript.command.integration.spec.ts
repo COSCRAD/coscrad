@@ -83,28 +83,30 @@ describe(commandType, () => {
     });
 
     describe(`when the command is valid`, () => {
-        it('should succeed with the expected database updates', async () => {
-            await assertCommandSuccess(assertionHelperDependencies, {
-                systemUserId,
-                initialState: validInitialState,
-                buildValidCommandFSA: () => validCommandFSA,
-                checkStateOnSuccess: async ({
-                    aggregateCompositeIdentifier: { id },
-                }: CreateTranscript) => {
-                    const audioItemSearchResult = await testRepositoryProvider
-                        .forResource<AudioItem>(ResourceType.audioItem)
-                        .fetchById(id);
+        describe('when adding a transcript to an audio item', () => {
+            it('should succeed with the expected database updates', async () => {
+                await assertCommandSuccess(assertionHelperDependencies, {
+                    systemUserId,
+                    initialState: validInitialState,
+                    buildValidCommandFSA: () => validCommandFSA,
+                    checkStateOnSuccess: async ({
+                        aggregateCompositeIdentifier: { id },
+                    }: CreateTranscript) => {
+                        const audioItemSearchResult = await testRepositoryProvider
+                            .forResource<AudioItem>(ResourceType.audioItem)
+                            .fetchById(id);
 
-                    expect(audioItemSearchResult).not.toBe(NotFound);
+                        expect(audioItemSearchResult).not.toBe(NotFound);
 
-                    expect(audioItemSearchResult).not.toBeInstanceOf(InternalError);
+                        expect(audioItemSearchResult).not.toBeInstanceOf(InternalError);
 
-                    const audioItem = audioItemSearchResult as unknown as AudioItem;
+                        const audioItem = audioItemSearchResult as unknown as AudioItem;
 
-                    expect(audioItem.hasTranscript()).toBe(true);
+                        expect(audioItem.hasTranscript()).toBe(true);
 
-                    assertEventRecordPersisted(audioItem, 'TRANSCRIPT_CREATED', systemUserId);
-                },
+                        assertEventRecordPersisted(audioItem, 'TRANSCRIPT_CREATED', systemUserId);
+                    },
+                });
             });
         });
     });

@@ -15,3 +15,17 @@ export class AudioItemCompositeIdentifier {
     })
     id: AggregateId;
 }
+
+export class AudioVisualCompositeIdentifier {
+    @NonEmptyString({
+        label: 'type',
+        description: 'audio item | video',
+    })
+    type: typeof AggregateType.video | typeof AggregateType.audioItem;
+
+    @UUID({
+        label: 'ID',
+        description: `the audio visual resource's ID (generated)`,
+    })
+    id: AggregateId;
+}

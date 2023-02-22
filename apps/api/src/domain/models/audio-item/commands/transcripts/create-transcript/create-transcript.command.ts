@@ -1,4 +1,4 @@
-import { AggregateCompositeIdentifier, ICommandBase } from '@coscrad/api-interfaces';
+import { ICommandBase, ResourceCompositeIdentifier, ResourceType } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType } from '@coscrad/data-types';
 import { AudioItemCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
@@ -15,5 +15,7 @@ export class CreateTranscript implements ICommandBase {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',
     })
-    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier;
+    readonly aggregateCompositeIdentifier: ResourceCompositeIdentifier<
+        typeof ResourceType.video | typeof ResourceType.audioItem
+    >;
 }
