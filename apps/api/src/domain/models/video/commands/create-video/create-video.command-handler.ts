@@ -13,7 +13,7 @@ import { IRepositoryProvider } from '../../../../repositories/interfaces/reposit
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
-import { Video, VideoItemBase } from '../../../audio-item/entities/video.entity';
+import { Video, VideoBase } from '../../../audio-item/entities/video.entity';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { CreateVideo } from './create-video.command';
@@ -44,7 +44,7 @@ export class CreateVideoCommandHandler extends BaseCreateCommandHandler<Video> {
         lengthMilliseconds,
     }: CreateVideo): ResultOrError<Video> {
         // Due to the mixin, we do not have typesafety in the constructor call bellow, so we type the DTO here
-        const videoItemDto: DTO<VideoItemBase> = {
+        const videoItemDto: DTO<VideoBase> = {
             name,
             id,
             type: AggregateType.video,

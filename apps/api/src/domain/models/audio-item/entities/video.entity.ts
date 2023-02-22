@@ -32,7 +32,7 @@ import {
 import { Transcript } from './transcript.entity';
 
 @RegisterIndexScopedCommands([CREATE_VIDEO])
-export class VideoItemBase extends Resource {
+export class VideoBase extends Resource {
     readonly type = ResourceType.video;
 
     @NestedDataType(MultilingualText, {
@@ -75,7 +75,7 @@ export class VideoItemBase extends Resource {
     })
     readonly lengthMilliseconds: CoscradTimeStamp;
 
-    constructor(dto: DTO<VideoItemBase>) {
+    constructor(dto: DTO<VideoBase>) {
         super(dto);
 
         if (!dto) return;
@@ -164,6 +164,6 @@ export class VideoItemBase extends Resource {
 }
 
 // mixin the transcribable behaviour
-export const Video = Transcribable(VideoItemBase as unknown as Constructor<ITranscribableBase>);
+export const Video = Transcribable(VideoBase as unknown as Constructor<ITranscribableBase>);
 
-export type Video = ITranscribable & VideoItemBase;
+export type Video = ITranscribable & VideoBase;
