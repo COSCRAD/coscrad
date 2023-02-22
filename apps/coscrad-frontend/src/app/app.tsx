@@ -1,5 +1,4 @@
 import { isAggregateType } from '@coscrad/api-interfaces';
-import { Box, Container } from '@mui/material';
 import { Route, Routes } from 'react-router-dom';
 import { About } from '../components/about/about';
 import { Credits } from '../components/credits/credits';
@@ -13,6 +12,7 @@ import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-
 import { getConfig } from '../config';
 import { fetchFreshState } from '../store/slices/utils/fetch-fresh-state';
 import { FloatSpacerDiv } from '../utils/generic-components';
+import { CoscradLayoutContainer } from './coscrad-layout-container';
 import { useAppDispatch } from './hooks';
 import { IndexToDetailFlowRoutes } from './index-to-detail-flow-routes';
 import { routes } from './routes/routes';
@@ -41,42 +41,36 @@ export function App() {
     return (
         <>
             <Header />
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: '95vh',
-                }}
-            >
-                {/* <CssBaseline /> */}
-                <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="md">
-                    <Routes key="routes">
-                        <Route key="home" path={routes.home} element={<Home />} />
-                        <Route key="about" path={routes.about} element={<About />} />
-                        <Route
-                            key="tag-index"
-                            path={routes.tags.index}
-                            element={<TagIndexContainer />}
-                        />
-                        <Route
-                            key="tag-detail"
-                            path={routes.tags.detail()}
-                            element={<TagDetailContainer />}
-                        />
-                        <Route
-                            key="category-tree"
-                            path={routes.treeOfKnowledge}
-                            element={<CategoryTreeContainer />}
-                        />
-                        {IndexToDetailFlowRoutes()}
-                        {/* The following are temporary or experimental */}
-                        <Route key="members-only" path="MembersOnly" element={<MembersOnly />} />
-                        <Route key="credits" path={routes.siteCredits} element={<Credits />} />
-                    </Routes>
-                    <FloatSpacerDiv />
-                </Container>
-                <Footer />
-            </Box>
+            <CoscradLayoutContainer>
+                {/**
+                 * TODO: Break out utility function to bootstrap all routes
+                 */}
+                <Routes key="routes">
+                    <Route key="home" path={routes.home} element={<Home />} />
+                    <Route key="about" path={routes.about} element={<About />} />
+                    <Route
+                        key="tag-index"
+                        path={routes.tags.index}
+                        element={<TagIndexContainer />}
+                    />
+                    <Route
+                        key="tag-detail"
+                        path={routes.tags.detail()}
+                        element={<TagDetailContainer />}
+                    />
+                    <Route
+                        key="category-tree"
+                        path={routes.treeOfKnowledge}
+                        element={<CategoryTreeContainer />}
+                    />
+                    {IndexToDetailFlowRoutes()}
+                    {/* The following are temporary or experimental */}
+                    <Route key="members-only" path="MembersOnly" element={<MembersOnly />} />
+                    <Route key="credits" path={routes.siteCredits} element={<Credits />} />
+                </Routes>
+                <FloatSpacerDiv />
+            </CoscradLayoutContainer>
+            <Footer />
         </>
     );
 }
