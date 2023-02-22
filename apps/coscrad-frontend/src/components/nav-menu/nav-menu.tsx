@@ -84,8 +84,12 @@ export const NavMenu = (): JSX.Element => {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                {navItemInfos.map((navItemInfo, index) => (
-                    <NavMenuItem key={index} navItemInfo={navItemInfo} handleClose={handleClose} />
+                {navItemInfos.map((navItemInfo) => (
+                    <NavMenuItem
+                        key={navItemInfo.label}
+                        navItemInfo={navItemInfo}
+                        handleClose={handleClose}
+                    />
                 ))}
             </Menu>
             <AuthenticationButton />
