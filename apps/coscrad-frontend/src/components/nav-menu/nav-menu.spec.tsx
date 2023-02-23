@@ -1,6 +1,6 @@
 import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../utils/test-utils';
-import { NavMenu } from './nav-menu';
+import { NavMenuContainer } from './nav-menu-container';
 
 /**
  *
@@ -9,11 +9,11 @@ import { NavMenu } from './nav-menu';
  * We probably also want Cypress tests to ensure the navigation works
  *
  */
-describe('NavBar', () => {
+describe('Nav Menu', () => {
     it('should render successfully', () => {
         const { baseElement } = renderWithProviders(
             <MemoryRouter>
-                <NavMenu />
+                <NavMenuContainer />
             </MemoryRouter>
         );
         expect(baseElement).toBeTruthy();

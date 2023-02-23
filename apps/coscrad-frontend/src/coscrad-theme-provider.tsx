@@ -13,7 +13,7 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
     const coscradDefaultTheme = createTheme({
         palette: {
             primary: {
-                main: blue[300],
+                main: blue[800],
             },
         },
     });

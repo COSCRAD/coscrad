@@ -1,63 +1,23 @@
-import { CategorizableType } from '@coscrad/api-interfaces';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import { Box, IconButton, Menu } from '@mui/material';
-import { useContext, useState } from 'react';
-import { routes } from '../../app/routes/routes';
-import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
+import { useState } from 'react';
 import AuthenticationButton from '../authentication-button/authentication-button';
+import { NavItemInfo } from './nav-menu-container';
 import { NavMenuItem } from './nav-menu-item';
 
-export type NavItemInfo = {
-    link: string;
-    label: string;
-};
+interface NavMenuPresenterProps {
+    navItemInfos: NavItemInfo[];
+}
 
-// TODO: We should have a NavBar container and presenter
-export const NavMenu = (): JSX.Element => {
-    const { indexToDetailFlows } = useContext(ConfigurableContentContext);
-
-    // note this may be [] if we haven't included `notes`
-    const dynamicLinks = indexToDetailFlows
-        .filter(({ categorizableType }) => categorizableType === CategorizableType.note)
-        .map(({ label, route }) => ({
-            link: route || routes.notes.index,
-            label: label || 'Notes',
-        }));
-
-    // We may want an enum \ constants for our routes
-    const navItemInfos: NavItemInfo[] = [
-        {
-            link: routes.home,
-            label: 'Home',
-        },
-        {
-            link: routes.about,
-            label: 'About',
-        },
-        {
-            link: routes.resources.info,
-            label: 'Browse Resources',
-        },
-        {
-            link: routes.tags.index,
-            label: 'Tags',
-        },
-        {
-            link: routes.treeOfKnowledge,
-            label: 'Tree of Knowledge',
-        },
-        ...dynamicLinks,
-        {
-            link: routes.siteCredits,
-            label: 'Credits',
-        },
-    ];
-
+export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.Element => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
     const open = Boolean(anchorEl);
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleClose = () => {
         setAnchorEl(null);
     };

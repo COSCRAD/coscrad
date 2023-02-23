@@ -7,6 +7,9 @@ import { userLoginSucceeded } from '../../store/slices/auth';
 import { ImageInContent } from '../image-in-content/image-in-content';
 
 export const Home = (): JSX.Element => {
+    /**
+     * TODO: Move data (ConfigurableContentContext, auth, and dispatch) out of presenter
+     */
     const { siteDescription, siteHomeImageUrl } = useContext(ConfigurableContentContext);
 
     const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();

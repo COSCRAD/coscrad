@@ -7,6 +7,9 @@ import { COSCRADByline } from '../coscrad-byline/coscrad-byline';
 import { TenantLogo } from '../tenant-logo/tenant-logo';
 
 export const Footer = (): JSX.Element => {
+    /**
+     * TODO: Move data (ConfigurableContentContext) out of presenter
+     */
     const { subTitle, copyrightHolder } = useContext(ConfigurableContentContext);
 
     return (

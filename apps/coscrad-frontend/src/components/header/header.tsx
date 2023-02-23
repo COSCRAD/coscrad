@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
-import { NavMenu } from '../nav-menu/nav-menu';
+import { NavMenuContainer } from '../nav-menu/nav-menu-container';
 
 const StyledAppBar = styled(AppBar)({
     backgroundColor: '#2cb5af',
@@ -23,6 +23,9 @@ const StyledSiteTitle = styled(Box)`
 `;
 
 export const Header = (): JSX.Element => {
+    /**
+     * TODO: Move data (ConfigurableContentContext) out of presenter
+     */
     const { siteTitle } = useContext(ConfigurableContentContext);
 
     return (
@@ -33,7 +36,7 @@ export const Header = (): JSX.Element => {
                         <Typography variant="h5">{siteTitle}</Typography>
                     </Link>
                 </StyledSiteTitle>
-                <NavMenu></NavMenu>
+                <NavMenuContainer />
             </StyledToolbar>
         </StyledAppBar>
     );

@@ -1,6 +1,6 @@
 import { MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { NavItemInfo } from './nav-menu';
+import { NavItemInfo } from './nav-menu-container';
 
 export interface NavItemItemProps {
     navItemInfo: NavItemInfo;

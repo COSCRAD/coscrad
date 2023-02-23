@@ -7,6 +7,9 @@ export interface AboutProps {
 }
 
 export const About = (): JSX.Element => {
+    /**
+     * TODO: Move data (ConfigurableContentContext) out of presenter
+     */
     const { about } = useContext(ConfigurableContentContext);
 
     return <Typography variant="body1">{about}</Typography>;

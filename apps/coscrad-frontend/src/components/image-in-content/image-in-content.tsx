@@ -9,19 +9,22 @@ interface ImageInContentProps {
     image: ImageAsset;
     displayWidth?: string;
     title?: string;
-    alt?: string;
     alignment?: 'left' | 'right';
 }
 
 /**
+ * Note: This is just a placeholder component for a more complete approach in our CMS
+ * Need to find a way to separate design, e.g., `alignment` from data, e.g., `ImageAsset`
+ * Frontmatter photos should eventually come from the Photo resource in the Web of Knowledge
  * Could add the caption feature as a part of this.  It could be optional.
- * The ImageAsset could be the model coming from the digital asset manager in the future
  * The image could have an optional borderRadius to round the corners
  * Eventually in the CMS clicking on the image could open it in full screen
  */
 
-export const ImageInContent = ({ image, alt, displayWidth, alignment }: ImageInContentProps) => {
+export const ImageInContent = ({ image, displayWidth, alignment }: ImageInContentProps) => {
     const { title, src, width, height } = image;
+
+    const alt = `Image Title: ${title}`;
 
     const divStyle = {
         width: displayWidth,

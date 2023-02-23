@@ -6,6 +6,9 @@ export interface AboutProps {
 }
 
 export const Credits = (): JSX.Element => {
+    /**
+     * TODO: Move data (ConfigurableContentContext) out of presenter
+     */
     const { siteCredits } = useContext(ConfigurableContentContext);
 
     return <div>{siteCredits}</div>;
