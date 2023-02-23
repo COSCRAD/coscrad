@@ -5,7 +5,9 @@ import { NotFound } from '../../../../../../lib/types/not-found';
 import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import formatAggregateType from '../../../../../../view-models/presentation/formatAggregateType';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
+import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
@@ -18,9 +20,11 @@ import { assertEventRecordPersisted } from '../../../../__tests__/command-helper
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
+import { AudiovisualResourceType } from '../../../entities/audio-item-composite-identifier';
 import { AudioItem } from '../../../entities/audio-item.entity';
 import { TranscriptParticipant } from '../../../entities/transcript-participant';
 import { Transcript } from '../../../entities/transcript.entity';
+import { Video } from '../../../entities/video.entity';
 import {
     DuplicateTranscriptParticipantError,
     DuplicateTranscriptParticipantInitialsError,
@@ -34,28 +38,40 @@ const commandType = `ADD_PARTICIPANT_TO_TRANSCRIPT`;
 
 const testDatabaseName = generateDatabaseNameForTestSuite();
 
-const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
-    transcript: new Transcript({
+const buildEmptyTranscript = () =>
+    new Transcript({
         items: [],
         participants: [],
-    }),
+    });
+
+const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem).clone({
+    transcript: buildEmptyTranscript(),
+});
+
+const existingVideo = getValidAggregateInstanceForTest(AggregateType.video).clone({
+    transcript: buildEmptyTranscript(),
+});
+
+const existingTranscriptParticipant = new TranscriptParticipant({
+    initials: 'ABC',
+    name: 'Aaron B. Cool',
 });
 
 const existingAudioItemWithParticipant = existingAudioItem.addParticipantToTranscript(
-    new TranscriptParticipant({
-        initials: 'ABC',
-        name: 'Aaron B. Cool',
-    })
+    existingTranscriptParticipant
 ) as unknown as AudioItem;
 
-const validCommandFSA: FluxStandardAction<AddParticipantToTranscript> = {
+const buildValidCommandFSA = (
+    validInstance: AudioItem | Video
+): FluxStandardAction<AddParticipantToTranscript> => ({
     type: commandType,
     payload: {
-        aggregateCompositeIdentifier: existingAudioItem.getCompositeIdentifier(),
+        aggregateCompositeIdentifier:
+            validInstance.getCompositeIdentifier() as AggregateCompositeIdentifier<AudiovisualResourceType>,
         name: `Long Talkin' Johnny`,
         initials: 'LTJ',
     },
-};
+});
 
 const audioItemWithParticipantInitialsAlready = existingAudioItem.clone({
     transcript: {
@@ -123,79 +139,91 @@ describe(`The command: ${commandType}`, () => {
         await testRepositoryProvider.testTeardown();
     });
 
+    const existingAudiovisualItems = [existingAudioItem, existingVideo];
+
     describe(`when the command is valid`, () => {
-        describe(`when there is not already a participant on the transcript for the audio item`, () => {
-            it(`should succeed with the expected database updates`, async () => {
-                await assertCommandSuccess(assertionHelperDependencies, {
-                    buildValidCommandFSA: () => validCommandFSA,
-                    systemUserId,
-                    initialState: validInitialState,
-                    checkStateOnSuccess: async ({
-                        aggregateCompositeIdentifier: { id },
-                    }: AddParticipantToTranscript) => {
-                        const transcriptSearchResult = await testRepositoryProvider
-                            .forResource(AggregateType.audioItem)
-                            .fetchById(id);
+        existingAudiovisualItems.forEach((item) => {
+            const validCommandFSA = buildValidCommandFSA(item);
 
-                        expect(transcriptSearchResult).not.toBe(NotFound);
+            describe(`for a resource of type: ${formatAggregateType(item.type)}`, () => {
+                describe(`when there is not already a participant on the transcript`, () => {
+                    it(`should succeed with the expected database updates`, async () => {
+                        await assertCommandSuccess(assertionHelperDependencies, {
+                            buildValidCommandFSA: () => validCommandFSA,
+                            systemUserId,
+                            initialState: validInitialState,
+                            checkStateOnSuccess: async ({
+                                aggregateCompositeIdentifier: { id },
+                            }: AddParticipantToTranscript) => {
+                                const transcriptSearchResult = await testRepositoryProvider
+                                    .forResource(item.type)
+                                    .fetchById(id);
 
-                        expect(transcriptSearchResult).toBeInstanceOf(AudioItem);
+                                expect(transcriptSearchResult).not.toBe(NotFound);
 
-                        const audioItem = transcriptSearchResult as AudioItem;
+                                expect(transcriptSearchResult).toBeInstanceOf(AudioItem);
 
-                        const participantSearchResult =
-                            audioItem.transcript.findParticipantByInitials(
-                                validCommandFSA.payload.initials
-                            );
+                                const audioItem = transcriptSearchResult as AudioItem;
 
-                        // Shouldn't be `NotFound`
-                        expect(participantSearchResult).toBeInstanceOf(TranscriptParticipant);
+                                const participantSearchResult =
+                                    audioItem.transcript.findParticipantByInitials(
+                                        validCommandFSA.payload.initials
+                                    );
 
-                        assertEventRecordPersisted(
-                            audioItem,
-                            'PARTICIPANT_ADDED_TO_TRANSCRIPT',
-                            systemUserId
-                        );
-                    },
+                                // Shouldn't be `NotFound`
+                                expect(participantSearchResult).toBeInstanceOf(
+                                    TranscriptParticipant
+                                );
+
+                                assertEventRecordPersisted(
+                                    audioItem,
+                                    'PARTICIPANT_ADDED_TO_TRANSCRIPT',
+                                    systemUserId
+                                );
+                            },
+                        });
+                    });
                 });
-            });
-        });
 
-        describe(`when there is already one participant transcript for the audio item`, () => {
-            it(`should succeed with the expected database updates`, async () => {
-                await assertCommandSuccess(assertionHelperDependencies, {
-                    buildValidCommandFSA: () => validCommandFSA,
-                    systemUserId,
-                    initialState: new DeluxeInMemoryStore({
-                        [AggregateType.audioItem]: [existingAudioItemWithParticipant],
-                    }).fetchFullSnapshotInLegacyFormat(),
-                    checkStateOnSuccess: async ({
-                        aggregateCompositeIdentifier: { id },
-                    }: AddParticipantToTranscript) => {
-                        const transcriptSearchResult = await testRepositoryProvider
-                            .forResource(AggregateType.audioItem)
-                            .fetchById(id);
+                describe(`when there is already one participant transcript for the audio item`, () => {
+                    it(`should succeed with the expected database updates`, async () => {
+                        await assertCommandSuccess(assertionHelperDependencies, {
+                            buildValidCommandFSA: () => validCommandFSA,
+                            systemUserId,
+                            initialState: new DeluxeInMemoryStore({
+                                [AggregateType.audioItem]: [existingAudioItemWithParticipant],
+                            }).fetchFullSnapshotInLegacyFormat(),
+                            checkStateOnSuccess: async ({
+                                aggregateCompositeIdentifier: { id },
+                            }: AddParticipantToTranscript) => {
+                                const transcriptSearchResult = await testRepositoryProvider
+                                    .forResource(AggregateType.audioItem)
+                                    .fetchById(id);
 
-                        expect(transcriptSearchResult).not.toBe(NotFound);
+                                expect(transcriptSearchResult).not.toBe(NotFound);
 
-                        expect(transcriptSearchResult).toBeInstanceOf(AudioItem);
+                                expect(transcriptSearchResult).toBeInstanceOf(AudioItem);
 
-                        const audioItem = transcriptSearchResult as AudioItem;
+                                const audioItem = transcriptSearchResult as AudioItem;
 
-                        const participantSearchResult =
-                            audioItem.transcript.findParticipantByInitials(
-                                validCommandFSA.payload.initials
-                            );
+                                const participantSearchResult =
+                                    audioItem.transcript.findParticipantByInitials(
+                                        validCommandFSA.payload.initials
+                                    );
 
-                        // Shouldn't be `NotFound`
-                        expect(participantSearchResult).toBeInstanceOf(TranscriptParticipant);
+                                // Shouldn't be `NotFound`
+                                expect(participantSearchResult).toBeInstanceOf(
+                                    TranscriptParticipant
+                                );
 
-                        assertEventRecordPersisted(
-                            audioItem,
-                            'PARTICIPANT_ADDED_TO_TRANSCRIPT',
-                            systemUserId
-                        );
-                    },
+                                assertEventRecordPersisted(
+                                    audioItem,
+                                    'PARTICIPANT_ADDED_TO_TRANSCRIPT',
+                                    systemUserId
+                                );
+                            },
+                        });
+                    });
                 });
             });
         });
