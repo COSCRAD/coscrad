@@ -218,7 +218,12 @@ export const IndexTable = <T extends IBaseViewModel>({
             size="small"
             placeholder="Search..."
             value={searchValue}
-            onChange={(changeEvent) => setSearchValue(changeEvent.target.value)}
+            onChange={(changeEvent) => {
+                const searchValue = changeEvent.target.value;
+
+                const transformedValue = searchValue.replace("s[", "ŝ").replace("w[", "ŵ").replace("z[", "ẑ").replace("]", "ʔ").replace(";", "ɨ")
+                setSearchValue(transformedValue)
+            }}
             InputProps={{
                 endAdornment: <SearchRounded />,
             }}
