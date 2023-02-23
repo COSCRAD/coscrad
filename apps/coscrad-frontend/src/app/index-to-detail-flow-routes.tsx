@@ -12,7 +12,7 @@ import { DetailViewType } from '../configurable-front-matter/data/configurable-c
 import { routes } from './routes/routes';
 
 export const IndexToDetailFlowRoutes = () => {
-    const { indexToDetailFlows } = useContext(ConfigurableContentContext);
+    const { indexToDetailFlows, virtualKeyboard } = useContext(ConfigurableContentContext);
 
     const resourceTypesAndLabels = indexToDetailFlows
         .filter(({ categorizableType }) => isResourceType(categorizableType))
@@ -83,6 +83,7 @@ export const IndexToDetailFlowRoutes = () => {
                                 )}
                                 preFilter={indexFilter}
                                 aggregateType={categorizableType}
+                                virtualKeyboard={virtualKeyboard}
                             />
                         }
                     />

@@ -6,6 +6,7 @@ import {
     IIndexQueryResult,
     WithTags,
 } from '@coscrad/api-interfaces';
+import { VirtualKeyboardConfig } from '../../configurable-front-matter/data/configurable-content-schema';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { CommandPanel } from '../commands';
@@ -19,6 +20,7 @@ export interface FilteredAggregateIndexContainerProps<
     IndexPresenter: FunctionalComponent<UPresenterProps>;
     preFilter?: (model: T) => boolean;
     aggregateType: CategorizableType;
+    virtualKeyboard: VirtualKeyboardConfig;
 }
 
 export const FilteredCategorizableIndexContainer = <
@@ -28,6 +30,7 @@ export const FilteredCategorizableIndexContainer = <
     IndexPresenter,
     preFilter,
     aggregateType,
+    virtualKeyboard,
 }: FilteredAggregateIndexContainerProps<T, U>): JSX.Element => {
     const loadableModels = buildUseLoadableForSingleCategorizableType(
         aggregateType

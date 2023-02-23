@@ -20,5 +20,15 @@ export const contentConfig: ConfigurableContent = {
         detailViewType: DetailViewType.fullView,
     })),
     shouldEnableWebOfKnowledgeForResources: true,
-    siteCredits: 'Credits here'
+    siteCredits: 'Credits here',
+    virtualKeyboard: {
+        name: 'Foo',
+        specialCharacterReplacements: {
+            's[': 'ŝ',
+            'w[': 'ŵ',
+            'z[': 'ẑ',
+            ']': 'ʔ',
+            ';': 'ɨ',
+        },
+    },
 };

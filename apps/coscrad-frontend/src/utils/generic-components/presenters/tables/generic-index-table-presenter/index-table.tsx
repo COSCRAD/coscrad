@@ -1,24 +1,18 @@
 import { IBaseViewModel } from '@coscrad/api-interfaces';
-import { SearchRounded } from '@mui/icons-material';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import {
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select,
-    TextField,
-    Typography
-} from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Paper, Select, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { NotFoundPresenter } from '../../../../../components/not-found';
+import { VirtualKeyboardConfig } from '../../../../../configurable-front-matter/data/configurable-content-schema';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import { filterTableData, Matchers } from './filter-table-data';
 import './generic-index-table-presenter.css';
 import './index-table.css';
 import { renderCell } from './render-cell';
+import { SearchBar } from './search-bar';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
 import { CellRenderersDefinition } from './types/cell-renderers-definition';
 
@@ -26,7 +20,7 @@ export const DEFAULT_PAGE_SIZE = 5;
 
 const pageSizeOptions: number[] = [DEFAULT_PAGE_SIZE, 10, 50, 100];
 
-const labelForSearchAllPropertiesOption = 'ALL'
+const labelForSearchAllPropertiesOption = 'ALL';
 
 const calculateNumberOfPages = (numberOfRecords: number, pageSize: number) => {
     const quotient = Math.floor(numberOfRecords / pageSize);
@@ -56,6 +50,7 @@ export interface GenericIndexTablePresenterProps<T extends IBaseViewModel> {
     heading: string;
     filterableProperties: (keyof T)[];
     matchers?: Matchers<T>;
+    virtualKeyboard?: VirtualKeyboardConfig;
 }
 
 const allProperties = 'allProperties';
@@ -67,6 +62,7 @@ export const IndexTable = <T extends IBaseViewModel>({
     heading,
     filterableProperties,
     matchers = {}, // default to String(value) & case-insensitive search
+    virtualKeyboard,
 }: GenericIndexTablePresenterProps<T>) => {
     if (headingLabels.length === 0) {
         throw new EmptyIndexTableException();
@@ -79,7 +75,12 @@ export const IndexTable = <T extends IBaseViewModel>({
         typeof allProperties | keyof T
     >(allProperties);
 
-    const propertiesToFilterBy = selectedFilterProperty === 'allProperties' ? filterableProperties : [selectedFilterProperty]
+    const [shouldUseVirtualKeyboard, _setShouldUseVirtualKeyboard] = useState<boolean>(true);
+
+    const propertiesToFilterBy =
+        selectedFilterProperty === 'allProperties'
+            ? filterableProperties
+            : [selectedFilterProperty];
 
     const filteredTableData = filterTableData(
         tableData,
@@ -213,23 +214,6 @@ export const IndexTable = <T extends IBaseViewModel>({
             </div>
         );
 
-    const searchBar = (
-        <TextField
-            size="small"
-            placeholder="Search..."
-            value={searchValue}
-            onChange={(changeEvent) => {
-                const searchValue = changeEvent.target.value;
-
-                const transformedValue = searchValue.replace("s[", "ŝ").replace("w[", "ŵ").replace("z[", "ẑ").replace("]", "ʔ").replace(";", "ɨ")
-                setSearchValue(transformedValue)
-            }}
-            InputProps={{
-                endAdornment: <SearchRounded />,
-            }}
-        />
-    )
-
     const propertiesToSearchSelectField = (
         <FormControl sx={{ minWidth: 120 }} size={'small'}>
             <InputLabel>Filter</InputLabel>
@@ -246,7 +230,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                 <MenuItem sx={{ minWidth: 120 }} value={'allProperties'}>
                     {labelForSearchAllPropertiesOption}
                 </MenuItem>
-                {filterableProperties.map((selectedFilterProperty: (keyof T & string)) => (
+                {filterableProperties.map((selectedFilterProperty: keyof T & string) => (
                     <MenuItem
                         key={selectedFilterProperty}
                         value={selectedFilterProperty}
@@ -262,7 +246,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                 ))}
             </Select>
         </FormControl>
-    )
+    );
 
     return (
         <div>
@@ -270,7 +254,19 @@ export const IndexTable = <T extends IBaseViewModel>({
 
             {propertiesToSearchSelectField}
 
-            {searchBar}
+            {!isNullOrUndefined(virtualKeyboard) && shouldUseVirtualKeyboard ? (
+                <p>Using virtual keyboard: {virtualKeyboard.name}</p>
+            ) : null}
+
+            <SearchBar
+                value={searchValue}
+                onValueChange={setSearchValue}
+                specialCharacterReplacements={
+                    shouldUseVirtualKeyboard
+                        ? virtualKeyboard?.specialCharacterReplacements
+                        : undefined
+                }
+            />
 
             <div className="records-table">{table}</div>
         </div>
