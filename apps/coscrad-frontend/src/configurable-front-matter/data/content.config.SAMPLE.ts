@@ -22,13 +22,14 @@ export const contentConfig: ConfigurableContent = {
     shouldEnableWebOfKnowledgeForResources: true,
     siteCredits: 'Credits here',
     virtualKeyboard: {
-        name: 'Foo',
+        name: 'Tŝilhqot’in',
         specialCharacterReplacements: {
             's[': 'ŝ',
             'w[': 'ŵ',
             'z[': 'ẑ',
             ']': 'ʔ',
             ';': 'ɨ',
+            "'": '’',
         },
     },
 };
