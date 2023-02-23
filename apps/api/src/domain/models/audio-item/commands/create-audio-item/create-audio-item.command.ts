@@ -29,20 +29,20 @@ export class CreateAudioItem implements ICommandBase {
 
     @CoscradMultilingualText({
         label: 'name',
-        description: 'the name of the transcript',
+        description: 'the name of the audio item',
     })
     readonly name: MultilingualText;
 
     @ReferenceTo(AggregateType.mediaItem)
     @UUID({
         label: 'media item ID',
-        description: `the ID of the transcript's media item`,
+        description: `the ID of the audio item's media item`,
     })
     readonly mediaItemId: AggregateId;
 
     @NonNegativeFiniteNumber({
         label: 'length (ms)',
-        description: "the length of the transcript's media item in milliseconds",
+        description: "the length of the audio item's media item in milliseconds",
     })
     readonly lengthMilliseconds: CoscradTimeStamp;
 

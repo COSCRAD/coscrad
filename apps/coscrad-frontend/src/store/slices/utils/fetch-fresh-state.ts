@@ -9,6 +9,7 @@ import { fetchMediaItems } from '../resources/media-items/thunks';
 import { fetchPhotographs } from '../resources/photographs/thunks';
 import { fetchSongs } from '../resources/songs/thunks';
 import { fetchSpatialFeatures } from '../resources/spatial-features/thunks';
+import { fetchVideos } from '../resources/video/thunks';
 import { fetchVocabularyLists } from '../resources/vocabulary-lists/thunks';
 import { fetchTags } from '../tagSlice/thunks';
 
@@ -63,6 +64,10 @@ export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateT
 
         case AggregateType.vocabularyList:
             dispatch(fetchVocabularyLists());
+            break;
+
+        case AggregateType.video:
+            dispatch(fetchVideos());
             break;
 
         // TODO Support `User`, `UserGroup`

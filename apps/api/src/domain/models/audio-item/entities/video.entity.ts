@@ -20,8 +20,9 @@ import InvalidExternalReferenceByAggregateError from '../../categories/errors/In
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
 import { Resource } from '../../resource.entity';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
-import { CREATE_AUDIO_ITEM } from '../commands';
-import { InvalidMIMETypeForTranscriptMediaError } from '../commands/errors';
+import { CREATE_VIDEO } from '../../video/commands/constants';
+import { InvalidMIMETypeForAudiovisualResourceError } from '../commands/errors';
+import { CoscradTimeStamp } from './audio-item.entity';
 import {
     Constructor,
     ITranscribable,
@@ -30,10 +31,8 @@ import {
 } from './transcribable.mixin';
 import { Transcript } from './transcript.entity';
 
-export type CoscradTimeStamp = number;
-
-@RegisterIndexScopedCommands([CREATE_AUDIO_ITEM])
-class VideoItemBase extends Resource {
+@RegisterIndexScopedCommands([CREATE_VIDEO])
+export class VideoBase extends Resource {
     readonly type = ResourceType.video;
 
     @NestedDataType(MultilingualText, {
@@ -76,7 +75,7 @@ class VideoItemBase extends Resource {
     })
     readonly lengthMilliseconds: CoscradTimeStamp;
 
-    constructor(dto: DTO<VideoItemBase>) {
+    constructor(dto: DTO<VideoBase>) {
         super(dto);
 
         if (!dto) return;
@@ -130,7 +129,12 @@ class VideoItemBase extends Resource {
                         id: this.mediaItemId,
                     },
                 ],
-                [new InvalidMIMETypeForTranscriptMediaError(this.id, mimeType)]
+                [
+                    new InvalidMIMETypeForAudiovisualResourceError(
+                        this.getCompositeIdentifier(),
+                        mimeType
+                    ),
+                ]
             );
 
         return Valid;
@@ -160,6 +164,6 @@ class VideoItemBase extends Resource {
 }
 
 // mixin the transcribable behaviour
-export const Video = Transcribable(VideoItemBase as unknown as Constructor<ITranscribableBase>);
+export const Video = Transcribable(VideoBase as unknown as Constructor<ITranscribableBase>);
 
-export type Video = ITranscribable & VideoItemBase;
+export type Video = ITranscribable & VideoBase;

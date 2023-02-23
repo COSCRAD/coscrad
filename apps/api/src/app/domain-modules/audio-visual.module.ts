@@ -9,6 +9,7 @@ import {
     CreateTranscript,
     CreateTranscriptCommandHandler,
 } from '../../domain/models/audio-item/commands';
+import { CreateVideo, CreateVideoCommandHandler } from '../../domain/models/video';
 import { AudioItemQueryService } from '../../domain/services/query-services/audio-item-query.service';
 import { VideoQueryService } from '../../domain/services/query-services/video-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -24,6 +25,8 @@ import { VideoController } from '../controllers/resources/video.controller';
         CommandInfoService,
         AudioItemQueryService,
         VideoQueryService,
+        CreateVideo,
+        CreateVideoCommandHandler,
         CreateAudioItem,
         CreateAudioItemCommandHandler,
         CreateTranscript,

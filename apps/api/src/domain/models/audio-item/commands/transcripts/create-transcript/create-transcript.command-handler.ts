@@ -1,23 +1,31 @@
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
-import { ID_MANAGER_TOKEN, IIdManager } from '../../../../../interfaces/id-manager.interface';
+import {
+    EVENT,
+    ID_MANAGER_TOKEN,
+    IIdManager,
+} from '../../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../../repositories/interfaces/repository-provider.interface';
+import { AggregateId } from '../../../../../types/AggregateId';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceType';
-import { BaseUpdateCommandHandler } from '../../../../shared/command-handlers/base-update-command-handler';
+import { BaseCommandHandler } from '../../../../shared/command-handlers/base-command-handler';
+import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import { AudioItem } from '../../../entities/audio-item.entity';
+import { Video } from '../../../entities/video.entity';
 import { CreateTranscript } from './create-transcript.command';
 import { TranscriptCreated } from './transcript-created.event';
 
 @CommandHandler(CreateTranscript)
-export class CreateTranscriptCommandHandler extends BaseUpdateCommandHandler<AudioItem> {
+export class CreateTranscriptCommandHandler extends BaseCommandHandler<AudioItem | Video> {
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<AudioItem>;
 
     protected aggregateType: AggregateType = AggregateType.audioItem;
@@ -32,6 +40,18 @@ export class CreateTranscriptCommandHandler extends BaseUpdateCommandHandler<Aud
         this.repositoryForCommandsTargetAggregate = this.repositoryProvider.forResource<AudioItem>(
             ResourceType.audioItem
         );
+    }
+
+    protected async createOrFetchWriteContext({
+        aggregateCompositeIdentifier: { type, id },
+    }: CreateTranscript): Promise<ResultOrError<AudioItem | Video>> {
+        const searchResult = await this.repositoryProvider
+            .forResource<AudioItem | Video>(type)
+            .fetchById(id);
+
+        if (isNotFound(searchResult)) return new AggregateNotFoundError({ type, id });
+
+        return searchResult;
     }
 
     protected fetchRequiredExternalState(): Promise<InMemorySnapshot> {
@@ -54,5 +74,29 @@ export class CreateTranscriptCommandHandler extends BaseUpdateCommandHandler<Aud
 
     protected buildEvent(command: CreateTranscript, eventId: string, userId: string): BaseEvent {
         return new TranscriptCreated(command, eventId, userId);
+    }
+
+    // TODO This overlaps with the generic base-update command handler- how can we reuse without complex inheritance hierarchies?
+    protected async persist(
+        instance: AudioItem | Video,
+        command: CreateTranscript,
+        systemUserId: AggregateId
+    ): Promise<void> {
+        // generate a unique ID for the event
+        const eventId = await this.idManager.generate();
+
+        await this.idManager.use({ id: eventId, type: EVENT });
+
+        const event = this.buildEvent(command, eventId, systemUserId);
+
+        const instanceToPersistWithUpdatedEventHistory = instance.addEventToHistory(event);
+
+        const {
+            aggregateCompositeIdentifier: { type: resourceType },
+        } = command;
+
+        await this.repositoryProvider
+            .forResource(resourceType)
+            .update(instanceToPersistWithUpdatedEventHistory);
     }
 }
