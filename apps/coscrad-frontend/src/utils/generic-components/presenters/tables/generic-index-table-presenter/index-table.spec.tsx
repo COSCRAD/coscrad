@@ -63,6 +63,10 @@ const allHeadings: HeadingLabel<Widget>[] = [
     },
 ];
 
+const filterableProperties: (keyof Widget)[] = [
+    'foo', 'bar', 'baz'
+]
+
 const comprehensiveCellRenderersDefinition: CellRenderersDefinition<Widget> = {
     id: ({ id }: Widget) => <Link to={id}>LINK</Link>,
     foo: ({ foo, bar }: Widget) => `combined prop: ${foo} (${bar})`,
@@ -97,6 +101,7 @@ describe('IndexTable', () => {
                         tableData: widgets,
                         cellRenderersDefinition: comprehensiveCellRenderersDefinition,
                         heading,
+                        filterableProperties: []
                     });
                 });
             });
@@ -114,6 +119,7 @@ describe('IndexTable', () => {
                         tableData: widgets,
                         cellRenderersDefinition: partialRenderers,
                         heading,
+                        filterableProperties
                     });
                 });
             });
@@ -125,6 +131,7 @@ describe('IndexTable', () => {
                         tableData: widgets,
                         cellRenderersDefinition: {},
                         heading,
+                        filterableProperties
                     });
                 });
             });
@@ -146,6 +153,7 @@ describe('IndexTable', () => {
                     tableData: widgets,
                     cellRenderersDefinition: renderers,
                     heading,
+                    filterableProperties
                 });
             });
 
@@ -157,6 +165,7 @@ describe('IndexTable', () => {
                         id: comprehensiveCellRenderersDefinition.id,
                     },
                     heading,
+                    filterableProperties
                 });
             });
 
@@ -166,6 +175,7 @@ describe('IndexTable', () => {
                     tableData: widgets,
                     cellRenderersDefinition: {},
                     heading,
+                    filterableProperties
                 });
             });
         });
@@ -188,6 +198,7 @@ describe('IndexTable', () => {
                     tableData: widgets,
                     cellRenderersDefinition: renderersWithExtra,
                     heading,
+                    filterableProperties
                 });
 
             it('should throw', () => {
@@ -202,6 +213,7 @@ describe('IndexTable', () => {
                     tableData: widgets,
                     cellRenderersDefinition: {},
                     heading,
+                    filterableProperties
                 });
 
             it('should throw', () => {
