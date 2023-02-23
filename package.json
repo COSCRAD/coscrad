@@ -35,6 +35,8 @@
     "private": true,
     "dependencies": {
         "@auth0/auth0-react": "^1.10.1",
+        "@babylonjs/core": "^5.40.0",
+        "@babylonjs/gui": "^5.40.0",
         "@emotion/react": "11.10.5",
         "@emotion/styled": "11.10.5",
         "@golevelup/nestjs-discovery": "^3.0.0",
@@ -63,6 +65,7 @@
         "passport": "^0.6.0",
         "passport-jwt": "^4.0.1",
         "react": "^18.2.0",
+        "react-babylonjs": "^3.1.15",
         "react-dom": "^18.2.0",
         "react-is": "18.0.0",
         "react-leaflet": "^4.1.0",
