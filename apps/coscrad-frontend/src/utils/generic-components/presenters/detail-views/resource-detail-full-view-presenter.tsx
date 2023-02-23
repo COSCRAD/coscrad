@@ -1,5 +1,5 @@
 import { IMultilingualText } from '@coscrad/api-interfaces';
-import { Card, CardContent, CardHeader } from '@mui/material';
+import { Card, CardContent } from '@mui/material';
 import { ReactNode } from 'react';
 import { MultilingualTextPresenter } from '../multilingual-text-presenter';
 
@@ -27,9 +27,7 @@ export const ResourceDetailFullViewPresenter = ({
 }: ResourceDetailFullViewPresenterProps): JSX.Element => (
     <div data-testid={id}>
         <Card>
-            <CardHeader>
-                <MultilingualTextPresenter text={name} />
-            </CardHeader>
+            <MultilingualTextPresenter text={name} />
             {/* <CardMedia>
             // We need to conditionally render media if they are specified
             // Note that you are not supposed to have a CardMedia section with no children

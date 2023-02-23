@@ -55,6 +55,7 @@ import { GrantUserRoleCommandHandler } from '../../../domain/models/user-managem
 import { RegisterUser } from '../../../domain/models/user-management/user/commands/register-user/register-user.command';
 import { RegisterUserCommandHandler } from '../../../domain/models/user-management/user/commands/register-user/register-user.command-handler';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { CreateVideo, CreateVideoCommandHandler } from '../../../domain/models/video';
 import { AudioItemQueryService } from '../../../domain/services/query-services/audio-item-query.service';
 import { BibliographicReferenceQueryService } from '../../../domain/services/query-services/bibliographic-reference-query.service';
 import { BookQueryService } from '../../../domain/services/query-services/book-query.service';
@@ -338,6 +339,8 @@ export default async (
             TagResourceOrNote,
             TagResourceOrNoteCommandHandler,
             // Next time try importing the domain module!
+            CreateVideo,
+            CreateVideoCommandHandler,
             CreateAudioItem,
             CreateAudioItemCommandHandler,
             CreateTranscript,
