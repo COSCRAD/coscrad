@@ -3,7 +3,7 @@ import {
     EdgeConnectionType,
     ICompositeIdentifier,
     IEdgeConnectionMember,
-    INoteViewModel
+    INoteViewModel,
 } from '@coscrad/api-interfaces';
 import { NoteIndexState } from '../../store/slices/notes/types/note-index-state';
 import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
