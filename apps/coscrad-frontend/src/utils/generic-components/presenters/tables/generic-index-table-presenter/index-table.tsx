@@ -2,7 +2,7 @@ import { IBaseViewModel } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { FormControl, InputLabel, MenuItem, Paper, Select, Typography } from '@mui/material';
+import { Checkbox, FormControl, InputLabel, MenuItem, Paper, Select, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { NotFoundPresenter } from '../../../../../components/not-found';
 import { VirtualKeyboardConfig } from '../../../../../configurable-front-matter/data/configurable-content-schema';
@@ -249,26 +249,30 @@ export const IndexTable = <T extends IBaseViewModel>({
     );
 
     return (
-        <div>
+        <div style={{ textAlign: 'center' }}>
             <h3>{heading}</h3>
+            <div>
+                {propertiesToSearchSelectField}
 
-            {propertiesToSearchSelectField}
+                <SearchBar
+                    value={searchValue}
+                    onValueChange={setSearchValue}
+                    specialCharacterReplacements={
+                        shouldUseVirtualKeyboard
+                            ? virtualKeyboard?.specialCharacterReplacements
+                            : undefined
+                    }
+                />
+            </div>
+            <div style={{ display: 'inline-flex' }}>
+                <Checkbox checked={shouldUseVirtualKeyboard} onChange={() => _setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)} />
 
-            {!isNullOrUndefined(virtualKeyboard) && shouldUseVirtualKeyboard ? (
-                <p>Using virtual keyboard: {virtualKeyboard.name}</p>
-            ) : null}
-
-            <SearchBar
-                value={searchValue}
-                onValueChange={setSearchValue}
-                specialCharacterReplacements={
-                    shouldUseVirtualKeyboard
-                        ? virtualKeyboard?.specialCharacterReplacements
-                        : undefined
-                }
-            />
+                {!isNullOrUndefined(virtualKeyboard) && shouldUseVirtualKeyboard ? (
+                    <p>Using virtual keyboard: {virtualKeyboard.name}</p>
+                ) : <p>Click to enable virtual keyboard: {virtualKeyboard.name}</p>}
+            </div>
 
             <div className="records-table">{table}</div>
-        </div>
+        </div >
     );
 };
