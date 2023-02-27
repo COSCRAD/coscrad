@@ -30,7 +30,6 @@ export const FilteredCategorizableIndexContainer = <
     IndexPresenter,
     preFilter,
     aggregateType,
-    virtualKeyboard,
 }: FilteredAggregateIndexContainerProps<T, U>): JSX.Element => {
     const loadableModels = buildUseLoadableForSingleCategorizableType(
         aggregateType
@@ -52,7 +51,7 @@ export const FilteredCategorizableIndexContainer = <
     return (
         <div>
             <Presenter {...filteredLoadableModels} />
-            {/* TODO [TODO [https://www.pivotaltracker.com/story/show/184107132] Use loadable display helper] */}
+            {/* TODO [https://www.pivotaltracker.com/story/show/184107132] Use loadable display helper] */}
             {loadableModels.data?.indexScopedActions?.length > 0 && (
                 <CommandPanel
                     actions={loadableModels.data.indexScopedActions}

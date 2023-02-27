@@ -2,10 +2,18 @@ import { IBaseViewModel } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Checkbox, FormControl, InputLabel, MenuItem, Paper, Select, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import {
+    Checkbox,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Paper,
+    Select,
+    Typography,
+} from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
 import { NotFoundPresenter } from '../../../../../components/not-found';
-import { VirtualKeyboardConfig } from '../../../../../configurable-front-matter/data/configurable-content-schema';
+import { ConfigurableContentContext } from '../../../../../configurable-front-matter/configurable-content-provider';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import { filterTableData, Matchers } from './filter-table-data';
@@ -50,7 +58,6 @@ export interface GenericIndexTablePresenterProps<T extends IBaseViewModel> {
     heading: string;
     filterableProperties: (keyof T)[];
     matchers?: Matchers<T>;
-    virtualKeyboard?: VirtualKeyboardConfig;
 }
 
 const allProperties = 'allProperties';
@@ -62,11 +69,12 @@ export const IndexTable = <T extends IBaseViewModel>({
     heading,
     filterableProperties,
     matchers = {}, // default to String(value) & case-insensitive search
-    virtualKeyboard,
 }: GenericIndexTablePresenterProps<T>) => {
     if (headingLabels.length === 0) {
         throw new EmptyIndexTableException();
     }
+
+    const { virtualKeyboard } = useContext(ConfigurableContentContext);
 
     const [searchValue, setSearchValue] = useState('');
 
@@ -265,14 +273,19 @@ export const IndexTable = <T extends IBaseViewModel>({
                 />
             </div>
             <div style={{ display: 'inline-flex' }}>
-                <Checkbox checked={shouldUseVirtualKeyboard} onChange={() => _setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)} />
+                <Checkbox
+                    checked={shouldUseVirtualKeyboard}
+                    onChange={() => _setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)}
+                />
 
                 {!isNullOrUndefined(virtualKeyboard) && shouldUseVirtualKeyboard ? (
                     <p>Using virtual keyboard: {virtualKeyboard.name}</p>
-                ) : <p>Click to enable virtual keyboard: {virtualKeyboard.name}</p>}
+                ) : (
+                    <p>Click to enable virtual keyboard: {virtualKeyboard.name}</p>
+                )}
             </div>
 
             <div className="records-table">{table}</div>
-        </div >
+        </div>
     );
 };

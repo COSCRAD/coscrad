@@ -3,7 +3,7 @@ import { ValueType } from '../../../lib/types/valueType';
 export const ArangoResourceCollectionId = {
     terms: 'terms',
     vocabulary_lists: 'vocabulary_lists',
-    transcribed_audio: 'audio_items',
+    audio_items: 'audio_items',
     books: 'books',
     photographs: 'photographs',
     spatial_features: 'spatial_features',

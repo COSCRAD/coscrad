@@ -1,14 +1,10 @@
 import { ITermViewModel } from '@coscrad/api-interfaces';
-import { useContext } from 'react';
-import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { TermIndexState } from '../../../store/slices/resources/terms/types/term-index-state';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 
 export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
-    const { virtualKeyboard } = useContext(ConfigurableContentContext);
-
     const { entities: terms } = termsIndexResult;
 
     const headingLabels: HeadingLabel<ITermViewModel>[] = [
@@ -33,7 +29,6 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Terms'}
             filterableProperties={['term', 'termEnglish', 'contributor']}
-            virtualKeyboard={virtualKeyboard}
         />
     );
 };
