@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { Button } from '@mui/material';
 import { useAppDispatch } from '../../app/hooks';
 import { userLoggedOut } from '../../store/slices/auth';
 
@@ -8,8 +9,8 @@ const LogoutButton = () => {
     const dispatch = useAppDispatch();
 
     return (
-        <button
-            className="btn btn-danger btn-block"
+        <Button
+            variant="contained"
             onClick={() => {
                 dispatch(userLoggedOut());
 
@@ -19,7 +20,7 @@ const LogoutButton = () => {
             }}
         >
             Log Out
-        </button>
+        </Button>
     );
 };
 
