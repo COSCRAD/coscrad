@@ -6,6 +6,7 @@ import App from './app/app';
 import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
 import { getConfigurableContent } from './configurable-front-matter';
 import { ConfigurableContentProvider } from './configurable-front-matter/configurable-content-provider';
+import { CoscradThemeProvider } from './coscrad-theme-provider';
 import { setupStore } from './store';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -16,7 +17,9 @@ root.render(
                 <Auth0ProviderWithHistory>
                     {/* The following will throw (fail fast) if the content config is invalid */}
                     <ConfigurableContentProvider value={getConfigurableContent()}>
-                        <App />
+                        <CoscradThemeProvider>
+                            <App />
+                        </CoscradThemeProvider>
                     </ConfigurableContentProvider>
                 </Auth0ProviderWithHistory>
             </BrowserRouter>

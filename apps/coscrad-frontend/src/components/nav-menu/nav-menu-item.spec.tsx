@@ -1,18 +1,22 @@
 import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../utils/test-utils';
-import { NavItemInfo } from './nav-bar';
-import { NavBarItem } from './nav-bar-item';
+import { NavItemItemProps, NavMenuItem } from './nav-menu-item';
 
-const dummyNavBarItemProps: NavItemInfo = {
-    link: 'https://samplesite.com',
-    label: 'Sample Label',
+const handleClose = () => {};
+
+const dummyNavBarItemProps: NavItemItemProps = {
+    navItemInfo: {
+        link: 'https://samplesite.com',
+        label: 'Sample Label',
+    },
+    handleClose: handleClose,
 };
 
 describe('NavBarItem', () => {
     it('should render successfully', () => {
         const { baseElement } = renderWithProviders(
             <MemoryRouter>
-                <NavBarItem {...dummyNavBarItemProps} />
+                <NavMenuItem {...dummyNavBarItemProps} />
             </MemoryRouter>
         );
 

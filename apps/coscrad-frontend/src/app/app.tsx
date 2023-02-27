@@ -11,7 +11,7 @@ import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
 import { getConfig } from '../config';
 import { fetchFreshState } from '../store/slices/utils/fetch-fresh-state';
-import './app.css';
+import { CoscradLayoutContainer } from './coscrad-layout-container';
 import { useAppDispatch } from './hooks';
 import { IndexToDetailFlowRoutes } from './index-to-detail-flow-routes';
 import { routes } from './routes/routes';
@@ -38,9 +38,12 @@ export function App() {
     };
 
     return (
-        <div className="app">
+        <>
             <Header />
-            <div className="main-content">
+            <CoscradLayoutContainer>
+                {/**
+                 * TODO: Break out utility function to bootstrap all routes
+                 */}
                 <Routes key="routes">
                     <Route key="home" path={routes.home} element={<Home />} />
                     <Route key="about" path={routes.about} element={<About />} />
@@ -64,9 +67,9 @@ export function App() {
                     <Route key="members-only" path="MembersOnly" element={<MembersOnly />} />
                     <Route key="credits" path={routes.siteCredits} element={<Credits />} />
                 </Routes>
-            </div>
-            <Footer></Footer>
-        </div>
+            </CoscradLayoutContainer>
+            <Footer />
+        </>
     );
 }
 
