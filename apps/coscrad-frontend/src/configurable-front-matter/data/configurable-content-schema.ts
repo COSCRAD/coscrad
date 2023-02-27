@@ -5,7 +5,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { CoscradConstraint } from '@coscrad/validation-constraints';
 
-export type VirtualKeyboardConfig = {
+export type SimulatedKeyboardConfig = {
     name: string;
     specialCharacterReplacements: Record<string, string>;
 };
@@ -23,7 +23,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     videoIdToCredits: Record<string, string>;
     shouldEnableWebOfKnowledgeForResources: boolean;
     siteCredits: string;
-    virtualKeyboard?: VirtualKeyboardConfig;
+    simulatedKeyboard?: SimulatedKeyboardConfig;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -42,7 +42,7 @@ export const configurableContentPropertiesAndConstraints: {
     // This is a tough one to constrain. We may need to manually specify the validation logic.
     indexToDetailFlows: [],
     siteCredits: [CoscradConstraint.isNonEmptyString, CoscradConstraint.isRequired],
-    virtualKeyboard: [CoscradConstraint.isObject],
+    simulatedKeyboard: [CoscradConstraint.isObject],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;

@@ -74,7 +74,8 @@ export const IndexTable = <T extends IBaseViewModel>({
         throw new EmptyIndexTableException();
     }
 
-    const { virtualKeyboard } = useContext(ConfigurableContentContext);
+    // TODO [] Encapsulte this as part of the `SearchBar`.
+    const { simulatedKeyboard } = useContext(ConfigurableContentContext);
 
     const [searchValue, setSearchValue] = useState('');
 
@@ -267,7 +268,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                     onValueChange={setSearchValue}
                     specialCharacterReplacements={
                         shouldUseVirtualKeyboard
-                            ? virtualKeyboard?.specialCharacterReplacements
+                            ? simulatedKeyboard?.specialCharacterReplacements
                             : undefined
                     }
                 />
@@ -278,10 +279,10 @@ export const IndexTable = <T extends IBaseViewModel>({
                     onChange={() => _setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)}
                 />
 
-                {!isNullOrUndefined(virtualKeyboard) && shouldUseVirtualKeyboard ? (
-                    <p>Using virtual keyboard: {virtualKeyboard.name}</p>
+                {!isNullOrUndefined(simulatedKeyboard) && shouldUseVirtualKeyboard ? (
+                    <p>Special Character Input Method: {simulatedKeyboard.name}</p>
                 ) : (
-                    <p>Click to enable virtual keyboard: {virtualKeyboard.name}</p>
+                    <p>Click to enable input method: {simulatedKeyboard.name}</p>
                 )}
             </div>
 

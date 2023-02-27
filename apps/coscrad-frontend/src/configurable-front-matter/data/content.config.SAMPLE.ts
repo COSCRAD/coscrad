@@ -21,7 +21,7 @@ export const contentConfig: ConfigurableContent = {
     })),
     shouldEnableWebOfKnowledgeForResources: true,
     siteCredits: 'Credits here',
-    virtualKeyboard: {
+    simulatedKeyboard: {
         name: 'Tŝilhqot’in',
         specialCharacterReplacements: {
             's[': 'ŝ',
