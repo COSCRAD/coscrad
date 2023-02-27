@@ -17,7 +17,7 @@ export const MultilingualTextPresenter = ({
         <>
             {/* TODO We need to separate the original in some way */}
             {items.map(({ languageCode, text, role }) => (
-                <div>
+                <div key={`${languageCode}-${role}`}>
                     {`{${languageCode}} [${role}]`} {text}
                 </div>
             ))}

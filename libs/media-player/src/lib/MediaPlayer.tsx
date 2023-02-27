@@ -36,7 +36,7 @@ export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
     }, []);
 
     return (
-        <div className={styles['container']}>
+        <div className={styles['container']} data-testid="MediaPlayer">
             {audio && (
                 <>
                     <PlayCircleFilledIcon

@@ -91,6 +91,17 @@ const invalidProps: InvalidProps[] = [
     },
     {
         propertyName: 'siteCredits',
+        description: 'number',
+        invalidValue: 994040,
+    },
+    // TODO test when listenlive is an object with invalid properties
+    // {
+    //     propertyName: 'listenLive',
+    //     invalidValue: { foo: 400 },
+    //     description: 'invalid object',
+    // },
+    {
+        propertyName: 'listenLive',
         invalidValue: ['foo'],
         description: 'string array',
     },

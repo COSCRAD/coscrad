@@ -1,19 +1,18 @@
 import { CategorizableType } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { useContext } from 'react';
 import { routes } from '../../app/routes/routes';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
-import AuthenticationButton from '../authentication-button/authentication-button';
-import { NavBarItem } from './nav-bar-item';
-import './nav-bar.css';
+import { NavMenuPresenter } from './nav-menu-presenter';
 
 export type NavItemInfo = {
     link: string;
     label: string;
 };
 
-// TODO: We should have a NavBar container and presenter
-export const NavBar = (): JSX.Element => {
-    const { indexToDetailFlows } = useContext(ConfigurableContentContext);
+export const NavMenuContainer = (): JSX.Element => {
+    const { indexToDetailFlows, listenLive } = useContext(ConfigurableContentContext);
+    // TODO: We should have a NavBar container and presenter
 
     // note this may be [] if we haven't included `notes`
     const dynamicLinks = indexToDetailFlows
@@ -21,7 +20,17 @@ export const NavBar = (): JSX.Element => {
         .map(({ label, route }) => ({
             link: route || routes.notes.index,
             label: label || 'Notes',
-        }));
+        }))
+        .concat([
+            ...(isNullOrUndefined(listenLive)
+                ? []
+                : [
+                      {
+                          link: routes.listenLive,
+                          label: listenLive.playingMessage,
+                      },
+                  ]),
+        ]);
 
     // We may want an enum \ constants for our routes
     const navItemInfos: NavItemInfo[] = [
@@ -45,19 +54,12 @@ export const NavBar = (): JSX.Element => {
             link: routes.treeOfKnowledge,
             label: 'Tree of Knowledge',
         },
+        ...dynamicLinks,
         {
             link: routes.siteCredits,
-            label: 'Credits'
+            label: 'Credits',
         },
-        ...dynamicLinks,
     ];
 
-    return (
-        <ul>
-            {navItemInfos.map((info, index) => (
-                <NavBarItem {...info} key={index} />
-            ))}
-            <AuthenticationButton />
-        </ul>
-    );
+    return <NavMenuPresenter navItemInfos={navItemInfos} />;
 };

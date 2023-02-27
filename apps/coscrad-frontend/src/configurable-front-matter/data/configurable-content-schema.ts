@@ -10,6 +10,14 @@ export type SimulatedKeyboardConfig = {
     specialCharacterReplacements: Record<string, string>;
 };
 
+export type ListenLivePageConfiguration = {
+    title: string;
+    logoUrl: string;
+    iceCastLink: string;
+    playingMessage: string;
+    missionStatement: string;
+};
+
 export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
     indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
     siteTitle: string;
@@ -24,6 +32,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     shouldEnableWebOfKnowledgeForResources: boolean;
     siteCredits: string;
     simulatedKeyboard?: SimulatedKeyboardConfig;
+    listenLive?: ListenLivePageConfiguration;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -43,6 +52,7 @@ export const configurableContentPropertiesAndConstraints: {
     indexToDetailFlows: [],
     siteCredits: [CoscradConstraint.isNonEmptyString, CoscradConstraint.isRequired],
     simulatedKeyboard: [CoscradConstraint.isObject],
+    listenLive: [CoscradConstraint.isObject],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
