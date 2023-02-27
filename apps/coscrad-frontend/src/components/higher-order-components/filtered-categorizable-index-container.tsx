@@ -6,6 +6,7 @@ import {
     IIndexQueryResult,
     WithTags,
 } from '@coscrad/api-interfaces';
+import { SimulatedKeyboardConfig } from '../../configurable-front-matter/data/configurable-content-schema';
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { CommandPanel } from '../commands';
@@ -19,6 +20,7 @@ export interface FilteredAggregateIndexContainerProps<
     IndexPresenter: FunctionalComponent<UPresenterProps>;
     preFilter?: (model: T) => boolean;
     aggregateType: CategorizableType;
+    simulatedKeyboard: SimulatedKeyboardConfig;
 }
 
 export const FilteredCategorizableIndexContainer = <
@@ -49,7 +51,7 @@ export const FilteredCategorizableIndexContainer = <
     return (
         <div>
             <Presenter {...filteredLoadableModels} />
-            {/* TODO [TODO [https://www.pivotaltracker.com/story/show/184107132] Use loadable display helper] */}
+            {/* TODO [https://www.pivotaltracker.com/story/show/184107132] Use loadable display helper] */}
             {loadableModels.data?.indexScopedActions?.length > 0 && (
                 <CommandPanel
                     actions={loadableModels.data.indexScopedActions}

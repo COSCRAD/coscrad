@@ -1,24 +1,26 @@
 import { IBaseViewModel } from '@coscrad/api-interfaces';
-import { SearchRounded } from '@mui/icons-material';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {
+    Checkbox,
     FormControl,
     InputLabel,
     MenuItem,
     Paper,
     Select,
-    TextField,
-    Typography
+    Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { NotFoundPresenter } from '../../../../../components/not-found';
+import { ConfigurableContentContext } from '../../../../../configurable-front-matter/configurable-content-provider';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import { filterTableData, Matchers } from './filter-table-data';
 import './generic-index-table-presenter.css';
 import './index-table.css';
 import { renderCell } from './render-cell';
+import { SearchBar } from './search-bar';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
 import { CellRenderersDefinition } from './types/cell-renderers-definition';
 
@@ -26,7 +28,7 @@ export const DEFAULT_PAGE_SIZE = 5;
 
 const pageSizeOptions: number[] = [DEFAULT_PAGE_SIZE, 10, 50, 100];
 
-const labelForSearchAllPropertiesOption = 'ALL'
+const labelForSearchAllPropertiesOption = 'ALL';
 
 const calculateNumberOfPages = (numberOfRecords: number, pageSize: number) => {
     const quotient = Math.floor(numberOfRecords / pageSize);
@@ -72,6 +74,9 @@ export const IndexTable = <T extends IBaseViewModel>({
         throw new EmptyIndexTableException();
     }
 
+    // TODO [] Encapsulte this as part of the `SearchBar`.
+    const { simulatedKeyboard } = useContext(ConfigurableContentContext);
+
     const [searchValue, setSearchValue] = useState('');
 
     // SEARCH LOGIC
@@ -79,7 +84,12 @@ export const IndexTable = <T extends IBaseViewModel>({
         typeof allProperties | keyof T
     >(allProperties);
 
-    const propertiesToFilterBy = selectedFilterProperty === 'allProperties' ? filterableProperties : [selectedFilterProperty]
+    const [shouldUseVirtualKeyboard, _setShouldUseVirtualKeyboard] = useState<boolean>(true);
+
+    const propertiesToFilterBy =
+        selectedFilterProperty === 'allProperties'
+            ? filterableProperties
+            : [selectedFilterProperty];
 
     const filteredTableData = filterTableData(
         tableData,
@@ -213,18 +223,6 @@ export const IndexTable = <T extends IBaseViewModel>({
             </div>
         );
 
-    const searchBar = (
-        <TextField
-            size="small"
-            placeholder="Search..."
-            value={searchValue}
-            onChange={(changeEvent) => setSearchValue(changeEvent.target.value)}
-            InputProps={{
-                endAdornment: <SearchRounded />,
-            }}
-        />
-    )
-
     const propertiesToSearchSelectField = (
         <FormControl sx={{ minWidth: 120 }} size={'small'}>
             <InputLabel>Filter</InputLabel>
@@ -241,7 +239,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                 <MenuItem sx={{ minWidth: 120 }} value={'allProperties'}>
                     {labelForSearchAllPropertiesOption}
                 </MenuItem>
-                {filterableProperties.map((selectedFilterProperty: (keyof T & string)) => (
+                {filterableProperties.map((selectedFilterProperty: keyof T & string) => (
                     <MenuItem
                         key={selectedFilterProperty}
                         value={selectedFilterProperty}
@@ -257,15 +255,36 @@ export const IndexTable = <T extends IBaseViewModel>({
                 ))}
             </Select>
         </FormControl>
-    )
+    );
 
     return (
-        <div>
+        <div style={{ textAlign: 'center' }}>
             <h3>{heading}</h3>
+            <div>
+                {propertiesToSearchSelectField}
 
-            {propertiesToSearchSelectField}
+                <SearchBar
+                    value={searchValue}
+                    onValueChange={setSearchValue}
+                    specialCharacterReplacements={
+                        shouldUseVirtualKeyboard
+                            ? simulatedKeyboard?.specialCharacterReplacements
+                            : undefined
+                    }
+                />
+            </div>
+            <div style={{ display: 'inline-flex' }}>
+                <Checkbox
+                    checked={shouldUseVirtualKeyboard}
+                    onChange={() => _setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)}
+                />
 
-            {searchBar}
+                {!isNullOrUndefined(simulatedKeyboard) && shouldUseVirtualKeyboard ? (
+                    <p>Special Character Input Method: {simulatedKeyboard.name}</p>
+                ) : (
+                    <p>Click to enable input method: {simulatedKeyboard.name}</p>
+                )}
+            </div>
 
             <div className="records-table">{table}</div>
         </div>
