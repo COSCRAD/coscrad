@@ -3,13 +3,15 @@ import {
     EdgeConnectionType,
     ICompositeIdentifier,
     IEdgeConnectionMember,
-    INoteViewModel
+    INoteViewModel,
 } from '@coscrad/api-interfaces';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { NoteIndexState } from '../../store/slices/notes/types/note-index-state';
 import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
-import { WebTest3D } from './WebTest3D';
+import './babylonjs.css';
+import { WebTest3dGUI } from './WebTest3dGUI';
 
 const formatCompositeIentifier = ({ type, id }: ICompositeIdentifier): string => `${type}/${id}`;
 
@@ -88,8 +90,14 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
             connectionType === EdgeConnectionType.self ? 'Single Resource Note' : 'Connecting Note',
     };
 
+    const handle = useFullScreenHandle();
+
     return (
         <>
+            <button onClick={handle.enter}>Enter fullscreen</button>
+            <FullScreen handle={handle}>
+                <WebTest3dGUI />
+            </FullScreen>
             <IndexTable
                 data-testid="note-index"
                 headingLabels={headingLabels}
@@ -98,7 +106,6 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
                 heading={'Notes'}
                 filterableProperties={['connectionType', 'note']}
             />
-            <WebTest3D data={notes} />
         </>
     );
 };
