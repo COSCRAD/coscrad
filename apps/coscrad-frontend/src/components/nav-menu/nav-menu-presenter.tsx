@@ -1,3 +1,4 @@
+import { isNull } from '@coscrad/validation-constraints';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import { Box, IconButton, Menu } from '@mui/material';
 import { useState } from 'react';
@@ -12,7 +13,7 @@ interface NavMenuPresenterProps {
 export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.Element => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-    const open = Boolean(anchorEl);
+    const isOpen = !isNull(anchorEl);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -28,9 +29,9 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
                 id="basic-button"
                 color="primary"
                 sx={{ mr: 2 }}
-                aria-controls={open ? 'basic-menu' : undefined}
+                aria-controls={isOpen ? 'basic-menu' : undefined}
                 aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
+                aria-expanded={isOpen ? 'true' : undefined}
                 onClick={handleClick}
             >
                 <MenuRoundedIcon />
@@ -38,7 +39,7 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
-                open={open}
+                open={isOpen}
                 onClose={handleClose}
                 MenuListProps={{
                     'aria-labelledby': 'basic-button',
