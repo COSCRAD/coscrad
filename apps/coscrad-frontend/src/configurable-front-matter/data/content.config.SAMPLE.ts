@@ -20,5 +20,16 @@ export const contentConfig: ConfigurableContent = {
         detailViewType: DetailViewType.fullView,
     })),
     shouldEnableWebOfKnowledgeForResources: true,
-    siteCredits: 'Credits here'
+    siteCredits: 'Credits here',
+    simulatedKeyboard: {
+        name: 'Tŝilhqot’in',
+        specialCharacterReplacements: {
+            's[': 'ŝ',
+            'w[': 'ŵ',
+            'z[': 'ẑ',
+            ']': 'ʔ',
+            ';': 'ɨ',
+            "'": '’',
+        },
+    },
 };
