@@ -5,6 +5,14 @@ import {
 } from '@coscrad/api-interfaces';
 import { CoscradConstraint } from '@coscrad/validation-constraints';
 
+export type ListenLivePageConfiguration = {
+    title: string;
+    logoUrl: string;
+    iceCastLink: string;
+    playingMessage: string;
+    missionStatement: string;
+};
+
 export type SimulatedKeyboardConfig = {
     name: string;
     specialCharacterReplacements: Record<string, string>;
@@ -24,6 +32,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     shouldEnableWebOfKnowledgeForResources: boolean;
     siteCredits: string;
     simulatedKeyboard?: SimulatedKeyboardConfig;
+    listenLive?: ListenLivePageConfiguration;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -43,6 +52,7 @@ export const configurableContentPropertiesAndConstraints: {
     indexToDetailFlows: [],
     siteCredits: [CoscradConstraint.isNonEmptyString, CoscradConstraint.isRequired],
     simulatedKeyboard: [CoscradConstraint.isObject],
+    listenLive: [CoscradConstraint.isObject],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;

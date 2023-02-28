@@ -94,6 +94,22 @@ const invalidProps: InvalidProps[] = [
         invalidValue: ['foo'],
         description: 'string array',
     },
+    // TODO test when listenlive is an object with invalid properties
+    // {
+    //     propertyName: 'listenLive',
+    //     invalidValue: { foo: 400 },
+    //     description: 'invalid object',
+    // },
+    {
+        propertyName: 'listenLive',
+        invalidValue: ['foo'],
+        description: 'string array',
+    },
+    {
+        propertyName: 'listenLive',
+        invalidValue: '',
+        description: 'empty string',
+    },
     // TODO test \ tighten up validation around index-to-detail flows
 ];
 

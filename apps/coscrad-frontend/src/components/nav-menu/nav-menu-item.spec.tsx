@@ -2,7 +2,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../utils/test-utils';
 import { NavItemItemProps, NavMenuItem } from './nav-menu-item';
 
-const handleClose = () => {};
+const handleClose = () => {
+    console.log(`nav menu closed`);
+};
 
 const dummyNavBarItemProps: NavItemItemProps = {
     navItemInfo: {

@@ -18,5 +18,6 @@ export const routes = {
                 `${resourcesBaseRoute}/${getResourceTypeLabelForRoutes(resourceType)}`
             ),
     },
-    siteCredits: 'Credits'
+    siteCredits: 'Credits',
+    listenLive: 'Live',
 };
