@@ -11,7 +11,7 @@ import { HeadingLabel, IndexTable } from '../../utils/generic-components/present
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
 import './babylonjs.css';
-import { WebTest3dGUI } from './WebTest3dGUI';
+import { ConnectionByID, ResourceNode, WebTest3dGUI } from './WebTest3dGUI';
 
 const formatCompositeIentifier = ({ type, id }: ICompositeIdentifier): string => `${type}/${id}`;
 
@@ -92,11 +92,20 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
 
     const handle = useFullScreenHandle();
 
+    const placeholderNodes: ResourceNode[] = [
+        {
+            id: 'Note/2',
+            title: 'hello',
+        },
+    ];
+
+    const placeholderConnections: ConnectionByID[] = [[2, 1]];
+
     return (
         <>
             <button onClick={handle.enter}>Enter fullscreen</button>
             <FullScreen handle={handle}>
-                <WebTest3dGUI />
+                <WebTest3dGUI nodes={placeholderNodes} connectionsById={placeholderConnections} />
             </FullScreen>
             <IndexTable
                 data-testid="note-index"
