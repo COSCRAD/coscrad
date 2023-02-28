@@ -2,6 +2,8 @@
 
 import {
     ArcRotateCamera,
+    Color4,
+    CreateLines,
     HemisphericLight,
     Mesh,
     MeshBuilder,
@@ -12,7 +14,7 @@ import { AdvancedDynamicTexture, Button } from '@babylonjs/gui/2D';
 import SceneComponent from 'babylonjs-hook';
 import { ResourceNode } from './BabylonJSTestContainer';
 
-export type ConnectionByID = [number, number];
+export type ConnectionByID = [string, string];
 
 export interface WebTest3dGUIProps {
     nodes: ResourceNode[];
@@ -76,6 +78,21 @@ export const WebTest3dGUI = ({ nodes, connectionsById }: WebTest3dGUIProps): JSX
             buttons[i].fontSize = 100;
             buttons[i].background = 'green';
             advancedTexture.addControl(buttons[i]);
+        }
+
+        const lineColors = [
+            new Color4(1, 0, 0, 1),
+            new Color4(0, 1, 0, 1),
+            new Color4(0, 0, 1, 1),
+            new Color4(1, 1, 0, 1),
+        ];
+
+        const lines = [];
+        for (let i = 0; i < connectionsById.length; i++) {
+            const pointsData = getEdgeEndPoints(connectionsById[i][0], connectionsById[i][1]);
+
+            const points = convertEdgeEndPointsToVector3(pointsData);
+            lines[i] = CreateLines(`line${i}`, { points: points, colors: lineColors });
         }
     };
 

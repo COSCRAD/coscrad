@@ -5,9 +5,8 @@ import {
     INoteViewModel,
     WithTags,
 } from '@coscrad/api-interfaces';
-import { Button } from '@mui/material';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import './babylonjs.css';
+import { FullScreenContainer } from './FullScreenContainer';
 import { getPointInSphere } from './getPointInSphere';
 import { ConnectionByID, WebTest3dGUI } from './WebTest3dGUI';
 
@@ -25,38 +24,32 @@ interface BabylonJSTestContainerProps {
 export const BabylonJSTestContainer = ({ notes }: BabylonJSTestContainerProps): JSX.Element => {
     const sphereSize: number = 5;
 
-    const webNodes: ResourceNode[] = notes
-        .filter((note) => note.connectionType == EdgeConnectionType.dual)
-        .map(({ id, note, connectionType }) => {
-            return {
-                id: id,
-                title: note.substring(0, 12),
-                connectionType: connectionType,
-                vectorCoords: getPointInSphere(sphereSize),
-            };
-        });
+    const dualConnections = notes.filter((note) => note.connectionType == EdgeConnectionType.dual);
 
-    const connectedResources = notes
-        .filter((note) => note.connectionType == EdgeConnectionType.dual)
+    const webNodes: ResourceNode[] = dualConnections.map(({ id, note, connectionType }) => {
+        return {
+            id: id,
+            title: note.substring(0, 12),
+            connectionType: connectionType,
+            vectorCoords: getPointInSphere(sphereSize),
+        };
+    });
+
+    const connectedResourcesById: ConnectionByID[] = dualConnections
         .map(({ connectedResources }) => connectedResources)
         .map((resourceConnection) => resourceConnection)
         .map(([to, from]) => {
-            console.log({ from: from.compositeIdentifier });
-            console.log({ to: to.compositeIdentifier });
+            return [
+                `${to.compositeIdentifier.type}/${to.compositeIdentifier.id}`,
+                `${from.compositeIdentifier.type}/${from.compositeIdentifier.id}`,
+            ];
         });
-
-    const placeholderConnections: ConnectionByID[] = [[2, 1]];
-
-    const handle = useFullScreenHandle();
 
     return (
         <>
-            <Button variant="contained" onClick={handle.enter}>
-                Enter fullscreen
-            </Button>
-            <FullScreen handle={handle}>
-                <WebTest3dGUI nodes={webNodes} connectionsById={placeholderConnections} />
-            </FullScreen>
+            <FullScreenContainer>
+                <WebTest3dGUI nodes={webNodes} connectionsById={connectedResourcesById} />
+            </FullScreenContainer>
         </>
     );
 };
