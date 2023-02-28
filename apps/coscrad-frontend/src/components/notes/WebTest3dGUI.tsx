@@ -63,7 +63,6 @@ export const WebTest3dGUI = ({ nodes, connectionsById }: WebTest3dGUIProps): JSX
         // Default intensity is 1. Let's dim the light a small amount
         light.intensity = 0.7;
 
-        const data: number[] = [...Array(10).keys()];
         let spheres: Mesh[] = [];
         let planes: Mesh[] = [];
         let buttons: Button[] = [];
@@ -71,11 +70,12 @@ export const WebTest3dGUI = ({ nodes, connectionsById }: WebTest3dGUIProps): JSX
         const r: number = 20;
         const sphereSize: number = 5;
 
-        const sphericalCoordinates = data.map((point) => getPointInSphere(sphereSize));
+        // Modify this to add a coord property?
+        const sphericalCoordinates = nodes.map((point) => getPointInSphere(sphereSize));
 
         for (i = 0; i < sphericalCoordinates.length; i++) {
             // Our built-in 'box' shape.
-            spheres[i] = MeshBuilder.CreateSphere(`sphere-${data[i]}`, { diameter: 0.5 }, scene);
+            spheres[i] = MeshBuilder.CreateSphere(`sphere-${nodes[i]}`, { diameter: 0.5 }, scene);
 
             // Move the sphere upward 1/2 its height
             const spherePosition = sphericalCoordinates[i];
@@ -83,7 +83,7 @@ export const WebTest3dGUI = ({ nodes, connectionsById }: WebTest3dGUIProps): JSX
 
             spheres[i].position = spherePosition;
 
-            planes[i] = MeshBuilder.CreatePlane(`plane-${data[i]}`, { width: 1, height: 0.8 });
+            planes[i] = MeshBuilder.CreatePlane(`plane-${nodes[i]}`, { width: 1, height: 0.8 });
             planes[i].parent = spheres[i];
             // planes[i].position.x = spherePosition.x + 0.5;
             planes[i].position.y = 0.6;
@@ -91,7 +91,7 @@ export const WebTest3dGUI = ({ nodes, connectionsById }: WebTest3dGUIProps): JSX
 
             var advancedTexture = AdvancedDynamicTexture.CreateForMesh(planes[i]);
 
-            buttons[i] = Button.CreateSimpleButton(`button-${data[i]}`, `Note ${data[i]}`);
+            buttons[i] = Button.CreateSimpleButton(`button-${nodes[i]}`, `Note ${nodes[i]}`);
             buttons[i].width = 1;
             buttons[i].height = 0.4;
             buttons[i].color = 'white';

@@ -5,13 +5,11 @@ import {
     IEdgeConnectionMember,
     INoteViewModel,
 } from '@coscrad/api-interfaces';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { NoteIndexState } from '../../store/slices/notes/types/note-index-state';
 import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
-import './babylonjs.css';
-import { ConnectionByID, ResourceNode, WebTest3dGUI } from './WebTest3dGUI';
+import { BabylonJSTestContainer } from './BabylonJSTestContainer';
 
 const formatCompositeIentifier = ({ type, id }: ICompositeIdentifier): string => `${type}/${id}`;
 
@@ -90,23 +88,9 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
             connectionType === EdgeConnectionType.self ? 'Single Resource Note' : 'Connecting Note',
     };
 
-    const handle = useFullScreenHandle();
-
-    const placeholderNodes: ResourceNode[] = [
-        {
-            id: 'Note/2',
-            title: 'hello',
-        },
-    ];
-
-    const placeholderConnections: ConnectionByID[] = [[2, 1]];
-
     return (
         <>
-            <button onClick={handle.enter}>Enter fullscreen</button>
-            <FullScreen handle={handle}>
-                <WebTest3dGUI nodes={placeholderNodes} connectionsById={placeholderConnections} />
-            </FullScreen>
+            <BabylonJSTestContainer notes={notes} />
             <IndexTable
                 data-testid="note-index"
                 headingLabels={headingLabels}
