@@ -37,15 +37,13 @@ export const Home = (): JSX.Element => {
     });
 
     return (
-        <>
-            <div>
-                {/**
-                 * TODO: consider using a photograph detail presenter for this
-                 */}
+        <div>
+            {/**
+             * TODO: consider using a photograph detail presenter for this
+             */}
 
-                <ImageInContent image={image} alignment="left" displayWidth="350px" />
-                <Typography variant="body1">{siteDescription}</Typography>
-            </div>
-        </>
+            <ImageInContent image={image} alignment="left" displayWidth="350px" />
+            <Typography variant="body1">{siteDescription}</Typography>
+        </div>
     );
 };

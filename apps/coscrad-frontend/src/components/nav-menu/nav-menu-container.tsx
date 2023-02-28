@@ -1,4 +1,5 @@
 import { CategorizableType } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { useContext } from 'react';
 import { routes } from '../../app/routes/routes';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
@@ -10,7 +11,7 @@ export type NavItemInfo = {
 };
 
 export const NavMenuContainer = (): JSX.Element => {
-    const { indexToDetailFlows } = useContext(ConfigurableContentContext);
+    const { indexToDetailFlows, listenLive } = useContext(ConfigurableContentContext);
 
     // note this may be [] if we haven't included `notes`
     const dynamicLinks = indexToDetailFlows
@@ -18,7 +19,17 @@ export const NavMenuContainer = (): JSX.Element => {
         .map(({ label, route }) => ({
             link: route || routes.notes.index,
             label: label || 'Notes',
-        }));
+        }))
+        .concat([
+            ...(isNullOrUndefined(listenLive)
+                ? []
+                : [
+                      {
+                          link: routes.listenLive,
+                          label: listenLive.playingMessage,
+                      },
+                  ]),
+        ]);
 
     // We may want an enum \ constants for our routes
     const navItemInfos: NavItemInfo[] = [
@@ -42,11 +53,11 @@ export const NavMenuContainer = (): JSX.Element => {
             link: routes.treeOfKnowledge,
             label: 'Tree of Knowledge',
         },
-        ...dynamicLinks,
         {
             link: routes.siteCredits,
             label: 'Credits',
         },
+        ...dynamicLinks,
     ];
 
     return <NavMenuPresenter navItemInfos={navItemInfos} />;
