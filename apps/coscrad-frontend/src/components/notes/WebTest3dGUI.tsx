@@ -10,28 +10,7 @@ import {
 } from '@babylonjs/core';
 import { AdvancedDynamicTexture, Button } from '@babylonjs/gui/2D';
 import SceneComponent from 'babylonjs-hook';
-
-const getPointInSphere = (factor: number) => {
-    var u = Math.random();
-    var v = Math.random();
-    var theta = u * 2.0 * Math.PI;
-    var phi = Math.acos(2.0 * v - 1.0);
-    var r = Math.cbrt(Math.random());
-    var sinTheta = Math.sin(theta);
-    var cosTheta = Math.cos(theta);
-    var sinPhi = Math.sin(phi);
-    var cosPhi = Math.cos(phi);
-    var x = r * sinPhi * cosTheta;
-    var y = r * sinPhi * sinTheta;
-    var z = r * cosPhi;
-
-    return new Vector3(x * factor, y * factor, z * factor);
-};
-
-export type ResourceNode = {
-    id: string;
-    title: string;
-};
+import { ResourceNode } from './BabylonJSTestContainer';
 
 export type ConnectionByID = [number, number];
 
@@ -68,20 +47,16 @@ export const WebTest3dGUI = ({ nodes, connectionsById }: WebTest3dGUIProps): JSX
         let buttons: Button[] = [];
         let i: number;
         const r: number = 20;
-        const sphereSize: number = 5;
 
-        // Modify this to add a coord property?
-        const sphericalCoordinates = nodes.map((point) => getPointInSphere(sphereSize));
-
-        for (i = 0; i < sphericalCoordinates.length; i++) {
+        for (i = 0; i < nodes.length; i++) {
             // Our built-in 'box' shape.
-            spheres[i] = MeshBuilder.CreateSphere(`sphere-${nodes[i]}`, { diameter: 0.5 }, scene);
+            spheres[i] = MeshBuilder.CreateSphere(
+                `sphere-${nodes[i].id}`,
+                { diameter: 0.5 },
+                scene
+            );
 
-            // Move the sphere upward 1/2 its height
-            const spherePosition = sphericalCoordinates[i];
-            console.log(spherePosition);
-
-            spheres[i].position = spherePosition;
+            spheres[i].position = nodes[i].vectorCoords;
 
             planes[i] = MeshBuilder.CreatePlane(`plane-${nodes[i]}`, { width: 1, height: 0.8 });
             planes[i].parent = spheres[i];
@@ -91,7 +66,10 @@ export const WebTest3dGUI = ({ nodes, connectionsById }: WebTest3dGUIProps): JSX
 
             var advancedTexture = AdvancedDynamicTexture.CreateForMesh(planes[i]);
 
-            buttons[i] = Button.CreateSimpleButton(`button-${nodes[i]}`, `Note ${nodes[i]}`);
+            buttons[i] = Button.CreateSimpleButton(
+                `button-${nodes[i].id}`,
+                `Note ${nodes[i].title}`
+            );
             buttons[i].width = 1;
             buttons[i].height = 0.4;
             buttons[i].color = 'white';
