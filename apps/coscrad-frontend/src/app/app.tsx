@@ -19,6 +19,10 @@ import { routes } from './routes/routes';
 export function App() {
     const dispatch = useAppDispatch();
 
+    const { listenLive } = useContext(ConfigurableContentContext);
+
+    const shouldRenderListenLivePage = !isNullOrUndefined(listenLive);
+
     const eventSource = new EventSource(`${getConfig().apiUrl}/commands/notifications`);
 
     eventSource.onmessage = (result) => {
@@ -63,6 +67,13 @@ export function App() {
                         element={<CategoryTreeContainer />}
                     />
                     {IndexToDetailFlowRoutes()}
+                    {shouldRenderListenLivePage ? (
+                        <Route
+                            key="listen-live-page"
+                            path={routes.listenLive}
+                            element={<ListenLivePage />}
+                        />
+                    ) : null}
                     {/* The following are temporary or experimental */}
                     <Route key="members-only" path="MembersOnly" element={<MembersOnly />} />
                     <Route key="credits" path={routes.siteCredits} element={<Credits />} />
