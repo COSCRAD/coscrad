@@ -40,6 +40,7 @@ Thumbs.db
 
 # environment files
 *.env
+cypress.env.json
 
 # data for data processing scripts
 /scripts/data-processing/data
