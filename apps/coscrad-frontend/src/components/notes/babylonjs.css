@@ -1,4 +1,9 @@
-.fullscreen canvas {
+canvas {
+    width: 200px;
+    height: 150px;
+}
+
+.fullscreen:fullscreen canvas {
     width: 100%;
-    height: auto;
+    height: 100vh;
 }
