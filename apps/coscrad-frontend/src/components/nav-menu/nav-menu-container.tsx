@@ -3,7 +3,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { useContext } from 'react';
 import { routes } from '../../app/routes/routes';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
-import { NavMenuPresenter } from './nav-menu-presenter';
+import { NavMenuHandlerContainer } from './nav-menu-handler-container';
 
 export type NavItemInfo = {
     link: string;
@@ -53,12 +53,12 @@ export const NavMenuContainer = (): JSX.Element => {
             link: routes.treeOfKnowledge,
             label: 'Tree of Knowledge',
         },
+        ...dynamicLinks,
         {
             link: routes.siteCredits,
             label: 'Credits',
         },
-        ...dynamicLinks,
     ];
 
-    return <NavMenuPresenter navItemInfos={navItemInfos} />;
+    return <NavMenuHandlerContainer navItemInfos={navItemInfos} />;
 };

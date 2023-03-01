@@ -1,30 +1,25 @@
-import { isNull } from '@coscrad/validation-constraints';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import { Box, IconButton, Menu } from '@mui/material';
-import { useState } from 'react';
+import { IconButton, Menu } from '@mui/material';
 import AuthenticationButton from '../authentication-button/authentication-button';
-import { NavItemInfo } from './nav-menu-container';
 import { NavMenuItem } from './nav-menu-item';
 
-interface NavMenuPresenterProps {
-    navItemInfos: NavItemInfo[];
+interface NavMenuHandlerContainerProps {
+    navItemInfos: any;
+    isOpen: any;
+    handleClick: any;
+    handleClose: any;
+    anchorEl: any;
 }
 
-export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.Element => {
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-    const isOpen = !isNull(anchorEl);
-
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
+export const NavMenuPresenter = ({
+    navItemInfos,
+    isOpen,
+    handleClick,
+    handleClose,
+    anchorEl,
+}: NavMenuHandlerContainerProps): JSX.Element => {
     return (
-        <Box>
+        <>
             <IconButton
                 id="basic-button"
                 color="primary"
@@ -54,6 +49,6 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
                 ))}
             </Menu>
             <AuthenticationButton />
-        </Box>
+        </>
     );
 };
