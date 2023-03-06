@@ -150,6 +150,10 @@ Object {
                   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                   "type": "note",
                 },
+                Object {
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+                  "type": "playlist",
+                },
               ],
             },
             Object {

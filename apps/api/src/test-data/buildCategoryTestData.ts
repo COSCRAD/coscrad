@@ -1,6 +1,7 @@
 import { Category } from '../domain/models/categories/entities/category.entity';
 import { AggregateType } from '../domain/types/AggregateType';
 import { CategorizableType } from '../domain/types/CategorizableType';
+import { ResourceType } from '../domain/types/ResourceType';
 import { InternalError } from '../lib/errors/InternalError';
 import {
     convertAggregatesIdToUuid,
@@ -193,6 +194,10 @@ export default (): Category[] => {
                     type: CategorizableType.note,
                     id: '1',
                 } as const,
+                {
+                    type: ResourceType.playlist,
+                    id: '501',
+                },
             ],
             childrenIDs: [],
         },

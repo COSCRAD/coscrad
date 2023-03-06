@@ -224,6 +224,30 @@ Photograph {
 }
 `;
 
+exports[`Aggregate factories when attempting to build an instance of type: playlist from a DTO when the DTO is valid valid playlist DTO should succeed 1`] = `
+Playlist {
+  "eventHistory": Array [],
+  "getCompositeIdentifier": [Function],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+  "items": Array [],
+  "name": MultilingualText {
+    "items": Array [
+      MultilingualTextItem {
+        "languageCode": "clc",
+        "role": "original",
+        "text": "Blake's jams",
+      },
+    ],
+  },
+  "published": true,
+  "queryAccessControlList": AccessControlList {
+    "allowedGroupIds": Array [],
+    "allowedUserIds": Array [],
+  },
+  "type": "playlist",
+}
+`;
+
 exports[`Aggregate factories when attempting to build an instance of type: song from a DTO when the DTO is valid valid song should succeed 1`] = `
 Song {
   "audioURL": "https://www.myaudio.com/lamb.mp3",

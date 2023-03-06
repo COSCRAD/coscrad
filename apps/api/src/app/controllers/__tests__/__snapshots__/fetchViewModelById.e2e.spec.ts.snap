@@ -222,6 +222,39 @@ Object {
 }
 `;
 
+exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/playlists/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
+Object {
+  "actions": Array [],
+  "episodes": Array [],
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+  "name": Object {
+    "items": Array [
+      Object {
+        "languageCode": "clc",
+        "role": "original",
+        "text": "Blake's jams",
+      },
+    ],
+  },
+  "tags": Array [
+    Object {
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "label": "law",
+      "members": Array [
+        Object {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+          "type": "bibliographicReference",
+        },
+        Object {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+          "type": "playlist",
+        },
+      ],
+    },
+  ],
+}
+`;
+
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/songs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 Object {
   "actions": Array [],

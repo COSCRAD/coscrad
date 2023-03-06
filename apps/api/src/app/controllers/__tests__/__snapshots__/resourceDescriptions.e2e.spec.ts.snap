@@ -683,6 +683,21 @@ Array [
     "type": "song",
   },
   Object {
+    "description": "A playlist collects media items from serveral resources into a collection for web or radio playback",
+    "label": "Playlist",
+    "link": "/resources/playlists",
+    "schema": Object {
+      "id": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
+    "type": "playlist",
+  },
+  Object {
     "description": "A media item is a digital representation of an audio or video recording.",
     "label": "Media Item",
     "link": "/resources/mediaItems",

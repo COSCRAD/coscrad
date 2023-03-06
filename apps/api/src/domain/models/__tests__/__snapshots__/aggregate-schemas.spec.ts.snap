@@ -522,6 +522,18 @@ Object {
 }
 `;
 
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Playlist  match the snapshot 1`] = `
+Object {
+  "id": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "ID",
+  },
+}
+`;
+
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Song  match the snapshot 1`] = `
 Object {
   "audioURL": Object {
