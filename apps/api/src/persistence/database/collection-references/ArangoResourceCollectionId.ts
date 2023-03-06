@@ -11,6 +11,7 @@ export const ArangoResourceCollectionId = {
     songs: 'songs',
     media_items: 'media_items',
     videos: 'videos',
+    playlists: 'playlists',
 } as const;
 
 export type ArangoResourceCollectionId = ValueType<typeof ArangoResourceCollectionId>;

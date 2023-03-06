@@ -18,6 +18,7 @@ const resourceTypeToArangoCollectionID: {
     [ResourceType.song]: ArangoResourceCollectionId.songs,
     [ResourceType.mediaItem]: ArangoResourceCollectionId.media_items,
     [ResourceType.video]: ArangoResourceCollectionId.videos,
+    [ResourceType.playlist]: ArangoResourceCollectionId.playlists,
 };
 
 export const getArangoCollectionIDFromResourceType = (

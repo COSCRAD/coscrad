@@ -16,6 +16,7 @@ import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-li
 
 import { ResourceType } from '@coscrad/api-interfaces';
 import { Video } from '../models/audio-item/entities/video.entity';
+import { Playlist } from '../models/playlist';
 
 export { ResourceType };
 
@@ -40,6 +41,7 @@ export type ResourceTypeToResourceModel = {
     bibliographicReference: IBibliographicReference;
     song: Song;
     mediaItem: MediaItem;
+    playlist: Playlist;
 };
 
 /**
