@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-import { InternalError } from '../../../../lib/errors/InternalError';
-import httpStatusCodes from '../../../constants/httpStatusCodes';
+import { InternalError } from '../../../../../lib/errors/InternalError';
+import httpStatusCodes from '../../../../constants/httpStatusCodes';
 
 @Catch(InternalError)
 export class InternalErrorFilter implements ExceptionFilter {
