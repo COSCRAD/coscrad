@@ -10,41 +10,33 @@ import {
     ID_MANAGER_TOKEN,
     IIdManager,
 } from '../../../../../interfaces/id-manager.interface';
-import { IRepositoryForAggregate } from '../../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../../repositories/interfaces/repository-provider.interface';
 import { AggregateId } from '../../../../../types/AggregateId';
-import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceType';
+import { InMemorySnapshot } from '../../../../../types/ResourceType';
+import { Resource } from '../../../../resource.entity';
 import { BaseCommandHandler } from '../../../../shared/command-handlers/base-command-handler';
 import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import { AudioItem } from '../../../entities/audio-item.entity';
+import { ITranscribable } from '../../../entities/transcribable.mixin';
 import { Video } from '../../../entities/video.entity';
 import { CreateTranscript } from './create-transcript.command';
 import { TranscriptCreated } from './transcript-created.event';
 
 @CommandHandler(CreateTranscript)
-export class CreateTranscriptCommandHandler extends BaseCommandHandler<AudioItem | Video> {
-    protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<AudioItem>;
-
-    protected aggregateType: AggregateType = AggregateType.audioItem;
-
+export class CreateTranscriptCommandHandler extends BaseCommandHandler<ITranscribable & Resource> {
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)
         protected readonly repositoryProvider: IRepositoryProvider,
         @Inject(ID_MANAGER_TOKEN) protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);
-
-        this.repositoryForCommandsTargetAggregate = this.repositoryProvider.forResource<AudioItem>(
-            ResourceType.audioItem
-        );
     }
 
     protected async createOrFetchWriteContext({
         aggregateCompositeIdentifier: { type, id },
-    }: CreateTranscript): Promise<ResultOrError<AudioItem | Video>> {
+    }: CreateTranscript): Promise<ResultOrError<ITranscribable & Resource>> {
         const searchResult = await this.repositoryProvider
             .forResource<AudioItem | Video>(type)
             .fetchById(id);
@@ -59,9 +51,10 @@ export class CreateTranscriptCommandHandler extends BaseCommandHandler<AudioItem
     }
 
     protected actOnInstance(
-        instance: AudioItem,
+        // should we program to `HasCreateTranscript` or `Transcribable` here?
+        instance: ITranscribable & Resource,
         _command: CreateTranscript
-    ): ResultOrError<AudioItem> {
+    ): ResultOrError<ITranscribable & Resource> {
         return instance.createTranscript() as unknown as AudioItem;
     }
 
@@ -78,7 +71,7 @@ export class CreateTranscriptCommandHandler extends BaseCommandHandler<AudioItem
 
     // TODO This overlaps with the generic base-update command handler- how can we reuse without complex inheritance hierarchies?
     protected async persist(
-        instance: AudioItem | Video,
+        instance: ITranscribable & Resource,
         command: CreateTranscript,
         systemUserId: AggregateId
     ): Promise<void> {
