@@ -229,7 +229,14 @@ Playlist {
   "eventHistory": Array [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-  "items": Array [],
+  "items": Array [
+    PlaylistItem {
+      "resourceCompositeIdentifier": Object {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+        "type": "audioItem",
+      },
+    },
+  ],
   "name": MultilingualText {
     "items": Array [
       MultilingualTextItem {

@@ -905,7 +905,9 @@ Object {
   "entities": Array [
     Object {
       "actions": Array [],
-      "episodes": Array [],
+      "episodes": Array [
+        "audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+      ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
       "name": Object {
         "items": Array [
@@ -943,7 +945,9 @@ Object {
   "entities": Array [
     Object {
       "actions": Array [],
-      "episodes": Array [],
+      "episodes": Array [
+        "audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+      ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
       "name": Object {
         "items": Array [

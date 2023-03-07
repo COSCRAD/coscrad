@@ -687,12 +687,26 @@ Array [
     "label": "Playlist",
     "link": "/resources/playlists",
     "schema": Object {
+      "episodes": Object {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a summary description of each episode in this playlist",
+        "isArray": true,
+        "isOptional": true,
+        "label": "episodes",
+      },
       "id": Object {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
+      },
+      "name": Object {
+        "coscradDataType": "MULTILINGUAL_TEXT",
+        "description": "name of the playlist",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
       },
     },
     "type": "playlist",
