@@ -18,11 +18,17 @@ export class QueryResponseTransformInterceptor<T> implements NestInterceptor<T, 
                     throw new CoscradNotFoundException();
                 }
 
+                /**
+                 * This will need to be updated to support
+                 * - users passing query params for filtering in queries
+                 * - command type errors?
+                 */
                 if (result instanceof InternalError) {
                     if (result instanceof CommandExecutionError) {
                         throw new CoscradInvalidUserInputException(result);
                     }
 
+                    // Realistically, this should not happen. We throw internal errors.
                     throw new CoscradInternalException(result);
                 }
 

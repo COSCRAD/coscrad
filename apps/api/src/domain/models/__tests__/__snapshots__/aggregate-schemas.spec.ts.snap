@@ -571,6 +571,13 @@ Object {
       },
     },
   },
+  "name": Object {
+    "coscradDataType": "MULTILINGUAL_TEXT",
+    "description": "the name of the playlist",
+    "isArray": false,
+    "isOptional": false,
+    "label": "name",
+  },
 }
 `;
 

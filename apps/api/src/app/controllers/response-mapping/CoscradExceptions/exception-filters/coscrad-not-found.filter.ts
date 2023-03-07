@@ -15,7 +15,7 @@ export class CoscradNotFoundFilter implements ExceptionFilter {
 
         response.status(statusCode).json({
             statusCode,
-            timestamp: '3', //new Date().toISOString(),,
+            timestamp: new Date().toISOString(),
             path: `${request.url}`,
             message: exception.toString(),
         });

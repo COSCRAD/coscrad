@@ -15,7 +15,7 @@ export class CoscradInternalErrorFilter implements ExceptionFilter {
 
         response.status(statusCode).json({
             statusCode,
-            timestamp: '1', //new Date().toISOString(),
+            timestamp: new Date().toISOString(),
             path: request.url,
             message: exception.toString(),
         });

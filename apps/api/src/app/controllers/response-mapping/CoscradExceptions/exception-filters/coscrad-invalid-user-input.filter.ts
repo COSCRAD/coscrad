@@ -15,7 +15,7 @@ export class CoscradInvalidUserInputFilter implements ExceptionFilter {
 
         response.status(statusCode).json({
             statusCode,
-            timestamp: '2', //new Date().toISOString(),
+            timestamp: new Date().toISOString(),
             path: request.url,
             message: exception.toString(),
         });
