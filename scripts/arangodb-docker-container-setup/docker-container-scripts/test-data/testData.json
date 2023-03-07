@@ -162,6 +162,10 @@
                     {
                         "type": "bibliographicReference",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003"
+                    },
+                    {
+                        "type": "playlist",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501"
                     }
                 ]
             }
@@ -350,6 +354,10 @@
                     {
                         "type": "note",
                         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
+                    },
+                    {
+                        "type": "playlist",
+                        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501"
                     }
                 ],
                 "type": "category"
@@ -1422,6 +1430,35 @@
                     ]
                 }
             }
+        ],
+        "playlists": [
+            {
+                "type": "playlist",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "name": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "Blake's jams"
+                        }
+                    ]
+                },
+                "items": [
+                    {
+                        "resourceCompositeIdentifier": {
+                            "type": "audioItem",
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110"
+                        }
+                    }
+                ]
+            }
         ]
     },
     "edge": {
@@ -1796,10 +1833,27 @@
                 "note": "this clip talks about birds"
             },
             {
+                "_to": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+                "_from": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+                "eventHistory": [],
+                "connectionType": "self",
+                "members": [
+                    {
+                        "role": "self",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this playlist is awesome"
+            },
+            {
                 "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1816,7 +1870,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1833,7 +1887,7 @@
                 "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1850,7 +1904,7 @@
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "_from": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1867,7 +1921,7 @@
                 "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1884,7 +1938,7 @@
                 "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1901,7 +1955,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1918,7 +1972,7 @@
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1935,7 +1989,7 @@
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1952,7 +2006,7 @@
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1969,7 +2023,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110026",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2226,7 +2280,7 @@
             },
             {
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
-                "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "_from": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "type": "note",
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
                 "eventHistory": [],
@@ -2245,6 +2299,29 @@
                     {
                         "role": "from",
                         "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "That is why video/223 is related to playlist/501"
+            },
+            {
+                "_to": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+                "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112008",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
                             "type": "textField",
                             "target": "term",
                             "charRange": [
@@ -2254,7 +2331,7 @@
                         }
                     }
                 ],
-                "note": "That is why video/223 is related to term/2"
+                "note": "That is why playlist/501 is related to term/2"
             },
             {
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",

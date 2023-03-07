@@ -8,6 +8,7 @@ import { buildBibliographicReferenceFactoryTestSet } from './bibliographic-refer
 import { buildBookAggregateFactoryTestSet } from './book.aggregate-factory.test-set';
 import { buildMediaItemFactoryTestSet } from './media-item.aggregate-factory.test-set';
 import { buildPhotographFactoryTestSet } from './photograph.aggregate-factory.test-set';
+import { buildPlaylistFactoryTestSet } from './playlist.aggregate-factory.test-set';
 import { buildSongFactoryTestSet } from './song.aggregate-factory.test-set';
 import { buildSpatialFeatureFactoryTestSet } from './spatial-feature.aggregate-factory.test-set';
 import { buildTermAggregateFactoryTestSet } from './term.aggregate-factory.test-set';
@@ -41,5 +42,6 @@ export default (): FactoryTestSuiteForAggregate[] => [
     buildTermAggregateFactoryTestSet(),
     buildAudioItemFactoryTestSet(),
     buildVideoFactoryTestSet(),
+    buildPlaylistFactoryTestSet(),
     buildVocabularyListAggregateFactoryTestSet(),
 ];

@@ -3,6 +3,7 @@ import buildBibliographicReferenceResourceModelContextStateValidatorTestCase fro
 import buildBookResourceModelContextStateValidatorTestCase from './buildBookResourceModelContextStateValidatorTestCase';
 import buildMediaItemResourceModelContextStateValidatorTestCase from './buildMediaItemResourceModelContextStateValidatorTestCase';
 import buildPhotographResourceModelContextStateValidatorTestCase from './buildPhotographResourceModelContextStateValidatorTestCase';
+import buildPlaylistResourceModelContextStateValidatorTestCase from './buildPlaylistResourceModelContextStateValidatorTestCase';
 import buildSongResourceModelContextStateValidatorTestCase from './buildSongResourceModelContextStateValidatorTestCase';
 import buildSpatialFeatureResourceModelContextStateValidatorTestCase from './buildSpatialFeatureResourceModelContextStateValidatorTestCase';
 import buildTermResourceModelContextStateValidatorTestCase from './buildTermResourceModelContextStateValidatorTestCase';
@@ -21,6 +22,7 @@ export default () => {
         buildVocabularyListResourceModelContextStateValidatorTestCase(),
         buildSongResourceModelContextStateValidatorTestCase(),
         buildMediaItemResourceModelContextStateValidatorTestCase(),
+        buildPlaylistResourceModelContextStateValidatorTestCase(),
     ];
 
     return testCases;

@@ -64,6 +64,7 @@ import { CoscradUserQueryService } from '../../../domain/services/query-services
 import { EdgeConnectionQueryService } from '../../../domain/services/query-services/edge-connection-query.service';
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { PhotographQueryService } from '../../../domain/services/query-services/photograph-query.service';
+import { PlaylistQueryService } from '../../../domain/services/query-services/playlist-query.service';
 import { SongQueryService } from '../../../domain/services/query-services/song-query.service';
 import { SpatialFeatureQueryService } from '../../../domain/services/query-services/spatial-feature-query.service';
 import { TagQueryService } from '../../../domain/services/query-services/tag-query.service';
@@ -96,6 +97,7 @@ import { BibliographicReferenceController } from '../resources/bibliographic-ref
 import { BookController } from '../resources/book.controller';
 import { MediaItemController } from '../resources/media-item.controller';
 import { PhotographController } from '../resources/photograph.controller';
+import { PlaylistController } from '../resources/playlist.controller';
 import { ResourceDescriptionController } from '../resources/resource-description.controller';
 import { SongController } from '../resources/song.controller';
 import { SpatialFeatureController } from '../resources/spatial-feature.controller';
@@ -269,6 +271,14 @@ export default async (
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
+                provide: PlaylistQueryService,
+                useFactory: (
+                    repositoryProvider: ArangoRepositoryProvider,
+                    commandInfoService: CommandInfoService
+                ) => new PlaylistQueryService(repositoryProvider, commandInfoService),
+                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
+            },
+            {
                 provide: CoscradUserGroupQueryService,
                 useFactory: (
                     repositoryProvider: ArangoRepositoryProvider,
@@ -365,6 +375,7 @@ export default async (
             PhotographController,
             SpatialFeatureController,
             BibliographicReferenceController,
+            PlaylistController,
             CoscradUserGroupController,
             CategoryController,
             CommandController,

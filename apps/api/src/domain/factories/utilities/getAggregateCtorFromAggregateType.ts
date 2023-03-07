@@ -8,6 +8,7 @@ import { Category } from '../../models/categories/entities/category.entity';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { Photograph } from '../../models/photograph/entities/photograph.entity';
+import { Playlist } from '../../models/playlist';
 import { Song } from '../../models/song/song.entity';
 import { Tag } from '../../models/tag/tag.entity';
 import { Term } from '../../models/term/entities/term.entity';
@@ -39,6 +40,7 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.audioItem]: AudioItem as unknown as DomainModelCtor<AudioItem>,
     [AggregateType.video]: Video as unknown as DomainModelCtor<Video>,
     [AggregateType.vocabularyList]: VocabularyList,
+    [AggregateType.playlist]: Playlist,
     [AggregateType.category]: Category,
 };
 

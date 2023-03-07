@@ -236,6 +236,10 @@ Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "bibliographicReference",
             },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+              "type": "playlist",
+            },
           ],
         },
       ],
@@ -348,6 +352,10 @@ Object {
             Object {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "bibliographicReference",
+            },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+              "type": "playlist",
             },
           ],
         },
@@ -886,6 +894,86 @@ Object {
       "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
       "photographer": "Kenny Tree-Huggens",
       "tags": Array [],
+    },
+  ],
+  "indexScopedActions": Array [],
+}
+`;
+
+exports[`When fetching multiple resources GET /resources/playlists when all of the resources are published should fetch multiple resources of type playlist 1`] = `
+Object {
+  "entities": Array [
+    Object {
+      "actions": Array [],
+      "episodes": Array [
+        "audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+      ],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Blake's jams",
+          },
+        ],
+      },
+      "tags": Array [
+        Object {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+          "label": "law",
+          "members": Array [
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+              "type": "bibliographicReference",
+            },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+              "type": "playlist",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  "indexScopedActions": Array [],
+}
+`;
+
+exports[`When fetching multiple resources GET /resources/playlists when some of the resources are unpublished should return the expected number of results 1`] = `
+Object {
+  "entities": Array [
+    Object {
+      "actions": Array [],
+      "episodes": Array [
+        "audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+      ],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+      "name": Object {
+        "items": Array [
+          Object {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Blake's jams",
+          },
+        ],
+      },
+      "tags": Array [
+        Object {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+          "label": "law",
+          "members": Array [
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+              "type": "bibliographicReference",
+            },
+            Object {
+              "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+              "type": "playlist",
+            },
+          ],
+        },
+      ],
     },
   ],
   "indexScopedActions": Array [],

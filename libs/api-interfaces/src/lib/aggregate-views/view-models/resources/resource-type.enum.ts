@@ -9,6 +9,7 @@ export enum ResourceType {
     song = 'song',
     mediaItem = 'mediaItem',
     video = 'video',
+    playlist = 'playlist',
 }
 
 export const isResourceType = (input: unknown): input is ResourceType =>

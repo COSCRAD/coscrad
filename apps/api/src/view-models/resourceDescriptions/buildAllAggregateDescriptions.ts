@@ -50,6 +50,11 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
             'A song includes a link to an audio recording along with metadata and lyrics (when available).',
     },
     {
+        type: ResourceType.playlist,
+        description:
+            'A playlist collects media items from serveral resources into a collection for web or radio playback',
+    },
+    {
         type: ResourceType.mediaItem,
         description: 'A media item is a digital representation of an audio or video recording.',
     },
