@@ -13,6 +13,7 @@ import { DuplicateLanguageInMultilingualTextError } from '../../models/audio-ite
 import { MultilingualTextHasNoOriginalError } from '../../models/audio-item/errors/multilingual-text-has-no-original.error';
 import { MultipleOriginalsInMultilingualTextError } from '../../models/audio-item/errors/multiple-originals-in-multilingual-text.error';
 import BaseDomainModel from '../../models/BaseDomainModel';
+import { isNull, isUndefined } from '../../utilities/validation/is-null-or-undefined';
 
 export { MultilingualTextItemRole };
 
@@ -99,6 +100,17 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
     }
 
     toString(): string {
+        /**
+         * This is necessary when building error messages in the validation layer.
+         */
+        if (!Array.isArray(this.items)) {
+            if (isNull(this.items)) return 'null';
+
+            if (isUndefined(this.items)) return 'undefined';
+
+            return 'invalid';
+        }
+
         return this.items.map(({ text, languageCode }) => `{${languageCode}}: ${text}`).join('\n');
     }
 

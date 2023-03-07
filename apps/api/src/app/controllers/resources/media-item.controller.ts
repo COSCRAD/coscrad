@@ -4,7 +4,7 @@ import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-g
 import { MediaItemQueryService } from '../../../domain/services/query-services/media-item-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { MediaItemViewModel } from '../../../view-models/buildViewModelForResource/viewModels/media-item.view-model';
-import { InternalErrorFilter } from '../exception-handling/exception-filters/internal-error.filter';
+import { InternalErrorFilter } from '../command/exception-handling/exception-filters/internal-error.filter';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';

@@ -1,4 +1,4 @@
-import { NestedDataType } from '@coscrad/data-types';
+import { CoscradMultilingualText, NestedDataType } from '@coscrad/data-types';
 import { DTO } from '../../../..//types/DTO';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
@@ -13,14 +13,13 @@ import { PlaylistItem } from './playlist-item.entity';
 export class Playlist extends Resource {
     readonly type = ResourceType.playlist;
 
-    // TODO Fix the aggregate factory test and comment this back in
-    // @CoscradMultilingualText({
-    //     label: 'name',
-    //     description: 'the name of the playlist',
-    // })
+    @CoscradMultilingualText({
+        label: 'name',
+        description: 'the name of the playlist',
+    })
     readonly name: MultilingualText;
 
-    // TODO add refrence to photograph
+    // TODO add refrence to a photograph
 
     @NestedDataType(PlaylistItem, {
         label: 'playlist items',
