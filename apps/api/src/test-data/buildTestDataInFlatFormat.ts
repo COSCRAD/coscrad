@@ -8,6 +8,7 @@ import buildCategoryTestData from './buildCategoryTestData';
 import buildEdgeConnectionTestData from './buildEdgeConnectionTestData';
 import buildMediaItemTestData from './buildMediaItemTestData';
 import buildPhotographTestData from './buildPhotographTestData';
+import buildPlayListTestData from './buildPlaylistTestData';
 import buildSongTestData from './buildSongTestData';
 import buildSpatialFeatureTestData from './buildSpatialFeatureTestData';
 import buildTagTestData from './buildTagTestData';
@@ -29,6 +30,7 @@ export default (): PartialSnapshot => ({
     [ResourceType.bibliographicReference]: buildBibliographicReferenceTestData(),
     [ResourceType.song]: buildSongTestData(),
     [ResourceType.mediaItem]: buildMediaItemTestData(),
+    [ResourceType.playlist]: buildPlayListTestData(),
     // Non-Resource Aggregates
     [AggregateType.note]: buildEdgeConnectionTestData(),
     [AggregateType.tag]: buildTagTestData(),

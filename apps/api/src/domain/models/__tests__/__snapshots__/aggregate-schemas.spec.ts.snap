@@ -522,6 +522,58 @@ Object {
 }
 `;
 
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Playlist  match the snapshot 1`] = `
+Object {
+  "id": Object {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "label": "ID",
+  },
+  "items": Object {
+    "complexDataType": "NESTED_TYPE",
+    "description": "the resources from which the playlist's episodes are derived",
+    "isArray": true,
+    "isOptional": true,
+    "label": "playlist items",
+    "schema": Object {
+      "resourceCompositeIdentifier": Object {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for the resource this playlist item was derived from",
+        "isArray": false,
+        "isOptional": false,
+        "label": "resource composite identifier",
+        "schema": Object {
+          "id": Object {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "id",
+          },
+          "type": Object {
+            "complexDataType": "ENUM",
+            "description": "the type of the resource this playlist item is derived from",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "resource type",
+            "labelsAndValues": Array [
+              Object {
+                "label": "audioItem",
+                "value": "audioItem",
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Song  match the snapshot 1`] = `
 Object {
   "audioURL": Object {

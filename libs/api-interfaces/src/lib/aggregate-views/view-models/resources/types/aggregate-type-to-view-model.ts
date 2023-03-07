@@ -10,6 +10,7 @@ import { IBibliographicReferenceViewModel } from '../bibliographic-reference';
 import { IBookViewModel } from '../book';
 import { IMediaItemViewModel } from '../media-items';
 import { IPhotographViewModel } from '../photograph.view-model.interface';
+import { IPlayListViewModel } from '../playlist';
 import { ISongViewModel } from '../song.view-model.interface';
 import { ISpatialFeatureViewModel } from '../spatial-feature';
 import { ITermViewModel } from '../term.view-model.interface';
@@ -27,6 +28,7 @@ export type AggregateTypeToViewModel = {
     [AggregateType.audioItem]: IAudioItemViewModel;
     [AggregateType.video]: IVideoViewModel;
     [AggregateType.vocabularyList]: IVocabularyListViewModel;
+    [AggregateType.playlist]: IPlayListViewModel;
     // Notes, which along with Resources form "Categorizables"
     [AggregateType.note]: INoteViewModel;
     // Non-categorizable (system) aggregates

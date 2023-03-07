@@ -19,6 +19,7 @@ import { BookModule } from './domain-modules/book.module';
 import { EdgeConnectionModule } from './domain-modules/edge-connection.module';
 import { MediaItemModule } from './domain-modules/media-item.module';
 import { PhotographModule } from './domain-modules/photograph.module';
+import { PlaylistModule } from './domain-modules/playlist.module';
 import { SongModule } from './domain-modules/song.module';
 import { SpatialFeatureModule } from './domain-modules/spatial-feature.module';
 import { TagModule } from './domain-modules/tag.module';
@@ -51,6 +52,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         PhotographModule,
         BibliographicReferenceModule,
         SpatialFeatureModule,
+        PlaylistModule,
     ],
     controllers: [
         AppController,

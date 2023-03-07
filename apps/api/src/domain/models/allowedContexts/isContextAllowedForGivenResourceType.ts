@@ -60,6 +60,7 @@ const resourceTypeToAllowedContextTypes = {
         EdgeConnectionContextType.textField,
         EdgeConnectionContextType.timeRange,
     ],
+    [ResourceType.playlist]: [EdgeConnectionContextType.general],
 };
 
 export const getResourceTypesThatOnlySupportGeneralContext = (): ResourceType[] =>

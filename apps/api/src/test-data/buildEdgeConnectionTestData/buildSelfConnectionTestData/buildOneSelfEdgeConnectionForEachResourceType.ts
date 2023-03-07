@@ -255,6 +255,19 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
             },
         ],
     },
+    {
+        note: 'this playlist is awesome',
+        members: [
+            {
+                role,
+                compositeIdentifier: {
+                    id: '501',
+                    type: ResourceType.playlist,
+                },
+                context: new GeneralContext(),
+            },
+        ],
+    },
 ];
 const selfEdgeConnectionInstancesWithSpecificContext = edgeConnectionDTOs.map((partialDTO) => ({
     ...partialDTO,

@@ -24,6 +24,7 @@ const resourceTypeAndLabel: AggregateTypeAndLabel = {
     [ResourceType.audioItem]: 'Transcribed Audio Item',
     [ResourceType.video]: 'Video',
     [ResourceType.vocabularyList]: 'Vocabulary List',
+    [ResourceType.playlist]: 'Playlist',
 };
 
 export default (aggregateType: AggregateType): string => {

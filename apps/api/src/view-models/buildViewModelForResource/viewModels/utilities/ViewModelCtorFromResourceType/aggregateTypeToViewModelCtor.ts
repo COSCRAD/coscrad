@@ -13,6 +13,7 @@ import { CategoryTreeViewModel } from '../../category-tree.view-model';
 import { CoscradUserViewModel } from '../../coscrad-user.view-model';
 import { MediaItemViewModel } from '../../media-item.view-model';
 import { PhotographViewModel } from '../../photograph.view-model';
+import { PlaylistViewModel } from '../../playlist.view-model';
 import { SongViewModel } from '../../song.view-model';
 import { SpatialFeatureViewModel } from '../../spatial-data/spatial-feature.view-model';
 import { TagViewModel } from '../../tag.view-model';
@@ -30,6 +31,7 @@ export const aggregateTypeToViewModelCtor: { [K in AggregateType]: Ctor<BaseView
     [ResourceType.audioItem]: AudioItemViewModel,
     [ResourceType.video]: VideoViewModel,
     [ResourceType.vocabularyList]: VocabularyListViewModel,
+    [ResourceType.playlist]: PlaylistViewModel,
     [CategorizableType.note]: NoteViewModel,
     [AggregateType.category]: CategoryTreeViewModel,
     [AggregateType.tag]: TagViewModel,

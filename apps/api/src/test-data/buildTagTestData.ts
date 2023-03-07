@@ -159,6 +159,10 @@ const allTagsDTOs: Omit<DTO<Tag>, 'type'>[] = [
                 type: CategorizableType.bibliographicReference,
                 id: '3',
             },
+            {
+                type: ResourceType.playlist,
+                id: '501',
+            },
         ],
     },
 ];
