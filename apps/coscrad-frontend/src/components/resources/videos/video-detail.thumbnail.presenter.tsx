@@ -13,19 +13,8 @@ export const VideoDetailThumbnailPresenter = ({
     text: plainText,
     name,
 }: ICategorizableDetailQueryResult<IVideoViewModel>): JSX.Element => {
-    /**
-     * Temporary placeholder: I'm assuming every resource will have at minimum the
-     * icon of its resource type.
-     */
-    const imgURL = 'https://digitalassetmanager.com/videoframe.jpg';
-
     return (
-        <ResourceDetailThumbnailPresenter
-            id={id}
-            name={name}
-            type={ResourceType.video}
-            src={imgURL}
-        >
+        <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.video}>
             <SinglePropertyPresenter
                 display="Duration"
                 value={convertMillisecondsToSeconds(lengthMilliseconds)}

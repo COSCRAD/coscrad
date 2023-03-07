@@ -1,4 +1,8 @@
-import { ICategorizableDetailQueryResult, IVideoViewModel } from '@coscrad/api-interfaces';
+import {
+    ICategorizableDetailQueryResult,
+    IVideoViewModel,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { convertMillisecondsToSeconds } from '../utils/math';
@@ -9,7 +13,7 @@ export const VideoDetailFullViewPresenter = ({
     name,
     id,
 }: ICategorizableDetailQueryResult<IVideoViewModel>): JSX.Element => (
-    <ResourceDetailFullViewPresenter name={name} id={id}>
+    <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.video}>
         <SinglePropertyPresenter
             display="Duration"
             value={convertMillisecondsToSeconds(lengthMilliseconds)}
