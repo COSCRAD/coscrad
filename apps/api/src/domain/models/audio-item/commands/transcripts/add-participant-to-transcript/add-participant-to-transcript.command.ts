@@ -1,7 +1,7 @@
-import { AggregateCompositeIdentifier, ICommandBase } from '@coscrad/api-interfaces';
+import { ICommandBase, ResourceCompositeIdentifier, ResourceType } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
-import { AudioItemCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
+import { AudioVisualCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
 import { ADD_PARTICIPANT_TO_TRANSCRIPT } from '../constants';
 
 @Command({
@@ -10,11 +10,13 @@ import { ADD_PARTICIPANT_TO_TRANSCRIPT } from '../constants';
     label: 'Add Participant to Transcript',
 })
 export class AddParticipantToTranscript implements ICommandBase {
-    @NestedDataType(AudioItemCompositeIdentifier, {
+    @NestedDataType(AudioVisualCompositeIdentifier, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',
     })
-    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier;
+    readonly aggregateCompositeIdentifier: ResourceCompositeIdentifier<
+        typeof ResourceType.video | typeof ResourceType.audioItem
+    >;
 
     @NonEmptyString({
         label: `participant's initials`,

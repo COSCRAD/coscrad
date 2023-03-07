@@ -1,4 +1,4 @@
-import { AggregateCompositeIdentifier, ICommandBase } from '@coscrad/api-interfaces';
+import { ICommandBase, ResourceCompositeIdentifier, ResourceType } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import {
     CoscradMultilingualText,
@@ -7,7 +7,7 @@ import {
     NonNegativeFiniteNumber,
 } from '@coscrad/data-types';
 import { MultilingualText } from '../../../../../common/entities/multilingual-text';
-import { AudioItemCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
+import { AudioVisualCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
 import { ADD_LINE_ITEM_TO_TRANSCRIPT } from '../constants';
 
 @Command({
@@ -16,11 +16,13 @@ import { ADD_LINE_ITEM_TO_TRANSCRIPT } from '../constants';
     label: `Add line item to transcript`,
 })
 export class AddLineItemToTranscript implements ICommandBase {
-    @NestedDataType(AudioItemCompositeIdentifier, {
+    @NestedDataType(AudioVisualCompositeIdentifier, {
         label: 'Composite Identifier',
         description: 'system-wide unique identifier',
     })
-    readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier;
+    readonly aggregateCompositeIdentifier: ResourceCompositeIdentifier<
+        typeof ResourceType.video | typeof ResourceType.audioItem
+    >;
 
     @NonNegativeFiniteNumber({
         label: 'in point (ms)',
