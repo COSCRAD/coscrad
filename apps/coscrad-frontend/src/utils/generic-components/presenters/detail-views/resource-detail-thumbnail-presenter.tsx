@@ -1,20 +1,16 @@
 import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
-import { Card, CardContent } from '@mui/material';
-import { routes } from 'apps/coscrad-frontend/src/app/routes/routes';
-import { ResourceNavLink } from 'apps/coscrad-frontend/src/components/resources/shared/resource-nav-link';
+import { isNullOrUndefined, isString } from '@coscrad/validation-constraints';
+import { Card, CardContent, Grid, Typography } from '@mui/material';
 import { ReactNode } from 'react';
-import { FloatSpacerDiv } from '../../float-spacer';
+import { routes } from '../../../../app/routes/routes';
+import { ResourceNavLink } from '../../../../components/resources/shared/resource-nav-link';
 import { MultilingualTextPresenter } from '../multilingual-text-presenter';
-import { ResourcePreviewImage } from './resource-preview-image';
+import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
 export interface ResourceDetailThumbnailPresenterProps {
-    imageUrl?: string;
-    videoUrl?: string;
-    audioUrl?: string;
     id: string;
     type: ResourceType;
-    name: IMultilingualText;
-    src: string;
+    name: IMultilingualText | string;
     children: ReactNode;
 }
 
@@ -30,16 +26,30 @@ export const ResourceDetailThumbnailPresenter = ({
     id,
     type,
     name,
-    src,
     children,
 }: ResourceDetailThumbnailPresenterProps): JSX.Element => (
     <Card>
         <CardContent>
-            <ResourcePreviewImage src={src} />
-            <MultilingualTextPresenter text={name} />
-            {children}
-            <ResourceNavLink linkURL={`/${routes.resources.ofType(type).detail(id)}`} />
-            <FloatSpacerDiv />
+            <Grid container spacing={1} columns={{ xs: 2, sm: 4, md: 12 }}>
+                <Grid item xs={2} sm={1} md={2}>
+                    {/* Preview will eventually include images taken from video or photos, etc. */}
+                    <ResourcePreviewIconFactory resourceType={type} />
+                </Grid>
+                <Grid item xs={2} sm={2} md={8}>
+                    {/* TODO: consider putting a standardized name property on the view models */}
+                    <Typography gutterBottom variant="h6" fontWeight="bold" color="primary">
+                        {isString(name) || isNullOrUndefined(name) ? (
+                            name
+                        ) : (
+                            <MultilingualTextPresenter text={name} />
+                        )}
+                    </Typography>
+                    {children}
+                </Grid>
+                <Grid item xs={2} sm={1} md={2} container sx={{ justifyContent: 'flex-end' }}>
+                    <ResourceNavLink linkURL={`/${routes.resources.ofType(type).detail(id)}`} />
+                </Grid>
+            </Grid>
         </CardContent>
     </Card>
 );

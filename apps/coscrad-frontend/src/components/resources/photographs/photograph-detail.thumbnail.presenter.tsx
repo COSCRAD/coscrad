@@ -1,6 +1,5 @@
 import {
     ICategorizableDetailQueryResult,
-    IMultilingualText,
     IPhotographViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
@@ -17,23 +16,10 @@ export const PhotographDetailThumbnailPresenter = ({
      * view model for photograph.  I assume we'll assign a name property in
      * the domain first
      */
-    const name: IMultilingualText = new MultilingualText({
-        items: [
-            new MultilingualTextItem({
-                text,
-                languageCode,
-                role: MultilingualTextItemRole.original,
-            }),
-        ],
-    });
+    const name = 'Photograph 1';
 
     return (
-        <ResourceDetailThumbnailPresenter
-            id={id}
-            name={name}
-            type={ResourceType.photograph}
-            src={imageURL}
-        >
+        <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.photograph}>
             <SinglePropertyPresenter display="Photograph ID" value={id} />
             <SinglePropertyPresenter display="Photographer" value={photographer} />
         </ResourceDetailThumbnailPresenter>
