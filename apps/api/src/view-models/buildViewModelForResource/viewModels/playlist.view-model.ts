@@ -5,6 +5,15 @@ import { Playlist } from '../../../domain/models/playlist';
 import formatAggregateCompositeIdentifier from '../../presentation/formatAggregateCompositeIdentifier';
 import { BaseViewModel } from './base.view-model';
 
+/**
+ * Note that in the future we anticipate the Playlist becoming something other
+ * than a resource. This may be a "report" or a "user defined view". It is really
+ * a configured custom view of multiple resources.
+ *
+ * As such, we do not want to encourage making many web of knowledge connections
+ * or notes about the playlist and will only support general context in connections
+ * for playlists.
+ */
 export class PlaylistViewModel extends BaseViewModel implements IPlayListViewModel {
     @CoscradMultilingualText({
         label: 'name',

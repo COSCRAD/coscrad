@@ -1,6 +1,6 @@
 import { NoCommandHandlerRegisteredForCommandException } from '@coscrad/commands';
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-import httpStatusCodes from '../../../constants/httpStatusCodes';
+import httpStatusCodes from '../../../../constants/httpStatusCodes';
 
 @Catch(NoCommandHandlerRegisteredForCommandException)
 export class NoCommandHandlerForCommandTypeFilter implements ExceptionFilter {

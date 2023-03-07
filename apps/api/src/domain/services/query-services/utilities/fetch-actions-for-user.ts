@@ -17,5 +17,13 @@ export const fetchActionsForUser = (
     commandInfoService: CommandInfoService,
     systemUser: CoscradUserWithGroups,
     commandContext: CommandContext
-): ICommandFormAndLabels[] =>
-    systemUser?.isAdmin() ? commandInfoService.getCommandInfo(commandContext) : [];
+): ICommandFormAndLabels[] => {
+    // if (systemUser === false) return [];
+
+    // @ts-expect-error fix me
+    if (systemUser === false) {
+        return [];
+    }
+
+    return systemUser?.isAdmin() ? commandInfoService.getCommandInfo(commandContext) : [];
+};
