@@ -1,6 +1,5 @@
 import { isNull } from '@coscrad/validation-constraints';
-import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import { Box, IconButton, Menu } from '@mui/material';
+import { Box } from '@mui/material';
 import { useState } from 'react';
 import AuthenticationButton from '../authentication-button/authentication-button';
 import { NavItemInfo } from './nav-menu-container';
@@ -20,7 +19,8 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
     };
 
     const handleClose = () => {
-        setAnchorEl(null);
+        console.log('hi');
+        // setAnchorEl(null);
     };
 
     return (

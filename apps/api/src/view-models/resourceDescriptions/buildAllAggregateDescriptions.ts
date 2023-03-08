@@ -24,7 +24,7 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
     },
     {
         type: ResourceType.video,
-        description: 'An video includes a link for playback and possibly a transcript.',
+        description: 'A video includes a link for playback and possibly a transcript.',
     },
     {
         type: ResourceType.book,

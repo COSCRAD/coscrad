@@ -5,11 +5,11 @@ describe(`Video + transcription flow`, () => {
 
             cy.contains('videos');
 
-            cy.window().then((store) => {
+            cy.window().then((window) => {
                 Array(100)
                     .fill('here')
                     .forEach((x) => console.log(x));
-                console.log({ store });
+                console.log({ window });
             });
         });
 
@@ -17,23 +17,23 @@ describe(`Video + transcription flow`, () => {
             cy.visit(`/Resources`);
             cy.contains('videos').click();
 
-            cy.contains('Videos');
+            cy.contains('videos');
 
             cy.location('pathname').should('contain', `Resources/Videos`);
         });
     });
 
     describe(`the index view`, () => {
-        it(`should have a create video button`, () => {
-            cy.visit('/');
+        it.only(`should have a create video button`, () => {
+            cy.visit(`/`);
             cy.login();
-            cy.visit(`/Resources/Videos`);
             cy.contains('Log In').click();
 
-            // .its('auth')
-            // .its('hasAuthenticatedUser')
-            // .should('be.true');
-            // cy.contains(`Create Video`);
+            cy.get('[href="/Resources"]').click();
+
+            cy.get('[data-testid="RESOURCE_CARD__videos"]').click();
+
+            cy.contains('Create Video');
         });
     });
 });

@@ -10,7 +10,7 @@ const LoginButton = () => {
             color="primary"
             onClick={() => {
                 loginWithRedirect({
-                    appState: { returnTo: window.location.pathname },
+                    // appState: { returnTo: window.location.pathname },
                 });
             }}
         >

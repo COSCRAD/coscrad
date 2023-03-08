@@ -33,6 +33,12 @@ export const Home = (): JSX.Element => {
     useEffect(() => {
         if (isAuthenticated) {
             getAccessTokenSilently().then((token) => {
+                Array(20)
+                    .fill('')
+                    .forEach((_) => {
+                        console.log(`DISPATCH USER LOGIN SUCCEEDEEEEEEEEEEEEEEEEEEEEEEEEEED`);
+                    });
+
                 dispatch(
                     userLoginSucceeded({
                         userId: user?.sub,

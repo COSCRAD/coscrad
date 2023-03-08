@@ -17,10 +17,10 @@ const dtos: DTO<CoscradUser>[] = [
     {
         type: AggregateType.user,
         id: '1',
-        authProviderUserId: 'auth0|123',
+        authProviderUserId: 'auth0|5db729701ead110c5b254553',
         profile: new CoscradUserProfile(dummyProfile),
         username: 'cool-james',
-        roles: [CoscradUserRole.viewer],
+        roles: [CoscradUserRole.projectAdmin],
     },
 ];
 

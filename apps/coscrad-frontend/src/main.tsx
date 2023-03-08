@@ -11,6 +11,16 @@ import { setupStore } from './store';
 const contentConfig = getConfigurableContent();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
+const store = setupStore();
+
+/**
+ * Here we patch window to expose the store within Cypress.
+ */
+
+//@ts-expect-error TODO extend window type
+window.store = store;
+
 root.render(
     <StrictMode>
         <Provider store={setupStore()}>

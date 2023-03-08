@@ -27,6 +27,7 @@ export const useLoadable = <TSelectedState, UIndexState>({
     const dispatch = useAppDispatch();
 
     useEffect(() => {
+        console.log(`dispatching thunk!!!!!!!!!!!!!!!!!!!1`);
         if (isNull(data)) dispatch(fetchThunk());
     }, [data, dispatch, fetchThunk]);
 
