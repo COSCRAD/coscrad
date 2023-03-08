@@ -11,6 +11,7 @@ import { useLoadableAudioItemById } from '../../store/slices/resources/audio-ite
 import { useLoadableBookById } from '../../store/slices/resources/books';
 import { useLoadableMediaItemById } from '../../store/slices/resources/media-items';
 import { useLoadablePhotographById } from '../../store/slices/resources/photographs/hooks';
+import { useLoadablePlaylistsById } from '../../store/slices/resources/playlists/hooks/use-Loadable-Playlist-By-Id';
 import { useLoadableVideoById } from '../../store/slices/resources/video/hooks';
 import { useLoadableVocabularyListById } from '../../store/slices/resources/vocabulary-lists/hooks/useLoadableVocabularyListById';
 
@@ -33,6 +34,7 @@ const lookupTable: { [K in CategorizableType]: UseLoadableById } = {
     [CategorizableType.video]: useLoadableVideoById,
     [CategorizableType.vocabularyList]: useLoadableVocabularyListById,
     [CategorizableType.note]: useLoadableNoteById,
+    [CategorizableType.playlist]: useLoadablePlaylistsById,
 };
 
 /**

@@ -15,6 +15,7 @@ import { BookDetailThumbnailPresenter } from '../books';
 import { BookInfo } from '../books/book-info';
 import { MediaItemDetailThumbnailPresenter } from '../media-items/media-item-detail.thumbnail.presenter';
 import { PhotographDetailThumbnailPresenter } from '../photographs/photograph-detail.thumbnail.presenter';
+import { PlaylistDetailThumbnailPresenter } from '../playlists/playlist-detail.thumbnail.presenter';
 import { SongDetailThumbnailPresenter } from '../songs';
 import { SpatialFeatureDetailThumbnailPresenter } from '../spatial-features/thumbnail-presenters';
 import { TermDetailThumbnailPresenter } from '../terms/term-detail.thumbnail.presenter';
@@ -34,6 +35,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.audioItem]: AudioItemDetailThumbnailPresenter,
     [CategorizableType.video]: VideoDetailThumbnailPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailThumbnailPresenter,
+    [CategorizableType.playlist]: PlaylistDetailThumbnailPresenter,
     /**
      * TODO Investigate why importing this from the component file leads to a
      * circular dependency.
