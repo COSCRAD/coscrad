@@ -18,6 +18,7 @@ const categorizableTypeAndPluralLabel: CategorizableTypeAndPluralLabel = {
     [CategorizableType.audioItem]: 'Audio Items',
     [CategorizableType.video]: 'Videos',
     [CategorizableType.vocabularyList]: 'Vocabulary Lists',
+    [CategorizableType.playlist]: 'Playlists',
     // Notes
     [CategorizableType.note]: 'Notes',
 };
