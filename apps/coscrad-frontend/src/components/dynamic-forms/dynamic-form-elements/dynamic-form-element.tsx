@@ -101,7 +101,11 @@ export const DynamicFormElement = ({
         return (
             <DynamicSelect
                 aggregateType={
-                    (options as unknown as { aggregateType: AggregateType }).aggregateType
+                    (
+                        options as unknown as {
+                            aggregateType: Exclude<AggregateType, typeof AggregateType.playlist>;
+                        }
+                    ).aggregateType
                 }
                 simpleFormField={formField}
                 onNewSelection={onElementChangeWithValidation}

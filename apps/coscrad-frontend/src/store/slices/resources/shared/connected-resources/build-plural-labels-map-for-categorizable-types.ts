@@ -1,6 +1,8 @@
 import { CategorizableType } from '@coscrad/api-interfaces';
 
-type CategorizableTypeAndPluralLabel = { [K in CategorizableType]: string };
+type CategorizableTypeAndPluralLabel = {
+    [K in Exclude<CategorizableType, typeof CategorizableType.playlist>]: string;
+};
 
 /**
  * This would be better as part of the `Resource Info`

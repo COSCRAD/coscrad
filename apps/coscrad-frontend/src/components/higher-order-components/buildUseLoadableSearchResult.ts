@@ -22,7 +22,9 @@ type UseLoadableById = (id: string) => IMaybeLoadable<unknown>;
  * resource detail container's responsibility to know what ID it is a container
  * for.
  */
-const lookupTable: { [K in CategorizableType]: UseLoadableById } = {
+const lookupTable: {
+    [K in Exclude<CategorizableType, typeof CategorizableType.playlist>]: UseLoadableById;
+} = {
     [CategorizableType.bibliographicReference]: useLoadableBibliographicReferenceById,
     [CategorizableType.book]: useLoadableBookById,
     [CategorizableType.mediaItem]: useLoadableMediaItemById,

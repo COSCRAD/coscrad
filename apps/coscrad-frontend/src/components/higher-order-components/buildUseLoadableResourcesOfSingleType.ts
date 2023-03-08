@@ -25,7 +25,10 @@ type UseLoadableResourcesOfSingleType<T extends IBaseViewModel> = () => ILoadabl
 >;
 
 const lookupTable: {
-    [K in CategorizableType]: UseLoadableResourcesOfSingleType<AggregateTypeToViewModel[K]>;
+    [K in Exclude<
+        CategorizableType,
+        typeof CategorizableType.playlist
+    >]: UseLoadableResourcesOfSingleType<AggregateTypeToViewModel[K]>;
 } = {
     [CategorizableType.bibliographicReference]: useLoadableBibliographicReferences,
     [CategorizableType.book]: useLoadableBooks,
@@ -49,7 +52,9 @@ const lookupTable: {
  * are meant to enapsulate that, so the selector seems like the natural
  * starting point.
  */
-export const buildUseLoadableForSingleCategorizableType = <T extends CategorizableType>(
+export const buildUseLoadableForSingleCategorizableType = <
+    T extends Exclude<CategorizableType, typeof CategorizableType.playlist>
+>(
     resourceType: T
 ): UseLoadableResourcesOfSingleType<AggregateTypeToViewModel[T]> => {
     const lookupResult = lookupTable[resourceType];

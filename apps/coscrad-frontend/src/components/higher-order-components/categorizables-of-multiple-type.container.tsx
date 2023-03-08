@@ -6,7 +6,10 @@ import { SelectedCategorizablesOfSingleTypeContainer } from './selected-categori
 export type CategorizableTypeAndSelectedIds = { [K in CategorizableType]?: string[] };
 
 interface CategorizablesOfMultipleTypeContainerProps<T> {
-    members: CategorizableCompositeIdentifier[];
+    members: Exclude<
+        CategorizableCompositeIdentifier,
+        { type: typeof CategorizableType.playlist; id: string }
+    >[];
     detailPresenterFactory: ICategorizableDetailPresenterFactory<T>;
     heading?: string;
 }
@@ -51,7 +54,10 @@ export const CategorizablesOfMultipleTypeContainer = <T,>({
     <div>
         <h3>{heading || 'Selected Resources'}</h3>
         {Object.entries(collectResourceTypesAndSelectedIds(members)).map(
-            ([categorizableType, selectedIds]: [CategorizableType, string[]]) => (
+            ([categorizableType, selectedIds]: [
+                Exclude<CategorizableType, typeof CategorizableType.playlist>,
+                string[]
+            ]) => (
                 <SelectedCategorizablesOfSingleTypeContainer
                     key={categorizableType}
                     categorizableType={categorizableType}

@@ -15,6 +15,28 @@ declare namespace Cypress {
 // -- This is a parent command --
 Cypress.Commands.add('login', () => {
     console.log(`logging in as ${Cypress.env('username')}`);
+
+    // cy.request({
+    //     method: 'POST',
+    //     url: `https://${Cypress.env('auth0_domain')}/oauth/token`,
+    //     body: {
+    //         grant_type: 'password',
+    //         username: Cypress.env('username'),
+    //         password: Cypress.env('password'),
+    //         audience: Cypress.env('auth0_audience'),
+    //         scope: Cypress.env('auth0_scope'),
+    //         client_id: Cypress.env('auth0_client_id'),
+    //         client_secret: Cypress.env('auth0_client_secret'),
+    //     },
+    // });
+
+    cy.contains('Log In').click();
+
+    cy.get('#username').click().type(Cypress.env('username'));
+
+    cy.get('#password').click().type(Cypress.env('password'));
+
+    cy.contains('Continue').click();
 });
 
 //

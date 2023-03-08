@@ -20,7 +20,12 @@ export type SimulatedKeyboardConfig = {
     specialCharacterReplacements: Record<string, string>;
 };
 
-export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
+export type ConfigurableContent<
+    T extends Exclude<CategorizableType, typeof CategorizableType.playlist> = Exclude<
+        CategorizableType,
+        typeof CategorizableType.playlist
+    >
+> = {
     indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
     siteTitle: string;
     subTitle: string;

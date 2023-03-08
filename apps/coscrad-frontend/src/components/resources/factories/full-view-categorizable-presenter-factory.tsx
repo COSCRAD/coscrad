@@ -22,7 +22,9 @@ import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocab
 /**
  * TODO We could have a mapped type if we need type safety here.
  */
-const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
+const lookupTable: {
+    [K in Exclude<CategorizableType, typeof CategorizableType.playlist>]: FunctionalComponent;
+} = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
     [CategorizableType.photograph]: PhotographDetailFullViewPresenter,
@@ -64,7 +66,9 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
  * a single resource for each resource type. It is used for the standard detail
  * view in the big index-to-detail flow.
  */
-export const fullViewCategorizablePresenterFactory = <T extends CategorizableType>(
+export const fullViewCategorizablePresenterFactory = <
+    T extends Exclude<CategorizableType, typeof CategorizableType.playlist>
+>(
     typeOfCategorizable: T
 ): typeof lookupTable[T] => {
     const DetailPresenter = lookupTable[typeOfCategorizable];

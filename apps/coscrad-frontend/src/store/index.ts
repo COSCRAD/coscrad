@@ -1,4 +1,4 @@
-import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, PayloadAction, PreloadedState } from '@reduxjs/toolkit';
 import { AUTH, authReducer } from './slices/auth';
 import { categoryTreeReducer } from './slices/categories';
 import { CATEGORY_TREE } from './slices/categories/constants';
@@ -32,7 +32,7 @@ import { VIDEOS } from './slices/resources/video/constants';
 import { tagReducer } from './slices/tagSlice';
 import { TAGS } from './slices/tagSlice/constants';
 
-export const rootReducer = combineReducers({
+const appReducer = combineReducers({
     [AUTH]: authReducer,
     [ID_GENERATION]: idGenerationReducer,
     [COMMAND_STATUS]: commandStatusReducer,
@@ -54,13 +54,25 @@ export const rootReducer = combineReducers({
     [PLAYLISTS]: PlaylistReducer,
 });
 
+const RESET_APP = 'RESET_APP';
+
+export const resetApp = () => ({
+    type: RESET_APP,
+});
+
+export type RootState = ReturnType<typeof appReducer>;
+
+export const rootReducer = (state: RootState, action: PayloadAction) => {
+    if (action.type === RESET_APP) return undefined;
+
+    return appReducer(state, action);
+};
+
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
     configureStore({
         reducer: rootReducer,
         preloadedState,
     });
-
-export type RootState = ReturnType<typeof rootReducer>;
 
 // ReturnType<typeof setupStore> if currying to inject additional setup
 export type AppStore = ReturnType<typeof setupStore>;

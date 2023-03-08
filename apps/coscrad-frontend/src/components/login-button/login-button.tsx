@@ -6,7 +6,14 @@ const LoginButton = () => {
     const { loginWithRedirect } = useAuth0();
 
     return (
-        <IconButton color="primary" onClick={() => loginWithRedirect()}>
+        <IconButton
+            color="primary"
+            onClick={() => {
+                loginWithRedirect({
+                    appState: { returnTo: window.location.pathname },
+                });
+            }}
+        >
             <LoginIcon />
         </IconButton>
     );

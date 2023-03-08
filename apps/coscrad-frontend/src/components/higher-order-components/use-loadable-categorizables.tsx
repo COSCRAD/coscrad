@@ -13,7 +13,7 @@ import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { fetchFreshState } from '../../store/slices/utils/fetch-fresh-state';
 
 // Hack alert- we need a mapping layer to give us the plurals for our redux slice names
-type PluralCategorizableType = `${CategorizableType}s`;
+type PluralCategorizableType = `${Exclude<CategorizableType, typeof CategorizableType.playlist>}s`;
 
 export type ViewModelIndexSnapshot = Pick<RootState, PluralCategorizableType>;
 
@@ -95,6 +95,7 @@ export const useLoadableCategorizables = (
                 [key]: {
                     isLoading: false,
                     errorInfo: null,
+
                     // @ts-expect-error fix me
                     data: data?.entities.filter(
                         ({ id }: ICategorizableDetailQueryResult<IBaseViewModel>) =>

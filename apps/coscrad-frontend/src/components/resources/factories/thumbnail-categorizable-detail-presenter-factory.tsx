@@ -23,7 +23,9 @@ import { VideoDetailThumbnailPresenter } from '../videos';
 import { VocabularyListDetailThumbnailPresenter } from '../vocabulary-lists/vocabulary-list-detail.thumbnail.presenter';
 
 // TODO Define thumbnail specific presenters
-const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
+const lookupTable: {
+    [K in Exclude<CategorizableType, typeof CategorizableType.playlist>]: FunctionalComponent;
+} = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailThumbnailPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailThumbnailPresenter,
     [CategorizableType.book]: BookDetailThumbnailPresenter,
@@ -69,7 +71,9 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
  * a single resource for each resource type. It is used for the connected
  * resources flow.
  */
-export const thumbnailCategorizableDetailPresenterFactory = <T extends CategorizableType>(
+export const thumbnailCategorizableDetailPresenterFactory = <
+    T extends Exclude<CategorizableType, typeof CategorizableType.playlist>
+>(
     typeOfCategorizable: T
 ): typeof lookupTable[T] => {
     const lookupResult = lookupTable[typeOfCategorizable];

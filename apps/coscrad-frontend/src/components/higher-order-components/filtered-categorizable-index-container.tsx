@@ -19,7 +19,7 @@ export interface FilteredAggregateIndexContainerProps<
 > {
     IndexPresenter: FunctionalComponent<UPresenterProps>;
     preFilter?: (model: T) => boolean;
-    aggregateType: CategorizableType;
+    aggregateType: Exclude<CategorizableType, typeof CategorizableType.playlist>;
     simulatedKeyboard: SimulatedKeyboardConfig;
 }
 
