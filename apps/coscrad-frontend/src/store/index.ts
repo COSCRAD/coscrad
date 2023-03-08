@@ -22,6 +22,8 @@ import { bookReducer, BOOKS } from './slices/resources/books';
 import { mediaItemReducer, MEDIA_ITEMS } from './slices/resources/media-items';
 import { photographReducer } from './slices/resources/photographs';
 import { PHOTOGRAPHS } from './slices/resources/photographs/constants';
+import { PLAYLISTS } from './slices/resources/playlists';
+import { PlaylistReducer } from './slices/resources/playlists/playlist-slice';
 import { songReducer, SONGS } from './slices/resources/songs';
 import { SPATIAL_FEATURES } from './slices/resources/spatial-features/constants';
 import { TERMS } from './slices/resources/terms/constants';
@@ -49,6 +51,7 @@ export const rootReducer = combineReducers({
     [SONGS]: songReducer,
     [BOOKS]: bookReducer,
     [MEDIA_ITEMS]: mediaItemReducer,
+    [PLAYLISTS]: PlaylistReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>

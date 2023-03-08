@@ -11,6 +11,7 @@ const lookupTable: { [K in ResourceType]: string } = {
     [ResourceType.audioItem]: 'AudioItems',
     [ResourceType.video]: 'Videos',
     [ResourceType.vocabularyList]: 'VocabularyLists',
+    [ResourceType.playlist]: 'Playlists',
 };
 
 export const getResourceTypeLabelForRoutes = (resourceType: ResourceType) => {
