@@ -1,22 +1,21 @@
-import {
-    ICategorizableDetailQueryResult,
-    IPhotographViewModel,
-    ResourceType,
-} from '@coscrad/api-interfaces';
+import { ICategorizableDetailQueryResult, IPhotographViewModel } from '@coscrad/api-interfaces';
+import { CoscradMainContentContainer } from 'apps/coscrad-frontend/src/utils/generic-components/style-components/coscrad-main-content-container';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
-import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { FullImageView } from '../../../utils/generic-components/presenters/full-image-view';
 
 export const PhotographDetailFullViewPresenter = ({
     id,
     imageURL,
 }: ICategorizableDetailQueryResult<IPhotographViewModel>): JSX.Element => {
-    const name = 'Photograph 1';
+    const name = 'Totem Pole';
 
     return (
-        <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.photograph}>
+        <>
             <FullImageView imageUrl={imageURL} alt={name} />
-            <SinglePropertyPresenter display="Photograph ID" value={id} />
-        </ResourceDetailFullViewPresenter>
+            <CoscradMainContentContainer>
+                <SinglePropertyPresenter display="Name" value={name} />
+                <SinglePropertyPresenter display="Photograph ID" value={id} />
+            </CoscradMainContentContainer>
+        </>
     );
 };
