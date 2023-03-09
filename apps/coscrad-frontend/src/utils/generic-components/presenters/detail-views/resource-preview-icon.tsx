@@ -6,11 +6,11 @@ import LanguageIcon from '@mui/icons-material/Language';
 import ListIcon from '@mui/icons-material/List';
 import PhotoIcon from '@mui/icons-material/Photo';
 import PlaceIcon from '@mui/icons-material/Place';
+import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { Box } from '@mui/material';
-
 type RGB = `rgb(${number}, ${number}, ${number})`;
 type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
 type HEX = `#${string}`;
@@ -41,6 +41,7 @@ const lookupTable: { [K in ResourceType]: JSX.Element } = {
     [ResourceType.term]: <LanguageIcon fontSize="inherit" />,
     [ResourceType.video]: <VideocamIcon fontSize="inherit" />,
     [ResourceType.vocabularyList]: <ListIcon fontSize="inherit" />,
+    [ResourceType.playlist]: <PlaylistPlayIcon fontSize="inherit" />,
 };
 
 const sizes = {
