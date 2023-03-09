@@ -33,7 +33,7 @@ export const ResourceDetailThumbnailPresenter = ({
             <Grid container spacing={1} columns={{ xs: 2, sm: 4, md: 12 }}>
                 <Grid item xs={2} sm={1} md={2}>
                     {/* Preview will eventually include images taken from video or photos, etc. */}
-                    <ResourcePreviewIconFactory resourceType={type} />
+                    <ResourcePreviewIconFactory resourceType={type} size="md" />
                 </Grid>
                 <Grid item xs={2} sm={2} md={8}>
                     {/* TODO: consider putting a standardized name property on the view models */}

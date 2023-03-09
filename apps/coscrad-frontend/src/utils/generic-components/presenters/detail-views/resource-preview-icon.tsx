@@ -13,6 +13,8 @@ import { Box } from '@mui/material';
 
 interface ResourcePreviewImageProps {
     resourceType: ResourceType;
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    color?: string;
 }
 
 /**
@@ -35,14 +37,26 @@ const lookupTable: { [K in ResourceType]: JSX.Element } = {
     [ResourceType.vocabularyList]: <ListIcon fontSize="inherit" />,
 };
 
+const sizes = {
+    xs: '20px',
+    sm: '40px',
+    md: '60px',
+    lg: '100px',
+    xl: '200px',
+};
+
 export const ResourcePreviewIconFactory = ({
     resourceType,
+    size = 'md',
+    color,
 }: ResourcePreviewImageProps): JSX.Element => {
     const lookupResult = lookupTable[resourceType];
+
+    const iconSize = sizes[size];
 
     if (!lookupResult) {
         throw new Error(`Failed to build an icon for resource type: ${resourceType}`);
     }
 
-    return <Box sx={{ fontSize: '100px', maxHeight: '100px' }}>{lookupResult}</Box>;
+    return <Box sx={{ fontSize: iconSize, maxHeight: iconSize, color: color }}>{lookupResult}</Box>;
 };
