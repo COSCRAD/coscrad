@@ -38,7 +38,7 @@ export const ResourceDetailFullViewPresenter = ({
                         <Grid item xs={2} sm={1} md={2}>
                             {/* Temporary.  We'd like an icon if there's no visual media associated with this resource */}
                             {type !== ResourceType.photograph && (
-                                <ResourcePreviewIconFactory resourceType={type} />
+                                <ResourcePreviewIconFactory resourceType={type} size="lg" />
                             )}
                         </Grid>
                         <Grid item xs={2} sm={2} md={8}>
