@@ -11,10 +11,16 @@ import VideocamIcon from '@mui/icons-material/Videocam';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { Box } from '@mui/material';
 
+type RGB = `rgb(${number}, ${number}, ${number})`;
+type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
+type HEX = `#${string}`;
+
+type Color = RGB | RGBA | HEX;
+
 interface ResourcePreviewImageProps {
     resourceType: ResourceType;
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-    color?: string;
+    color?: Color;
 }
 
 /**

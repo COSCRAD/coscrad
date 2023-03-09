@@ -11,6 +11,7 @@ export interface ResourceDetailFullViewPresenterProps {
     imageUrl?: string;
     videoUrl?: string;
     audioUrl?: string;
+    // TODO: Refactor the name property to eliminate this conditional type
     name: IMultilingualText | string;
     type: ResourceType;
     children: ReactNode;
@@ -50,11 +51,6 @@ export const ResourceDetailFullViewPresenter = ({
                                     <MultilingualTextPresenter text={name} />
                                 )}
                             </Typography>
-                            {/* <CardMedia>
-                        // We need to conditionally render media if they are specified
-                        // Note that you are not supposed to have a CardMedia section with no children
-                        {isNonEmptyString(audioUrl) ? <MediaPlayer audioUrl={audioUrl} /> : null}
-                    </CardMedia> */}
                             {children}
                         </Grid>
                     </Grid>

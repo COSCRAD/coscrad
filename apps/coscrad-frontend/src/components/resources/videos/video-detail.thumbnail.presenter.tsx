@@ -3,6 +3,7 @@ import {
     IVideoViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
+import { Typography } from '@mui/material';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceDetailThumbnailPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { convertMillisecondsToSeconds } from '../utils/math';
@@ -19,8 +20,8 @@ export const VideoDetailThumbnailPresenter = ({
                 display="Duration"
                 value={convertMillisecondsToSeconds(lengthMilliseconds)}
             />
-            <h3>Transcript:</h3>
-            <p>{plainText}</p>
+            <Typography variant="h3">Transcript:</Typography>
+            <Typography>{plainText}</Typography>
         </ResourceDetailThumbnailPresenter>
     );
 };
