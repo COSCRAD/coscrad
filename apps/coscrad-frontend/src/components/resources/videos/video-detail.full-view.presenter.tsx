@@ -19,6 +19,7 @@ export const VideoDetailFullViewPresenter = ({
             value={convertMillisecondsToSeconds(lengthMilliseconds)}
         />
         {/* TODO[https://www.pivotaltracker.com/story/show/184530937] Support video playback via the media player lib  */}
+        {/* TODO[https://www.pivotaltracker.com/story/show/184666073] Create a transcript presenter */}
         <h3>Transcript:</h3>
         <p>{plainText}</p>
     </ResourceDetailFullViewPresenter>

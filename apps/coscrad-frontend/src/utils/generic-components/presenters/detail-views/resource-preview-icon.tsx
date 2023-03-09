@@ -12,6 +12,9 @@ import VideocamIcon from '@mui/icons-material/Videocam';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { Box } from '@mui/material';
 
+/**
+ * TODO[https://www.pivotaltracker.com/story/show/184664117] Create an icon factory that enables custom icons
+ */
 type RGB = `rgb(${number}, ${number}, ${number})`;
 type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
 type HEX = `#${string}`;
