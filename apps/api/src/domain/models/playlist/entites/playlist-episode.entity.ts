@@ -1,0 +1,25 @@
+import { IPlaylistEpisode, MIMEType } from '@coscrad/api-interfaces';
+import { DTO } from '../../../../types/DTO';
+import BaseDomainModel from '../../BaseDomainModel';
+
+export class PlaylistEpisode extends BaseDomainModel implements IPlaylistEpisode {
+    readonly name: string;
+
+    readonly mediaItemUrl: string;
+
+    readonly mimeType: MIMEType;
+
+    constructor(dto: DTO<PlaylistEpisode>) {
+        super();
+
+        if (!dto) return;
+
+        const { name, mediaItemUrl, mimeType } = dto;
+
+        this.name = name;
+
+        this.mediaItemUrl = mediaItemUrl;
+
+        this.mimeType = mimeType;
+    }
+}

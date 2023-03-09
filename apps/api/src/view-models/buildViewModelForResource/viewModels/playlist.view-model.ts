@@ -1,8 +1,11 @@
-import { IPlayListViewModel } from '@coscrad/api-interfaces';
+import { IPlayListViewModel, ResourceType } from '@coscrad/api-interfaces';
 import { CoscradMultilingualText, NonEmptyString } from '@coscrad/data-types';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
+import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item.entity';
+import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { Playlist } from '../../../domain/models/playlist';
-import formatAggregateCompositeIdentifier from '../../presentation/formatAggregateCompositeIdentifier';
+import { PlaylistEpisode } from '../../../domain/models/playlist/entites/playlist-episode.entity';
+import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import { BaseViewModel } from './base.view-model';
 
 /**
@@ -35,16 +38,32 @@ export class PlaylistViewModel extends BaseViewModel implements IPlayListViewMod
         description: 'a summary description of each episode in this playlist',
     })
     // TODO establish a view model for episodes
-    readonly episodes: string[];
+    readonly episodes: PlaylistEpisode[];
 
-    constructor({ id, name, items }: Playlist) {
+    constructor(
+        { id, name, items }: Playlist,
+        allAudioItems: AudioItem[],
+        allMediaItems: MediaItem[]
+    ) {
         super({ id });
 
         this.name = name.clone();
 
+        const allResourceCompositeIdsToFind = items.flatMap(
+            ({ resourceCompositeIdentifier }) => resourceCompositeIdentifier
+        );
+
         // TODO establish a view model for episodes
-        this.episodes = items.map(({ resourceCompositeIdentifier }) =>
-            formatAggregateCompositeIdentifier(resourceCompositeIdentifier)
+        const allResources = allAudioItems.filter(({ id }) =>
+            allResourceCompositeIdsToFind.some((compositeId) => compositeId.id === id)
+        );
+
+        this.episodes = allResources.flatMap((resource) =>
+            resource.buildEpisodes(
+                new DeluxeInMemoryStore({
+                    [ResourceType.mediaItem]: allMediaItems,
+                }).fetchFullSnapshotInLegacyFormat()
+            )
         );
     }
 }

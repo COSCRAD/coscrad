@@ -1,12 +1,16 @@
-import { IPlayListViewModel, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, IPlayListViewModel, ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { PlaylistViewModel } from '../../../view-models/buildViewModelForResource/viewModels';
+import { AudioItem } from '../../models/audio-item/entities/audio-item.entity';
 import BaseDomainModel from '../../models/BaseDomainModel';
+import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { Playlist } from '../../models/playlist';
+import { validAggregateOrThrow } from '../../models/shared/functional';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
+import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../types/ResourceType';
 import { ResourceQueryService } from './resource-query.service';
 
@@ -20,8 +24,29 @@ export class PlaylistQueryService extends ResourceQueryService<Playlist, IPlayLi
         super(repositoryProvider, commandInfoService);
     }
 
-    buildViewModel(playlist: Playlist, _externalState: InMemorySnapshot): IPlayListViewModel {
-        return new PlaylistViewModel(playlist);
+    protected override async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
+        const allAudioItems = await this.repositoryProvider
+            .forResource<AudioItem>(ResourceType.audioItem)
+            .fetchMany();
+
+        const allMediaItems = await this.repositoryProvider
+            .forResource<MediaItem>(ResourceType.mediaItem)
+            .fetchMany();
+
+        const allTags = await this.repositoryProvider.getTagRepository().fetchMany();
+
+        return new DeluxeInMemoryStore({
+            [ResourceType.audioItem]: allAudioItems.filter(validAggregateOrThrow),
+            [ResourceType.mediaItem]: allMediaItems.filter(validAggregateOrThrow),
+            [AggregateType.tag]: allTags.filter(validAggregateOrThrow),
+        }).fetchFullSnapshotInLegacyFormat();
+    }
+
+    buildViewModel(
+        playlist: Playlist,
+        { resources: { audioItem: allAudioItems, mediaItem: allMediaItems } }: InMemorySnapshot
+    ): IPlayListViewModel {
+        return new PlaylistViewModel(playlist, allAudioItems, allMediaItems);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {

@@ -18,7 +18,9 @@ import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import InvalidExternalReferenceByAggregateError from '../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
+import { PlaylistEpisode } from '../../playlist/entites/playlist-episode.entity';
 import { Resource } from '../../resource.entity';
+import AggregateNotFoundError from '../../shared/common-command-errors/AggregateNotFoundError';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import { CREATE_AUDIO_ITEM } from '../commands';
 import { InvalidMIMETypeForAudiovisualResourceError } from '../commands/errors';
@@ -32,8 +34,14 @@ import { Transcript } from './transcript.entity';
 
 export type CoscradTimeStamp = number;
 
+// TODO export from elsewhere
+export interface IRadioPublishableResource {
+    // TODO Reduce the input type
+    buildEpisodes: (snapshot: InMemorySnapshot) => PlaylistEpisode[];
+}
+
 @RegisterIndexScopedCommands([CREATE_AUDIO_ITEM])
-class AudioItemBase extends Resource {
+class AudioItemBase extends Resource implements IRadioPublishableResource {
     readonly type = ResourceType.audioItem;
 
     @NestedDataType(MultilingualText, {
@@ -154,6 +162,30 @@ class AudioItemBase extends Resource {
 
     getTimeBounds(): [number, number] {
         return [0, this.lengthMilliseconds];
+    }
+
+    // TODO Does this belong in the view layer?
+    buildEpisodes({
+        resources: { mediaItem: allMediaItems },
+    }: InMemorySnapshot): PlaylistEpisode[] {
+        const myMediaItem = allMediaItems.find(({ id }) => id === this.mediaItemId);
+
+        if (isNullOrUndefined(myMediaItem)) {
+            throw new AggregateNotFoundError({
+                id: this.mediaItemId,
+                type: ResourceType.mediaItem,
+            });
+        }
+
+        const { mimeType, url: mediaItemUrl } = myMediaItem;
+
+        return [
+            new PlaylistEpisode({
+                name: this.name.toString(),
+                mimeType,
+                mediaItemUrl,
+            }),
+        ];
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
