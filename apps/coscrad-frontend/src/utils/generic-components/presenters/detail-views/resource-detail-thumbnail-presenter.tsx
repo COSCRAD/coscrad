@@ -47,7 +47,9 @@ export const ResourceDetailThumbnailPresenter = ({
                     {children}
                 </Grid>
                 <Grid item xs={2} sm={1} md={2} container sx={{ justifyContent: 'flex-end' }}>
-                    <ResourceNavLink linkURL={`/${routes.resources.ofType(type).detail(id)}`} />
+                    <ResourceNavLink
+                        internalLink={`/${routes.resources.ofType(type).detail(id)}`}
+                    />
                 </Grid>
             </Grid>
         </CardContent>

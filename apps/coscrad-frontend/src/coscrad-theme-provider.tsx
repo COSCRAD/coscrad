@@ -10,15 +10,15 @@ interface CoscradThemeProviderProps {
 export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): JSX.Element => {
     const _configurableContent = useContext(ConfigurableContentContext);
 
-    let coscradDefaultTheme = createTheme({
-        palette: {
-            primary: {
-                main: blue[800],
+    const coscradDefaultTheme = responsiveFontSizes(
+        createTheme({
+            palette: {
+                primary: {
+                    main: blue[800],
+                },
             },
-        },
-    });
-
-    coscradDefaultTheme = responsiveFontSizes(coscradDefaultTheme);
+        })
+    );
 
     return <ThemeProvider theme={coscradDefaultTheme}>{children}</ThemeProvider>;
 };

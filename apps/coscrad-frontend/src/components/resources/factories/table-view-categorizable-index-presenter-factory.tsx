@@ -80,6 +80,9 @@ export const tableViewCategorizableIndexPresenterFactory: CategorizableIndexPres
         case CategorizableType.vocabularyList:
             return VocabularyListIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
+        case CategorizableType.playlist:
+            throw new Error(`We do not yet support playlist index views.`);
+
         case CategorizableType.note:
             return NoteIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 

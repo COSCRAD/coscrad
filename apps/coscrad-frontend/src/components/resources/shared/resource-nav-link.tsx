@@ -3,10 +3,10 @@ import { Box, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 interface ResourceNavLinkProps {
-    linkURL: string;
+    internalLink: string;
 }
 
-export const ResourceNavLink = ({ linkURL }: ResourceNavLinkProps): JSX.Element => (
+export const ResourceNavLink = ({ internalLink: linkURL }: ResourceNavLinkProps): JSX.Element => (
     <Box sx={{ pl: 8 }}>
         <Link to={linkURL}>
             <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>

@@ -1,4 +1,5 @@
 import { IPhotographViewModel } from '@coscrad/api-interfaces';
+import { CoscradMainContentContainer } from 'apps/coscrad-frontend/src/utils/generic-components/style-components/coscrad-main-content-container';
 import { PhotographIndexState } from '../../../store/slices/resources/photographs/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
@@ -19,13 +20,15 @@ export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIn
     };
 
     return (
-        <IndexTable
-            headingLabels={headingLabels}
-            tableData={photographs}
-            cellRenderersDefinition={cellRenderersDefinition}
-            // This should be a resource label from resource info
-            heading={'Photographs'}
-            filterableProperties={['photographer']}
-        />
+        <CoscradMainContentContainer>
+            <IndexTable
+                headingLabels={headingLabels}
+                tableData={photographs}
+                cellRenderersDefinition={cellRenderersDefinition}
+                // This should be a resource label from resource info
+                heading={'Photographs'}
+                filterableProperties={['photographer']}
+            />
+        </CoscradMainContentContainer>
     );
 };
