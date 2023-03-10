@@ -1,4 +1,5 @@
 import { IVideoViewModel } from '@coscrad/api-interfaces';
+import { CoscradMainContentContainer } from 'apps/coscrad-frontend/src/utils/generic-components/style-components/coscrad-main-content-container';
 import { VideoIndexState } from '../../../store/slices/resources/video';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
@@ -24,12 +25,14 @@ export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.
     };
 
     return (
-        <IndexTable
-            headingLabels={headingLabels}
-            tableData={videos}
-            cellRenderersDefinition={cellRenderersDefinition}
-            heading={'Videos'}
-            filterableProperties={['text']}
-        />
+        <CoscradMainContentContainer>
+            <IndexTable
+                headingLabels={headingLabels}
+                tableData={videos}
+                cellRenderersDefinition={cellRenderersDefinition}
+                heading={'Videos'}
+                filterableProperties={['text']}
+            />
+        </CoscradMainContentContainer>
     );
 };
