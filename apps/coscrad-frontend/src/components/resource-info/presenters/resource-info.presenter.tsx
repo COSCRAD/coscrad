@@ -16,7 +16,6 @@ IAggregateInfo<ResourceType> & { route: string }): JSX.Element => (
     <Link to={`/${route}`}>
         <Card>
             {/* TODO Handle pluralization properly as soon as we have a Resource Type whose plural form is irregular */}
-            {/* <CardHeader title={label} /> */}
             <CardContent>
                 <Grid container justifyContent="flex-start" spacing="10" direction="row" mb={2}>
                     <Grid item>

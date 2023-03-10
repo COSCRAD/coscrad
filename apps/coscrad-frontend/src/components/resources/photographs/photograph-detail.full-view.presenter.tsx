@@ -15,6 +15,9 @@ export const PhotographDetailFullViewPresenter = ({
             <CoscradMainContentContainer>
                 <SinglePropertyPresenter display="Name" value={name} />
                 <SinglePropertyPresenter display="Photograph ID" value={id} />
+                <div style={{ height: '1px' }} data-testid={id}>
+                    &nbsp;
+                </div>
             </CoscradMainContentContainer>
         </>
     );
