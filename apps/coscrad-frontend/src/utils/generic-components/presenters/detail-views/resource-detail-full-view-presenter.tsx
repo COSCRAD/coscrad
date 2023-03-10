@@ -1,14 +1,19 @@
-import { IMultilingualText } from '@coscrad/api-interfaces';
-import { Card, CardContent } from '@mui/material';
+import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
+import { isNullOrUndefined, isString } from '@coscrad/validation-constraints';
+import { Card, CardContent, Grid, Typography } from '@mui/material';
 import { ReactNode } from 'react';
+import { CoscradMainContentContainer } from '../../style-components/coscrad-main-content-container';
 import { MultilingualTextPresenter } from '../multilingual-text-presenter';
+import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
 export interface ResourceDetailFullViewPresenterProps {
     id: string;
     imageUrl?: string;
     videoUrl?: string;
     audioUrl?: string;
-    name: IMultilingualText;
+    // TODO: Refactor the name property to eliminate this conditional type
+    name: IMultilingualText | string;
+    type: ResourceType;
     children: ReactNode;
 }
 
@@ -23,17 +28,34 @@ export interface ResourceDetailFullViewPresenterProps {
 export const ResourceDetailFullViewPresenter = ({
     id,
     name,
+    type,
     children,
 }: ResourceDetailFullViewPresenterProps): JSX.Element => (
-    <div data-testid={id}>
-        <Card>
-            <MultilingualTextPresenter text={name} />
-            {/* <CardMedia>
-            // We need to conditionally render media if they are specified
-            // Note that you are not supposed to have a CardMedia section with no children
-            {isNonEmptyString(audioUrl) ? <MediaPlayer audioUrl={audioUrl} /> : null}
-        </CardMedia> */}
-            <CardContent>{children}</CardContent>
-        </Card>
-    </div>
+    <CoscradMainContentContainer>
+        <div data-testid={id}>
+            <Card>
+                <CardContent>
+                    <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
+                        <Grid item xs={2} sm={1} md={2}>
+                            {/* Temporary.  We'd like an icon if there's no visual media associated with this resource */}
+                            {type !== ResourceType.photograph && (
+                                <ResourcePreviewIconFactory resourceType={type} size="lg" />
+                            )}
+                        </Grid>
+                        <Grid item xs={2} sm={2} md={8}>
+                            {/* TODO: consider putting a standardized name property on the view models */}
+                            <Typography gutterBottom variant="h6" fontWeight="bold" color="primary">
+                                {isString(name) || isNullOrUndefined(name) ? (
+                                    name
+                                ) : (
+                                    <MultilingualTextPresenter text={name} />
+                                )}
+                            </Typography>
+                            {children}
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+        </div>
+    </CoscradMainContentContainer>
 );

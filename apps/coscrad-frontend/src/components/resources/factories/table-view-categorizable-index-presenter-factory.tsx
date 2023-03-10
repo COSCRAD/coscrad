@@ -18,7 +18,7 @@ import { VocabularyListIndexPresenter } from '../vocabulary-lists/vocabulary-lis
 import {
     CategorizableIndexPresenter,
     CategorizableIndexPresenterFactory,
-} from './categorizable-index-presneter-factory.interface';
+} from './categorizable-index-presenter-factory.interface';
 import { thumbnailCategorizableDetailPresenterFactory } from './thumbnail-categorizable-detail-presenter-factory';
 
 /**
@@ -79,6 +79,9 @@ export const tableViewCategorizableIndexPresenterFactory: CategorizableIndexPres
 
         case CategorizableType.vocabularyList:
             return VocabularyListIndexPresenter as unknown as CategorizableIndexPresenter<T>;
+
+        case CategorizableType.playlist:
+            throw new Error(`We do not yet support playlist index views.`);
 
         case CategorizableType.note:
             return NoteIndexPresenter as unknown as CategorizableIndexPresenter<T>;

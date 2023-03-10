@@ -7,6 +7,7 @@ import { fetchAudioItems } from '../resources/audio-item/thunks/fetch-audio-item
 import { fetchBooks } from '../resources/books/thunks';
 import { fetchMediaItems } from '../resources/media-items/thunks';
 import { fetchPhotographs } from '../resources/photographs/thunks';
+import { fetchPlaylists } from '../resources/playlists/thunks';
 import { fetchSongs } from '../resources/songs/thunks';
 import { fetchSpatialFeatures } from '../resources/spatial-features/thunks';
 import { fetchVideos } from '../resources/video/thunks';
@@ -68,6 +69,10 @@ export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateT
 
         case AggregateType.video:
             dispatch(fetchVideos());
+            break;
+
+        case AggregateType.playlist:
+            dispatch(fetchPlaylists());
             break;
 
         // TODO Support `User`, `UserGroup`

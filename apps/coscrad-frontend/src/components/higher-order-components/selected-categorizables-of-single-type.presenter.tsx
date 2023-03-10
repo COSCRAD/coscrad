@@ -23,7 +23,7 @@ export const SelectedCategorizablesPresenter = <T extends IBaseViewModel>({
     const Presenter = presenterFactory(categorizableType);
 
     return (
-        <div>
+        <div key={pluralLabelForCategorizableType}>
             <h2>{pluralLabelForCategorizableType}</h2>
             {viewModels.map((viewModel, index) => (
                 <div key={index}>
