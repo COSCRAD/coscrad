@@ -3,12 +3,11 @@ import {
     IPhotographViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { SinglePropertyPresenter } from 'apps/coscrad-frontend/src/utils/generic-components';
-import { ResourceDetailThumbnailPresenter } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/detail-views';
+import { SinglePropertyPresenter } from '../../../utils/generic-components';
+import { ResourceDetailThumbnailPresenter } from '../../../utils/generic-components/presenters/detail-views';
 
 export const PhotographDetailThumbnailPresenter = ({
     id,
-    imageURL,
     photographer,
 }: ICategorizableDetailQueryResult<IPhotographViewModel>): JSX.Element => {
     /**
