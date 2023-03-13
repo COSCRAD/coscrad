@@ -7,6 +7,7 @@ import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { Valid } from '../../../../domainModelValidators/Valid';
+import getInstanceFactoryForResource from '../../../../factories/getInstanceFactoryForResource';
 import { ID_MANAGER_TOKEN, IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
@@ -54,7 +55,7 @@ export class CreateVideoCommandHandler extends BaseCreateCommandHandler<Video> {
         };
 
         // the cast is necessary due to loss of type-safety from using a mixin
-        return new Video(videoItemDto) as unknown as Video;
+        return getInstanceFactoryForResource<Video>(ResourceType.video)(videoItemDto);
     }
 
     protected async fetchRequiredExternalState({

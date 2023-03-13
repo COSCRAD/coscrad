@@ -4,6 +4,7 @@ import {
     MIMEType,
     MultilingualTextItemRole,
     ResourceCompositeIdentifier,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
@@ -61,7 +62,7 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateVid
     },
 });
 
-const _fsaFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
+const fsaFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
 
 const validInitialState = new DeluxeInMemoryStore({
     [AggregateType.mediaItem]: [existingMediaItem],
@@ -146,7 +147,7 @@ describe(commandType, () => {
             });
         });
 
-        describe('when the MIME type of the media item is not an audio format', () => {
+        describe('when the MIME type of the media item is not an video format', () => {
             const disallowedMIMETypes = Object.values(MIMEType).filter(
                 (mimeType) => ![MIMEType.mp4].includes(mimeType)
             );
@@ -191,14 +192,14 @@ describe(commandType, () => {
             it('should fail with the expected error', async () => {
                 const newId = await idManager.generate();
 
-                const fsa = _fsaFactory.build(newId);
+                const fsa = fsaFactory.build(newId);
 
                 await commandHandlerService.execute(fsa, {
                     userId: dummyAdminUserId,
                 });
 
                 const resultOfAttemptingToReuseId = await commandHandlerService.execute(
-                    _fsaFactory.build(newId),
+                    fsaFactory.build(newId),
                     { userId: dummyAdminUserId }
                 );
 
@@ -207,6 +208,61 @@ describe(commandType, () => {
         });
 
         describe('when the command payload type is invalid', () => {
+            describe('when there is no original item in the multilingual text provided', () => {
+                const multiLingualTextWithNoOriginal: DTO<MultilingualText> = {
+                    items: [
+                        {
+                            role: MultilingualTextItemRole.freeTranslation,
+                            languageCode: LanguageCode.Chilcotin,
+                            text: 'I am not sure how I got here!',
+                        },
+                    ],
+                };
+
+                it('should fail', async () => {
+                    await assertCreateCommandError(assertionHelperDependencies, {
+                        systemUserId: dummyAdminUserId,
+                        initialState: new DeluxeInMemoryStore({
+                            [ResourceType.mediaItem]: [existingMediaItem],
+                        }).fetchFullSnapshotInLegacyFormat(),
+                        buildCommandFSA: (id: AggregateId) =>
+                            fsaFactory.build(id, {
+                                name: multiLingualTextWithNoOriginal,
+                            }),
+                    });
+                });
+            });
+
+            describe('when there are two original items in the multilingual text provided', () => {
+                it('should fail', async () => {
+                    const multiLingualTextWithTwoOriginals: DTO<MultilingualText> = {
+                        items: [
+                            {
+                                role: MultilingualTextItemRole.original,
+                                languageCode: LanguageCode.Haida,
+                                text: 'I am the original!',
+                            },
+                            {
+                                role: MultilingualTextItemRole.original,
+                                languageCode: LanguageCode.English,
+                                text: 'No, me!',
+                            },
+                        ],
+                    };
+
+                    await assertCreateCommandError(assertionHelperDependencies, {
+                        systemUserId: dummyAdminUserId,
+                        initialState: new DeluxeInMemoryStore({
+                            [ResourceType.mediaItem]: [existingMediaItem],
+                        }).fetchFullSnapshotInLegacyFormat(),
+                        buildCommandFSA: (id: AggregateId) =>
+                            fsaFactory.build(id, {
+                                name: multiLingualTextWithTwoOriginals,
+                            }),
+                    });
+                });
+            });
+
             generateCommandFuzzTestCases(CreateVideo).forEach(
                 ({ description, propertyName, invalidValue }) => {
                     describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {

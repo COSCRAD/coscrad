@@ -1,8 +1,8 @@
 import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
-import { CoscradMainContentContainer } from 'apps/coscrad-frontend/src/utils/generic-components/style-components/coscrad-main-content-container';
 import { SelectedCategorizablesOfMultipleTypesPresenter } from '../../../../../components/higher-order-components/selected-categorizables-of-multiple-types.presenter';
 import { useLoadableCategorizables } from '../../../../../components/higher-order-components/use-loadable-categorizables';
 import { thumbnailCategorizableDetailPresenterFactory } from '../../../../../components/resources/factories/thumbnail-categorizable-detail-presenter-factory';
+import { CoscradMainContentContainer } from '../../../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { useLoadableConnectionsToResource } from '../../../notes/hooks';
 
 export interface ConnectedResourcesPanelProps {

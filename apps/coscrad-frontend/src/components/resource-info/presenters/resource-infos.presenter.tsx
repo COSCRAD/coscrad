@@ -1,6 +1,6 @@
 import { IAggregateInfo, ResourceType } from '@coscrad/api-interfaces';
 import { Divider, Stack } from '@mui/material';
-import { CoscradMainContentContainer } from 'apps/coscrad-frontend/src/utils/generic-components/style-components/coscrad-main-content-container';
+import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { HasData } from '../../higher-order-components';
 import { ResourceInfoContainerProps } from '../resource-info.container';

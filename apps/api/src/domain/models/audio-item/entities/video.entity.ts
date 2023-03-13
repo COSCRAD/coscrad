@@ -10,7 +10,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../../types/DTO';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
-import { Valid } from '../../../domainModelValidators/Valid';
+import { isValid, Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
@@ -93,7 +93,9 @@ export class VideoBase extends Resource {
     }
 
     protected validateComplexInvariants(): InternalError[] {
-        return [];
+        const nameValidationResult = this.name.validateComplexInvariants();
+
+        return isValid(nameValidationResult) ? [] : [nameValidationResult];
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
