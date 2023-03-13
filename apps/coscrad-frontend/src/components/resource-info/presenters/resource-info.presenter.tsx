@@ -1,7 +1,7 @@
 import { IAggregateInfo, ResourceType } from '@coscrad/api-interfaces';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
-import { ResourcePreviewIconFactory } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/detail-views/resource-preview-icon';
 import { Link } from 'react-router-dom';
+import { ResourcePreviewIconFactory } from '../../../utils/generic-components/presenters/detail-views/resource-preview-icon';
 
 export const ResourceInfoPresenter = ({
     type,

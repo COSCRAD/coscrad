@@ -1,5 +1,5 @@
 import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
-import { CoscradMainContentContainer } from 'apps/coscrad-frontend/src/utils/generic-components/style-components/coscrad-main-content-container';
+import { CoscradMainContentContainer } from '../../../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { SelfConnectionNote } from '../../../notes/hooks/use-loadable-self-notes-for-resource';
 import { SelfNotePresenter } from './self-note.presenter';
 

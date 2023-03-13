@@ -117,6 +117,13 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
     validateComplexInvariants(): ResultOrError<Valid> {
         const allErrors: InternalError[] = [];
 
+        /**
+         * We can't validate complex invariants if the simple invariants (data types)
+         * are off. Maybe we should skip the call to `validateComplexInvariants`
+         * in that case?
+         */
+        if (!Array.isArray(this.items)) return;
+
         const originalTextItems = this.items.filter(
             ({ role }) => role === MultilingualTextItemRole.original
         );

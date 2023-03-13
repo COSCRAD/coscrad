@@ -1,8 +1,8 @@
 import { IVideoViewModel } from '@coscrad/api-interfaces';
-import { CoscradMainContentContainer } from 'apps/coscrad-frontend/src/utils/generic-components/style-components/coscrad-main-content-container';
 import { VideoIndexState } from '../../../store/slices/resources/video';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
