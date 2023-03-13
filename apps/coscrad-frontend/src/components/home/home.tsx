@@ -6,6 +6,7 @@ import { ConfigurableContentContext } from '../../configurable-front-matter/conf
 import { userLoginSucceeded } from '../../store/slices/auth';
 import { ImageInContent } from '../../utils/generic-components/presenters/image-in-content';
 import { CoscradMainContentContainer } from '../../utils/generic-components/style-components/coscrad-main-content-container';
+import { TermOfTheDay } from '../term-of-the-day/term-of-the-day';
 
 export const Home = (): JSX.Element => {
     /**
@@ -46,6 +47,7 @@ export const Home = (): JSX.Element => {
 
             <ImageInContent image={image} alignment="left" displayWidth="45%" />
             <Typography variant="body1">{siteDescription}</Typography>
+            <TermOfTheDay />
         </CoscradMainContentContainer>
     );
 };
