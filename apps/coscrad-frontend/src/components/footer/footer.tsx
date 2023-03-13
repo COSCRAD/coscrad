@@ -1,20 +1,25 @@
-import { Stack, Typography } from '@mui/material';
+import { Stack, styled, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
-import { Copyright } from '../copyright/copyright';
 import { COSCRADByline } from '../coscrad-byline/coscrad-byline';
-import { TenantLogo } from '../tenant-logo/tenant-logo';
+import { Tenant } from '../tenant/tenant';
+
+const Item = styled('div')(({ theme }) => ({
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+}));
 
 export const Footer = (): JSX.Element => {
     /**
      * TODO: Move data (ConfigurableContentContext) out of presenter
      */
-    const { subTitle, copyrightHolder } = useContext(ConfigurableContentContext);
+    const { subTitle } = useContext(ConfigurableContentContext);
 
     return (
-        <Box
+        <Stack
             component="footer"
+            direction="column"
             sx={{
                 py: 3,
                 px: 2,
@@ -22,16 +27,17 @@ export const Footer = (): JSX.Element => {
                 backgroundColor: '#ededed',
             }}
         >
-            <Stack direction="row" spacing={2} justifyContent="space-between">
-                <TenantLogo />
+            <Item>
                 <Box>
-                    <Typography variant="h6">{subTitle}</Typography>
+                    <Typography variant="small">{subTitle}</Typography>
                 </Box>
+            </Item>
+            <Item>
+                <Tenant />
+            </Item>
+            <Item>
                 <COSCRADByline />
-            </Stack>
-            <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
-                <Copyright copyrightHolder={copyrightHolder} />
-            </Stack>
-        </Box>
+            </Item>
+        </Stack>
     );
 };

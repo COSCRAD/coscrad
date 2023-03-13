@@ -8,7 +8,8 @@ export const contentConfig: ConfigurableContent = {
     siteDescription: 'Your site decription goes here..',
     siteHomeImageUrl: 'https://www.picbox.org/home-image.png',
     copyrightHolder: 'My Organization',
-    organizationLogoUrl: 'https://www.picbox.org/logo.png',
+    coscradLogoUrl: 'https://www.picbox.org/logo.png',
+    organizationLogoUrl: 'https://www.picbox.org/org-logo.png',
     songIdToCredits: {
         '1': 'Credits for song 1',
     },
