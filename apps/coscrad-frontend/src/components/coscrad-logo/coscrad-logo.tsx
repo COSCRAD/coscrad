@@ -1,11 +1,18 @@
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
-import { StyledImageInUILayout } from '../../utils/generic-components/presenters/styled-image-in-ui-layout';
+import { StyledImage } from '../../utils/generic-components/presenters/styled-image';
 
 export const COSCRADLogo = (): JSX.Element => {
     const { coscradLogoUrl } = useContext(ConfigurableContentContext);
 
+    const testId = '455';
+
     return (
-        <StyledImageInUILayout sx={{ width: '100px' }} src={coscradLogoUrl} alt="COSCRAD Logo" />
+        <StyledImage
+            className={`test-${testId}`}
+            sx={{ width: '100px' }}
+            src={coscradLogoUrl}
+            alt="COSCRAD Logo"
+        />
     );
 };

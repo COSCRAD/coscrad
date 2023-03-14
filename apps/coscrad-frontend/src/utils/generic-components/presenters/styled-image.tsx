@@ -1,6 +1,6 @@
 import { styled } from '@mui/material';
 
-export const StyledImageInUILayout = styled('img')({
+export const StyledImage = styled('img')({
     height: 'auto',
     display: 'block',
 });
