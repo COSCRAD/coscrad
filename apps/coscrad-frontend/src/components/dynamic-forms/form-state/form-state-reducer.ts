@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { isClearedFormAction } from './actions';
 import { isUpdateFormAction } from './actions/update-form-state';
 import { FormState } from './types';
 
@@ -14,6 +15,8 @@ export const formStateReducer = (state: FormState, fsa: PayloadAction<unknown>):
             ...state,
             [fsa.payload.propertyKey]: consolidateEmptyValues(fsa.payload.propertyValue),
         };
+
+    if (isClearedFormAction(fsa)) return {};
 
     return state;
 };

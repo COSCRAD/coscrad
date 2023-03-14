@@ -1,4 +1,5 @@
 import { FormFieldType } from '@coscrad/api-interfaces';
+import { clearForm } from './actions';
 import { updateFormState } from './actions/update-form-state';
 import { formStateReducer } from './form-state-reducer';
 
@@ -83,4 +84,17 @@ describe('formStateReducer', () => {
             });
         }
     );
+
+    describe('clearing the form', () => {
+        it('should work', () => {
+            const initialState = {
+                foo: [1, 2, 3],
+                bar: 'hello',
+            };
+
+            const result = formStateReducer(initialState, clearForm());
+
+            expect(result).toEqual({});
+        });
+    });
 });
