@@ -1,10 +1,31 @@
+import { Grid, Typography } from '@mui/material';
 import { COSCRADLogo } from '../coscrad-logo/coscrad-logo';
-import './coscrad-byline.css';
 
 export const COSCRADByline = (): JSX.Element => {
     return (
-        <span className="coscrad-byline">
-            A project built on the <COSCRADLogo /> platform.
-        </span>
+        <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            sx={{
+                mt: 2,
+                width: '100%',
+            }}
+        >
+            <Grid item>
+                <Typography color="text.secondary" sx={{ textAlign: 'center' }}>
+                    A project built on the
+                </Typography>
+            </Grid>
+            <Grid item sx={{ mr: 1, ml: 1 }}>
+                <COSCRADLogo />
+            </Grid>
+            <Grid item>
+                <Typography color="text.secondary" sx={{ textAlign: 'center' }}>
+                    platform.
+                </Typography>
+            </Grid>
+        </Grid>
     );
 };

@@ -1,11 +1,18 @@
-// We're importing this asset so that if it is not present it will break the build
-import coscradLogo from '../../assets/coscrad-logo.png';
-import './coscrad-logo.css';
+import { useContext } from 'react';
+import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
+import { StyledImage } from '../../utils/generic-components/presenters/styled-image';
 
 export const COSCRADLogo = (): JSX.Element => {
+    const { coscradLogoUrl } = useContext(ConfigurableContentContext);
+
+    const testId = '455';
+
     return (
-        <span className="coscrad-logo">
-            <img src={coscradLogo} alt={'COSCRAD Logo'} />
-        </span>
+        <StyledImage
+            className={`test-${testId}`}
+            sx={{ width: '100px' }}
+            src={coscradLogoUrl}
+            alt="COSCRAD Logo"
+        />
     );
 };

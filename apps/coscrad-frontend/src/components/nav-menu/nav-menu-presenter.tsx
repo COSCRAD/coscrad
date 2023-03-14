@@ -24,11 +24,10 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
     };
 
     return (
-        <Box>
+        <Box sx={{ minWidth: '100px' }}>
             <IconButton
                 id="basic-button"
                 color="primary"
-                sx={{ mr: 2 }}
                 aria-controls={isOpen ? 'basic-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={isOpen ? 'true' : undefined}
