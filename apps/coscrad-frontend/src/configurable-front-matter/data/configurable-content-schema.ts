@@ -26,6 +26,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     siteDescription: string;
     siteHomeImageUrl: string;
     copyrightHolder: string;
+    coscradLogoUrl: string;
     organizationLogoUrl: string;
     songIdToCredits: Record<string, string>;
     videoIdToCredits: Record<string, string>;
@@ -44,6 +45,7 @@ export const configurableContentPropertiesAndConstraints: {
     siteDescription: [CoscradConstraint.isNonEmptyString],
     siteHomeImageUrl: [CoscradConstraint.isURL],
     copyrightHolder: [CoscradConstraint.isNonEmptyString],
+    coscradLogoUrl: [CoscradConstraint.isURL],
     organizationLogoUrl: [CoscradConstraint.isURL],
     songIdToCredits: [CoscradConstraint.isObject],
     videoIdToCredits: [CoscradConstraint.isObject],

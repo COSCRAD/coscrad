@@ -1,20 +1,20 @@
-import { Stack, Typography } from '@mui/material';
-import Box from '@mui/material/Box';
+import { Grid, Typography } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
-import { Copyright } from '../copyright/copyright';
 import { COSCRADByline } from '../coscrad-byline/coscrad-byline';
-import { TenantLogo } from '../tenant-logo/tenant-logo';
+import { Tenant } from '../tenant/tenant';
 
 export const Footer = (): JSX.Element => {
     /**
      * TODO: Move data (ConfigurableContentContext) out of presenter
      */
-    const { subTitle, copyrightHolder } = useContext(ConfigurableContentContext);
+    const { subTitle } = useContext(ConfigurableContentContext);
 
     return (
-        <Box
+        <Grid
+            container
             component="footer"
+            direction="column"
             sx={{
                 py: 3,
                 px: 2,
@@ -22,16 +22,17 @@ export const Footer = (): JSX.Element => {
                 backgroundColor: '#ededed',
             }}
         >
-            <Stack direction="row" spacing={2} justifyContent="space-between">
-                <TenantLogo />
-                <Box>
-                    <Typography variant="h6">{subTitle}</Typography>
-                </Box>
+            <Grid item>
+                <Typography sx={{ textAlign: 'center' }} variant="subtitle1" color="text.secondary">
+                    {subTitle}
+                </Typography>
+            </Grid>
+            <Grid item>
+                <Tenant />
+            </Grid>
+            <Grid item>
                 <COSCRADByline />
-            </Stack>
-            <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
-                <Copyright copyrightHolder={copyrightHolder} />
-            </Stack>
-        </Box>
+            </Grid>
+        </Grid>
     );
 };
