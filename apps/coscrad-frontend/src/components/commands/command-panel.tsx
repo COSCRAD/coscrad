@@ -27,7 +27,7 @@ interface CommandPanelProps {
 export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => {
     const [selectedCommandType, setSelectedCommandType] = useState<string>(null);
 
-    const [formState, updateForm] = useFormState();
+    const [formState, updateForm, clearForm] = useFormState();
 
     const dispatch = useAppDispatch();
 
@@ -72,6 +72,7 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
             onAcknowledgeCommandResult={(didCommandSucceed: boolean) => {
                 setSelectedCommandType(null);
                 dispatch(clearCommandStatus());
+                clearForm();
                 if (didCommandSucceed) dispatch(idUsed());
             }}
         />
