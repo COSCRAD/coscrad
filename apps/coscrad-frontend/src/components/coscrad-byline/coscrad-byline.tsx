@@ -1,14 +1,10 @@
-import { Stack, styled, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { COSCRADLogo } from '../coscrad-logo/coscrad-logo';
-
-const Item = styled('div')(({ theme }) => ({
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
 
 export const COSCRADByline = (): JSX.Element => {
     return (
-        <Stack
+        <Grid
+            container
             direction="row"
             justifyContent="center"
             alignItems="center"
@@ -17,15 +13,19 @@ export const COSCRADByline = (): JSX.Element => {
                 width: '100%',
             }}
         >
-            <Item>
-                <Typography variant="smallest">A project built on the</Typography>
-            </Item>
-            <Item sx={{ mr: 1, ml: 1 }}>
+            <Grid item>
+                <Typography color="text.secondary" sx={{ textAlign: 'center' }}>
+                    A project built on the
+                </Typography>
+            </Grid>
+            <Grid item sx={{ mr: 1, ml: 1 }}>
                 <COSCRADLogo />
-            </Item>
-            <Item>
-                <Typography variant="smallest">platform.</Typography>
-            </Item>
-        </Stack>
+            </Grid>
+            <Grid item>
+                <Typography color="text.secondary" sx={{ textAlign: 'center' }}>
+                    platform.
+                </Typography>
+            </Grid>
+        </Grid>
     );
 };

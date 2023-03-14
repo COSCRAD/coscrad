@@ -1,14 +1,8 @@
-import { Stack, styled, Typography } from '@mui/material';
-import Box from '@mui/material/Box';
+import { Grid, Typography } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { COSCRADByline } from '../coscrad-byline/coscrad-byline';
 import { Tenant } from '../tenant/tenant';
-
-const Item = styled('div')(({ theme }) => ({
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
 
 export const Footer = (): JSX.Element => {
     /**
@@ -17,7 +11,8 @@ export const Footer = (): JSX.Element => {
     const { subTitle } = useContext(ConfigurableContentContext);
 
     return (
-        <Stack
+        <Grid
+            container
             component="footer"
             direction="column"
             sx={{
@@ -27,17 +22,17 @@ export const Footer = (): JSX.Element => {
                 backgroundColor: '#ededed',
             }}
         >
-            <Item>
-                <Box>
-                    <Typography variant="small">{subTitle}</Typography>
-                </Box>
-            </Item>
-            <Item>
+            <Grid item>
+                <Typography sx={{ textAlign: 'center' }} variant="subtitle1" color="text.secondary">
+                    {subTitle}
+                </Typography>
+            </Grid>
+            <Grid item>
                 <Tenant />
-            </Item>
-            <Item>
+            </Grid>
+            <Grid item>
                 <COSCRADByline />
-            </Item>
-        </Stack>
+            </Grid>
+        </Grid>
     );
 };

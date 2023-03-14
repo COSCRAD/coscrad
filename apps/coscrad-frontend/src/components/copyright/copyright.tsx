@@ -5,7 +5,7 @@ interface CopyrightProps {
 }
 
 export const Copyright = ({ copyrightHolder }: CopyrightProps) => (
-    <Typography variant="smallest" color="text.secondary">
+    <Typography color="text.secondary">
         &copy; {new Date().getFullYear()} {copyrightHolder}
     </Typography>
 );

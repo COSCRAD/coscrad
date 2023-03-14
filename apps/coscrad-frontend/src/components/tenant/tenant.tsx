@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Box } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { Copyright } from '../copyright/copyright';
@@ -8,9 +8,19 @@ export const Tenant = (): JSX.Element => {
     const { copyrightHolder } = useContext(ConfigurableContentContext);
 
     return (
-        <Stack direction="row" justifyContent="center" alignItems="center" sx={{ mt: 2, gap: 1 }}>
+        <Box
+            sx={{
+                width: '80%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: 'auto',
+                mt: 2,
+                gap: 2,
+            }}
+        >
             <TenantLogo />
             <Copyright copyrightHolder={copyrightHolder} />
-        </Stack>
+        </Box>
     );
 };
