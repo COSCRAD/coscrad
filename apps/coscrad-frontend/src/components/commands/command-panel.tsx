@@ -2,7 +2,7 @@ import {
     AggregateCompositeIdentifier,
     AggregateType,
     ICommandFormAndLabels,
-    isAggregateType,
+    isAggregateType
 } from '@coscrad/api-interfaces';
 import { isNull } from '@coscrad/validation-constraints';
 import { useState } from 'react';
@@ -10,13 +10,13 @@ import { useAppDispatch } from '../../app/hooks';
 import {
     Ack,
     clearCommandStatus,
-    useLoadableCommandResult,
+    useLoadableCommandResult
 } from '../../store/slices/command-status';
 import { idUsed, useLoadableGeneratedId } from '../../store/slices/id-generation';
 import { useFormState } from '../dynamic-forms/form-state';
 import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
-import { CommandSelectionButtons } from './command-selection-buttons';
+import { CommandSelectionArea } from './command-selection-area';
 import { CommandWorkspace } from './command-workspace';
 
 export const INDEX_COMMAND_CONTEXT = 'index';
@@ -61,7 +61,7 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
      */
     if (isNull(selectedCommandType) && commandResult !== Ack)
         return (
-            <CommandSelectionButtons
+            <CommandSelectionArea
                 actions={actions}
                 onCommandSelection={(type: string) => setSelectedCommandType(type)}
             />

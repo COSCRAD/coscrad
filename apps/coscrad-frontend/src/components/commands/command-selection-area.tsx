@@ -1,12 +1,15 @@
 import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
 import { CommandButton } from './command-button';
 
-interface Props {
+interface CommandSelectionAreaProps {
     actions: ICommandFormAndLabels[];
     onCommandSelection: (type: string) => void;
 }
 
-export const CommandSelectionButtons = ({ actions, onCommandSelection }: Props): JSX.Element => (
+export const CommandSelectionArea = ({
+    actions,
+    onCommandSelection,
+}: CommandSelectionAreaProps): JSX.Element => (
     <div>
         <h1>Commands</h1>
         {actions.map((action) =>
