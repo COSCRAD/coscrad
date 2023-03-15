@@ -7,12 +7,16 @@ import {
 import { isNull } from '@coscrad/validation-constraints';
 import { useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
-import { clearCommandStatus } from '../../store/slices/command-status';
+import {
+    Ack,
+    clearCommandStatus,
+    useLoadableCommandResult,
+} from '../../store/slices/command-status';
 import { idUsed, useLoadableGeneratedId } from '../../store/slices/id-generation';
 import { useFormState } from '../dynamic-forms/form-state';
 import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
-import { CommandButton } from './command-button';
+import { CommandSelectionButtons } from './command-selection-buttons';
 import { CommandWorkspace } from './command-workspace';
 
 export const INDEX_COMMAND_CONTEXT = 'index';
@@ -31,6 +35,8 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
 
     const dispatch = useAppDispatch();
 
+    const { data: commandResult } = useLoadableCommandResult();
+
     const { isLoading, errorInfo, data: generatedId } = useLoadableGeneratedId();
 
     // Do not render if there are no available actions
@@ -46,17 +52,19 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
 
     const selectedCommand = actions.find((action) => action.type === selectedCommandType);
 
-    if (isNull(selectedCommandType))
+    /**
+     * TODO Clean this up.
+     *
+     * This is a hack. There is some state change that is causing us to land
+     * back here before the user has accepted the acknowledgement of a successful
+     * command.
+     */
+    if (isNull(selectedCommandType) && commandResult !== Ack)
         return (
-            <div>
-                <h1>Commands</h1>
-                {actions.map((action) =>
-                    CommandButton({
-                        commandFormAndLabels: action,
-                        onButtonClick: (type: string) => setSelectedCommandType(type),
-                    })
-                )}
-            </div>
+            <CommandSelectionButtons
+                actions={actions}
+                onCommandSelection={(type: string) => setSelectedCommandType(type)}
+            />
         );
 
     return (
