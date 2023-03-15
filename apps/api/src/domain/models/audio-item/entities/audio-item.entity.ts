@@ -95,6 +95,9 @@ class AudioItemBase extends Resource {
 
     protected validateComplexInvariants(): InternalError[] {
         return [];
+        // const nameValidationResult = this.name.validateComplexInvariants();
+
+        // return isValid(nameValidationResult) ? [] : [nameValidationResult];
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
