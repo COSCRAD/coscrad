@@ -1,10 +1,12 @@
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
+import { DomainModelCtor } from '../../../../../lib/types/DomainModelCtor';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { Valid } from '../../../../domainModelValidators/Valid';
+import buildInstanceFactory from '../../../../factories/utilities/buildInstanceFactory';
 import { ID_MANAGER_TOKEN, IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
@@ -41,14 +43,19 @@ export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<Audi
         mediaItemId,
         lengthMilliseconds,
     }: CreateAudioItem) {
-        return new AudioItem({
+        const createDto = {
             type: AggregateType.audioItem,
             id,
             name,
             mediaItemId,
             lengthMilliseconds,
             published: false,
-        }) as unknown as AudioItem;
+        };
+
+        return buildInstanceFactory(AudioItem as unknown as DomainModelCtor<AudioItem>)(createDto);
+
+        // WARNING The following introduces circular dependencies.
+        // return getInstanceFactoryForResource<AudioItem>(ResourceType.audioItem)(createDto);
     }
 
     protected async fetchRequiredExternalState({

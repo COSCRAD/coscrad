@@ -79,7 +79,7 @@ export const MultilingualTextInput = ({
     formField: { name, label },
     onInputChange,
 }: MultilingualTextInputProps): JSX.Element => {
-    const [multilingualText, dispatch] = useReducer(
+    const [_multilingualText, dispatch] = useReducer(
         multiLingualTextReducerWithNotification((propertyValue: unknown) =>
             onInputChange(name, propertyValue)
         ),
@@ -90,7 +90,6 @@ export const MultilingualTextInput = ({
 
     return (
         <>
-            current state: {JSON.stringify(multilingualText)}
             {[
                 {
                     languageCode: LanguageCode.Haida,
