@@ -1,7 +1,7 @@
 import {
     AggregateTypeToViewModel,
     CategorizableType,
-    ICategorizableDetailQueryResult,
+    ICategorizableDetailQueryResult
 } from '@coscrad/api-interfaces';
 import { CoscradConstraint } from '@coscrad/validation-constraints';
 
@@ -17,6 +17,12 @@ export type SimulatedKeyboardConfig = {
     name: string;
     specialCharacterReplacements: Record<string, string>;
 };
+
+export type TermOfTheDayConfig = {
+    [month:string]: {
+        [day:string]: string
+    }
+}
 
 export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
     indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
@@ -34,6 +40,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     siteCredits: string;
     simulatedKeyboard?: SimulatedKeyboardConfig;
     listenLive?: ListenLivePageConfiguration;
+    termOfTheDay: TermOfTheDayConfig
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -55,6 +62,7 @@ export const configurableContentPropertiesAndConstraints: {
     siteCredits: [CoscradConstraint.isNonEmptyString, CoscradConstraint.isRequired],
     simulatedKeyboard: [CoscradConstraint.isObject],
     listenLive: [CoscradConstraint.isObject],
+    termOfTheDay: [CoscradConstraint.isObject]
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
