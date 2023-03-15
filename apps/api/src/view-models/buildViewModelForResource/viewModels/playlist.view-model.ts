@@ -4,7 +4,7 @@ import { MultilingualText } from '../../../domain/common/entities/multilingual-t
 import { AudioItem } from '../../../domain/models/audio-item/entities/audio-item.entity';
 import { MediaItem } from '../../../domain/models/media-item/entities/media-item.entity';
 import { Playlist } from '../../../domain/models/playlist';
-import { PlaylistEpisode } from '../../../domain/models/playlist/entites/playlist-episode.entity';
+import { PlaylistEpisode } from '../../../domain/models/playlist/entities/playlist-episode.entity';
 import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import { BaseViewModel } from './base.view-model';
 

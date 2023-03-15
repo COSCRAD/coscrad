@@ -18,7 +18,7 @@ import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import InvalidExternalReferenceByAggregateError from '../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
-import { PlaylistEpisode } from '../../playlist/entites/playlist-episode.entity';
+import { PlaylistEpisode } from '../../playlist/entities/playlist-episode.entity';
 import { Resource } from '../../resource.entity';
 import AggregateNotFoundError from '../../shared/common-command-errors/AggregateNotFoundError';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
