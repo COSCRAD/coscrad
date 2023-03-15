@@ -2,8 +2,9 @@ import { AggregateTypeToViewModel, CategorizableType } from '@coscrad/api-interf
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
+import { CommandPanel } from '../commands';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
-import { WithCommands, WithWebOfKnowledge } from '../resources/shared';
+import { WithWebOfKnowledge } from '../resources/shared';
 import {
     AggregateDetailContainer,
     AggregateDetailContainerProps,
@@ -37,10 +38,6 @@ export const CategorizablePage = <T extends CategorizableType>({
         return <NoteDetailPageContainer />;
     }
 
-    // TODO Determine this from user's roles
-    // TODO Move this to a higher `AggregatePage`
-    const shouldShowCommands = true;
-
     const compositeIdentifier = { type: categorizableType, id };
 
     const EnhancedAggregateDetailContainer = shouldEnableWebOfKnowledgeForResources
@@ -50,16 +47,22 @@ export const CategorizablePage = <T extends CategorizableType>({
           )
         : AggregateDetailContainer;
 
-    const EnhancedDetailPresenterFactory = shouldShowCommands
-        ? (categorizableType: CategorizableType) =>
-              WithCommands(
-                  // @ts-expect-error FIX ME
-                  detailPresenterFactory(categorizableType),
-                  // @ts-expect-error FIX ME
-                  ({ actions }) => actions,
-                  (_) => compositeIdentifier
-              )
-        : detailPresenterFactory;
+    const EnhancedDetailPresenterFactory = (categorizableType: CategorizableType) => {
+        // @ts-expect-error FIX ME
+        const DetailPresenter = detailPresenterFactory(categorizableType);
+
+        return (viewModel) => (
+            <>
+                <DetailPresenter {...viewModel} />
+                {viewModel?.actions?.length > 0 ? (
+                    <CommandPanel
+                        actions={viewModel.actions}
+                        commandContext={compositeIdentifier}
+                    />
+                ) : null}
+            </>
+        );
+    };
 
     return (
         <div>
