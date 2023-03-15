@@ -1,7 +1,7 @@
 import { ICategorizableDetailQueryResult, IPhotographViewModel } from '@coscrad/api-interfaces';
-import { ResourceNamePresenter } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/resource-name-presenter';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ImageFullPageWidth } from '../../../utils/generic-components/presenters/image-full-page-width';
+import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
 import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 
 export const PhotographDetailFullViewPresenter = ({

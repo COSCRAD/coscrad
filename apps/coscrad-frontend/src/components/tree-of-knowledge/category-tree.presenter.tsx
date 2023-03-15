@@ -11,11 +11,8 @@ const wrapTree = ({
     children,
     members,
 }: ICategoryTreeViewModel<CategorizableType>): JSX.Element => (
-    <>
-        <div style={{ height: 0 }} data-testid={id}>
-            &nbsp;
-        </div>
-        <Accordion key={id}>
+    <div data-testid={id} key={id}>
+        <Accordion>
             <AccordionSummary>{label}</AccordionSummary>
             <AccordionDetails>
                 {/* TODO Pass the state in as props */}
@@ -30,7 +27,7 @@ const wrapTree = ({
                 }
             </AccordionDetails>
         </Accordion>
-    </>
+    </div>
 );
 
 /**

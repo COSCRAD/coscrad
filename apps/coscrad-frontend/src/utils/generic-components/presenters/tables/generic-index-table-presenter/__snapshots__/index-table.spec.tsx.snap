@@ -6,9 +6,11 @@ exports[` 1`] = `
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
@@ -299,9 +301,11 @@ exports[` 2`] = `
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
@@ -587,9 +591,11 @@ exports[` 2`] = `
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
@@ -888,9 +894,11 @@ exports[` 3`] = `
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
@@ -1176,9 +1184,11 @@ exports[` 3`] = `
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
@@ -1472,9 +1482,11 @@ exports[` 3`] = `
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
@@ -1767,9 +1779,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
@@ -2096,9 +2110,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
@@ -2427,9 +2443,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
@@ -2715,9 +2733,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
@@ -3011,9 +3031,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
@@ -3301,9 +3323,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
     <div
       style="text-align: center;"
     >
-      <h3>
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
         Widgets
-      </h3>
+      </h2>
       <div>
         <div
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
