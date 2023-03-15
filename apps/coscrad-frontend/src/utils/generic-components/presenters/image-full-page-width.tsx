@@ -14,20 +14,12 @@ const StyledFullViewFigure = styled('figure')({
 });
 
 export const ImageFullPageWidth = ({ image }: FullImageViewProps): JSX.Element => {
-    const { title, src, width } = image;
+    const { title, src } = image;
 
     const alt = `Image Title: ${title}`;
 
     return (
-        <StyledFullViewFigure
-            sx={{
-                width: '100%',
-                maxHeight: '60vh',
-                display: 'block',
-                mb: '2%',
-                objectFit: 'cover',
-            }}
-        >
+        <StyledFullViewFigure>
             <StyledImage sx={{ width: '100%' }} src={src} alt={alt} />
         </StyledFullViewFigure>
     );

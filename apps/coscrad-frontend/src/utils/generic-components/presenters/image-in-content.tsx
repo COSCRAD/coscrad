@@ -25,18 +25,17 @@ interface ImageInContentProps {
  */
 
 const StyledContentFigure = styled('figure')({
-    float: 'left',
     position: 'relative',
     margin: '15px',
 });
 
 export const ImageInContent = ({ image, displayWidth, alignment }: ImageInContentProps) => {
-    const { title, src, width } = image;
+    const { title, src } = image;
 
     const alt = `Image Title: ${title}`;
 
     return (
-        <StyledContentFigure sx={{ width: displayWidth }}>
+        <StyledContentFigure sx={{ width: displayWidth, float: alignment }}>
             <StyledImage sx={{ width: '100%', borderRadius: '5px' }} src={src} alt={alt} />
             <figcaption>
                 <Typography variant="caption">{title}</Typography>
