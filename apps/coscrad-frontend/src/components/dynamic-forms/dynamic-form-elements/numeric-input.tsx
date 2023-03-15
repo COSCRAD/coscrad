@@ -1,4 +1,5 @@
 import { IFormField } from '@coscrad/api-interfaces';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { FormGroup, TextField } from '@mui/material';
 
 interface NumericInputProps {
@@ -19,8 +20,9 @@ export const NumericInput = ({
                 name={name}
                 label={label}
                 onChange={(e) => {
-                    const parsedValue =
-                        typeof e.target.value === 'string' ? Number(e.target.value) : null;
+                    const parsedValue = isNonEmptyString(e.target.value)
+                        ? Number(e.target.value)
+                        : null;
 
                     onInputChange(e.target.name, parsedValue);
                 }}
