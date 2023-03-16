@@ -1,3 +1,6 @@
+import { styled, Typography } from '@mui/material';
+import { StyledImage } from './styled-image';
+
 export type ImageAsset = {
     title: string;
     src: string;
@@ -21,28 +24,22 @@ interface ImageInContentProps {
  * Eventually in the CMS clicking on the image could open it in full screen
  */
 
+const StyledContentFigure = styled('figure')({
+    position: 'relative',
+    margin: '15px',
+});
+
 export const ImageInContent = ({ image, displayWidth, alignment }: ImageInContentProps) => {
-    const { title, src, width, height } = image;
+    const { title, src } = image;
 
     const alt = `Image Title: ${title}`;
 
-    const divStyle = {
-        width: displayWidth,
-        float: alignment,
-        position: 'relative',
-        margin: '15px',
-    } as React.CSSProperties;
-
-    const imgStyle = {
-        width: '100%',
-        height: 'auto',
-        display: 'block',
-        borderRadius: '7px',
-    };
-
     return (
-        <div style={divStyle}>
-            <img style={imgStyle} src={src} alt={alt} title={title} width={width} height={height} />
-        </div>
+        <StyledContentFigure sx={{ width: displayWidth, float: alignment }}>
+            <StyledImage sx={{ width: '100%', borderRadius: '5px' }} src={src} alt={alt} />
+            <figcaption>
+                <Typography variant="caption">{title}</Typography>
+            </figcaption>
+        </StyledContentFigure>
     );
 };
