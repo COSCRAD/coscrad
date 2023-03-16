@@ -1,9 +1,7 @@
 export function useDate() {
+    const currentDay = new Date().getDate();
 
-    const currentDay = (new Date()).getDate();
-
-    console.log('TODAYS DAY:', currentDay)
+    console.log('TODAYS DAY:', currentDay);
 
     return currentDay;
-};
-
+}

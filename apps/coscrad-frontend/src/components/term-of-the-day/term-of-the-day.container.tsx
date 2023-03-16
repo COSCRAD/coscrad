@@ -6,7 +6,6 @@ import { TermDetailFullViewPresenter } from '../resources/terms/term-detail.full
 import { useDate } from './use-date';
 
 export const TermOfTheDayContainer = (): JSX.Element => {
-
     const { termOfTheDayConfig } = useContext(ConfigurableContentContext);
 
     const getCurrentTermOfTheDay = useDate();
@@ -17,9 +16,7 @@ export const TermOfTheDayContainer = (): JSX.Element => {
 
     const Presenter = displayLoadableSearchResult(TermDetailFullViewPresenter);
 
-    console.log(termOfTheDayId)
+    console.log(termOfTheDayId);
 
-    return (
-        <Presenter {...loadableTermSearchResult} />
-    );
-}
+    return <Presenter {...loadableTermSearchResult} />;
+};

@@ -1,7 +1,7 @@
 import {
     AggregateTypeToViewModel,
     CategorizableType,
-    ICategorizableDetailQueryResult
+    ICategorizableDetailQueryResult,
 } from '@coscrad/api-interfaces';
 import { CoscradConstraint } from '@coscrad/validation-constraints';
 
@@ -34,7 +34,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     siteCredits: string;
     simulatedKeyboard?: SimulatedKeyboardConfig;
     listenLive?: ListenLivePageConfiguration;
-    termOfTheDayConfig: Record<string,string>
+    termOfTheDayConfig: Record<string, string>;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -56,7 +56,7 @@ export const configurableContentPropertiesAndConstraints: {
     siteCredits: [CoscradConstraint.isNonEmptyString, CoscradConstraint.isRequired],
     simulatedKeyboard: [CoscradConstraint.isObject],
     listenLive: [CoscradConstraint.isObject],
-    termOfTheDayConfig: [CoscradConstraint.isObject]
+    termOfTheDayConfig: [CoscradConstraint.isObject],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
