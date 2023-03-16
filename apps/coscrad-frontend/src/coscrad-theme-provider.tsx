@@ -17,6 +17,31 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                     main: blue[800],
                 },
             },
+            typography: {
+                h1: {
+                    fontSize: 40,
+                },
+                h2: {
+                    fontSize: 35,
+                    fontWeight: 'bold',
+                    marginBottom: '33px',
+                },
+                h3: {
+                    fontSize: 26,
+                    fontWeight: 'bold',
+                    marginBottom: '28px',
+                },
+                h4: {
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    marginBottom: '12px',
+                },
+                h5: {
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    marginBottom: '7px',
+                },
+            },
         })
     );
 

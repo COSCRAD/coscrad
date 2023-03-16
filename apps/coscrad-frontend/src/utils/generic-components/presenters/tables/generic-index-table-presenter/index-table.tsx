@@ -259,7 +259,7 @@ export const IndexTable = <T extends IBaseViewModel>({
 
     return (
         <div style={{ textAlign: 'center' }}>
-            <h3>{heading}</h3>
+            <Typography variant="h2">{heading}</Typography>
             <div>
                 {propertiesToSearchSelectField}
 

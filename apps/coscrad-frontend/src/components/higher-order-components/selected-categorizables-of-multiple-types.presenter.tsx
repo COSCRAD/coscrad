@@ -14,6 +14,7 @@ import {
 } from './use-loadable-categorizables';
 
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { Typography } from '@mui/material';
 import { CoscradMainContentContainer } from '../../utils/generic-components/style-components/coscrad-main-content-container';
 
 interface SelectedCategorizablesOfMultipleTypesPresenterProps<
@@ -34,7 +35,9 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
     return (
         <CoscradMainContentContainer>
             <div data-testid="multiple-categorizables-view">
-                <h2>{isNonEmptyString(heading) ? heading : 'Connected Resources'}</h2>
+                <Typography variant="h3">
+                    {isNonEmptyString(heading) ? heading : 'Connected Resources'}
+                </Typography>
                 {Object.entries(viewModelSnapshot)
                     // replace the slice name with corresponding categorizable type
                     .map(
