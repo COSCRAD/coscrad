@@ -3,6 +3,7 @@ import {
     IBaseViewModel,
     ICategorizableDetailQueryResult,
 } from '@coscrad/api-interfaces';
+import { Typography } from '@mui/material';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { NotFoundPresenter } from '../not-found';
 import { ICategorizableDetailPresenterFactory } from '../resources/factories/categorizable-detail-presenter-factory.interface';
@@ -24,7 +25,7 @@ export const SelectedCategorizablesPresenter = <T extends IBaseViewModel>({
 
     return (
         <div key={pluralLabelForCategorizableType}>
-            <h2>{pluralLabelForCategorizableType}</h2>
+            <Typography variant="h4">{pluralLabelForCategorizableType}</Typography>
             {viewModels.map((viewModel, index) => (
                 <div key={index}>
                     {viewModel === NOT_FOUND ? <NotFoundPresenter /> : <Presenter {...viewModel} />}
