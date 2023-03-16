@@ -53,11 +53,11 @@ export const NavMenuContainer = (): JSX.Element => {
             link: routes.treeOfKnowledge,
             label: 'Tree of Knowledge',
         },
+        ...dynamicLinks,
         {
             link: routes.siteCredits,
             label: 'Credits',
         },
-        ...dynamicLinks,
     ];
 
     return <NavMenuPresenter navItemInfos={navItemInfos} />;

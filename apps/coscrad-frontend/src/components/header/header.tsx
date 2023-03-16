@@ -34,7 +34,7 @@ export const Header = (): JSX.Element => {
             <StyledToolbar>
                 <StyledSiteTitle>
                     <Link to="/">
-                        <Typography variant="h5">{siteTitle}</Typography>
+                        <Typography variant="h1">{siteTitle}</Typography>
                     </Link>
                 </StyledSiteTitle>
                 <NavMenuContainer />
