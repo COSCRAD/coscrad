@@ -4,7 +4,8 @@ import { useContext, useEffect } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { userLoginSucceeded } from '../../store/slices/auth';
-import { ImageInContent } from '../image-in-content/image-in-content';
+import { ImageInContent } from '../../utils/generic-components/presenters/image-in-content';
+import { CoscradMainContentContainer } from '../../utils/generic-components/style-components/coscrad-main-content-container';
 
 export const Home = (): JSX.Element => {
     /**
@@ -16,6 +17,7 @@ export const Home = (): JSX.Element => {
 
     const dispatch = useAppDispatch();
 
+    // Simulating image object retrieved from Digital Asset Manager
     const image = {
         src: siteHomeImageUrl,
         width: 2000,
@@ -37,13 +39,13 @@ export const Home = (): JSX.Element => {
     });
 
     return (
-        <div>
+        <CoscradMainContentContainer>
             {/**
              * TODO: consider using a photograph detail presenter for this
              */}
 
-            <ImageInContent image={image} alignment="left" displayWidth="350px" />
+            <ImageInContent image={image} alignment="left" displayWidth="45%" />
             <Typography variant="body1">{siteDescription}</Typography>
-        </div>
+        </CoscradMainContentContainer>
     );
 };
