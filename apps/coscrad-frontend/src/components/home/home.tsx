@@ -14,8 +14,6 @@ export const Home = (): JSX.Element => {
      * TODO: Move data (ConfigurableContentContext, auth, and dispatch) out of presenter
      */
 
-    const { termOfTheDay } = useContext(ConfigurableContentContext);
-
     const { siteDescription, siteHomeImageUrl } = useContext(ConfigurableContentContext);
 
     const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();

@@ -18,12 +18,6 @@ export type SimulatedKeyboardConfig = {
     specialCharacterReplacements: Record<string, string>;
 };
 
-export type TermOfTheDayConfig = {
-    [month:string]: {
-        [day:string]: string
-    }
-}
-
 export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
     indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
     siteTitle: string;
@@ -40,7 +34,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     siteCredits: string;
     simulatedKeyboard?: SimulatedKeyboardConfig;
     listenLive?: ListenLivePageConfiguration;
-    termOfTheDay: TermOfTheDayConfig
+    termOfTheDayConfig: Record<string,string>
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -62,7 +56,7 @@ export const configurableContentPropertiesAndConstraints: {
     siteCredits: [CoscradConstraint.isNonEmptyString, CoscradConstraint.isRequired],
     simulatedKeyboard: [CoscradConstraint.isObject],
     listenLive: [CoscradConstraint.isObject],
-    termOfTheDay: [CoscradConstraint.isObject]
+    termOfTheDayConfig: [CoscradConstraint.isObject]
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;

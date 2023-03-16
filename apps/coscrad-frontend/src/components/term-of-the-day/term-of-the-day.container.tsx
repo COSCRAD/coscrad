@@ -1,46 +1,25 @@
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useLoadableTermById } from '../../store/slices/resources';
-import { TermOfTheDayPresenter } from './term-of-the-day.presenter';
+import { displayLoadableSearchResult } from '../higher-order-components/display-loadable-search-result';
+import { TermDetailFullViewPresenter } from '../resources/terms/term-detail.full-view.presenter';
+import { useDate } from './use-date';
 
 export const TermOfTheDayContainer = (): JSX.Element => {
 
-    //get termOfTheDay from config instead of hardwired const termArray
-    const { termOfTheDay } = useContext(ConfigurableContentContext);
+    const { termOfTheDayConfig } = useContext(ConfigurableContentContext);
 
-    // const termArray: string[] = [
-    //     "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-    //     "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-    //     "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
-    //     "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
-    //     "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
-    //     "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-    //     "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502"
-    // ];
+    const getCurrentTermOfTheDay = useDate();
 
-    // #TODO Change from random to select specific day
+    const termOfTheDayId = termOfTheDayConfig[getCurrentTermOfTheDay];
 
-    const randomIndex = Math.floor(Math.random() * termOfTheDay.length);
-    const randomTerm = termOfTheDay[randomIndex];
+    const loadableTermSearchResult = useLoadableTermById(termOfTheDayId);
 
-    // useEffect(() => {
-    //     pull from redux, dont hit an endpoint outside of redux
-    //     use useLoadableTermById(todaysId)
-    //     const apiUrl = `http://localhost:3131/api/resources/terms/${randomTerm}`
+    const Presenter = displayLoadableSearchResult(TermDetailFullViewPresenter);
 
-    //     fetch(apiUrl, { mode: 'cors' })
-    //         .then(response => response.json())
-    //         .then(data => (data))
-    //         .catch(error => console.error(error));
-    // }, []);
-
-    const getTermOfTheDay = useLoadableTermById(randomTerm)
-
-    console.log(getTermOfTheDay)
+    console.log(termOfTheDayId)
 
     return (
-        <div>
-            <TermOfTheDayPresenter {...getTermOfTheDay} termOfTheDay={termOfTheDay} />
-        </div>
+        <Presenter {...loadableTermSearchResult} />
     );
 }
