@@ -1,4 +1,5 @@
 import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
+import { Typography } from '@mui/material';
 import { SelectedCategorizablesOfMultipleTypesPresenter } from '../../../../../components/higher-order-components/selected-categorizables-of-multiple-types.presenter';
 import { useLoadableCategorizables } from '../../../../../components/higher-order-components/use-loadable-categorizables';
 import { thumbnailCategorizableDetailPresenterFactory } from '../../../../../components/resources/factories/thumbnail-categorizable-detail-presenter-factory';
@@ -24,7 +25,7 @@ export const ConnectedResourcesPanel = ({
     if (compositeIdentifiers.length === 0)
         return (
             <CoscradMainContentContainer>
-                <h2>Connected Resources</h2>
+                <Typography variant="h3">Connected Resources</Typography>
                 No Connections Found
             </CoscradMainContentContainer>
         );

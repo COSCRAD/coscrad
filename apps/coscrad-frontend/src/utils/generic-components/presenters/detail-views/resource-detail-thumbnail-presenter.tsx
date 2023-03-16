@@ -1,10 +1,9 @@
 import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
-import { isNullOrUndefined, isString } from '@coscrad/validation-constraints';
-import { Card, CardContent, Grid, Typography } from '@mui/material';
+import { Card, CardContent, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { routes } from '../../../../app/routes/routes';
 import { ResourceNavLink } from '../../../../components/resources/shared/resource-nav-link';
-import { MultilingualTextPresenter } from '../multilingual-text-presenter';
+import { ResourceNamePresenter } from '../resource-name-presenter';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
 export interface ResourceDetailThumbnailPresenterProps {
@@ -37,13 +36,7 @@ export const ResourceDetailThumbnailPresenter = ({
                 </Grid>
                 <Grid item xs={2} sm={2} md={8}>
                     {/* TODO: consider putting a standardized name property on the view models */}
-                    <Typography gutterBottom variant="h6" fontWeight="bold" color="primary">
-                        {isString(name) || isNullOrUndefined(name) ? (
-                            name
-                        ) : (
-                            <MultilingualTextPresenter text={name} />
-                        )}
-                    </Typography>
+                    <ResourceNamePresenter name={name} variant="h5" />
                     {children}
                 </Grid>
                 <Grid item xs={2} sm={1} md={2} container sx={{ justifyContent: 'flex-end' }}>
