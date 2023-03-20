@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`buildCommandForm should return the expected result 1`] = `
-Object {
-  "fields": Array [
-    Object {
-      "constraints": Array [
-        Object {
+{
+  "fields": [
+    {
+      "constraints": [
+        {
           "message": "must be a non-empty string",
           "name": "non-empty string",
         },
@@ -15,9 +15,9 @@ Object {
       "name": "title",
       "type": "TEXT_FIELD",
     },
-    Object {
-      "constraints": Array [
-        Object {
+    {
+      "constraints": [
+        {
           "message": "must be a non-empty string",
           "name": "non-empty string",
         },
@@ -27,13 +27,13 @@ Object {
       "name": "titleEnglish",
       "type": "TEXT_FIELD",
     },
-    Object {
-      "constraints": Array [
-        Object {
+    {
+      "constraints": [
+        {
           "message": "must be a URL",
           "name": "URL",
         },
-        Object {
+        {
           "message": "must be a defined value",
           "name": "defined value",
         },
@@ -43,9 +43,9 @@ Object {
       "name": "url",
       "type": "TEXT_FIELD",
     },
-    Object {
-      "constraints": Array [
-        Object {
+    {
+      "constraints": [
+        {
           "message": "Must be a valid \${propertyLabel}",
           "name": "IS_ENUM",
         },
@@ -53,12 +53,12 @@ Object {
       "description": "technical specification of the type of this media item",
       "label": "MIME Type",
       "name": "mimeType",
-      "options": Array [
-        Object {
+      "options": [
+        {
           "display": "mp3",
           "value": "audio/mpeg",
         },
-        Object {
+        {
           "display": "mp4",
           "value": "video/mp4",
         },
@@ -66,6 +66,6 @@ Object {
       "type": "STATIC_SELECT",
     },
   ],
-  "prepopulatedFields": Object {},
+  "prepopulatedFields": {},
 }
 `;

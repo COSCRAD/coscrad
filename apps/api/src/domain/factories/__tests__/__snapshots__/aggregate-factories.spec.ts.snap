@@ -2,13 +2,13 @@
 
 exports[`Aggregate factories when attempting to build an instance of type: audioItem from a DTO when the DTO is valid valid transribed audio DTO should succeed 1`] = `
 WithTranscription {
-  "eventHistory": Array [],
+  "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "lengthMilliseconds": 20000,
   "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "name": MultilingualText {
-    "items": Array [
+    "items": [
       MultilingualTextItem {
         "languageCode": "eng",
         "role": "original",
@@ -18,17 +18,17 @@ WithTranscription {
   },
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "transcript": Transcript {
-    "items": Array [
+    "items": [
       TranscriptItem {
         "inPoint": 12000,
         "outPoint": 15550,
         "speakerInitials": "JHC",
         "text": MultilingualText {
-          "items": Array [
+          "items": [
             MultilingualTextItem {
               "languageCode": "eng",
               "role": "original",
@@ -42,7 +42,7 @@ WithTranscription {
         "outPoint": 19240,
         "speakerInitials": "JHC",
         "text": MultilingualText {
-          "items": Array [
+          "items": [
             MultilingualTextItem {
               "languageCode": "eng",
               "role": "original",
@@ -52,7 +52,7 @@ WithTranscription {
         },
       },
     ],
-    "participants": Array [
+    "participants": [
       TranscriptParticipant {
         "initials": "JHC",
         "name": "Jimmy H. Cricket",
@@ -67,8 +67,8 @@ exports[`Aggregate factories when attempting to build an instance of type: bibli
 BookBibliographicReference {
   "data": BookBibliographicReferenceData {
     "abstract": "This is the abstract, NOT a general note!",
-    "creators": Array [
-      Object {
+    "creators": [
+      {
         "name": "Alana Duvernay",
         "type": "author",
       },
@@ -82,13 +82,13 @@ BookBibliographicReference {
     "url": "https://atlanticpublishing.com",
     "year": 1999,
   },
-  "eventHistory": Array [],
+  "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "type": "bibliographicReference",
 }
@@ -107,13 +107,13 @@ CourtCaseBibliographicReference {
     "type": "courtCase",
     "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
   },
-  "eventHistory": Array [],
+  "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "type": "bibliographicReference",
 }
@@ -123,7 +123,7 @@ exports[`Aggregate factories when attempting to build an instance of type: bibli
 JournalArticleBibliographicReference {
   "data": JournalArticleBibliographicReferenceData {
     "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
-    "creators": Array [
+    "creators": [
       BibliographicReferenceCreator {
         "name": "Sigurd Purcell",
         "type": "author",
@@ -137,13 +137,13 @@ JournalArticleBibliographicReference {
     "type": "journalArticle",
     "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
   },
-  "eventHistory": Array [],
+  "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "type": "bibliographicReference",
 }
@@ -152,10 +152,10 @@ JournalArticleBibliographicReference {
 exports[`Aggregate factories when attempting to build an instance of type: book from a DTO when the DTO is valid valid book should succeed 1`] = `
 Book {
   "author": "John Doeburg",
-  "eventHistory": Array [],
+  "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-  "pages": Array [
+  "pages": [
     BookPage {
       "identifier": "1",
       "text": "foo",
@@ -170,8 +170,8 @@ Book {
   "publicationDate": "2002",
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "subtitle": "The wolf's revenge",
   "title": "Three Little Pigs",
@@ -181,21 +181,21 @@ Book {
 
 exports[`Aggregate factories when attempting to build an instance of type: mediaItem from a DTO when the DTO is valid valid media item should succeed 1`] = `
 MediaItem {
-  "contributorAndRoles": Array [
+  "contributorAndRoles": [
     ContributorAndRole {
       "contributorId": "2",
       "role": "host",
     },
   ],
-  "eventHistory": Array [],
+  "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 2500,
   "mimeType": "audio/mpeg",
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "title": "episode title (in language)",
   "titleEnglish": "Metal Mondays episode 1",
@@ -210,15 +210,15 @@ Photograph {
     "heightPX": 400,
     "widthPX": 300,
   },
-  "eventHistory": Array [],
+  "eventHistory": [],
   "filename": "Adiitsii-Running",
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
   "photographer": "Susie McRealart",
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "type": "photograph",
 }
@@ -226,19 +226,19 @@ Photograph {
 
 exports[`Aggregate factories when attempting to build an instance of type: playlist from a DTO when the DTO is valid valid playlist DTO should succeed 1`] = `
 Playlist {
-  "eventHistory": Array [],
+  "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-  "items": Array [
+  "items": [
     PlaylistItem {
-      "resourceCompositeIdentifier": Object {
+      "resourceCompositeIdentifier": {
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
         "type": "audioItem",
       },
     },
   ],
   "name": MultilingualText {
-    "items": Array [
+    "items": [
       MultilingualTextItem {
         "languageCode": "clc",
         "role": "original",
@@ -248,8 +248,8 @@ Playlist {
   },
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "type": "playlist",
 }
@@ -258,21 +258,21 @@ Playlist {
 exports[`Aggregate factories when attempting to build an instance of type: song from a DTO when the DTO is valid valid song should succeed 1`] = `
 Song {
   "audioURL": "https://www.myaudio.com/lamb.mp3",
-  "contributions": Array [
+  "contributions": [
     ContributorAndRole {
       "contributorId": "1",
       "role": "performer",
     },
   ],
-  "eventHistory": Array [],
+  "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 3500,
   "lyrics": "Mary had a little lamb, little lamb.",
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "startMilliseconds": 0,
   "title": "Song title in language",
@@ -283,34 +283,34 @@ Song {
 
 exports[`Aggregate factories when attempting to build an instance of type: spatialFeature from a DTO when the DTO is valid valid dto for a Spatial Feature of sub-type: Line should succeed 1`] = `
 Line {
-  "eventHistory": Array [],
-  "geometry": Object {
-    "coordinates": Array [
-      Array [
+  "eventHistory": [],
+  "geometry": {
+    "coordinates": [
+      [
         52.3,
         -124.2,
       ],
-      Array [
+      [
         52.35,
         -124.85,
       ],
-      Array [
+      [
         52.21,
         -124.9,
       ],
-      Array [
+      [
         52.05,
         -125.1,
       ],
-      Array [
+      [
         52.15,
         -125.1,
       ],
-      Array [
+      [
         52.33,
         -125.22,
       ],
-      Array [
+      [
         52.45,
         -125.39,
       ],
@@ -326,8 +326,8 @@ Line {
   },
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "type": "spatialFeature",
 }
@@ -335,9 +335,9 @@ Line {
 
 exports[`Aggregate factories when attempting to build an instance of type: spatialFeature from a DTO when the DTO is valid valid dto for a Spatial Feature of sub-type: Point should succeed 1`] = `
 Point {
-  "eventHistory": Array [],
-  "geometry": Object {
-    "coordinates": Array [
+  "eventHistory": [],
+  "geometry": {
+    "coordinates": [
       54.034404852745006,
       -132.17563335558532,
     ],
@@ -352,8 +352,8 @@ Point {
   },
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "type": "spatialFeature",
 }
@@ -361,23 +361,23 @@ Point {
 
 exports[`Aggregate factories when attempting to build an instance of type: spatialFeature from a DTO when the DTO is valid valid dto for a Spatial Feature of sub-type: Polygon should succeed 1`] = `
 Polygon {
-  "eventHistory": Array [],
-  "geometry": Object {
-    "coordinates": Array [
-      Array [
-        Array [
+  "eventHistory": [],
+  "geometry": {
+    "coordinates": [
+      [
+        [
           52.47,
           -123.6,
         ],
-        Array [
+        [
           52.42,
           -123.95,
         ],
-        Array [
+        [
           52.05,
           -123.95,
         ],
-        Array [
+        [
           52.05,
           -123.685,
         ],
@@ -394,8 +394,8 @@ Polygon {
   },
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "type": "spatialFeature",
 }
@@ -405,13 +405,13 @@ exports[`Aggregate factories when attempting to build an instance of type: term 
 Term {
   "audioFilename": undefined,
   "contributorId": "John Doe",
-  "eventHistory": Array [],
+  "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "sourceProject": undefined,
   "term": "Chil-term-1",
@@ -422,13 +422,13 @@ Term {
 
 exports[`Aggregate factories when attempting to build an instance of type: video from a DTO when the DTO is valid valid video DTO should succeed 1`] = `
 WithTranscription {
-  "eventHistory": Array [],
+  "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
   "lengthMilliseconds": 20000,
   "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
   "name": MultilingualText {
-    "items": Array [
+    "items": [
       MultilingualTextItem {
         "languageCode": "eng",
         "role": "original",
@@ -438,17 +438,17 @@ WithTranscription {
   },
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "transcript": Transcript {
-    "items": Array [
+    "items": [
       TranscriptItem {
         "inPoint": 12000,
         "outPoint": 15550,
         "speakerInitials": "DM",
         "text": MultilingualText {
-          "items": Array [
+          "items": [
             MultilingualTextItem {
               "languageCode": "eng",
               "role": "original",
@@ -462,7 +462,7 @@ WithTranscription {
         "outPoint": 19240,
         "speakerInitials": "DM",
         "text": MultilingualText {
-          "items": Array [
+          "items": [
             MultilingualTextItem {
               "languageCode": "eng",
               "role": "original",
@@ -472,7 +472,7 @@ WithTranscription {
         },
       },
     ],
-    "participants": Array [
+    "participants": [
       TranscriptParticipant {
         "initials": "DM",
         "name": "Dee Monstrator",
@@ -485,82 +485,82 @@ WithTranscription {
 
 exports[`Aggregate factories when attempting to build an instance of type: vocabularyList from a DTO when the DTO is valid valid vocabulary list should succeed 1`] = `
 VocabularyList {
-  "entries": Array [
+  "entries": [
     VocabularyListEntry {
       "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
-      "variableValues": Object {
+      "variableValues": {
         "person": "11",
         "positive": true,
       },
     },
     VocabularyListEntry {
       "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
-      "variableValues": Object {
+      "variableValues": {
         "person": "12",
         "positive": false,
       },
     },
     VocabularyListEntry {
       "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
-      "variableValues": Object {
+      "variableValues": {
         "person": "13",
         "positive": false,
       },
     },
     VocabularyListEntry {
       "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-      "variableValues": Object {
+      "variableValues": {
         "person": "01",
         "positive": true,
       },
     },
     VocabularyListEntry {
       "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
-      "variableValues": Object {
+      "variableValues": {
         "person": "02",
         "positive": false,
       },
     },
   ],
-  "eventHistory": Array [],
+  "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
   "name": "To Sing (lang)",
   "nameEnglish": "To Sing (Engl)",
   "published": true,
   "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": Array [],
-    "allowedUserIds": Array [],
+    "allowedGroupIds": [],
+    "allowedUserIds": [],
   },
   "type": "vocabularyList",
-  "variables": Array [
-    Object {
+  "variables": [
+    {
       "name": "positive",
       "type": "checkbox",
-      "validValues": Array [
-        Object {
+      "validValues": [
+        {
           "display": "negative (lha)",
           "value": false,
         },
-        Object {
+        {
           "display": "positive form (switch for negative)",
           "value": true,
         },
       ],
     },
-    Object {
+    {
       "name": "person",
       "type": "dropbox",
-      "validValues": Array [
-        Object {
+      "validValues": [
+        {
           "display": "I",
           "value": "1",
         },
-        Object {
+        {
           "display": "You",
           "value": "2",
         },
-        Object {
+        {
           "display": "She",
           "value": "3",
         },

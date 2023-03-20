@@ -1,48 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`GET /resources should return the expected result 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "A term is a word, phrase, or sentence.",
     "label": "Term",
     "link": "/resources/terms",
-    "schema": Object {
-      "audioURL": Object {
+    "schema": {
+      "audioURL": {
         "coscradDataType": "URL",
         "description": "a web link to a digital audio recording of this term's pronunciation",
         "isArray": false,
         "isOptional": false,
         "label": "audio link",
       },
-      "contributor": Object {
+      "contributor": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "name of the person who contributed this term",
         "isArray": false,
         "isOptional": false,
         "label": "contributor",
       },
-      "id": Object {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "sourceProject": Object {
+      "sourceProject": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the name of the project through which the term was collected",
         "isArray": false,
         "isOptional": true,
         "label": "Source Project",
       },
-      "term": Object {
+      "term": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the term in the language",
         "isArray": false,
         "isOptional": true,
         "label": "text (language)",
       },
-      "termEnglish": Object {
+      "termEnglish": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the text in the colonial language",
         "isArray": false,
@@ -52,61 +52,61 @@ Array [
     },
     "type": "term",
   },
-  Object {
+  {
     "description": "A vocabulary list gathers terms with filters that apply within the context of the vocabulary list.",
     "label": "Vocabulary List",
     "link": "/resources/vocabularyLists",
-    "schema": Object {
-      "entries": Object {
+    "schema": {
+      "entries": {
         "complexDataType": "NESTED_TYPE",
         "description": "all terms in this vocabulary list together with their filter properties",
         "isArray": true,
         "isOptional": false,
         "label": "entries",
-        "schema": Object {
-          "term": Object {
+        "schema": {
+          "term": {
             "complexDataType": "NESTED_TYPE",
             "description": "the term that is included in the vocabulary list via this entry",
             "isArray": false,
             "isOptional": false,
             "label": "term",
-            "schema": Object {
-              "audioURL": Object {
+            "schema": {
+              "audioURL": {
                 "coscradDataType": "URL",
                 "description": "a web link to a digital audio recording of this term's pronunciation",
                 "isArray": false,
                 "isOptional": false,
                 "label": "audio link",
               },
-              "contributor": Object {
+              "contributor": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "name of the person who contributed this term",
                 "isArray": false,
                 "isOptional": false,
                 "label": "contributor",
               },
-              "id": Object {
+              "id": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "unique identifier",
                 "isArray": false,
                 "isOptional": false,
                 "label": "ID",
               },
-              "sourceProject": Object {
+              "sourceProject": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the name of the project through which the term was collected",
                 "isArray": false,
                 "isOptional": true,
                 "label": "Source Project",
               },
-              "term": Object {
+              "term": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the term in the language",
                 "isArray": false,
                 "isOptional": true,
                 "label": "text (language)",
               },
-              "termEnglish": Object {
+              "termEnglish": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the text in the colonial language",
                 "isArray": false,
@@ -117,21 +117,21 @@ Array [
           },
         },
       },
-      "id": Object {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "name": Object {
+      "name": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "name of the vocabulary list in the language",
         "isArray": false,
         "isOptional": true,
         "label": "name (language)",
       },
-      "nameEnglish": Object {
+      "nameEnglish": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "name of the vocabulary list in the colonial language",
         "isArray": false,
@@ -141,33 +141,33 @@ Array [
     },
     "type": "vocabularyList",
   },
-  Object {
+  {
     "description": "An audio item includes a link for playback and possibly a transcript.",
     "label": "Transcribed Audio Item",
     "link": "/resources/audioItems",
-    "schema": Object {
-      "audioURL": Object {
+    "schema": {
+      "audioURL": {
         "coscradDataType": "URL",
         "description": "a web link to an accompanying digital audio file",
         "isArray": false,
         "isOptional": false,
         "label": "audio link",
       },
-      "id": Object {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "lengthMilliseconds": Object {
+      "lengthMilliseconds": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "the length of the accompanying audio file in milliseconds",
         "isArray": false,
         "isOptional": false,
         "label": "length (ms)",
       },
-      "mimeType": Object {
+      "mimeType": {
         "complexDataType": "ENUM",
         "description": "the media format type",
         "enumLabel": "MIME type",
@@ -175,29 +175,29 @@ Array [
         "isArray": false,
         "isOptional": false,
         "label": "MIME type",
-        "labelsAndValues": Array [
-          Object {
+        "labelsAndValues": [
+          {
             "label": "mp3",
             "value": "audio/mpeg",
           },
-          Object {
+          {
             "label": "mp4",
             "value": "video/mp4",
           },
-          Object {
+          {
             "label": "png",
             "value": "image/png",
           },
         ],
       },
-      "name": Object {
+      "name": {
         "coscradDataType": "MULTILINGUAL_TEXT",
         "description": "name of the audio item",
         "isArray": false,
         "isOptional": false,
         "label": "name",
       },
-      "text": Object {
+      "text": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a plain-text representation of the transcript",
         "isArray": false,
@@ -207,26 +207,26 @@ Array [
     },
     "type": "audioItem",
   },
-  Object {
+  {
     "description": "An video includes a link for playback and possibly a transcript.",
     "label": "Video",
     "link": "/resources/videos",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "lengthMilliseconds": Object {
+      "lengthMilliseconds": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "the length of the accompanying audio file in milliseconds",
         "isArray": false,
         "isOptional": false,
         "label": "length (ms)",
       },
-      "mimeType": Object {
+      "mimeType": {
         "complexDataType": "ENUM",
         "description": "the media format type",
         "enumLabel": "MIME type",
@@ -234,36 +234,36 @@ Array [
         "isArray": false,
         "isOptional": false,
         "label": "MIME type",
-        "labelsAndValues": Array [
-          Object {
+        "labelsAndValues": [
+          {
             "label": "mp3",
             "value": "audio/mpeg",
           },
-          Object {
+          {
             "label": "mp4",
             "value": "video/mp4",
           },
-          Object {
+          {
             "label": "png",
             "value": "image/png",
           },
         ],
       },
-      "name": Object {
+      "name": {
         "coscradDataType": "MULTILINGUAL_TEXT",
         "description": "name of the video",
         "isArray": false,
         "isOptional": false,
         "label": "name",
       },
-      "text": Object {
+      "text": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a plain-text representation of the transcript",
         "isArray": false,
         "isOptional": false,
         "label": "plain text",
       },
-      "videoUrl": Object {
+      "videoUrl": {
         "coscradDataType": "URL",
         "description": "a web link to an accompanying digital video file",
         "isArray": false,
@@ -273,40 +273,40 @@ Array [
     },
     "type": "video",
   },
-  Object {
+  {
     "description": "A book is a digital representation of a text, organized into pages.",
     "label": "Book",
     "link": "/resources/books",
-    "schema": Object {
-      "author": Object {
+    "schema": {
+      "author": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the author of the book",
         "isArray": false,
         "isOptional": false,
         "label": "author",
       },
-      "id": Object {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "publicationDate": Object {
+      "publicationDate": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a free form string that specifies the publication date",
         "isArray": false,
         "isOptional": true,
         "label": "publication date",
       },
-      "subtitle": Object {
+      "subtitle": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "subtitle of the book (in whatever language)",
         "isArray": false,
         "isOptional": true,
         "label": "subtitle",
       },
-      "title": Object {
+      "title": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "title of the book (in whatever language)",
         "isArray": false,
@@ -316,26 +316,26 @@ Array [
     },
     "type": "book",
   },
-  Object {
+  {
     "description": "A photograph is a digital representation of an analog photograph and its metadata.",
     "label": "Photograph",
     "link": "/resources/photographs",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "imageURL": Object {
+      "imageURL": {
         "coscradDataType": "URL",
         "description": "a web link to a digital version of the photograph",
         "isArray": false,
         "isOptional": false,
         "label": "image link",
       },
-      "photographer": Object {
+      "photographer": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the person who took the picture",
         "isArray": false,
@@ -345,12 +345,12 @@ Array [
     },
     "type": "photograph",
   },
-  Object {
+  {
     "description": "A spatial feature may be a point, line, or polygon on the map.",
     "label": "Spatial Feature",
     "link": "/resources/spatialFeatures",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
@@ -360,44 +360,44 @@ Array [
     },
     "type": "spatialFeature",
   },
-  Object {
+  {
     "description": "A bibliographic reference is a reference to, but not a digital representation of, a research resource.",
     "label": "BibliographicReference",
     "link": "/resources/bibliographicReferences",
-    "schema": Object {
-      "data": Object {
+    "schema": {
+      "data": {
         "complexDataType": "UNION_TYPE",
         "description": "citation information for this bibliographic reference",
         "discriminantPath": "type",
         "isArray": false,
         "isOptional": false,
         "label": "reference data",
-        "schemaDefinitions": Array [
-          Object {
+        "schemaDefinitions": [
+          {
             "discriminant": "book",
-            "schema": Object {
-              "abstract": Object {
+            "schema": {
+              "abstract": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "a brief summary of the referenced book",
                 "isArray": false,
                 "isOptional": true,
                 "label": "abstract",
               },
-              "creators": Object {
+              "creators": {
                 "complexDataType": "NESTED_TYPE",
                 "description": "those responsible for creating this work",
                 "isArray": true,
                 "isOptional": false,
                 "label": "creators",
-                "schema": Object {
-                  "name": Object {
+                "schema": {
+                  "name": {
                     "coscradDataType": "NON_EMPTY_STRING",
                     "description": "full name of work's creator (free-form text)",
                     "isArray": false,
                     "isOptional": false,
                     "label": "name",
                   },
-                  "type": Object {
+                  "type": {
                     "complexDataType": "ENUM",
                     "description": "the person's role in creating the given work",
                     "enumLabel": "Creator Type",
@@ -405,16 +405,16 @@ Array [
                     "isArray": false,
                     "isOptional": false,
                     "label": "creator type",
-                    "labelsAndValues": Array [
-                      Object {
+                    "labelsAndValues": [
+                      {
                         "label": "artist",
                         "value": "artist",
                       },
-                      Object {
+                      {
                         "label": "author",
                         "value": "author",
                       },
-                      Object {
+                      {
                         "label": "director",
                         "value": "director",
                       },
@@ -422,49 +422,49 @@ Array [
                   },
                 },
               },
-              "isbn": Object {
+              "isbn": {
                 "coscradDataType": "ISBN",
                 "description": "a standardized globally unique identifier for the referenced book",
                 "isArray": false,
                 "isOptional": true,
                 "label": "ISBN",
               },
-              "numberOfPages": Object {
+              "numberOfPages": {
                 "coscradDataType": "POSITIVE_INTEGER",
                 "description": "the total number of pages in the referenced book",
                 "isArray": false,
                 "isOptional": true,
                 "label": "number of pages",
               },
-              "place": Object {
+              "place": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the place where the referenced book was published",
                 "isArray": false,
                 "isOptional": true,
                 "label": "place",
               },
-              "publisher": Object {
+              "publisher": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the publisher of the referenced book",
                 "isArray": false,
                 "isOptional": true,
                 "label": "publisher",
               },
-              "title": Object {
+              "title": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the title of the referenced book",
                 "isArray": false,
                 "isOptional": false,
                 "label": "title",
               },
-              "url": Object {
+              "url": {
                 "coscradDataType": "URL",
                 "description": "an link to an external digital representation of the book",
                 "isArray": false,
                 "isOptional": true,
                 "label": "external link",
               },
-              "year": Object {
+              "year": {
                 "coscradDataType": "YEAR",
                 "description": "A number representing the year of publication",
                 "isArray": false,
@@ -473,45 +473,45 @@ Array [
               },
             },
           },
-          Object {
+          {
             "discriminant": "courtCase",
-            "schema": Object {
-              "abstract": Object {
+            "schema": {
+              "abstract": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "a brief summary of the court case",
                 "isArray": false,
                 "isOptional": true,
                 "label": "abstract",
               },
-              "caseName": Object {
+              "caseName": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the official name of the court case",
                 "isArray": false,
                 "isOptional": false,
                 "label": "case name",
               },
-              "court": Object {
+              "court": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the name of the court in which the case was decided",
                 "isArray": false,
                 "isOptional": true,
                 "label": "court",
               },
-              "dateDecided": Object {
+              "dateDecided": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the date on which the court case was decided",
                 "isArray": false,
                 "isOptional": true,
                 "label": "date decided",
               },
-              "pages": Object {
+              "pages": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "summary information about the pages relevant to this court case",
                 "isArray": false,
                 "isOptional": true,
                 "label": "pages",
               },
-              "url": Object {
+              "url": {
                 "coscradDataType": "URL",
                 "description": "external link to digital materials regarding this court case",
                 "isArray": false,
@@ -520,31 +520,31 @@ Array [
               },
             },
           },
-          Object {
+          {
             "discriminant": "journalArticle",
-            "schema": Object {
-              "abstract": Object {
+            "schema": {
+              "abstract": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "a brief summary of the journal article",
                 "isArray": false,
                 "isOptional": true,
                 "label": "abstract",
               },
-              "creators": Object {
+              "creators": {
                 "complexDataType": "NESTED_TYPE",
                 "description": "the authors of the referenced journal article",
                 "isArray": true,
                 "isOptional": false,
                 "label": "creators",
-                "schema": Object {
-                  "name": Object {
+                "schema": {
+                  "name": {
                     "coscradDataType": "NON_EMPTY_STRING",
                     "description": "full name of work's creator (free-form text)",
                     "isArray": false,
                     "isOptional": false,
                     "label": "name",
                   },
-                  "type": Object {
+                  "type": {
                     "complexDataType": "ENUM",
                     "description": "the person's role in creating the given work",
                     "enumLabel": "Creator Type",
@@ -552,16 +552,16 @@ Array [
                     "isArray": false,
                     "isOptional": false,
                     "label": "creator type",
-                    "labelsAndValues": Array [
-                      Object {
+                    "labelsAndValues": [
+                      {
                         "label": "artist",
                         "value": "artist",
                       },
-                      Object {
+                      {
                         "label": "author",
                         "value": "author",
                       },
-                      Object {
+                      {
                         "label": "director",
                         "value": "director",
                       },
@@ -569,42 +569,42 @@ Array [
                   },
                 },
               },
-              "doi": Object {
+              "doi": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "an alternative unique identifier in the form of a permalink",
                 "isArray": false,
                 "isOptional": true,
                 "label": "DOI",
               },
-              "issn": Object {
+              "issn": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "a standardized unique identifier for the journal article",
                 "isArray": false,
                 "isOptional": true,
                 "label": "ISSN",
               },
-              "issueDate": Object {
+              "issueDate": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "unstructured text representation of the date the journal article was issued",
                 "isArray": false,
                 "isOptional": false,
                 "label": "issue date",
               },
-              "publicationTitle": Object {
+              "publicationTitle": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the name of the journal in which the article was published",
                 "isArray": false,
                 "isOptional": true,
                 "label": "publication title",
               },
-              "title": Object {
+              "title": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the title of the referenced journal article",
                 "isArray": false,
                 "isOptional": false,
                 "label": "title",
               },
-              "url": Object {
+              "url": {
                 "coscradDataType": "URL",
                 "description": "an external link to a digital representation of the referenced journal article",
                 "isArray": false,
@@ -615,7 +615,7 @@ Array [
           },
         ],
       },
-      "id": Object {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
@@ -625,54 +625,54 @@ Array [
     },
     "type": "bibliographicReference",
   },
-  Object {
+  {
     "description": "A song includes a link to an audio recording along with metadata and lyrics (when available).",
     "label": "Song",
     "link": "/resources/songs",
-    "schema": Object {
-      "audioURL": Object {
+    "schema": {
+      "audioURL": {
         "coscradDataType": "URL",
         "description": "a web link to the digital audio file for playback",
         "isArray": false,
         "isOptional": false,
         "label": "audio link",
       },
-      "id": Object {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "lengthMilliseconds": Object {
+      "lengthMilliseconds": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "length of the audio file in milliseconds",
         "isArray": false,
         "isOptional": false,
         "label": "length (ms)",
       },
-      "lyrics": Object {
+      "lyrics": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the lyrics of the song",
         "isArray": false,
         "isOptional": true,
         "label": "lyrics",
       },
-      "startMilliseconds": Object {
+      "startMilliseconds": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "the starting timestamp for the audio file",
         "isArray": false,
         "isOptional": false,
         "label": "start (ms)",
       },
-      "title": Object {
+      "title": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the title of the song in the language",
         "isArray": false,
         "isOptional": true,
         "label": "title",
       },
-      "titleEnglish": Object {
+      "titleEnglish": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the title of the song in the colonial language",
         "isArray": false,
@@ -682,26 +682,26 @@ Array [
     },
     "type": "song",
   },
-  Object {
+  {
     "description": "A playlist collects media items from serveral resources into a collection for web or radio playback",
     "label": "Playlist",
     "link": "/resources/playlists",
-    "schema": Object {
-      "episodes": Object {
+    "schema": {
+      "episodes": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a summary description of each episode in this playlist",
         "isArray": true,
         "isOptional": true,
         "label": "episodes",
       },
-      "id": Object {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "name": Object {
+      "name": {
         "coscradDataType": "MULTILINGUAL_TEXT",
         "description": "name of the playlist",
         "isArray": false,
@@ -711,26 +711,26 @@ Array [
     },
     "type": "playlist",
   },
-  Object {
+  {
     "description": "A media item is a digital representation of an audio or video recording.",
     "label": "Media Item",
     "link": "/resources/mediaItems",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "lengthMilliseconds": Object {
+      "lengthMilliseconds": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "length of the media item in milliseconds",
         "isArray": false,
         "isOptional": false,
         "label": "length (ms)",
       },
-      "mimeType": Object {
+      "mimeType": {
         "complexDataType": "ENUM",
         "description": "technical specification of the format of the media item",
         "enumLabel": "MIME type",
@@ -738,36 +738,36 @@ Array [
         "isArray": false,
         "isOptional": false,
         "label": "MIME type",
-        "labelsAndValues": Array [
-          Object {
+        "labelsAndValues": [
+          {
             "label": "mp3",
             "value": "audio/mpeg",
           },
-          Object {
+          {
             "label": "mp4",
             "value": "video/mp4",
           },
-          Object {
+          {
             "label": "png",
             "value": "image/png",
           },
         ],
       },
-      "title": Object {
+      "title": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "title of the media item in the language",
         "isArray": false,
         "isOptional": true,
         "label": "title (language)",
       },
-      "titleEnglish": Object {
+      "titleEnglish": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "title of the media item in the colonial language",
         "isArray": false,
         "isOptional": true,
         "label": "title (colonial language)",
       },
-      "url": Object {
+      "url": {
         "coscradDataType": "URL",
         "description": "a web link to the corresponding media file",
         "isArray": false,
