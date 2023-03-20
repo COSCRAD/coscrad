@@ -1,7 +1,30 @@
-export function useDate() {
-    const currentDay = new Date().getDate();
+const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+] as const;
 
-    console.log('TODAYS DAY:', currentDay);
+export type Month = typeof months[number];
 
-    return currentDay;
+export type MonthAndDate = {
+    month: Month;
+    date: number;
+};
+
+export function useDate(): MonthAndDate {
+    const currentDate = new Date();
+
+    return {
+        month: months[currentDate.getMonth()],
+        date: currentDate.getDate(),
+    };
 }

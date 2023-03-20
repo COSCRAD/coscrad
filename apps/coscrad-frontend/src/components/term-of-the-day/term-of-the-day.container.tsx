@@ -1,22 +1,26 @@
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useLoadableTermById } from '../../store/slices/resources';
+import { displayLoadableSearchResult } from '../higher-order-components/display-loadable-search-result';
+import { TermOfTheDayPresenter } from './term-of-the-day.presenter';
 import { useDate } from './use-date';
 
 export const TermOfTheDayContainer = (): JSX.Element => {
     const { termOfTheDayConfig } = useContext(ConfigurableContentContext);
 
-    const getCurrentTermOfTheDay = useDate();
+    const monthAndDate = useDate();
 
-    const termOfTheDayId = termOfTheDayConfig[getCurrentTermOfTheDay];
+    const termOfTheDayId = termOfTheDayConfig[monthAndDate.date.toString()];
 
     const loadableTermSearchResult = useLoadableTermById(termOfTheDayId);
 
-    return <div>{termOfTheDayId}</div>;
+    const Presenter = displayLoadableSearchResult(
+        TermOfTheDayPresenter,
+        (loadableTermSearchResult) => ({
+            termProps: loadableTermSearchResult,
+            monthAndDate,
+        })
+    );
 
-    // const Presenter = displayLoadableSearchResult(TermDetailFullViewPresenter);
-
-    // console.log(termOfTheDayId);
-
-    // return <Presenter {...loadableTermSearchResult} />;
+    return <Presenter {...loadableTermSearchResult} />;
 };

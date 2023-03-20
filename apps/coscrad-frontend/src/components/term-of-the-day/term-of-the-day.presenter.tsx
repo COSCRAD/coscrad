@@ -1,37 +1,25 @@
-import { TermOfTheDayContainer } from './term-of-the-day.container';
+import { ICategorizableDetailQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
+import { TermDetailFullViewPresenter } from '../resources/terms/term-detail.full-view.presenter';
+import { MonthAndDate } from './use-date';
 
-export const TermOfTheDayPresenter = (): JSX.Element => {
-    const today: Date = new Date();
+interface TermOfTheDayPresenterProps {
+    termProps: ICategorizableDetailQueryResult<ITermViewModel>;
+    monthAndDate: MonthAndDate;
+}
 
-    const year: number = today.getFullYear();
-
-    const month: number = today.getMonth() + 1;
-
-    const day: number = today.getDate();
-
-    const monthNames = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-    ];
-
-    const monthName = monthNames[month - 1];
-
+export const TermOfTheDayPresenter = ({
+    monthAndDate: { month, date },
+    termProps,
+}: TermOfTheDayPresenterProps): JSX.Element => {
     return (
         <div>
             <h1>Term of the day</h1>
-            <TermOfTheDayContainer />
+
             <div>
-                {monthName} {day}, {year}
+                {month} {date}
+            </div>
+            <div>
+                <TermDetailFullViewPresenter {...termProps} />
             </div>
         </div>
     );
