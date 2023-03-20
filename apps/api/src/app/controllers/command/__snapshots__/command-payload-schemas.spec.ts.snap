@@ -1,22 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`command payload schemas The schema for command ADD_USER_TO_GROUP should have the expected value 1`] = `
-Object {
-  "aggregateCompositeIdentifier": Object {
+{
+  "aggregateCompositeIdentifier": {
     "complexDataType": "NESTED_TYPE",
     "description": "system-wide unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "Composite Identifier",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "UUID",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "type": Object {
+      "type": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "user group",
         "isArray": false,
@@ -25,7 +25,7 @@ Object {
       },
     },
   },
-  "userId": Object {
+  "userId": {
     "coscradDataType": "UUID",
     "description": "the ID of the user that will be added to this group",
     "isArray": false,
@@ -37,29 +37,29 @@ Object {
 `;
 
 exports[`command payload schemas The schema for command CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE should have the expected value 1`] = `
-Object {
-  "abstract": Object {
+{
+  "abstract": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a brief summary of the referenced book",
     "isArray": false,
     "isOptional": true,
     "label": "abstract",
   },
-  "aggregateCompositeIdentifier": Object {
+  "aggregateCompositeIdentifier": {
     "complexDataType": "NESTED_TYPE",
     "description": "system-wide unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "Composite Identifier",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "UUID",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "type": Object {
+      "type": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
         "isArray": false,
@@ -68,21 +68,21 @@ Object {
       },
     },
   },
-  "creators": Object {
+  "creators": {
     "complexDataType": "NESTED_TYPE",
     "description": "the authors of the referenced book",
     "isArray": true,
     "isOptional": false,
     "label": "creators",
-    "schema": Object {
-      "name": Object {
+    "schema": {
+      "name": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "full name of work's creator (free-form text)",
         "isArray": false,
         "isOptional": false,
         "label": "name",
       },
-      "type": Object {
+      "type": {
         "complexDataType": "ENUM",
         "description": "the person's role in creating the given work",
         "enumLabel": "Creator Type",
@@ -90,16 +90,16 @@ Object {
         "isArray": false,
         "isOptional": false,
         "label": "creator type",
-        "labelsAndValues": Array [
-          Object {
+        "labelsAndValues": [
+          {
             "label": "artist",
             "value": "artist",
           },
-          Object {
+          {
             "label": "author",
             "value": "author",
           },
-          Object {
+          {
             "label": "director",
             "value": "director",
           },
@@ -107,56 +107,56 @@ Object {
       },
     },
   },
-  "isbn": Object {
+  "isbn": {
     "coscradDataType": "ISBN",
     "description": "the ISBN  of the referenced book",
     "isArray": false,
     "isOptional": true,
     "label": "ISBN",
   },
-  "numberOfPages": Object {
+  "numberOfPages": {
     "coscradDataType": "POSITIVE_INTEGER",
     "description": "the number of pages in the referenced book",
     "isArray": false,
     "isOptional": true,
     "label": "number of pages",
   },
-  "place": Object {
+  "place": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the place where the referenced book was published",
     "isArray": false,
     "isOptional": true,
     "label": "place of publication",
   },
-  "publisher": Object {
+  "publisher": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the publisher who published the referenced book",
     "isArray": false,
     "isOptional": true,
     "label": "publisher",
   },
-  "rawData": Object {
+  "rawData": {
     "coscradDataType": "RAW_DATA",
     "description": "raw data from a third-party system (e.g. Zotero)",
     "isArray": false,
     "isOptional": true,
     "label": "raw data",
   },
-  "title": Object {
+  "title": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "title of the book in any language",
     "isArray": false,
     "isOptional": false,
     "label": "title",
   },
-  "url": Object {
+  "url": {
     "coscradDataType": "URL",
     "description": "a link to an external digital representation of the book",
     "isArray": false,
     "isOptional": true,
     "label": "external link",
   },
-  "year": Object {
+  "year": {
     "coscradDataType": "YEAR",
     "description": "a number representing the year the referenced book was published",
     "isArray": false,
@@ -167,29 +167,29 @@ Object {
 `;
 
 exports[`command payload schemas The schema for command CREATE_COURT_CASE_BIBLIOGRAPHIC_REFERENCE should have the expected value 1`] = `
-Object {
-  "abstract": Object {
+{
+  "abstract": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a brief summary of the court case",
     "isArray": false,
     "isOptional": true,
     "label": "abstract",
   },
-  "aggregateCompositeIdentifier": Object {
+  "aggregateCompositeIdentifier": {
     "complexDataType": "NESTED_TYPE",
     "description": "system-wide unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "Composite Identifier",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "UUID",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "type": Object {
+      "type": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
         "isArray": false,
@@ -198,42 +198,42 @@ Object {
       },
     },
   },
-  "caseName": Object {
+  "caseName": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the name of the court case",
     "isArray": false,
     "isOptional": false,
     "label": "case name",
   },
-  "court": Object {
+  "court": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "name of the court in which the case was decided",
     "isArray": false,
     "isOptional": true,
     "label": "court",
   },
-  "dateDecided": Object {
+  "dateDecided": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the date that the court case was decided",
     "isArray": false,
     "isOptional": true,
     "label": "date decided",
   },
-  "pages": Object {
+  "pages": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a summary a larger document's pages relevant to this court case",
     "isArray": false,
     "isOptional": true,
     "label": "pages",
   },
-  "rawData": Object {
+  "rawData": {
     "coscradDataType": "RAW_DATA",
     "description": "raw data from third-party system (e.g. Zotero)",
     "isArray": false,
     "isOptional": true,
     "label": "raw data",
   },
-  "url": Object {
+  "url": {
     "coscradDataType": "URL",
     "description": "web link to additional information about the court case",
     "isArray": false,
@@ -244,29 +244,29 @@ Object {
 `;
 
 exports[`command payload schemas The schema for command CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE should have the expected value 1`] = `
-Object {
-  "abstract": Object {
+{
+  "abstract": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a brief summary of the referenced journal article",
     "isArray": false,
     "isOptional": true,
     "label": "abstract",
   },
-  "aggregateCompositeIdentifier": Object {
+  "aggregateCompositeIdentifier": {
     "complexDataType": "NESTED_TYPE",
     "description": "system-wide unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "Composite Identifier",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "UUID",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "type": Object {
+      "type": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
         "isArray": false,
@@ -275,21 +275,21 @@ Object {
       },
     },
   },
-  "creators": Object {
+  "creators": {
     "complexDataType": "NESTED_TYPE",
     "description": "the authors of the referenced journal article",
     "isArray": true,
     "isOptional": false,
     "label": "creators",
-    "schema": Object {
-      "name": Object {
+    "schema": {
+      "name": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "full name of work's creator (free-form text)",
         "isArray": false,
         "isOptional": false,
         "label": "name",
       },
-      "type": Object {
+      "type": {
         "complexDataType": "ENUM",
         "description": "the person's role in creating the given work",
         "enumLabel": "Creator Type",
@@ -297,16 +297,16 @@ Object {
         "isArray": false,
         "isOptional": false,
         "label": "creator type",
-        "labelsAndValues": Array [
-          Object {
+        "labelsAndValues": [
+          {
             "label": "artist",
             "value": "artist",
           },
-          Object {
+          {
             "label": "author",
             "value": "author",
           },
-          Object {
+          {
             "label": "director",
             "value": "director",
           },
@@ -314,56 +314,56 @@ Object {
       },
     },
   },
-  "doi": Object {
+  "doi": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the DOI of the journal article",
     "isArray": false,
     "isOptional": true,
     "label": "DOI",
   },
-  "issn": Object {
+  "issn": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the ISSN of the journal article",
     "isArray": false,
     "isOptional": true,
     "label": "ISSN",
   },
-  "issueDate": Object {
+  "issueDate": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a free-form text representation of the date of publication",
     "isArray": false,
     "isOptional": false,
     "label": "issue date",
   },
-  "pages": Object {
+  "pages": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "text summary of the pages on which this article appears in the larger journal",
     "isArray": false,
     "isOptional": true,
     "label": "pages",
   },
-  "publicationTitle": Object {
+  "publicationTitle": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the name of the journal in which the article was published",
     "isArray": false,
     "isOptional": true,
     "label": "publication title",
   },
-  "rawData": Object {
+  "rawData": {
     "coscradDataType": "RAW_DATA",
     "description": "raw data from third-party system of origin (e.g. Zotero)",
     "isArray": false,
     "isOptional": true,
     "label": "raw data",
   },
-  "title": Object {
+  "title": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "title of the referenced journal article",
     "isArray": false,
     "isOptional": false,
     "label": "title",
   },
-  "url": Object {
+  "url": {
     "coscradDataType": "URL",
     "description": "an external web link to the referenced journal article",
     "isArray": false,
@@ -374,22 +374,22 @@ Object {
 `;
 
 exports[`command payload schemas The schema for command CREATE_SONG should have the expected value 1`] = `
-Object {
-  "aggregateCompositeIdentifier": Object {
+{
+  "aggregateCompositeIdentifier": {
     "complexDataType": "NESTED_TYPE",
     "description": "system-wide unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "Composite Identifier",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "UUID",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "type": Object {
+      "type": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "song",
         "isArray": false,
@@ -398,35 +398,35 @@ Object {
       },
     },
   },
-  "audioURL": Object {
+  "audioURL": {
     "coscradDataType": "URL",
     "description": "a web URL link to the audio for this song",
     "isArray": false,
     "isOptional": false,
     "label": "audio link",
   },
-  "lyrics": Object {
+  "lyrics": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "plain text representation of this song's lyrics",
     "isArray": false,
     "isOptional": true,
     "label": "lyrics",
   },
-  "rawData": Object {
+  "rawData": {
     "coscradDataType": "RAW_DATA",
-    "description": "additional data from a legacy \\\\ third-party system source of the data",
+    "description": "additional data from a legacy \\ third-party system source of the data",
     "isArray": false,
     "isOptional": true,
     "label": "raw data",
   },
-  "title": Object {
+  "title": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "song's title in the language",
     "isArray": false,
     "isOptional": true,
     "label": "title",
   },
-  "titleEnglish": Object {
+  "titleEnglish": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "song's title in the colonial language",
     "isArray": false,
@@ -437,22 +437,22 @@ Object {
 `;
 
 exports[`command payload schemas The schema for command CREATE_USER_GROUP should have the expected value 1`] = `
-Object {
-  "aggregateCompositeIdentifier": Object {
+{
+  "aggregateCompositeIdentifier": {
     "complexDataType": "NESTED_TYPE",
     "description": "system-wide unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "Composite Identifier",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "UUID",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "type": Object {
+      "type": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "user group",
         "isArray": false,
@@ -461,14 +461,14 @@ Object {
       },
     },
   },
-  "description": Object {
+  "description": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a summary of the purpose of this group (what its members have in common)",
     "isArray": false,
     "isOptional": false,
     "label": "description",
   },
-  "label": Object {
+  "label": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the name of the user group",
     "isArray": false,
@@ -479,22 +479,22 @@ Object {
 `;
 
 exports[`command payload schemas The schema for command GRANT_RESOURCE_READ_ACCESS_TO_USER should have the expected value 1`] = `
-Object {
-  "aggregateCompositeIdentifier": Object {
+{
+  "aggregateCompositeIdentifier": {
     "complexDataType": "NESTED_TYPE",
     "description": "system-wide unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "Composite Identifier",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "UUID",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "type": Object {
+      "type": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "user",
         "isArray": false,
@@ -503,7 +503,7 @@ Object {
       },
     },
   },
-  "resourceCompositeIdentifier": Object {
+  "resourceCompositeIdentifier": {
     "coscradDataType": "COMPOSITE_IDENTIFIER",
     "description": "the composite identifier of the resource to which the user will receive access",
     "isArray": false,
@@ -514,22 +514,22 @@ Object {
 `;
 
 exports[`command payload schemas The schema for command GRANT_USER_ROLE should have the expected value 1`] = `
-Object {
-  "aggregateCompositeIdentifier": Object {
+{
+  "aggregateCompositeIdentifier": {
     "complexDataType": "NESTED_TYPE",
     "description": "system-wide unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "Composite Identifier",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "UUID",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "type": Object {
+      "type": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "user",
         "isArray": false,
@@ -538,7 +538,7 @@ Object {
       },
     },
   },
-  "role": Object {
+  "role": {
     "complexDataType": "ENUM",
     "description": "the role that will be granted to this user",
     "enumLabel": "User Role",
@@ -546,16 +546,16 @@ Object {
     "isArray": false,
     "isOptional": false,
     "label": "role",
-    "labelsAndValues": Array [
-      Object {
+    "labelsAndValues": [
+      {
         "label": "admin",
         "value": "projectAdmin",
       },
-      Object {
+      {
         "label": "viewer",
         "value": "viewer",
       },
-      Object {
+      {
         "label": "COSCRAD admin",
         "value": "superAdmin",
       },
@@ -565,22 +565,22 @@ Object {
 `;
 
 exports[`command payload schemas The schema for command REGISTER_USER should have the expected value 1`] = `
-Object {
-  "aggregateCompositeIdentifier": Object {
+{
+  "aggregateCompositeIdentifier": {
     "complexDataType": "NESTED_TYPE",
     "description": "system-wide unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "Composite Identifier",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "UUID",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "type": Object {
+      "type": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "user",
         "isArray": false,
@@ -589,14 +589,14 @@ Object {
       },
     },
   },
-  "userIdFromAuthProvider": Object {
+  "userIdFromAuthProvider": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the auth provider's unique ID for this user (the user must be added to the auth provider first)",
     "isArray": false,
     "isOptional": false,
     "label": "auth provider's ID",
   },
-  "username": Object {
+  "username": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a human-readable text identifier for this user",
     "isArray": false,

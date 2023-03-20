@@ -1,36 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: book match the snapshot 1`] = `
-Object {
-  "data": Object {
+{
+  "data": {
     "complexDataType": "NESTED_TYPE",
     "description": "citation information for the referenced book",
     "isArray": false,
     "isOptional": false,
     "label": "reference data",
-    "schema": Object {
-      "abstract": Object {
+    "schema": {
+      "abstract": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a brief summary of the referenced book",
         "isArray": false,
         "isOptional": true,
         "label": "abstract",
       },
-      "creators": Object {
+      "creators": {
         "complexDataType": "NESTED_TYPE",
         "description": "those responsible for creating this work",
         "isArray": true,
         "isOptional": false,
         "label": "creators",
-        "schema": Object {
-          "name": Object {
+        "schema": {
+          "name": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "full name of work's creator (free-form text)",
             "isArray": false,
             "isOptional": false,
             "label": "name",
           },
-          "type": Object {
+          "type": {
             "complexDataType": "ENUM",
             "description": "the person's role in creating the given work",
             "enumLabel": "Creator Type",
@@ -38,16 +38,16 @@ Object {
             "isArray": false,
             "isOptional": false,
             "label": "creator type",
-            "labelsAndValues": Array [
-              Object {
+            "labelsAndValues": [
+              {
                 "label": "artist",
                 "value": "artist",
               },
-              Object {
+              {
                 "label": "author",
                 "value": "author",
               },
-              Object {
+              {
                 "label": "director",
                 "value": "director",
               },
@@ -55,49 +55,49 @@ Object {
           },
         },
       },
-      "isbn": Object {
+      "isbn": {
         "coscradDataType": "ISBN",
         "description": "a standardized globally unique identifier for the referenced book",
         "isArray": false,
         "isOptional": true,
         "label": "ISBN",
       },
-      "numberOfPages": Object {
+      "numberOfPages": {
         "coscradDataType": "POSITIVE_INTEGER",
         "description": "the total number of pages in the referenced book",
         "isArray": false,
         "isOptional": true,
         "label": "number of pages",
       },
-      "place": Object {
+      "place": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the place where the referenced book was published",
         "isArray": false,
         "isOptional": true,
         "label": "place",
       },
-      "publisher": Object {
+      "publisher": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the publisher of the referenced book",
         "isArray": false,
         "isOptional": true,
         "label": "publisher",
       },
-      "title": Object {
+      "title": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the title of the referenced book",
         "isArray": false,
         "isOptional": false,
         "label": "title",
       },
-      "url": Object {
+      "url": {
         "coscradDataType": "URL",
         "description": "an link to an external digital representation of the book",
         "isArray": false,
         "isOptional": true,
         "label": "external link",
       },
-      "year": Object {
+      "year": {
         "coscradDataType": "YEAR",
         "description": "A number representing the year of publication",
         "isArray": false,
@@ -106,7 +106,7 @@ Object {
       },
     },
   },
-  "id": Object {
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
@@ -117,50 +117,50 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: courtCase match the snapshot 1`] = `
-Object {
-  "data": Object {
+{
+  "data": {
     "complexDataType": "NESTED_TYPE",
     "description": "citation information for the referenced court case",
     "isArray": false,
     "isOptional": false,
     "label": "reference data",
-    "schema": Object {
-      "abstract": Object {
+    "schema": {
+      "abstract": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a brief summary of the court case",
         "isArray": false,
         "isOptional": true,
         "label": "abstract",
       },
-      "caseName": Object {
+      "caseName": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the official name of the court case",
         "isArray": false,
         "isOptional": false,
         "label": "case name",
       },
-      "court": Object {
+      "court": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the name of the court in which the case was decided",
         "isArray": false,
         "isOptional": true,
         "label": "court",
       },
-      "dateDecided": Object {
+      "dateDecided": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the date on which the court case was decided",
         "isArray": false,
         "isOptional": true,
         "label": "date decided",
       },
-      "pages": Object {
+      "pages": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "summary information about the pages relevant to this court case",
         "isArray": false,
         "isOptional": true,
         "label": "pages",
       },
-      "url": Object {
+      "url": {
         "coscradDataType": "URL",
         "description": "external link to digital materials regarding this court case",
         "isArray": false,
@@ -169,7 +169,7 @@ Object {
       },
     },
   },
-  "id": Object {
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
@@ -180,36 +180,36 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: journalArticle match the snapshot 1`] = `
-Object {
-  "data": Object {
+{
+  "data": {
     "complexDataType": "NESTED_TYPE",
     "description": "citation information for the referenced journal article",
     "isArray": false,
     "isOptional": false,
     "label": "reference data",
-    "schema": Object {
-      "abstract": Object {
+    "schema": {
+      "abstract": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a brief summary of the journal article",
         "isArray": false,
         "isOptional": true,
         "label": "abstract",
       },
-      "creators": Object {
+      "creators": {
         "complexDataType": "NESTED_TYPE",
         "description": "the authors of the referenced journal article",
         "isArray": true,
         "isOptional": false,
         "label": "creators",
-        "schema": Object {
-          "name": Object {
+        "schema": {
+          "name": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "full name of work's creator (free-form text)",
             "isArray": false,
             "isOptional": false,
             "label": "name",
           },
-          "type": Object {
+          "type": {
             "complexDataType": "ENUM",
             "description": "the person's role in creating the given work",
             "enumLabel": "Creator Type",
@@ -217,16 +217,16 @@ Object {
             "isArray": false,
             "isOptional": false,
             "label": "creator type",
-            "labelsAndValues": Array [
-              Object {
+            "labelsAndValues": [
+              {
                 "label": "artist",
                 "value": "artist",
               },
-              Object {
+              {
                 "label": "author",
                 "value": "author",
               },
-              Object {
+              {
                 "label": "director",
                 "value": "director",
               },
@@ -234,42 +234,42 @@ Object {
           },
         },
       },
-      "doi": Object {
+      "doi": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "an alternative unique identifier in the form of a permalink",
         "isArray": false,
         "isOptional": true,
         "label": "DOI",
       },
-      "issn": Object {
+      "issn": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a standardized unique identifier for the journal article",
         "isArray": false,
         "isOptional": true,
         "label": "ISSN",
       },
-      "issueDate": Object {
+      "issueDate": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unstructured text representation of the date the journal article was issued",
         "isArray": false,
         "isOptional": false,
         "label": "issue date",
       },
-      "publicationTitle": Object {
+      "publicationTitle": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the name of the journal in which the article was published",
         "isArray": false,
         "isOptional": true,
         "label": "publication title",
       },
-      "title": Object {
+      "title": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the title of the referenced journal article",
         "isArray": false,
         "isOptional": false,
         "label": "title",
       },
-      "url": Object {
+      "url": {
         "coscradDataType": "URL",
         "description": "an external link to a digital representation of the referenced journal article",
         "isArray": false,
@@ -278,7 +278,7 @@ Object {
       },
     },
   },
-  "id": Object {
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
@@ -289,43 +289,43 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Book  match the snapshot 1`] = `
-Object {
-  "author": Object {
+{
+  "author": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the author of the book",
     "isArray": false,
     "isOptional": false,
     "label": "author",
   },
-  "id": Object {
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "pages": Object {
+  "pages": {
     "complexDataType": "NESTED_TYPE",
     "description": "a digital representation of the book's pages",
     "isArray": true,
     "isOptional": false,
     "label": "book pages",
-    "schema": Object {
-      "identifier": Object {
+    "schema": {
+      "identifier": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "text identifier for the page(",
         "isArray": false,
         "isOptional": false,
         "label": "identifier",
       },
-      "text": Object {
+      "text": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the page's text in the language",
         "isArray": false,
         "isOptional": false,
         "label": "text",
       },
-      "translation": Object {
+      "translation": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "translation of the page's text into the colonial language",
         "isArray": false,
@@ -334,21 +334,21 @@ Object {
       },
     },
   },
-  "publicationDate": Object {
+  "publicationDate": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a free form string that specifies the publication date",
     "isArray": false,
     "isOptional": true,
     "label": "publication date",
   },
-  "subtitle": Object {
+  "subtitle": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "subtitle of the book (in whatever language)",
     "isArray": false,
     "isOptional": true,
     "label": "subtitle",
   },
-  "title": Object {
+  "title": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "title of the book (in whatever language)",
     "isArray": false,
@@ -359,29 +359,29 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Category  match the snapshot 1`] = `
-Object {
-  "childrenIDs": Object {
+{
+  "childrenIDs": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the ID of every category that is a child (sub-cateogry) of this one",
     "isArray": true,
     "isOptional": false,
     "label": "children IDs",
   },
-  "id": Object {
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "label": Object {
+  "label": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the user-facing label for this category",
     "isArray": false,
     "isOptional": false,
     "label": "label",
   },
-  "members": Object {
+  "members": {
     "coscradDataType": "COMPOSITE_IDENTIFIER",
     "description": "the composite identifier of every resource or note in this category",
     "isArray": true,
@@ -392,22 +392,22 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Media Item  match the snapshot 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "lengthMilliseconds": Object {
+  "lengthMilliseconds": {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
     "description": "length of the media item in milliseconds",
     "isArray": false,
     "isOptional": false,
     "label": "length (ms)",
   },
-  "mimeType": Object {
+  "mimeType": {
     "complexDataType": "ENUM",
     "description": "technical specification of the format of the media item",
     "enumLabel": "MIME type",
@@ -415,36 +415,36 @@ Object {
     "isArray": false,
     "isOptional": false,
     "label": "MIME type",
-    "labelsAndValues": Array [
-      Object {
+    "labelsAndValues": [
+      {
         "label": "mp3",
         "value": "audio/mpeg",
       },
-      Object {
+      {
         "label": "mp4",
         "value": "video/mp4",
       },
-      Object {
+      {
         "label": "png",
         "value": "image/png",
       },
     ],
   },
-  "title": Object {
+  "title": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "title of the media item in the language",
     "isArray": false,
     "isOptional": true,
     "label": "title (language)",
   },
-  "titleEnglish": Object {
+  "titleEnglish": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "title of the media item in the colonial language",
     "isArray": false,
     "isOptional": true,
     "label": "title (colonial language)",
   },
-  "url": Object {
+  "url": {
     "coscradDataType": "URL",
     "description": "a web link to the corresponding media file",
     "isArray": false,
@@ -455,15 +455,15 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Note  match the snapshot 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "note": Object {
+  "note": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "text summary of why this connection is relevant",
     "isArray": false,
@@ -474,22 +474,22 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Photograph  match the snapshot 1`] = `
-Object {
-  "dimensions": Object {
+{
+  "dimensions": {
     "complexDataType": "NESTED_TYPE",
     "description": "the height and width of the photograph in pixels",
     "isArray": false,
     "isOptional": false,
     "label": "dimensions",
-    "schema": Object {
-      "heightPX": Object {
+    "schema": {
+      "heightPX": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "the height of the photograph in pixels",
         "isArray": false,
         "isOptional": false,
         "label": "height (px)",
       },
-      "widthPX": Object {
+      "widthPX": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "the width of the photograph in pixels",
         "isArray": false,
@@ -498,21 +498,21 @@ Object {
       },
     },
   },
-  "filename": Object {
+  "filename": {
     "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the name (not full URL \\\\ path) of the digital file",
+    "description": "the name (not full URL \\ path) of the digital file",
     "isArray": false,
     "isOptional": false,
     "label": "file name",
   },
-  "id": Object {
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "photographer": Object {
+  "photographer": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the person who took the picture",
     "isArray": false,
@@ -523,36 +523,36 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Playlist  match the snapshot 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "items": Object {
+  "items": {
     "complexDataType": "NESTED_TYPE",
     "description": "the resources from which the playlist's episodes are derived",
     "isArray": true,
     "isOptional": true,
     "label": "playlist items",
-    "schema": Object {
-      "resourceCompositeIdentifier": Object {
+    "schema": {
+      "resourceCompositeIdentifier": {
         "complexDataType": "NESTED_TYPE",
         "description": "system-wide unique identifier for the resource this playlist item was derived from",
         "isArray": false,
         "isOptional": false,
         "label": "resource composite identifier",
-        "schema": Object {
-          "id": Object {
+        "schema": {
+          "id": {
             "coscradDataType": "UUID",
             "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
             "label": "id",
           },
-          "type": Object {
+          "type": {
             "complexDataType": "ENUM",
             "description": "the type of the resource this playlist item is derived from",
             "enumLabel": "type",
@@ -560,8 +560,8 @@ Object {
             "isArray": false,
             "isOptional": false,
             "label": "resource type",
-            "labelsAndValues": Array [
-              Object {
+            "labelsAndValues": [
+              {
                 "label": "audioItem",
                 "value": "audioItem",
               },
@@ -571,7 +571,7 @@ Object {
       },
     },
   },
-  "name": Object {
+  "name": {
     "coscradDataType": "MULTILINGUAL_TEXT",
     "description": "the name of the playlist",
     "isArray": false,
@@ -582,50 +582,50 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Song  match the snapshot 1`] = `
-Object {
-  "audioURL": Object {
+{
+  "audioURL": {
     "coscradDataType": "URL",
     "description": "a web link to the audio for the song",
     "isArray": false,
     "isOptional": false,
     "label": "audio URL",
   },
-  "id": Object {
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "lengthMilliseconds": Object {
+  "lengthMilliseconds": {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
     "description": "length of the audio file in milliseconds",
     "isArray": false,
     "isOptional": false,
     "label": "length (ms)",
   },
-  "lyrics": Object {
+  "lyrics": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the lyrics of the song",
     "isArray": false,
     "isOptional": true,
     "label": "lyrics",
   },
-  "startMilliseconds": Object {
+  "startMilliseconds": {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
     "description": "the starting timestamp for the audio file",
     "isArray": false,
     "isOptional": false,
     "label": "start (ms)",
   },
-  "title": Object {
+  "title": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the title of the song in the language",
     "isArray": false,
     "isOptional": true,
     "label": "title",
   },
-  "titleEnglish": Object {
+  "titleEnglish": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the title of the song in the colonial language",
     "isArray": false,
@@ -636,8 +636,8 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Spatial Feature of subtype: LineString match the snapshot 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
@@ -648,8 +648,8 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Spatial Feature of subtype: Point match the snapshot 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
@@ -660,8 +660,8 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Spatial Feature of subtype: Polygon match the snapshot 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
@@ -672,22 +672,22 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Tag  match the snapshot 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "label": Object {
+  "label": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a human readable text label for this tag",
     "isArray": false,
     "isOptional": false,
     "label": "label",
   },
-  "members": Object {
+  "members": {
     "coscradDataType": "COMPOSITE_IDENTIFIER",
     "description": "the composite identifier of every resource or note with this tag",
     "isArray": true,
@@ -698,43 +698,43 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Term  match the snapshot 1`] = `
-Object {
-  "audioFilename": Object {
+{
+  "audioFilename": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the name of the audio file",
     "isArray": false,
     "isOptional": true,
     "label": "Audio Filename",
   },
-  "contributorId": Object {
+  "contributorId": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "reference to the contributor for this term",
     "isArray": false,
     "isOptional": false,
     "label": "contributor ID",
   },
-  "id": Object {
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "sourceProject": Object {
+  "sourceProject": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the name of the project through which the term was collected",
     "isArray": false,
     "isOptional": true,
     "label": "Source Project",
   },
-  "term": Object {
+  "term": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the term in the language",
     "isArray": false,
     "isOptional": true,
     "label": "text (language)",
   },
-  "termEnglish": Object {
+  "termEnglish": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the text in the colonial language",
     "isArray": false,
@@ -745,43 +745,43 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Transcribed Audio Item  match the snapshot 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "lengthMilliseconds": Object {
+  "lengthMilliseconds": {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
     "description": "the length of the transcript's media item in milliseconds",
     "isArray": false,
     "isOptional": false,
     "label": "length (ms)",
   },
-  "mediaItemId": Object {
+  "mediaItemId": {
     "coscradDataType": "UUID",
     "description": "ID of the transcript's media item",
     "isArray": false,
     "isOptional": false,
     "label": "media item ID",
   },
-  "name": Object {
+  "name": {
     "complexDataType": "NESTED_TYPE",
     "description": "the name of the transcript",
     "isArray": false,
     "isOptional": false,
     "label": "name",
-    "schema": Object {
-      "items": Object {
+    "schema": {
+      "items": {
         "complexDataType": "NESTED_TYPE",
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
         "label": "items",
-        "schema": Object {
-          "languageCode": Object {
+        "schema": {
+          "languageCode": {
             "complexDataType": "ENUM",
             "description": "an official identifier of the language",
             "enumLabel": "Language_Code",
@@ -789,38 +789,38 @@ Object {
             "isArray": false,
             "isOptional": false,
             "label": "language code",
-            "labelsAndValues": Array [
-              Object {
+            "labelsAndValues": [
+              {
                 "label": "Chilcotin",
                 "value": "clc",
               },
-              Object {
+              {
                 "label": "Haida",
                 "value": "hai",
               },
-              Object {
+              {
                 "label": "English",
                 "value": "eng",
               },
-              Object {
+              {
                 "label": "French",
                 "value": "fra",
               },
-              Object {
+              {
                 "label": "Chinook",
                 "value": "chn",
               },
-              Object {
+              {
                 "label": "Zapotec",
                 "value": "zap",
               },
-              Object {
+              {
                 "label": "Spanish",
                 "value": "spa",
               },
             ],
           },
-          "role": Object {
+          "role": {
             "complexDataType": "ENUM",
             "description": "role of this text in the translation process",
             "enumLabel": "text item role",
@@ -828,30 +828,30 @@ Object {
             "isArray": false,
             "isOptional": false,
             "label": "text item role",
-            "labelsAndValues": Array [
-              Object {
+            "labelsAndValues": [
+              {
                 "label": "original",
                 "value": "original",
               },
-              Object {
+              {
                 "label": "glossed to",
                 "value": "glossed to",
               },
-              Object {
+              {
                 "label": "prompt",
                 "value": "prompt",
               },
-              Object {
+              {
                 "label": "free translation",
                 "value": "free translation",
               },
-              Object {
+              {
                 "label": "literal translation",
                 "value": "literal translation",
               },
             ],
           },
-          "text": Object {
+          "text": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "plain text in the given language",
             "isArray": false,
@@ -862,56 +862,56 @@ Object {
       },
     },
   },
-  "transcript": Object {
+  "transcript": {
     "complexDataType": "NESTED_TYPE",
     "description": "time stamps with text and speaker labels",
     "isArray": false,
     "isOptional": true,
     "label": "items",
-    "schema": Object {
-      "items": Object {
+    "schema": {
+      "items": {
         "complexDataType": "NESTED_TYPE",
         "description": "time stamps with text and speaker labels",
         "isArray": true,
         "isOptional": true,
         "label": "items",
-        "schema": Object {
-          "inPoint": Object {
+        "schema": {
+          "inPoint": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
             "description": "starting time stamp",
             "isArray": false,
             "isOptional": false,
             "label": "in point",
           },
-          "outPoint": Object {
+          "outPoint": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
             "description": "ending time stamp",
             "isArray": false,
             "isOptional": false,
             "label": "out point",
           },
-          "speakerInitials": Object {
+          "speakerInitials": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "the label for the current timestamped item",
             "isArray": false,
             "isOptional": false,
             "label": "label",
           },
-          "text": Object {
+          "text": {
             "complexDataType": "NESTED_TYPE",
-            "description": "multi-lingual text transcription \\\\ translation for this item",
+            "description": "multi-lingual text transcription \\ translation for this item",
             "isArray": false,
             "isOptional": false,
             "label": "text",
-            "schema": Object {
-              "items": Object {
+            "schema": {
+              "items": {
                 "complexDataType": "NESTED_TYPE",
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
                 "label": "items",
-                "schema": Object {
-                  "languageCode": Object {
+                "schema": {
+                  "languageCode": {
                     "complexDataType": "ENUM",
                     "description": "an official identifier of the language",
                     "enumLabel": "Language_Code",
@@ -919,38 +919,38 @@ Object {
                     "isArray": false,
                     "isOptional": false,
                     "label": "language code",
-                    "labelsAndValues": Array [
-                      Object {
+                    "labelsAndValues": [
+                      {
                         "label": "Chilcotin",
                         "value": "clc",
                       },
-                      Object {
+                      {
                         "label": "Haida",
                         "value": "hai",
                       },
-                      Object {
+                      {
                         "label": "English",
                         "value": "eng",
                       },
-                      Object {
+                      {
                         "label": "French",
                         "value": "fra",
                       },
-                      Object {
+                      {
                         "label": "Chinook",
                         "value": "chn",
                       },
-                      Object {
+                      {
                         "label": "Zapotec",
                         "value": "zap",
                       },
-                      Object {
+                      {
                         "label": "Spanish",
                         "value": "spa",
                       },
                     ],
                   },
-                  "role": Object {
+                  "role": {
                     "complexDataType": "ENUM",
                     "description": "role of this text in the translation process",
                     "enumLabel": "text item role",
@@ -958,30 +958,30 @@ Object {
                     "isArray": false,
                     "isOptional": false,
                     "label": "text item role",
-                    "labelsAndValues": Array [
-                      Object {
+                    "labelsAndValues": [
+                      {
                         "label": "original",
                         "value": "original",
                       },
-                      Object {
+                      {
                         "label": "glossed to",
                         "value": "glossed to",
                       },
-                      Object {
+                      {
                         "label": "prompt",
                         "value": "prompt",
                       },
-                      Object {
+                      {
                         "label": "free translation",
                         "value": "free translation",
                       },
-                      Object {
+                      {
                         "label": "literal translation",
                         "value": "literal translation",
                       },
                     ],
                   },
-                  "text": Object {
+                  "text": {
                     "coscradDataType": "NON_EMPTY_STRING",
                     "description": "plain text in the given language",
                     "isArray": false,
@@ -994,21 +994,21 @@ Object {
           },
         },
       },
-      "participants": Object {
+      "participants": {
         "complexDataType": "NESTED_TYPE",
         "description": "a list of participants and their initials",
         "isArray": true,
         "isOptional": true,
         "label": "participants",
-        "schema": Object {
-          "initials": Object {
+        "schema": {
+          "initials": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "the initials or text identifier for this speaker",
             "isArray": false,
             "isOptional": false,
             "label": "speaker initials",
           },
-          "name": Object {
+          "name": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "the participant's name",
             "isArray": false,
@@ -1023,50 +1023,50 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a User  match the snapshot 1`] = `
-Object {
-  "authProviderUserId": Object {
+{
+  "authProviderUserId": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "an external ID that identifies the user with the auth provider",
     "isArray": false,
     "isOptional": false,
     "label": "user ID with the auth provider",
   },
-  "id": Object {
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "profile": Object {
+  "profile": {
     "complexDataType": "NESTED_TYPE",
     "description": "the user's profile information",
     "isArray": false,
     "isOptional": true,
     "label": "profile",
-    "schema": Object {
-      "email": Object {
+    "schema": {
+      "email": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the user's email address",
         "isArray": false,
         "isOptional": false,
         "label": "email",
       },
-      "name": Object {
+      "name": {
         "complexDataType": "NESTED_TYPE",
         "description": "the user's full name",
         "isArray": false,
         "isOptional": false,
         "label": "full name",
-        "schema": Object {
-          "firstName": Object {
+        "schema": {
+          "firstName": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "the user's first name",
             "isArray": false,
             "isOptional": false,
             "label": "first name",
           },
-          "lastName": Object {
+          "lastName": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "the user's last name",
             "isArray": false,
@@ -1077,30 +1077,30 @@ Object {
       },
     },
   },
-  "roles": Object {
+  "roles": {
     "complexDataType": "ENUM",
-    "description": "the user's roles, which grant privileges to perform certain read \\\\ write actions",
+    "description": "the user's roles, which grant privileges to perform certain read \\ write actions",
     "enumLabel": "User Role",
     "enumName": "COSCRAD_USER_ROLE",
     "isArray": true,
     "isOptional": false,
     "label": "roles",
-    "labelsAndValues": Array [
-      Object {
+    "labelsAndValues": [
+      {
         "label": "admin",
         "value": "projectAdmin",
       },
-      Object {
+      {
         "label": "viewer",
         "value": "viewer",
       },
-      Object {
+      {
         "label": "COSCRAD admin",
         "value": "superAdmin",
       },
     ],
   },
-  "username": Object {
+  "username": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a human-readable identifier for this user",
     "isArray": false,
@@ -1111,29 +1111,29 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a User Group  match the snapshot 1`] = `
-Object {
-  "description": Object {
+{
+  "description": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "a summary of the significance of this user group (what its members have in common)",
     "isArray": false,
     "isOptional": false,
     "label": "description",
   },
-  "id": Object {
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "label": Object {
+  "label": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the name of the group",
     "isArray": false,
     "isOptional": false,
     "label": "label",
   },
-  "userIds": Object {
+  "userIds": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the ID of every user that is in this group",
     "isArray": true,
@@ -1144,43 +1144,43 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Video  match the snapshot 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "lengthMilliseconds": Object {
+  "lengthMilliseconds": {
     "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
     "description": "the length of the transcript's media item in milliseconds",
     "isArray": false,
     "isOptional": false,
     "label": "length (ms)",
   },
-  "mediaItemId": Object {
+  "mediaItemId": {
     "coscradDataType": "UUID",
     "description": "ID of the transcript's media item",
     "isArray": false,
     "isOptional": false,
     "label": "media item ID",
   },
-  "name": Object {
+  "name": {
     "complexDataType": "NESTED_TYPE",
     "description": "the name of the video",
     "isArray": false,
     "isOptional": false,
     "label": "name",
-    "schema": Object {
-      "items": Object {
+    "schema": {
+      "items": {
         "complexDataType": "NESTED_TYPE",
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
         "label": "items",
-        "schema": Object {
-          "languageCode": Object {
+        "schema": {
+          "languageCode": {
             "complexDataType": "ENUM",
             "description": "an official identifier of the language",
             "enumLabel": "Language_Code",
@@ -1188,38 +1188,38 @@ Object {
             "isArray": false,
             "isOptional": false,
             "label": "language code",
-            "labelsAndValues": Array [
-              Object {
+            "labelsAndValues": [
+              {
                 "label": "Chilcotin",
                 "value": "clc",
               },
-              Object {
+              {
                 "label": "Haida",
                 "value": "hai",
               },
-              Object {
+              {
                 "label": "English",
                 "value": "eng",
               },
-              Object {
+              {
                 "label": "French",
                 "value": "fra",
               },
-              Object {
+              {
                 "label": "Chinook",
                 "value": "chn",
               },
-              Object {
+              {
                 "label": "Zapotec",
                 "value": "zap",
               },
-              Object {
+              {
                 "label": "Spanish",
                 "value": "spa",
               },
             ],
           },
-          "role": Object {
+          "role": {
             "complexDataType": "ENUM",
             "description": "role of this text in the translation process",
             "enumLabel": "text item role",
@@ -1227,30 +1227,30 @@ Object {
             "isArray": false,
             "isOptional": false,
             "label": "text item role",
-            "labelsAndValues": Array [
-              Object {
+            "labelsAndValues": [
+              {
                 "label": "original",
                 "value": "original",
               },
-              Object {
+              {
                 "label": "glossed to",
                 "value": "glossed to",
               },
-              Object {
+              {
                 "label": "prompt",
                 "value": "prompt",
               },
-              Object {
+              {
                 "label": "free translation",
                 "value": "free translation",
               },
-              Object {
+              {
                 "label": "literal translation",
                 "value": "literal translation",
               },
             ],
           },
-          "text": Object {
+          "text": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "plain text in the given language",
             "isArray": false,
@@ -1261,56 +1261,56 @@ Object {
       },
     },
   },
-  "transcript": Object {
+  "transcript": {
     "complexDataType": "NESTED_TYPE",
     "description": "time stamps with text and speaker labels",
     "isArray": false,
     "isOptional": true,
     "label": "items",
-    "schema": Object {
-      "items": Object {
+    "schema": {
+      "items": {
         "complexDataType": "NESTED_TYPE",
         "description": "time stamps with text and speaker labels",
         "isArray": true,
         "isOptional": true,
         "label": "items",
-        "schema": Object {
-          "inPoint": Object {
+        "schema": {
+          "inPoint": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
             "description": "starting time stamp",
             "isArray": false,
             "isOptional": false,
             "label": "in point",
           },
-          "outPoint": Object {
+          "outPoint": {
             "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
             "description": "ending time stamp",
             "isArray": false,
             "isOptional": false,
             "label": "out point",
           },
-          "speakerInitials": Object {
+          "speakerInitials": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "the label for the current timestamped item",
             "isArray": false,
             "isOptional": false,
             "label": "label",
           },
-          "text": Object {
+          "text": {
             "complexDataType": "NESTED_TYPE",
-            "description": "multi-lingual text transcription \\\\ translation for this item",
+            "description": "multi-lingual text transcription \\ translation for this item",
             "isArray": false,
             "isOptional": false,
             "label": "text",
-            "schema": Object {
-              "items": Object {
+            "schema": {
+              "items": {
                 "complexDataType": "NESTED_TYPE",
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
                 "label": "items",
-                "schema": Object {
-                  "languageCode": Object {
+                "schema": {
+                  "languageCode": {
                     "complexDataType": "ENUM",
                     "description": "an official identifier of the language",
                     "enumLabel": "Language_Code",
@@ -1318,38 +1318,38 @@ Object {
                     "isArray": false,
                     "isOptional": false,
                     "label": "language code",
-                    "labelsAndValues": Array [
-                      Object {
+                    "labelsAndValues": [
+                      {
                         "label": "Chilcotin",
                         "value": "clc",
                       },
-                      Object {
+                      {
                         "label": "Haida",
                         "value": "hai",
                       },
-                      Object {
+                      {
                         "label": "English",
                         "value": "eng",
                       },
-                      Object {
+                      {
                         "label": "French",
                         "value": "fra",
                       },
-                      Object {
+                      {
                         "label": "Chinook",
                         "value": "chn",
                       },
-                      Object {
+                      {
                         "label": "Zapotec",
                         "value": "zap",
                       },
-                      Object {
+                      {
                         "label": "Spanish",
                         "value": "spa",
                       },
                     ],
                   },
-                  "role": Object {
+                  "role": {
                     "complexDataType": "ENUM",
                     "description": "role of this text in the translation process",
                     "enumLabel": "text item role",
@@ -1357,30 +1357,30 @@ Object {
                     "isArray": false,
                     "isOptional": false,
                     "label": "text item role",
-                    "labelsAndValues": Array [
-                      Object {
+                    "labelsAndValues": [
+                      {
                         "label": "original",
                         "value": "original",
                       },
-                      Object {
+                      {
                         "label": "glossed to",
                         "value": "glossed to",
                       },
-                      Object {
+                      {
                         "label": "prompt",
                         "value": "prompt",
                       },
-                      Object {
+                      {
                         "label": "free translation",
                         "value": "free translation",
                       },
-                      Object {
+                      {
                         "label": "literal translation",
                         "value": "literal translation",
                       },
                     ],
                   },
-                  "text": Object {
+                  "text": {
                     "coscradDataType": "NON_EMPTY_STRING",
                     "description": "plain text in the given language",
                     "isArray": false,
@@ -1393,21 +1393,21 @@ Object {
           },
         },
       },
-      "participants": Object {
+      "participants": {
         "complexDataType": "NESTED_TYPE",
         "description": "a list of participants and their initials",
         "isArray": true,
         "isOptional": true,
         "label": "participants",
-        "schema": Object {
-          "initials": Object {
+        "schema": {
+          "initials": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "the initials or text identifier for this speaker",
             "isArray": false,
             "isOptional": false,
             "label": "speaker initials",
           },
-          "name": Object {
+          "name": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "the participant's name",
             "isArray": false,
@@ -1422,15 +1422,15 @@ Object {
 `;
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Vocabulary List  match the snapshot 1`] = `
-Object {
-  "entries": Object {
+{
+  "entries": {
     "complexDataType": "NESTED_TYPE",
     "description": "all terms in this vocabulary list with corresponding filter properties",
     "isArray": true,
     "isOptional": true,
     "label": "entries",
-    "schema": Object {
-      "termId": Object {
+    "schema": {
+      "termId": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier for the term that is included in the vocabulary list via this entry",
         "isArray": false,
@@ -1439,35 +1439,35 @@ Object {
       },
     },
   },
-  "id": Object {
+  "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
   },
-  "name": Object {
+  "name": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "name of the vocabulary list in the language",
     "isArray": false,
     "isOptional": true,
     "label": "name (language)",
   },
-  "nameEnglish": Object {
+  "nameEnglish": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "name of the vocabulary list in the colonial language",
     "isArray": false,
     "isOptional": true,
     "label": "name (colonial language)",
   },
-  "variables": Object {
+  "variables": {
     "complexDataType": "NESTED_TYPE",
     "description": "defines a dynamic form that can be used to filter the entries",
     "isArray": true,
     "isOptional": true,
     "label": "filters",
-    "schema": Object {
-      "name": Object {
+    "schema": {
+      "name": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the name of this filter property",
         "isArray": false,

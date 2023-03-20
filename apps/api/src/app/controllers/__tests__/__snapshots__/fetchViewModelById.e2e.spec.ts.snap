@@ -1,34 +1,34 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/audioItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-Object {
-  "actions": Array [],
+{
+  "actions": [],
   "audioURL": "https://www.metalmondays.com/1.mp3",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "lengthMilliseconds": 20000,
   "mimeType": "audio/mpeg",
-  "name": Object {
-    "items": Array [
-      Object {
+  "name": {
+    "items": [
+      {
         "languageCode": "eng",
         "role": "original",
         "text": "The Wooden Boy",
       },
     ],
   },
-  "tags": Array [],
+  "tags": [],
   "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
 [18300] [JHC] {eng}: His name was Pinocchio [19240]",
 }
 `;
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/bibliographicReferences/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-Object {
-  "actions": Array [],
-  "data": Object {
+{
+  "actions": [],
+  "data": {
     "abstract": "This is the abstract, NOT a general note!",
-    "creators": Array [
-      Object {
+    "creators": [
+      {
         "name": "Alana Duvernay",
         "type": "author",
       },
@@ -43,36 +43,36 @@ Object {
     "year": 1999,
   },
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-  "tags": Array [
-    Object {
+  "tags": [
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "label": "animals",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "type": "term",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "type": "term",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
           "type": "spatialFeature",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "bibliographicReference",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
           "type": "video",
         },
@@ -83,17 +83,17 @@ Object {
 `;
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/books/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-Object {
-  "actions": Array [],
+{
+  "actions": [],
   "author": "John Doeburg",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-  "pages": Array [
-    Object {
+  "pages": [
+    {
       "identifier": "1",
       "text": "foo",
       "translation": "dee foo",
     },
-    Object {
+    {
       "identifier": "2",
       "text": "blah blah blah",
       "translation": "blahas",
@@ -101,40 +101,40 @@ Object {
   ],
   "publicationDate": "2002",
   "subtitle": "The wolf's revenge",
-  "tags": Array [
-    Object {
+  "tags": [
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "label": "plants",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "term",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
           "type": "book",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           "type": "book",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "vocabularyList",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
           "type": "spatialFeature",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
           "type": "note",
         },
@@ -146,37 +146,37 @@ Object {
 `;
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/mediaItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-Object {
-  "actions": Array [],
+{
+  "actions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 2500,
   "mimeType": "audio/mpeg",
-  "tags": Array [
-    Object {
+  "tags": [
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
       "label": "legends",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "type": "vocabularyList",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
           "type": "spatialFeature",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "mediaItem",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "song",
         },
@@ -190,29 +190,29 @@ Object {
 `;
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/photographs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-Object {
-  "actions": Array [],
+{
+  "actions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
   "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
   "photographer": "Susie McRealart",
-  "tags": Array [
-    Object {
+  "tags": [
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "label": "placenames",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
           "type": "photograph",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
           "type": "audioItem",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "type": "note",
         },
@@ -223,31 +223,31 @@ Object {
 `;
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/playlists/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-Object {
-  "actions": Array [],
-  "episodes": Array [
+{
+  "actions": [],
+  "episodes": [
     "audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-  "name": Object {
-    "items": Array [
-      Object {
+  "name": {
+    "items": [
+      {
         "languageCode": "clc",
         "role": "original",
         "text": "Blake's jams",
       },
     ],
   },
-  "tags": Array [
-    Object {
+  "tags": [
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
       "label": "law",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "type": "bibliographicReference",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
           "type": "playlist",
         },
@@ -258,39 +258,39 @@ Object {
 `;
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/songs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-Object {
-  "actions": Array [],
+{
+  "actions": [],
   "audioURL": "https://www.myaudio.com/lamb.mp3",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 3500,
   "lyrics": "Mary had a little lamb, little lamb.",
   "startMilliseconds": 0,
-  "tags": Array [
-    Object {
+  "tags": [
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
       "label": "legends",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "type": "vocabularyList",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
           "type": "spatialFeature",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "mediaItem",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "song",
         },
@@ -303,55 +303,55 @@ Object {
 `;
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/spatialFeatures/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-Object {
-  "actions": Array [],
-  "geometry": Object {
-    "coordinates": Array [
+{
+  "actions": [],
+  "geometry": {
+    "coordinates": [
       54.034404852745006,
       -132.17563335558532,
     ],
     "type": "Point",
   },
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
-  "properties": Object {
+  "properties": {
     "description": "Description for point 100",
     "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
     "name": "Name of Point with ID: 100",
   },
-  "tags": Array [
-    Object {
+  "tags": [
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "label": "plants",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "term",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
           "type": "book",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           "type": "book",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "vocabularyList",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
           "type": "spatialFeature",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
           "type": "note",
         },
@@ -362,44 +362,44 @@ Object {
 `;
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/terms/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-Object {
-  "actions": Array [],
+{
+  "actions": [],
   "contributor": "",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-  "tags": Array [
-    Object {
+  "tags": [
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "label": "plants",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "term",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
           "type": "book",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           "type": "book",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "vocabularyList",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
           "type": "spatialFeature",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
           "type": "note",
         },
@@ -412,21 +412,21 @@ Object {
 `;
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/videos/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-Object {
-  "actions": Array [],
+{
+  "actions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
   "lengthMilliseconds": 20000,
   "mimeType": "video/mp4",
-  "name": Object {
-    "items": Array [
-      Object {
+  "name": {
+    "items": [
+      {
         "languageCode": "eng",
         "role": "original",
         "text": "The Demonstration",
       },
     ],
   },
-  "tags": Array [],
+  "tags": [],
   "text": "[12000] [DM] {eng}: This is how. [15550]
 [18300] [DM] {eng}: It is done [19240]",
   "videoUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
@@ -434,104 +434,104 @@ Object {
 `;
 
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/vocabularyLists/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
-Object {
-  "actions": Array [],
-  "entries": Array [
-    Object {
-      "term": Object {
+{
+  "actions": [],
+  "entries": [
+    {
+      "term": {
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
         "term": "I am singing (lang)",
         "termEnglish": "I am singing (Engl)",
       },
-      "variableValues": Object {
+      "variableValues": {
         "person": "11",
         "positive": true,
       },
     },
-    Object {
-      "term": Object {
+    {
+      "term": {
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
         "term": "You are singing (lang)",
         "termEnglish": "You are singing (Engl)",
       },
-      "variableValues": Object {
+      "variableValues": {
         "person": "12",
         "positive": false,
       },
     },
-    Object {
-      "term": Object {
+    {
+      "term": {
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
         "term": "She is singing (lang)",
         "termEnglish": "She is singing (Engl)",
       },
-      "variableValues": Object {
+      "variableValues": {
         "person": "13",
         "positive": false,
       },
     },
-    Object {
-      "term": Object {
+    {
+      "term": {
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
         "term": "I am not singing (lang)",
         "termEnglish": "I am not singing (Engl)",
       },
-      "variableValues": Object {
+      "variableValues": {
         "person": "01",
         "positive": true,
       },
     },
-    Object {
-      "term": Object {
+    {
+      "term": {
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
         "term": "You are not singing (lang)",
         "termEnglish": "You are not singing (Engl)",
       },
-      "variableValues": Object {
+      "variableValues": {
         "person": "02",
         "positive": false,
       },
     },
   ],
-  "form": Object {
-    "fields": Array [
-      Object {
-        "constraints": Array [],
+  "form": {
+    "fields": [
+      {
+        "constraints": [],
         "description": "choose positive",
         "label": "positive",
         "name": "positive",
-        "options": Array [
-          Object {
+        "options": [
+          {
             "display": "negative (lha)",
             "value": false,
           },
-          Object {
+          {
             "display": "positive form (switch for negative)",
             "value": true,
           },
         ],
         "type": "SWITCH",
       },
-      Object {
-        "constraints": Array [],
+      {
+        "constraints": [],
         "description": "choose person",
         "label": "person",
         "name": "person",
-        "options": Array [
-          Object {
+        "options": [
+          {
             "display": "I",
             "value": "1",
           },
-          Object {
+          {
             "display": "You",
             "value": "2",
           },
-          Object {
+          {
             "display": "She",
             "value": "3",
           },
@@ -543,6 +543,6 @@ Object {
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
   "name": "To Sing (lang)",
   "nameEnglish": "To Sing (Engl)",
-  "tags": Array [],
+  "tags": [],
 }
 `;

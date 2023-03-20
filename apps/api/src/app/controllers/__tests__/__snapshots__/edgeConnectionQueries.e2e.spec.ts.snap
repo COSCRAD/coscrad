@@ -1,64 +1,64 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`When querying for edge connections GET /connections/ should return the correct schema 1`] = `
-Object {
+{
   "description": "A note contextualizes a resource in itself or in relation to another resource",
   "label": "Note",
   "link": "/connections",
-  "schema": Object {
-    "connectedResources": Object {
+  "schema": {
+    "connectedResources": {
       "complexDataType": "NESTED_TYPE",
       "description": "the 1 (self note) or 2 (dual connection) resources that this note connects",
       "isArray": true,
       "isOptional": false,
       "label": "connected resources",
-      "schema": Object {
-        "compositeIdentifier": Object {
+      "schema": {
+        "compositeIdentifier": {
           "coscradDataType": "COMPOSITE_IDENTIFIER",
           "description": "composite identifier of the members's resource",
           "isArray": false,
           "isOptional": false,
           "label": "composite identifier",
         },
-        "context": Object {
+        "context": {
           "complexDataType": "UNION_TYPE",
           "description": "contextualizes this resource as a member of this connection",
           "discriminantPath": "type",
           "isArray": false,
           "isOptional": false,
           "label": "context",
-          "schemaDefinitions": Array [
-            Object {
+          "schemaDefinitions": [
+            {
               "discriminant": "freeMultiline",
-              "schema": Object {},
+              "schema": {},
             },
-            Object {
+            {
               "discriminant": "general",
-              "schema": Object {},
+              "schema": {},
             },
-            Object {
+            {
               "discriminant": "identity",
-              "schema": Object {},
+              "schema": {},
             },
-            Object {
+            {
               "discriminant": "pageRange",
-              "schema": Object {},
+              "schema": {},
             },
-            Object {
+            {
               "discriminant": "general",
-              "schema": Object {},
+              "schema": {},
             },
-            Object {
+            {
               "discriminant": "general",
-              "schema": Object {},
+              "schema": {},
             },
-            Object {
+            {
               "discriminant": "general",
-              "schema": Object {},
+              "schema": {},
             },
           ],
         },
-        "role": Object {
+        "role": {
           "complexDataType": "ENUM",
           "description": "is",
           "enumLabel": "Edge Connection Member Role",
@@ -66,16 +66,16 @@ Object {
           "isArray": false,
           "isOptional": false,
           "label": "role",
-          "labelsAndValues": Array [
-            Object {
+          "labelsAndValues": [
+            {
               "label": "from",
               "value": "from",
             },
-            Object {
+            {
               "label": "to",
               "value": "to",
             },
-            Object {
+            {
               "label": "self",
               "value": "self",
             },
@@ -83,14 +83,14 @@ Object {
         },
       },
     },
-    "id": Object {
+    "id": {
       "coscradDataType": "NON_EMPTY_STRING",
       "description": "unique identifier",
       "isArray": false,
       "isOptional": false,
       "label": "ID",
     },
-    "note": Object {
+    "note": {
       "coscradDataType": "NON_EMPTY_STRING",
       "description": "",
       "isArray": false,
@@ -1127,18 +1127,18 @@ Array [
 `;
 
 exports[`When querying for edge connections GET /connections/notes should return the expected result 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+{
+  "entities": [
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "term",
           },
-          "context": Object {
-            "charRange": Array [
+          "context": {
+            "charRange": [
               0,
               3,
             ],
@@ -1151,32 +1151,32 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "label": "legends",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "mediaItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "song",
             },
@@ -1184,16 +1184,16 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
             "type": "book",
           },
-          "context": Object {
-            "pageIdentifiers": Array [
+          "context": {
+            "pageIdentifiers": [
               "ix",
             ],
             "type": "pageRange",
@@ -1204,18 +1204,18 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "note": "This page is about bears",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "vocabularyList",
           },
-          "context": Object {
-            "charRange": Array [
+          "context": {
+            "charRange": [
               0,
               1,
             ],
@@ -1228,20 +1228,20 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "note": "This is the first letter of the list name",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
           "label": "songs",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "photograph",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "note",
             },
@@ -1249,15 +1249,15 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
             "type": "spatialFeature",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1266,18 +1266,18 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
       "note": "there is a placename for this point at the base of the mountain",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
             "type": "audioItem",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 11000,
               "outPoint": 12950,
             },
@@ -1289,24 +1289,24 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
       "note": "this clip talks about songs",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "label": "placenames",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
               "type": "photograph",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
               "type": "audioItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
               "type": "note",
             },
@@ -1314,30 +1314,30 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "photograph",
           },
-          "context": Object {
-            "lines": Array [
-              Array [
-                Array [
+          "context": {
+            "lines": [
+              [
+                [
                   0,
                   200,
                 ],
-                Array [
+                [
                   100,
                   300,
                 ],
-                Array [
+                [
                   200,
                   400,
                 ],
-                Array [
+                [
                   250,
                   475,
                 ],
@@ -1351,18 +1351,18 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
       "note": "this is the stem of the flower",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "photograph",
           },
-          "context": Object {
-            "point": Array [
+          "context": {
+            "point": [
               0,
               200,
             ],
@@ -1374,36 +1374,36 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
       "note": "this is the base of the flower",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "label": "animals",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
@@ -1411,16 +1411,16 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
             "type": "book",
           },
-          "context": Object {
-            "pageIdentifiers": Array [
+          "context": {
+            "pageIdentifiers": [
               "ix",
             ],
             "type": "pageRange",
@@ -1431,17 +1431,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
       "note": "this section is the best part of an illustrated book about birds",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "bibliographicReference",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1450,40 +1450,40 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
       "note": "found this in the archives",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -1491,16 +1491,16 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "song",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 300,
               "outPoint": 500,
             },
@@ -1512,18 +1512,18 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
       "note": "this is a song",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "mediaItem",
           },
-          "context": Object {
-            "charRange": Array [
+          "context": {
+            "charRange": [
               0,
               2,
             ],
@@ -1536,40 +1536,40 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
       "note": "this is an awesome show",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -1577,16 +1577,16 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "mediaItem",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 650,
               "outPoint": 1230,
             },
@@ -1598,17 +1598,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
       "note": "important clip from the show",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "bibliographicReference",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1617,18 +1617,18 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
       "note": "this book is hard to track down",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
             "type": "video",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 11000,
               "outPoint": 12950,
             },
@@ -1640,17 +1640,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
       "note": "this clip talks about birds",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
             "type": "playlist",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1659,17 +1659,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
       "note": "this playlist is awesome",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "term",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1678,17 +1678,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
       "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
             "type": "book",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1697,17 +1697,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
       "note": "This page is about bears",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "vocabularyList",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1716,17 +1716,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
       "note": "This is the first letter of the list name",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
             "type": "audioItem",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1735,17 +1735,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
       "note": "this clip talks about songs",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "photograph",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1754,17 +1754,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
       "note": "this is the stem of the flower",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "photograph",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1773,17 +1773,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
       "note": "this is the base of the flower",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
             "type": "book",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1792,17 +1792,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
       "note": "this section is the best part of an illustrated book about birds",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "song",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1811,17 +1811,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
       "note": "this is a song",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "mediaItem",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1830,17 +1830,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
       "note": "this is an awesome show",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "mediaItem",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1849,17 +1849,17 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
       "note": "important clip from the show",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
             "type": "video",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "self",
@@ -1868,18 +1868,18 @@ Object {
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110026",
       "note": "this clip talks about birds",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "term",
           },
-          "context": Object {
-            "charRange": Array [
+          "context": {
+            "charRange": [
               0,
               3,
             ],
@@ -1888,13 +1888,13 @@ Object {
           },
           "role": "to",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "vocabularyList",
           },
-          "context": Object {
-            "charRange": Array [
+          "context": {
+            "charRange": [
               0,
               1,
             ],
@@ -1907,18 +1907,18 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112000",
       "note": "That is why term/2 is related to vocabularyList/2",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "vocabularyList",
           },
-          "context": Object {
-            "charRange": Array [
+          "context": {
+            "charRange": [
               0,
               1,
             ],
@@ -1927,13 +1927,13 @@ Object {
           },
           "role": "to",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
             "type": "audioItem",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 11000,
               "outPoint": 12950,
             },
@@ -1945,32 +1945,32 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
       "note": "That is why vocabularyList/2 is related to audioItem/110",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "label": "legends",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "mediaItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "song",
             },
@@ -1978,16 +1978,16 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
             "type": "audioItem",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 11000,
               "outPoint": 12950,
             },
@@ -1995,13 +1995,13 @@ Object {
           },
           "role": "to",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
             "type": "book",
           },
-          "context": Object {
-            "pageIdentifiers": Array [
+          "context": {
+            "pageIdentifiers": [
               "ix",
             ],
             "type": "pageRange",
@@ -2012,20 +2012,20 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
       "note": "That is why audioItem/110 is related to book/24",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
           "label": "songs",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "photograph",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "note",
             },
@@ -2033,43 +2033,43 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
             "type": "book",
           },
-          "context": Object {
-            "pageIdentifiers": Array [
+          "context": {
+            "pageIdentifiers": [
               "ix",
             ],
             "type": "pageRange",
           },
           "role": "to",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "photograph",
           },
-          "context": Object {
-            "lines": Array [
-              Array [
-                Array [
+          "context": {
+            "lines": [
+              [
+                [
                   0,
                   200,
                 ],
-                Array [
+                [
                   100,
                   300,
                 ],
-                Array [
+                [
                   200,
                   400,
                 ],
-                Array [
+                [
                   250,
                   475,
                 ],
@@ -2083,24 +2083,24 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
       "note": "That is why book/24 is related to photograph/2",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "label": "placenames",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
               "type": "photograph",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
               "type": "audioItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
               "type": "note",
             },
@@ -2108,30 +2108,30 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "photograph",
           },
-          "context": Object {
-            "lines": Array [
-              Array [
-                Array [
+          "context": {
+            "lines": [
+              [
+                [
                   0,
                   200,
                 ],
-                Array [
+                [
                   100,
                   300,
                 ],
-                Array [
+                [
                   200,
                   400,
                 ],
-                Array [
+                [
                   250,
                   475,
                 ],
@@ -2141,12 +2141,12 @@ Object {
           },
           "role": "to",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
             "type": "spatialFeature",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "from",
@@ -2155,36 +2155,36 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
       "note": "That is why photograph/2 is related to spatialFeature/300",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "label": "animals",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
@@ -2192,26 +2192,26 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
             "type": "spatialFeature",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "to",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "song",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 300,
               "outPoint": 500,
             },
@@ -2223,40 +2223,40 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
       "note": "That is why spatialFeature/300 is related to song/1",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -2264,16 +2264,16 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "song",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 300,
               "outPoint": 500,
             },
@@ -2281,13 +2281,13 @@ Object {
           },
           "role": "to",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
             "type": "video",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 11000,
               "outPoint": 12950,
             },
@@ -2299,18 +2299,18 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
       "note": "That is why song/1 is related to video/223",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
             "type": "video",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 11000,
               "outPoint": 12950,
             },
@@ -2318,12 +2318,12 @@ Object {
           },
           "role": "to",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
             "type": "playlist",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "from",
@@ -2332,28 +2332,28 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
       "note": "That is why video/223 is related to playlist/501",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
             "type": "playlist",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "to",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "term",
           },
-          "context": Object {
-            "charRange": Array [
+          "context": {
+            "charRange": [
               0,
               3,
             ],
@@ -2366,18 +2366,18 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112008",
       "note": "That is why playlist/501 is related to term/2",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "mediaItem",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 100,
               "outPoint": 1200,
             },
@@ -2385,13 +2385,13 @@ Object {
           },
           "role": "from",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "type": "term",
           },
-          "context": Object {
-            "charRange": Array [
+          "context": {
+            "charRange": [
               1,
               4,
             ],
@@ -2404,27 +2404,27 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113001",
       "note": "this media item mentions a word in the term",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "bibliographicReference",
           },
-          "context": Object {
+          "context": {
             "type": "identity",
           },
           "role": "from",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
             "type": "book",
           },
-          "context": Object {
+          "context": {
             "type": "identity",
           },
           "role": "to",
@@ -2433,18 +2433,18 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113002",
       "note": "here is the digital version of the book!",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "mediaItem",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 300,
               "outPoint": 1800,
             },
@@ -2452,13 +2452,13 @@ Object {
           },
           "role": "to",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
             "type": "book",
           },
-          "context": Object {
-            "pageIdentifiers": Array [
+          "context": {
+            "pageIdentifiers": [
               "ix",
             ],
             "type": "pageRange",
@@ -2469,28 +2469,28 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113101",
       "note": "this selection from the media item portrays the events in the book",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "connectedResources": Array [
-        Object {
-          "compositeIdentifier": Object {
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "bibliographicReference",
           },
-          "context": Object {
+          "context": {
             "type": "general",
           },
           "role": "to",
         },
-        Object {
-          "compositeIdentifier": Object {
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "song",
           },
-          "context": Object {
-            "timeRange": Object {
+          "context": {
+            "timeRange": {
               "inPoint": 500,
               "outPoint": 778.4,
             },
@@ -2502,10 +2502,10 @@ Object {
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113102",
       "note": "this library book has the lyrics from the song, but we do not have access to the book",
-      "tags": Array [],
+      "tags": [],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 

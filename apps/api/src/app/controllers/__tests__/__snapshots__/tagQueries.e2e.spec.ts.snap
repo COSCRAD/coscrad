@@ -1,40 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Tag Queries when fetching a tag by ID when there is a tag with the given ID should return the expected result 1`] = `
-Object {
-  "actions": Array [],
+{
+  "actions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "label": "plants",
-  "members": Array [
-    Object {
+  "members": [
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "type": "term",
     },
-    Object {
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
       "type": "book",
     },
-    Object {
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
       "type": "book",
     },
-    Object {
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "type": "vocabularyList",
     },
-    Object {
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
       "type": "spatialFeature",
     },
-    Object {
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
       "type": "note",
     },
-    Object {
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
       "type": "note",
     },
-    Object {
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
       "type": "note",
     },
@@ -43,171 +43,171 @@ Object {
 `;
 
 exports[`Tag Queries when fetching all tags should return the expected result 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "label": "plants",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "term",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
           "type": "book",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           "type": "book",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "vocabularyList",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
           "type": "spatialFeature",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
           "type": "note",
         },
       ],
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "label": "animals",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "type": "term",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "type": "term",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
           "type": "spatialFeature",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "bibliographicReference",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
           "type": "video",
         },
       ],
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "label": "placenames",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
           "type": "photograph",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
           "type": "audioItem",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "type": "note",
         },
       ],
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
       "label": "songs",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "photograph",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "type": "note",
         },
       ],
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
       "label": "legends",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "type": "vocabularyList",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
           "type": "spatialFeature",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "note",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "mediaItem",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "type": "song",
         },
       ],
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
       "label": "law",
-      "members": Array [
-        Object {
+      "members": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "type": "bibliographicReference",
         },
-        Object {
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
           "type": "playlist",
         },
       ],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
