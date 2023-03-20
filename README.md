@@ -11,30 +11,42 @@ _COSCRAD_ is a loose collaboration of several organizations, technical teams, an
 We have adopted the monorepo approach to allow our members to maximize opportunities for code sharing and collaboration, while maintaining autonomy and focus on their own individual projects within this workspace.
 
 ### Projects
+
 #### Apps
+
 Our apps are of two kinds:
 **core coscrad apps**
-- `api` (core back-end for the COSCRAD `web of knowledge`)
-- `coscrad-frontend` (standard front-end for the COSCRAD `web of knowledge`)
 
-**community experimental prototypes**
-- `tng-dictionary` (maintained by Justin Bambrick, TNG)
-- `tsilqotin-language-hub` (maintained by Justin Bambrick, TNG)
-- `tng-radio-hub` (maintained by Blake Sellars, TNG)
+-   `api` (core back-end for the COSCRAD `web of knowledge`)
+-   `coscrad-frontend` (standard front-end for the COSCRAD `web of knowledge`)
 
-The core apps adhere to strict static analysis, and leverage relatively comprehensive automated  unit \ integration test coverage (Jest), and e2e tests (Cypress). Meanwhile, the experimental prototypes are more 'Wild West'. Many ideas explored in the prototypes will eventually find their way into Coscrad's core.
+**community projects**
+
+-   `tng-dictionary` (maintained by Justin Bambrick, TNG)
+-   `tsilqotin-language-hub` (maintained by Justin Bambrick, TNG)
+-   `tng-radio-hub` (maintained by Blake Sellars, TNG)
+
+The core apps are developed and maintained by the core COSCRAD team. These projects
+are subject to strict guidelines for code quality and automated test coverage.
+
+The community projects currently consist of several prototypes of front-end clients
+that leverage the COSCRAD API. The Many ideas explored in the community projects
+will eventually find their way into Coscrad's core.
 
 #### libs
-We maintain several libraries, which allow us to share code between applications in the monorepo.
-- `@coscrad/api-interfaces` (shared types \ enums that represent the contract between `api` and `coscrad-frontend`)
-- `@coscrad/validation` (our custom constraint functions and a combination of custom and `class-validator` validation decorators)
-- `@coscrad/data-types` (custom data types for models and command payloads and decorators that wrap-in corresponding validation decorators)
-- `@coscrad/commands` (our custom barebones command infrastructure, loosely based on the command part of `@nestjs/cqrs`
-- `@coscrad/media-player` (our custom react media player)
 
-**
+We maintain several libraries, which allow us to share code between applications in the monorepo.
+
+-   `@coscrad/api-interfaces` (shared types \ enums that represent the contract between `api` and `coscrad-frontend`)
+-   `@coscrad/validation` (our custom constraint functions and a combination of custom and `class-validator` validation decorators)
+-   `@coscrad/data-types` (custom data types for models and command payloads and decorators that wrap-in corresponding validation decorators)
+-   `@coscrad/commands` (our custom barebones command infrastructure, loosely based on the command part of `@nestjs/cqrs`
+-   `@coscrad/media-player` (our custom react media player)
+
+\*\*
 
 ## Getting Started
+
 ### Technical Details
 
 This monorepo workspace is managed using [Nx](https://nx.dev). See the `README` in an individual app or lib to learn more about the tools used on that particular project.
@@ -125,9 +137,11 @@ not be modified, nor should `sample.env`.
 #### Coscrad Frontend (frontend)
 
 To run just the front-end, run
+
 > > nx serve coscrad-frontend
 
 To run the front-end and back-end concurrently from a single command, run
+
 > > npm run serve:all
 
 ## Workflow
@@ -198,7 +212,6 @@ e.g.
 In the event that a Jest snapshot fails, first run the single test with a failing snapshot in isolation. To accept the snapshot changes, rerun the test with the -u flag as follows:
 
 > > nx text <project-name> -- --test-file=<name-of-test-file> -u
-
 
 #### Cypress- Front-end e2e tests
 
