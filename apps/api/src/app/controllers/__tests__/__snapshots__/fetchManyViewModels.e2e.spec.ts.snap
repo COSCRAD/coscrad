@@ -1,146 +1,146 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`When fetching multiple resources GET /resources/audioItems when all of the resources are published should fetch multiple resources of type audioItem 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "audioURL": "https://www.metalmondays.com/1.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "lengthMilliseconds": 20000,
       "mimeType": "audio/mpeg",
-      "name": Object {
-        "items": Array [
-          Object {
+      "name": {
+        "items": [
+          {
             "languageCode": "eng",
             "role": "original",
             "text": "The Wooden Boy",
           },
         ],
       },
-      "tags": Array [],
+      "tags": [],
       "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
 [18300] [JHC] {eng}: His name was Pinocchio [19240]",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "audioURL": "https://www.metalmondays.com/1.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
-      "name": Object {
-        "items": Array [
-          Object {
+      "name": {
+        "items": [
+          {
             "languageCode": "clc",
             "role": "original",
             "text": "Down at the River",
           },
         ],
       },
-      "tags": Array [],
+      "tags": [],
       "text": "[3400] [BL] {eng}: While she went down to the river [3670]
 [3700] [SD] {eng}: someone had already filled the water tank. [3980]
 [4010] [BL] {eng}: These were the types of problems we had. [4290]",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "audioURL": "https://www.metalmondays.com/1.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "lengthMilliseconds": 32989,
       "mimeType": "audio/mpeg",
-      "name": Object {
-        "items": Array [
-          Object {
+      "name": {
+        "items": [
+          {
             "languageCode": "hai",
             "role": "original",
             "text": "Learning about Protocols",
           },
         ],
       },
-      "tags": Array [],
+      "tags": [],
       "text": "[120] [E1] {eng}: this type of spoon is used in ceremonies [848]
 [930] [E2] {eng}: by members of the opposite clan of the house chief [1080]",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/audioItems when some of the resources are unpublished should return the expected number of results 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "audioURL": "https://www.metalmondays.com/1.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "lengthMilliseconds": 20000,
       "mimeType": "audio/mpeg",
-      "name": Object {
-        "items": Array [
-          Object {
+      "name": {
+        "items": [
+          {
             "languageCode": "eng",
             "role": "original",
             "text": "The Wooden Boy",
           },
         ],
       },
-      "tags": Array [],
+      "tags": [],
       "text": "[12000] [JHC] {eng}: There once was a little wooden boy. [15550]
 [18300] [JHC] {eng}: His name was Pinocchio [19240]",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "audioURL": "https://www.metalmondays.com/1.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
-      "name": Object {
-        "items": Array [
-          Object {
+      "name": {
+        "items": [
+          {
             "languageCode": "clc",
             "role": "original",
             "text": "Down at the River",
           },
         ],
       },
-      "tags": Array [],
+      "tags": [],
       "text": "[3400] [BL] {eng}: While she went down to the river [3670]
 [3700] [SD] {eng}: someone had already filled the water tank. [3980]
 [4010] [BL] {eng}: These were the types of problems we had. [4290]",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "audioURL": "https://www.metalmondays.com/1.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "lengthMilliseconds": 32989,
       "mimeType": "audio/mpeg",
-      "name": Object {
-        "items": Array [
-          Object {
+      "name": {
+        "items": [
+          {
             "languageCode": "hai",
             "role": "original",
             "text": "Learning about Protocols",
           },
         ],
       },
-      "tags": Array [],
+      "tags": [],
       "text": "[120] [E1] {eng}: this type of spoon is used in ceremonies [848]
 [930] [E2] {eng}: by members of the opposite clan of the house chief [1080]",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/bibliographicReferences when all of the resources are published should fetch multiple resources of type bibliographicReference 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
-      "data": Object {
+{
+  "entities": [
+    {
+      "actions": [],
+      "data": {
         "abstract": "This is the abstract, NOT a general note!",
-        "creators": Array [
-          Object {
+        "creators": [
+          {
             "name": "Alana Duvernay",
             "type": "author",
           },
@@ -155,36 +155,36 @@ Object {
         "year": 1999,
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "label": "animals",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
@@ -192,12 +192,12 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "data": Object {
+    {
+      "actions": [],
+      "data": {
         "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
-        "creators": Array [
-          Object {
+        "creators": [
+          {
             "name": "Sigurd Purcell",
             "type": "author",
           },
@@ -211,11 +211,11 @@ Object {
         "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "data": Object {
+    {
+      "actions": [],
+      "data": {
         "abstract": "William, June
 - Nemiah Valley
 - Qualifying as an expert in Tsilhqot'in written language",
@@ -227,16 +227,16 @@ Object {
         "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
           "label": "law",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
               "type": "playlist",
             },
@@ -245,19 +245,19 @@ Object {
       ],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/bibliographicReferences when some of the resources are unpublished should return the expected number of results 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
-      "data": Object {
+{
+  "entities": [
+    {
+      "actions": [],
+      "data": {
         "abstract": "This is the abstract, NOT a general note!",
-        "creators": Array [
-          Object {
+        "creators": [
+          {
             "name": "Alana Duvernay",
             "type": "author",
           },
@@ -272,36 +272,36 @@ Object {
         "year": 1999,
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "label": "animals",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
@@ -309,12 +309,12 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "data": Object {
+    {
+      "actions": [],
+      "data": {
         "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
-        "creators": Array [
-          Object {
+        "creators": [
+          {
             "name": "Sigurd Purcell",
             "type": "author",
           },
@@ -328,11 +328,11 @@ Object {
         "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "data": Object {
+    {
+      "actions": [],
+      "data": {
         "abstract": "William, June
 - Nemiah Valley
 - Qualifying as an expert in Tsilhqot'in written language",
@@ -344,16 +344,16 @@ Object {
         "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
           "label": "law",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
               "type": "playlist",
             },
@@ -362,24 +362,24 @@ Object {
       ],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/books when all of the resources are published should fetch multiple resources of type book 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "author": "John Doeburg",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-      "pages": Array [
-        Object {
+      "pages": [
+        {
           "identifier": "1",
           "text": "foo",
           "translation": "dee foo",
         },
-        Object {
+        {
           "identifier": "2",
           "text": "blah blah blah",
           "translation": "blahas",
@@ -387,40 +387,40 @@ Object {
       ],
       "publicationDate": "2002",
       "subtitle": "The wolf's revenge",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -429,52 +429,52 @@ Object {
       ],
       "title": "Three Little Pigs",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "author": "Jane Donnaldson",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-      "pages": Array [
-        Object {
+      "pages": [
+        {
           "identifier": "ix",
           "text": "blah blah blah",
           "translation": "blahas",
         },
       ],
       "publicationDate": "2011",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -483,40 +483,40 @@ Object {
       ],
       "title": "An Adventure Story",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "author": "Jane Donnaldson",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
-      "pages": Array [
-        Object {
+      "pages": [
+        {
           "identifier": "ix",
           "text": "blah blah blah",
           "translation": "blahas",
         },
       ],
       "publicationDate": "2012",
-      "tags": Array [],
+      "tags": [],
       "title": "An Adventure Story II",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/books when some of the resources are unpublished should return the expected number of results 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "author": "John Doeburg",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
-      "pages": Array [
-        Object {
+      "pages": [
+        {
           "identifier": "1",
           "text": "foo",
           "translation": "dee foo",
         },
-        Object {
+        {
           "identifier": "2",
           "text": "blah blah blah",
           "translation": "blahas",
@@ -524,40 +524,40 @@ Object {
       ],
       "publicationDate": "2002",
       "subtitle": "The wolf's revenge",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -566,52 +566,52 @@ Object {
       ],
       "title": "Three Little Pigs",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "author": "Jane Donnaldson",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-      "pages": Array [
-        Object {
+      "pages": [
+        {
           "identifier": "ix",
           "text": "blah blah blah",
           "translation": "blahas",
         },
       ],
       "publicationDate": "2011",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -620,60 +620,60 @@ Object {
       ],
       "title": "An Adventure Story",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "author": "Jane Donnaldson",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
-      "pages": Array [
-        Object {
+      "pages": [
+        {
           "identifier": "ix",
           "text": "blah blah blah",
           "translation": "blahas",
         },
       ],
       "publicationDate": "2012",
-      "tags": Array [],
+      "tags": [],
       "title": "An Adventure Story II",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/mediaItems when all of the resources are published should fetch multiple resources of type mediaItem 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 2500,
       "mimeType": "audio/mpeg",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "label": "legends",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "mediaItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "song",
             },
@@ -684,55 +684,55 @@ Object {
       "titleEnglish": "Metal Mondays episode 1",
       "url": "https://www.metalmondays.com/1.mp3",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "lengthMilliseconds": 910000,
       "mimeType": "video/mp4",
-      "tags": Array [],
+      "tags": [],
       "title": "video title (in language)",
       "titleEnglish": "cool video",
       "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/mediaItems when some of the resources are unpublished should return the expected number of results 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 2500,
       "mimeType": "audio/mpeg",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "label": "legends",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "mediaItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "song",
             },
@@ -743,47 +743,47 @@ Object {
       "titleEnglish": "Metal Mondays episode 1",
       "url": "https://www.metalmondays.com/1.mp3",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "lengthMilliseconds": 910000,
       "mimeType": "video/mp4",
-      "tags": Array [],
+      "tags": [],
       "title": "video title (in language)",
       "titleEnglish": "cool video",
       "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/photographs when all of the resources are published should fetch multiple resources of type photograph 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
       "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
       "photographer": "Susie McRealart",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "label": "placenames",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
               "type": "photograph",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
               "type": "audioItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
               "type": "note",
             },
@@ -791,25 +791,25 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
       "photographer": "Robert McRealart",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
           "label": "songs",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "photograph",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "note",
             },
@@ -817,44 +817,44 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
       "photographer": "Kenny Tree-Huggens",
-      "tags": Array [],
+      "tags": [],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/photographs when some of the resources are unpublished should return the expected number of results 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
       "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
       "photographer": "Susie McRealart",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
           "label": "placenames",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
               "type": "photograph",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
               "type": "audioItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
               "type": "note",
             },
@@ -862,25 +862,25 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
       "photographer": "Robert McRealart",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
           "label": "songs",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "photograph",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "note",
             },
@@ -888,46 +888,46 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
       "photographer": "Kenny Tree-Huggens",
-      "tags": Array [],
+      "tags": [],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/playlists when all of the resources are published should fetch multiple resources of type playlist 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
-      "episodes": Array [
+{
+  "entities": [
+    {
+      "actions": [],
+      "episodes": [
         "audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-      "name": Object {
-        "items": Array [
-          Object {
+      "name": {
+        "items": [
+          {
             "languageCode": "clc",
             "role": "original",
             "text": "Blake's jams",
           },
         ],
       },
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
           "label": "law",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
               "type": "playlist",
             },
@@ -936,38 +936,38 @@ Object {
       ],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/playlists when some of the resources are unpublished should return the expected number of results 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
-      "episodes": Array [
+{
+  "entities": [
+    {
+      "actions": [],
+      "episodes": [
         "audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-      "name": Object {
-        "items": Array [
-          Object {
+      "name": {
+        "items": [
+          {
             "languageCode": "clc",
             "role": "original",
             "text": "Blake's jams",
           },
         ],
       },
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
           "label": "law",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
               "type": "playlist",
             },
@@ -976,46 +976,46 @@ Object {
       ],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/songs when all of the resources are published should fetch multiple resources of type song 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "audioURL": "https://www.myaudio.com/lamb.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 3500,
       "lyrics": "Mary had a little lamb, little lamb.",
       "startMilliseconds": 0,
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "label": "legends",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "mediaItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "song",
             },
@@ -1025,58 +1025,58 @@ Object {
       "title": "Song title in language",
       "titleEnglish": "Mary had a little lamb",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "audioURL": "https://www.myaudio.com/badsong.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "lengthMilliseconds": 33000,
       "lyrics": "Ain't gonna see the light of day, light of day, light of day",
       "startMilliseconds": 0,
-      "tags": Array [],
+      "tags": [],
       "title": "Unpublished Song Title (lang)",
       "titleEnglish": "Unpublished Song Title (Engl)",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/songs when some of the resources are unpublished should return the expected number of results 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "audioURL": "https://www.myaudio.com/lamb.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 3500,
       "lyrics": "Mary had a little lamb, little lamb.",
       "startMilliseconds": 0,
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "label": "legends",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "mediaItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "song",
             },
@@ -1086,74 +1086,74 @@ Object {
       "title": "Song title in language",
       "titleEnglish": "Mary had a little lamb",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "audioURL": "https://www.myaudio.com/badsong.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "lengthMilliseconds": 33000,
       "lyrics": "Ain't gonna see the light of day, light of day, light of day",
       "startMilliseconds": 0,
-      "tags": Array [],
+      "tags": [],
       "title": "Unpublished Song Title (lang)",
       "titleEnglish": "Unpublished Song Title (Engl)",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/spatialFeatures when all of the resources are published should fetch multiple resources of type spatialFeature 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
+{
+  "entities": [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
           54.034404852745006,
           -132.17563335558532,
         ],
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 100",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Name of Point with ID: 100",
       },
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -1161,47 +1161,47 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
           53.26710566708586,
           -131.99142447847115,
         ],
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 101",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Name of Point with ID: 101",
       },
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "label": "legends",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "mediaItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "song",
             },
@@ -1209,51 +1209,51 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
           51.93152097800416,
           -123.14042112774867,
         ],
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 102",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Name of Point with ID: 102",
       },
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "label": "animals",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
@@ -1261,69 +1261,69 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
           51.935065638350636,
           -122.50936316168337,
         ],
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110103",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 103",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Name of Point with ID: 103",
       },
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
           52.12579975880678,
           -123.68132823530952,
         ],
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110104",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 104",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Name of Point with ID: 104",
       },
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
-          Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
+          [
             52.3,
             -124.2,
           ],
-          Array [
+          [
             52.35,
             -124.85,
           ],
-          Array [
+          [
             52.21,
             -124.9,
           ],
-          Array [
+          [
             52.05,
             -125.1,
           ],
-          Array [
+          [
             52.15,
             -125.1,
           ],
-          Array [
+          [
             52.33,
             -125.22,
           ],
-          Array [
+          [
             52.45,
             -125.39,
           ],
@@ -1331,31 +1331,31 @@ Object {
         "type": "LineString",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "properties": Object {
+      "properties": {
         "description": "One amazing hike!",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Windy Path",
       },
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
-          Array [
-            Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
+          [
+            [
               52.47,
               -123.6,
             ],
-            Array [
+            [
               52.42,
               -123.95,
             ],
-            Array [
+            [
               52.05,
               -123.95,
             ],
-            Array [
+            [
               52.05,
               -123.685,
             ],
@@ -1364,70 +1364,70 @@ Object {
         "type": "Polygon",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 300",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Point with ID: 300 Name",
       },
-      "tags": Array [],
+      "tags": [],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/spatialFeatures when some of the resources are unpublished should return the expected number of results 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
+{
+  "entities": [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
           54.034404852745006,
           -132.17563335558532,
         ],
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 100",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Name of Point with ID: 100",
       },
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -1435,47 +1435,47 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
           53.26710566708586,
           -131.99142447847115,
         ],
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 101",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Name of Point with ID: 101",
       },
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "label": "legends",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "mediaItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "song",
             },
@@ -1483,51 +1483,51 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
           51.93152097800416,
           -123.14042112774867,
         ],
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 102",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Name of Point with ID: 102",
       },
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "label": "animals",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
@@ -1535,69 +1535,69 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
           51.935065638350636,
           -122.50936316168337,
         ],
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110103",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 103",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Name of Point with ID: 103",
       },
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
           52.12579975880678,
           -123.68132823530952,
         ],
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110104",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 104",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Name of Point with ID: 104",
       },
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
-          Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
+          [
             52.3,
             -124.2,
           ],
-          Array [
+          [
             52.35,
             -124.85,
           ],
-          Array [
+          [
             52.21,
             -124.9,
           ],
-          Array [
+          [
             52.05,
             -125.1,
           ],
-          Array [
+          [
             52.15,
             -125.1,
           ],
-          Array [
+          [
             52.33,
             -125.22,
           ],
-          Array [
+          [
             52.45,
             -125.39,
           ],
@@ -1605,31 +1605,31 @@ Object {
         "type": "LineString",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "properties": Object {
+      "properties": {
         "description": "One amazing hike!",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Windy Path",
       },
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "geometry": Object {
-        "coordinates": Array [
-          Array [
-            Array [
+    {
+      "actions": [],
+      "geometry": {
+        "coordinates": [
+          [
+            [
               52.47,
               -123.6,
             ],
-            Array [
+            [
               52.42,
               -123.95,
             ],
-            Array [
+            [
               52.05,
               -123.95,
             ],
-            Array [
+            [
               52.05,
               -123.685,
             ],
@@ -1638,59 +1638,59 @@ Object {
         "type": "Polygon",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-      "properties": Object {
+      "properties": {
         "description": "Description for point 300",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
         "name": "Point with ID: 300 Name",
       },
-      "tags": Array [],
+      "tags": [],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/terms when all of the resources are published should fetch multiple resources of type term 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -1700,40 +1700,40 @@ Object {
       "term": "Chil-term-1",
       "termEnglish": "Engl-term-1",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "label": "animals",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
@@ -1743,40 +1743,40 @@ Object {
       "term": "Chil-term-2",
       "termEnglish": "Engl-term-2",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "label": "animals",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
@@ -1785,99 +1785,99 @@ Object {
       ],
       "term": "Chil-term-no-english",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
-      "tags": Array [],
+      "tags": [],
       "term": "My Secret Term",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
-      "tags": Array [],
+      "tags": [],
       "term": "I am singing (lang)",
       "termEnglish": "I am singing (Engl)",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
-      "tags": Array [],
+      "tags": [],
       "term": "You are singing (lang)",
       "termEnglish": "You are singing (Engl)",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
-      "tags": Array [],
+      "tags": [],
       "term": "She is singing (lang)",
       "termEnglish": "She is singing (Engl)",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-      "tags": Array [],
+      "tags": [],
       "term": "I am not singing (lang)",
       "termEnglish": "I am not singing (Engl)",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
-      "tags": Array [],
+      "tags": [],
       "term": "You are not singing (lang)",
       "termEnglish": "You are not singing (Engl)",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/terms when some of the resources are unpublished should return the expected number of results 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -1887,40 +1887,40 @@ Object {
       "term": "Chil-term-1",
       "termEnglish": "Engl-term-1",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "label": "animals",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
@@ -1930,40 +1930,40 @@ Object {
       "term": "Chil-term-2",
       "termEnglish": "Engl-term-2",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
           "label": "animals",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "bibliographicReference",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
               "type": "video",
             },
@@ -1972,213 +1972,213 @@ Object {
       ],
       "term": "Chil-term-no-english",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
-      "tags": Array [],
+      "tags": [],
       "term": "My Secret Term",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
-      "tags": Array [],
+      "tags": [],
       "term": "I am singing (lang)",
       "termEnglish": "I am singing (Engl)",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
-      "tags": Array [],
+      "tags": [],
       "term": "You are singing (lang)",
       "termEnglish": "You are singing (Engl)",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
-      "tags": Array [],
+      "tags": [],
       "term": "She is singing (lang)",
       "termEnglish": "She is singing (Engl)",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
-      "tags": Array [],
+      "tags": [],
       "term": "I am not singing (lang)",
       "termEnglish": "I am not singing (Engl)",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
-      "tags": Array [],
+      "tags": [],
       "term": "You are not singing (lang)",
       "termEnglish": "You are not singing (Engl)",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/videos when all of the resources are published should fetch multiple resources of type video 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
       "lengthMilliseconds": 20000,
       "mimeType": "video/mp4",
-      "name": Object {
-        "items": Array [
-          Object {
+      "name": {
+        "items": [
+          {
             "languageCode": "eng",
             "role": "original",
             "text": "The Demonstration",
           },
         ],
       },
-      "tags": Array [],
+      "tags": [],
       "text": "[12000] [DM] {eng}: This is how. [15550]
 [18300] [DM] {eng}: It is done [19240]",
       "videoUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/videos when some of the resources are unpublished should return the expected number of results 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
+{
+  "entities": [
+    {
+      "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
       "lengthMilliseconds": 20000,
       "mimeType": "video/mp4",
-      "name": Object {
-        "items": Array [
-          Object {
+      "name": {
+        "items": [
+          {
             "languageCode": "eng",
             "role": "original",
             "text": "The Demonstration",
           },
         ],
       },
-      "tags": Array [],
+      "tags": [],
       "text": "[12000] [DM] {eng}: This is how. [15550]
 [18300] [DM] {eng}: It is done [19240]",
       "videoUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/vocabularyLists when all of the resources are published should fetch multiple resources of type vocabularyList 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
-      "entries": Array [
-        Object {
-          "term": Object {
+{
+  "entities": [
+    {
+      "actions": [],
+      "entries": [
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
             "term": "I am singing (lang)",
             "termEnglish": "I am singing (Engl)",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "11",
             "positive": true,
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
             "term": "You are singing (lang)",
             "termEnglish": "You are singing (Engl)",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "12",
             "positive": false,
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
             "term": "She is singing (lang)",
             "termEnglish": "She is singing (Engl)",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "13",
             "positive": false,
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
             "term": "I am not singing (lang)",
             "termEnglish": "I am not singing (Engl)",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "01",
             "positive": true,
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
             "term": "You are not singing (lang)",
             "termEnglish": "You are not singing (Engl)",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "02",
             "positive": false,
           },
         },
       ],
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [],
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
             "description": "choose positive",
             "label": "positive",
             "name": "positive",
-            "options": Array [
-              Object {
+            "options": [
+              {
                 "display": "negative (lha)",
                 "value": false,
               },
-              Object {
+              {
                 "display": "positive form (switch for negative)",
                 "value": true,
               },
             ],
             "type": "SWITCH",
           },
-          Object {
-            "constraints": Array [],
+          {
+            "constraints": [],
             "description": "choose person",
             "label": "person",
             "name": "person",
-            "options": Array [
-              Object {
+            "options": [
+              {
                 "display": "I",
                 "value": "1",
               },
-              Object {
+              {
                 "display": "You",
                 "value": "2",
               },
-              Object {
+              {
                 "display": "She",
                 "value": "3",
               },
@@ -2190,47 +2190,47 @@ Object {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
       "name": "To Sing (lang)",
       "nameEnglish": "To Sing (Engl)",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "entries": Array [
-        Object {
-          "term": Object {
+    {
+      "actions": [],
+      "entries": [
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "term": "Chil-term-1",
             "termEnglish": "Engl-term-1",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "11",
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "term": "Chil-term-2",
             "termEnglish": "Engl-term-2",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "12",
           },
         },
       ],
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [],
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
             "description": "choose person",
             "label": "person",
             "name": "person",
-            "options": Array [
-              Object {
+            "options": [
+              {
                 "display": "I",
                 "value": "11",
               },
-              Object {
+              {
                 "display": "We",
                 "value": "12",
               },
@@ -2242,40 +2242,40 @@ Object {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "name": "test VL 1 chil",
       "nameEnglish": "test VL 1 engl",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -2283,45 +2283,45 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "entries": Array [
-        Object {
-          "term": Object {
+    {
+      "actions": [],
+      "entries": [
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "term": "Chil-term-2",
             "termEnglish": "Engl-term-2",
           },
-          "variableValues": Object {
+          "variableValues": {
             "his": false,
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "term": "Chil-term-1",
             "termEnglish": "Engl-term-1",
           },
-          "variableValues": Object {
+          "variableValues": {
             "his": true,
           },
         },
       ],
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [],
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
             "description": "choose his",
             "label": "his",
             "name": "his",
-            "options": Array [
-              Object {
+            "options": [
+              {
                 "display": "his",
                 "value": true,
               },
-              Object {
+              {
                 "display": "hers",
                 "value": false,
               },
@@ -2332,32 +2332,32 @@ Object {
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "name": "test VL 2 CHIL- no engl name",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "label": "legends",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "mediaItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "song",
             },
@@ -2366,111 +2366,111 @@ Object {
       ],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/vocabularyLists when some of the resources are unpublished should return the expected number of results 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [],
-      "entries": Array [
-        Object {
-          "term": Object {
+{
+  "entities": [
+    {
+      "actions": [],
+      "entries": [
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
             "term": "I am singing (lang)",
             "termEnglish": "I am singing (Engl)",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "11",
             "positive": true,
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
             "term": "You are singing (lang)",
             "termEnglish": "You are singing (Engl)",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "12",
             "positive": false,
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
             "term": "She is singing (lang)",
             "termEnglish": "She is singing (Engl)",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "13",
             "positive": false,
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
             "term": "I am not singing (lang)",
             "termEnglish": "I am not singing (Engl)",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "01",
             "positive": true,
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
             "term": "You are not singing (lang)",
             "termEnglish": "You are not singing (Engl)",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "02",
             "positive": false,
           },
         },
       ],
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [],
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
             "description": "choose positive",
             "label": "positive",
             "name": "positive",
-            "options": Array [
-              Object {
+            "options": [
+              {
                 "display": "negative (lha)",
                 "value": false,
               },
-              Object {
+              {
                 "display": "positive form (switch for negative)",
                 "value": true,
               },
             ],
             "type": "SWITCH",
           },
-          Object {
-            "constraints": Array [],
+          {
+            "constraints": [],
             "description": "choose person",
             "label": "person",
             "name": "person",
-            "options": Array [
-              Object {
+            "options": [
+              {
                 "display": "I",
                 "value": "1",
               },
-              Object {
+              {
                 "display": "You",
                 "value": "2",
               },
-              Object {
+              {
                 "display": "She",
                 "value": "3",
               },
@@ -2482,47 +2482,47 @@ Object {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
       "name": "To Sing (lang)",
       "nameEnglish": "To Sing (Engl)",
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
-      "actions": Array [],
-      "entries": Array [
-        Object {
-          "term": Object {
+    {
+      "actions": [],
+      "entries": [
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "term": "Chil-term-1",
             "termEnglish": "Engl-term-1",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "11",
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "term": "Chil-term-2",
             "termEnglish": "Engl-term-2",
           },
-          "variableValues": Object {
+          "variableValues": {
             "person": "12",
           },
         },
       ],
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [],
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
             "description": "choose person",
             "label": "person",
             "name": "person",
-            "options": Array [
-              Object {
+            "options": [
+              {
                 "display": "I",
                 "value": "11",
               },
-              Object {
+              {
                 "display": "We",
                 "value": "12",
               },
@@ -2534,40 +2534,40 @@ Object {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "name": "test VL 1 chil",
       "nameEnglish": "test VL 1 engl",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           "label": "plants",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "term",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
               "type": "book",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
               "type": "note",
             },
@@ -2575,45 +2575,45 @@ Object {
         },
       ],
     },
-    Object {
-      "actions": Array [],
-      "entries": Array [
-        Object {
-          "term": Object {
+    {
+      "actions": [],
+      "entries": [
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
             "term": "Chil-term-2",
             "termEnglish": "Engl-term-2",
           },
-          "variableValues": Object {
+          "variableValues": {
             "his": false,
           },
         },
-        Object {
-          "term": Object {
+        {
+          "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "term": "Chil-term-1",
             "termEnglish": "Engl-term-1",
           },
-          "variableValues": Object {
+          "variableValues": {
             "his": true,
           },
         },
       ],
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [],
+      "form": {
+        "fields": [
+          {
+            "constraints": [],
             "description": "choose his",
             "label": "his",
             "name": "his",
-            "options": Array [
-              Object {
+            "options": [
+              {
                 "display": "his",
                 "value": true,
               },
-              Object {
+              {
                 "display": "hers",
                 "value": false,
               },
@@ -2624,32 +2624,32 @@ Object {
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "name": "test VL 2 CHIL- no engl name",
-      "tags": Array [
-        Object {
+      "tags": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
           "label": "legends",
-          "members": Array [
-            Object {
+          "members": [
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
               "type": "vocabularyList",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
               "type": "spatialFeature",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "note",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "mediaItem",
             },
-            Object {
+            {
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
               "type": "song",
             },
@@ -2658,6 +2658,6 @@ Object {
       ],
     },
   ],
-  "indexScopedActions": Array [],
+  "indexScopedActions": [],
 }
 `;

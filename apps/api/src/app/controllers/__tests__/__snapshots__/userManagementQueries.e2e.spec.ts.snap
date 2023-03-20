@@ -1,27 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`User Management Queries when fetching schemas (/admin) should return the expected result 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "A tag is used to group related resources or notes in a non-hierarchical manner",
     "label": "Tag",
     "link": "/tags",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "label": Object {
+      "label": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a human readable text label for this tag",
         "isArray": false,
         "isOptional": false,
         "label": "label",
       },
-      "members": Object {
+      "members": {
         "coscradDataType": "COMPOSITE_IDENTIFIER",
         "description": "the composite identifier of every resource or note with this tag",
         "isArray": true,
@@ -31,33 +31,33 @@ Array [
     },
     "type": "tag",
   },
-  Object {
+  {
     "description": "A category tree provides a hierarchical organization of resources",
     "label": "Category",
     "link": "/treeOfKnowledge",
-    "schema": Object {
-      "children": Object {
+    "schema": {
+      "children": {
         "complexDataType": "NESTED_TYPE",
         "description": "self similar reference to all categories that are direct-descendants of this category in the tree",
         "isArray": false,
         "isOptional": false,
         "label": "children",
-        "schema": Object {
-          "id": Object {
+        "schema": {
+          "id": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
             "label": "ID",
           },
-          "label": Object {
+          "label": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "the user-facing label for this category",
             "isArray": false,
             "isOptional": false,
             "label": "label",
           },
-          "members": Object {
+          "members": {
             "coscradDataType": "COMPOSITE_IDENTIFIER",
             "description": "the composite identifier of every resource or note in this category",
             "isArray": true,
@@ -66,21 +66,21 @@ Array [
           },
         },
       },
-      "id": Object {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "label": Object {
+      "label": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the user-facing label for this category",
         "isArray": false,
         "isOptional": false,
         "label": "label",
       },
-      "members": Object {
+      "members": {
         "coscradDataType": "COMPOSITE_IDENTIFIER",
         "description": "the composite identifier of every resource or note in this category",
         "isArray": true,
@@ -90,47 +90,47 @@ Array [
     },
     "type": "category",
   },
-  Object {
+  {
     "description": "A user may belong to groups and have privileges to access data",
     "label": "User",
     "link": "/admin/users",
-    "schema": Object {
-      "id": Object {
+    "schema": {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "profile": Object {
+      "profile": {
         "complexDataType": "NESTED_TYPE",
         "description": "the user's profile information",
         "isArray": false,
         "isOptional": true,
         "label": "profile",
-        "schema": Object {
-          "email": Object {
+        "schema": {
+          "email": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "the user's email address",
             "isArray": false,
             "isOptional": false,
             "label": "email",
           },
-          "name": Object {
+          "name": {
             "complexDataType": "NESTED_TYPE",
             "description": "the user's full name",
             "isArray": false,
             "isOptional": false,
             "label": "full name",
-            "schema": Object {
-              "firstName": Object {
+            "schema": {
+              "firstName": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the user's first name",
                 "isArray": false,
                 "isOptional": false,
                 "label": "first name",
               },
-              "lastName": Object {
+              "lastName": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the user's last name",
                 "isArray": false,
@@ -141,30 +141,30 @@ Array [
           },
         },
       },
-      "roles": Object {
+      "roles": {
         "complexDataType": "ENUM",
-        "description": "the user's roles, which grant privileges to perform certain read \\\\ write actions",
+        "description": "the user's roles, which grant privileges to perform certain read \\ write actions",
         "enumLabel": "User Role",
         "enumName": "COSCRAD_USER_ROLE",
         "isArray": true,
         "isOptional": false,
         "label": "roles",
-        "labelsAndValues": Array [
-          Object {
+        "labelsAndValues": [
+          {
             "label": "admin",
             "value": "projectAdmin",
           },
-          Object {
+          {
             "label": "viewer",
             "value": "viewer",
           },
-          Object {
+          {
             "label": "COSCRAD admin",
             "value": "superAdmin",
           },
         ],
       },
-      "username": Object {
+      "username": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a human-readable identifier for this user",
         "isArray": false,
@@ -174,33 +174,33 @@ Array [
     },
     "type": "user",
   },
-  Object {
+  {
     "description": "A user group serves to organize users based on shared privileges to access data",
     "label": "User Group",
     "link": "/admin/userGroups",
-    "schema": Object {
-      "description": Object {
+    "schema": {
+      "description": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a summary of the significance of this user group (what its members have in common)",
         "isArray": false,
         "isOptional": false,
         "label": "description",
       },
-      "id": Object {
+      "id": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
         "label": "ID",
       },
-      "label": Object {
+      "label": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the name of the group",
         "isArray": false,
         "isOptional": false,
         "label": "label",
       },
-      "userIds": Object {
+      "userIds": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the ID of every user that is in this group",
         "isArray": true,
@@ -214,19 +214,19 @@ Array [
 `;
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a coscrad admin when querying for user groups when fetching a group by ID when there is a group with the given ID should find the group 1`] = `
-Object {
-  "actions": Array [
-    Object {
+{
+  "actions": [
+    {
       "description": "Add an existing user to an existing user group",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [
-              Object {
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
                 "message": "must be a UUID",
                 "name": "UUID",
               },
-              Object {
+              {
                 "message": "must be a defined value",
                 "name": "defined value",
               },
@@ -234,14 +234,14 @@ Object {
             "description": "the ID of the user that will be added to this group",
             "label": "user ID",
             "name": "userId",
-            "options": Object {
+            "options": {
               "aggregateType": "user",
             },
             "type": "DYNAMIC_SELECT",
           },
         ],
-        "prepopulatedFields": Object {
-          "aggregateCompositeIdentifier": Object {
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "userGroup",
           },
@@ -254,17 +254,17 @@ Object {
   "description": "This group is for members of the community only.",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "label": "community members",
-  "users": Array [
-    Object {
+  "users": [
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "profile": Object {
+      "profile": {
         "email": "llcj1985@aol.com",
-        "name": Object {
+        "name": {
           "firstName": "James",
           "lastName": "Jones",
         },
       },
-      "roles": Array [
+      "roles": [
         "viewer",
       ],
       "username": "cool-james",
@@ -274,21 +274,21 @@ Object {
 `;
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a coscrad admin when querying for user groups when fetching all groups should return the expected result 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [
-        Object {
+{
+  "entities": [
+    {
+      "actions": [
+        {
           "description": "Add an existing user to an existing user group",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "constraints": Array [
-                  Object {
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
                     "message": "must be a UUID",
                     "name": "UUID",
                   },
-                  Object {
+                  {
                     "message": "must be a defined value",
                     "name": "defined value",
                   },
@@ -296,14 +296,14 @@ Object {
                 "description": "the ID of the user that will be added to this group",
                 "label": "user ID",
                 "name": "userId",
-                "options": Object {
+                "options": {
                   "aggregateType": "user",
                 },
                 "type": "DYNAMIC_SELECT",
               },
             ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
                 "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "userGroup",
               },
@@ -316,17 +316,17 @@ Object {
       "description": "This group is for members of the community only.",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "label": "community members",
-      "users": Array [
-        Object {
+      "users": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "profile": Object {
+          "profile": {
             "email": "llcj1985@aol.com",
-            "name": Object {
+            "name": {
               "firstName": "James",
               "lastName": "Jones",
             },
           },
-          "roles": Array [
+          "roles": [
             "viewer",
           ],
           "username": "cool-james",
@@ -334,18 +334,18 @@ Object {
       ],
     },
   ],
-  "indexScopedActions": Array [
-    Object {
+  "indexScopedActions": [
+    {
       "description": "Creates a new user group",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [
-              Object {
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
-              Object {
+              {
                 "message": "must be a defined value",
                 "name": "defined value",
               },
@@ -355,13 +355,13 @@ Object {
             "name": "label",
             "type": "TEXT_FIELD",
           },
-          Object {
-            "constraints": Array [
-              Object {
+          {
+            "constraints": [
+              {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
-              Object {
+              {
                 "message": "must be a defined value",
                 "name": "defined value",
               },
@@ -372,7 +372,7 @@ Object {
             "type": "TEXT_FIELD",
           },
         ],
-        "prepopulatedFields": Object {},
+        "prepopulatedFields": {},
       },
       "label": "Create User Group",
       "type": "CREATE_USER_GROUP",
@@ -382,15 +382,15 @@ Object {
 `;
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a coscrad admin when querying for users when fetching a user by ID when there is a user with the given ID should find the user 1`] = `
-Object {
-  "actions": Array [
-    Object {
+{
+  "actions": [
+    {
       "description": "Grant an additional user role to the user",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [
-              Object {
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
                 "message": "Must be a valid \${propertyLabel}",
                 "name": "IS_ENUM",
               },
@@ -398,16 +398,16 @@ Object {
             "description": "the role that will be granted to this user",
             "label": "User Role",
             "name": "role",
-            "options": Array [
-              Object {
+            "options": [
+              {
                 "display": "admin",
                 "value": "projectAdmin",
               },
-              Object {
+              {
                 "display": "viewer",
                 "value": "viewer",
               },
-              Object {
+              {
                 "display": "COSCRAD admin",
                 "value": "superAdmin",
               },
@@ -415,8 +415,8 @@ Object {
             "type": "STATIC_SELECT",
           },
         ],
-        "prepopulatedFields": Object {
-          "aggregateCompositeIdentifier": Object {
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "user",
           },
@@ -427,14 +427,14 @@ Object {
     },
   ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-  "profile": Object {
+  "profile": {
     "email": "llcj1985@aol.com",
-    "name": Object {
+    "name": {
       "firstName": "James",
       "lastName": "Jones",
     },
   },
-  "roles": Array [
+  "roles": [
     "viewer",
   ],
   "username": "cool-james",
@@ -442,17 +442,17 @@ Object {
 `;
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a coscrad admin when querying for users when fetching all users should return the expected result 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [
-        Object {
+{
+  "entities": [
+    {
+      "actions": [
+        {
           "description": "Grant an additional user role to the user",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "constraints": Array [
-                  Object {
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
                     "message": "Must be a valid \${propertyLabel}",
                     "name": "IS_ENUM",
                   },
@@ -460,16 +460,16 @@ Object {
                 "description": "the role that will be granted to this user",
                 "label": "User Role",
                 "name": "role",
-                "options": Array [
-                  Object {
+                "options": [
+                  {
                     "display": "admin",
                     "value": "projectAdmin",
                   },
-                  Object {
+                  {
                     "display": "viewer",
                     "value": "viewer",
                   },
-                  Object {
+                  {
                     "display": "COSCRAD admin",
                     "value": "superAdmin",
                   },
@@ -477,8 +477,8 @@ Object {
                 "type": "STATIC_SELECT",
               },
             ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
                 "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "user",
               },
@@ -489,31 +489,31 @@ Object {
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "profile": Object {
+      "profile": {
         "email": "llcj1985@aol.com",
-        "name": Object {
+        "name": {
           "firstName": "James",
           "lastName": "Jones",
         },
       },
-      "roles": Array [
+      "roles": [
         "viewer",
       ],
       "username": "cool-james",
     },
   ],
-  "indexScopedActions": Array [
-    Object {
+  "indexScopedActions": [
+    {
       "description": "Register a new COSCRAD user after the user has been registered with the auth provider",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [
-              Object {
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
-              Object {
+              {
                 "message": "must be a defined value",
                 "name": "defined value",
               },
@@ -523,13 +523,13 @@ Object {
             "name": "userIdFromAuthProvider",
             "type": "TEXT_FIELD",
           },
-          Object {
-            "constraints": Array [
-              Object {
+          {
+            "constraints": [
+              {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
-              Object {
+              {
                 "message": "must be a defined value",
                 "name": "defined value",
               },
@@ -540,7 +540,7 @@ Object {
             "type": "TEXT_FIELD",
           },
         ],
-        "prepopulatedFields": Object {},
+        "prepopulatedFields": {},
       },
       "label": "Register User",
       "type": "REGISTER_USER",
@@ -550,19 +550,19 @@ Object {
 `;
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a project admin when querying for user groups when fetching a group by ID when there is a group with the given ID should find the group 1`] = `
-Object {
-  "actions": Array [
-    Object {
+{
+  "actions": [
+    {
       "description": "Add an existing user to an existing user group",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [
-              Object {
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
                 "message": "must be a UUID",
                 "name": "UUID",
               },
-              Object {
+              {
                 "message": "must be a defined value",
                 "name": "defined value",
               },
@@ -570,14 +570,14 @@ Object {
             "description": "the ID of the user that will be added to this group",
             "label": "user ID",
             "name": "userId",
-            "options": Object {
+            "options": {
               "aggregateType": "user",
             },
             "type": "DYNAMIC_SELECT",
           },
         ],
-        "prepopulatedFields": Object {
-          "aggregateCompositeIdentifier": Object {
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "userGroup",
           },
@@ -590,17 +590,17 @@ Object {
   "description": "This group is for members of the community only.",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "label": "community members",
-  "users": Array [
-    Object {
+  "users": [
+    {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "profile": Object {
+      "profile": {
         "email": "llcj1985@aol.com",
-        "name": Object {
+        "name": {
           "firstName": "James",
           "lastName": "Jones",
         },
       },
-      "roles": Array [
+      "roles": [
         "viewer",
       ],
       "username": "cool-james",
@@ -610,21 +610,21 @@ Object {
 `;
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a project admin when querying for user groups when fetching all groups should return the expected result 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [
-        Object {
+{
+  "entities": [
+    {
+      "actions": [
+        {
           "description": "Add an existing user to an existing user group",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "constraints": Array [
-                  Object {
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
                     "message": "must be a UUID",
                     "name": "UUID",
                   },
-                  Object {
+                  {
                     "message": "must be a defined value",
                     "name": "defined value",
                   },
@@ -632,14 +632,14 @@ Object {
                 "description": "the ID of the user that will be added to this group",
                 "label": "user ID",
                 "name": "userId",
-                "options": Object {
+                "options": {
                   "aggregateType": "user",
                 },
                 "type": "DYNAMIC_SELECT",
               },
             ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
                 "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "userGroup",
               },
@@ -652,17 +652,17 @@ Object {
       "description": "This group is for members of the community only.",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "label": "community members",
-      "users": Array [
-        Object {
+      "users": [
+        {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          "profile": Object {
+          "profile": {
             "email": "llcj1985@aol.com",
-            "name": Object {
+            "name": {
               "firstName": "James",
               "lastName": "Jones",
             },
           },
-          "roles": Array [
+          "roles": [
             "viewer",
           ],
           "username": "cool-james",
@@ -670,18 +670,18 @@ Object {
       ],
     },
   ],
-  "indexScopedActions": Array [
-    Object {
+  "indexScopedActions": [
+    {
       "description": "Creates a new user group",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [
-              Object {
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
-              Object {
+              {
                 "message": "must be a defined value",
                 "name": "defined value",
               },
@@ -691,13 +691,13 @@ Object {
             "name": "label",
             "type": "TEXT_FIELD",
           },
-          Object {
-            "constraints": Array [
-              Object {
+          {
+            "constraints": [
+              {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
-              Object {
+              {
                 "message": "must be a defined value",
                 "name": "defined value",
               },
@@ -708,7 +708,7 @@ Object {
             "type": "TEXT_FIELD",
           },
         ],
-        "prepopulatedFields": Object {},
+        "prepopulatedFields": {},
       },
       "label": "Create User Group",
       "type": "CREATE_USER_GROUP",
@@ -718,15 +718,15 @@ Object {
 `;
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a project admin when querying for users when fetching a user by ID when there is a user with the given ID should find the user 1`] = `
-Object {
-  "actions": Array [
-    Object {
+{
+  "actions": [
+    {
       "description": "Grant an additional user role to the user",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [
-              Object {
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
                 "message": "Must be a valid \${propertyLabel}",
                 "name": "IS_ENUM",
               },
@@ -734,16 +734,16 @@ Object {
             "description": "the role that will be granted to this user",
             "label": "User Role",
             "name": "role",
-            "options": Array [
-              Object {
+            "options": [
+              {
                 "display": "admin",
                 "value": "projectAdmin",
               },
-              Object {
+              {
                 "display": "viewer",
                 "value": "viewer",
               },
-              Object {
+              {
                 "display": "COSCRAD admin",
                 "value": "superAdmin",
               },
@@ -751,8 +751,8 @@ Object {
             "type": "STATIC_SELECT",
           },
         ],
-        "prepopulatedFields": Object {
-          "aggregateCompositeIdentifier": Object {
+        "prepopulatedFields": {
+          "aggregateCompositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "user",
           },
@@ -763,14 +763,14 @@ Object {
     },
   ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-  "profile": Object {
+  "profile": {
     "email": "llcj1985@aol.com",
-    "name": Object {
+    "name": {
       "firstName": "James",
       "lastName": "Jones",
     },
   },
-  "roles": Array [
+  "roles": [
     "viewer",
   ],
   "username": "cool-james",
@@ -778,17 +778,17 @@ Object {
 `;
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a project admin when querying for users when fetching all users should return the expected result 1`] = `
-Object {
-  "entities": Array [
-    Object {
-      "actions": Array [
-        Object {
+{
+  "entities": [
+    {
+      "actions": [
+        {
           "description": "Grant an additional user role to the user",
-          "form": Object {
-            "fields": Array [
-              Object {
-                "constraints": Array [
-                  Object {
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
                     "message": "Must be a valid \${propertyLabel}",
                     "name": "IS_ENUM",
                   },
@@ -796,16 +796,16 @@ Object {
                 "description": "the role that will be granted to this user",
                 "label": "User Role",
                 "name": "role",
-                "options": Array [
-                  Object {
+                "options": [
+                  {
                     "display": "admin",
                     "value": "projectAdmin",
                   },
-                  Object {
+                  {
                     "display": "viewer",
                     "value": "viewer",
                   },
-                  Object {
+                  {
                     "display": "COSCRAD admin",
                     "value": "superAdmin",
                   },
@@ -813,8 +813,8 @@ Object {
                 "type": "STATIC_SELECT",
               },
             ],
-            "prepopulatedFields": Object {
-              "aggregateCompositeIdentifier": Object {
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
                 "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "user",
               },
@@ -825,31 +825,31 @@ Object {
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "profile": Object {
+      "profile": {
         "email": "llcj1985@aol.com",
-        "name": Object {
+        "name": {
           "firstName": "James",
           "lastName": "Jones",
         },
       },
-      "roles": Array [
+      "roles": [
         "viewer",
       ],
       "username": "cool-james",
     },
   ],
-  "indexScopedActions": Array [
-    Object {
+  "indexScopedActions": [
+    {
       "description": "Register a new COSCRAD user after the user has been registered with the auth provider",
-      "form": Object {
-        "fields": Array [
-          Object {
-            "constraints": Array [
-              Object {
+      "form": {
+        "fields": [
+          {
+            "constraints": [
+              {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
-              Object {
+              {
                 "message": "must be a defined value",
                 "name": "defined value",
               },
@@ -859,13 +859,13 @@ Object {
             "name": "userIdFromAuthProvider",
             "type": "TEXT_FIELD",
           },
-          Object {
-            "constraints": Array [
-              Object {
+          {
+            "constraints": [
+              {
                 "message": "must be a non-empty string",
                 "name": "non-empty string",
               },
-              Object {
+              {
                 "message": "must be a defined value",
                 "name": "defined value",
               },
@@ -876,7 +876,7 @@ Object {
             "type": "TEXT_FIELD",
           },
         ],
-        "prepopulatedFields": Object {},
+        "prepopulatedFields": {},
       },
       "label": "Register User",
       "type": "REGISTER_USER",
