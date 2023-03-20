@@ -1,8 +1,6 @@
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useLoadableTermById } from '../../store/slices/resources';
-import { displayLoadableSearchResult } from '../higher-order-components/display-loadable-search-result';
-import { TermDetailFullViewPresenter } from '../resources/terms/term-detail.full-view.presenter';
 import { useDate } from './use-date';
 
 export const TermOfTheDayContainer = (): JSX.Element => {
@@ -14,9 +12,11 @@ export const TermOfTheDayContainer = (): JSX.Element => {
 
     const loadableTermSearchResult = useLoadableTermById(termOfTheDayId);
 
-    const Presenter = displayLoadableSearchResult(TermDetailFullViewPresenter);
+    return <div>{termOfTheDayId}</div>;
 
-    console.log(termOfTheDayId);
+    // const Presenter = displayLoadableSearchResult(TermDetailFullViewPresenter);
 
-    return <Presenter {...loadableTermSearchResult} />;
+    // console.log(termOfTheDayId);
+
+    // return <Presenter {...loadableTermSearchResult} />;
 };

@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Typography } from '@mui/material';
 import { useContext, useEffect } from 'react';
 import { useAppDispatch } from '../../app/hooks';
@@ -7,6 +8,7 @@ import { userLoginSucceeded } from '../../store/slices/auth';
 import { ImageInContent } from '../../utils/generic-components/presenters/image-in-content';
 import { CoscradMainContentContainer } from '../../utils/generic-components/style-components/coscrad-main-content-container';
 import { TermOfTheDay } from '../term-of-the-day/term-of-the-day';
+import { TermOfTheDayContainer } from '../term-of-the-day/term-of-the-day.container';
 import { TermOfTheDayPresenter } from '../term-of-the-day/term-of-the-day.presenter';
 
 export const Home = (): JSX.Element => {
@@ -14,7 +16,9 @@ export const Home = (): JSX.Element => {
      * TODO: Move data (ConfigurableContentContext, auth, and dispatch) out of presenter
      */
 
-    const { siteDescription, siteHomeImageUrl } = useContext(ConfigurableContentContext);
+    const { siteDescription, siteHomeImageUrl, termOfTheDayConfig } = useContext(
+        ConfigurableContentContext
+    );
 
     const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
 
@@ -51,6 +55,10 @@ export const Home = (): JSX.Element => {
             <Typography variant="body1">{siteDescription}</Typography>
             <TermOfTheDay />
             <TermOfTheDayPresenter termOfTheDay={termOfTheDay} />
+            <ImageInContent image={image} alignment="left" displayWidth="350px" />
+            <Typography variant="body1">{siteDescription}</Typography>
+
+            {isNullOrUndefined(termOfTheDayConfig) ? null : <TermOfTheDayContainer />}
         </CoscradMainContentContainer>
     );
 };

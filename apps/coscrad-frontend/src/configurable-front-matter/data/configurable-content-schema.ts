@@ -34,7 +34,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     siteCredits: string;
     simulatedKeyboard?: SimulatedKeyboardConfig;
     listenLive?: ListenLivePageConfiguration;
-    termOfTheDayConfig: Record<string, string>;
+    termOfTheDayConfig?: Record<string, string>;
 };
 
 export const configurableContentPropertiesAndConstraints: {
