@@ -1,5 +1,11 @@
 import { ICategorizableDetailQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
+import { Typography } from '@mui/material';
 import { TermDetailFullViewPresenter } from '../resources/terms/term-detail.full-view.presenter';
+import {
+    TermOfTheDayContainerStyled,
+    TermOfTheDayCurrentDate,
+    TermOfTheDayHeader,
+} from './term-of-the-day-styled';
 import { MonthAndDate } from './use-date';
 
 interface TermOfTheDayPresenterProps {
@@ -12,15 +18,14 @@ export const TermOfTheDayPresenter = ({
     termProps,
 }: TermOfTheDayPresenterProps): JSX.Element => {
     return (
-        <div>
-            <h1>Term of the day</h1>
-
-            <div>
-                {month} {date}
-            </div>
-            <div>
+        <TermOfTheDayContainerStyled>
+            <TermOfTheDayHeader>Term of the day</TermOfTheDayHeader>
+            <Typography>
                 <TermDetailFullViewPresenter {...termProps} />
-            </div>
-        </div>
+            </Typography>
+            <TermOfTheDayCurrentDate>
+                {month} {date}
+            </TermOfTheDayCurrentDate>
+        </TermOfTheDayContainerStyled>
     );
 };
