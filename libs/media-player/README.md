@@ -1,7 +1,8 @@
-# media-player
+# @coscrad/media-player
 
 This library was generated with [Nx](https://nx.dev).
 
-## Running unit tests
+## Background
 
-Run `nx test media-player` to execute the unit tests via [Jest](https://jestjs.io).
+This library allows us to share our implementation of audio and video players
+amongst other React projects in the repo.

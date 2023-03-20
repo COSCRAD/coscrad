@@ -28,12 +28,25 @@ We opted for a simplified approach as it is not clear that we will do full CQRS-
 
 ### Commands and Command Handlers
 
+#### Commands
+
 Commands are defined data classes. Note that you can use this library in conjuction with `@coscrad/data-types` to obtain schemas for command payloads (useful when building dynamic forms) and validation for these payload types (very important as the input is from the client).
 
-A command handler
+Every command is identifiable by its command type. You specify a command's type when registering it with the `@Command(commandType)` decorator.
 
-Use the `@Command(...)` and `@CommandHandler(...)` decorators to register commands and command handlers. These should be defined in pairs or you will quickly hit an exception.
+#### Command Handlers
 
-Import the `CommandModule` into your Nest application. Inject an instance of the `CommandHandlerService` into a controller as follows.
+A command handler must implement the `ICommandHandler` interface. I.e., it must have an method with the signature
 
-The `CommandHandlerService`
+```ts
+async execute(
+        command: ICommand,
+        commandType: string,
+): void;
+```
+
+You must link a command handler to the command that it handles by registering you command handler with the decorator `@CommandHandler(MyCommand)`, where `MyCommand` is a reference to the command's class (constructor);
+
+Import the `CommandModule` into your Nest application. Inject an instance of the `CommandHandlerService` into a controller. Call `CommandHandlerService.execute(commandFSA)` to execute a command.
+
+For an example, see any files with the form `<some-command>.command.ts` and `<some-command>.command-handler.ts` within the COSCRAD back-end (`api`).
