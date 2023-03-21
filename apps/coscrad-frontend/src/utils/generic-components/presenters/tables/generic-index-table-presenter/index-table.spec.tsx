@@ -1,7 +1,7 @@
 import { HasId } from '@coscrad/api-interfaces';
 import { Link, MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../../../test-utils';
-import { GenericIndexTablePresenterProps, IndexTable } from './index-table';
+import { IndexViewContainer, IndexViewContainerProps } from './index-view-container';
 import { HeadingLabel } from './types';
 import { CellRenderersDefinition } from './types/cell-renderers-definition';
 
@@ -63,9 +63,7 @@ const allHeadings: HeadingLabel<Widget>[] = [
     },
 ];
 
-const filterableProperties: (keyof Widget)[] = [
-    'foo', 'bar', 'baz'
-]
+const filterableProperties: (keyof Widget)[] = ['foo', 'bar', 'baz'];
 
 const comprehensiveCellRenderersDefinition: CellRenderersDefinition<Widget> = {
     id: ({ id }: Widget) => <Link to={id}>LINK</Link>,
@@ -78,11 +76,11 @@ const comprehensiveCellRenderersDefinition: CellRenderersDefinition<Widget> = {
  * If inspecting the snapshot proves tedious or flakey, we may want to check
  * look for a `data-testid` prop on rendered cells.
  */
-const assertValidTableRender = (props: GenericIndexTablePresenterProps<Widget>) => {
+const assertValidTableRender = (props: IndexViewContainerProps<Widget>) => {
     // act
     const { baseElement } = renderWithProviders(
         <MemoryRouter>
-            <IndexTable {...props} />
+            <IndexViewContainer {...props} />
         </MemoryRouter>
     );
 
@@ -98,10 +96,10 @@ describe('IndexTable', () => {
                 it('should render properly', () => {
                     assertValidTableRender({
                         headingLabels: allHeadings,
-                        tableData: widgets,
+                        indexViewData: widgets,
                         cellRenderersDefinition: comprehensiveCellRenderersDefinition,
                         heading,
-                        filterableProperties: []
+                        filterableProperties: [],
                     });
                 });
             });
@@ -116,10 +114,10 @@ describe('IndexTable', () => {
                 it('should render properly', () => {
                     assertValidTableRender({
                         headingLabels: allHeadings,
-                        tableData: widgets,
+                        indexViewData: widgets,
                         cellRenderersDefinition: partialRenderers,
                         heading,
-                        filterableProperties
+                        filterableProperties,
                     });
                 });
             });
@@ -128,10 +126,10 @@ describe('IndexTable', () => {
                 it('should render properly', () => {
                     assertValidTableRender({
                         headingLabels: allHeadings,
-                        tableData: widgets,
+                        indexViewData: widgets,
                         cellRenderersDefinition: {},
                         heading,
-                        filterableProperties
+                        filterableProperties,
                     });
                 });
             });
@@ -150,32 +148,32 @@ describe('IndexTable', () => {
 
                 assertValidTableRender({
                     headingLabels: partialHeadings,
-                    tableData: widgets,
+                    indexViewData: widgets,
                     cellRenderersDefinition: renderers,
                     heading,
-                    filterableProperties
+                    filterableProperties,
                 });
             });
 
             describe('when a cell renderer is omitted for an included property (baz)', () => {
                 assertValidTableRender({
                     headingLabels: partialHeadings,
-                    tableData: widgets,
+                    indexViewData: widgets,
                     cellRenderersDefinition: {
                         id: comprehensiveCellRenderersDefinition.id,
                     },
                     heading,
-                    filterableProperties
+                    filterableProperties,
                 });
             });
 
             describe('when no cell renderers are specified', () => {
                 assertValidTableRender({
                     headingLabels: partialHeadings,
-                    tableData: widgets,
+                    indexViewData: widgets,
                     cellRenderersDefinition: {},
                     heading,
-                    filterableProperties
+                    filterableProperties,
                 });
             });
         });
@@ -193,12 +191,12 @@ describe('IndexTable', () => {
             };
 
             const attemptBadRender = () =>
-                IndexTable({
+                IndexViewContainer({
                     headingLabels: partialHeadings,
-                    tableData: widgets,
+                    indexViewData: widgets,
                     cellRenderersDefinition: renderersWithExtra,
                     heading,
-                    filterableProperties
+                    filterableProperties,
                 });
 
             it('should throw', () => {
@@ -208,12 +206,12 @@ describe('IndexTable', () => {
 
         describe('when there are no headings specified', () => {
             const attemptBadRender = () =>
-                IndexTable({
+                IndexViewContainer({
                     headingLabels: [],
-                    tableData: widgets,
+                    indexViewData: widgets,
                     cellRenderersDefinition: {},
                     heading,
-                    filterableProperties
+                    filterableProperties,
                 });
 
             it('should throw', () => {

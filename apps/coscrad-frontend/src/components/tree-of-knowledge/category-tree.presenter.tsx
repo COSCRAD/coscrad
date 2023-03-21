@@ -1,6 +1,6 @@
 import { CategorizableType, ICategoryTreeViewModel } from '@coscrad/api-interfaces';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
-import { CoscradMainContentContainer } from '../../utils/generic-components/style-components/coscrad-main-content-container';
+import { CoscradPrimaryStyleLayoutContainer } from '../../utils/generic-components/style-components/coscrad-main-content-container';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { CategorizablesOfMultipleTypeContainer } from '../higher-order-components';
 import { thumbnailCategorizableDetailPresenterFactory } from '../resources/factories/thumbnail-categorizable-detail-presenter-factory';
@@ -37,11 +37,11 @@ const wrapTree = ({
 export const CategoryTreePresenter: FunctionalComponent<ICategoryTreeViewModel> = (
     tree: ICategoryTreeViewModel<CategorizableType>
 ) => (
-    <CoscradMainContentContainer>
+    <CoscradPrimaryStyleLayoutContainer>
         <div style={{ height: 0 }} data-testid="categoryTree">
             &nbsp;
         </div>
         <Typography variant="h2">Tree of Knowledge</Typography>
         {wrapTree(tree)}
-    </CoscradMainContentContainer>
+    </CoscradPrimaryStyleLayoutContainer>
 );

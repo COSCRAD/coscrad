@@ -1,6 +1,6 @@
 import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
 import { Typography } from '@mui/material';
-import { CoscradMainContentContainer } from '../../../../../utils/generic-components/style-components/coscrad-main-content-container';
+import { CoscradPrimaryStyleLayoutContainer } from '../../../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { SelfConnectionNote } from '../../../notes/hooks/use-loadable-self-notes-for-resource';
 import { SelfNotePresenter } from './self-note.presenter';
 
@@ -14,7 +14,7 @@ export const SelfNotesPanelPresenter = ({
     notes,
 }: SelfNotesPanelProps): JSX.Element => (
     // TODO remove magic string
-    <CoscradMainContentContainer>
+    <CoscradPrimaryStyleLayoutContainer>
         <div style={{ height: 0 }} data-testid={'selfNotesPanel'}>
             &nbsp;
         </div>
@@ -27,5 +27,5 @@ export const SelfNotesPanelPresenter = ({
                 ? notes.map((note) => <SelfNotePresenter {...note} key={note.id} />)
                 : 'No Notes Found'}
         </div>
-    </CoscradMainContentContainer>
+    </CoscradPrimaryStyleLayoutContainer>
 );

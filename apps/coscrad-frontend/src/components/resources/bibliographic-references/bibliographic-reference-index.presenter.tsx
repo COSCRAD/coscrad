@@ -1,5 +1,8 @@
 import { BibliographicReferenceIndexState } from '../../../store/slices/resources';
-import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import {
+    HeadingLabel,
+    IndexViewContainer,
+} from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import {
@@ -42,9 +45,9 @@ export const BibliographicReferenceIndexPresenter = ({
     };
 
     return (
-        <IndexTable
+        <IndexViewContainer
             headingLabels={headingLabels}
-            tableData={consolidatedViewOfBibliographicReferences}
+            indexViewData={consolidatedViewOfBibliographicReferences}
             cellRenderersDefinition={cellRenderersDefinition}
             heading="Bibliographic References"
             filterableProperties={['title', 'citation', 'type']}

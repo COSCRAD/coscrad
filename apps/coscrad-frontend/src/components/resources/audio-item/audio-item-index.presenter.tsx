@@ -1,6 +1,9 @@
 import { IAudioItemViewModel } from '@coscrad/api-interfaces';
 import { AudioItemIndexState } from '../../../store/slices/resources/audio-item/types';
-import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import {
+    HeadingLabel,
+    IndexViewContainer,
+} from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
@@ -39,9 +42,9 @@ export const TranscribedAudioIndexPresenter = ({
     };
 
     return (
-        <IndexTable
+        <IndexViewContainer
             headingLabels={headingLabels}
-            tableData={transcribedAudioItems}
+            indexViewData={transcribedAudioItems}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Audio Transcripts'}
             filterableProperties={['text']}

@@ -1,6 +1,9 @@
 import { IMediaItemViewModel } from '@coscrad/api-interfaces';
 import { MediaItemIndexState } from '../../../store/slices/resources/media-items/types';
-import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import {
+    HeadingLabel,
+    IndexViewContainer,
+} from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { formatBilingualText } from '../vocabulary-lists/utils';
@@ -29,9 +32,9 @@ export const MediaItemIndexPresenter = ({ entities: mediaItems }: MediaItemIndex
     };
 
     return (
-        <IndexTable
+        <IndexViewContainer
             headingLabels={headingLabels}
-            tableData={mediaItems}
+            indexViewData={mediaItems}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Media'}
             filterableProperties={['title', 'titleEnglish']}

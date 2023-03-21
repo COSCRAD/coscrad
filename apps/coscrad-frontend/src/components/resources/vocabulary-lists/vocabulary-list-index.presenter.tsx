@@ -1,6 +1,9 @@
 import { IVocabularyListViewModel } from '@coscrad/api-interfaces';
 import { VocabularyListIndexState } from '../../../store/slices/resources/vocabulary-lists/types/vocabulary-list-index-state';
-import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import {
+    HeadingLabel,
+    IndexViewContainer,
+} from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { formatBilingualText } from './utils';
@@ -19,9 +22,9 @@ export const VocabularyListIndexPresenter = ({
     };
 
     return (
-        <IndexTable
+        <IndexViewContainer
             headingLabels={headingLabels}
-            tableData={vocabularyLists}
+            indexViewData={vocabularyLists}
             cellRenderersDefinition={cellRenderersDefinition}
             // This should be a resource label from resource info
             heading={'Vocabulary Lists'}

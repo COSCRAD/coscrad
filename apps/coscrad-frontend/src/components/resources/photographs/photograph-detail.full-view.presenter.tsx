@@ -2,7 +2,7 @@ import { ICategorizableDetailQueryResult, IPhotographViewModel } from '@coscrad/
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ImageFullPageWidth } from '../../../utils/generic-components/presenters/image-full-page-width';
 import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
-import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
+import { CoscradPrimaryStyleLayoutContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 
 export const PhotographDetailFullViewPresenter = ({
     id,
@@ -21,13 +21,13 @@ export const PhotographDetailFullViewPresenter = ({
     return (
         <>
             <ImageFullPageWidth image={image} />
-            <CoscradMainContentContainer>
+            <CoscradPrimaryStyleLayoutContainer>
                 <ResourceNamePresenter name={name} variant="h2" />
                 <SinglePropertyPresenter display="Photograph ID" value={id} />
                 <div style={{ height: '1px' }} data-testid={id}>
                     &nbsp;
                 </div>
-            </CoscradMainContentContainer>
+            </CoscradPrimaryStyleLayoutContainer>
         </>
     );
 };

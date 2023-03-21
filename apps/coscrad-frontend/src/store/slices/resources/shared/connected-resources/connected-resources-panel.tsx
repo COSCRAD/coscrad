@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 import { SelectedCategorizablesOfMultipleTypesPresenter } from '../../../../../components/higher-order-components/selected-categorizables-of-multiple-types.presenter';
 import { useLoadableCategorizables } from '../../../../../components/higher-order-components/use-loadable-categorizables';
 import { thumbnailCategorizableDetailPresenterFactory } from '../../../../../components/resources/factories/thumbnail-categorizable-detail-presenter-factory';
-import { CoscradMainContentContainer } from '../../../../../utils/generic-components/style-components/coscrad-main-content-container';
+import { CoscradPrimaryStyleLayoutContainer } from '../../../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { useLoadableConnectionsToResource } from '../../../notes/hooks';
 
 export interface ConnectedResourcesPanelProps {
@@ -24,10 +24,10 @@ export const ConnectedResourcesPanel = ({
 
     if (compositeIdentifiers.length === 0)
         return (
-            <CoscradMainContentContainer>
+            <CoscradPrimaryStyleLayoutContainer>
                 <Typography variant="h3">Connected Resources</Typography>
                 No Connections Found
-            </CoscradMainContentContainer>
+            </CoscradPrimaryStyleLayoutContainer>
         );
 
     return SelectedCategorizablesOfMultipleTypesPresenter({

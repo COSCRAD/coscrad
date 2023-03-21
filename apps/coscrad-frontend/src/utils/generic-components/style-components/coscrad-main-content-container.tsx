@@ -6,7 +6,7 @@ interface CoscradMainContentContainerProps {
     children: ReactNode;
 }
 
-export const CoscradMainContentContainer = ({
+export const CoscradPrimaryStyleLayoutContainer = ({
     children,
 }: CoscradMainContentContainerProps): JSX.Element => {
     return (

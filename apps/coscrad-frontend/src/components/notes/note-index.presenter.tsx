@@ -6,7 +6,7 @@ import {
     INoteViewModel,
 } from '@coscrad/api-interfaces';
 import { NoteIndexState } from '../../store/slices/notes/types/note-index-state';
-import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
+import { HeadingLabel, IndexViewContainer } from '../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
 
@@ -88,10 +88,10 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
     };
 
     return (
-        <IndexTable
+        <IndexViewContainer
             data-testid="note-index"
             headingLabels={headingLabels}
-            tableData={notes}
+            indexViewData={notes}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Notes'}
             filterableProperties={['connectionType', 'note']}

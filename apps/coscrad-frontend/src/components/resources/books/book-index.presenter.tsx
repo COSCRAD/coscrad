@@ -1,6 +1,9 @@
 import { IBookViewModel } from '@coscrad/api-interfaces';
 import { BookIndexState } from '../../../store/slices/resources/books/types';
-import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import {
+    HeadingLabel,
+    IndexViewContainer,
+} from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { formatBilingualText } from '../vocabulary-lists/utils';
@@ -27,9 +30,9 @@ export const BookIndexPresenter = ({ entities: books }: BookIndexState) => {
     };
 
     return (
-        <IndexTable
+        <IndexViewContainer
             headingLabels={headingLabels}
-            tableData={books}
+            indexViewData={books}
             cellRenderersDefinition={cellRenderersDefinition}
             /**
              * TODO[https://www.pivotaltracker.com/story/show/183867993]

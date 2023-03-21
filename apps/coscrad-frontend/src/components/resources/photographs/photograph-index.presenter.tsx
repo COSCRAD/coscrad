@@ -1,8 +1,11 @@
 import { IPhotographViewModel } from '@coscrad/api-interfaces';
 import { PhotographIndexState } from '../../../store/slices/resources/photographs/types';
-import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import {
+    HeadingLabel,
+    IndexViewContainer,
+} from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
-import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
+import { CoscradPrimaryStyleLayoutContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderPhotographThumbnailLinkCell } from '../utils/render-photograph-thumbnail-link-cell';
 
@@ -20,15 +23,15 @@ export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIn
     };
 
     return (
-        <CoscradMainContentContainer>
-            <IndexTable
+        <CoscradPrimaryStyleLayoutContainer>
+            <IndexViewContainer
                 headingLabels={headingLabels}
-                tableData={photographs}
+                indexViewData={photographs}
                 cellRenderersDefinition={cellRenderersDefinition}
                 // This should be a resource label from resource info
                 heading={'Photographs'}
                 filterableProperties={['photographer']}
             />
-        </CoscradMainContentContainer>
+        </CoscradPrimaryStyleLayoutContainer>
     );
 };

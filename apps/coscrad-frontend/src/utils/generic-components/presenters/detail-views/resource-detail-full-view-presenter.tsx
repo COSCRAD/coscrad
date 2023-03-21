@@ -2,7 +2,7 @@ import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined, isString } from '@coscrad/validation-constraints';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
 import { ReactNode } from 'react';
-import { CoscradMainContentContainer } from '../../style-components/coscrad-main-content-container';
+import { CoscradPrimaryStyleLayoutContainer } from '../../style-components/coscrad-main-content-container';
 import { MultilingualTextPresenter } from '../multilingual-text-presenter';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
@@ -31,7 +31,7 @@ export const ResourceDetailFullViewPresenter = ({
     type,
     children,
 }: ResourceDetailFullViewPresenterProps): JSX.Element => (
-    <CoscradMainContentContainer>
+    <CoscradPrimaryStyleLayoutContainer>
         <div data-testid={id}>
             <Card>
                 <CardContent>
@@ -57,5 +57,5 @@ export const ResourceDetailFullViewPresenter = ({
                 </CardContent>
             </Card>
         </div>
-    </CoscradMainContentContainer>
+    </CoscradPrimaryStyleLayoutContainer>
 );

@@ -1,2 +1,2 @@
-export * from './index-table';
+export * from './index-view-container';
 export * from './types';
