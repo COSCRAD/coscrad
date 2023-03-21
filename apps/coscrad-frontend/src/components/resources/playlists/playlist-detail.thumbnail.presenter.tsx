@@ -10,8 +10,9 @@ export const PlaylistDetailThumbnailPresenter = ({
     <ResourceDetailFullViewPresenter name={name} id={id}>
         <div>
             <h3> Episodes </h3>
+            {episodes.length}
             {episodes.map((episode) => (
-                <EpisodePresenter episode={episode} />
+                <EpisodePresenter name={name} episode={episode} />
             ))}
         </div>
     </ResourceDetailFullViewPresenter>

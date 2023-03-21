@@ -10,7 +10,7 @@ export const PlaylistDetailFullViewPresenter = ({
         <div>
             <h3> Episodes </h3>
             {episodes.map((episode) => (
-                <EpisodePresenter episode={episode} />
+                <EpisodePresenter episode={episode} name={name} />
             ))}
         </div>
     </ResourceDetailFullViewPresenter>

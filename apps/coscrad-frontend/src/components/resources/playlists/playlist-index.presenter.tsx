@@ -4,18 +4,20 @@ import { HeadingLabel, IndexTable } from '../../../utils/generic-components/pres
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
 export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexState) => {
     const headingLabels: HeadingLabel<IPlayListViewModel>[] = [
-        { propertyKey: 'id', headingLabel: 'link' },
-        { propertyKey: 'episodes', headingLabel: 'episode' },
+        { propertyKey: 'id', headingLabel: 'Link' },
+        { propertyKey: 'episodes', headingLabel: 'Number of Episodes' },
         { propertyKey: 'name', headingLabel: 'Playlist' },
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<IPlayListViewModel> = {
         id: renderAggregateIdCell,
         name: ({ name }) => renderMultilingualTextCell(name),
+        episodes: ({ episodes }) => renderMediaLengthInSeconds(episodes.length),
     };
 
     return (
@@ -24,7 +26,7 @@ export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexSta
             tableData={playlists}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Episodes'}
-            filterableProperties={['episodes']}
+            filterableProperties={['name', 'episodes']}
         />
     );
 };
