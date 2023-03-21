@@ -49,6 +49,15 @@
         "jestConfig": "libs/media-player/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "component-test": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "libs/media-player/cypress.config.ts",
+        "testingType": "component",
+        "devServerTarget": "coscrad-frontend:build",
+        "skipServe": true
+      }
     }
   }
 }

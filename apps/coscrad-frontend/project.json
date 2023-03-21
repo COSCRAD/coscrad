@@ -1,89 +1,108 @@
 {
-    "name": "coscrad-frontend",
-    "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "apps/coscrad-frontend/src",
-    "projectType": "application",
-    "targets": {
-        "build": {
-            "executor": "@nrwl/webpack:webpack",
-            "outputs": ["{options.outputPath}"],
-            "defaultConfiguration": "production",
-            "options": {
-                "compiler": "babel",
-                "outputPath": "dist/apps/coscrad-frontend",
-                "index": "apps/coscrad-frontend/src/index.html",
-                "baseHref": "/",
-                "main": "apps/coscrad-frontend/src/main.tsx",
-                "polyfills": "apps/coscrad-frontend/src/polyfills.ts",
-                "tsConfig": "apps/coscrad-frontend/tsconfig.app.json",
-                "assets": [
-                    "apps/coscrad-frontend/src/favicon.ico",
-                    "apps/coscrad-frontend/src/assets"
-                ],
-                "styles": ["apps/coscrad-frontend/src/styles.scss"],
-                "scripts": [],
-                "webpackConfig": "@nrwl/react/plugins/webpack"
-            },
-            "configurations": {
-                "production": {
-                    "fileReplacements": [
-                        {
-                            "replace": "apps/coscrad-frontend/src/environments/environment.ts",
-                            "with": "apps/coscrad-frontend/src/environments/environment.prod.ts"
-                        }
-                    ],
-                    "optimization": true,
-                    "outputHashing": "all",
-                    "sourceMap": false,
-                    "namedChunks": false,
-                    "extractLicenses": true,
-                    "vendorChunk": false
-                },
-                "development": {
-                    "extractLicenses": false,
-                    "optimization": false,
-                    "sourceMap": true,
-                    "vendorChunk": true
-                }
+  "name": "coscrad-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/coscrad-frontend/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/coscrad-frontend",
+        "index": "apps/coscrad-frontend/src/index.html",
+        "baseHref": "/",
+        "main": "apps/coscrad-frontend/src/main.tsx",
+        "polyfills": "apps/coscrad-frontend/src/polyfills.ts",
+        "tsConfig": "apps/coscrad-frontend/tsconfig.app.json",
+        "assets": [
+          "apps/coscrad-frontend/src/favicon.ico",
+          "apps/coscrad-frontend/src/assets"
+        ],
+        "styles": [
+          "apps/coscrad-frontend/src/styles.scss"
+        ],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/coscrad-frontend/src/environments/environment.ts",
+              "with": "apps/coscrad-frontend/src/environments/environment.prod.ts"
             }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
         },
-        "serve": {
-            "executor": "@nrwl/webpack:dev-server",
-            "options": {
-                "buildTarget": "coscrad-frontend:build",
-                "hmr": true
-            },
-            "configurations": {
-                "production": {
-                    "buildTarget": "coscrad-frontend:build:production",
-                    "hmr": false
-                },
-                "development": {
-                    "buildTarget": "coscrad-frontend:build:development"
-                }
-            },
-            "defaultConfiguration": "development"
-        },
-        "lint": {
-            "executor": "@nrwl/linter:eslint",
-            "options": {
-                "lintFilePatterns": ["apps/coscrad-frontend/**/*.{ts,tsx,js,jsx}"]
-            },
-            "outputs": ["{options.outputFile}"]
-        },
-        "test": {
-            "executor": "@nrwl/jest:jest",
-            "outputs": ["{workspaceRoot}/coverage/apps/coscrad-frontend"],
-            "options": {
-                "jestConfig": "apps/coscrad-frontend/jest.config.ts",
-                "passWithNoTests": false
-            }
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
         }
+      }
     },
-    "tags": [],
-    "jest": {
-        "transform": {
-            "^.+\\.(ts|tsx|js|jsx)$": "ts-jest"
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "options": {
+        "buildTarget": "coscrad-frontend:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "coscrad-frontend:build:production",
+          "hmr": false
+        },
+        "development": {
+          "buildTarget": "coscrad-frontend:build:development"
         }
+      },
+      "defaultConfiguration": "development"
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/coscrad-frontend/**/*.{ts,tsx,js,jsx}"
+        ]
+      },
+      "outputs": [
+        "{options.outputFile}"
+      ]
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/coscrad-frontend"
+      ],
+      "options": {
+        "jestConfig": "apps/coscrad-frontend/jest.config.ts",
+        "passWithNoTests": false
+      }
+    },
+    "component-test": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/coscrad-frontend/cypress.config.ts",
+        "testingType": "component",
+        "devServerTarget": "coscrad-frontend:build",
+        "skipServe": true
+      }
     }
+  },
+  "tags": [],
+  "jest": {
+    "transform": {
+      "^.+\\.(ts|tsx|js|jsx)$": "ts-jest"
+    }
+  }
 }

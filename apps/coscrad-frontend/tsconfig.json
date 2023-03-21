@@ -2,15 +2,6 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    // "allowJs": true,
-    // "esModuleInterop": true,
-    // "forceConsistentCasingInFileNames": true,
-    // This breaks the build when compiling imported libs. Look into this.
-    // "strict": true,
-    // "noImplicitOverride": true,
-    // "noPropertyAccessFromIndexSignature": true,
-    // "noImplicitReturns": true,
-    // "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true
   },
@@ -22,6 +13,9 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./cypress/tsconfig.cy.json"
     }
   ]
 }

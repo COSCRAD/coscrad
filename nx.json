@@ -11,7 +11,8 @@
           "build",
           "lint",
           "test",
-          "e2e"
+          "e2e",
+          "component-test"
         ],
         "parallel": 3,
         "accessToken": "MmZlZGE0MmUtODY0Zi00OGM5LTg0MGItNmFjMzUzMzE3OWY2fHJlYWQtd3JpdGU="
@@ -64,6 +65,12 @@
         "default",
         "{workspaceRoot}/.eslintrc.json"
       ]
+    },
+    "component-test": {
+      "inputs": [
+        "default",
+        "^production"
+      ]
     }
   },
   "namedInputs": {
@@ -79,7 +86,10 @@
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/jest.config.[jt]s",
-      "!{projectRoot}/.eslintrc.json"
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/cypress/**/*",
+      "!{projectRoot}/**/*.cy.[jt]s?(x)",
+      "!{projectRoot}/cypress.config.[jt]s"
     ]
   }
 }
