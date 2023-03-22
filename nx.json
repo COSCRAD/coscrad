@@ -14,8 +14,7 @@
           "e2e",
           "component-test"
         ],
-        "parallel": 3,
-        "accessToken": "MmZlZGE0MmUtODY0Zi00OGM5LTg0MGItNmFjMzUzMzE3OWY2fHJlYWQtd3JpdGU="
+        "parallel": 3
       }
     }
   },
