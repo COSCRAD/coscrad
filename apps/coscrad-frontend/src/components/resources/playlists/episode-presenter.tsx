@@ -1,11 +1,10 @@
-import { IMultilingualText, IPlaylistEpisode } from '@coscrad/api-interfaces';
-import { Card } from '@mui/material';
+import { IPlaylistEpisode } from '@coscrad/api-interfaces';
+import { Typography } from '@mui/material';
 
 interface EpisodePresenterProps {
     episode: IPlaylistEpisode;
-    name: IMultilingualText;
 }
 
 export const EpisodePresenter = ({ episode }: EpisodePresenterProps): JSX.Element => {
-    return <Card>{episode.name}</Card>;
+    return <Typography variant={'h4'}>{episode.name}</Typography>;
 };

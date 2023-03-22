@@ -1,4 +1,5 @@
 import { ICategorizableDetailQueryResult, IPlayListViewModel } from '@coscrad/api-interfaces';
+import { Typography } from '@mui/material';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { EpisodePresenter } from './episode-presenter';
 export const PlaylistDetailFullViewPresenter = ({
@@ -7,11 +8,11 @@ export const PlaylistDetailFullViewPresenter = ({
     episodes,
 }: ICategorizableDetailQueryResult<IPlayListViewModel>): JSX.Element => (
     <ResourceDetailFullViewPresenter name={name} id={id}>
-        <div>
-            <h3> Episodes </h3>
+        <Typography component={'div'}>
+            <Typography variant={'h5'}> Episodes </Typography>
             {episodes.map((episode) => (
-                <EpisodePresenter episode={episode} name={name} />
+                <EpisodePresenter episode={episode} />
             ))}
-        </div>
+        </Typography>
     </ResourceDetailFullViewPresenter>
 );

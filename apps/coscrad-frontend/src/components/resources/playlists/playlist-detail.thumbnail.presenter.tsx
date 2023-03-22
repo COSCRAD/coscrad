@@ -1,19 +1,15 @@
 import { ICategorizableDetailQueryResult, IPlayListViewModel } from '@coscrad/api-interfaces';
-import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
-import { EpisodePresenter } from './episode-presenter';
+import { Typography } from '@mui/material';
+import { ResourceDetailThumbnailPresenter } from '../../../utils/generic-components/presenters/detail-views';
 
 export const PlaylistDetailThumbnailPresenter = ({
     name,
-    id,
     episodes,
 }: ICategorizableDetailQueryResult<IPlayListViewModel>): JSX.Element => (
-    <ResourceDetailFullViewPresenter name={name} id={id}>
-        <div>
-            <h3> Episodes </h3>
+    <ResourceDetailThumbnailPresenter name={name}>
+        <Typography component={'div'}>
+            <Typography variant={'h5'}> Number of Episodes </Typography>
             {episodes.length}
-            {episodes.map((episode) => (
-                <EpisodePresenter name={name} episode={episode} />
-            ))}
-        </div>
-    </ResourceDetailFullViewPresenter>
+        </Typography>
+    </ResourceDetailThumbnailPresenter>
 );
