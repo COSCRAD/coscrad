@@ -1,9 +1,13 @@
 import {
+    BibliographicReferenceType,
     IBibliographicReferenceViewModel,
     IBookBibliographicReferenceData,
     IValueAndDisplay,
+    ResourceType,
 } from '@coscrad/api-interfaces';
-import { BibliographicReferenceCard, buildValueAndDisplay } from './shared';
+import { SinglePropertyPresenter } from '../../../utils/generic-components';
+import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
+import { buildValueAndDisplay } from './shared';
 
 export const BookBibliographicReferenceDetailFullViewPresenter = ({
     id,
@@ -25,12 +29,24 @@ export const BookBibliographicReferenceDetailFullViewPresenter = ({
         ] as [string, string][]
     ).map(buildValueAndDisplay);
 
+    const name = title;
+
     return (
-        <BibliographicReferenceCard
+        <ResourceDetailFullViewPresenter
+            name={name}
             id={id}
-            header="Book Bibliographic Reference"
-            title={title}
-            labelsAndValues={labelsAndValues}
-        />
+            type={ResourceType.bibliographicReference}
+        >
+            <SinglePropertyPresenter display="Title" value={title} />
+            <SinglePropertyPresenter
+                display="Reference Type"
+                value={BibliographicReferenceType.book}
+            />
+            {labelsAndValues
+                .filter(({ value }) => value !== null && typeof value !== 'undefined')
+                .map((valueAndDisplay) => (
+                    <SinglePropertyPresenter {...valueAndDisplay} key={valueAndDisplay.display} />
+                ))}
+        </ResourceDetailFullViewPresenter>
     );
 };

@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { routes } from '../../../../app/routes/routes';
 import { ResourceNavLink } from '../../../../components/resources/shared/resource-nav-link';
 import { ResourceNamePresenter } from '../resource-name-presenter';
+import { TestIdDiv } from '../test-id-div';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
 export interface ResourceDetailThumbnailPresenterProps {
@@ -30,6 +31,7 @@ export const ResourceDetailThumbnailPresenter = ({
     <Card>
         <CardContent>
             <Grid container spacing={1} columns={{ xs: 2, sm: 4, md: 12 }}>
+                <TestIdDiv testId={id} />
                 <Grid item xs={2} sm={1} md={2}>
                     {/* Preview will eventually include images taken from video or photos, etc. */}
                     <ResourcePreviewIconFactory resourceType={type} size="md" />
@@ -39,7 +41,7 @@ export const ResourceDetailThumbnailPresenter = ({
                     <ResourceNamePresenter name={name} variant="h5" />
                     {children}
                 </Grid>
-                <Grid item xs={2} sm={1} md={2} container sx={{ justifyContent: 'flex-end' }}>
+                <Grid item xs={2} sm={4} md={12} container sx={{ justifyContent: 'flex-end' }}>
                     <ResourceNavLink
                         internalLink={`/${routes.resources.ofType(type).detail(id)}`}
                     />

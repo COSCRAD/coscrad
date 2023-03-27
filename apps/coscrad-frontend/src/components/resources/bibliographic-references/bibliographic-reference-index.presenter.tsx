@@ -1,3 +1,4 @@
+import { CoscradMainContentContainer } from 'apps/coscrad-frontend/src/utils/generic-components/style-components/coscrad-main-content-container';
 import { BibliographicReferenceIndexState } from '../../../store/slices/resources';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
@@ -42,12 +43,14 @@ export const BibliographicReferenceIndexPresenter = ({
     };
 
     return (
-        <IndexTable
-            headingLabels={headingLabels}
-            tableData={consolidatedViewOfBibliographicReferences}
-            cellRenderersDefinition={cellRenderersDefinition}
-            heading="Bibliographic References"
-            filterableProperties={['title', 'citation', 'type']}
-        />
+        <CoscradMainContentContainer>
+            <IndexTable
+                headingLabels={headingLabels}
+                tableData={consolidatedViewOfBibliographicReferences}
+                cellRenderersDefinition={cellRenderersDefinition}
+                heading="Bibliographic References"
+                filterableProperties={['title', 'citation', 'type']}
+            />
+        </CoscradMainContentContainer>
     );
 };

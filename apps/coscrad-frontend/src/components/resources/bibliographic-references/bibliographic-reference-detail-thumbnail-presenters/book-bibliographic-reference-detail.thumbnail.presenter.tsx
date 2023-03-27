@@ -1,25 +1,25 @@
 import {
     IBibliographicReferenceViewModel,
     IBookBibliographicReferenceData,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Card, CardContent, CardHeader, Divider } from '@mui/material';
+import { ResourceDetailThumbnailPresenter } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/detail-views';
 
 export const BookBibliographicReferenceDetailThumbnailPresenter = ({
     id,
     data: { title, numberOfPages, year },
-}: IBibliographicReferenceViewModel<IBookBibliographicReferenceData>): JSX.Element => (
-    <Card>
-        <CardHeader title="Book Bibliographic Reference"></CardHeader>
-        <CardContent>
-            <div data-testid={id}>
-                {title}
-                <Divider />
-                <br />
-                {/* TODO We should have an `OptionalProperty` helper */}
-                {!isNullOrUndefined(numberOfPages) && <div>{numberOfPages} pages</div>}
-                {!isNullOrUndefined(year) && <div>({year})</div>}
-            </div>
-        </CardContent>
-    </Card>
-);
+}: IBibliographicReferenceViewModel<IBookBibliographicReferenceData>): JSX.Element => {
+    const name = title;
+
+    return (
+        <ResourceDetailThumbnailPresenter
+            id={id}
+            name={name}
+            type={ResourceType.bibliographicReference}
+        >
+            {!isNullOrUndefined(numberOfPages) && <div>{numberOfPages} pages</div>}
+            {!isNullOrUndefined(year) && <div>({year})</div>}
+        </ResourceDetailThumbnailPresenter>
+    );
+};

@@ -1,10 +1,12 @@
 import {
+    BibliographicReferenceType,
     IBibliographicReferenceViewModel,
     IJournalArticleBibliographicReferenceData,
     IValueAndDisplay,
+    ResourceType,
 } from '@coscrad/api-interfaces';
-import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
+import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 
 export const JournalArticleBibliographicReferenceFullViewPresenter = ({
     id,
@@ -29,21 +31,24 @@ export const JournalArticleBibliographicReferenceFullViewPresenter = ({
             display,
         }));
 
+    const name = title;
+
     return (
-        <Card>
-            <CardHeader title="Journal Article Bibliographic Reference"></CardHeader>
-            <CardContent>
-                <div data-testid={id}>
-                    {title}
-                    <Divider />
-                    <br />
-                    {labelsAndValues
-                        .filter(({ value }) => value !== null && typeof value !== 'undefined')
-                        .map((valueAndDisplay) => (
-                            <SinglePropertyPresenter {...valueAndDisplay} />
-                        ))}
-                </div>
-            </CardContent>
-        </Card>
+        <ResourceDetailFullViewPresenter
+            name={name}
+            id={id}
+            type={ResourceType.bibliographicReference}
+        >
+            <SinglePropertyPresenter display="Title" value={title} />
+            <SinglePropertyPresenter
+                display="Reference Type"
+                value={BibliographicReferenceType.journalArticle}
+            />
+            {labelsAndValues
+                .filter(({ value }) => value !== null && typeof value !== 'undefined')
+                .map((valueAndDisplay) => (
+                    <SinglePropertyPresenter {...valueAndDisplay} key={valueAndDisplay.display} />
+                ))}
+        </ResourceDetailFullViewPresenter>
     );
 };
