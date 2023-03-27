@@ -14,10 +14,7 @@ const doesCountSatisfyStringCriterion = (input: number, stringCriterion: string)
 
     const firstChar = stringCriterion.charAt(0);
 
-    console.log({ firstChar });
-
     if (['<', '>'].includes(firstChar)) {
-        console.log('here!');
         const valueToCompare = stringCriterion.slice(1, stringCriterion.length);
 
         if (valueToCompare.length === 0) return false;
