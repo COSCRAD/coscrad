@@ -11,8 +11,6 @@ interface SearchBarProps {
     specialCharacterReplacements?: Record<string, string>;
 }
 
-
-
 export const SearchBar = ({
     value,
     onValueChange,
