@@ -9,6 +9,7 @@ import { BibliographicReferenceIndexPresenter } from '../bibliographic-reference
 import { BookIndexPresenter } from '../books/book-index.presenter';
 import { MediaItemIndexPresenter } from '../media-items/media-item-index.presenter';
 import { PhotographIndexPresenter } from '../photographs/photograph-index.presenter';
+import { PlaylistIndexPresenter } from '../playlists/playlist-index.presenter';
 import { SongIndexPresenter } from '../songs/song-index.presenter';
 import { CoscradLeafletMap } from '../spatial-features/leaflet';
 import { SpatialFeatureIndexPresenter } from '../spatial-features/spatial-feature-index.presenter';
@@ -81,7 +82,8 @@ export const tableViewCategorizableIndexPresenterFactory: CategorizableIndexPres
             return VocabularyListIndexPresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.playlist:
-            throw new Error(`We do not yet support playlist index views.`);
+            return PlaylistIndexPresenter as unknown as CategorizableIndexPresenter<T>;
+        // throw new Error(`We do not yet support playlist index views.`);
 
         case CategorizableType.note:
             return NoteIndexPresenter as unknown as CategorizableIndexPresenter<T>;

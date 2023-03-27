@@ -226,7 +226,11 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 {
   "actions": [],
   "episodes": [
-    "audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+    {
+      "mediaItemUrl": "https://www.metalmondays.com/1.mp3",
+      "mimeType": "audio/mpeg",
+      "name": "{eng}: The Wooden Boy",
+    },
   ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
   "name": {
