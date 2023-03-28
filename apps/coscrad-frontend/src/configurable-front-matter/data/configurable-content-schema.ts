@@ -34,6 +34,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     siteCredits: string;
     simulatedKeyboard?: SimulatedKeyboardConfig;
     listenLive?: ListenLivePageConfiguration;
+    termOfTheDayConfig?: Record<string, string>;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -55,6 +56,7 @@ export const configurableContentPropertiesAndConstraints: {
     siteCredits: [CoscradConstraint.isNonEmptyString, CoscradConstraint.isRequired],
     simulatedKeyboard: [CoscradConstraint.isObject],
     listenLive: [CoscradConstraint.isObject],
+    termOfTheDayConfig: [CoscradConstraint.isObject],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
