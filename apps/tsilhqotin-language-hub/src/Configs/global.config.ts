@@ -20,6 +20,8 @@ export type SongIdToCredits = Record<string, string>;
 
 export type VideoIdtoCredits = Record<string, string>;
 
+export type TermOfTheDay = Record<string, string>;
+
 export type GlobalConfig = {
     siteTitle: string;
     funderInfos: FunderInfo[];
@@ -27,6 +29,7 @@ export type GlobalConfig = {
     linkInfos: LinkInfo[];
     songIdToCredits: SongIdToCredits;
     videoIdToCredits: VideoIdtoCredits;
+    termOfTheDay: TermOfTheDay;
 };
 
 export function getGlobalConfig(): GlobalConfig {
