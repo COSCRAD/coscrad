@@ -35,6 +35,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     simulatedKeyboard?: SimulatedKeyboardConfig;
     listenLive?: ListenLivePageConfiguration;
     termOfTheDayConfig?: Record<string, string>;
+    notFoundMessage: string;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -57,6 +58,7 @@ export const configurableContentPropertiesAndConstraints: {
     simulatedKeyboard: [CoscradConstraint.isObject],
     listenLive: [CoscradConstraint.isObject],
     termOfTheDayConfig: [CoscradConstraint.isObject],
+    notFoundMessage: [CoscradConstraint.isNonEmptyString],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
