@@ -80,4 +80,5 @@ export const contentConfig: ConfigurableContent = {
         '30': '152',
         '31': '153',
     },
+    notFoundMessage: 'No result found.',
 };
