@@ -1,6 +1,6 @@
 import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined, isString } from '@coscrad/validation-constraints';
-import { Card, CardContent, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import { CoscradMainContentContainer } from '../../style-components/coscrad-main-content-container';
 import { MultilingualTextPresenter } from '../multilingual-text-presenter';
@@ -33,29 +33,25 @@ export const ResourceDetailFullViewPresenter = ({
     children,
 }: ResourceDetailFullViewPresenterProps): JSX.Element => (
     <CoscradMainContentContainer>
-        <Card>
-            <CardContent>
-                <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
-                    <Grid item xs={2} sm={1} md={2}>
-                        {/* Temporary.  We'd like an icon if there's no visual media associated with this resource */}
-                        {type !== ResourceType.photograph && (
-                            <ResourcePreviewIconFactory resourceType={type} size="lg" />
-                        )}
-                    </Grid>
-                    <Grid item xs={2} sm={2} md={8}>
-                        {/* TODO: consider putting a standardized name property on the view models */}
-                        <Typography gutterBottom variant="h6" fontWeight="bold" color="primary">
-                            {isString(name) || isNullOrUndefined(name) ? (
-                                name
-                            ) : (
-                                <MultilingualTextPresenter text={name} />
-                            )}
-                        </Typography>
-                        <SinglePropertyPresenter display="ID" value={id} />
-                        {children}
-                    </Grid>
-                </Grid>
-            </CardContent>
-        </Card>
+        <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
+            <Grid item xs={2} sm={1} md={2}>
+                {/* Temporary.  We'd like an icon if there's no visual media associated with this resource */}
+                {type !== ResourceType.photograph && (
+                    <ResourcePreviewIconFactory resourceType={type} size="lg" />
+                )}
+            </Grid>
+            <Grid item xs={2} sm={2} md={8}>
+                {/* TODO: consider putting a standardized name property on the view models */}
+                <Typography gutterBottom variant="h6" fontWeight="bold" color="primary">
+                    {isString(name) || isNullOrUndefined(name) ? (
+                        name
+                    ) : (
+                        <MultilingualTextPresenter text={name} />
+                    )}
+                </Typography>
+                <SinglePropertyPresenter display="ID" value={id} />
+                {children}
+            </Grid>
+        </Grid>
     </CoscradMainContentContainer>
 );
