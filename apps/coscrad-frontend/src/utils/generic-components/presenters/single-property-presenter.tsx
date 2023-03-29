@@ -4,8 +4,6 @@ import { Box } from '@mui/system';
 
 /**
  * Provides a standard presentation for a single property on a view model
- *
- * TODO: Consider an optional property helper - would it work at this level?
  */
 export const SinglePropertyPresenter = <T,>({
     value,
