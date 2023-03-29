@@ -1,20 +1,31 @@
-import { KeysAndLabels } from '../../../components/resources/bibliographic-references/journal-article-bibliographic-reference.full-view.presenter';
 import { SinglePropertyPresenter } from './single-property-presenter';
 
+export type PropertyLabels<T> = {
+    [K in keyof T]?: string;
+};
+
 interface MultiPropertyPresenterProps<T> {
-    keysAndLabels: KeysAndLabels[];
-    presenterData: T;
+    keysAndLabels: PropertyLabels<T>;
+    data: T;
 }
 
-export const MultiPropertyPresenter = <T = unknown,>({
+export const MultiplePropertyPresenter = <T,>({
     keysAndLabels,
-    presenterData,
+    data,
 }: MultiPropertyPresenterProps<T>): JSX.Element => {
     return (
         <>
-            {keysAndLabels.map(({ propertyKey, label }) => (
-                <SinglePropertyPresenter display={label} value={presenterData[propertyKey]} />
-            ))}
+            {Object.entries(keysAndLabels).map(([propertyKey, label]) => {
+                // `year` and `numberOfPages` in book are both numbers
+                const propertyValueAsString = data[propertyKey].toString();
+                return (
+                    <SinglePropertyPresenter
+                        key={label as string}
+                        display={label as string}
+                        value={propertyValueAsString}
+                    />
+                );
+            })}
         </>
     );
 };

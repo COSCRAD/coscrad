@@ -1,34 +1,36 @@
 import {
-    BibliographicReferenceType,
     IBibliographicReferenceViewModel,
     IBookBibliographicReferenceData,
-    IValueAndDisplay,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
-import { buildValueAndDisplay } from './shared';
+import { ExternalLinkPresenter } from '../../../utils/generic-components/presenters/external-link-presenter';
+import {
+    MultiplePropertyPresenter,
+    PropertyLabels,
+} from '../../../utils/generic-components/presenters/multiple-property-presenter';
+import { CreatorsPresenter } from './shared/creators-presenter';
 
 export const BookBibliographicReferenceDetailFullViewPresenter = ({
     id,
     data,
 }: IBibliographicReferenceViewModel<IBookBibliographicReferenceData>): JSX.Element => {
-    const { title, abstract, year, publisher, place, url, numberOfPages, isbn } = data;
+    const { title, creators, url } = data;
 
-    const labelsAndValues: IValueAndDisplay<unknown>[] = (
-        [
-            [abstract, 'Abstract'],
-            [year.toString(), 'Year'],
-            [publisher, 'Publisher'],
-            [place, 'Place'],
-            // TODO format this as a link
-            [url, 'External Link'],
-            [numberOfPages.toString(), 'Page Count'],
-            [isbn, 'ISBN'],
-            // TODO Expose creators
-        ] as [string, string][]
-    ).map(buildValueAndDisplay);
+    /**
+     * TODO: render `year` and `numberOfPages` as strings (for now it's a hack in
+     * multiple-property-presenter)
+     */
+    const keysAndLabels: PropertyLabels<IBookBibliographicReferenceData> = {
+        abstract: 'Abstract',
+        year: 'Year',
+        publisher: 'Publisher',
+        place: 'Place',
+        numberOfPages: 'Pages',
+        isbn: 'ISBN',
+    };
 
+    // Temporary workaround until `name` is on IBaseViewModel
     const name = title;
 
     return (
@@ -37,16 +39,9 @@ export const BookBibliographicReferenceDetailFullViewPresenter = ({
             id={id}
             type={ResourceType.bibliographicReference}
         >
-            <SinglePropertyPresenter display="Title" value={title} />
-            <SinglePropertyPresenter
-                display="Reference Type"
-                value={BibliographicReferenceType.book}
-            />
-            {labelsAndValues
-                .filter(({ value }) => value !== null && typeof value !== 'undefined')
-                .map((valueAndDisplay) => (
-                    <SinglePropertyPresenter {...valueAndDisplay} key={valueAndDisplay.display} />
-                ))}
+            <CreatorsPresenter creators={creators} />
+            <MultiplePropertyPresenter keysAndLabels={keysAndLabels} data={data} />
+            <ExternalLinkPresenter url={url} />
         </ResourceDetailFullViewPresenter>
     );
 };
