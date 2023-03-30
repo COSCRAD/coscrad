@@ -1,6 +1,6 @@
 import { IBibliographicReferenceCreator } from '@coscrad/api-interfaces';
 import { Box, Typography } from '@mui/material';
-import { CommaSeparatedList } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/styled-comma-separated-list';
+import { CommaSeparatedList } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/comma-separated-list';
 import { CreatorPresenter } from './creator-presenter';
 
 interface CreatorsPresenterProps {
