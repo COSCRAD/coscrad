@@ -1,5 +1,5 @@
 import { IFormField } from '@coscrad/api-interfaces';
-import { Card, CardContent, CardHeader, FormControl } from '@mui/material';
+import { FormControl, Typography } from '@mui/material';
 import { VocabularyListFilter } from './vocabulary-list-detail.full-view.presenter';
 import { VocabularyListFormElement } from './vocabulary-list-form-element';
 
@@ -14,11 +14,13 @@ export const VocabularyListForm = ({
     onFormChange,
     formState,
 }: VocabularyListFormProps): JSX.Element => (
-    <Card>
-        <CardHeader title="Filter the Vocabulary List" />
-        <CardContent>
+    <Typography component={'div'}>
+        <Typography variant="h4" component={'div'}>
+            Filter the Vocabulary List
+        </Typography>
+        <Typography component={'div'} sx={{ margin: 'auto', textAlign: 'center' }}>
             {/* TODO [https://www.pivotaltracker.com/story/show/184066412] Use `DynamicForm` for this */}
-            <FormControl>
+            <FormControl sx={{ minWidth: '200px', maxWidth: '100%' }} size="small">
                 {fields.map((field) => (
                     <VocabularyListFormElement
                         formField={field}
@@ -28,6 +30,6 @@ export const VocabularyListForm = ({
                     />
                 ))}
             </FormControl>
-        </CardContent>
-    </Card>
+        </Typography>
+    </Typography>
 );

@@ -2,6 +2,8 @@ import { Button, Card, CardActions, CardContent } from '@mui/material';
 import { useState } from 'react';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { cyclicDecrement, cyclicIncrement } from '../../utils/math';
 import { NotFoundPresenter } from '../not-found';
 
@@ -30,23 +32,23 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
     const propsForSelectedItem = propsForItems[indexToUse];
 
     return (
-        <Card>
+        <Card sx={{ boxShadow: 'none' }}>
             <CardContent>
                 <Presenter {...propsForSelectedItem} />
             </CardContent>
-            <CardActions>
+            <CardActions sx={{ display: 'inline' }}>
                 <Button
                     disableRipple={true}
                     onClick={(_) => setIndex(cyclicDecrement(indexToUse, numberOfItems))}
                 >
                     {' '}
-                    Back
+                    <ArrowBackIosIcon /> Back
                 </Button>
                 <Button
                     disableRipple={true}
                     onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}
                 >
-                    Next{' '}
+                    Next <ArrowForwardIosIcon />
                 </Button>
             </CardActions>
         </Card>
