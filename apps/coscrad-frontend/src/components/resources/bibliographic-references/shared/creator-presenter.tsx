@@ -8,7 +8,7 @@ interface CreatorPresenterProps {
 export const CreatorPresenter = ({ name, type }: CreatorPresenterProps): JSX.Element => (
     <>
         <Typography component="span">{name}</Typography>
-        {` `}
+        &nbsp;
         <Typography component="span" sx={{ fontStyle: 'italic' }}>
             {`(${type})`}
         </Typography>

@@ -4,7 +4,6 @@ import { Grid, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import { CoscradMainContentContainer } from '../../style-components/coscrad-main-content-container';
 import { MultilingualTextPresenter } from '../multilingual-text-presenter';
-import { SinglePropertyPresenter } from '../single-property-presenter';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
 export interface ResourceDetailFullViewPresenterProps {
@@ -49,7 +48,6 @@ export const ResourceDetailFullViewPresenter = ({
                         <MultilingualTextPresenter text={name} />
                     )}
                 </Typography>
-                <SinglePropertyPresenter display="ID" value={id} />
                 {children}
             </Grid>
         </Grid>

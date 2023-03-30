@@ -26,6 +26,7 @@ export const JournalArticleBibliographicReferenceFullViewPresenter = ({
 
     // Temporary workaround until `name` is on IBaseViewModel
     const { title, creators, url } = data;
+
     const name = title;
 
     return (

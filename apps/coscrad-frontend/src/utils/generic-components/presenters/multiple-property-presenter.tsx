@@ -18,6 +18,7 @@ export const MultiplePropertyPresenter = <T,>({
             {Object.entries(keysAndLabels).map(([propertyKey, label]) => {
                 // `year` and `numberOfPages` in book are both numbers
                 const propertyValueAsString = data[propertyKey].toString();
+
                 return (
                     <SinglePropertyPresenter
                         key={label as string}
