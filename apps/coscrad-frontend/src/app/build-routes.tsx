@@ -4,6 +4,7 @@ import { About } from '../components/about/about';
 import { Credits } from '../components/credits/credits';
 import { Home } from '../components/home/home';
 import { ListenLivePage } from '../components/listen-live-page/listen-live-page';
+import { NotFoundPresenter } from '../components/not-found';
 import { NoteIndexContainer } from '../components/notes/note-index.container';
 import { ResourceInfoContainer } from '../components/resource-info/resource-info.container';
 import { TagDetailContainer } from '../components/tags/tag-detail.container';
@@ -17,6 +18,8 @@ import { routes } from './routes/routes';
 export type CoscradRoute = {
     path: string;
     element: JSX.Element;
+    errorElement?: React.ReactNode;
+    fallbackElement?: React.ReactNode;
     children?: CoscradRoute[];
 };
 
@@ -119,5 +122,9 @@ export const buildRoutes = ({
             element: <Credits />,
         },
         ...dynamicRoutes,
+        {
+            path: '*',
+            element: <NotFoundPresenter />,
+        },
     ];
 };
