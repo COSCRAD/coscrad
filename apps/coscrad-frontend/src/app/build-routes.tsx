@@ -1,4 +1,4 @@
-import { CategorizableType, isResourceType } from '@coscrad/api-interfaces';
+import { CategorizableType, isResourceType, ResourceType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { About } from '../components/about/about';
 import { Credits } from '../components/credits/credits';
@@ -17,6 +17,7 @@ import { routes } from './routes/routes';
 
 export type CoscradRoute = {
     path: string;
+    label?: string;
     element: JSX.Element;
     errorElement?: React.ReactNode;
     fallbackElement?: React.ReactNode;
@@ -32,42 +33,6 @@ export const buildRoutes = ({
         ({ categorizableType }) => categorizableType === CategorizableType.note
     );
 
-    const dynamicRoutes: CoscradRoute[] = [
-        ...(!isNullOrUndefined(noteIndexToDetailConfig) && shouldEnableWebOfKnowledgeForResources
-            ? [
-                  {
-                      path: noteIndexToDetailConfig.route || 'Notes',
-                      element: <NoteIndexContainer />,
-                  },
-              ]
-            : []),
-        ...(!isNullOrUndefined(listenLive)
-            ? [
-                  {
-                      path: 'Live', // TODO pull the route off of `listenLive` prop
-                      element: <ListenLivePage />,
-                  },
-              ]
-            : []),
-        ...(shouldEnableWebOfKnowledgeForResources
-            ? [
-                  {
-                      path: 'Tags',
-                      element: <TagIndexContainer />,
-                  },
-                  {
-                      path: 'Tags/:id',
-                      element: <TagDetailContainer />,
-                  },
-                  {
-                      path: 'TreeOfKnowledge',
-                      element: <CategoryTreeContainer />,
-                  },
-                  ...bootstrapIndexToDetailFlowRoutes(contentConfig),
-              ]
-            : []),
-    ];
-
     const resourceTypesAndLabels = indexToDetailFlows
         .filter(({ categorizableType }) => isResourceType(categorizableType))
         .reduce(
@@ -78,30 +43,36 @@ export const buildRoutes = ({
             {}
         );
 
-    const resourceTypesAndRoutes = indexToDetailFlows.reduce(
-        (acc, { categorizableType, route }) => {
-            if (categorizableType === CategorizableType.note) {
-                return {
-                    ...acc,
-                    [CategorizableType.note]: route || routes.notes.index,
-                };
-            }
-
-            return {
+    const resourceTypesAndRoutes = indexToDetailFlows
+        .filter(({ categorizableType }) => isResourceType(categorizableType))
+        .reduce(
+            (acc, { categorizableType, route }) => ({
                 ...acc,
-                [categorizableType]: route || routes.resources.ofType(categorizableType).index,
-            };
-        },
-        {}
-    );
+                [categorizableType]:
+                    route || routes.resources.ofType(categorizableType as ResourceType).index,
+            }),
+            {}
+        );
 
-    return [
+    type RouteFlag = boolean;
+
+    const routeDefinitions: (
+        | CoscradRoute
+        | [RouteFlag, (config?: ConfigurableContent) => CoscradRoute]
+    )[] = [
         {
             path: '/',
+            label: 'Home',
             element: <Home />,
         },
         {
+            path: 'About',
+            label: 'About',
+            element: <About />,
+        },
+        {
             path: 'Resources',
+            label: 'Browse Resources',
             element: (
                 <ResourceInfoContainer
                     resourceTypesAndLabels={resourceTypesAndLabels}
@@ -109,22 +80,58 @@ export const buildRoutes = ({
                 />
             ),
         },
-        {
-            path: 'About',
-            element: <About />,
-        },
-        {
-            path: 'Tags',
-            element: <TagIndexContainer />,
-        },
+        [
+            !isNullOrUndefined(noteIndexToDetailConfig) && shouldEnableWebOfKnowledgeForResources,
+            () => ({
+                path: noteIndexToDetailConfig.route || 'Notes',
+                label: noteIndexToDetailConfig.label || 'Notes',
+                element: <NoteIndexContainer />,
+            }),
+        ],
+        [
+            shouldEnableWebOfKnowledgeForResources,
+            () => ({
+                path: 'TreeOfKnowledge',
+                label: 'Tree of Knowledge',
+                element: <CategoryTreeContainer />,
+            }),
+        ],
+        [
+            shouldEnableWebOfKnowledgeForResources,
+            () => ({
+                path: 'Tags',
+                label: 'Tags',
+                element: <TagIndexContainer />,
+            }),
+        ],
+        [
+            shouldEnableWebOfKnowledgeForResources,
+            () => ({
+                path: 'Tags/:id',
+                element: <TagDetailContainer />,
+            }),
+        ],
+        [
+            !isNullOrUndefined(listenLive),
+            (contentConfig: ConfigurableContent) => ({
+                path: contentConfig.listenLive.route,
+                label: contentConfig.listenLive.label,
+                element: <ListenLivePage />,
+            }),
+        ],
         {
             path: 'Credits',
+            label: 'Credits',
             element: <Credits />,
         },
-        ...dynamicRoutes,
+        ...bootstrapIndexToDetailFlowRoutes(contentConfig),
         {
             path: '*',
             element: <NotFoundPresenter />,
         },
     ];
+
+    return routeDefinitions
+        .filter((input) => !Array.isArray(input) || input[0])
+        .map((input) => (Array.isArray(input) ? input[1](contentConfig) : input));
 };

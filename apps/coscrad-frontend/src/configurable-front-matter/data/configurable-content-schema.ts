@@ -11,6 +11,8 @@ export type ListenLivePageConfiguration = {
     iceCastLink: string;
     playingMessage: string;
     missionStatement: string;
+    route: string;
+    label: string;
 };
 
 export type SimulatedKeyboardConfig = {

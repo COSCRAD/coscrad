@@ -1,7 +1,7 @@
 import { CoscradRoute } from './build-routes';
 
 /**
- * A RouteWrapper is an element that wraps a route to participate in UI nexting,
+ * A RouteWrapper is an element that wraps a route to participate in UI nesting,
  * but does not contribute to the URL.
  *
  * React Router calls this a `Layout Route`. This naming collides with our use

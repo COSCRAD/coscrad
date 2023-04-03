@@ -1,4 +1,4 @@
-import { CategorizableType } from '@coscrad/api-interfaces';
+import { CategorizableType, ResourceType } from '@coscrad/api-interfaces';
 import { FilteredCategorizableIndexContainer } from '../components/higher-order-components';
 import { CategorizablePage } from '../components/higher-order-components/categorizable-page';
 import { fullViewCategorizablePresenterFactory } from '../components/resources/factories/full-view-categorizable-presenter-factory';
@@ -15,25 +15,21 @@ export const bootstrapIndexToDetailFlowRoutes = ({
     indexToDetailFlows,
     simulatedKeyboard,
 }: ConfigurableContent): CoscradRoute[] => {
-    const resourceTypesAndRoutes = indexToDetailFlows.reduce(
-        (acc, { categorizableType, route }) => {
-            if (categorizableType === CategorizableType.note) {
-                return {
-                    ...acc,
-                    [CategorizableType.note]: route || routes.notes.index,
-                };
-            }
-
-            return {
+    const resourceTypesAndRoutes = indexToDetailFlows
+        .filter(({ categorizableType }) => categorizableType !== CategorizableType.note)
+        .reduce(
+            (acc, { categorizableType, route }) => ({
                 ...acc,
-                [categorizableType]: route || routes.resources.ofType(categorizableType).index,
-            };
-        },
-        {}
-    );
+                [categorizableType]:
+                    // we have already filtered out the Notes
+                    route || routes.resources.ofType(categorizableType as ResourceType).index,
+            }),
+            {}
+        );
 
-    const indexToDetailFlowsRoutes: CoscradRoute[] = indexToDetailFlows.flatMap(
-        ({ categorizableType, detailViewType, indexFilter }) => {
+    const indexToDetailFlowsRoutes: CoscradRoute[] = indexToDetailFlows
+        .filter(({ categorizableType }) => categorizableType !== CategorizableType.note)
+        .flatMap(({ categorizableType, detailViewType, indexFilter }) => {
             /**
              * TODO Use a switch, lookup table, or OOP & polymorphism as soon as
              * you have a third view type.
@@ -72,9 +68,8 @@ export const bootstrapIndexToDetailFlowRoutes = ({
                         />
                     ),
                 },
-            ];
-        }
-    );
+            ] as const;
+        });
 
     return indexToDetailFlowsRoutes;
 };

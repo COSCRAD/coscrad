@@ -1,7 +1,6 @@
 import { useContext } from 'react';
-import { buildRoutes } from '../../app/build-routes';
-import { ID_ROUTE_PARAM_KEY } from '../../app/routes';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
+import { buildNavMenuItems } from './build-nav-menu-items';
 import { NavMenuPresenter } from './nav-menu-presenter';
 
 export type NavItemInfo = {
@@ -12,16 +11,10 @@ export type NavItemInfo = {
 export const NavMenuContainer = (): JSX.Element => {
     const contentConfig = useContext(ConfigurableContentContext);
 
-    const navItems = buildRoutes(contentConfig)
-        // TODO We should have a `shouldPublishInMenu` or `menus: string[]`  prop on CoscradRoute
-        .filter(({ path }) => !path.includes(`Resources/`))
-        .filter(({ path }) => path !== '/')
-        .filter(({ path }) => !path.includes(ID_ROUTE_PARAM_KEY))
-        .map(({ path }) => ({
-            // TODO We should put a separate label prop on CoscradRoute
-            label: path,
-            link: path,
-        }));
-
-    return <NavMenuPresenter navItemInfos={navItems} />;
+    /**
+     * The menu items are built dynamically from the config. Omitting certain
+     * properties means that the corresponding page routes do not exist and so
+     * these pages must be omitted from the menu.
+     */
+    return <NavMenuPresenter navItemInfos={buildNavMenuItems(contentConfig)} />;
 };

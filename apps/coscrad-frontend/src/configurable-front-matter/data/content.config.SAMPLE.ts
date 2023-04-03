@@ -35,6 +35,8 @@ export const contentConfig: ConfigurableContent = {
     },
     listenLive: {
         title: 'Web Radio Stream',
+        route: 'Live',
+        label: '89.5',
         logoUrl: 'https://www.mymams.org/logo.jpg',
         iceCastLink: 'https://www.somebroadcaster.com/link',
         playingMessage: 'Now Playing',
