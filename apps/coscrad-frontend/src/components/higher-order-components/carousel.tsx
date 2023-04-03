@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useState } from 'react';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 
@@ -32,25 +32,24 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
     const propsForSelectedItem = propsForItems[indexToUse];
 
     return (
-        <Card sx={{ boxShadow: 'none' }}>
-            <CardContent>
-                <Presenter {...propsForSelectedItem} />
-            </CardContent>
-            <CardActions sx={{ display: 'inline' }}>
-                <Button
-                    disableRipple={true}
-                    onClick={(_) => setIndex(cyclicDecrement(indexToUse, numberOfItems))}
-                >
-                    {' '}
-                    <ArrowBackIosIcon /> Back
-                </Button>
-                <Button
-                    disableRipple={true}
-                    onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}
-                >
-                    Next <ArrowForwardIosIcon />
-                </Button>
-            </CardActions>
-        </Card>
+        <>
+            <Box component={Presenter} {...propsForSelectedItem} />
+            <Box
+                mt={1}
+                component={Button}
+                disableRipple={true}
+                onClick={(_) => setIndex(cyclicDecrement(indexToUse, numberOfItems))}
+            >
+                <ArrowBackIosIcon />
+            </Box>
+            <Box
+                mt={1}
+                component={Button}
+                disableRipple={true}
+                onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}
+            >
+                <ArrowForwardIosIcon />
+            </Box>
+        </>
     );
 };
