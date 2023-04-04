@@ -1,4 +1,4 @@
-import DiscriminatedUnionValidator from './DiscriminatedUnionValidator';
+import { DiscriminatedUnionValidator } from './DiscriminatedUnionValidator';
 import { SimpleValidationFunction } from './interfaces/SimpleValidationFunction';
 
 class ValidationError extends Error {}

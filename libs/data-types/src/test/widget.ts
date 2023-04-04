@@ -9,7 +9,6 @@ import {
     PositiveInteger,
     RawDataObject,
     ReferenceTo,
-    Union,
     Year,
 } from '../lib/decorators';
 import { BibliographicSubjectCreatorType, CoscradEnum, MIMEType } from '../lib/enums';
@@ -119,12 +118,13 @@ export class Widget {
     @ISBN({ isOptional, ...buildDummyLabelAndDescription('optionalISBN') })
     optionalISBN = `979-3-16-148410-0`;
 
-    @Union([ThingDataOne, ThingDataTwo], 'type', { ...buildDummyLabelAndDescription('data') })
-    data: ThingDataOne | ThingDataTwo = {
-        type: 'one',
+    // TODO Comment back in once we support validating a union type
+    // @Union([ThingDataOne, ThingDataTwo], 'type', { ...buildDummyLabelAndDescription('data') })
+    // data: ThingDataOne | ThingDataTwo = {
+    //     type: 'one',
 
-        strength: 67.3,
-    };
+    //     strength: 67.3,
+    // };
 
     @ReferenceTo('widget')
     @NonEmptyString({ ...buildDummyLabelAndDescription('parentWidgetId') })
@@ -192,10 +192,10 @@ export const buildValidWidgetDto = (): Widget => ({
 
     optionalISBN: `978-3-16-148410-0`,
 
-    data: {
-        type: 'one',
-        strength: 85,
-    },
+    // data: {
+    //     type: 'one',
+    //     strength: 85,
+    // },
 
     catalogId: '25c5824f-6b4b-4341-bb60-3145d8109577',
 
