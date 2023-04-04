@@ -3,9 +3,7 @@ import {
     IJournalArticleBibliographicReferenceData,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { Divider } from '@mui/material';
 import { ResourceDetailThumbnailPresenter } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/detail-views';
-import { Abstract } from './abstract';
 
 export const JournalArticleBibliographicReferenceThumbnailPresenter = ({
     id,
@@ -20,11 +18,6 @@ export const JournalArticleBibliographicReferenceThumbnailPresenter = ({
             type={ResourceType.bibliographicReference}
         >
             {publicationTitle} ({issueDate})
-            <Divider />
-            <br />
-            {typeof abstract !== 'undefined' && abstract !== null && (
-                <Abstract abstract={abstract} />
-            )}
         </ResourceDetailThumbnailPresenter>
     );
 };

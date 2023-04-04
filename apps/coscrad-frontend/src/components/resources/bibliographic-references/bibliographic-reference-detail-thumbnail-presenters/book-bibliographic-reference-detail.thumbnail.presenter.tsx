@@ -18,7 +18,7 @@ export const BookBibliographicReferenceDetailThumbnailPresenter = ({
             name={name}
             type={ResourceType.bibliographicReference}
         >
-            {!isNullOrUndefined(numberOfPages) && <div>{numberOfPages} pages</div>}
+            {!isNullOrUndefined(numberOfPages) && <div>{numberOfPages}</div>}
             {!isNullOrUndefined(year) && <div>({year})</div>}
         </ResourceDetailThumbnailPresenter>
     );

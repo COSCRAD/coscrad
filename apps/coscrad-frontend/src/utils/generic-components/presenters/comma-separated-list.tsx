@@ -10,5 +10,7 @@ interface CommaSeparatedListProps {
 }
 
 export const CommaSeparatedList = ({ children }: CommaSeparatedListProps): JSX.Element => {
+    console.log({ type: Array.isArray(children) });
+
     return <StyledCommaSeparatedList>{children}</StyledCommaSeparatedList>;
 };

@@ -3,9 +3,7 @@ import {
     ICourtCaseBibliographicReferenceData,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { Divider } from '@mui/material';
-import { ResourceDetailThumbnailPresenter } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/detail-views';
-import { Abstract } from './abstract';
+import { ResourceDetailThumbnailPresenter } from '../../../../utils/generic-components/presenters/detail-views';
 
 export const CourtCaseBibliographicReferenceDetailThumbnailPresenter = ({
     id,
@@ -19,10 +17,10 @@ export const CourtCaseBibliographicReferenceDetailThumbnailPresenter = ({
             name={name}
             type={ResourceType.bibliographicReference}
         >
-            {pages && <div>{pages} pages</div>}
+            {/* <IfDefined value={pages}>
+                <div>{pages} pages</div>
+            </IfDefined> */}
             {dateDecided && <div>({dateDecided})</div>}
-            <Divider />
-            {abstract !== null && typeof abstract !== undefined && <Abstract abstract={abstract} />}
         </ResourceDetailThumbnailPresenter>
     );
 };
