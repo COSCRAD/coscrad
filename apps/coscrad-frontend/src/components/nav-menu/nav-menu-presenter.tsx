@@ -24,35 +24,37 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
     };
 
     return (
-        <Box sx={{ minWidth: '100px' }}>
-            <IconButton
-                id="basic-button"
-                color="primary"
-                aria-controls={isOpen ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={isOpen ? 'true' : undefined}
-                onClick={handleClick}
-            >
-                <MenuRoundedIcon />
-            </IconButton>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={isOpen}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-            >
-                {navItemInfos.map((navItemInfo) => (
-                    <NavMenuItem
-                        key={navItemInfo.label}
-                        navItemInfo={navItemInfo}
-                        handleClose={handleClose}
-                    />
-                ))}
-            </Menu>
-            <AuthenticationButton />
-        </Box>
+        <div data-testid="nav-menu">
+            <Box sx={{ minWidth: '100px' }}>
+                <IconButton
+                    id="basic-button"
+                    color="primary"
+                    aria-controls={isOpen ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={isOpen ? 'true' : undefined}
+                    onClick={handleClick}
+                >
+                    <MenuRoundedIcon />
+                </IconButton>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={isOpen}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    {navItemInfos.map((navItemInfo) => (
+                        <NavMenuItem
+                            key={navItemInfo.label}
+                            navItemInfo={navItemInfo}
+                            handleClose={handleClose}
+                        />
+                    ))}
+                </Menu>
+                <AuthenticationButton />
+            </Box>
+        </div>
     );
 };

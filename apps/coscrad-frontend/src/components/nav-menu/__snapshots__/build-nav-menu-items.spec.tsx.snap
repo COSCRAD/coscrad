@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dynamic navigation menu when all properties are provided should return the expected routes 1`] = `
+[
+  {
+    "label": "Home",
+    "link": "/",
+  },
+  {
+    "label": "About",
+    "link": "About",
+  },
+  {
+    "label": "Browse Resources",
+    "link": "Resources",
+  },
+  {
+    "label": "Notes",
+    "link": "Notes",
+  },
+  {
+    "label": "Tree of Knowledge",
+    "link": "TreeOfKnowledge",
+  },
+  {
+    "label": "Tags",
+    "link": "Tags",
+  },
+  {
+    "label": "89.5",
+    "link": "Live",
+  },
+  {
+    "label": "Credits",
+    "link": "Credits",
+  },
+]
+`;
