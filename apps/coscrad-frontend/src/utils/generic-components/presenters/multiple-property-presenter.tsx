@@ -9,6 +9,9 @@ interface MultiPropertyPresenterProps<T> {
     data: T;
 }
 
+/**
+ * test using .screen
+ */
 export const MultiplePropertyPresenter = <T,>({
     keysAndLabels,
     data,
