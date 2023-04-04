@@ -12,5 +12,4 @@ export default {
         '^.+\\.[tj]s$': 'ts-jest',
     },
     moduleFileExtensions: ['ts', 'js'],
-    coverageDirectory: '../../coverage/libs/data-types',
 };
