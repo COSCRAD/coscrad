@@ -17,7 +17,7 @@ export const wrapRoutes = (
     routesToWrap: RouteWrapper[],
     ...wrapperRoutes: RouteWrapper[]
 ): RouteWrapper =>
-    // @ts-expect-error FIX ME
+    // @ts-expect-error TODO Fix types here
     wrapperRoutes.reduce(
         (acc, nextWrapper) =>
             Array.isArray(acc)

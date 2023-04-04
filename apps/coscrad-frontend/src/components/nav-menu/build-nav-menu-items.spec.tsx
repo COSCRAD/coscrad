@@ -90,12 +90,4 @@ describe(`dynamic navigation menu`, () => {
             assertExpectedOrder(result);
         });
     });
-
-    // testCases.forEach(({ description, config, expectedResult }) => {
-    //     describe(description, () => {
-    //         const result = buildNavMenuItems(config);
-
-    //         expect(result).toEqual(expectedResult);
-    //     });
-    // });
 });
