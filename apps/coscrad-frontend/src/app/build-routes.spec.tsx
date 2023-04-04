@@ -24,57 +24,50 @@ const buildIndexToDetailConfig = <T extends CategorizableType>(
 
 describe(`dynamic routes`, () => {
     describe(`routes for index-to-detail flows`, () => {
-        Object.values(ResourceType)
-            // TODO troubleshoot this one- exceptional route name
-            .filter((rt) => rt !== ResourceType.spatialFeature)
-            // TODO rebase and make sure the playlist index presenter is registered
-            .filter((rt) => rt !== ResourceType.playlist)
-            .forEach((resourceType) => {
-                describe(`for resource type: ${resourceType}`, () => {
-                    describe(`when no custom label or route is defined`, () => {
-                        const contentConfig = buildDummyConfig({
-                            indexToDetailFlows: [buildIndexToDetailConfig(resourceType)],
-                        });
-
-                        const result = buildRoutes(contentConfig);
-
-                        it('should include the default route', () => {
-                            const exceptions = {
-                                [ResourceType.spatialFeature]: 'Map',
-                            } as const;
-
-                            const defaultPath =
-                                exceptions[resourceType] ||
-                                `Resources/${capitalizeFirstLetter(resourceType)}s`;
-
-                            const matchingPaths = result.filter(({ path }) => path === defaultPath);
-
-                            expect(matchingPaths.length).toBe(1);
-                        });
+        Object.values(ResourceType).forEach((resourceType) => {
+            describe(`for resource type: ${resourceType}`, () => {
+                describe(`when no custom label or route is defined`, () => {
+                    const contentConfig = buildDummyConfig({
+                        indexToDetailFlows: [buildIndexToDetailConfig(resourceType)],
                     });
 
-                    describe(`when a custom route is provided`, () => {
-                        const indexToDetailFlowConfig = buildIndexToDetailConfig(resourceType, [
-                            'route',
-                        ]);
+                    const result = buildRoutes(contentConfig);
 
-                        const contentConfig = buildDummyConfig({
-                            indexToDetailFlows: [indexToDetailFlowConfig],
-                        });
+                    it('should include the default route', () => {
+                        const exceptions = {
+                            [ResourceType.spatialFeature]: 'Resources/Map',
+                        } as const;
 
-                        const result = buildRoutes(contentConfig);
+                        const defaultPath =
+                            exceptions[resourceType] ||
+                            `Resources/${capitalizeFirstLetter(resourceType)}s`;
 
-                        it('should include the custom route', () => {
-                            console.log(contentConfig);
+                        const matchingPaths = result.filter(({ path }) => path === defaultPath);
 
-                            const customPath = `Resources/${indexToDetailFlowConfig.route}`;
+                        expect(matchingPaths.length).toBe(1);
+                    });
+                });
 
-                            const matchingPaths = result.filter(({ path }) => path === customPath);
+                describe(`when a custom route is provided`, () => {
+                    const indexToDetailFlowConfig = buildIndexToDetailConfig(resourceType, [
+                        'route',
+                    ]);
 
-                            expect(matchingPaths.length).toBe(1);
-                        });
+                    const contentConfig = buildDummyConfig({
+                        indexToDetailFlows: [indexToDetailFlowConfig],
+                    });
+
+                    const result = buildRoutes(contentConfig);
+
+                    it('should include the custom route', () => {
+                        const customPath = `Resources/${indexToDetailFlowConfig.route}`;
+
+                        const matchingPaths = result.filter(({ path }) => path === customPath);
+
+                        expect(matchingPaths.length).toBe(1);
                     });
                 });
             });
+        });
     });
 });
