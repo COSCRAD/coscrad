@@ -12,7 +12,7 @@ export const TermDetailFullViewPresenter = ({
     contributor,
 }: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => (
     <div className="term-detail-page" data-testid={id}>
-        <Card className="detail-card">
+        <Card variant="outlined" className="detail-card">
             <div id="detail-term">{term || ''}</div>
             <Divider id="detail-divider" />
             <div className="detail-meta">

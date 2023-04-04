@@ -1,5 +1,5 @@
 import { IFormField, IValueAndDisplay } from '@coscrad/api-interfaces';
-import { MenuItem, Select } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
 
 const NO_SELECTION_PLACEHOLDER = '-SELECT-';
@@ -18,10 +18,10 @@ export const VocabularyListSelect = ({
     const menuItems = options as IValueAndDisplay<string>[];
 
     return (
-        <div>
-            {label}
+        <FormControl size="small">
+            <InputLabel>{label}</InputLabel>
             <Select
-                value={currentValue || ''}
+                value={currentValue}
                 label={label}
                 name={name}
                 onChange={(changeEvent) => {
@@ -41,6 +41,6 @@ export const VocabularyListSelect = ({
                     ))
                 )}
             </Select>
-        </div>
+        </FormControl>
     );
 };
