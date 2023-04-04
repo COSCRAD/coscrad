@@ -32,24 +32,14 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
     const propsForSelectedItem = propsForItems[indexToUse];
 
     return (
-        <>
-            <Box component={Presenter} {...propsForSelectedItem} />
-            <Box
-                mt={1}
-                component={Button}
-                disableRipple={true}
-                onClick={(_) => setIndex(cyclicDecrement(indexToUse, numberOfItems))}
-            >
-                <ArrowBackIosIcon />
-            </Box>
-            <Box
-                mt={1}
-                component={Button}
-                disableRipple={true}
-                onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}
-            >
-                <ArrowForwardIosIcon />
-            </Box>
-        </>
+        <Box>
+            <Presenter {...propsForSelectedItem} />
+            <Button onClick={(_) => setIndex(cyclicDecrement(indexToUse, numberOfItems))}>
+                <ArrowBackIosIcon></ArrowBackIosIcon>
+            </Button>
+            <Button onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}>
+                <ArrowForwardIosIcon></ArrowForwardIosIcon>
+            </Button>
+        </Box>
     );
 };

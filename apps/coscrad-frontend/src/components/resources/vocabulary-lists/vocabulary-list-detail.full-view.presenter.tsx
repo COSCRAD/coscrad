@@ -92,16 +92,14 @@ export const VocabularyListDetailFullViewPresenter = ({
     return (
         <Box textAlign={'center'} data-testid={id}>
             <Typography variant="h2">{formatBilingualText(name, nameEnglish)}</Typography>
-            <Box
-                component={VocabularyListForm}
+            <VocabularyListForm
                 fields={form.fields}
                 onFormChange={(key: string, value: VocabularyListFilterProperty) =>
                     dispatch(updateVocabularyListFilter(key, value))
                 }
                 formState={filterWithoutNullAndUndefined}
             />
-            <Box
-                component={Carousel}
+            <Carousel
                 propsForItems={selectedEntries.map(({ term }) => term)}
                 Presenter={TermDetailFullViewPresenter}
             />
