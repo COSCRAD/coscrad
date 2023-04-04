@@ -6,6 +6,5 @@ module.exports = {
         '^.+\\.[tj]sx?$': 'babel-jest',
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-    coverageDirectory: '../../coverage/apps/tsilhqotin-language-hub',
     setupFilesAfterEnv: ['./setupTests.js'],
 };

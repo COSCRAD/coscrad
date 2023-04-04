@@ -8,6 +8,5 @@ export default {
     },
     transformIgnorePatterns: [`/node_modules/(?!@react-leaflet|react-leaflet)`],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-    coverageDirectory: '../../coverage/apps/coscrad-frontend',
     setupFilesAfterEnv: ['./setupTests.js'],
 };
