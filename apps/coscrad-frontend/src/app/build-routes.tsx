@@ -11,7 +11,6 @@ import { TagDetailContainer } from '../components/tags/tag-detail.container';
 import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
 import { ConfigurableContent } from '../configurable-front-matter/data/configurable-content-schema';
-import { contentConfig } from '../configurable-front-matter/data/content.config';
 import { bootstrapIndexToDetailFlowRoutes } from './bootstrap-index-to-detail-flow-routes';
 import { routes } from './routes/routes';
 
@@ -24,11 +23,10 @@ export type CoscradRoute = {
     children?: CoscradRoute[];
 };
 
-export const buildRoutes = ({
-    indexToDetailFlows,
-    shouldEnableWebOfKnowledgeForResources,
-    listenLive,
-}: ConfigurableContent): CoscradRoute[] => {
+export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] => {
+    const { indexToDetailFlows, shouldEnableWebOfKnowledgeForResources, listenLive } =
+        contentConfig;
+
     const noteIndexToDetailConfig = indexToDetailFlows.find(
         ({ categorizableType }) => categorizableType === CategorizableType.note
     );

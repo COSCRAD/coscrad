@@ -70,7 +70,7 @@ export enum DetailViewType {
     thumbnail = 'thumbnail-view',
 }
 
-type IndexToDetailFlowDefinition<T extends CategorizableType> = {
+export type IndexToDetailFlowDefinition<T extends CategorizableType> = {
     categorizableType: T;
     indexFilter?: (
         viewModel: ICategorizableDetailQueryResult<AggregateTypeToViewModel[T]>

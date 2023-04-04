@@ -1,38 +1,8 @@
-import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { ConfigurableContent } from '../../configurable-front-matter/data/configurable-content-schema';
-import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
+import { buildDummyConfig } from '../../utils/test-utils/build-dummy-content-config';
 import { buildNavMenuItems } from './build-nav-menu-items';
 import { NavItemInfo } from './nav-menu-container';
-
-const dummyConfigWithAllProps = getDummyConfigurableContent();
-
-const buildDummyConfig = (userOverrides: Partial<ConfigurableContent> = {}) => {
-    const propertiesToRemove = Object.entries(userOverrides)
-        .filter(([_key, value]) => isNullOrUndefined(value))
-        .map(([key, _value]) => key);
-
-    // Note that this is a shallow clone
-    const withUserOverrides = { ...dummyConfigWithAllProps, ...userOverrides };
-
-    /**
-     * We remove null or undefined valued properties to fully mimic the
-     * behaviour of leaving the property off the config entirely.
-     */
-    propertiesToRemove.forEach((key) => delete withUserOverrides[key]);
-
-    return withUserOverrides;
-};
-
-type TestCase = {
-    description: string;
-    config: ConfigurableContent;
-    /**
-     * Within this test, we only confirm that the paths are built as expected.
-     * There are separate e2e tests with Cypress that confirm that these paths
-     * actually link to properly rendered content.
-     */
-    expectedResult: NavItemInfo[];
-};
 
 const liveRoute = 'Live';
 

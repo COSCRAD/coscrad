@@ -22,7 +22,8 @@ export const bootstrapIndexToDetailFlowRoutes = ({
                 ...acc,
                 [categorizableType]:
                     // we have already filtered out the Notes
-                    route || routes.resources.ofType(categorizableType as ResourceType).index,
+                    (route && `Resources/${route}`) ||
+                    routes.resources.ofType(categorizableType as ResourceType).index,
             }),
             {}
         );
