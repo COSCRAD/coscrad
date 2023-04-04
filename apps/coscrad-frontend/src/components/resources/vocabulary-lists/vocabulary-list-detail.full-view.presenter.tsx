@@ -4,6 +4,7 @@ import {
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { Box, Typography } from '@mui/material';
 import { useReducer } from 'react';
 import { Carousel } from '../../higher-order-components/carousel';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
@@ -89,24 +90,19 @@ export const VocabularyListDetailFullViewPresenter = ({
     const selectedEntries = filterEntriesForSelectedTerms(entries, filterWithoutNullAndUndefined);
 
     return (
-        <div data-testid={id}>
-            <h1>{formatBilingualText(name, nameEnglish)}</h1>
-            <div>
-                <VocabularyListForm
-                    fields={form.fields}
-                    onFormChange={(key: string, value: VocabularyListFilterProperty) =>
-                        dispatch(updateVocabularyListFilter(key, value))
-                    }
-                    formState={filterWithoutNullAndUndefined}
-                />
-            </div>
-            <div>
-                {/* We may want to give the user the option of seeing a Multiple Categorizables of Single Type view instead*/}
-                <Carousel
-                    propsForItems={selectedEntries.map(({ term }) => term)}
-                    Presenter={TermDetailFullViewPresenter}
-                />
-            </div>
-        </div>
+        <Box textAlign={'center'} data-testid={id}>
+            <Typography variant="h2">{formatBilingualText(name, nameEnglish)}</Typography>
+            <VocabularyListForm
+                fields={form.fields}
+                onFormChange={(key: string, value: VocabularyListFilterProperty) =>
+                    dispatch(updateVocabularyListFilter(key, value))
+                }
+                formState={filterWithoutNullAndUndefined}
+            />
+            <Carousel
+                propsForItems={selectedEntries.map(({ term }) => term)}
+                Presenter={TermDetailFullViewPresenter}
+            />
+        </Box>
     );
 };
