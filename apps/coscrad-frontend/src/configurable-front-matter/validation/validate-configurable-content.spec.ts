@@ -94,12 +94,6 @@ const invalidProps: InvalidProps[] = [
         invalidValue: ['foo'],
         description: 'string array',
     },
-    // TODO test when listenlive is an object with invalid properties
-    // {
-    //     propertyName: 'listenLive',
-    //     invalidValue: { foo: 400 },
-    //     description: 'invalid object',
-    // },
     {
         propertyName: 'listenLive',
         invalidValue: ['foo'],
@@ -110,9 +104,38 @@ const invalidProps: InvalidProps[] = [
         invalidValue: '',
         description: 'empty string',
     },
-    // TODO test \ tighten up validation around index-to-detail flows
+    {
+        propertyName: 'indexToDetailFlows',
+        invalidValue: null,
+        description: 'null',
+    },
+    {
+        propertyName: 'indexToDetailFlows',
+        invalidValue: undefined,
+        description: 'undefined',
+    },
+    /**
+     * Note that we have static type safety so we don't need to do detailed
+     * validation of the schema.
+     */
+    {
+        propertyName: 'simulatedKeyboard',
+        invalidValue: null,
+        description: 'null',
+    },
+    {
+        propertyName: 'simulatedKeyboard',
+        invalidValue: undefined,
+        description: 'undefined',
+    },
 ];
 
+/**
+ * Note that now that we have moved to a typescript config, most of our safety
+ * comes from static type-safety. But because we are using a lookup table for
+ * constraint based validation, we still need to test null and undefined values
+ * to ensure the constraints are consistent with the type of `ConfigurableContent`.
+ */
 describe('validateFrontMatterData', () => {
     describe('when the content config is valid (using the sample  config)', () => {
         it('should return no errors', () => {
