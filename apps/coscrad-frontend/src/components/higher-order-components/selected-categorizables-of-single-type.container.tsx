@@ -11,7 +11,7 @@ import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-err
 import { SelectedCategorizablesPresenter } from './selected-categorizables-of-single-type.presenter';
 
 interface SelectedResourceContainerProps<T> {
-    categorizableType: Exclude<CategorizableType, typeof CategorizableType.playlist>;
+    categorizableType: CategorizableType;
     selectedIds: string[];
     detailPresenterFactory: ICategorizableDetailPresenterFactory<T>;
     pluralLabelForCategorizableType: string;

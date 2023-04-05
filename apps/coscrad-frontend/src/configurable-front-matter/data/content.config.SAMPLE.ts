@@ -17,10 +17,7 @@ export const contentConfig: ConfigurableContent = {
         '2': 'Credits for video 2',
     },
     indexToDetailFlows: Object.values(CategorizableType)
-        .filter(
-            (t): t is Exclude<CategorizableType, typeof CategorizableType.playlist> =>
-                t !== CategorizableType.playlist
-        )
+        .filter((t): t is CategorizableType => t !== CategorizableType.playlist)
         .map((categorizableType) => ({
             categorizableType,
             detailViewType: DetailViewType.fullView,

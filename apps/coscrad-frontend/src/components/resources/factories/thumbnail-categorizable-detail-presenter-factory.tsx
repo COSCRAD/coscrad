@@ -24,7 +24,7 @@ import { VocabularyListDetailThumbnailPresenter } from '../vocabulary-lists/voca
 
 // TODO Define thumbnail specific presenters
 const lookupTable: {
-    [K in Exclude<CategorizableType, typeof CategorizableType.playlist>]: FunctionalComponent;
+    [K in CategorizableType]: FunctionalComponent;
 } = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailThumbnailPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailThumbnailPresenter,
@@ -71,9 +71,7 @@ const lookupTable: {
  * a single resource for each resource type. It is used for the connected
  * resources flow.
  */
-export const thumbnailCategorizableDetailPresenterFactory = <
-    T extends Exclude<CategorizableType, typeof CategorizableType.playlist>
->(
+export const thumbnailCategorizableDetailPresenterFactory = <T extends CategorizableType>(
     typeOfCategorizable: T
 ): typeof lookupTable[T] => {
     const lookupResult = lookupTable[typeOfCategorizable];

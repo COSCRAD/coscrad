@@ -4,13 +4,6 @@ describe(`Video + transcription flow`, () => {
             cy.visit(`/Resources`);
 
             cy.contains('videos');
-
-            cy.window().then((window) => {
-                Array(100)
-                    .fill('here')
-                    .forEach((x) => console.log(x));
-                console.log({ window });
-            });
         });
 
         it(`should have a link to the videos`, () => {

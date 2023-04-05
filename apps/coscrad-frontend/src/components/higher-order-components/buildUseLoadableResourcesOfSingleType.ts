@@ -52,9 +52,7 @@ const lookupTable: {
  * are meant to enapsulate that, so the selector seems like the natural
  * starting point.
  */
-export const buildUseLoadableForSingleCategorizableType = <
-    T extends Exclude<CategorizableType, typeof CategorizableType.playlist>
->(
+export const buildUseLoadableForSingleCategorizableType = <T extends CategorizableType>(
     resourceType: T
 ): UseLoadableResourcesOfSingleType<AggregateTypeToViewModel[T]> => {
     const lookupResult = lookupTable[resourceType];

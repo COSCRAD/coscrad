@@ -54,10 +54,7 @@ export const CategorizablesOfMultipleTypeContainer = <T,>({
     <div>
         <h3>{heading || 'Selected Resources'}</h3>
         {Object.entries(collectResourceTypesAndSelectedIds(members)).map(
-            ([categorizableType, selectedIds]: [
-                Exclude<CategorizableType, typeof CategorizableType.playlist>,
-                string[]
-            ]) => (
+            ([categorizableType, selectedIds]: [CategorizableType, string[]]) => (
                 <SelectedCategorizablesOfSingleTypeContainer
                     key={categorizableType}
                     categorizableType={categorizableType}

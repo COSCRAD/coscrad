@@ -23,7 +23,7 @@ type UseLoadableById = (id: string) => IMaybeLoadable<unknown>;
  * for.
  */
 const lookupTable: {
-    [K in Exclude<CategorizableType, typeof CategorizableType.playlist>]: UseLoadableById;
+    [K in CategorizableType]: UseLoadableById;
 } = {
     [CategorizableType.bibliographicReference]: useLoadableBibliographicReferenceById,
     [CategorizableType.book]: useLoadableBookById,
