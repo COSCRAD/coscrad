@@ -1,6 +1,6 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 
-const lookupTable: { [K in Exclude<ResourceType, typeof ResourceType.playlist>]: string } = {
+const lookupTable: { [K in ResourceType]: string } = {
     [ResourceType.bibliographicReference]: 'BibliographicReferences',
     [ResourceType.book]: 'Books',
     [ResourceType.mediaItem]: 'MediaItems',

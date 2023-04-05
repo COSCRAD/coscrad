@@ -25,10 +25,7 @@ type UseLoadableResourcesOfSingleType<T extends IBaseViewModel> = () => ILoadabl
 >;
 
 const lookupTable: {
-    [K in Exclude<
-        CategorizableType,
-        typeof CategorizableType.playlist
-    >]: UseLoadableResourcesOfSingleType<AggregateTypeToViewModel[K]>;
+    [K in CategorizableType]: UseLoadableResourcesOfSingleType<AggregateTypeToViewModel[K]>;
 } = {
     [CategorizableType.bibliographicReference]: useLoadableBibliographicReferences,
     [CategorizableType.book]: useLoadableBooks,

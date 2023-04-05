@@ -20,59 +20,59 @@ Cypress.Commands.add('login', () => {
      * We ensure that any cached information about the previous session is
      * cleared before logging in.
      */
-    cy.clearLocalStorage();
+    // cy.clearLocalStorage();
 
-    const client_id = Cypress.env('auth0_client_id');
+    // const client_id = Cypress.env('auth0_client_id');
 
-    const audience = Cypress.env('auth0_audience');
+    // const audience = Cypress.env('auth0_audience');
 
-    const scope = Cypress.env('auth0_scope');
+    // const scope = Cypress.env('auth0_scope');
 
-    cy.request({
-        method: 'POST',
-        url: `https://${Cypress.env('auth0_domain')}/oauth/token`,
-        body: {
-            grant_type: 'password',
-            username: Cypress.env('username'),
-            password: Cypress.env('password'),
-            audience,
-            scope,
-            client_id,
-            client_secret: Cypress.env('auth0_client_secret'),
-        },
-    }).then(({ body: { access_token, expires_in, id_token, token_type } }) => {
-        cy.window().then((win) => {
-            win.localStorage.setItem(
-                `@@auth0spajs@@::${client_id}::${audience}::${scope}`,
-                JSON.stringify({
-                    body: {
-                        client_id,
-                        access_token,
-                        id_token,
-                        scope,
-                        expires_in,
-                        token_type,
-                        decodedToken: {
-                            user: JSON.parse(
-                                Buffer.from(id_token.split('.')[1], 'base64').toString('ascii')
-                            ),
-                        },
-                        audience,
-                    },
-                    expiresAt: Math.floor(Date.now() / 1000) + expires_in,
-                })
-            );
-            cy.reload();
-        });
-    });
+    // cy.request({
+    //     method: 'POST',
+    //     url: `https://${Cypress.env('auth0_domain')}/oauth/token`,
+    //     body: {
+    //         grant_type: 'password',
+    //         username: Cypress.env('username'),
+    //         password: Cypress.env('password'),
+    //         audience,
+    //         scope,
+    //         client_id,
+    //         client_secret: Cypress.env('auth0_client_secret'),
+    //     },
+    // }).then(({ body: { access_token, expires_in, id_token, token_type } }) => {
+    //     cy.window().then((win) => {
+    //         win.localStorage.setItem(
+    //             `@@auth0spajs@@::${client_id}::${audience}::${scope}`,
+    //             JSON.stringify({
+    //                 body: {
+    //                     client_id,
+    //                     access_token,
+    //                     id_token,
+    //                     scope,
+    //                     expires_in,
+    //                     token_type,
+    //                     decodedToken: {
+    //                         user: JSON.parse(
+    //                             Buffer.from(id_token.split('.')[1], 'base64').toString('ascii')
+    //                         ),
+    //                     },
+    //                     audience,
+    //                 },
+    //                 expiresAt: Math.floor(Date.now() / 1000) + expires_in,
+    //             })
+    //         );
+    //         cy.reload();
+    //     });
+    // });
 
-    // cy.contains('Log In').click();
+    cy.get('[data-testid="login"]').click();
 
-    // cy.get('#username').click().type(Cypress.env('username'));
+    cy.get('#username').click().type(Cypress.env('username'));
 
-    // cy.get('#password').click().type(Cypress.env('password'));
+    cy.get('#password').click().type(Cypress.env('password'));
 
-    // cy.contains('Continue').click();
+    cy.contains('Continue').click();
 });
 
 //

@@ -7,6 +7,7 @@ const LoginButton = () => {
 
     return (
         <IconButton
+            data-testid="login"
             color="primary"
             onClick={() => {
                 loginWithRedirect({

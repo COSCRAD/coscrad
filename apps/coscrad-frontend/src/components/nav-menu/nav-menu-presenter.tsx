@@ -1,5 +1,6 @@
 import { isNull } from '@coscrad/validation-constraints';
-import { Box } from '@mui/material';
+import { MenuRounded as MenuRoundedIcon } from '@mui/icons-material';
+import { Box, IconButton, Menu } from '@mui/material';
 import { useState } from 'react';
 import AuthenticationButton from '../authentication-button/authentication-button';
 import { NavItemInfo } from './nav-menu-container';
@@ -19,8 +20,7 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
     };
 
     const handleClose = () => {
-        console.log('hi');
-        // setAnchorEl(null);
+        setAnchorEl(null);
     };
 
     return (
@@ -28,6 +28,7 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
             <Box sx={{ minWidth: '100px' }}>
                 <IconButton
                     id="basic-button"
+                    data-testid="nav-menu-control"
                     color="primary"
                     aria-controls={isOpen ? 'basic-menu' : undefined}
                     aria-haspopup="true"

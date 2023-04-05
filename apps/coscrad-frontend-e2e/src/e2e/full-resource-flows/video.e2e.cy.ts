@@ -8,25 +8,26 @@ describe(`Video + transcription flow`, () => {
 
         it(`should have a link to the videos`, () => {
             cy.visit(`/Resources`);
-            cy.contains('videos').click();
 
-            cy.contains('videos');
-
-            cy.location('pathname').should('contain', `Resources/Videos`);
+            cy.get('[href="/Resources/Videos"]');
         });
     });
 
     describe(`the index view`, () => {
-        it.only(`should have a create video button`, () => {
-            cy.visit(`/`);
+        it(`should have a create video button`, () => {
+            cy.visit('/');
+
             cy.login();
-            cy.contains('Log In').click();
+
+            cy.get('[data-testid="nav-menu-control"]').click();
 
             cy.get('[href="/Resources"]').click();
 
             cy.get('[data-testid="RESOURCE_CARD__videos"]').click();
 
-            cy.contains('Create Video');
+            cy.contains('Create Video').click();
+
+            cy.contains('Haida').click();
         });
     });
 });

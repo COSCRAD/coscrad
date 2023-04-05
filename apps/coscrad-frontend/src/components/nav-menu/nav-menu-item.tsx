@@ -1,3 +1,4 @@
+import { MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { NavItemInfo } from './nav-menu-container';
 
@@ -9,5 +10,9 @@ export interface NavItemItemProps {
 export const NavMenuItem = ({ navItemInfo, handleClose }: NavItemItemProps) => {
     const { link, label } = navItemInfo;
 
-    return <Link to={link}>{label}</Link>;
+    return (
+        <MenuItem onClick={handleClose}>
+            <Link to={link}>{label}</Link>
+        </MenuItem>
+    );
 };
