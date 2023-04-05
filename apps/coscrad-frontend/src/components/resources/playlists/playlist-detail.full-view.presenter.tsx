@@ -6,6 +6,7 @@ import {
 import { Typography } from '@mui/material';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { EpisodePresenter } from './episode-presenter';
+
 export const PlaylistDetailFullViewPresenter = ({
     name,
     id,
