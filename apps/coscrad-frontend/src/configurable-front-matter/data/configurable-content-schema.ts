@@ -54,10 +54,9 @@ export const configurableContentPropertiesAndConstraints: {
     songIdToCredits: [CoscradConstraint.isObject],
     videoIdToCredits: [CoscradConstraint.isObject],
     shouldEnableWebOfKnowledgeForResources: [CoscradConstraint.isBoolean],
-    // This is a tough one to constrain. We may need to manually specify the validation logic.
-    indexToDetailFlows: [],
+    indexToDetailFlows: [CoscradConstraint.isRequired],
     siteCredits: [CoscradConstraint.isNonEmptyString, CoscradConstraint.isRequired],
-    simulatedKeyboard: [CoscradConstraint.isObject],
+    simulatedKeyboard: [CoscradConstraint.isObject, CoscradConstraint.isRequired],
     listenLive: [CoscradConstraint.isObject],
     termOfTheDayConfig: [CoscradConstraint.isObject],
     notFoundMessage: [CoscradConstraint.isNonEmptyString],
