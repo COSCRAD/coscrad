@@ -7,7 +7,7 @@ import { ResourceDetailThumbnailPresenter } from 'apps/coscrad-frontend/src/util
 
 export const JournalArticleBibliographicReferenceThumbnailPresenter = ({
     id,
-    data: { title, abstract, issueDate, publicationTitle },
+    data: { title, issueDate, publicationTitle },
 }: IBibliographicReferenceViewModel<IJournalArticleBibliographicReferenceData>): JSX.Element => {
     const name = title;
 

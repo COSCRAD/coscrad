@@ -3,13 +3,13 @@ import {
     IJournalArticleBibliographicReferenceData,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { SinglePropertyPresenter } from 'apps/coscrad-frontend/src/utils/generic-components';
-import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
-import { ExternalLinkPresenter } from '../../../utils/generic-components/presenters/external-link-presenter';
 import {
+    ExternalLinkPresenter,
     MultiplePropertyPresenter,
     PropertyLabels,
-} from '../../../utils/generic-components/presenters/multiple-property-presenter';
+    SinglePropertyPresenter,
+} from '../../../utils/generic-components/';
+import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { CreatorsPresenter } from './shared/creators-presenter';
 
 export const JournalArticleBibliographicReferenceFullViewPresenter = ({

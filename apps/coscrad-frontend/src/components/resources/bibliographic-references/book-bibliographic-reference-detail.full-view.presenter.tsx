@@ -3,12 +3,13 @@ import {
     IBookBibliographicReferenceData,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
-import { ExternalLinkPresenter } from '../../../utils/generic-components/presenters/external-link-presenter';
 import {
+    ExternalLinkPresenter,
     MultiplePropertyPresenter,
     PropertyLabels,
-} from '../../../utils/generic-components/presenters/multiple-property-presenter';
+    SinglePropertyPresenter,
+} from '../../../utils/generic-components/';
+import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { CreatorsPresenter } from './shared/creators-presenter';
 
 export const BookBibliographicReferenceDetailFullViewPresenter = ({
@@ -39,6 +40,7 @@ export const BookBibliographicReferenceDetailFullViewPresenter = ({
             id={id}
             type={ResourceType.bibliographicReference}
         >
+            <SinglePropertyPresenter display="Reference Type" value="Court Case" />
             <CreatorsPresenter creators={creators} />
             <MultiplePropertyPresenter keysAndLabels={keysAndLabels} data={data} />
             <ExternalLinkPresenter url={url} />

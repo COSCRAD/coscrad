@@ -4,11 +4,23 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { ResourceDetailThumbnailPresenter } from '../../../../utils/generic-components/presenters/detail-views';
+import {
+    MultiplePropertyPresenter,
+    PropertyLabels,
+} from '../../../../utils/generic-components/presenters/multiple-property-presenter';
 
 export const CourtCaseBibliographicReferenceDetailThumbnailPresenter = ({
     id,
-    data: { caseName, abstract, dateDecided, pages },
+    data,
 }: IBibliographicReferenceViewModel<ICourtCaseBibliographicReferenceData>): JSX.Element => {
+    const keysAndLabels: PropertyLabels<ICourtCaseBibliographicReferenceData> = {
+        dateDecided: 'Date Decided',
+        court: 'Court',
+    };
+
+    // Temporary workaround until `name` is on IBaseViewModel
+    const { caseName } = data;
+
     const name = caseName;
 
     return (
@@ -17,10 +29,7 @@ export const CourtCaseBibliographicReferenceDetailThumbnailPresenter = ({
             name={name}
             type={ResourceType.bibliographicReference}
         >
-            {/* <IfDefined value={pages}>
-                <div>{pages} pages</div>
-            </IfDefined> */}
-            {dateDecided && <div>({dateDecided})</div>}
+            <MultiplePropertyPresenter keysAndLabels={keysAndLabels} data={data} />
         </ResourceDetailThumbnailPresenter>
     );
 };

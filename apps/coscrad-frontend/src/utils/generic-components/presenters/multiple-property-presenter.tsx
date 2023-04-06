@@ -1,3 +1,4 @@
+import { isNullOrUndefined, isNumber, isString } from '@coscrad/validation-constraints';
 import { SinglePropertyPresenter } from './single-property-presenter';
 
 export type PropertyLabels<T> = {
@@ -9,27 +10,33 @@ interface MultiPropertyPresenterProps<T> {
     data: T;
 }
 
-/**
- * test using .screen
- */
 export const MultiplePropertyPresenter = <T,>({
     keysAndLabels,
     data,
 }: MultiPropertyPresenterProps<T>): JSX.Element => {
     return (
         <>
-            {Object.entries(keysAndLabels).map(([propertyKey, label]) => {
-                // `year` and `numberOfPages` in book are both numbers
-                const propertyValueAsString = data[propertyKey].toString();
+            {Object.entries(keysAndLabels)
+                .filter(([propertyKey, _]) => !isNullOrUndefined(data[propertyKey]))
+                .map(([propertyKey, label]) => {
+                    const propertyValue = data[propertyKey];
 
-                return (
-                    <SinglePropertyPresenter
-                        key={label as string}
-                        display={label as string}
-                        value={propertyValueAsString}
-                    />
-                );
-            })}
+                    if (!isString(propertyValue) && !isNumber(propertyValue)) {
+                        throw new Error(
+                            'Only string or number valued properties are supported by MultiplePropertyPresenter'
+                        );
+                    }
+
+                    const propertyValueAsString = propertyValue.toString();
+
+                    return (
+                        <SinglePropertyPresenter
+                            key={label as string}
+                            display={label as string}
+                            value={propertyValueAsString}
+                        />
+                    );
+                })}
         </>
     );
 };

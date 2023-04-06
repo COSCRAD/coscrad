@@ -4,6 +4,7 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { SinglePropertyPresenter } from 'apps/coscrad-frontend/src/utils/generic-components';
 import { ResourceDetailThumbnailPresenter } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/detail-views';
 
 export const BookBibliographicReferenceDetailThumbnailPresenter = ({
@@ -18,7 +19,8 @@ export const BookBibliographicReferenceDetailThumbnailPresenter = ({
             name={name}
             type={ResourceType.bibliographicReference}
         >
-            {!isNullOrUndefined(numberOfPages) && <div>{numberOfPages}</div>}
+            <SinglePropertyPresenter display="Pages" value={numberOfPages} />
+            {/* TODO: streamline the null or undefined check */}
             {!isNullOrUndefined(year) && <div>({year})</div>}
         </ResourceDetailThumbnailPresenter>
     );

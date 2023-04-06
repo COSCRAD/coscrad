@@ -3,13 +3,13 @@ import {
     ICourtCaseBibliographicReferenceData,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { SinglePropertyPresenter } from '../../../utils/generic-components';
-import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
-import { ExternalLinkPresenter } from '../../../utils/generic-components/presenters/external-link-presenter';
 import {
+    ExternalLinkPresenter,
     MultiplePropertyPresenter,
     PropertyLabels,
-} from '../../../utils/generic-components/presenters/multiple-property-presenter';
+    SinglePropertyPresenter,
+} from '../../../utils/generic-components/';
+import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 
 export const CourtCaseBibliographicReferenceDetailFullViewPresenter = ({
     id,
@@ -19,7 +19,7 @@ export const CourtCaseBibliographicReferenceDetailFullViewPresenter = ({
         abstract: 'Abstract',
         dateDecided: 'Date Decided',
         court: 'Court',
-        pages: 'Pages',
+        pages: 'First Page',
     };
 
     // Temporary workaround until `name` is on IBaseViewModel
@@ -33,7 +33,7 @@ export const CourtCaseBibliographicReferenceDetailFullViewPresenter = ({
             type={ResourceType.bibliographicReference}
         >
             {/* TODO: create label configuration for subtypes */}
-            <SinglePropertyPresenter display="Reference Type" value="Journal Article" />
+            <SinglePropertyPresenter display="Reference Type" value="Court Case" />
             <MultiplePropertyPresenter keysAndLabels={keysAndLabels} data={data} />
             <ExternalLinkPresenter url={url} />
         </ResourceDetailFullViewPresenter>
