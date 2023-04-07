@@ -1,11 +1,13 @@
-import { IAudioItemViewModel, ICategorizableDetailQueryResult } from '@coscrad/api-interfaces';
+import {
+    IAudioItemViewModel,
+    ICategorizableDetailQueryResult,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
-import { Stack } from '@mui/material';
-import { FloatSpacerDiv } from '../../../utils/generic-components';
-import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
+import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
+import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { convertMillisecondsToSeconds } from '../utils/math';
-import './audio-item-detail.full-view.presenter.css';
 
 export const AudioItemDetailFullViewPresenter = ({
     id,
@@ -13,26 +15,20 @@ export const AudioItemDetailFullViewPresenter = ({
     audioURL,
     text: plainText,
     name,
-}: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => (
-    <div className="detail-full-view-container" title="View Connected Photograph" data-testid={id}>
-        <div className="detail-full-view-media-container">
-            <MediaPlayer audioUrl={audioURL} />
-        </div>
-        <div className="detail-full-view-meta-container">
-            <MultilingualTextPresenter text={name} />
-            <SinglePropertyPresenter display="Audio Item ID" value={id} />
-            <SinglePropertyPresenter
-                display="Duration"
-                value={`${convertMillisecondsToSeconds(lengthMilliseconds)} secs`}
-            />
-            <SinglePropertyPresenter display="Audio Url" value={audioURL} />
-            {/* TODO We should send the full Multilingual text to the front-end in the view model */}
-            <Stack>
-                {plainText.split('\n').map((line, index) => (
-                    <p key={index}>{line}</p>
-                ))}
-            </Stack>
-        </div>
-        <FloatSpacerDiv />
-    </div>
-);
+}: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
+    const formatedPlainText = plainText.split('\n').map((line, index) => <p key={index}>{line}</p>);
+
+    return (
+        <CoscradMainContentContainer>
+            <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
+                <MediaPlayer audioUrl={audioURL} />
+                <SinglePropertyPresenter
+                    display="Duration"
+                    value={`${convertMillisecondsToSeconds(lengthMilliseconds)} secs`}
+                />
+                <SinglePropertyPresenter display="Audio Url" value={audioURL} />
+                <SinglePropertyPresenter display="Text" value={formatedPlainText} />
+            </ResourceDetailFullViewPresenter>
+        </CoscradMainContentContainer>
+    );
+};
