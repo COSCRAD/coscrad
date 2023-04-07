@@ -1,7 +1,7 @@
-import { CoscradMainContentContainer } from 'apps/coscrad-frontend/src/utils/generic-components/style-components/coscrad-main-content-container';
 import { BibliographicReferenceIndexState } from '../../../store/slices/resources';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import {
     BibliographicReferenceJointViewModel,

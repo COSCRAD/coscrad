@@ -4,8 +4,10 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { SinglePropertyPresenter } from 'apps/coscrad-frontend/src/utils/generic-components';
-import { ResourceDetailThumbnailPresenter } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/detail-views';
+import {
+    ResourceDetailThumbnailPresenter,
+    SinglePropertyPresenter,
+} from '../../../../utils/generic-components';
 
 export const BookBibliographicReferenceDetailThumbnailPresenter = ({
     id,

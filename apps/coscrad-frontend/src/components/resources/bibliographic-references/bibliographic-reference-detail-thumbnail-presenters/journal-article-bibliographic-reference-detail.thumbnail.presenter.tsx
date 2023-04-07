@@ -3,7 +3,7 @@ import {
     IJournalArticleBibliographicReferenceData,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { ResourceDetailThumbnailPresenter } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/detail-views';
+import { ResourceDetailThumbnailPresenter } from '../../../../utils/generic-components/';
 
 export const JournalArticleBibliographicReferenceThumbnailPresenter = ({
     id,
