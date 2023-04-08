@@ -1,10 +1,9 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import { CoscradMainContentContainer } from 'apps/coscrad-frontend/src/utils/generic-components/style-components/coscrad-main-content-container';
-import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { SpatialFeatureIndexState } from '../../../store/slices/resources';
 import { ConnectedResourcesPanel } from '../../../store/slices/resources/shared/connected-resources';
 import { SelfNotesPanelContainer } from '../../../store/slices/resources/shared/notes-for-resource';
+import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { ICoscradMap, SpatialFeatureDetailPresenter } from './map';
 import { Position2D } from './types';
 
