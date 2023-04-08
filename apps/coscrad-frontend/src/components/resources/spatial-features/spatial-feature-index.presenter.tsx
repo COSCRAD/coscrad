@@ -1,16 +1,11 @@
-/**
- * This is an attempted fix from: https://stackoverflow.com/a/59523791
- * For some reason the shadow of the place marker is a broken image link
- */
 import { ResourceType } from '@coscrad/api-interfaces';
-// import 'leaflet/dist/images/marker-shadow.png';
+import { CoscradMainContentContainer } from 'apps/coscrad-frontend/src/utils/generic-components/style-components/coscrad-main-content-container';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { SpatialFeatureIndexState } from '../../../store/slices/resources';
 import { ConnectedResourcesPanel } from '../../../store/slices/resources/shared/connected-resources';
 import { SelfNotesPanelContainer } from '../../../store/slices/resources/shared/notes-for-resource';
 import { ICoscradMap, SpatialFeatureDetailPresenter } from './map';
-import './spatial-feature-index.presenter.css';
 import { Position2D } from './types';
 
 type SpatialFeatureIndexPresenterProps = SpatialFeatureIndexState & {
@@ -35,7 +30,7 @@ export const SpatialFeatureIndexPresenter = ({
     const [selectedSpatialFeatureId, setSelectedSpatialFeatureId] = useState<string>(null);
 
     return (
-        <div>
+        <>
             <MapComponent
                 spatialFeatures={spatialFeatures}
                 initialCentre={initialCentre}
@@ -45,7 +40,7 @@ export const SpatialFeatureIndexPresenter = ({
                 selectedSpatialFeatureId={selectedSpatialFeatureId}
             />
 
-            <div>
+            <CoscradMainContentContainer>
                 <ConnectedResourcesPanel
                     compositeIdentifier={{
                         type: ResourceType.spatialFeature,
@@ -58,7 +53,7 @@ export const SpatialFeatureIndexPresenter = ({
                         id: selectedSpatialFeatureId,
                     }}
                 />
-            </div>
-        </div>
+            </CoscradMainContentContainer>
+        </>
     );
 };
