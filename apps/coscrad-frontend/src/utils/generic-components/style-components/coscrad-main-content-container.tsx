@@ -12,7 +12,8 @@ export const CoscradMainContentContainer = ({
     return (
         <Container
             component="div"
-            sx={{ paddingTop: '5%', width: { xs: '90%', sm: '80%' }, margin: 'auto' }}
+            disableGutters
+            sx={{ paddingTop: '5%', width: { xs: '90%', md: '80%' }, margin: 'auto' }}
         >
             {children}
             <FloatSpacerDiv />

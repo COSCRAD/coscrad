@@ -15,6 +15,7 @@ export const AudioItemDetailThumbnailPresenter = ({
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
     return (
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.audioItem}>
+            {/* TODO: add spotify experience to audioItems thumbnail views */}
             <SinglePropertyPresenter
                 display="Duration"
                 value={convertMillisecondsToSeconds(lengthMilliseconds)}
