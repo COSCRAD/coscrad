@@ -32,30 +32,28 @@ export const ResourceDetailFullViewPresenter = ({
     children,
 }: ResourceDetailFullViewPresenterProps): JSX.Element => (
     <CoscradMainContentContainer>
-        <div data-testid={id}>
-            <Card>
-                <CardContent>
-                    <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
-                        <Grid item xs={2} sm={1} md={2}>
-                            {/* Temporary.  We'd like an icon if there's no visual media associated with this resource */}
-                            {type !== ResourceType.photograph && (
-                                <ResourcePreviewIconFactory resourceType={type} size="lg" />
-                            )}
-                        </Grid>
-                        <Grid item xs={2} sm={2} md={8}>
-                            {/* TODO: consider putting a standardized name property on the view models */}
-                            <Typography gutterBottom variant="h6" fontWeight="bold" color="primary">
-                                {isString(name) || isNullOrUndefined(name) ? (
-                                    name
-                                ) : (
-                                    <MultilingualTextPresenter text={name} />
-                                )}
-                            </Typography>
-                            {children}
-                        </Grid>
+        <Card>
+            <CardContent>
+                <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
+                    <Grid item xs={2} sm={1} md={2}>
+                        {/* Temporary.  We'd like an icon if there's no visual media associated with this resource */}
+                        {type !== ResourceType.photograph && (
+                            <ResourcePreviewIconFactory resourceType={type} size="lg" />
+                        )}
                     </Grid>
-                </CardContent>
-            </Card>
-        </div>
+                    <Grid item xs={2} sm={2} md={8}>
+                        {/* TODO: consider putting a standardized name property on the view models */}
+                        <Typography gutterBottom variant="h6" fontWeight="bold" color="primary">
+                            {isString(name) || isNullOrUndefined(name) ? (
+                                name
+                            ) : (
+                                <MultilingualTextPresenter text={name} />
+                            )}
+                        </Typography>
+                        {children}
+                    </Grid>
+                </Grid>
+            </CardContent>
+        </Card>
     </CoscradMainContentContainer>
 );
