@@ -3,10 +3,10 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Icon as LeafletIcon, Marker as LeafletMarker } from 'leaflet';
 import { PropsWithChildren, useEffect, useRef } from 'react';
 import {
+    Popup as LeafletPopup,
     Marker as PointMarker,
     Polygon as PolygonMarker,
     Polyline as PolylineMarker,
-    Popup as LeafletPopup,
 } from 'react-leaflet';
 import { SinglePropertyPresenter } from '../../../../utils/generic-components';
 import { SpatialFeatureDetailPresenter } from '../map';
@@ -114,17 +114,14 @@ export const buildSpatialFeatureMarker =
         /**
          * This is a workaround to get the default icon shadows (marker-shadow.png) to
          * display.  There may be a leaflet bug affecting this but I haven't tracked down official
-         * documentation of it but it is reference here: https://stackoverflow.com/a/51232969
+         * documentation of it but it is referenced here: https://stackoverflow.com/a/51232969
          */
         const DefaultIcon = new LeafletIcon({
             iconUrl,
             shadowUrl,
             iconAnchor: [12, 41],
-            shadowAnchor: [20, 95],
+            shadowAnchor: [10, 42],
         });
-
-        // TODO Fix this hack
-        LeafletMarker.prototype.options.icon = DefaultIcon;
 
         // TODO Fix this hack
         LeafletMarker.prototype.options.icon = DefaultIcon;

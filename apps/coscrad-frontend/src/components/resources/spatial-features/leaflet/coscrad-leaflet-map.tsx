@@ -1,4 +1,5 @@
 import { LatLngExpression, Map } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { INITIAL_CENTRE, INITIAL_ZOOM } from '../constants';
