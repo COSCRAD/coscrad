@@ -15,8 +15,9 @@ export const SinglePropertyPresenter = <T,>({
         <>
             <Typography component={'span'} sx={{ fontWeight: 'bold' }}>
                 {display}:
-            </Typography>{' '}
-            {value}
+            </Typography>
+            &nbsp;
+            <Typography component={'span'}>{value as string}</Typography>
         </>
     </Box>
 );

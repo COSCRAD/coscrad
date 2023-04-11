@@ -10,7 +10,7 @@ export interface ResourceDetailThumbnailPresenterProps {
     id: string;
     type: ResourceType;
     name: IMultilingualText | string;
-    children: ReactNode;
+    children?: ReactNode;
 }
 
 /**
@@ -41,6 +41,7 @@ export const ResourceDetailThumbnailPresenter = ({
                 </Grid>
                 <Grid item xs={2} sm={1} md={2} container sx={{ justifyContent: 'flex-end' }}>
                     <ResourceNavLink
+                        iconSx={{ fontSize: { xs: '30px', sm: '60px' } }}
                         internalLink={`/${routes.resources.ofType(type).detail(id)}`}
                     />
                 </Grid>

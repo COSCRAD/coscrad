@@ -8,7 +8,6 @@ import {
     Polygon as PolygonMarker,
     Polyline as PolylineMarker,
 } from 'react-leaflet';
-import { SinglePropertyPresenter } from '../../../../utils/generic-components';
 import { SpatialFeatureDetailPresenter } from '../map';
 import { Line2D, MultiPolygon2D, Position2D } from '../types';
 
@@ -143,7 +142,6 @@ export const buildSpatialFeatureMarker =
                     elRef={markerRef}
                 >
                     <LeafletPopup>
-                        <SinglePropertyPresenter display="ID" value={spatialFeature.id} />
                         <DetailPresenter {...spatialFeature} />
                     </LeafletPopup>
                 </Presenter>{' '}
