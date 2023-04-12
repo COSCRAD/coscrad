@@ -63,6 +63,7 @@ export const SpatialFeatureDetailFullViewPresenter = (
                 <Grid item xs={9}>
                     {/* TODO: consider putting a standardized name property on the view models */}
                     <ResourceNamePresenter name={name} variant="h5" />
+                    <SinglePropertyPresenter display="ID" value={id} />
                     <SinglePropertyPresenter display="Description" value={description} />
                     <SinglePropertyPresenter display="Feature Type" value={geometryType} />
                     <CoordinatesTextPresenter coordinates={coordinates} />

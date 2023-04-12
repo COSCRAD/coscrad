@@ -48,6 +48,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
             />
             {spatialFeatures.map((spatialFeature) => (
                 <SpatialFeatureMarker
+                    key={spatialFeature.id}
                     spatialFeature={spatialFeature}
                     handleClick={onSpatialFeatureSelected}
                     customEffects={(id, marker) => {
