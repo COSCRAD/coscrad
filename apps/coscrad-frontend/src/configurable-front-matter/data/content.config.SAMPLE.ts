@@ -81,4 +81,5 @@ export const contentConfig: ConfigurableContent = {
         '31': '153',
     },
     notFoundMessage: 'No result found.',
+    loadingMessage: 'Loading',
 };

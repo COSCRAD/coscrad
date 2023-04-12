@@ -1,21 +1,42 @@
-import { useEffect, useState } from 'react';
-
-const MAX_NUMBER_OF_DOTS = 3;
-
-const DOT_RATE = 1500; // rate dots are added in milliseconds
-
-const DOT_CHAR = '.';
-
-type LoadingState = number;
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { useContext } from 'react';
+import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 
 export const Loading = (): JSX.Element => {
-    const [numberOfDots, setNumberOfDots] = useState<LoadingState>(0);
+    const { loadingMessage } = useContext(ConfigurableContentContext);
 
-    useEffect(() => {
-        setTimeout(() => {
-            setNumberOfDots((numberOfDots + 1) % (MAX_NUMBER_OF_DOTS + 1));
-        }, DOT_RATE);
-    }, [numberOfDots]);
+    const { organizationLogoUrl } = useContext(ConfigurableContentContext);
 
-    return <div data-testid="loading">Loading {DOT_CHAR.repeat(numberOfDots)}</div>;
+    return (
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                padding: '3em 0 0 0',
+            }}
+            data-testid="loading"
+        >
+            <Box style={{ position: 'relative', display: 'inline-block' }}>
+                <CircularProgress size={'6rem'} />
+                <img
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                    }}
+                    width={40}
+                    src={organizationLogoUrl}
+                    alt="Logo"
+                />
+            </Box>
+
+            <Typography variant={'inherit'} style={{ marginTop: '1rem' }}>
+                {loadingMessage}
+            </Typography>
+        </Box>
+    );
 };
