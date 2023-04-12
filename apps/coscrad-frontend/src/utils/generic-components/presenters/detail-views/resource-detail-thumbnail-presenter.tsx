@@ -41,7 +41,6 @@ export const ResourceDetailThumbnailPresenter = ({
                 </Grid>
                 <Grid item xs={2} sm={1} md={2} container sx={{ justifyContent: 'flex-end' }}>
                     <ResourceNavLink
-                        iconSx={{ fontSize: { xs: '30px', sm: '60px' } }}
                         internalLink={`/${routes.resources.ofType(type).detail(id)}`}
                     />
                 </Grid>

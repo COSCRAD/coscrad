@@ -3,11 +3,12 @@ import {
     ISpatialFeatureViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { Grid, styled } from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Box, Grid, IconButton, styled } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { routes } from '../../../../app/routes/routes';
 import { SinglePropertyPresenter } from '../../../../utils/generic-components';
 import { ResourceNamePresenter } from '../../../../utils/generic-components/presenters/resource-name-presenter';
-import { ResourceNavLink } from '../../shared/resource-nav-link';
 
 const StyledPlaceIcon = styled('img')({
     width: '60px',
@@ -48,12 +49,15 @@ export const SpatialFeatureDetailThumbnailPresenter = (
                 <SinglePropertyPresenter display="Feature Type" value={geometryType} />
             </Grid>
             <Grid item xs={12} container sx={{ justifyContent: 'flex-end' }}>
-                <ResourceNavLink
-                    iconSx={{ fontSize: '20px' }}
-                    internalLink={`/${routes.resources
-                        .ofType(ResourceType.spatialFeature)
-                        .detail(id)}`}
-                />
+                <Box sx={{ pl: 8 }}>
+                    <Link
+                        to={`/${routes.resources.ofType(ResourceType.spatialFeature).detail(id)}`}
+                    >
+                        <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
+                            <ArrowForwardIosIcon sx={{ fontSize: '20px' }} />
+                        </IconButton>
+                    </Link>
+                </Box>
             </Grid>
         </Grid>
     );
