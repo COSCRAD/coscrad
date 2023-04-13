@@ -15,16 +15,8 @@ describe(`Spatial Feature index-to-detail flow`, () => {
         it('should have a link to the spatial features', () => {
             const links = cy
                 .get('[data-cy="resourceInfos-stack"]')
-                .find('a')
-                .then((ele) => {
-                    cy.wrap(ele)
-                        .should('have.attr', 'href')
-                        .then((ele) => {
-                            cy.log(ele.toString());
-                        });
-                });
-
-            // cy.get('a').should('have.attr', 'href').and('contain.text', 'Resources/Map');
+                .find('a[href*="Resources/Map"]')
+                .should('exist');
         });
     });
 
