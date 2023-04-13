@@ -14,7 +14,7 @@ import { MediaItemDetailFullViewPresenter } from '../media-items/media-item-deta
 import { PhotographDetailFullViewPresenter } from '../photographs/photograph-detail.full-view.presenter';
 import { PlaylistDetailFullViewPresenter } from '../playlists/playlist-detail.full-view.presenter';
 import { SongDetailFullViewPresenter } from '../songs/song-detail.full-view.presenter';
-import { SpatialFeatureDetailThumbnailPresenter } from '../spatial-features/thumbnail-presenters';
+import { SpatialFeatureDetailFullViewPresenter } from '../spatial-features/spatial-feature-detail.full-view.presenter';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
 import { VideoDetailFullViewPresenter } from '../videos/video-detail.full-view.presenter';
 import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocabulary-list-detail.full-view.presenter';
@@ -27,7 +27,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
     [CategorizableType.photograph]: PhotographDetailFullViewPresenter,
     [CategorizableType.song]: SongDetailFullViewPresenter,
-    [CategorizableType.spatialFeature]: SpatialFeatureDetailThumbnailPresenter,
+    [CategorizableType.spatialFeature]: SpatialFeatureDetailFullViewPresenter,
     [CategorizableType.term]: TermDetailFullViewPresenter,
     [CategorizableType.audioItem]: AudioItemDetailFullViewPresenter,
     [CategorizableType.video]: VideoDetailFullViewPresenter,

@@ -1,48 +1,29 @@
 import {
-    GeometricFeatureType,
     ICategorizableDetailQueryResult,
     ISpatialFeatureViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
-import {
-    Card,
-    CardActionArea,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Collapse,
-    Divider,
-} from '@mui/material';
-import { useState } from 'react';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Box, Grid, IconButton, styled } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../../app/routes/routes';
-import { FunctionalComponent } from '../../../../utils/types/functional-component';
-import { LineTextPresenter } from './line-text-presenter';
-import { PointTextPresenter } from './point-text-presenter';
-import { PolygonTextPresenter } from './polygon-text-presenter';
-import { toGeoJSON } from './to-geo-json';
+import { SinglePropertyPresenter } from '../../../../utils/generic-components';
+import { ResourceNamePresenter } from '../../../../utils/generic-components/presenters/resource-name-presenter';
 
-interface HasCoordinates<T = unknown> {
-    coordinates: T;
-}
-
-const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordinates> } = {
-    [GeometricFeatureType.point]: PointTextPresenter,
-    [GeometricFeatureType.line]: LineTextPresenter,
-    [GeometricFeatureType.polygon]: PolygonTextPresenter,
-};
+const StyledPlaceIcon = styled('img')({
+    width: '60px',
+});
 
 /**
  * Our current approach is to present a text summary of the coordinates for a
  * spatial feature in its thumbnail view.
+ *
+ * TODO [https://www.pivotaltracker.com/story/show/184932759] create a separate
+ * presenter for the marker pop-up instead of re-using the thumbnail presenter
  */
 export const SpatialFeatureDetailThumbnailPresenter = (
     spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>
 ): JSX.Element => {
-    const [isExpanded, setIsExpanded] = useState(false);
-
     const { id, geometry, properties } = spatialFeature;
 
     if (!geometry) {
@@ -55,42 +36,32 @@ export const SpatialFeatureDetailThumbnailPresenter = (
 
     const { name, description, imageUrl } = properties;
 
-    const { type: geometryType, coordinates } = geometry;
-
-    const CoordinatesTextPresenter = lookupTable[geometryType];
-
-    if (isNullOrUndefined(CoordinatesTextPresenter)) {
-        throw new Error(
-            `There is no thumbnail presenter registered for coordinates of geometry type: ${geometryType}`
-        );
-    }
+    const { type: geometryType } = geometry;
 
     return (
-        <Card data-testid={id}>
-            <CardContent>
-                <CardHeader title={name} />
-                <img height="100px" src={imageUrl} alt={`Spatial Feature ${id}`} />
-                <br />
-                {description}
-                <br />
-
-                <Divider />
-                <CoordinatesTextPresenter coordinates={coordinates} />
-                <Collapse in={isExpanded}>
-                    <h3>GEOJSON</h3>
-                    <pre>{JSON.stringify(toGeoJSON(spatialFeature), null, 2)}</pre>
-                </Collapse>
-                <Link to={`/${routes.resources.ofType(ResourceType.spatialFeature).detail(id)}`}>
-                    View Spatial Feature
-                </Link>
-            </CardContent>
-            <CardActionArea>
-                <CardActions>
-                    <span aria-label="View Full JSON" onClick={(_) => setIsExpanded(!isExpanded)}>
-                        {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </span>
-                </CardActions>
-            </CardActionArea>
-        </Card>
+        <Grid container spacing={0}>
+            <Grid item xs={3}>
+                <div data-testid={id} />
+                {/* Preview will eventually include images taken from video or photos, etc. */}
+                <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${id}`} />
+            </Grid>
+            <Grid item xs={9}>
+                {/* TODO: consider putting a standardized name property on the view models */}
+                <ResourceNamePresenter name={name} variant="h5" />
+                <SinglePropertyPresenter display="Description" value={description} />
+                <SinglePropertyPresenter display="Feature Type" value={geometryType} />
+            </Grid>
+            <Grid item xs={12} container sx={{ justifyContent: 'flex-end' }}>
+                <Box sx={{ pl: 8 }}>
+                    <Link
+                        to={`/${routes.resources.ofType(ResourceType.spatialFeature).detail(id)}`}
+                    >
+                        <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
+                            <ArrowForwardIosIcon sx={{ fontSize: '20px' }} />
+                        </IconButton>
+                    </Link>
+                </Box>
+            </Grid>
+        </Grid>
     );
 };

@@ -10,7 +10,7 @@ export interface ResourceDetailThumbnailPresenterProps {
     id: string;
     type: ResourceType;
     name: IMultilingualText | string;
-    children: ReactNode;
+    children?: ReactNode;
 }
 
 /**
