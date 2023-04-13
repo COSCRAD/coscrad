@@ -20,7 +20,6 @@ import {
     TableHead,
     TableRow,
     Typography,
-    styled,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { NotFoundPresenter } from '../../../../../components/not-found';
@@ -70,10 +69,6 @@ export interface GenericIndexTablePresenterProps<T extends IBaseViewModel> {
 }
 
 const allProperties = 'allProperties';
-
-const StyledItem = styled(Box)({
-    paddingRight: '20px',
-});
 
 export const IndexTable = <T extends IBaseViewModel>({
     headingLabels,
@@ -310,7 +305,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                     }
                 />
             </Box>
-            <Box style={{ display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Checkbox
                     checked={shouldUseVirtualKeyboard}
                     onChange={() => _setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)}

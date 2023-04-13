@@ -109,8 +109,7 @@ exports[` 1`] = `
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
@@ -468,8 +467,7 @@ exports[` 2`] = `
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
@@ -822,8 +820,7 @@ exports[` 2`] = `
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
@@ -1189,8 +1186,7 @@ exports[` 3`] = `
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
@@ -1543,8 +1539,7 @@ exports[` 3`] = `
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
@@ -1905,8 +1900,7 @@ exports[` 3`] = `
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
@@ -2266,8 +2260,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
@@ -2679,8 +2672,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
@@ -3094,8 +3086,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
@@ -3448,8 +3439,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
@@ -3810,8 +3800,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
@@ -4166,8 +4155,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         </div>
       </div>
       <div
-        class="MuiBox-root css-0"
-        style="display: flex; justify-content: center;"
+        class="MuiBox-root css-1l4w6pd"
       >
         <span
           class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
