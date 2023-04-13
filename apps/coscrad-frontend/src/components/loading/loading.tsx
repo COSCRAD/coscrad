@@ -3,6 +3,8 @@ import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 
 export const Loading = (): JSX.Element => {
+    const DEFAULT_LOADING_MESSAGE = 'Loading';
+
     const { loadingMessage } = useContext(ConfigurableContentContext);
 
     const { organizationLogoUrl } = useContext(ConfigurableContentContext);
@@ -34,11 +36,9 @@ export const Loading = (): JSX.Element => {
                 />
             </Box>
 
-            {loadingMessage && (
-                <Typography variant={'inherit'} style={{ marginTop: '1rem' }}>
-                    {loadingMessage}
-                </Typography>
-            )}
+            <Typography variant={'inherit'} style={{ marginTop: '1rem' }}>
+                {loadingMessage || DEFAULT_LOADING_MESSAGE}
+            </Typography>
         </Box>
     );
 };
