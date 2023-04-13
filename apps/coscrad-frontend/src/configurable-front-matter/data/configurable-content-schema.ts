@@ -62,7 +62,7 @@ export const configurableContentPropertiesAndConstraints: {
     listenLive: [CoscradConstraint.isObject],
     termOfTheDayConfig: [CoscradConstraint.isObject],
     notFoundMessage: [CoscradConstraint.isNonEmptyString],
-    loadingMessage: [CoscradConstraint.isNonEmptyString],
+    loadingMessage: [CoscradConstraint.isString],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;

@@ -19,7 +19,7 @@ export const Loading = (): JSX.Element => {
             }}
             data-testid="loading"
         >
-            <Box style={{ position: 'relative', display: 'inline-block' }}>
+            <Box sx={{ position: 'relative', display: 'inline-block' }}>
                 <CircularProgress size={'6rem'} />
                 <img
                     style={{
@@ -34,9 +34,11 @@ export const Loading = (): JSX.Element => {
                 />
             </Box>
 
-            <Typography variant={'inherit'} style={{ marginTop: '1rem' }}>
-                {loadingMessage}
-            </Typography>
+            {loadingMessage && (
+                <Typography variant={'inherit'} style={{ marginTop: '1rem' }}>
+                    {loadingMessage}
+                </Typography>
+            )}
         </Box>
     );
 };
