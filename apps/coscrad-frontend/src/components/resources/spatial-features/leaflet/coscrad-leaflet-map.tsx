@@ -41,6 +41,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
             scrollWheelZoom={true}
             ref={mapRef}
         >
+            <div data-cy="Map Container" />
             <TileLayer
                 attribution="&copy; ESRI and Contributors"
                 // Should this be part of the config?
@@ -48,6 +49,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
             />
             {spatialFeatures.map((spatialFeature) => (
                 <SpatialFeatureMarker
+                    key={spatialFeature.id}
                     spatialFeature={spatialFeature}
                     handleClick={onSpatialFeatureSelected}
                     customEffects={(id, marker) => {
