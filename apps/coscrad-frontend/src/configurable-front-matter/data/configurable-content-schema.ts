@@ -38,6 +38,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     listenLive?: ListenLivePageConfiguration;
     termOfTheDayConfig?: Record<string, string>;
     notFoundMessage: string;
+    loadingMessage: string;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -60,6 +61,7 @@ export const configurableContentPropertiesAndConstraints: {
     listenLive: [CoscradConstraint.isObject],
     termOfTheDayConfig: [CoscradConstraint.isObject],
     notFoundMessage: [CoscradConstraint.isNonEmptyString],
+    loadingMessage: [CoscradConstraint.isString],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
