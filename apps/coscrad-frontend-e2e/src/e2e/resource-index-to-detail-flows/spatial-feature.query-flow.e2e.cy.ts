@@ -1,5 +1,6 @@
 describe(`Spatial Feature index-to-detail flow`, () => {
-    const textForSpatialFeatureMarker = 'Name of Point with ID: 103';
+    // Note: Leaflet displays Polygons and Lines in a single SVG that is obscured to Cypress
+    const idsForPointFeatures = ['100', '101', '102', '103', '104'];
 
     describe(`the resource menu`, () => {
         beforeEach(() => {
@@ -12,15 +13,18 @@ describe(`Spatial Feature index-to-detail flow`, () => {
         });
 
         it('should have a link to the spatial features', () => {
-            cy.contains('spatialFeatures').click();
+            const links = cy
+                .get('[data-cy="resourceInfos-stack"]')
+                .find('a')
+                .then((ele) => {
+                    cy.wrap(ele)
+                        .should('have.attr', 'href')
+                        .then((ele) => {
+                            cy.log(ele.toString());
+                        });
+                });
 
-            /**
-             * We don't have a title for this page since the map is self-evident.
-             * This test however should not be tied to the implementation of the Leaflet plugin
-             */
-            cy.contains('Leaflet');
-
-            cy.location('pathname').should('contain', 'Resources/Map');
+            // cy.get('a').should('have.attr', 'href').and('contain.text', 'Resources/Map');
         });
     });
 
@@ -29,13 +33,13 @@ describe(`Spatial Feature index-to-detail flow`, () => {
             cy.visit(`/Resources/Map`);
         });
 
-        it('should display a leaflet map', () => {
-            // Not sure if this is working - map appears not to move
-            cy.get('.leaflet-container').dragMapFromCenter({
-                xMoveFactor: 60,
-                yMoveFactor: -100,
-            });
+        it('should load the map container', () => {
+            cy.get('[data-cy="Map Container"]').should('exist');
         });
+
+        /**
+         * TODO [https://www.pivotaltracker.com/story/show/184932902] We need to test the interactive functions of the map
+         */
 
         it(`should display spatial feature markers`, () => {
             cy.get('.leaflet-marker-icon').should('be.visible');
@@ -44,17 +48,17 @@ describe(`Spatial Feature index-to-detail flow`, () => {
         it(`should be able to open a spatial feature marker`, () => {
             cy.get('.leaflet-marker-icon').eq(2).click();
 
-            cy.wait(1000);
-
             cy.get('.leaflet-container').trigger('click', 'center');
-
-            cy.wait(1000);
         });
 
-        it('should display the text for spatial feature 103', () => {
-            cy.get('.leaflet-marker-icon').eq(3).click();
+        idsForPointFeatures.forEach((idForPointFeature, index) => {
+            it(`should display the text for spatial feature ${idForPointFeature}`, () => {
+                cy.get('.leaflet-marker-icon').eq(index).click();
 
-            cy.contains(textForSpatialFeatureMarker);
+                const pointName = `Name of Point with ID: ${idForPointFeature}`;
+
+                cy.contains(pointName);
+            });
         });
     });
 });

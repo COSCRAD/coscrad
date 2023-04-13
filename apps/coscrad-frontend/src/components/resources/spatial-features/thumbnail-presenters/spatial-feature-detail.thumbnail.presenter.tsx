@@ -17,6 +17,9 @@ const StyledPlaceIcon = styled('img')({
 /**
  * Our current approach is to present a text summary of the coordinates for a
  * spatial feature in its thumbnail view.
+ *
+ * TODO [https://www.pivotaltracker.com/story/show/184932759] create a separate
+ * presenter for the marker pop-up instead of re-using the thumbnail presenter
  */
 export const SpatialFeatureDetailThumbnailPresenter = (
     spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>

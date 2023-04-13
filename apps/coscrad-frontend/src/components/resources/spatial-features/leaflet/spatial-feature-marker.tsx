@@ -134,17 +134,16 @@ export const buildSpatialFeatureMarker =
         }
 
         return (
-            <div data-testid={spatialFeature.id}>
-                <Presenter
-                    spatialFeature={spatialFeature}
-                    DetailPresenter={DetailPresenter}
-                    handleClick={handleClick}
-                    elRef={markerRef}
-                >
-                    <LeafletPopup>
-                        <DetailPresenter {...spatialFeature} />
-                    </LeafletPopup>
-                </Presenter>{' '}
-            </div>
+            <Presenter
+                spatialFeature={spatialFeature}
+                DetailPresenter={DetailPresenter}
+                handleClick={handleClick}
+                elRef={markerRef}
+            >
+                <LeafletPopup>
+                    <div className="spatialMarker" data-testid={spatialFeature.id} />
+                    <DetailPresenter {...spatialFeature} />
+                </LeafletPopup>
+            </Presenter>
         );
     };
