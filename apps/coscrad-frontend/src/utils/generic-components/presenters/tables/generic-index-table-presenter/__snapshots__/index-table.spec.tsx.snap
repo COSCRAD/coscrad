@@ -307,10 +307,9 @@ exports[` 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -332,10 +331,9 @@ exports[` 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
@@ -665,10 +663,9 @@ exports[` 2`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -690,10 +687,9 @@ exports[` 2`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
@@ -1026,10 +1022,9 @@ exports[` 2`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -1051,10 +1046,9 @@ exports[` 2`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
@@ -1384,10 +1378,9 @@ exports[` 3`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -1409,10 +1402,9 @@ exports[` 3`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
@@ -1745,10 +1737,9 @@ exports[` 3`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -1770,10 +1761,9 @@ exports[` 3`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
@@ -2100,10 +2090,9 @@ exports[` 3`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -2125,10 +2114,9 @@ exports[` 3`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
@@ -2512,10 +2500,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -2537,10 +2524,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
@@ -2926,10 +2912,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -2951,10 +2936,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
@@ -3284,10 +3268,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -3309,10 +3292,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
@@ -3645,10 +3627,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -3670,10 +3651,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
@@ -4000,10 +3980,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -4025,10 +4004,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
@@ -4401,10 +4379,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowBackIosIcon"
                       focusable="false"
-                      id="pagination-back-arrow"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -4426,10 +4403,9 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium pagination-arrow css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      id="pagination-front-arrow"
                       style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >

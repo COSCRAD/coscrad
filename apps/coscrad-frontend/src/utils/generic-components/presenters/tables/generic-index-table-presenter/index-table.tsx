@@ -223,26 +223,25 @@ export const IndexTable = <T extends IBaseViewModel>({
                                 Page: {currentPageIndex + 1}/{lastPageIndex + 1}
                             </Grid>
                             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                <IconButton>
-                                    <ArrowBackIosIcon
-                                        onClick={() =>
-                                            setCurrentPageIndex(
-                                                cyclicDecrement(currentPageIndex, lastPageIndex + 1)
-                                            )
-                                        }
-                                    />
+                                <IconButton
+                                    onClick={() =>
+                                        setCurrentPageIndex(
+                                            cyclicDecrement(currentPageIndex, lastPageIndex + 1)
+                                        )
+                                    }
+                                >
+                                    <ArrowBackIosIcon />
                                 </IconButton>
                             </Grid>
                             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                <IconButton>
-                                    <ArrowForwardIosIcon
-                                        style={{ verticalAlign: 'sub' }}
-                                        onClick={() =>
-                                            setCurrentPageIndex(
-                                                cyclicIncrement(currentPageIndex, lastPageIndex + 1)
-                                            )
-                                        }
-                                    />
+                                <IconButton
+                                    onClick={() =>
+                                        setCurrentPageIndex(
+                                            cyclicIncrement(currentPageIndex, lastPageIndex + 1)
+                                        )
+                                    }
+                                >
+                                    <ArrowForwardIosIcon />
                                 </IconButton>
                             </Grid>
                         </Grid>
