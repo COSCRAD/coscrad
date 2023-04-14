@@ -3,12 +3,22 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {
+    Box,
     Checkbox,
     FormControl,
+    Grid,
+    IconButton,
     InputLabel,
+    TableContainer as MUITableContainer,
     MenuItem,
     Paper,
     Select,
+    Stack,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
     Typography,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
@@ -16,9 +26,7 @@ import { NotFoundPresenter } from '../../../../../components/not-found';
 import { ConfigurableContentContext } from '../../../../../configurable-front-matter/configurable-content-provider';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
-import { filterTableData, Matchers } from './filter-table-data';
-import './generic-index-table-presenter.css';
-import './index-table.css';
+import { Matchers, filterTableData } from './filter-table-data';
 import { renderCell } from './render-cell';
 import { SearchBar } from './search-bar';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
@@ -144,83 +152,102 @@ export const IndexTable = <T extends IBaseViewModel>({
         paginatedData.length === 0 ? (
             <NotFoundPresenter />
         ) : (
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            {headingLabels.map(({ headingLabel }) => (
-                                <th key={headingLabel}>{headingLabel}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {paginatedData.map((row) => (
-                            <tr key={row.id} data-testid={row.id}>
-                                {headingLabels.map(({ propertyKey }) => (
-                                    // A little inversion of control here
-                                    // We may want to use some currying here
-                                    <td key={String(propertyKey)}>
-                                        {renderCell(row, cellRenderers, propertyKey)}
-                                    </td>
+            <Box sx={{ width: '100%' }}>
+                <Paper>
+                    <MUITableContainer>
+                        <Table aria-labelledby="Resources Table">
+                            <TableHead>
+                                <TableRow>
+                                    {headingLabels.map(({ headingLabel }) => (
+                                        <TableCell sx={{ fontWeight: 'bold' }} key={headingLabel}>
+                                            {headingLabel}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {paginatedData.map((row) => (
+                                    <TableRow key={row.id} data-testid={row.id}>
+                                        {headingLabels.map(({ propertyKey }) => (
+                                            // A little inversion of control here
+                                            // We may want to use some currying here
+                                            <TableCell key={String(propertyKey)}>
+                                                {renderCell(row, cellRenderers, propertyKey)}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
                                 ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <Typography component={'span'}>
-                    <Paper className="index-footer">
-                        <span> </span> Rows per page:
-                        <FormControl sx={{ m: 1, width: 60 }} size="small">
-                            <Select
-                                sx={{ notchedOutline: 'none' }}
-                                className="pagination-control"
-                                name="pageSize"
-                                value={pageSize}
-                                onChange={(changeEvent) => {
-                                    const {
-                                        target: { value },
-                                    } = changeEvent;
+                            </TableBody>
+                        </Table>
+                    </MUITableContainer>
+                    <Box
+                        component="div"
+                        sx={{
+                            display: 'grid',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyItems: 'flex-end',
+                        }}
+                    >
+                        <Grid container justifyContent="flex-end" spacing={3}>
+                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                                <Typography component="span" sx={{ mr: 2 }}>
+                                    Rows per page:
+                                </Typography>
+                                <FormControl variant="standard" sx={{ m: 1 }}>
+                                    <Select
+                                        name="pageSize"
+                                        value={pageSize}
+                                        onChange={(changeEvent) => {
+                                            const {
+                                                target: { value },
+                                            } = changeEvent;
 
-                                    const newPageSize =
-                                        typeof value === 'string' ? Number.parseInt(value) : value;
+                                            const newPageSize =
+                                                typeof value === 'string'
+                                                    ? Number.parseInt(value)
+                                                    : value;
 
-                                    setPageSize(newPageSize);
-                                }}
-                            >
-                                {pageSizeOptions.map((pageSize) => (
-                                    <MenuItem key={pageSize} value={pageSize}>
-                                        {pageSize}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        Page: {currentPageIndex + 1}/{lastPageIndex + 1}
-                        <ArrowBackIosIcon
-                            id="pagination-back-arrow"
-                            className="pagination-arrow"
-                            onClick={() =>
-                                setCurrentPageIndex(
-                                    cyclicDecrement(currentPageIndex, lastPageIndex + 1)
-                                )
-                            }
-                        >
-                            Prev
-                        </ArrowBackIosIcon>
-                        <ArrowForwardIosIcon
-                            id="pagination-front-arrow"
-                            className="pagination-arrow"
-                            style={{ verticalAlign: 'sub' }}
-                            onClick={() =>
-                                setCurrentPageIndex(
-                                    cyclicIncrement(currentPageIndex, lastPageIndex + 1)
-                                )
-                            }
-                        >
-                            Next
-                        </ArrowForwardIosIcon>
-                    </Paper>
-                </Typography>
-            </div>
+                                            setPageSize(newPageSize);
+                                        }}
+                                    >
+                                        {pageSizeOptions.map((pageSize) => (
+                                            <MenuItem key={pageSize} value={pageSize}>
+                                                {pageSize}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                                Page: {currentPageIndex + 1}/{lastPageIndex + 1}
+                            </Grid>
+                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                                <IconButton
+                                    onClick={() =>
+                                        setCurrentPageIndex(
+                                            cyclicDecrement(currentPageIndex, lastPageIndex + 1)
+                                        )
+                                    }
+                                >
+                                    <ArrowBackIosIcon />
+                                </IconButton>
+                            </Grid>
+                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                                <IconButton
+                                    onClick={() =>
+                                        setCurrentPageIndex(
+                                            cyclicIncrement(currentPageIndex, lastPageIndex + 1)
+                                        )
+                                    }
+                                >
+                                    <ArrowForwardIosIcon />
+                                </IconButton>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Paper>
+            </Box>
         );
 
     const propertiesToSearchSelectField = (
@@ -258,9 +285,9 @@ export const IndexTable = <T extends IBaseViewModel>({
     );
 
     return (
-        <div style={{ textAlign: 'center' }}>
+        <Stack>
             <Typography variant="h2">{heading}</Typography>
-            <div>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 {propertiesToSearchSelectField}
 
                 <SearchBar
@@ -272,8 +299,8 @@ export const IndexTable = <T extends IBaseViewModel>({
                             : undefined
                     }
                 />
-            </div>
-            <div style={{ display: 'inline-flex' }}>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Checkbox
                     checked={shouldUseVirtualKeyboard}
                     onChange={() => _setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)}
@@ -284,9 +311,9 @@ export const IndexTable = <T extends IBaseViewModel>({
                 ) : (
                     <p>Click to enable input method: {simulatedKeyboard.name}</p>
                 )}
-            </div>
+            </Box>
 
-            <div className="records-table">{table}</div>
-        </div>
+            <Box>{table}</Box>
+        </Stack>
     );
 };

@@ -1,7 +1,5 @@
 import { SearchRounded } from '@mui/icons-material';
 import { TextField } from '@mui/material';
-import './generic-index-table-presenter.css';
-import './index-table.css';
 
 interface SearchBarProps {
     value: string;
