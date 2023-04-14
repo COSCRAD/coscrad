@@ -9,6 +9,7 @@ import {
     Grid,
     IconButton,
     InputLabel,
+    TableContainer as MUITableContainer,
     MenuItem,
     Paper,
     Select,
@@ -16,7 +17,6 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableContainer,
     TableHead,
     TableRow,
     Typography,
@@ -154,7 +154,7 @@ export const IndexTable = <T extends IBaseViewModel>({
         ) : (
             <Box sx={{ width: '100%' }}>
                 <Paper>
-                    <TableContainer>
+                    <MUITableContainer>
                         <Table aria-labelledby="Resources Table">
                             <TableHead>
                                 <TableRow>
@@ -179,7 +179,7 @@ export const IndexTable = <T extends IBaseViewModel>({
                                 ))}
                             </TableBody>
                         </Table>
-                    </TableContainer>
+                    </MUITableContainer>
                     <Box
                         component="div"
                         sx={{
@@ -225,8 +225,6 @@ export const IndexTable = <T extends IBaseViewModel>({
                             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                                 <IconButton>
                                     <ArrowBackIosIcon
-                                        id="pagination-back-arrow"
-                                        className="pagination-arrow"
                                         onClick={() =>
                                             setCurrentPageIndex(
                                                 cyclicDecrement(currentPageIndex, lastPageIndex + 1)
@@ -238,8 +236,6 @@ export const IndexTable = <T extends IBaseViewModel>({
                             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                                 <IconButton>
                                     <ArrowForwardIosIcon
-                                        id="pagination-front-arrow"
-                                        className="pagination-arrow"
                                         style={{ verticalAlign: 'sub' }}
                                         onClick={() =>
                                             setCurrentPageIndex(
