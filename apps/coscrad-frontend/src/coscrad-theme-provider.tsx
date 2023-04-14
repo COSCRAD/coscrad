@@ -42,6 +42,15 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                     marginBottom: '7px',
                 },
             },
+            components: {
+                MuiTableCell: {
+                    styleOverrides: {
+                        root: {
+                            fontSize: 16,
+                        },
+                    },
+                },
+            },
         })
     );
 
