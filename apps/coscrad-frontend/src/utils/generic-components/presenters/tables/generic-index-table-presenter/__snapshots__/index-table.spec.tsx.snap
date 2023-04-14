@@ -334,7 +334,6 @@ exports[` 1`] = `
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -690,7 +689,6 @@ exports[` 2`] = `
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -902,9 +900,7 @@ exports[` 2`] = `
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[b,c]}
-                      </div>
+                      {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
@@ -923,9 +919,7 @@ exports[` 2`] = `
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[c]}
-                      </div>
+                      {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
@@ -944,9 +938,7 @@ exports[` 2`] = `
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[]}
-                      </div>
+                      {nestedProp:[]}
                     </td>
                   </tr>
                 </tbody>
@@ -1049,7 +1041,6 @@ exports[` 2`] = `
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -1405,7 +1396,6 @@ exports[` 3`] = `
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -1617,9 +1607,7 @@ exports[` 3`] = `
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[b,c]}
-                      </div>
+                      {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
@@ -1638,9 +1626,7 @@ exports[` 3`] = `
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[c]}
-                      </div>
+                      {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
@@ -1659,9 +1645,7 @@ exports[` 3`] = `
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[]}
-                      </div>
+                      {nestedProp:[]}
                     </td>
                   </tr>
                 </tbody>
@@ -1764,7 +1748,6 @@ exports[` 3`] = `
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -1967,16 +1950,12 @@ exports[` 3`] = `
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        1
-                      </div>
+                      1
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[b,c]}
-                      </div>
+                      {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
@@ -1986,16 +1965,12 @@ exports[` 3`] = `
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        2
-                      </div>
+                      2
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[c]}
-                      </div>
+                      {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
@@ -2005,16 +1980,12 @@ exports[` 3`] = `
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        3
-                      </div>
+                      3
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[]}
-                      </div>
+                      {nestedProp:[]}
                     </td>
                   </tr>
                 </tbody>
@@ -2117,7 +2088,6 @@ exports[` 3`] = `
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -2346,9 +2316,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        a
-                      </div>
+                      a
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
@@ -2379,9 +2347,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        e
-                      </div>
+                      e
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
@@ -2412,9 +2378,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        hello world
-                      </div>
+                      hello world
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
@@ -2527,7 +2491,6 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -2747,30 +2710,22 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        1
-                      </div>
+                      1
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        a
-                      </div>
+                      a
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        [1,2,3]
-                      </div>
+                      [1,2,3]
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[b,c]}
-                      </div>
+                      {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
@@ -2780,30 +2735,22 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        2
-                      </div>
+                      2
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        e
-                      </div>
+                      e
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        [11,233,34]
-                      </div>
+                      [11,233,34]
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[c]}
-                      </div>
+                      {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
@@ -2813,30 +2760,22 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        3
-                      </div>
+                      3
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        hello world
-                      </div>
+                      hello world
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        [1,23,34]
-                      </div>
+                      [1,23,34]
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[]}
-                      </div>
+                      {nestedProp:[]}
                     </td>
                   </tr>
                 </tbody>
@@ -2939,7 +2878,6 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -3295,7 +3233,6 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -3507,9 +3444,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[b,c]}
-                      </div>
+                      {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
@@ -3528,9 +3463,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[c]}
-                      </div>
+                      {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
@@ -3549,9 +3482,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[]}
-                      </div>
+                      {nestedProp:[]}
                     </td>
                   </tr>
                 </tbody>
@@ -3654,7 +3585,6 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -3857,16 +3787,12 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        1
-                      </div>
+                      1
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[b,c]}
-                      </div>
+                      {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
@@ -3876,16 +3802,12 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        2
-                      </div>
+                      2
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[c]}
-                      </div>
+                      {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
@@ -3895,16 +3817,12 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        3
-                      </div>
+                      3
                     </td>
                     <td
                       class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
                     >
-                      <div>
-                        {nestedProp:[]}
-                      </div>
+                      {nestedProp:[]}
                     </td>
                   </tr>
                 </tbody>
@@ -4007,7 +3925,6 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -4406,7 +4323,6 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                       data-testid="ArrowForwardIosIcon"
                       focusable="false"
-                      style="vertical-align: sub;"
                       viewBox="0 0 24 24"
                     >
                       <path
