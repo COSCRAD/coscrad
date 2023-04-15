@@ -70,9 +70,9 @@ export interface GenericIndexTablePresenterProps<T extends IBaseViewModel> {
 
 const allProperties = 'allProperties';
 
-const StyledScrollableDiv = styled('div')({
-    overflow: 'scroll',
-});
+// const StyledScrollableDiv = styled('div')({
+//     overflow: 'scroll',
+// });
 
 export const IndexTable = <T extends IBaseViewModel>({
     headingLabels,

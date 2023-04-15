@@ -8,13 +8,11 @@ export const CommaSeparatedList = ({ children }: CommaSeparatedListProps): JSX.E
     return (
         <>
             {Array.isArray(children)
-                ? children
-                      .map((child) => <span>{child}</span>)
-                      .reduce((acc, currentElement, index) => {
-                          if (index === children.length - 1) return acc.concat(currentElement);
+                ? children.reduce((acc, currentElement, index) => {
+                      if (index === children.length - 1) return acc.concat(currentElement);
 
-                          return acc.concat(currentElement, ', ');
-                      }, [])
+                      return acc.concat(currentElement, ', ');
+                  }, [])
                 : children}
         </>
     );

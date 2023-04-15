@@ -8,11 +8,11 @@ import {
     MultiplePropertyPresenter,
     PropertyLabels,
     SinglePropertyPresenter,
-} from '../../../utils/generic-components/';
+} from '../../../utils/generic-components';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { CreatorsPresenter } from './shared/creators-presenter';
 
-export const JournalArticleBibliographicReferenceFullViewPresenter = ({
+export const JournalArticleBibliographicReferenceDetailFullViewPresenter = ({
     id,
     data,
 }: IBibliographicReferenceViewModel<IJournalArticleBibliographicReferenceData>): JSX.Element => {

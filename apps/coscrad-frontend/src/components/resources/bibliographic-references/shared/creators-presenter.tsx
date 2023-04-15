@@ -20,7 +20,7 @@ export const CreatorsPresenter = ({ creators }: CreatorsPresenterProps): JSX.Ele
                 {creatorLabel}:&nbsp;
             </Typography>
             <CommaSeparatedList>
-                {creators.map(({ name, type }, index) => (
+                {creators.map(({ name, type }) => (
                     <span>
                         <CreatorPresenter key={name} name={name} type={type} />
                     </span>
