@@ -5,7 +5,7 @@ import { IPlaylistEpisode } from './playlist-episode.interface';
 export interface IPlayListViewModel extends IBaseViewModel {
     name: IMultilingualText;
 
-    url?: string;
+    url: string;
 
     // TODO establish a view model for episodes
     episodes: IPlaylistEpisode[];

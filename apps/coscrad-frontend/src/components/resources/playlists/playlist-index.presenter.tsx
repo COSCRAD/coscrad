@@ -3,9 +3,8 @@ import { PlaylistIndexState } from '../../../store/slices/resources/playlists/ty
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
-import { AudioPanel } from '../../audio-panel/audiopanel';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
-import { renderAggregateUrlCell } from '../utils/render-aggregate-url-cell';
+import { renderAggregateUrlCell } from '../utils/render-audio-preview';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
 /***
@@ -60,23 +59,13 @@ export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexSta
     };
 
     return (
-        <>
-            <IndexTable
-                headingLabels={headingLabels}
-                tableData={playlists}
-                cellRenderersDefinition={cellRenderersDefinition}
-                heading={'Episodes'}
-                filterableProperties={['episodes', 'name']}
-                matchers={matchers}
-            />
-            <AudioPanel
-                url={''}
-                lengthMilliseconds={0}
-                id={''}
-                tags={[]}
-                actions={[]}
-                mimeType={''}
-            />
-        </>
+        <IndexTable
+            headingLabels={headingLabels}
+            tableData={playlists}
+            cellRenderersDefinition={cellRenderersDefinition}
+            heading={'Episodes'}
+            filterableProperties={['episodes', 'name']}
+            matchers={matchers}
+        />
     );
 };

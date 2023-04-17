@@ -66,4 +66,5 @@ export class PlaylistViewModel extends BaseViewModel implements IPlayListViewMod
             )
         );
     }
+    url: string;
 }

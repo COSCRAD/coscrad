@@ -5,6 +5,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { Typography } from '@mui/material';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
+import { AudioPanel } from '../../audio-panel/audio-panel';
 import { EpisodePresenter } from './episode-presenter';
 
 export const PlaylistDetailFullViewPresenter = ({
@@ -18,6 +19,7 @@ export const PlaylistDetailFullViewPresenter = ({
             {episodes.map((episode) => (
                 <EpisodePresenter episode={episode} />
             ))}
+            <AudioPanel url={''} />
         </Typography>
     </ResourceDetailFullViewPresenter>
 );
