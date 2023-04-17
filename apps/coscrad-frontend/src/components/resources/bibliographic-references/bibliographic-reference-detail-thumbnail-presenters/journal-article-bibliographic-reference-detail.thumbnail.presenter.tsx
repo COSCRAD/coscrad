@@ -9,6 +9,12 @@ import {
     SinglePropertyPresenter,
 } from '../../../../utils/generic-components/';
 
+/**
+ * NOTE: currently there is no way to view the journal article thumbnail to check that
+ * it's displaying properly because there is no existing dual edge connection that
+ * includes the journal article bibliographic reference type.
+ */
+
 export const JournalArticleBibliographicReferenceThumbnailPresenter = ({
     id,
     data: { title, issueDate, publicationTitle },

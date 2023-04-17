@@ -11,6 +11,12 @@ import {
 } from '../../../../utils/generic-components/presenters/';
 import { ResourceDetailThumbnailPresenter } from '../../../../utils/generic-components/presenters/detail-views';
 
+/**
+ * NOTE: currently there is no way to view the court case thumbnail to check that
+ * it's displaying properly because there is no existing dual edge connection that
+ * includes the court case bibliographic reference type.
+ */
+
 export const CourtCaseBibliographicReferenceDetailThumbnailPresenter = ({
     id,
     data,
