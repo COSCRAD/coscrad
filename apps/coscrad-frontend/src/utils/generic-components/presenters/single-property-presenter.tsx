@@ -1,5 +1,8 @@
 import { IValueAndDisplay } from '@coscrad/api-interfaces';
 import { Grid } from '@mui/material';
+import { shortenString } from '../../string-processor/shorten-string';
+
+const MAXIMUM_NUMBER_OF_CHARACTERS = 70;
 
 /**
  * Provides a standard presentation for a single property on a view model
@@ -18,7 +21,7 @@ export const SinglePropertyPresenter = <T,>({
          * [https://github.com/mui/material-ui/issues/11339#issuecomment-388542106]
          */}
         <Grid item xs>
-            {value as string}
+            {shortenString(value as string, MAXIMUM_NUMBER_OF_CHARACTERS)}
         </Grid>
     </Grid>
 );

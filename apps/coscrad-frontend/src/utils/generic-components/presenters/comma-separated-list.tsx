@@ -11,7 +11,9 @@ export const CommaSeparatedList = ({ children }: CommaSeparatedListProps): JSX.E
                 ? children.reduce((acc, currentElement, index) => {
                       if (index === children.length - 1) return acc.concat(currentElement);
 
-                      return acc.concat(currentElement, ', ');
+                      const inlineListElement = <span>{currentElement}</span>;
+
+                      return acc.concat(inlineListElement, ', ');
                   }, [])
                 : children}
         </>

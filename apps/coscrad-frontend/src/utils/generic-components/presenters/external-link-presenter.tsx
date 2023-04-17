@@ -1,7 +1,7 @@
 import { Box, Link, Tooltip, Typography } from '@mui/material';
 import { shortenString } from '../../string-processor/shorten-string';
 
-export const MAXIMUM_NUMBER_OF_LINK_CHARACTERS = 30;
+const MAXIMUM_NUMBER_OF_LINK_CHARACTERS = 30;
 
 interface ExternalLinkProps {
     url: string;
