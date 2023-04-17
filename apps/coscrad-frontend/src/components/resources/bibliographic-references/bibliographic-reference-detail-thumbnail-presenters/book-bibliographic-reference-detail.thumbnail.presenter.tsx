@@ -1,4 +1,5 @@
 import {
+    BibliographicReferenceType,
     IBibliographicReferenceViewModel,
     IBookBibliographicReferenceData,
     ResourceType,
@@ -21,6 +22,10 @@ export const BookBibliographicReferenceDetailThumbnailPresenter = ({
             name={name}
             type={ResourceType.bibliographicReference}
         >
+            <SinglePropertyPresenter
+                display="Reference Type"
+                value={BibliographicReferenceType.book}
+            />
             <SinglePropertyPresenter display="Pages" value={numberOfPages} />
             {/* TODO: streamline the null or undefined check */}
             {!isNullOrUndefined(year) && <div>({year})</div>}

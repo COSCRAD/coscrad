@@ -1,9 +1,13 @@
 import {
+    BibliographicReferenceType,
     IBibliographicReferenceViewModel,
     IJournalArticleBibliographicReferenceData,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { ResourceDetailThumbnailPresenter } from '../../../../utils/generic-components/';
+import {
+    ResourceDetailThumbnailPresenter,
+    SinglePropertyPresenter,
+} from '../../../../utils/generic-components/';
 
 export const JournalArticleBibliographicReferenceThumbnailPresenter = ({
     id,
@@ -17,6 +21,10 @@ export const JournalArticleBibliographicReferenceThumbnailPresenter = ({
             name={name}
             type={ResourceType.bibliographicReference}
         >
+            <SinglePropertyPresenter
+                display="Reference Type"
+                value={BibliographicReferenceType.book}
+            />
             {publicationTitle} ({issueDate})
         </ResourceDetailThumbnailPresenter>
     );

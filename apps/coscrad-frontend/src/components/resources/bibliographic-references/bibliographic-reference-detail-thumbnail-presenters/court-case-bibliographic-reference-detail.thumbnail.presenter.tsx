@@ -1,13 +1,15 @@
 import {
+    BibliographicReferenceType,
     IBibliographicReferenceViewModel,
     ICourtCaseBibliographicReferenceData,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { ResourceDetailThumbnailPresenter } from '../../../../utils/generic-components/presenters/detail-views';
 import {
     MultiplePropertyPresenter,
     PropertyLabels,
-} from '../../../../utils/generic-components/presenters/multiple-property-presenter';
+    SinglePropertyPresenter,
+} from '../../../../utils/generic-components/presenters/';
+import { ResourceDetailThumbnailPresenter } from '../../../../utils/generic-components/presenters/detail-views';
 
 export const CourtCaseBibliographicReferenceDetailThumbnailPresenter = ({
     id,
@@ -29,6 +31,10 @@ export const CourtCaseBibliographicReferenceDetailThumbnailPresenter = ({
             name={name}
             type={ResourceType.bibliographicReference}
         >
+            <SinglePropertyPresenter
+                display="Reference Type"
+                value={BibliographicReferenceType.book}
+            />
             <MultiplePropertyPresenter keysAndLabels={keysAndLabels} data={data} />
         </ResourceDetailThumbnailPresenter>
     );
