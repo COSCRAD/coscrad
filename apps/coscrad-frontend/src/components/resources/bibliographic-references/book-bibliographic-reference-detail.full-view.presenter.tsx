@@ -18,16 +18,12 @@ export const BookBibliographicReferenceDetailFullViewPresenter = ({
 }: IBibliographicReferenceViewModel<IBookBibliographicReferenceData>): JSX.Element => {
     const { title, creators, url } = data;
 
-    /**
-     * TODO: render `year` and `numberOfPages` as strings (for now it's a hack in
-     * multiple-property-presenter)
-     */
     const keysAndLabels: PropertyLabels<IBookBibliographicReferenceData> = {
         abstract: 'Abstract',
-        year: 'Year',
         publisher: 'Publisher',
         place: 'Place',
         numberOfPages: 'Pages',
+        year: 'Year',
         isbn: 'ISBN',
     };
 

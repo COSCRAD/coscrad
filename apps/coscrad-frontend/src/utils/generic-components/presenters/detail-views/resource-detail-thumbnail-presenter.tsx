@@ -3,7 +3,7 @@ import { Card, CardContent, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { routes } from '../../../../app/routes/routes';
 import { ResourceNavLink } from '../../../../components/resources/shared/resource-nav-link';
-import { ResourceNamePresenter } from '../resource-name-presenter';
+import { ResourceDetailPresenterHeader } from './resource-detail-presenter-header';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
 export interface ResourceDetailThumbnailPresenterProps {
@@ -37,7 +37,7 @@ export const ResourceDetailThumbnailPresenter = ({
                 </Grid>
                 <Grid item xs={2} sm={2} md={7}>
                     {/* TODO: consider putting a standardized name property on the view models */}
-                    <ResourceNamePresenter name={name} variant="h5" />
+                    <ResourceDetailPresenterHeader id={id} type={type} name={name} variant="h5" />
                     {children}
                 </Grid>
                 <Grid item xs={2} sm={1} md={3} sx={{ display: 'flex' }} justifyContent="flex-end">
