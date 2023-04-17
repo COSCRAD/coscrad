@@ -12,6 +12,13 @@ export const SinglePropertyPresenter = <T,>({
         <Grid item sx={{ fontWeight: 'bold' }}>
             {display}:
         </Grid>
-        <Grid item>{value as string}</Grid>
+        {/**
+         * NOTE: the `xs` here is a bizarre workaround to get MUI Grid to adhere to
+         * CSS flexbox properly when wrapping long text (e.g., the abstract)
+         * [https://github.com/mui/material-ui/issues/11339#issuecomment-388542106]
+         */}
+        <Grid item xs>
+            {value as string}
+        </Grid>
     </Grid>
 );
