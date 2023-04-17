@@ -4,7 +4,6 @@ import { HeadingLabel, IndexTable } from '../../../utils/generic-components/pres
 import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
-import { renderAggregateUrlCell } from '../utils/render-audio-preview';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
 /***
@@ -39,12 +38,10 @@ export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexSta
         { propertyKey: 'id', headingLabel: 'Link' },
         { propertyKey: 'episodes', headingLabel: 'Number of Episodes' },
         { propertyKey: 'name', headingLabel: 'Playlist' },
-        { propertyKey: 'url', headingLabel: 'Play' },
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<IPlayListViewModel> = {
         id: renderAggregateIdCell,
-        url: renderAggregateUrlCell,
         name: ({ name }) => renderMultilingualTextCell(name),
         episodes: ({ episodes }) => episodes.length.toString(),
     };
@@ -63,7 +60,7 @@ export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexSta
             headingLabels={headingLabels}
             tableData={playlists}
             cellRenderersDefinition={cellRenderersDefinition}
-            heading={'Episodes'}
+            heading={'Playlists'}
             filterableProperties={['episodes', 'name']}
             matchers={matchers}
         />

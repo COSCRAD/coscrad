@@ -4,8 +4,8 @@ interface AudioPanelProps {
     url: string;
 }
 export const AudioPanel = ({ url }: AudioPanelProps): JSX.Element => (
-    <div>
-        Audio panel
+    <>
+        Audio panel url: {url}
         <MediaPlayer audioUrl={url} />
-    </div>
+    </>
 );

@@ -1,13 +1,8 @@
 import { PlayArrowRounded } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { CellRenderer } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types';
 
-export interface HasUrl {
-    url: string;
-}
-
-export const renderAggregateUrlCell: CellRenderer<HasUrl> = ({ url }: HasUrl) => (
-    <Button>
+export const renderAggregateUrlCell = (url: string, handleClick: (url: string) => void) => (
+    <Button onClick={() => handleClick(url)}>
         {url}
         <PlayArrowRounded />
     </Button>
