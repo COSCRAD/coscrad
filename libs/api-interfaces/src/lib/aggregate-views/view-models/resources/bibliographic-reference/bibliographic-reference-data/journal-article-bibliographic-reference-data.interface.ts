@@ -1,9 +1,10 @@
 import { BibliographicReferenceType } from '../bibliographic-reference-type.enum';
+import { IBibliographicReferenceCreator } from './bibliographic-reference-creator.interface';
 
 export interface IJournalArticleBibliographicReferenceData {
     type: BibliographicReferenceType.journalArticle;
     title: string;
-    creators: unknown[];
+    creators: IBibliographicReferenceCreator[];
     abstract?: string;
     issueDate: string;
     publicationTitle?: string;

@@ -5,6 +5,7 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
+import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
@@ -98,6 +99,66 @@ const generateComprehensiveDualEdgeConnectionTestData = (
     return edgeConnectionDTOs.map((dto) => new EdgeConnection(dto));
 };
 
+/**
+ * Load connections for bibliographic references to be able to view the thumbnail
+ * presenters on the frontend
+ */
+const additionalDualConnectionsForBibliographicReferenceDTOs = [
+    {
+        type: AggregateType.note,
+        connectionType: EdgeConnectionType.dual,
+        // TODO generate this at the top level instead
+        id: `3201`,
+        members: [
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    id: '3',
+                    type: ResourceType.bibliographicReference,
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    id: '24',
+                    type: ResourceType.book,
+                },
+                context: new GeneralContext(),
+            },
+        ],
+        note: 'this is why bibliographic_references/3 is connected to book/24',
+    },
+    {
+        type: AggregateType.note,
+        connectionType: EdgeConnectionType.dual,
+        // TODO generate this at the top level instead
+        id: `3202`,
+        members: [
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    id: '23',
+                    type: ResourceType.bibliographicReference,
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    id: '24',
+                    type: ResourceType.book,
+                },
+                context: new GeneralContext(),
+            },
+        ],
+        note: 'this is why bibliographic_references/23 is connected to book/24',
+    },
+];
+
+const additionalDualConnectionsForBibliographicReferences: EdgeConnection[] =
+    additionalDualConnectionsForBibliographicReferenceDTOs.map((dto) => new EdgeConnection(dto));
+
 export default (uniqueIdOffset: number): EdgeConnection[] => [
     /**
      * TODO [https://www.pivotaltracker.com/story/show/182302542]
@@ -110,4 +171,5 @@ export default (uniqueIdOffset: number): EdgeConnection[] => [
     ...buildOneDualEdgeConnectionForEveryContextType(),
     ...buildOneFromConnectionForInstanceOfEachResourceType(),
     ...buildOneToConnectionForInstanceOfEachResourceType(),
+    ...additionalDualConnectionsForBibliographicReferences,
 ];

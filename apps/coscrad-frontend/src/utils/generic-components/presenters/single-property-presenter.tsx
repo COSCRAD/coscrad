@@ -1,23 +1,27 @@
 import { IValueAndDisplay } from '@coscrad/api-interfaces';
-import { Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Grid } from '@mui/material';
+import { shortenString } from '../../string-processor/shorten-string';
+
+const MAXIMUM_NUMBER_OF_CHARACTERS = 70;
 
 /**
  * Provides a standard presentation for a single property on a view model
- *
- * TODO: Consider a separate utility to add the break tags using reduce
  */
 export const SinglePropertyPresenter = <T,>({
     value,
     display,
 }: IValueAndDisplay<T>): JSX.Element => (
-    <Box sx={{ mb: 1 }}>
-        <>
-            <Typography component={'span'} sx={{ fontWeight: 'bold' }}>
-                {display}:
-            </Typography>
-            &nbsp;
-            <Typography component={'span'}>{value as string}</Typography>
-        </>
-    </Box>
+    <Grid component="span" container spacing={1} sx={{ mb: 1 }}>
+        <Grid item sx={{ fontWeight: 'bold' }}>
+            {display}:
+        </Grid>
+        {/**
+         * NOTE: the `xs` here is a bizarre workaround to get MUI Grid to adhere to
+         * CSS flexbox properly when wrapping long text (e.g., the abstract)
+         * [https://github.com/mui/material-ui/issues/11339#issuecomment-388542106]
+         */}
+        <Grid item xs>
+            {shortenString(value as string, MAXIMUM_NUMBER_OF_CHARACTERS)}
+        </Grid>
+    </Grid>
 );
