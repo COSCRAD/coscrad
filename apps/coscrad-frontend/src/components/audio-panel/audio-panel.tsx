@@ -3,9 +3,9 @@ import { MediaPlayer } from '@coscrad/media-player';
 interface AudioPanelProps {
     url: string;
 }
-export const AudioPanel = ({ url }: AudioPanelProps): JSX.Element => (
-    <>
-        Audio panel url: {url}
-        <MediaPlayer audioUrl={url} />
-    </>
-);
+
+const AudioPanel = ({ url }: AudioPanelProps): JSX.Element => {
+    return <MediaPlayer audioUrl={url} />;
+};
+
+export default AudioPanel;

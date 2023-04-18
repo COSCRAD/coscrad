@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
-import { AudioPanel } from '../../audio-panel/audio-panel';
+import AudioPanel from '../../audio-panel/audio-panel';
 import { renderAggregateUrlCell } from '../utils/render-audio-preview';
 
 export const PlaylistDetailFullViewPresenter = ({
