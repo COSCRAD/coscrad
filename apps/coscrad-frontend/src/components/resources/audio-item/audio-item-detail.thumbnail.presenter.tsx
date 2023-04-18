@@ -11,7 +11,6 @@ export const AudioItemDetailThumbnailPresenter = ({
     id,
     name,
     lengthMilliseconds,
-    audioURL,
 }: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
     return (
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.audioItem}>

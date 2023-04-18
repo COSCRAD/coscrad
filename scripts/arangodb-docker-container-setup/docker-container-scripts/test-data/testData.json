@@ -1221,13 +1221,17 @@
                         {
                             "name": "Alana Duvernay",
                             "type": "author"
+                        },
+                        {
+                            "name": "James Smith",
+                            "type": "author"
                         }
                     ],
                     "abstract": "This is the abstract, NOT a general note!",
                     "year": 1999,
                     "publisher": "Atlantic Publishing",
                     "place": "Kennebunk Port, Maine",
-                    "url": "https://atlanticpublishing.com",
+                    "url": "https://atlanticpublishing.com/authors/Duvernay/NewBook/BookInformation/",
                     "isbn": "978-1-895811-34-6",
                     "numberOfPages": 455
                 }
@@ -2444,6 +2448,52 @@
                     }
                 ],
                 "note": "this library book has the lyrics from the song, but we do not have access to the book"
+            },
+            {
+                "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113201",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this is why bibliographic_references/3 is connected to book/24"
+            },
+            {
+                "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113202",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this is why bibliographic_references/23 is connected to book/24"
             }
         ]
     }

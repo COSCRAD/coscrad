@@ -3,7 +3,7 @@ import { Card, CardContent, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { routes } from '../../../../app/routes/routes';
 import { ResourceNavLink } from '../../../../components/resources/shared/resource-nav-link';
-import { ResourceNamePresenter } from '../resource-name-presenter';
+import { ResourceDetailPresenterHeader } from './resource-detail-presenter-header';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
 export interface ResourceDetailThumbnailPresenterProps {
@@ -30,16 +30,17 @@ export const ResourceDetailThumbnailPresenter = ({
     <Card>
         <CardContent>
             <Grid container spacing={1} columns={{ xs: 2, sm: 4, md: 12 }}>
+                <div data-testid={id} />
                 <Grid item xs={2} sm={1} md={2}>
                     {/* Preview will eventually include images taken from video or photos, etc. */}
                     <ResourcePreviewIconFactory resourceType={type} size="md" />
                 </Grid>
-                <Grid item xs={2} sm={2} md={8}>
+                <Grid item xs={2} sm={2} md={7}>
                     {/* TODO: consider putting a standardized name property on the view models */}
-                    <ResourceNamePresenter name={name} variant="h5" />
+                    <ResourceDetailPresenterHeader id={id} type={type} name={name} variant="h5" />
                     {children}
                 </Grid>
-                <Grid item xs={2} sm={1} md={2} container sx={{ justifyContent: 'flex-end' }}>
+                <Grid item xs={2} sm={1} md={3} sx={{ display: 'flex' }} justifyContent="flex-end">
                     <ResourceNavLink
                         internalLink={`/${routes.resources.ofType(type).detail(id)}`}
                     />
