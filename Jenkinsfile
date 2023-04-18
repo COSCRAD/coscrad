@@ -83,7 +83,7 @@ pipeline {
             }
                 post {
                     success {
-                        archiveArtifacts artifacts: 'dist/apps/**', followSymlinks: false
+                        archiveArtifacts artifacts: 'dist/**', followSymlinks: false
                     }
                 }
         }
