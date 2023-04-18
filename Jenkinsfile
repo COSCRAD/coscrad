@@ -40,38 +40,33 @@ pipeline {
                 branch 'PR-*'
             }
             steps {
-                echo 'PR opened or updated...'
-                echo "NODE ENV: ${NODE_ENV}"
-                echo 'Installing dependencies'
-                sh 'npm ci --legacy-peer-deps'
+                configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
+            targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
+                    echo 'PR opened or updated...'
+                    echo "NODE ENV: ${NODE_ENV}"
+                    echo 'Installing dependencies'
+                    sh 'npm ci --legacy-peer-deps'
 
-                echo 'Running lint on all COSCRAD projects'
-                sh 'npm run lint:coscrad'
+                    echo 'Running lint on all COSCRAD projects'
+                    sh 'npm run lint:coscrad'
 
-                    /**
-                    /* TODO Use the actual front-end configs for a runable build
-                    /* configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',
-                    /* targetLocation: 'apps/coscrad-frontend/src/auth_config.json')])
-                    **/
-
-                echo 'copying sample content config for test build'
+                /**
+                * Note that the sample content config is actually valid for
+                * our staging build.
+                **/
+                    echo 'copying sample content config for test build'
                 /* groovylint-disable-next-line LineLength */
-                sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
+                    sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
 
-                echo 'copying sample auth config for test build'
-                /* This config has the correct types, but totally bogus data-
-                it won't break the build, but it **will** die at run-time */
-                sh 'cp apps/coscrad-frontend/src/auth_config.SAMPLE.json apps/coscrad-frontend/src/auth_config.json'
+                    echo 'Building COSCRAD'
+                    echo 'with node version'
+                    sh 'node --version'
+                    sh 'npm run build:coscrad:prod'
 
-                echo 'Building COSCRAD'
-                echo 'with node version'
-                sh 'node --version'
-                sh 'npm run build:coscrad:prod'
+                    echo 'testing coscrad-frontend'
+                    sh 'npx nx test coscrad-frontend'
 
-                echo 'testing coscrad-frontend'
-                sh 'npx nx test coscrad-frontend'
-
-                echo 'testing api (coscrad back-end)'
+                    echo 'testing api (coscrad back-end)'
 
                 /**
                 * While the test falls back to `process.env` whenever there is
@@ -79,11 +74,12 @@ pipeline {
                 * as a hack because by some quirk the mock config implementation
                 * fails when no file is found.
                 **/
-                echo 'creating empty test.env file'
+                    echo 'creating empty test.env file'
                 /* groovylint-disable-next-line LineLength */
-                sh 'touch apps/api/src/app/config/test.env'
+                    sh 'touch apps/api/src/app/config/test.env'
 
-                sh 'npx nx test api'
+                    sh 'npx nx test api'
+            }
             }
                 post {
                     success {
