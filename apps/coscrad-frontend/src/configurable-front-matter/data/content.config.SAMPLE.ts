@@ -16,10 +16,12 @@ export const contentConfig: ConfigurableContent = {
     videoIdToCredits: {
         '2': 'Credits for video 2',
     },
-    indexToDetailFlows: Object.values(CategorizableType).map((categorizableType) => ({
-        categorizableType,
-        detailViewType: DetailViewType.fullView,
-    })),
+    indexToDetailFlows: Object.values(CategorizableType)
+        .filter((t) => t !== CategorizableType.playlist)
+        .map((categorizableType) => ({
+            categorizableType,
+            detailViewType: DetailViewType.fullView,
+        })),
     shouldEnableWebOfKnowledgeForResources: true,
     siteCredits: 'Credits here',
     simulatedKeyboard: {
