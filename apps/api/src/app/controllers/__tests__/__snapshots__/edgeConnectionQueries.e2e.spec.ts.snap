@@ -2504,6 +2504,64 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": "this library book has the lyrics from the song, but we do not have access to the book",
       "tags": [],
     },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+            "type": "bibliographicReference",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113201",
+      "note": "this is why bibliographic_references/3 is connected to book/24",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+            "type": "bibliographicReference",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113202",
+      "note": "this is why bibliographic_references/23 is connected to book/24",
+      "tags": [],
+    },
   ],
   "indexScopedActions": [],
 }

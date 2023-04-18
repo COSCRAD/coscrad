@@ -1,29 +1,38 @@
 import {
     IBibliographicReferenceViewModel,
-    ICourtCaseBibliographicReferenceData
+    ICourtCaseBibliographicReferenceData,
+    ResourceType,
 } from '@coscrad/api-interfaces';
-import { Card, CardContent, CardHeader, Divider } from '@mui/material';
-import { Abstract } from './abstract';
+import {
+    MultiplePropertyPresenter,
+    PropertyLabels,
+    SinglePropertyPresenter,
+} from '../../../../utils/generic-components/presenters/';
+import { ResourceDetailThumbnailPresenter } from '../../../../utils/generic-components/presenters/detail-views';
 
 export const CourtCaseBibliographicReferenceDetailThumbnailPresenter = ({
     id,
-    data: { caseName, abstract, dateDecided, pages },
+    data,
 }: IBibliographicReferenceViewModel<ICourtCaseBibliographicReferenceData>): JSX.Element => {
+    const keysAndLabels: PropertyLabels<ICourtCaseBibliographicReferenceData> = {
+        dateDecided: 'Date Decided',
+        court: 'Court',
+    };
+
+    // Temporary workaround until `name` is on IBaseViewModel
+    const { caseName } = data;
+
+    const name = caseName;
+
     return (
-        <Card>
-            <CardHeader title="Court Case Bibliographic Reference"></CardHeader>
-            <CardContent>
-                <div data-testid={id}>
-                    {caseName}
-                    <br />
-                    {pages && <div>{pages} pages</div>}
-                    {dateDecided && <div>({dateDecided})</div>}
-                    <Divider />
-                    {abstract !== null && typeof abstract !== undefined && (
-                        <Abstract abstract={abstract} />
-                    )}
-                </div>
-            </CardContent>
-        </Card>
+        <ResourceDetailThumbnailPresenter
+            id={id}
+            name={name}
+            type={ResourceType.bibliographicReference}
+        >
+            <div data-testid={id} />
+            <SinglePropertyPresenter display="Reference Type" value="Court Case" />
+            <MultiplePropertyPresenter keysAndLabels={keysAndLabels} data={data} />
+        </ResourceDetailThumbnailPresenter>
     );
 };

@@ -1,3 +1,4 @@
+import { IBibliographicReferenceCreator } from '@coscrad/api-interfaces';
 import {
     BibliographicSubjectCreatorType,
     CoscradEnum,
@@ -8,7 +9,10 @@ import { DTO } from '../../../../types/DTO';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../BaseDomainModel';
 
-export default class BibliographicReferenceCreator extends BaseDomainModel {
+export default class BibliographicReferenceCreator
+    extends BaseDomainModel
+    implements IBibliographicReferenceCreator
+{
     @NonEmptyString({
         label: 'name',
         description: "full name of work's creator (free-form text)",

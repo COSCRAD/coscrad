@@ -1,6 +1,6 @@
 import {
     IBibliographicReferenceViewModel,
-    ICourtCaseBibliographicReferenceData,
+    IJournalArticleBibliographicReferenceData,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import {
@@ -8,23 +8,26 @@ import {
     MultiplePropertyPresenter,
     PropertyLabels,
     SinglePropertyPresenter,
-} from '../../../utils/generic-components/';
+} from '../../../utils/generic-components';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
+import { CreatorsPresenter } from './shared/creators-presenter';
 
-export const CourtCaseBibliographicReferenceDetailFullViewPresenter = ({
+export const JournalArticleBibliographicReferenceDetailFullViewPresenter = ({
     id,
     data,
-}: IBibliographicReferenceViewModel<ICourtCaseBibliographicReferenceData>): JSX.Element => {
-    const keysAndLabels: PropertyLabels<ICourtCaseBibliographicReferenceData> = {
+}: IBibliographicReferenceViewModel<IJournalArticleBibliographicReferenceData>): JSX.Element => {
+    const keysAndLabels: PropertyLabels<IJournalArticleBibliographicReferenceData> = {
         abstract: 'Abstract',
-        dateDecided: 'Date Decided',
-        court: 'Court',
-        pages: 'First Page',
+        publicationTitle: 'Publication Title',
+        issueDate: 'Issue Date',
+        issn: 'ISSN',
+        doi: 'DOI',
     };
 
     // Temporary workaround until `name` is on IBaseViewModel
-    const { caseName, url } = data;
-    const name = caseName;
+    const { title, creators, url } = data;
+
+    const name = title;
 
     return (
         <ResourceDetailFullViewPresenter
@@ -34,7 +37,8 @@ export const CourtCaseBibliographicReferenceDetailFullViewPresenter = ({
         >
             <div data-testid={id} />
             {/* TODO: create label configuration for subtypes */}
-            <SinglePropertyPresenter display="Reference Type" value="Court Case" />
+            <SinglePropertyPresenter display="Reference Type" value="Journal Article" />
+            <CreatorsPresenter creators={creators} />
             <MultiplePropertyPresenter keysAndLabels={keysAndLabels} data={data} />
             <ExternalLinkPresenter url={url} />
         </ResourceDetailFullViewPresenter>

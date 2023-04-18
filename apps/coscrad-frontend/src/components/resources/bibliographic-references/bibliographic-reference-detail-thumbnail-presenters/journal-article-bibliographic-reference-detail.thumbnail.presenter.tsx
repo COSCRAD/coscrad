@@ -1,29 +1,28 @@
 import {
     IBibliographicReferenceViewModel,
     IJournalArticleBibliographicReferenceData,
+    ResourceType,
 } from '@coscrad/api-interfaces';
-import { Card, CardContent, CardHeader, Divider } from '@mui/material';
-import { Abstract } from './abstract';
+import {
+    ResourceDetailThumbnailPresenter,
+    SinglePropertyPresenter,
+} from '../../../../utils/generic-components/';
 
 export const JournalArticleBibliographicReferenceThumbnailPresenter = ({
     id,
-    data: { title, abstract, issueDate, publicationTitle },
+    data: { title, issueDate, publicationTitle },
 }: IBibliographicReferenceViewModel<IJournalArticleBibliographicReferenceData>): JSX.Element => {
+    const name = title;
+
     return (
-        <Card>
-            <CardHeader title="Journal Article Bibliographic Reference"></CardHeader>
-            <CardContent>
-                <div data-testid={id}>
-                    {title}
-                    <br />
-                    {publicationTitle} ({issueDate})
-                    <Divider />
-                    <br />
-                    {typeof abstract !== 'undefined' && abstract !== null && (
-                        <Abstract abstract={abstract} />
-                    )}
-                </div>
-            </CardContent>
-        </Card>
+        <ResourceDetailThumbnailPresenter
+            id={id}
+            name={name}
+            type={ResourceType.bibliographicReference}
+        >
+            <div data-testid={id} />
+            <SinglePropertyPresenter display="Reference Type" value="Journal Article" />
+            {publicationTitle} ({issueDate})
+        </ResourceDetailThumbnailPresenter>
     );
 };

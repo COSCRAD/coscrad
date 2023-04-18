@@ -20,7 +20,6 @@ export const PhotographDetailThumbnailPresenter = ({
     return (
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.photograph}>
             <div data-testid={id} />
-            <SinglePropertyPresenter display="Photograph ID" value={id} />
             <SinglePropertyPresenter display="Photographer" value={photographer} />
         </ResourceDetailThumbnailPresenter>
     );
