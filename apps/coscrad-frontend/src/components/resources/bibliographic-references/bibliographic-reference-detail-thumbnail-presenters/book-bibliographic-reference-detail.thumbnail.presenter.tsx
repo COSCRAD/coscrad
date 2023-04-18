@@ -1,5 +1,4 @@
 import {
-    BibliographicReferenceType,
     IBibliographicReferenceViewModel,
     IBookBibliographicReferenceData,
     ResourceType,
@@ -38,10 +37,8 @@ export const BookBibliographicReferenceDetailThumbnailPresenter = ({
             name={name}
             type={ResourceType.bibliographicReference}
         >
-            <SinglePropertyPresenter
-                display="Reference Type"
-                value={BibliographicReferenceType.book}
-            />
+            <div data-testid={id} />
+            <SinglePropertyPresenter display="Reference Type" value="Book" />
             <MultiplePropertyPresenter keysAndLabels={keysAndLabels} data={data} />
         </ResourceDetailThumbnailPresenter>
     );

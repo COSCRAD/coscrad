@@ -1,4 +1,3 @@
-import { GeneralContext } from 'apps/api/src/domain/models/context/general-context/general-context.entity';
 import { getResourceTypesThatOnlySupportGeneralContext } from '../../../domain/models/allowedContexts/isContextAllowedForGivenResourceType';
 import {
     EdgeConnection,
@@ -6,6 +5,7 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
+import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';

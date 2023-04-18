@@ -1,5 +1,4 @@
 import {
-    BibliographicReferenceType,
     IBibliographicReferenceViewModel,
     IJournalArticleBibliographicReferenceData,
     ResourceType,
@@ -8,12 +7,6 @@ import {
     ResourceDetailThumbnailPresenter,
     SinglePropertyPresenter,
 } from '../../../../utils/generic-components/';
-
-/**
- * NOTE: currently there is no way to view the journal article thumbnail to check that
- * it's displaying properly because there is no existing dual edge connection that
- * includes the journal article bibliographic reference type.
- */
 
 export const JournalArticleBibliographicReferenceThumbnailPresenter = ({
     id,
@@ -27,10 +20,8 @@ export const JournalArticleBibliographicReferenceThumbnailPresenter = ({
             name={name}
             type={ResourceType.bibliographicReference}
         >
-            <SinglePropertyPresenter
-                display="Reference Type"
-                value={BibliographicReferenceType.book}
-            />
+            <div data-testid={id} />
+            <SinglePropertyPresenter display="Reference Type" value="Journal Article" />
             {publicationTitle} ({issueDate})
         </ResourceDetailThumbnailPresenter>
     );

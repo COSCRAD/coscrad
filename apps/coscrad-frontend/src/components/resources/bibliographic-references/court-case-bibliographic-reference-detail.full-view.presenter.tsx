@@ -32,6 +32,7 @@ export const CourtCaseBibliographicReferenceDetailFullViewPresenter = ({
             id={id}
             type={ResourceType.bibliographicReference}
         >
+            <div data-testid={id} />
             {/* TODO: create label configuration for subtypes */}
             <SinglePropertyPresenter display="Reference Type" value="Court Case" />
             <MultiplePropertyPresenter keysAndLabels={keysAndLabels} data={data} />
