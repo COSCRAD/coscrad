@@ -39,6 +39,7 @@
                     "optimization": true,
                     "extractLicenses": true,
                     "inspect": false,
+                    "externalDependencies": "none",
                     "fileReplacements": [
                         {
                             "replace": "apps/api/src/environments/environment.ts",
