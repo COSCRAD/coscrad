@@ -22,18 +22,20 @@ export const MultiplePropertyPresenter = <T,>({
     return (
         <>
             {Object.entries(keysAndLabels)
-                .filter(
-                    ([propertyKey, _]) =>
-                        !isNullOrUndefined(data[propertyKey]) && isNonEmptyString(data[propertyKey])
-                )
-                .map(([propertyKey, label]) => {
-                    const propertyValue = data[propertyKey];
-
-                    if (!isString(propertyValue) && !isNumber(propertyValue)) {
+                .filter(([propertyKey, _]) => !isNullOrUndefined(data[propertyKey]))
+                .filter(([propertyKey, _]) => {
+                    if (!isString(data[propertyKey]) && !isNumber(data[propertyKey])) {
                         throw new Error(
                             'Only string or number valued properties are supported by MultiplePropertyPresenter'
                         );
                     }
+
+                    if (!isNonEmptyString(data[propertyKey].toString())) return false;
+
+                    return true;
+                })
+                .map(([propertyKey, label]) => {
+                    const propertyValue = data[propertyKey];
 
                     const propertyValueAsString = propertyValue.toString();
 
