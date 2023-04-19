@@ -1,4 +1,9 @@
-import { isNullOrUndefined, isNumber, isString } from '@coscrad/validation-constraints';
+import {
+    isNonEmptyString,
+    isNullOrUndefined,
+    isNumber,
+    isString,
+} from '@coscrad/validation-constraints';
 import { SinglePropertyPresenter } from './single-property-presenter';
 
 export type PropertyLabels<T> = {
@@ -17,7 +22,10 @@ export const MultiplePropertyPresenter = <T,>({
     return (
         <>
             {Object.entries(keysAndLabels)
-                .filter(([propertyKey, _]) => !isNullOrUndefined(data[propertyKey]))
+                .filter(
+                    ([propertyKey, _]) =>
+                        !isNullOrUndefined(data[propertyKey]) && isNonEmptyString(data[propertyKey])
+                )
                 .map(([propertyKey, label]) => {
                     const propertyValue = data[propertyKey];
 
