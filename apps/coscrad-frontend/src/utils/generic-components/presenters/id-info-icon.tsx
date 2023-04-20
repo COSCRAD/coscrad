@@ -41,18 +41,28 @@ export const IdInfoIcon = ({ id, type }: IdInfoIconProps): JSX.Element => {
 
     return (
         <>
-            <IconButton component="span" onClick={handleDialogOpen}>
-                <InfoIcon />
-            </IconButton>
+            <Tooltip title="Click to View ID">
+                <IconButton component="span" onClick={handleDialogOpen}>
+                    <InfoIcon />
+                </IconButton>
+            </Tooltip>
             <Dialog onClose={handleDialogClose} open={openDialog}>
-                <DialogTitle>Record ID:</DialogTitle>
+                <DialogTitle>{type} ID:</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <Typography component="span">{`${type}/${id}`}</Typography>
+                        <Typography
+                            component="span"
+                            variant="body1"
+                            sx={{ fontWeight: 'bold' }}
+                            mr={1}
+                        >
+                            {id}
+                        </Typography>
                         <Tooltip
                             open={showTooltip}
                             title={'Copied to clipboard!'}
-                            leaveDelay={1000}
+                            leaveDelay={500}
+                            leaveTouchDelay={500}
                             onClose={handleOnTooltipClose}
                         >
                             <IconButton onClick={handleCopyClick}>
