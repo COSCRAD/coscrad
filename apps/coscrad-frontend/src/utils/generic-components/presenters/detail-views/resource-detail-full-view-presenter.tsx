@@ -25,7 +25,6 @@ export interface ResourceDetailFullViewPresenterProps {
  * This is WIP. We will solidify the API as we make our first pass of the resources.
  */
 export const ResourceDetailFullViewPresenter = ({
-    id,
     name,
     type,
     children,

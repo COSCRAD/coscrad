@@ -21,7 +21,6 @@ import {
     Typography,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import { HasId } from '../../../../../../../../libs/api-interfaces/src';
 import { NotFoundPresenter } from '../../../../../components/not-found';
 import { ConfigurableContentContext } from '../../../../../configurable-front-matter/configurable-content-provider';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
@@ -31,6 +30,10 @@ import { renderCell } from './render-cell';
 import { SearchBar } from './search-bar';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
 import { CellRenderersDefinition } from './types/cell-renderers-definition';
+
+interface HasId {
+    id: string;
+}
 
 export const DEFAULT_PAGE_SIZE = 5;
 
