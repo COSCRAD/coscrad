@@ -1,5 +1,5 @@
 /* eslint-disable-next-line */
-import { IMultilingualText, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+// import { IMultilingualText, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import {
     isBoolean,
     isFiniteNumber,
@@ -18,6 +18,41 @@ import {
 import { CoscradConstraint } from '../constraints/coscrad-constraint.enum';
 import { isFunction } from '../constraints/is-function';
 import { PredicateFunction } from '../types';
+
+/**
+ * We reapeat the following definitions to avoid circular dependencies. This is
+ * probably a sign that our approach to validating multilingual text via
+ * constraints is not quite the correct pattern to use.
+ */
+enum LanguageCode {
+    Chilcotin = 'clc',
+    Haida = 'hai',
+    English = 'eng',
+    French = 'fra',
+    Chinook = 'chn',
+    Zapotec = 'zap',
+    Spanish = 'spa',
+}
+
+enum MultilingualTextItemRole {
+    original = 'original',
+    glossedTo = 'glossed to',
+    prompt = 'prompt', // e.g., "How do you say?"
+    freeTranslation = 'free translation',
+    literalTranslation = 'literal translation',
+}
+
+interface IMultlingualTextItem {
+    languageCode: LanguageCode;
+
+    text: string;
+
+    role: MultilingualTextItemRole;
+}
+
+interface IMultilingualText {
+    items: IMultlingualTextItem[];
+}
 
 const constraintsLookupTable: { [K in CoscradConstraint]: PredicateFunction } = {
     [CoscradConstraint.isNonEmptyString]: isNonEmptyString,
