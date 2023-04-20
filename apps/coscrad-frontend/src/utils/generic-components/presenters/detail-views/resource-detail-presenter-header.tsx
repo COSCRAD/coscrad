@@ -20,10 +20,10 @@ export const ResourceDetailPresenterHeader = ({
     return (
         <Grid container direction="row" spacing={1} alignItems="center" mb={1}>
             <Grid item>
-                <IdInfoIcon id={id} type={type} />
+                <ResourceNamePresenter name={name} variant={variant} />
             </Grid>
             <Grid item>
-                <ResourceNamePresenter name={name} variant={variant} />
+                <IdInfoIcon id={id} type={type} />
             </Grid>
         </Grid>
     );

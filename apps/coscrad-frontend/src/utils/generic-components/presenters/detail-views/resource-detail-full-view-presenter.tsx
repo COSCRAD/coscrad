@@ -1,9 +1,8 @@
 import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
-import { isNullOrUndefined, isString } from '@coscrad/validation-constraints';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { CoscradMainContentContainer } from '../../style-components/coscrad-main-content-container';
-import { MultilingualTextPresenter } from '../multilingual-text-presenter';
+import { ResourceDetailPresenterHeader } from './resource-detail-presenter-header';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
 export interface ResourceDetailFullViewPresenterProps {
@@ -40,13 +39,7 @@ export const ResourceDetailFullViewPresenter = ({
             </Grid>
             <Grid item xs={2} sm={2} md={8}>
                 {/* TODO: consider putting a standardized name property on the view models */}
-                <Typography gutterBottom variant="h6" fontWeight="bold" color="primary">
-                    {isString(name) || isNullOrUndefined(name) ? (
-                        name
-                    ) : (
-                        <MultilingualTextPresenter text={name} />
-                    )}
-                </Typography>
+                <ResourceDetailPresenterHeader id={id} type={type} name={name} variant="h3" />
                 {children}
             </Grid>
         </Grid>

@@ -31,7 +31,7 @@ export const IdInfoIcon = ({ id, type }: IdInfoIconProps): JSX.Element => {
     };
 
     const handleCopyClick = () => {
-        navigator.clipboard.writeText(`${type}/${id}`);
+        navigator.clipboard.writeText(id);
         setShowTooltip(true);
     };
 
@@ -41,7 +41,7 @@ export const IdInfoIcon = ({ id, type }: IdInfoIconProps): JSX.Element => {
 
     return (
         <>
-            <Tooltip title="Click to View ID">
+            <Tooltip title={`Click to Copy ID ${id}`}>
                 <IconButton component="span" onClick={handleDialogOpen}>
                     <InfoIcon />
                 </IconButton>

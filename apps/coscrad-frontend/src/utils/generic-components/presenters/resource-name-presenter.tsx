@@ -14,7 +14,13 @@ export const ResourceNamePresenter = ({
     variant,
 }: ResourceNamePresenterProps): JSX.Element => {
     return (
-        <Typography component="span" variant={variant}>
+        <Typography
+            gutterBottom
+            component="span"
+            variant={variant}
+            fontWeight="bold"
+            color="primary"
+        >
             {isString(name) || isNullOrUndefined(name) ? (
                 name
             ) : (
