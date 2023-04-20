@@ -4,4 +4,5 @@ export * from './detail-views/resource-detail-thumbnail-presenter';
 export * from './detail-views/resource-preview-icon';
 export * from './external-link-presenter';
 export * from './multiple-property-presenter';
+export * from './single-optional-property-presenter';
 export * from './single-property-presenter';

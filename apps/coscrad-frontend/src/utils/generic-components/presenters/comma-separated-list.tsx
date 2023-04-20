@@ -6,7 +6,7 @@ interface CommaSeparatedListProps {
 
 export const CommaSeparatedList = ({ children }: CommaSeparatedListProps): JSX.Element => {
     return (
-        <>
+        <span>
             {Array.isArray(children)
                 ? children.reduce((acc, currentElement, index) => {
                       if (index === children.length - 1) return acc.concat(currentElement);
@@ -16,6 +16,6 @@ export const CommaSeparatedList = ({ children }: CommaSeparatedListProps): JSX.E
                       return acc.concat(inlineListElement, ', ');
                   }, [])
                 : children}
-        </>
+        </span>
     );
 };

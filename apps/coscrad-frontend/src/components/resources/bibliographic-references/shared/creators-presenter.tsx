@@ -8,10 +8,7 @@ interface CreatorsPresenterProps {
 }
 
 export const CreatorsPresenter = ({ creators }: CreatorsPresenterProps): JSX.Element => {
-    {
-        /* TODO: create uppercase label for `type` */
-    }
-
+    // TODO: create uppercase label for `type`
     const creatorLabel = creators.length > 1 ? `Creators` : `Creator`;
 
     return (
