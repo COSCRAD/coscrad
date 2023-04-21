@@ -1,7 +1,7 @@
 import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
 import { Grid } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
-import { IdInfoIcon } from '../id-info-icon';
+import { IdInfoIcon } from '../id-info-icon/id-info-icon';
 import { ResourceNamePresenter } from '../resource-name-presenter';
 
 interface ResourceDetailPresenterHeaderProps {
