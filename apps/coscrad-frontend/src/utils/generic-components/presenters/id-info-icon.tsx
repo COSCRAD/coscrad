@@ -2,13 +2,13 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import InfoIcon from '@mui/icons-material/Info';
 import {
+    Button,
     Dialog,
     DialogContent,
     DialogContentText,
     DialogTitle,
     IconButton,
     Tooltip,
-    Typography,
 } from '@mui/material';
 import { useState } from 'react';
 
@@ -20,7 +20,8 @@ interface IdInfoIconProps {
 export const IdInfoIcon = ({ id, type }: IdInfoIconProps): JSX.Element => {
     const [openDialog, setOpenDialog] = useState(false);
 
-    const [showTooltip, setShowTooltip] = useState(false);
+    const [showIdTooltip, setShowIdTooltip] = useState(false);
+    const [showCompositeIdTooltip, setShowCompositeIdTooltip] = useState(false);
 
     const handleDialogOpen = () => {
         setOpenDialog(true);
@@ -30,13 +31,22 @@ export const IdInfoIcon = ({ id, type }: IdInfoIconProps): JSX.Element => {
         setOpenDialog(false);
     };
 
-    const handleCopyClick = () => {
+    const handleIdCopyClick = (value) => {
         navigator.clipboard.writeText(id);
-        setShowTooltip(true);
+        setShowIdTooltip(true);
     };
 
-    const handleOnTooltipClose = () => {
-        setShowTooltip(false);
+    const handleCompositeIdCopyClick = (value) => {
+        navigator.clipboard.writeText(`${type}/${id}`);
+        setShowCompositeIdTooltip(true);
+    };
+
+    const handleOnIdTooltipClose = () => {
+        setShowIdTooltip(false);
+    };
+
+    const handleOnCompositeIdTooltipClose = () => {
+        setShowCompositeIdTooltip(false);
     };
 
     return (
@@ -47,27 +57,39 @@ export const IdInfoIcon = ({ id, type }: IdInfoIconProps): JSX.Element => {
                 </IconButton>
             </Tooltip>
             <Dialog onClose={handleDialogClose} open={openDialog}>
-                <DialogTitle>{type} ID:</DialogTitle>
+                <DialogTitle>
+                    {type} ID: {id}
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <Typography
-                            component="span"
-                            variant="body1"
-                            sx={{ fontWeight: 'bold' }}
-                            mr={1}
-                        >
-                            {id}
-                        </Typography>
                         <Tooltip
-                            open={showTooltip}
+                            open={showIdTooltip}
                             title={'Copied to clipboard!'}
                             leaveDelay={500}
                             leaveTouchDelay={500}
-                            onClose={handleOnTooltipClose}
+                            onClose={handleOnIdTooltipClose}
                         >
-                            <IconButton onClick={handleCopyClick}>
-                                <ContentCopyIcon />
-                            </IconButton>
+                            <Button
+                                startIcon={<ContentCopyIcon />}
+                                onClick={handleIdCopyClick}
+                                sx={{ mr: 1 }}
+                            >
+                                Copy ID
+                            </Button>
+                        </Tooltip>
+                        <Tooltip
+                            open={showCompositeIdTooltip}
+                            title={'Copied to clipboard!'}
+                            leaveDelay={500}
+                            leaveTouchDelay={500}
+                            onClose={handleOnCompositeIdTooltipClose}
+                        >
+                            <Button
+                                startIcon={<ContentCopyIcon />}
+                                onClick={handleCompositeIdCopyClick}
+                            >
+                                Copy Composite ID ("ResourceType/ID")
+                            </Button>
                         </Tooltip>
                     </DialogContentText>
                 </DialogContent>
