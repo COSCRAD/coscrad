@@ -7,12 +7,6 @@ pipeline {
         disableConcurrentBuilds()
     }
     stages {
-        stage('Test Jenkins Out') {
-            agent any
-            steps {
-                echo 'CI Triggered...'
-            }
-        }
         stage('ci') {
             agent {
                 docker {
@@ -81,6 +75,56 @@ pipeline {
                     sh 'npx nx test api'
             }
             }
+        }
+        stage('deploy to staging') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    args '-u root'
+                }
+            }
+            environment {
+                NODE_ENV = 'staging'
+                NODE_PORT = 3131
+                ARANGO_DB_HOST_DOMAIN = 'arangotest.digiteched.com'
+                ARANGO_DB_HOST_SCHEME = 'https'
+                ARANGO_DB_HOST_PORT = 443
+                ARANGO_DB_ROOT_PASSWORD = credentials('arango-test-root-password')
+                ARANGO_DB_USER = 'dbuser'
+                ARANGO_DB_USER_PASSWORD = credentials('arango-test-db-user-password')
+                ARANGO_DB_NAME = 'staging'
+                AUTH0_ISSUER_URL = 'https://foo.auth0.com/'
+                AUTH0_AUDIENCE = 'https://bar.mydomain.ca'
+                BASE_DIGITAL_ASSET_URL = 'https://www.myaudio.com:5555/media?id='
+                GLOBAL_PREFIX = 'api'
+                SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
+            }
+            when {
+                branch 'integration'
+            }
+            steps {
+                configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
+            targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
+                    echo 'Merged to integration'
+                    echo "NODE ENV: ${NODE_ENV}"
+                    echo 'Installing dependencies'
+                    sh 'npm ci --legacy-peer-deps'
+
+                    echo 'Building COSCRAD'
+                    echo 'with node version'
+                    sh 'node --version'
+
+                /**
+                * Note that the sample content config is actually valid for
+                * our staging build.
+                **/
+                    echo 'copying sample content config for test build'
+                /* groovylint-disable-next-line LineLength */
+                    sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
+
+                    sh 'npm run build:coscrad:prod'
+            }
+            }
                 post {
                     success {
                         archiveArtifacts artifacts: 'dist/**, node_modules/**', followSymlinks: false
@@ -93,6 +137,6 @@ pipeline {
                         publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     }
                 }
-        }
+                }
     }
 }
