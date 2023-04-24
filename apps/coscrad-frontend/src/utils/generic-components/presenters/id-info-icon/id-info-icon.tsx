@@ -7,6 +7,7 @@ import {
     DialogTitle,
     IconButton,
     Tooltip,
+    Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { CopyIdButton } from './copy-id-button';
@@ -36,7 +37,10 @@ export const IdInfoIcon = ({ id, type }: IdInfoIconProps): JSX.Element => {
             </Tooltip>
             <Dialog onClose={handleDialogClose} open={openDialog}>
                 <DialogTitle>
-                    {type} ID: {id}
+                    {type} ID:
+                    <Typography component="div" variant="body2">
+                        {id}
+                    </Typography>
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>

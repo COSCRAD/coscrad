@@ -37,7 +37,7 @@ export const CopyIdButton = ({ id, type, idType }: CopyIdButtonProps): JSX.Eleme
                 onClick={() => handleCopyClick(idType)}
                 sx={{ mr: 1 }}
             >
-                Copy ID {idType === 'compositeId' ? 'Composite Id' : 'Id'}
+                Copy {idType === 'compositeId' ? 'Composite Id' : 'Id'}
             </Button>
         </Tooltip>
     );
