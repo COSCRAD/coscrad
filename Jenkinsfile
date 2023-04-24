@@ -63,11 +63,10 @@ pipeline {
                     sh 'node --version'
                     sh 'npm run build:coscrad:prod'
 
-                    // TODO comment back in- rmeoved to shorten feedback loop while tweaking config
-                    // echo 'testing coscrad-frontend'
-                    // sh 'npx nx test coscrad-frontend'
+                    echo 'testing coscrad-frontend'
+                    sh 'npx nx test coscrad-frontend'
 
-                    // echo 'testing api (coscrad back-end)'
+                    echo 'testing api (coscrad back-end)'
 
                 /**
                 * While the test falls back to `process.env` whenever there is
@@ -91,7 +90,7 @@ pipeline {
 
                     // Deploy back-end build to staging
                     sshPublisher(
-                        publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'echo SUCCESS', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                        publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     }
                 }
         }

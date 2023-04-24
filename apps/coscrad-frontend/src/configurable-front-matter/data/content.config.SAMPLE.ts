@@ -2,8 +2,8 @@ import { CategorizableType } from '@coscrad/api-interfaces';
 import { ConfigurableContent, DetailViewType } from './configurable-content-schema';
 
 export const contentConfig: ConfigurableContent = {
-    siteTitle: 'Site Title',
-    subTitle: 'Site Subtitle',
+    siteTitle: 'COSCRAD [-Sandbox-]',
+    subTitle: 'Powering a Web of Knowledge',
     about: 'Add a few sentences about your web of knowledge!',
     siteDescription: 'Your site decription goes here..',
     siteHomeImageUrl: 'https://www.picbox.org/home-image.png',
