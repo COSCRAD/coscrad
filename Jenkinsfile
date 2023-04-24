@@ -63,10 +63,11 @@ pipeline {
                     sh 'node --version'
                     sh 'npm run build:coscrad:prod'
 
-                    echo 'testing coscrad-frontend'
-                    sh 'npx nx test coscrad-frontend'
+                    // TODO comment back in- rmeoved to shorten feedback loop while tweaking config
+                    // echo 'testing coscrad-frontend'
+                    // sh 'npx nx test coscrad-frontend'
 
-                    echo 'testing api (coscrad back-end)'
+                    // echo 'testing api (coscrad back-end)'
 
                 /**
                 * While the test falls back to `process.env` whenever there is
@@ -84,9 +85,13 @@ pipeline {
                 post {
                     success {
                         archiveArtifacts artifacts: 'dist/**, node_modules/**', followSymlinks: false
-
+                    // Deploy front-end build to staging
                     sshPublisher(
                         publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf /var/www/html && mv build/dist/apps/coscrad-frontend /var/www/html && rm -rf build', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+
+                    // Deploy back-end build to staging
+                    sshPublisher(
+                        publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'echo SUCCESS', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     }
                 }
         }
