@@ -44,8 +44,8 @@ export const IdInfoIcon = ({ id, type }: IdInfoIconProps): JSX.Element => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <CopyIdButton id={id} type={type} idType="compositeId" />
                         <CopyIdButton id={id} type={type} idType="id" />
+                        <CopyIdButton id={id} type={type} idType="compositeId" />
                     </DialogContentText>
                 </DialogContent>
             </Dialog>
