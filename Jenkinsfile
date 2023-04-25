@@ -58,7 +58,7 @@ pipeline {
                     sh 'npm run build:coscrad:prod'
 
                     echo 'testing coscrad-frontend'
-                    sh 'npx nx test coscrad-frontend'
+                    sh 'npx nx test coscrad-frontend --skip-nx-cache'
 
                     echo 'testing api (coscrad back-end)'
 
@@ -72,7 +72,7 @@ pipeline {
                 /* groovylint-disable-next-line LineLength */
                     sh 'touch apps/api/src/app/config/test.env'
 
-                    sh 'npx nx test api'
+                    sh 'npx nx test api --skip-nx-cache'
             }
             }
         }
