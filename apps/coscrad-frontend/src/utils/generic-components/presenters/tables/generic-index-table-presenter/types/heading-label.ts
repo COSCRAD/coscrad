@@ -1,6 +1,4 @@
-import { HasId } from '@coscrad/api-interfaces';
-
-export type HeadingLabel<T extends HasId> = {
+export type HeadingLabel<T> = {
     propertyKey: keyof T;
     headingLabel: string;
 };
