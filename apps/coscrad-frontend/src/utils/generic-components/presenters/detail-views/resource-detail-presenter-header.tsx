@@ -1,7 +1,7 @@
 import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
 import { Grid } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
-import { IdInfoIcon } from '../id-info-icon';
+import { IdInfoIcon } from '../id-info-icon/id-info-icon';
 import { ResourceNamePresenter } from '../resource-name-presenter';
 
 interface ResourceDetailPresenterHeaderProps {
@@ -20,10 +20,10 @@ export const ResourceDetailPresenterHeader = ({
     return (
         <Grid container direction="row" spacing={1} alignItems="center" mb={1}>
             <Grid item>
-                <IdInfoIcon id={id} type={type} />
+                <ResourceNamePresenter name={name} variant={variant} />
             </Grid>
             <Grid item>
-                <ResourceNamePresenter name={name} variant={variant} />
+                <IdInfoIcon id={id} type={type} />
             </Grid>
         </Grid>
     );
