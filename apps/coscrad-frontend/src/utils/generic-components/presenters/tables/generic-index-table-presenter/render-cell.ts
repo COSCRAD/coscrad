@@ -1,8 +1,7 @@
-import { IBaseViewModel } from '@coscrad/api-interfaces';
 import { buildDefaultRenderer } from './build-default-renderer';
 import { CellRenderersMap } from './types';
 
-export const renderCell = <T extends IBaseViewModel>(
+export const renderCell = <T>(
     row: T,
     cellRendererMap: CellRenderersMap<T>,
     propertyToRender: keyof T

@@ -204,7 +204,7 @@ MediaItem {
   "title": "episode title (in language)",
   "titleEnglish": "Metal Mondays episode 1",
   "type": "mediaItem",
-  "url": "https://www.metalmondays.com/1.mp3",
+  "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
 }
 `;
 
@@ -237,6 +237,12 @@ Playlist {
     PlaylistItem {
       "resourceCompositeIdentifier": {
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+        "type": "audioItem",
+      },
+    },
+    PlaylistItem {
+      "resourceCompositeIdentifier": {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
         "type": "audioItem",
       },
     },

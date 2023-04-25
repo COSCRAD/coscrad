@@ -3,7 +3,7 @@
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/audioItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 {
   "actions": [],
-  "audioURL": "https://www.metalmondays.com/1.mp3",
+  "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "lengthMilliseconds": 20000,
   "mimeType": "audio/mpeg",
@@ -189,7 +189,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   ],
   "title": "episode title (in language)",
   "titleEnglish": "Metal Mondays episode 1",
-  "url": "https://www.metalmondays.com/1.mp3",
+  "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
 }
 `;
 
@@ -231,9 +231,14 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "actions": [],
   "episodes": [
     {
-      "mediaItemUrl": "https://www.metalmondays.com/1.mp3",
+      "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
       "mimeType": "audio/mpeg",
       "name": "{eng}: The Wooden Boy",
+    },
+    {
+      "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+      "mimeType": "audio/mpeg",
+      "name": "{clc}: Down at the River",
     },
   ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
