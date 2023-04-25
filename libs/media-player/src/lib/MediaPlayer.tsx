@@ -33,7 +33,7 @@ export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
             setCanPlayThrough(true);
         });
         setAudio(audioElement);
-    }, []);
+    }, [audioUrl]);
 
     return (
         <div className={styles['container']}>

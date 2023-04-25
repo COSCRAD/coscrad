@@ -60,7 +60,7 @@ export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexSta
             headingLabels={headingLabels}
             tableData={playlists}
             cellRenderersDefinition={cellRenderersDefinition}
-            heading={'Episodes'}
+            heading={'Playlists'}
             filterableProperties={['episodes', 'name']}
             matchers={matchers}
         />

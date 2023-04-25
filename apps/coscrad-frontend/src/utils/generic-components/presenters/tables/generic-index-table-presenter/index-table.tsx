@@ -1,4 +1,3 @@
-import { IBaseViewModel } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -9,7 +8,6 @@ import {
     Grid,
     IconButton,
     InputLabel,
-    TableContainer as MUITableContainer,
     MenuItem,
     Paper,
     Select,
@@ -17,6 +15,7 @@ import {
     Table,
     TableBody,
     TableCell,
+    TableContainer as MUITableContainer,
     TableHead,
     TableRow,
     Typography,
@@ -26,11 +25,15 @@ import { NotFoundPresenter } from '../../../../../components/not-found';
 import { ConfigurableContentContext } from '../../../../../configurable-front-matter/configurable-content-provider';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
-import { Matchers, filterTableData } from './filter-table-data';
+import { filterTableData, Matchers } from './filter-table-data';
 import { renderCell } from './render-cell';
 import { SearchBar } from './search-bar';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
 import { CellRenderersDefinition } from './types/cell-renderers-definition';
+
+interface HasId {
+    id: string;
+}
 
 export const DEFAULT_PAGE_SIZE = 5;
 
@@ -59,7 +62,7 @@ export type ValueUnion<T> = T[keyof T];
  *
  * We may also want to require renderers for non-string (or maybe non-primitive types)
  */
-export interface GenericIndexTablePresenterProps<T extends IBaseViewModel> {
+export interface GenericIndexTablePresenterProps<T> {
     headingLabels: HeadingLabel<T>[];
     tableData: T[];
     cellRenderersDefinition: CellRenderersDefinition<T>;
@@ -70,7 +73,7 @@ export interface GenericIndexTablePresenterProps<T extends IBaseViewModel> {
 
 const allProperties = 'allProperties';
 
-export const IndexTable = <T extends IBaseViewModel>({
+export const IndexTable = <T,>({
     headingLabels,
     tableData,
     cellRenderersDefinition,
@@ -166,8 +169,12 @@ export const IndexTable = <T extends IBaseViewModel>({
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {paginatedData.map((row) => (
-                                    <TableRow key={row.id} data-testid={row.id}>
+                                {paginatedData.map((row, index) => (
+                                    // TODO find a better fallback key
+                                    <TableRow
+                                        key={(row as HasId).id || index}
+                                        data-testid={(row as HasId).id || index}
+                                    >
                                         {headingLabels.map(({ propertyKey }) => (
                                             // A little inversion of control here
                                             // We may want to use some currying here
