@@ -8,6 +8,7 @@ type ConfigOverrides = Partial<DTO<EnvironmentVariables>>;
 export default (configOverrides: ConfigOverrides, envFilePath: string) => {
     const realConfig = dotenv.parse(fs.readFileSync(envFilePath));
 
+    // TODO Fall back to real environment variables in a more extensible way
     const mockedConfig = {
         NODE_PORT: process.env.NODE_PORT,
         ARANGO_DB_HOST_SCHEME: process.env.ARANGO_DB_HOST_SCHEME,
