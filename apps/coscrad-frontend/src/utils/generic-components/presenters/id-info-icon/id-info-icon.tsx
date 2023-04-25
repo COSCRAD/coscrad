@@ -42,7 +42,7 @@ export const IdInfoIcon = ({ id, type }: IdInfoIconProps): JSX.Element => {
                         {id}
                     </Typography>
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent data-testid={'copy-id-dialog'}>
                     <DialogContentText>
                         <CopyIdButton id={id} type={type} idType="id" />
                         <CopyIdButton id={id} type={type} idType="compositeId" />

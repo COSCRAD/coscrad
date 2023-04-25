@@ -1,52 +1,40 @@
 const termId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001';
-const compositeId = `term/${termId}`;
+const termCompositeIdentifier = `term/${termId}`;
 
 describe('IdInfoIcon', () => {
     beforeEach(() => {
         cy.visit(`/Resources/Terms/${termId}`);
+
+        cy.get(`[aria-label="Click to Copy ID ${termId}"]`).as('copyButton');
     });
 
     it('Should display the id icon for the TermDetailFullViewPresenter', () => {
-        cy.get(`[aria-label="Click to Copy ID ${termId}"]`).should('be.visible');
+        cy.get('@copyButton').should('be.visible');
     });
 
     it('Should show the copy modal when clicked', () => {
-        cy.get(`[aria-label="Click to Copy ID ${termId}"]`).click();
+        cy.get('@copyButton').click();
 
-        cy.get('.MuiDialogContent-root').should('be.visible');
+        cy.getByDataAttribute('copy-id-dialog').should('be.visible');
     });
 
-    it('Should copy the resource ID when the clipboard button is clicked', () => {
-        cy.wrap(
-            Cypress.automation('remote:debugger:protocol', {
-                command: 'Browser.grantPermissions',
-                params: {
-                    permissions: ['clipboardReadWrite', 'clipboardSanitizedWrite'],
-                    origin: window.location.origin,
-                },
-            })
-        );
+    it('Should copy the resource ID when the button is clicked', () => {
+        cy.grantPermissions('clipboard');
 
-        cy.window()
-            .its('navigator.permissions')
-            .then((permissions) => permissions.query({ name: 'clipboard-read' }))
-            .its('state')
-            .should('equal', 'granted');
+        cy.get('@copyButton').click();
 
-        cy.get(`[aria-label="Click to Copy ID ${termId}"]`).click();
+        cy.contains('Copy Id', { matchCase: false }).click();
 
-        cy.get('.MuiDialogContentText-root > :nth-child(1)').click();
+        cy.assertValueCopiedToClipboard(termId);
+    });
 
-        cy.window()
-            .its('navigator.clipboard')
-            .then((clip) => clip.readText())
-            .should('equal', termId);
+    it('Should copy the resource composite identifier when the button is clicked', () => {
+        cy.grantPermissions('clipboard');
 
-        cy.get('.MuiDialogContentText-root > :nth-child(2)').click();
+        cy.get('@copyButton').click();
 
-        cy.window()
-            .its('navigator.clipboard')
-            .then((clip) => clip.readText())
-            .should('equal', compositeId);
+        cy.contains('Copy Composite Id', { matchCase: false }).click();
+
+        cy.assertValueCopiedToClipboard(termCompositeIdentifier);
     });
 });
