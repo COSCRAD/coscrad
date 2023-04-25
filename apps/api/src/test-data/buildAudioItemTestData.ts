@@ -96,7 +96,7 @@ const partialDtos: DTO<Omit<AudioItem, 'type'>>[] = [
                 text: buildSingleLanguageText(item.text, LanguageCode.English),
             })),
         },
-        mediaItemId: mediaItems[0].id,
+        mediaItemId: mediaItems[2].id,
         lengthMilliseconds: 23409,
         published: true,
     },

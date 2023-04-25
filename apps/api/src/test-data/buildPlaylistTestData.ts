@@ -18,6 +18,12 @@ const partialDtos: Omit<DTO<Playlist>, 'type'>[] = [
                     id: AggregateId;
                 },
             },
+            {
+                resourceCompositeIdentifier: audioItems[1].getCompositeIdentifier() as {
+                    type: typeof ResourceType.audioItem;
+                    id: AggregateId;
+                },
+            },
         ],
         published: true,
     },

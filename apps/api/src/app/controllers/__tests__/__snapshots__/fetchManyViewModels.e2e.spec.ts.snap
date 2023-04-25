@@ -5,7 +5,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
   "entities": [
     {
       "actions": [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "lengthMilliseconds": 20000,
       "mimeType": "audio/mpeg",
@@ -24,7 +24,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
     },
     {
       "actions": [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
@@ -44,7 +44,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
     },
     {
       "actions": [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "lengthMilliseconds": 32989,
       "mimeType": "audio/mpeg",
@@ -71,7 +71,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
   "entities": [
     {
       "actions": [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "lengthMilliseconds": 20000,
       "mimeType": "audio/mpeg",
@@ -90,7 +90,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
     },
     {
       "actions": [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
@@ -110,7 +110,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
     },
     {
       "actions": [],
-      "audioURL": "https://www.metalmondays.com/1.mp3",
+      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "lengthMilliseconds": 32989,
       "mimeType": "audio/mpeg",
@@ -690,7 +690,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
       ],
       "title": "episode title (in language)",
       "titleEnglish": "Metal Mondays episode 1",
-      "url": "https://www.metalmondays.com/1.mp3",
+      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
     },
     {
       "actions": [],
@@ -701,6 +701,16 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
       "title": "video title (in language)",
       "titleEnglish": "cool video",
       "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "lengthMilliseconds": 2500,
+      "mimeType": "audio/mpeg",
+      "tags": [],
+      "title": "episode title (in language)",
+      "titleEnglish": "Metal Mondays episode 2",
+      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
     },
   ],
   "indexScopedActions": [],
@@ -749,7 +759,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
       ],
       "title": "episode title (in language)",
       "titleEnglish": "Metal Mondays episode 1",
-      "url": "https://www.metalmondays.com/1.mp3",
+      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
     },
     {
       "actions": [],
@@ -760,6 +770,16 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
       "title": "video title (in language)",
       "titleEnglish": "cool video",
       "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+    },
+    {
+      "actions": [],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "lengthMilliseconds": 2500,
+      "mimeType": "audio/mpeg",
+      "tags": [],
+      "title": "episode title (in language)",
+      "titleEnglish": "Metal Mondays episode 2",
+      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
     },
   ],
   "indexScopedActions": [],
@@ -915,9 +935,14 @@ exports[`When fetching multiple resources GET /resources/playlists when all of t
       "actions": [],
       "episodes": [
         {
-          "mediaItemUrl": "https://www.metalmondays.com/1.mp3",
+          "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
           "mimeType": "audio/mpeg",
           "name": "{eng}: The Wooden Boy",
+        },
+        {
+          "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+          "mimeType": "audio/mpeg",
+          "name": "{clc}: Down at the River",
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
@@ -959,9 +984,14 @@ exports[`When fetching multiple resources GET /resources/playlists when some of 
       "actions": [],
       "episodes": [
         {
-          "mediaItemUrl": "https://www.metalmondays.com/1.mp3",
+          "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
           "mimeType": "audio/mpeg",
           "name": "{eng}: The Wooden Boy",
+        },
+        {
+          "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+          "mimeType": "audio/mpeg",
+          "name": "{clc}: Down at the River",
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",

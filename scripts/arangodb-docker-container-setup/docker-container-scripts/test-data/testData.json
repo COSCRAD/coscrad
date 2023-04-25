@@ -765,7 +765,7 @@
                         }
                     ]
                 },
-                "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
                 "lengthMilliseconds": 23409,
                 "transcript": {
                     "participants": [
@@ -1348,7 +1348,7 @@
                         "role": "host"
                     }
                 ],
-                "url": "https://www.metalmondays.com/1.mp3",
+                "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
                 "mimeType": "audio/mpeg",
                 "lengthMilliseconds": 2500
             },
@@ -1372,6 +1372,27 @@
                 "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
                 "mimeType": "video/mp4",
                 "lengthMilliseconds": 910000
+            },
+            {
+                "type": "mediaItem",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+                "eventHistory": [],
+                "published": true,
+                "queryAccessControlList": {
+                    "allowedUserIds": [],
+                    "allowedGroupIds": []
+                },
+                "title": "episode title (in language)",
+                "titleEnglish": "Metal Mondays episode 2",
+                "contributorAndRoles": [
+                    {
+                        "contributorId": "2",
+                        "role": "host"
+                    }
+                ],
+                "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+                "mimeType": "audio/mpeg",
+                "lengthMilliseconds": 2500
             }
         ],
         "videos": [
@@ -1459,6 +1480,12 @@
                         "resourceCompositeIdentifier": {
                             "type": "audioItem",
                             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110"
+                        }
+                    },
+                    {
+                        "resourceCompositeIdentifier": {
+                            "type": "audioItem",
+                            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111"
                         }
                     }
                 ]
