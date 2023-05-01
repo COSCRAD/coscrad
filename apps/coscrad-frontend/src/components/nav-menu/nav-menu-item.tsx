@@ -11,8 +11,8 @@ export const NavMenuItem = ({ navItemInfo, handleClose }: NavItemItemProps) => {
     const { link, label } = navItemInfo;
 
     return (
-        <MenuItem onClick={handleClose}>
-            <Link to={link}>{label}</Link>
-        </MenuItem>
+        <Link to={link}>
+            <MenuItem onClick={handleClose}>{label}</MenuItem>
+        </Link>
     );
 };

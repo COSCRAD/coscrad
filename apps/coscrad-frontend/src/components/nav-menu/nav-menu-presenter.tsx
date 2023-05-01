@@ -1,6 +1,6 @@
-import { isNull } from '@coscrad/validation-constraints';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import { Box, IconButton, Menu } from '@mui/material';
+import { Box, Drawer, IconButton } from '@mui/material';
 import { useState } from 'react';
 import AuthenticationButton from '../authentication-button/authentication-button';
 import { NavItemInfo } from './nav-menu-container';
@@ -11,50 +11,45 @@ interface NavMenuPresenterProps {
 }
 
 export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.Element => {
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [isOpen, setIsOpen] = useState(false);
 
-    const isOpen = !isNull(anchorEl);
-
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
+    const handleClick = () => {
+        setIsOpen(true);
     };
 
     const handleClose = () => {
-        setAnchorEl(null);
+        setIsOpen(false);
     };
 
     return (
-        <div data-testid="nav-menu">
-            <Box sx={{ minWidth: '100px' }}>
-                <IconButton
-                    id="basic-button"
-                    color="primary"
-                    aria-controls={isOpen ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={isOpen ? 'true' : undefined}
-                    onClick={handleClick}
-                >
-                    <MenuRoundedIcon />
-                </IconButton>
-                <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={isOpen}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                    }}
-                >
-                    {navItemInfos.map((navItemInfo) => (
-                        <NavMenuItem
-                            key={navItemInfo.label}
-                            navItemInfo={navItemInfo}
-                            handleClose={handleClose}
-                        />
-                    ))}
-                </Menu>
-                <AuthenticationButton />
+        <Box data-testid="nav-menu">
+            <IconButton
+                id="basic-button"
+                color="primary"
+                aria-controls={isOpen ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={isOpen ? 'true' : undefined}
+                onClick={handleClick}
+            >
+                <MenuRoundedIcon />
+            </IconButton>
+            <AuthenticationButton />
+            <Box>
+                <Drawer anchor="right" open={isOpen} onClose={handleClose}>
+                    <Box sx={{ padding: 3 }}>
+                        <IconButton color="primary" onClick={handleClose}>
+                            <ChevronRightIcon style={{ fontSize: '2rem' }} />
+                        </IconButton>
+                        {navItemInfos.map((navItemInfo) => (
+                            <NavMenuItem
+                                key={navItemInfo.label}
+                                navItemInfo={navItemInfo}
+                                handleClose={handleClose}
+                            />
+                        ))}
+                    </Box>
+                </Drawer>
             </Box>
-        </div>
+        </Box>
     );
 };
