@@ -22,7 +22,7 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
     };
 
     return (
-        <Box data-testid="nav-menu">
+        <Box sx={{ display: 'flex' }} data-testid="nav-menu">
             <IconButton
                 id="basic-button"
                 color="primary"
