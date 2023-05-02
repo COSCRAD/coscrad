@@ -31,8 +31,6 @@ export class DomainDumpCliCommand extends CommandRunner {
                 NUMBER_OF_SPACES_TO_INDENT
             )
         );
-
-        Promise.resolve();
     }
 
     @Option({
