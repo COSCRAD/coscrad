@@ -1,0 +1,245 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Task Command when the command is valid when using the full --filepath input option should write a dump file 1`] = `
+[
+  {
+    "contributorId": "John Doe",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+    "type": "term",
+  },
+  {
+    "contributorId": "John Doe",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "Chil-term-2",
+    "termEnglish": "Engl-term-2",
+    "type": "term",
+  },
+  {
+    "contributorId": "Jane Deer",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+    "published": false,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "Chil-term-no-english",
+    "type": "term",
+  },
+  {
+    "contributorId": "This will be removed soon",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+    "published": false,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [
+        "1",
+      ],
+    },
+    "term": "My Secret Term",
+    "type": "term",
+  },
+  {
+    "contributorId": "Sarah Smith",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "I am singing (lang)",
+    "termEnglish": "I am singing (Engl)",
+    "type": "term",
+  },
+  {
+    "contributorId": "Sarah Smith",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "You are singing (lang)",
+    "termEnglish": "You are singing (Engl)",
+    "type": "term",
+  },
+  {
+    "contributorId": "Sarah Smith",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "She is singing (lang)",
+    "termEnglish": "She is singing (Engl)",
+    "type": "term",
+  },
+  {
+    "contributorId": "Sarah Smith",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "I am not singing (lang)",
+    "termEnglish": "I am not singing (Engl)",
+    "type": "term",
+  },
+  {
+    "contributorId": "Sarah Smith",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "You are not singing (lang)",
+    "termEnglish": "You are not singing (Engl)",
+    "type": "term",
+  },
+]
+`;
+
+exports[`Task Command when the command is valid when using the full -f input option should write a dump file 1`] = `
+[
+  {
+    "contributorId": "John Doe",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "Chil-term-1",
+    "termEnglish": "Engl-term-1",
+    "type": "term",
+  },
+  {
+    "contributorId": "John Doe",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "Chil-term-2",
+    "termEnglish": "Engl-term-2",
+    "type": "term",
+  },
+  {
+    "contributorId": "Jane Deer",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+    "published": false,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "Chil-term-no-english",
+    "type": "term",
+  },
+  {
+    "contributorId": "This will be removed soon",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+    "published": false,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [
+        "1",
+      ],
+    },
+    "term": "My Secret Term",
+    "type": "term",
+  },
+  {
+    "contributorId": "Sarah Smith",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "I am singing (lang)",
+    "termEnglish": "I am singing (Engl)",
+    "type": "term",
+  },
+  {
+    "contributorId": "Sarah Smith",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "You are singing (lang)",
+    "termEnglish": "You are singing (Engl)",
+    "type": "term",
+  },
+  {
+    "contributorId": "Sarah Smith",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "She is singing (lang)",
+    "termEnglish": "She is singing (Engl)",
+    "type": "term",
+  },
+  {
+    "contributorId": "Sarah Smith",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "I am not singing (lang)",
+    "termEnglish": "I am not singing (Engl)",
+    "type": "term",
+  },
+  {
+    "contributorId": "Sarah Smith",
+    "eventHistory": [],
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+    "published": true,
+    "queryAccessControlList": {
+      "allowedGroupIds": [],
+      "allowedUserIds": [],
+    },
+    "term": "You are not singing (lang)",
+    "termEnglish": "You are not singing (Engl)",
+    "type": "term",
+  },
+]
+`;

@@ -50,3 +50,6 @@ auth_config.json
 **content.config.ts
 # TODO Be careful not to git-ignore third-party configs
 **config.json
+
+# COSCRAD CLI command e2e test dummy files
+__cli-command-test-files__
