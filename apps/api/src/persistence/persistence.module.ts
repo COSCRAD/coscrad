@@ -6,7 +6,6 @@ import { ArangoConnectionProvider } from './database/arango-connection.provider'
 import { ArangoDatabaseProvider } from './database/database.provider';
 import { ArangoIdRepository } from './repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from './repositories/arango-repository.provider';
-import { DataExporter } from './repositories/data-exporter';
 
 @Global()
 @Module({})
@@ -46,18 +45,8 @@ export class PersistenceModule {
         return {
             module: PersistenceModule,
             imports: [ConfigModule],
-            providers: [
-                arangoConnectionProvider,
-                repositoryProvider,
-                idRepositoryProvider,
-                DataExporter,
-            ],
-            exports: [
-                arangoConnectionProvider,
-                repositoryProvider,
-                idRepositoryProvider,
-                DataExporter,
-            ],
+            providers: [arangoConnectionProvider, repositoryProvider, idRepositoryProvider],
+            exports: [arangoConnectionProvider, repositoryProvider, idRepositoryProvider],
             global: true,
         };
     }
