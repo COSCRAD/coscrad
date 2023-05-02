@@ -13,7 +13,7 @@ import generateDatabaseNameForTestSuite from '../persistence/repositories/__test
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
 
-const outputFilePrefix = `__cli-command-test-files__/${expect.getState().testPath}`;
+const outputFilePrefix = `__cli-command-test-files__/${expect.getState().currentTestName}`;
 
 const buildFullFilepath = (suffix: string): string => `${outputFilePrefix}${suffix}.data.json`;
 
