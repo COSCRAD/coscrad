@@ -2,7 +2,7 @@ import { CommandTestFactory } from 'nest-commander-testing';
 import { CoscradCliModule } from './coscrad-cli.module';
 
 import { TestingModule } from '@nestjs/testing';
-import { existsSync, readFileSync, unlinkSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, unlinkSync } from 'fs';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
@@ -15,7 +15,9 @@ import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
 
 const cliCommandName = 'domain-dump';
 
-const outputFilePrefix = `__cli-command-test-files__/${cliCommandName}`;
+const outputDir = `__cli-command-test-files__`;
+
+const outputFilePrefix = `./${outputDir}/${cliCommandName}`;
 
 const buildFullFilepath = (suffix: string): string => `${outputFilePrefix}${suffix}.data.json`;
 
@@ -44,6 +46,10 @@ describe('Task Command', () => {
             .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
             .useValue(testRepositoryProvider)
             .compile();
+
+        if (!existsSync(outputDir)) {
+            mkdirSync(outputDir);
+        }
     });
 
     describe(`when the command is invalid`, () => {
