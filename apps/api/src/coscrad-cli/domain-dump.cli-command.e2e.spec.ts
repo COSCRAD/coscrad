@@ -13,7 +13,9 @@ import generateDatabaseNameForTestSuite from '../persistence/repositories/__test
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
 
-const outputFilePrefix = `__cli-command-test-files__/${expect.getState().currentTestName}`;
+const cliCommandName = 'domain-dump';
+
+const outputFilePrefix = `__cli-command-test-files__/${cliCommandName}`;
 
 const buildFullFilepath = (suffix: string): string => `${outputFilePrefix}${suffix}.data.json`;
 
@@ -74,7 +76,7 @@ describe('Task Command', () => {
 
             it('should write a dump file', async () => {
                 await CommandTestFactory.run(commandInstance, [
-                    'domain-dump',
+                    cliCommandName,
                     `--filepath=${filepath}`,
                 ]);
 
@@ -96,7 +98,7 @@ describe('Task Command', () => {
             });
 
             it('should write a dump file', async () => {
-                await CommandTestFactory.run(commandInstance, ['domain-dump', '-f', filepath]);
+                await CommandTestFactory.run(commandInstance, [cliCommandName, '-f', filepath]);
 
                 const doesFileExist = existsSync(filepath);
 
