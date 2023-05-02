@@ -45,6 +45,19 @@
                             "with": "apps/api/src/environments/environment.prod.ts"
                         }
                     ]
+                },
+                "cli": {
+                    "outputPath": "dist/apps/coscrad-cli",
+                    "main": "apps/api/src/cli.ts",
+                    "optimization": true,
+                    "extractLicenses": true,
+                    "inspect": false,
+                    "fileReplacements": [
+                        {
+                            "replace": "apps/api/src/environments/environment.ts",
+                            "with": "apps/api/src/environments/environment.prod.ts"
+                        }
+                    ]  
                 }
             }
         },

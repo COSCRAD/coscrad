@@ -31,7 +31,7 @@ export class DeluxeInMemoryStore {
                 if (doesSnapshotHaveResourcesKey(partialSnapshot) && isResourceType(aggregateType))
                     return partialMap.set(aggregateType, partialSnapshot.resources[aggregateType]);
 
-                return partialMap.set(aggregateType, partialSnapshot[aggregateType]) || [];
+                return partialMap.set(aggregateType, partialSnapshot[aggregateType] || []);
             },
             new Map()
         ) as AggregatesMap;
@@ -48,6 +48,15 @@ export class DeluxeInMemoryStore {
         return this.inMemoryMapOfAggregates.get(
             aggregateType
         ) as AggregateTypeToAggregateInstance[TAggregateType][];
+    }
+
+    appendAggregates(aggregateType: AggregateType, data: Aggregate[]): DeluxeInMemoryStore {
+        this.inMemoryMapOfAggregates.set(aggregateType, [
+            ...this.inMemoryMapOfAggregates.get(aggregateType),
+            ...data,
+        ]);
+
+        return this;
     }
 
     append(partialSnapshot: PartialSnapshot): DeluxeInMemoryStore {
