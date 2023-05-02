@@ -84,4 +84,8 @@ export const contentConfig: ConfigurableContent = {
     },
     notFoundMessage: 'No result found.',
     loadingMessage: 'Loading',
+    theme: {
+        primaryColor: '#000000',
+        secondaryColor: '#000000',
+    },
 };

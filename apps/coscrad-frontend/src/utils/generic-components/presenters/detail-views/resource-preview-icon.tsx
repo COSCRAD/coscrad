@@ -35,17 +35,19 @@ interface ResourcePreviewImageProps {
  */
 
 const lookupTable: { [K in ResourceType]: JSX.Element } = {
-    [ResourceType.audioItem]: <VolumeUpIcon fontSize="inherit" />,
-    [ResourceType.bibliographicReference]: <CollectionsBookmarkIcon fontSize="inherit" />,
-    [ResourceType.book]: <AutoStoriesIcon fontSize="inherit" />,
-    [ResourceType.mediaItem]: <SubscriptionsIcon fontSize="inherit" />,
-    [ResourceType.photograph]: <PhotoIcon fontSize="inherit" />,
-    [ResourceType.song]: <AudiotrackIcon fontSize="inherit" />,
-    [ResourceType.spatialFeature]: <PlaceIcon fontSize="inherit" />,
-    [ResourceType.term]: <LanguageIcon fontSize="inherit" />,
-    [ResourceType.video]: <VideocamIcon fontSize="inherit" />,
-    [ResourceType.vocabularyList]: <ListIcon fontSize="inherit" />,
-    [ResourceType.playlist]: <PlaylistPlayIcon fontSize="inherit" />,
+    [ResourceType.audioItem]: <VolumeUpIcon fontSize="inherit" color="primary" />,
+    [ResourceType.bibliographicReference]: (
+        <CollectionsBookmarkIcon fontSize="inherit" color="primary" />
+    ),
+    [ResourceType.book]: <AutoStoriesIcon fontSize="inherit" color="primary" />,
+    [ResourceType.mediaItem]: <SubscriptionsIcon fontSize="inherit" color="primary" />,
+    [ResourceType.photograph]: <PhotoIcon fontSize="inherit" color="primary" />,
+    [ResourceType.song]: <AudiotrackIcon fontSize="inherit" color="primary" />,
+    [ResourceType.spatialFeature]: <PlaceIcon fontSize="inherit" color="primary" />,
+    [ResourceType.term]: <LanguageIcon fontSize="inherit" color="primary" />,
+    [ResourceType.video]: <VideocamIcon fontSize="inherit" color="primary" />,
+    [ResourceType.vocabularyList]: <ListIcon fontSize="inherit" color="primary" />,
+    [ResourceType.playlist]: <PlaylistPlayIcon fontSize="inherit" color="primary" />,
 };
 
 const sizes = {

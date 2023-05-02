@@ -1,5 +1,4 @@
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
-import { blue } from '@mui/material/colors';
 import { ReactNode, useContext } from 'react';
 import { ConfigurableContentContext } from './configurable-front-matter/configurable-content-provider';
 
@@ -8,13 +7,16 @@ interface CoscradThemeProviderProps {
 }
 
 export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): JSX.Element => {
-    const _configurableContent = useContext(ConfigurableContentContext);
+    const { theme } = useContext(ConfigurableContentContext);
 
     const coscradDefaultTheme = responsiveFontSizes(
         createTheme({
             palette: {
                 primary: {
-                    main: blue[800],
+                    main: theme.primaryColor,
+                },
+                secondary: {
+                    main: theme.secondaryColor,
                 },
             },
             typography: {

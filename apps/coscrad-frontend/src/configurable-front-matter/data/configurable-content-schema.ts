@@ -39,6 +39,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     termOfTheDayConfig?: Record<string, string>;
     notFoundMessage: string;
     loadingMessage: string;
+    theme: Record<string, string>;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -62,6 +63,7 @@ export const configurableContentPropertiesAndConstraints: {
     termOfTheDayConfig: [CoscradConstraint.isObject],
     notFoundMessage: [CoscradConstraint.isNonEmptyString],
     loadingMessage: [CoscradConstraint.isString],
+    theme: [CoscradConstraint.isObject],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;

@@ -7,7 +7,7 @@ import { ConfigurableContentContext } from '../../configurable-front-matter/conf
 import { NavMenuContainer } from '../nav-menu/nav-menu-container';
 
 const StyledAppBar = styled(AppBar)({
-    backgroundColor: '#2cb5af',
+    backgroundColor: 'primary.main',
     position: 'sticky',
     padding: '.5em',
 });
