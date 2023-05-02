@@ -2,24 +2,35 @@ import { Inject } from '@nestjs/common';
 import { writeFileSync } from 'fs';
 import { Command, CommandRunner, Option } from 'nest-commander';
 import { IRepositoryProvider } from '../domain/repositories/interfaces/repository-provider.interface';
-import { ResourceType } from '../domain/types/ResourceType';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
+import { DataExporter } from '../persistence/repositories/data-exporter';
 
 @Command({
     name: 'domain-dump',
     description: 'test the COSCRAD CLI!',
 })
 export class DomainDumpCliCommand extends CommandRunner {
-    constructor(
-        @Inject(REPOSITORY_PROVIDER_TOKEN) private readonly repositoryProvider: IRepositoryProvider
-    ) {
+    private readonly dataExporter: DataExporter;
+
+    constructor(@Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider) {
         super();
+
+        this.dataExporter = new DataExporter(repositoryProvider);
     }
 
     async run(_passedParams: string[], options?: Record<string, any>): Promise<void> {
-        const result = await this.repositoryProvider.forResource(ResourceType.term).fetchMany();
+        const NUMBER_OF_SPACES_TO_INDENT = 4;
 
-        writeFileSync(options.filepath, JSON.stringify(result, null, 4));
+        const result = await this.dataExporter.fetchSnapshot();
+
+        writeFileSync(
+            options.filepath,
+            JSON.stringify(
+                result.fetchFullSnapshotInLegacyFormat(),
+                null,
+                NUMBER_OF_SPACES_TO_INDENT
+            )
+        );
 
         Promise.resolve();
     }

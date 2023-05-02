@@ -13,9 +13,11 @@ import generateDatabaseNameForTestSuite from '../persistence/repositories/__test
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
 
-describe('Task Command', () => {
-    const outputFilePath = `__cli-command-test-files__/domain-dump.spec.data.json`;
+const outputFilePrefix = `__cli-command-test-files__/${expect.getState().testPath}`;
 
+const buildFullFilepath = (suffix: string): string => `${outputFilePrefix}${suffix}.data.json`;
+
+describe('Task Command', () => {
     let commandInstance: TestingModule;
 
     let testRepositoryProvider: TestRepositoryProvider;
@@ -54,8 +56,6 @@ describe('Task Command', () => {
 
     describe(`when the command is valid`, () => {
         beforeEach(async () => {
-            if (existsSync(outputFilePath)) unlinkSync(outputFilePath);
-
             await testRepositoryProvider.testTeardown();
 
             await testRepositoryProvider.addFullSnapshot(
@@ -66,35 +66,43 @@ describe('Task Command', () => {
         });
 
         describe(`when using the full --filepath input option`, () => {
-            it('should write a dump file', async () => {
-                const filePath = `${outputFilePath}_filepath`;
+            const filepath = buildFullFilepath('_filepath');
 
+            beforeEach(async () => {
+                if (existsSync(filepath)) unlinkSync(filepath);
+            });
+
+            it('should write a dump file', async () => {
                 await CommandTestFactory.run(commandInstance, [
                     'domain-dump',
-                    `--filepath=${filePath}`,
+                    `--filepath=${filepath}`,
                 ]);
 
-                const doesFileExist = existsSync(filePath);
+                const doesFileExist = existsSync(filepath);
 
                 expect(doesFileExist).toBe(true);
 
-                const fileContents = JSON.parse(readFileSync(filePath, { encoding: 'utf-8' }));
+                const fileContents = JSON.parse(readFileSync(filepath, { encoding: 'utf-8' }));
 
                 expect(fileContents).toMatchSnapshot();
             });
         });
 
         describe(`when using the full -f input option`, () => {
+            const filepath = buildFullFilepath('_f');
+
+            beforeEach(async () => {
+                if (existsSync(filepath)) unlinkSync(filepath);
+            });
+
             it('should write a dump file', async () => {
-                const filePath = `${outputFilePath}_f`;
+                await CommandTestFactory.run(commandInstance, ['domain-dump', '-f', filepath]);
 
-                await CommandTestFactory.run(commandInstance, ['domain-dump', '-f', filePath]);
-
-                const doesFileExist = existsSync(filePath);
+                const doesFileExist = existsSync(filepath);
 
                 expect(doesFileExist).toBe(true);
 
-                const fileContents = JSON.parse(readFileSync(filePath, { encoding: 'utf-8' }));
+                const fileContents = JSON.parse(readFileSync(filepath, { encoding: 'utf-8' }));
 
                 expect(fileContents).toMatchSnapshot();
             });
