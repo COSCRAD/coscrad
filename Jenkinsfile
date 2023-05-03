@@ -1,3 +1,5 @@
+def nodeInstallationName = 'NodeJS 18.12.0'
+
 /* groovylint-disable DuplicateStringLiteral */
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
@@ -11,6 +13,7 @@ pipeline {
             agent {
                 label 'jenkins-build-agent'
             }
+            tools { nodejs nodeInstallationName }
             environment {
                 NODE_ENV = 'test'
                 NODE_PORT = 3131
@@ -35,12 +38,6 @@ pipeline {
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
                     echo 'PR opened or updated...'
                     echo "NODE ENV: ${NODE_ENV}"
-                    echo 'running as user'
-                    sh 'whoami'
-                    echo 'droplet ip'
-                    sh 'ip a'
-                    echo 'NVM version'
-                    sh 'nvm --version'
                     echo 'node version:'
                     sh 'node -v'
                     echo 'npm version'
@@ -87,6 +84,7 @@ pipeline {
             agent {
                 label 'jenkins-build-agent'
             }
+            tools { nodejs nodeInstallationName }
             environment {
                 NODE_ENV = 'staging'
                 NODE_PORT = 3131
