@@ -9,10 +9,7 @@ pipeline {
     stages {
         stage('ci') {
             agent {
-                docker {
-                    image 'node:18-alpine'
-                    args '-u root'
-                }
+                label 'jenkins-build-agent'
             }
             environment {
                 NODE_ENV = 'test'
@@ -78,10 +75,7 @@ pipeline {
         }
         stage('deploy to staging') {
             agent {
-                docker {
-                    image 'node:18-alpine'
-                    args '-u root'
-                }
+                label 'jenkins-build-agent'
             }
             environment {
                 NODE_ENV = 'staging'
