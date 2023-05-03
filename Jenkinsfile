@@ -125,6 +125,8 @@ pipeline {
                     sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
 
                     sh 'npm run build:coscrad:prod'
+
+                    sh 'npx nx run api:build:cli'
             }
             }
                 post {
