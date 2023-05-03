@@ -35,6 +35,12 @@ pipeline {
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
                     echo 'PR opened or updated...'
                     echo "NODE ENV: ${NODE_ENV}"
+                    echo 'running as user'
+                    sh 'whoami'
+                    echo 'node version:'
+                    sh 'node -v'
+                    echo 'npm version'
+                    sh 'npm -v'
                     echo 'Installing dependencies'
                     sh 'npm ci --legacy-peer-deps'
 
@@ -131,6 +137,6 @@ pipeline {
                         publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     }
                 }
-                }
+        }
     }
 }
