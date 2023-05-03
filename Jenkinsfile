@@ -1,3 +1,5 @@
+def nodeInstallationName = 'NodeJS 18.12.0'
+
 /* groovylint-disable DuplicateStringLiteral */
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
@@ -9,11 +11,9 @@ pipeline {
     stages {
         stage('ci') {
             agent {
-                docker {
-                    image 'node:18-alpine'
-                    args '-u root'
-                }
+                label 'jenkins-build-agent'
             }
+            tools { nodejs nodeInstallationName }
             environment {
                 NODE_ENV = 'test'
                 NODE_PORT = 3131
@@ -38,6 +38,10 @@ pipeline {
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
                     echo 'PR opened or updated...'
                     echo "NODE ENV: ${NODE_ENV}"
+                    echo 'node version:'
+                    sh 'node -v'
+                    echo 'npm version'
+                    sh 'npm -v'
                     echo 'Installing dependencies'
                     sh 'npm ci --legacy-peer-deps'
 
@@ -78,11 +82,9 @@ pipeline {
         }
         stage('deploy to staging') {
             agent {
-                docker {
-                    image 'node:18-alpine'
-                    args '-u root'
-                }
+                label 'jenkins-build-agent'
             }
+            tools { nodejs nodeInstallationName }
             environment {
                 NODE_ENV = 'staging'
                 NODE_PORT = 3131
@@ -123,6 +125,8 @@ pipeline {
                     sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
 
                     sh 'npm run build:coscrad:prod'
+
+                    sh 'npx nx run api:build:cli'
             }
             }
                 post {
@@ -137,6 +141,6 @@ pipeline {
                         publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     }
                 }
-                }
+        }
     }
 }
