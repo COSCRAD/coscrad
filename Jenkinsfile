@@ -37,6 +37,10 @@ pipeline {
                     echo "NODE ENV: ${NODE_ENV}"
                     echo 'running as user'
                     sh 'whoami'
+                    echo 'droplet ip'
+                    sh 'ip a'
+                    echo 'NVM version'
+                    sh 'nvm --version'
                     echo 'node version:'
                     sh 'node -v'
                     echo 'npm version'
