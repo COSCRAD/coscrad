@@ -1,17 +1,17 @@
-import { CommandTestFactory } from 'nest-commander-testing';
-import { CoscradCliModule } from './coscrad-cli.module';
-
 import { TestingModule } from '@nestjs/testing';
 import { existsSync, mkdirSync, readFileSync, unlinkSync } from 'fs';
+import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
-import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
+
+import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
+import { CoscradCliModule } from './coscrad-cli.module';
 
 const cliCommandName = 'domain-dump';
 
@@ -21,7 +21,7 @@ const outputFilePrefix = `./${outputDir}/${cliCommandName}`;
 
 const buildFullFilepath = (suffix: string): string => `${outputFilePrefix}${suffix}.data.json`;
 
-describe('Task Command', () => {
+describe('CLI Command: **domain-dump**', () => {
     let commandInstance: TestingModule;
 
     let testRepositoryProvider: TestRepositoryProvider;

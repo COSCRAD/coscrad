@@ -1,0 +1,2793 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CLI Command: **domain-restore** when the command is valid when using the --filepath option to specify the input file should restore the db state via the domain snapshot 1`] = `
+{
+  "audioItem": [
+    WithTranscription {
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "AUDIOITEM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+      "lengthMilliseconds": 20000,
+      "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "The Wooden Boy",
+          },
+        ],
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "transcript": Transcript {
+        "items": [
+          TranscriptItem {
+            "inPoint": 12000,
+            "outPoint": 15550,
+            "speakerInitials": "JHC",
+            "text": MultilingualText {
+              "items": [
+                MultilingualTextItem {
+                  "languageCode": "eng",
+                  "role": "original",
+                  "text": "There once was a little wooden boy.",
+                },
+              ],
+            },
+          },
+          TranscriptItem {
+            "inPoint": 18300,
+            "outPoint": 19240,
+            "speakerInitials": "JHC",
+            "text": MultilingualText {
+              "items": [
+                MultilingualTextItem {
+                  "languageCode": "eng",
+                  "role": "original",
+                  "text": "His name was Pinocchio",
+                },
+              ],
+            },
+          },
+        ],
+        "participants": [
+          TranscriptParticipant {
+            "initials": "JHC",
+            "name": "Jimmy H. Cricket",
+          },
+        ],
+      },
+      "type": "audioItem",
+    },
+    WithTranscription {
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "AUDIOITEM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
+      "lengthMilliseconds": 23409,
+      "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "name": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Down at the River",
+          },
+        ],
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "transcript": Transcript {
+        "items": [
+          TranscriptItem {
+            "inPoint": 3400,
+            "outPoint": 3670,
+            "speakerInitials": "BL",
+            "text": MultilingualText {
+              "items": [
+                MultilingualTextItem {
+                  "languageCode": "eng",
+                  "role": "original",
+                  "text": "While she went down to the river",
+                },
+              ],
+            },
+          },
+          TranscriptItem {
+            "inPoint": 3700,
+            "outPoint": 3980,
+            "speakerInitials": "SD",
+            "text": MultilingualText {
+              "items": [
+                MultilingualTextItem {
+                  "languageCode": "eng",
+                  "role": "original",
+                  "text": "someone had already filled the water tank.",
+                },
+              ],
+            },
+          },
+          TranscriptItem {
+            "inPoint": 4010,
+            "outPoint": 4290,
+            "speakerInitials": "BL",
+            "text": MultilingualText {
+              "items": [
+                MultilingualTextItem {
+                  "languageCode": "eng",
+                  "role": "original",
+                  "text": "These were the types of problems we had.",
+                },
+              ],
+            },
+          },
+        ],
+        "participants": [
+          TranscriptParticipant {
+            "initials": "BL",
+            "name": "Bob LeRob",
+          },
+          TranscriptParticipant {
+            "initials": "SD",
+            "name": "Sue DeDue",
+          },
+        ],
+      },
+      "type": "audioItem",
+    },
+    WithTranscription {
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "AUDIOITEM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
+      "lengthMilliseconds": 32989,
+      "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "hai",
+            "role": "original",
+            "text": "Learning about Protocols",
+          },
+        ],
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "transcript": Transcript {
+        "items": [
+          TranscriptItem {
+            "inPoint": 120,
+            "outPoint": 848,
+            "speakerInitials": "E1",
+            "text": MultilingualText {
+              "items": [
+                MultilingualTextItem {
+                  "languageCode": "eng",
+                  "role": "original",
+                  "text": "this type of spoon is used in ceremonies",
+                },
+              ],
+            },
+          },
+          TranscriptItem {
+            "inPoint": 930,
+            "outPoint": 1080,
+            "speakerInitials": "E2",
+            "text": MultilingualText {
+              "items": [
+                MultilingualTextItem {
+                  "languageCode": "eng",
+                  "role": "original",
+                  "text": "by members of the opposite clan of the house chief",
+                },
+              ],
+            },
+          },
+        ],
+        "participants": [
+          TranscriptParticipant {
+            "initials": "E1",
+            "name": "Elder 1",
+          },
+          TranscriptParticipant {
+            "initials": "E2",
+            "name": "Elder 2",
+          },
+        ],
+      },
+      "type": "audioItem",
+    },
+  ],
+  "bibliographicReference": [
+    BookBibliographicReference {
+      "data": BookBibliographicReferenceData {
+        "abstract": "This is the abstract, NOT a general note!",
+        "creators": [
+          {
+            "name": "Alana Duvernay",
+            "type": "author",
+          },
+          {
+            "name": "James Smith",
+            "type": "author",
+          },
+        ],
+        "isbn": "978-1-895811-34-6",
+        "numberOfPages": 455,
+        "place": "Kennebunk Port, Maine",
+        "publisher": "Atlantic Publishing",
+        "title": "A Day in the Life",
+        "type": "book",
+        "url": "https://atlanticpublishing.com/authors/Duvernay/NewBook/BookInformation/",
+        "year": 1999,
+      },
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "BIBLIOGRAPHICREFERENCE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "bibliographicReference",
+    },
+    JournalArticleBibliographicReference {
+      "data": JournalArticleBibliographicReferenceData {
+        "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
+        "creators": [
+          BibliographicReferenceCreator {
+            "name": "Sigurd Purcell",
+            "type": "author",
+          },
+        ],
+        "doi": "10.14288/bcs.v0i19.784",
+        "issn": "00052949",
+        "issueDate": "Spring 2013",
+        "publicationTitle": "Journal of History",
+        "title": "Report on the Cariboo Chilcotin Justice inquiry",
+        "type": "journalArticle",
+        "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+      },
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "BIBLIOGRAPHICREFERENCE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "bibliographicReference",
+    },
+    CourtCaseBibliographicReference {
+      "data": CourtCaseBibliographicReferenceData {
+        "abstract": "William, June
+- Nemiah Valley
+- Qualifying as an expert in Tsilhqot'in written language",
+        "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+        "court": "Supreme Court of British Columbia",
+        "dateDecided": "Recorded 2002-07-08",
+        "pages": "Pages 1-6",
+        "type": "courtCase",
+        "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
+      },
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "BIBLIOGRAPHICREFERENCE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "bibliographicReference",
+    },
+  ],
+  "book": [
+    Book {
+      "author": "John Doeburg",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "BOOK.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+      "pages": [
+        BookPage {
+          "identifier": "1",
+          "text": "foo",
+          "translation": "dee foo",
+        },
+        BookPage {
+          "identifier": "2",
+          "text": "blah blah blah",
+          "translation": "blahas",
+        },
+      ],
+      "publicationDate": "2002",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "subtitle": "The wolf's revenge",
+      "title": "Three Little Pigs",
+      "type": "book",
+    },
+    Book {
+      "author": "Jane Donnaldson",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "BOOK.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+      "pages": [
+        BookPage {
+          "identifier": "ix",
+          "text": "blah blah blah",
+          "translation": "blahas",
+        },
+      ],
+      "publicationDate": "2011",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "subtitle": undefined,
+      "title": "An Adventure Story",
+      "type": "book",
+    },
+    Book {
+      "author": "Jane Donnaldson",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "BOOK.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+      "pages": [
+        BookPage {
+          "identifier": "ix",
+          "text": "blah blah blah",
+          "translation": "blahas",
+        },
+      ],
+      "publicationDate": "2012",
+      "published": false,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "subtitle": undefined,
+      "title": "An Adventure Story II",
+      "type": "book",
+    },
+  ],
+  "category": [
+    Category {
+      "childrenIDs": [
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
+      "label": "tree of knowledge",
+      "members": [],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "label": "animals",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "vocabularyList",
+        },
+      ],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "label": "mammals",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "term",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+          "type": "book",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "song",
+        },
+      ],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "label": "birds",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+          "type": "video",
+        },
+      ],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "label": "canines",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          "type": "term",
+        },
+      ],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "label": "felines",
+      "members": [],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "label": "big cats",
+      "members": [],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      "label": "domestic cats",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          "type": "vocabularyList",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
+          "type": "photograph",
+        },
+      ],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "label": "wolves",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
+          "type": "spatialFeature",
+        },
+      ],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      "label": "songs",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+          "type": "term",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
+          "type": "spatialFeature",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "bibliographicReference",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "mediaItem",
+        },
+      ],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
+      "label": "domestic dogs",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "photograph",
+        },
+      ],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+      "label": "rodents",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          "type": "book",
+        },
+      ],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+      "label": "film",
+      "members": [],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+      "label": "props",
+      "members": [],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+      "label": "wardrobe",
+      "members": [],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+      "label": "tools",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+          "type": "audioItem",
+        },
+      ],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+      "label": "adornments",
+      "members": [],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+      "label": "clothing",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "note",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+          "type": "playlist",
+        },
+      ],
+      "type": "category",
+    },
+    Category {
+      "childrenIDs": [],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "CATEGORY.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+      "label": "tools",
+      "members": [],
+      "type": "category",
+    },
+  ],
+  "mediaItem": [
+    MediaItem {
+      "contributorAndRoles": [
+        ContributorAndRole {
+          "contributorId": "2",
+          "role": "host",
+        },
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "MEDIAITEM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "lengthMilliseconds": 2500,
+      "mimeType": "audio/mpeg",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "title": "episode title (in language)",
+      "titleEnglish": "Metal Mondays episode 1",
+      "type": "mediaItem",
+      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
+    },
+    MediaItem {
+      "contributorAndRoles": [
+        ContributorAndRole {
+          "contributorId": "2",
+          "role": "host",
+        },
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "MEDIAITEM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "lengthMilliseconds": 910000,
+      "mimeType": "video/mp4",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "title": "video title (in language)",
+      "titleEnglish": "cool video",
+      "type": "mediaItem",
+      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+    },
+    MediaItem {
+      "contributorAndRoles": [
+        ContributorAndRole {
+          "contributorId": "2",
+          "role": "host",
+        },
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "MEDIAITEM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "lengthMilliseconds": 2500,
+      "mimeType": "audio/mpeg",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "title": "episode title (in language)",
+      "titleEnglish": "Metal Mondays episode 2",
+      "type": "mediaItem",
+      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+    },
+  ],
+  "note": [
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "term",
+          },
+          "context": {
+            "charRange": [
+              0,
+              3,
+            ],
+            "target": "term",
+            "type": "textField",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "pageIdentifiers": [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "This page is about bears",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "vocabularyList",
+          },
+          "context": {
+            "charRange": [
+              0,
+              1,
+            ],
+            "target": "name",
+            "type": "textField",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "This is the first letter of the list name",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+            "type": "spatialFeature",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "there is a placename for this point at the base of the mountain",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+            "type": "audioItem",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this clip talks about songs",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "photograph",
+          },
+          "context": {
+            "lines": [
+              [
+                [
+                  0,
+                  200,
+                ],
+                [
+                  100,
+                  300,
+                ],
+                [
+                  200,
+                  400,
+                ],
+                [
+                  250,
+                  475,
+                ],
+              ],
+            ],
+            "type": "freeMultiline",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this is the stem of the flower",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "photograph",
+          },
+          "context": {
+            "point": [
+              0,
+              200,
+            ],
+            "type": "point2D",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this is the base of the flower",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "pageIdentifiers": [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this section is the best part of an illustrated book about birds",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "bibliographicReference",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "found this in the archives",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 300,
+              "outPoint": 500,
+            },
+            "type": "timeRange",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this is a song",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "mediaItem",
+          },
+          "context": {
+            "charRange": [
+              0,
+              2,
+            ],
+            "target": "title",
+            "type": "textField",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this is an awesome show",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "mediaItem",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 650,
+              "outPoint": 1230,
+            },
+            "type": "timeRange",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "important clip from the show",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "bibliographicReference",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this book is hard to track down",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this clip talks about birds",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+            "type": "playlist",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this playlist is awesome",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "term",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "This page is about bears",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "vocabularyList",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "This is the first letter of the list name",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+            "type": "audioItem",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this clip talks about songs",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "photograph",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this is the stem of the flower",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "photograph",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this is the base of the flower",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this section is the best part of an illustrated book about birds",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this is a song",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "mediaItem",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this is an awesome show",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "mediaItem",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "important clip from the show",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "self",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110026",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "self",
+        },
+      ],
+      "note": "this clip talks about birds",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b112000",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "term",
+          },
+          "context": {
+            "charRange": [
+              0,
+              3,
+            ],
+            "target": "term",
+            "type": "textField",
+          },
+          "role": "to",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "vocabularyList",
+          },
+          "context": {
+            "charRange": [
+              0,
+              1,
+            ],
+            "target": "name",
+            "type": "textField",
+          },
+          "role": "from",
+        },
+      ],
+      "note": "That is why term/2 is related to vocabularyList/2",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "vocabularyList",
+          },
+          "context": {
+            "charRange": [
+              0,
+              1,
+            ],
+            "target": "name",
+            "type": "textField",
+          },
+          "role": "to",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+            "type": "audioItem",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
+        },
+      ],
+      "note": "That is why vocabularyList/2 is related to audioItem/110",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+            "type": "audioItem",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "to",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "pageIdentifiers": [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "from",
+        },
+      ],
+      "note": "That is why audioItem/110 is related to book/24",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "pageIdentifiers": [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "to",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "photograph",
+          },
+          "context": {
+            "lines": [
+              [
+                [
+                  0,
+                  200,
+                ],
+                [
+                  100,
+                  300,
+                ],
+                [
+                  200,
+                  400,
+                ],
+                [
+                  250,
+                  475,
+                ],
+              ],
+            ],
+            "type": "freeMultiline",
+          },
+          "role": "from",
+        },
+      ],
+      "note": "That is why book/24 is related to photograph/2",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "photograph",
+          },
+          "context": {
+            "lines": [
+              [
+                [
+                  0,
+                  200,
+                ],
+                [
+                  100,
+                  300,
+                ],
+                [
+                  200,
+                  400,
+                ],
+                [
+                  250,
+                  475,
+                ],
+              ],
+            ],
+            "type": "freeMultiline",
+          },
+          "role": "to",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+            "type": "spatialFeature",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "note": "That is why photograph/2 is related to spatialFeature/300",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+            "type": "spatialFeature",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 300,
+              "outPoint": 500,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
+        },
+      ],
+      "note": "That is why spatialFeature/300 is related to song/1",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 300,
+              "outPoint": 500,
+            },
+            "type": "timeRange",
+          },
+          "role": "to",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
+        },
+      ],
+      "note": "That is why song/1 is related to video/223",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 11000,
+              "outPoint": 12950,
+            },
+            "type": "timeRange",
+          },
+          "role": "to",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+            "type": "playlist",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "note": "That is why video/223 is related to playlist/501",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b112008",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+            "type": "playlist",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "term",
+          },
+          "context": {
+            "charRange": [
+              0,
+              3,
+            ],
+            "target": "term",
+            "type": "textField",
+          },
+          "role": "from",
+        },
+      ],
+      "note": "That is why playlist/501 is related to term/2",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b113001",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "mediaItem",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 100,
+              "outPoint": 1200,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "term",
+          },
+          "context": {
+            "charRange": [
+              1,
+              4,
+            ],
+            "target": "term",
+            "type": "textField",
+          },
+          "role": "to",
+        },
+      ],
+      "note": "this media item mentions a word in the term",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b113002",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "bibliographicReference",
+          },
+          "context": {
+            "type": "identity",
+          },
+          "role": "from",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "type": "identity",
+          },
+          "role": "to",
+        },
+      ],
+      "note": "here is the digital version of the book!",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b113101",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "mediaItem",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 300,
+              "outPoint": 1800,
+            },
+            "type": "timeRange",
+          },
+          "role": "to",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "pageIdentifiers": [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "from",
+        },
+      ],
+      "note": "this selection from the media item portrays the events in the book",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b113102",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "bibliographicReference",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 500,
+              "outPoint": 778.4,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
+        },
+      ],
+      "note": "this library book has the lyrics from the song, but we do not have access to the book",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b113201",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+            "type": "bibliographicReference",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+      ],
+      "note": "this is why bibliographic_references/3 is connected to book/24",
+      "type": "note",
+    },
+    EdgeConnection {
+      "connectionType": "dual",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "NOTE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b113202",
+      "members": [
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+            "type": "bibliographicReference",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+        EdgeConnectionMember {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+      ],
+      "note": "this is why bibliographic_references/23 is connected to book/24",
+      "type": "note",
+    },
+  ],
+  "photograph": [
+    Photograph {
+      "dimensions": PhotographDimensions {
+        "heightPX": 400,
+        "widthPX": 300,
+      },
+      "eventHistory": [],
+      "filename": "Adiitsii-Running",
+      "getCompositeIdentifier": [Function],
+      "id": "PHOTOGRAPH.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
+      "photographer": "Susie McRealart",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "photograph",
+    },
+    Photograph {
+      "dimensions": PhotographDimensions {
+        "heightPX": 285,
+        "widthPX": 420,
+      },
+      "eventHistory": [],
+      "filename": "Nuu-Story",
+      "getCompositeIdentifier": [Function],
+      "id": "PHOTOGRAPH.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "photographer": "Robert McRealart",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "photograph",
+    },
+    Photograph {
+      "dimensions": PhotographDimensions {
+        "heightPX": 1500,
+        "widthPX": 1200,
+      },
+      "eventHistory": [],
+      "filename": "TwoBrothersPole",
+      "getCompositeIdentifier": [Function],
+      "id": "PHOTOGRAPH.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "photographer": "Kenny Tree-Huggens",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "photograph",
+    },
+  ],
+  "playlist": [
+    Playlist {
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "PLAYLIST.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+      "items": [
+        PlaylistItem {
+          "resourceCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+            "type": "audioItem",
+          },
+        },
+        PlaylistItem {
+          "resourceCompositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
+            "type": "audioItem",
+          },
+        },
+      ],
+      "name": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Blake's jams",
+          },
+        ],
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "playlist",
+    },
+  ],
+  "song": [
+    Song {
+      "audioURL": "https://www.myaudio.com/lamb.mp3",
+      "contributions": [
+        ContributorAndRole {
+          "contributorId": "1",
+          "role": "performer",
+        },
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "SONG.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "lengthMilliseconds": 3500,
+      "lyrics": "Mary had a little lamb, little lamb.",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "startMilliseconds": 0,
+      "title": "Song title in language",
+      "titleEnglish": "Mary had a little lamb",
+      "type": "song",
+    },
+    Song {
+      "audioURL": "https://www.myaudio.com/badsong.wav",
+      "contributions": [
+        ContributorAndRole {
+          "contributorId": "33",
+          "role": "author",
+        },
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "SONG.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "lengthMilliseconds": 33000,
+      "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+      "published": false,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [
+          "1",
+        ],
+      },
+      "startMilliseconds": 0,
+      "title": "Unpublished Song Title (lang)",
+      "titleEnglish": "Unpublished Song Title (Engl)",
+      "type": "song",
+    },
+  ],
+  "spatialFeature": [
+    Point {
+      "eventHistory": [],
+      "geometry": {
+        "coordinates": [
+          54.034404852745006,
+          -132.17563335558532,
+        ],
+        "type": "Point",
+      },
+      "getCompositeIdentifier": [Function],
+      "id": "SPATIALFEATURE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
+      "properties": SpatialFeatureProperties {
+        "description": "Description for point 100",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 100",
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "spatialFeature",
+    },
+    Point {
+      "eventHistory": [],
+      "geometry": {
+        "coordinates": [
+          53.26710566708586,
+          -131.99142447847115,
+        ],
+        "type": "Point",
+      },
+      "getCompositeIdentifier": [Function],
+      "id": "SPATIALFEATURE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
+      "properties": SpatialFeatureProperties {
+        "description": "Description for point 101",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 101",
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "spatialFeature",
+    },
+    Point {
+      "eventHistory": [],
+      "geometry": {
+        "coordinates": [
+          51.93152097800416,
+          -123.14042112774867,
+        ],
+        "type": "Point",
+      },
+      "getCompositeIdentifier": [Function],
+      "id": "SPATIALFEATURE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
+      "properties": SpatialFeatureProperties {
+        "description": "Description for point 102",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 102",
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "spatialFeature",
+    },
+    Point {
+      "eventHistory": [],
+      "geometry": {
+        "coordinates": [
+          51.935065638350636,
+          -122.50936316168337,
+        ],
+        "type": "Point",
+      },
+      "getCompositeIdentifier": [Function],
+      "id": "SPATIALFEATURE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110103",
+      "properties": SpatialFeatureProperties {
+        "description": "Description for point 103",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 103",
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "spatialFeature",
+    },
+    Point {
+      "eventHistory": [],
+      "geometry": {
+        "coordinates": [
+          52.12579975880678,
+          -123.68132823530952,
+        ],
+        "type": "Point",
+      },
+      "getCompositeIdentifier": [Function],
+      "id": "SPATIALFEATURE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110104",
+      "properties": SpatialFeatureProperties {
+        "description": "Description for point 104",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Name of Point with ID: 104",
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "spatialFeature",
+    },
+    Line {
+      "eventHistory": [],
+      "geometry": {
+        "coordinates": [
+          [
+            52.3,
+            -124.2,
+          ],
+          [
+            52.35,
+            -124.85,
+          ],
+          [
+            52.21,
+            -124.9,
+          ],
+          [
+            52.05,
+            -125.1,
+          ],
+          [
+            52.15,
+            -125.1,
+          ],
+          [
+            52.33,
+            -125.22,
+          ],
+          [
+            52.45,
+            -125.39,
+          ],
+        ],
+        "type": "LineString",
+      },
+      "getCompositeIdentifier": [Function],
+      "id": "SPATIALFEATURE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "properties": SpatialFeatureProperties {
+        "description": "One amazing hike!",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Windy Path",
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "spatialFeature",
+    },
+    Polygon {
+      "eventHistory": [],
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              52.47,
+              -123.6,
+            ],
+            [
+              52.42,
+              -123.95,
+            ],
+            [
+              52.05,
+              -123.95,
+            ],
+            [
+              52.05,
+              -123.685,
+            ],
+          ],
+        ],
+        "type": "Polygon",
+      },
+      "getCompositeIdentifier": [Function],
+      "id": "SPATIALFEATURE.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+      "properties": SpatialFeatureProperties {
+        "description": "Description for point 300",
+        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "name": "Point with ID: 300 Name",
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "spatialFeature",
+    },
+  ],
+  "tag": [
+    Tag {
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TAG.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "label": "plants",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "term",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+          "type": "book",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          "type": "book",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "vocabularyList",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
+          "type": "spatialFeature",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
+          "type": "note",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+          "type": "note",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+          "type": "note",
+        },
+      ],
+      "type": "tag",
+    },
+    Tag {
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TAG.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "label": "animals",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          "type": "term",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+          "type": "term",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
+          "type": "spatialFeature",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
+          "type": "note",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+          "type": "note",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "bibliographicReference",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+          "type": "video",
+        },
+      ],
+      "type": "tag",
+    },
+    Tag {
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TAG.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "label": "placenames",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
+          "type": "photograph",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+          "type": "audioItem",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
+          "type": "note",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+          "type": "note",
+        },
+      ],
+      "type": "tag",
+    },
+    Tag {
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TAG.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "label": "songs",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "photograph",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
+          "type": "note",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+          "type": "note",
+        },
+      ],
+      "type": "tag",
+    },
+    Tag {
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TAG.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "label": "legends",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          "type": "vocabularyList",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
+          "type": "spatialFeature",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
+          "type": "note",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "note",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "mediaItem",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "type": "song",
+        },
+      ],
+      "type": "tag",
+    },
+    Tag {
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TAG.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "label": "law",
+      "members": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+          "type": "bibliographicReference",
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+          "type": "playlist",
+        },
+      ],
+      "type": "tag",
+    },
+  ],
+  "term": [
+    Term {
+      "audioFilename": undefined,
+      "contributorId": "John Doe",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TERM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "sourceProject": undefined,
+      "term": "Chil-term-1",
+      "termEnglish": "Engl-term-1",
+      "type": "term",
+    },
+    Term {
+      "audioFilename": undefined,
+      "contributorId": "John Doe",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TERM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "sourceProject": undefined,
+      "term": "Chil-term-2",
+      "termEnglish": "Engl-term-2",
+      "type": "term",
+    },
+    Term {
+      "audioFilename": undefined,
+      "contributorId": "Jane Deer",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TERM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "published": false,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "sourceProject": undefined,
+      "term": "Chil-term-no-english",
+      "termEnglish": undefined,
+      "type": "term",
+    },
+    Term {
+      "audioFilename": undefined,
+      "contributorId": "This will be removed soon",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TERM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "published": false,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [
+          "1",
+        ],
+      },
+      "sourceProject": undefined,
+      "term": "My Secret Term",
+      "termEnglish": undefined,
+      "type": "term",
+    },
+    Term {
+      "audioFilename": undefined,
+      "contributorId": "Sarah Smith",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TERM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "sourceProject": undefined,
+      "term": "I am singing (lang)",
+      "termEnglish": "I am singing (Engl)",
+      "type": "term",
+    },
+    Term {
+      "audioFilename": undefined,
+      "contributorId": "Sarah Smith",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TERM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "sourceProject": undefined,
+      "term": "You are singing (lang)",
+      "termEnglish": "You are singing (Engl)",
+      "type": "term",
+    },
+    Term {
+      "audioFilename": undefined,
+      "contributorId": "Sarah Smith",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TERM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "sourceProject": undefined,
+      "term": "She is singing (lang)",
+      "termEnglish": "She is singing (Engl)",
+      "type": "term",
+    },
+    Term {
+      "audioFilename": undefined,
+      "contributorId": "Sarah Smith",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TERM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "sourceProject": undefined,
+      "term": "I am not singing (lang)",
+      "termEnglish": "I am not singing (Engl)",
+      "type": "term",
+    },
+    Term {
+      "audioFilename": undefined,
+      "contributorId": "Sarah Smith",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "TERM.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "sourceProject": undefined,
+      "term": "You are not singing (lang)",
+      "termEnglish": "You are not singing (Engl)",
+      "type": "term",
+    },
+  ],
+  "user": [
+    CoscradUser {
+      "authProviderUserId": "auth0|123",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "USER.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "profile": CoscradUserProfile {
+        "email": "llcj1985@aol.com",
+        "name": FullName {
+          "firstName": "James",
+          "lastName": "Jones",
+        },
+      },
+      "roles": [
+        "viewer",
+      ],
+      "type": "user",
+      "username": "cool-james",
+    },
+  ],
+  "userGroup": [
+    CoscradUserGroup {
+      "description": "This group is for members of the community only.",
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "USERGROUP.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "label": "community members",
+      "type": "userGroup",
+      "userIds": [
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      ],
+    },
+  ],
+  "video": [
+    WithTranscription {
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "VIDEO.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+      "lengthMilliseconds": 20000,
+      "mediaItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "name": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "The Demonstration",
+          },
+        ],
+      },
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "transcript": Transcript {
+        "items": [
+          TranscriptItem {
+            "inPoint": 12000,
+            "outPoint": 15550,
+            "speakerInitials": "DM",
+            "text": MultilingualText {
+              "items": [
+                MultilingualTextItem {
+                  "languageCode": "eng",
+                  "role": "original",
+                  "text": "This is how.",
+                },
+              ],
+            },
+          },
+          TranscriptItem {
+            "inPoint": 18300,
+            "outPoint": 19240,
+            "speakerInitials": "DM",
+            "text": MultilingualText {
+              "items": [
+                MultilingualTextItem {
+                  "languageCode": "eng",
+                  "role": "original",
+                  "text": "It is done",
+                },
+              ],
+            },
+          },
+        ],
+        "participants": [
+          TranscriptParticipant {
+            "initials": "DM",
+            "name": "Dee Monstrator",
+          },
+        ],
+      },
+      "type": "video",
+    },
+  ],
+  "vocabularyList": [
+    VocabularyList {
+      "entries": [
+        VocabularyListEntry {
+          "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+          "variableValues": {
+            "person": "11",
+            "positive": true,
+          },
+        },
+        VocabularyListEntry {
+          "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+          "variableValues": {
+            "person": "12",
+            "positive": false,
+          },
+        },
+        VocabularyListEntry {
+          "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
+          "variableValues": {
+            "person": "13",
+            "positive": false,
+          },
+        },
+        VocabularyListEntry {
+          "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+          "variableValues": {
+            "person": "01",
+            "positive": true,
+          },
+        },
+        VocabularyListEntry {
+          "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+          "variableValues": {
+            "person": "02",
+            "positive": false,
+          },
+        },
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "VOCABULARYLIST.9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
+      "name": "To Sing (lang)",
+      "nameEnglish": "To Sing (Engl)",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "vocabularyList",
+      "variables": [
+        {
+          "name": "positive",
+          "type": "checkbox",
+          "validValues": [
+            {
+              "display": "negative (lha)",
+              "value": false,
+            },
+            {
+              "display": "positive form (switch for negative)",
+              "value": true,
+            },
+          ],
+        },
+        {
+          "name": "person",
+          "type": "dropbox",
+          "validValues": [
+            {
+              "display": "I",
+              "value": "1",
+            },
+            {
+              "display": "You",
+              "value": "2",
+            },
+            {
+              "display": "She",
+              "value": "3",
+            },
+          ],
+        },
+      ],
+    },
+    VocabularyList {
+      "entries": [
+        VocabularyListEntry {
+          "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "variableValues": {
+            "person": "11",
+          },
+        },
+        VocabularyListEntry {
+          "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          "variableValues": {
+            "person": "12",
+          },
+        },
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "VOCABULARYLIST.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": "test VL 1 chil",
+      "nameEnglish": "test VL 1 engl",
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "vocabularyList",
+      "variables": [
+        {
+          "name": "person",
+          "type": "dropbox",
+          "validValues": [
+            {
+              "display": "I",
+              "value": "11",
+            },
+            {
+              "display": "We",
+              "value": "12",
+            },
+          ],
+        },
+      ],
+    },
+    VocabularyList {
+      "entries": [
+        VocabularyListEntry {
+          "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          "variableValues": {
+            "his": false,
+          },
+        },
+        VocabularyListEntry {
+          "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "variableValues": {
+            "his": true,
+          },
+        },
+      ],
+      "eventHistory": [],
+      "getCompositeIdentifier": [Function],
+      "id": "VOCABULARYLIST.9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "name": "test VL 2 CHIL- no engl name",
+      "nameEnglish": undefined,
+      "published": true,
+      "queryAccessControlList": AccessControlList {
+        "allowedGroupIds": [],
+        "allowedUserIds": [],
+      },
+      "type": "vocabularyList",
+      "variables": [
+        {
+          "name": "his",
+          "type": "checkbox",
+          "validValues": [
+            {
+              "display": "his",
+              "value": true,
+            },
+            {
+              "display": "hers",
+              "value": false,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
+`;
