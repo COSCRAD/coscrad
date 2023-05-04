@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CLI Command: **domain-restore** when the command is valid when using the --filepath option to specify the input file should restore the db state via the domain snapshot 1`] = `
+exports[`CLI Command: **data-restore** when the command is valid when using the --filepath option to specify the input file should restore the db state via the domain snapshot 1`] = `
 {
   "audioItem": [
     WithTranscription {
@@ -268,10 +268,10 @@ exports[`CLI Command: **domain-restore** when the command is valid when using th
     },
     CourtCaseBibliographicReference {
       "data": CourtCaseBibliographicReferenceData {
-        "abstract": "William, June
-- Nemiah Valley
-- Qualifying as an expert in Tsilhqot'in written language",
-        "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+        "abstract": "Doe, Jane
+- Large Valley
+- Qualifying as an expert in the written language",
+        "caseName": "2002-07-08_NationTitleCase",
         "court": "Supreme Court of British Columbia",
         "dateDecided": "Recorded 2002-07-08",
         "pages": "Pages 1-6",

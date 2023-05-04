@@ -7,8 +7,8 @@ import { DataExporter } from '../persistence/repositories/data-exporter';
 import convertInMemorySnapshotToDatabaseFormat from '../test-data/utilities/convertInMemorySnapshotToDatabaseFormat';
 
 @Command({
-    name: 'domain-dump',
-    description: 'dumps the database state to a snapshot of the domain',
+    name: 'data-dump',
+    description: 'dumps the database state to a snapshot file',
 })
 export class DomainDumpCliCommand extends CommandRunner {
     private readonly dataExporter: DataExporter;

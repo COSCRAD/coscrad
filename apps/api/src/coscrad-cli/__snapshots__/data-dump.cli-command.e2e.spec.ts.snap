@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CLI Command: **domain-dump** when the command is valid when using the full --filepath input option should write a dump file 1`] = `
+exports[`CLI Command: **data-dump** when the command is valid when using the full --filepath input option should write a dump file 1`] = `
 {
   "document": {
     "audio_items": [
@@ -265,10 +265,10 @@ exports[`CLI Command: **domain-dump** when the command is valid when using the f
       {
         "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
         "data": {
-          "abstract": "William, June
-- Nemiah Valley
-- Qualifying as an expert in Tsilhqot'in written language",
-          "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+          "abstract": "Doe, Jane
+- Large Valley
+- Qualifying as an expert in the written language",
+          "caseName": "2002-07-08_NationTitleCase",
           "court": "Supreme Court of British Columbia",
           "dateDecided": "Recorded 2002-07-08",
           "pages": "Pages 1-6",
@@ -2532,7 +2532,7 @@ exports[`CLI Command: **domain-dump** when the command is valid when using the f
 }
 `;
 
-exports[`CLI Command: **domain-dump** when the command is valid when using the full -f input option should write a dump file 1`] = `
+exports[`CLI Command: **data-dump** when the command is valid when using the full -f input option should write a dump file 1`] = `
 {
   "document": {
     "audio_items": [
@@ -2797,10 +2797,10 @@ exports[`CLI Command: **domain-dump** when the command is valid when using the f
       {
         "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
         "data": {
-          "abstract": "William, June
-- Nemiah Valley
-- Qualifying as an expert in Tsilhqot'in written language",
-          "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+          "abstract": "Doe, Jane
+- Large Valley
+- Qualifying as an expert in the written language",
+          "caseName": "2002-07-08_NationTitleCase",
           "court": "Supreme Court of British Columbia",
           "dateDecided": "Recorded 2002-07-08",
           "pages": "Pages 1-6",

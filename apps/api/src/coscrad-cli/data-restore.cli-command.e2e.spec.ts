@@ -1,5 +1,5 @@
 import { TestingModule } from '@nestjs/testing';
-import { existsSync, unlinkSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, unlinkSync, writeFileSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
@@ -15,11 +15,17 @@ import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
 import convertInMemorySnapshotToDatabaseFormat from '../test-data/utilities/convertInMemorySnapshotToDatabaseFormat';
 import { CoscradCliModule } from './coscrad-cli.module';
 
-const cliCommandName = 'domain-restore';
+const cliCommandName = 'data-restore';
 
-const fileToRestore = `foo.data.json`;
+const outputDir = `__cli-command-test-files__`;
 
-describe(`CLI Command: **domain-restore**`, () => {
+const outputFilePrefix = `./${outputDir}/${cliCommandName}`;
+
+const buildFullFilepath = (suffix: string): string => `${outputFilePrefix}${suffix}.data.json`;
+
+const fileToRestore = buildFullFilepath(`__restore-file__`);
+
+describe(`CLI Command: **data-restore**`, () => {
     let commandInstance: TestingModule;
 
     let testRepositoryProvider: TestRepositoryProvider;
@@ -45,9 +51,9 @@ describe(`CLI Command: **domain-restore**`, () => {
             .useValue(databaseProvider)
             .compile();
 
-        // if (!existsSync(outputDir)) {
-        //     mkdirSync(outputDir);
-        // }
+        if (!existsSync(outputDir)) {
+            mkdirSync(outputDir);
+        }
     });
 
     describe(`when the command is valid`, () => {
@@ -121,6 +127,45 @@ describe(`CLI Command: **domain-restore**`, () => {
                 expect(aggregatesNotInSnapshot).toEqual([]);
 
                 expect(snapshot).toMatchSnapshot();
+            });
+        });
+
+        describe(`when using the -f option to specify the input file`, () => {
+            it(`should restore the db state via the domain snapshot`, async () => {
+                const terms = await testRepositoryProvider
+                    .forResource(AggregateType.term)
+                    .fetchMany();
+
+                // sanity check to ensure db has been emptied
+                expect(terms).toEqual([]);
+
+                await CommandTestFactory.run(commandInstance, [
+                    cliCommandName,
+                    `-f`,
+                    fileToRestore,
+                ]);
+
+                const dataExporter = new DataExporter(testRepositoryProvider);
+
+                const inMemoryStore = await dataExporter.fetchSnapshot();
+
+                const snapshot = inMemoryStore.fetchFullSnapshot();
+
+                const aggregatesNotInSnapshot = Object.values(AggregateType).reduce(
+                    (acc: AggregateType[], aggregateType) =>
+                        isNullOrUndefined(snapshot[aggregateType]) ||
+                        snapshot[aggregateType]?.length === 0
+                            ? acc.concat(aggregateType)
+                            : acc,
+                    []
+                );
+
+                /**
+                 * The test data is comprehensive, so checking that there is at
+                 * least one instnace of each aggregate in the post-restore state
+                 * is a good sanity check.
+                 */
+                expect(aggregatesNotInSnapshot).toEqual([]);
             });
         });
     });

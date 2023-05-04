@@ -13,7 +13,7 @@ import generateDatabaseNameForTestSuite from '../persistence/repositories/__test
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
 import { CoscradCliModule } from './coscrad-cli.module';
 
-const cliCommandName = 'domain-dump';
+const cliCommandName = 'data-dump';
 
 const outputDir = `__cli-command-test-files__`;
 
@@ -21,7 +21,7 @@ const outputFilePrefix = `./${outputDir}/${cliCommandName}`;
 
 const buildFullFilepath = (suffix: string): string => `${outputFilePrefix}${suffix}.data.json`;
 
-describe('CLI Command: **domain-dump**', () => {
+describe('CLI Command: **data-dump**', () => {
     let commandInstance: TestingModule;
 
     let testRepositoryProvider: TestRepositoryProvider;
