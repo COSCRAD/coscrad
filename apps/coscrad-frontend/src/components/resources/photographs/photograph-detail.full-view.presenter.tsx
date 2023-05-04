@@ -19,13 +19,11 @@ export const PhotographDetailFullViewPresenter = ({
     };
 
     return (
-        <>
+        <CoscradMainContentContainer>
             <ImageFullPageWidth image={image} />
-            <CoscradMainContentContainer>
-                <div data-testid={id} />
-                <ResourceNamePresenter name={name} variant="h2" />
-                <SinglePropertyPresenter display="Photograph ID" value={id} />
-            </CoscradMainContentContainer>
-        </>
+            <div data-testid={id} />
+            <ResourceNamePresenter name={name} variant="h2" />
+            <SinglePropertyPresenter display="Photograph ID" value={id} />
+        </CoscradMainContentContainer>
     );
 };
