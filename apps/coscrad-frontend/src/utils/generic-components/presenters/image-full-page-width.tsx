@@ -7,9 +7,14 @@ interface FullImageViewProps {
 }
 
 const StyledFullViewFigure = styled('figure')({
-    width: '100%',
-    display: 'block',
-    margin: '0 0 2% 0',
+    left: '50%',
+    marginLeft: '-50vw',
+    marginRight: '-50vw',
+    maxWidth: '100vw',
+    position: 'relative',
+    right: '50%',
+    width: '100vw',
+    marginTop: '-7%',
 });
 
 export const ImageFullPageWidth = ({ image }: FullImageViewProps): JSX.Element => {
