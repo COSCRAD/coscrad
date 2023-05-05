@@ -4,10 +4,11 @@ import { Command, CommandRunner, Option } from 'nest-commander';
 import { IRepositoryProvider } from '../domain/repositories/interfaces/repository-provider.interface';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { DataExporter } from '../persistence/repositories/data-exporter';
+import convertInMemorySnapshotToDatabaseFormat from '../test-data/utilities/convertInMemorySnapshotToDatabaseFormat';
 
 @Command({
-    name: 'domain-dump',
-    description: 'test the COSCRAD CLI!',
+    name: 'data-dump',
+    description: 'dumps the database state to a snapshot file',
 })
 export class DomainDumpCliCommand extends CommandRunner {
     private readonly dataExporter: DataExporter;
@@ -18,18 +19,18 @@ export class DomainDumpCliCommand extends CommandRunner {
         this.dataExporter = new DataExporter(repositoryProvider);
     }
 
-    async run(_passedParams: string[], options?: Record<string, any>): Promise<void> {
+    async run(_passedParams: string[], options?: { filepath: string }): Promise<void> {
         const NUMBER_OF_SPACES_TO_INDENT = 4;
 
-        const result = await this.dataExporter.fetchSnapshot();
+        const domainSnapshot = await this.dataExporter.fetchSnapshot();
+
+        const snapshotInDatabaseFormat = convertInMemorySnapshotToDatabaseFormat(
+            domainSnapshot.fetchFullSnapshotInLegacyFormat()
+        );
 
         writeFileSync(
             options.filepath,
-            JSON.stringify(
-                result.fetchFullSnapshotInLegacyFormat(),
-                null,
-                NUMBER_OF_SPACES_TO_INDENT
-            )
+            JSON.stringify(snapshotInDatabaseFormat, null, NUMBER_OF_SPACES_TO_INDENT)
         );
     }
 

@@ -76,6 +76,13 @@ export class DeluxeInMemoryStore {
         return this;
     }
 
+    fetchFullSnapshot(): Required<PartialSnapshot> {
+        return Object.fromEntries(this.inMemoryMapOfAggregates) as Record<
+            AggregateType,
+            Aggregate[]
+        >;
+    }
+
     fetchFullSnapshotInLegacyFormat(): Snapshot {
         const result = Object.values(AggregateType).reduce(
             (acc: DeepPartial<Snapshot>, key: AggregateType) => {
