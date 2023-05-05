@@ -1,3 +1,6 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualTextItem } from '../domain/common/entities/multilingual-text';
 import { Song } from '../domain/models/song/song.entity';
 import { ResourceType } from '../domain/types/ResourceType';
 import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid';
@@ -6,8 +9,16 @@ export default (): Song[] =>
     [
         {
             type: ResourceType.song,
-            title: 'Song title in language',
-            titleEnglish: 'Mary had a little lamb',
+            title: buildMultilingualTextWithSingleItem(
+                'Song title in language',
+                LanguageCode.Chilcotin
+            ).append(
+                new MultilingualTextItem({
+                    text: 'Mary had a little lamb',
+                    languageCode: LanguageCode.English,
+                    role: MultilingualTextItemRole.freeTranslation,
+                })
+            ),
             lyrics: 'Mary had a little lamb, little lamb.',
             audioURL: 'https://www.myaudio.com/lamb.mp3',
             published: true,
@@ -22,8 +33,16 @@ export default (): Song[] =>
         },
         {
             type: ResourceType.song,
-            title: 'Unpublished Song Title (lang)',
-            titleEnglish: 'Unpublished Song Title (Engl)',
+            title: buildMultilingualTextWithSingleItem(
+                'Unpublished Song Title (lang)',
+                LanguageCode.Chilcotin
+            ).append(
+                new MultilingualTextItem({
+                    text: 'Unpublished Song Title (Engl)',
+                    languageCode: LanguageCode.English,
+                    role: MultilingualTextItemRole.freeTranslation,
+                })
+            ),
             lyrics: "Ain't gonna see the light of day, light of day, light of day",
             audioURL: 'https://www.myaudio.com/badsong.wav',
             published: false,

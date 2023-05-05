@@ -16,8 +16,10 @@ export class CoscradUserViewModel extends BaseViewModel implements ICoscradUserV
     @FromUser
     readonly roles: CoscradUserRole[];
 
-    constructor({ id, profile, username, roles }: CoscradUser) {
-        super({ id });
+    constructor(user: CoscradUser) {
+        super(user);
+
+        const { profile, username, roles } = user;
 
         this.profile = new CoscradUserProfile(profile);
 

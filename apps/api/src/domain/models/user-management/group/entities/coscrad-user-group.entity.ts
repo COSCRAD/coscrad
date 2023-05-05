@@ -2,6 +2,8 @@ import { NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../types/DTO';
+import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { isValid, Valid } from '../../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../../types/AggregateId';
@@ -55,6 +57,10 @@ export class CoscradUserGroup extends Aggregate {
         this.userIds = Array.isArray(userIds) ? [...userIds] : undefined;
 
         this.description = description;
+    }
+
+    getName(): MultilingualText {
+        return buildMultilingualTextWithSingleItem(this.label);
     }
 
     getAvailableCommands(): string[] {

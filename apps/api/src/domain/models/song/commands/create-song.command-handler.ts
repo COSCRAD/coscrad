@@ -45,14 +45,12 @@ export class CreateSongCommandHandler extends BaseCommandHandler<Song> {
     async createOrFetchWriteContext({
         aggregateCompositeIdentifier: { id },
         title,
-        titleEnglish,
         lyrics,
         audioURL,
     }: CreateSong): Promise<ResultOrError<Song>> {
         const songDTO: DTO<Song> = {
             id,
             title,
-            titleEnglish,
             lyrics,
             audioURL,
             published: false,

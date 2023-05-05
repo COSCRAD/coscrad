@@ -21,8 +21,10 @@ export class CoscradUserGroupViewModel extends BaseViewModel implements ICoscrad
     @FromUserGroup
     readonly description: string;
 
-    constructor({ id, label, userIds, description }: CoscradUserGroup, allUsers: CoscradUser[]) {
-        super({ id });
+    constructor(userGroup: CoscradUserGroup, allUsers: CoscradUser[]) {
+        super(userGroup);
+
+        const { label, userIds, description } = userGroup;
 
         this.label = label;
 

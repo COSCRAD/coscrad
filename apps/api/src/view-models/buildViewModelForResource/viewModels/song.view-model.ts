@@ -7,12 +7,6 @@ const FromSong = FromDomainModel(Song);
 
 export class SongViewModel extends BaseViewModel implements ISongViewModel {
     @FromSong
-    readonly title?: string;
-
-    @FromSong
-    readonly titleEnglish?: string;
-
-    @FromSong
     readonly lyrics?: string;
 
     @URL({
@@ -30,12 +24,7 @@ export class SongViewModel extends BaseViewModel implements ISongViewModel {
     constructor(song: Song) {
         super(song);
 
-        const { title, titleEnglish, lyrics, audioURL, lengthMilliseconds, startMilliseconds } =
-            song;
-
-        this.title = title;
-
-        this.titleEnglish = titleEnglish;
+        const { lyrics, audioURL, lengthMilliseconds, startMilliseconds } = song;
 
         this.lyrics = lyrics;
 
