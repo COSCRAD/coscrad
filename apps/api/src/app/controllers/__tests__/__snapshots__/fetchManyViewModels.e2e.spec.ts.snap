@@ -220,10 +220,10 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
     {
       "actions": [],
       "data": {
-        "abstract": "William, June
-- Nemiah Valley
-- Qualifying as an expert in Tsilhqot'in written language",
-        "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+        "abstract": "Doe, Jane
+- Large Valley
+- Qualifying as an expert in the written language",
+        "caseName": "2002-07-08_NationTitleCase",
         "court": "Supreme Court of British Columbia",
         "dateDecided": "Recorded 2002-07-08",
         "pages": "Pages 1-6",
@@ -341,10 +341,10 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
     {
       "actions": [],
       "data": {
-        "abstract": "William, June
-- Nemiah Valley
-- Qualifying as an expert in Tsilhqot'in written language",
-        "caseName": "2002-07-08_Tsilhqot'inTitleCase",
+        "abstract": "Doe, Jane
+- Large Valley
+- Qualifying as an expert in the written language",
+        "caseName": "2002-07-08_NationTitleCase",
         "court": "Supreme Court of British Columbia",
         "dateDecided": "Recorded 2002-07-08",
         "pages": "Pages 1-6",

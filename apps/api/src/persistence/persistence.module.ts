@@ -23,6 +23,14 @@ export class PersistenceModule {
             inject: [ConfigService],
         };
 
+        const arangoDatabaseProvider = {
+            provide: ArangoDatabaseProvider,
+            useFactory: async (arangoConnectionProvider: ArangoConnectionProvider) => {
+                return new ArangoDatabaseProvider(arangoConnectionProvider);
+            },
+            inject: [ArangoConnectionProvider],
+        };
+
         const repositoryProvider = {
             provide: REPOSITORY_PROVIDER_TOKEN,
             useFactory: async (arangoConnectionProvider: ArangoConnectionProvider) => {
@@ -45,8 +53,18 @@ export class PersistenceModule {
         return {
             module: PersistenceModule,
             imports: [ConfigModule],
-            providers: [arangoConnectionProvider, repositoryProvider, idRepositoryProvider],
-            exports: [arangoConnectionProvider, repositoryProvider, idRepositoryProvider],
+            providers: [
+                arangoConnectionProvider,
+                repositoryProvider,
+                idRepositoryProvider,
+                arangoDatabaseProvider,
+            ],
+            exports: [
+                arangoConnectionProvider,
+                repositoryProvider,
+                idRepositoryProvider,
+                arangoDatabaseProvider,
+            ],
             global: true,
         };
     }

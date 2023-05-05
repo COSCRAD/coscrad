@@ -9,9 +9,9 @@ const dtos: DTO<CourtCaseBibliographicReference>[] = [
         type: ResourceType.bibliographicReference,
         data: {
             type: BibliographicReferenceType.courtCase,
-            caseName: "2002-07-08_Tsilhqot'inTitleCase",
+            caseName: '2002-07-08_NationTitleCase',
             abstract:
-                "William, June\n- Nemiah Valley\n- Qualifying as an expert in Tsilhqot'in written language",
+                'Doe, Jane\n- Large Valley\n- Qualifying as an expert in the written language',
             dateDecided: 'Recorded 2002-07-08',
             court: 'Supreme Court of British Columbia',
             url: 'https://www.myzoterolink.com/bogus-link-to-doc.php',
