@@ -34,6 +34,28 @@ The community projects currently consist of several prototypes of front-end clie
 that leverage the COSCRAD API. The Many ideas explored in the community projects
 will eventually find their way into Coscrad's core.
 
+**COSCRAD CLI**
+We also have built our own command-line interface, `COSCRAD CLI`. This is used
+for administrative tasks like dumping data snapshots (in persistence layer, domain layer
+and view layer formats), seeding test data and restoring data dumps, dumping
+a JSON version of schemas for our domain models, view models, command and event payloads,
+and so on.
+
+Currently, `COSCRAD CLI` is part of the `api`, and it is available via a custom
+build of the `api`. Run `npx nx build:api:cli` to build the `COSCRAD CLI`. The
+cli will be built to `dist/apps/cosccrad-cli`. Run
+
+```
+node main.js <command> <options>
+```
+
+from within this directory to execute a `COSCRAD CLI` command.
+
+<!-- TODO Add documentation for all commands -->
+
+In the future, once our domain has been moved to a separate lib, we will move
+the `COSCRAD CLI` to a standalone app in the mono-repo.
+
 #### libs
 
 We maintain several libraries, which allow us to share code between applications in the monorepo.
@@ -56,11 +78,11 @@ This monorepo workspace is managed using [Nx](https://nx.dev). See the `README` 
 
 ### Requirements
 
-You'll need Node v16.19.0. It is recommended that you install node using [nvm](https://github.com/nvm-sh/nvm)).
+You'll need Node v18.12.0. It is recommended that you install node using [nvm](https://github.com/nvm-sh/nvm)).
 
 You'll also need an instance of [ArangoDB](https://www.arangodb.com/).
 
-We provide an optional shell script for spinning up an ArangoDB instance. This will only work if you have docker installed on your development machine. Alternatively, you could run an ArangoDB instance on a VirtualBox VM, a local physical machine, or in the cloud.
+We provide an optional shell script for spinning up an ArangoDB instance. This will only work if you have docker installed on your development machine. Alternatively, you could run an ArangoDB instance on a VirtualBox VM, a local physical machine, in the cloud, or via one of Arango's enterprise hosting solutions.
 
 ### Getting Started
 
@@ -74,7 +96,7 @@ cd into the repo's directory
 
 Install the dependencies
 
-> > npm install
+> > npm ci --legacy-peer-deps
 
 ## Workflow
 
@@ -111,3 +133,13 @@ with the appropraite values at `dist/apps/api/production.env` (alongside `main.j
 [pm2](https://www.npmjs.com/package/pm2) is a useful process manager for node
 applications. You may want to use [NGinx](https://www.nginx.com/) as a reverse proxy and to manage your
 certificates using [certbot](https://certbot.eff.org/).
+
+#### Jenkins
+
+We use Jenkins for continuous integration and continuous delivery. We have
+integrated Jenkins with our GitHub repo via GitHub apps and GitHub hooks. We
+currently use DigitalOcean cloud agents for our builds. We provide a `Jenkinsfile`
+that specifies our pipeline as code. While this is reusable in principle, there is
+a lot of magic required to configure the tooling in the background. Your best bet
+is to contact us if you'd like to automate deployments of your own COSCRAD instance
+to your own infra.
