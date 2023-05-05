@@ -42,6 +42,10 @@ export class Playlist extends Resource {
         if (Array.isArray(items)) this.items = items.map((item) => new PlaylistItem(item));
     }
 
+    getName(): MultilingualText {
+        return this.name;
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }

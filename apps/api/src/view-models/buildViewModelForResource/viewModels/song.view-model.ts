@@ -27,16 +27,11 @@ export class SongViewModel extends BaseViewModel implements ISongViewModel {
     @FromSong
     readonly startMilliseconds: number;
 
-    constructor({
-        id,
-        title,
-        titleEnglish,
-        lyrics,
-        audioURL,
-        lengthMilliseconds,
-        startMilliseconds,
-    }: Song) {
-        super({ id });
+    constructor(song: Song) {
+        super(song);
+
+        const { title, titleEnglish, lyrics, audioURL, lengthMilliseconds, startMilliseconds } =
+            song;
 
         this.title = title;
 
