@@ -1,4 +1,4 @@
-import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { LanguageCode } from '@coscrad/api-interfaces';
 import {
     ExternalEnum,
     MIMEType,
@@ -10,8 +10,8 @@ import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
-import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
-import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
+import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -102,12 +102,15 @@ export class MediaItem extends Resource implements ITimeBoundable {
 
     getName(): MultilingualText {
         // TODO [migration] change `title` to `MultilingualText`
-        return buildMultilingualTextWithSingleItem(this.title, LanguageCode.Chilcotin).append(
-            new MultilingualTextItem({
-                role: MultilingualTextItemRole.freeTranslation,
+        return buildMultilingualTextFromBilingualText(
+            {
+                text: this.title,
+                languageCode: LanguageCode.Chilcotin,
+            },
+            {
                 text: this.titleEnglish,
                 languageCode: LanguageCode.English,
-            })
+            }
         );
     }
 

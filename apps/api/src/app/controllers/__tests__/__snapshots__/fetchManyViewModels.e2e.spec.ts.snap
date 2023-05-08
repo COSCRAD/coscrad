@@ -2470,10 +2470,6 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
             "role": "original",
             "text": "Chil-term-no-english",
           },
-          {
-            "languageCode": "eng",
-            "role": "free translation",
-          },
         ],
       },
       "tags": [
@@ -2533,10 +2529,6 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
             "languageCode": "clc",
             "role": "original",
             "text": "My Secret Term",
-          },
-          {
-            "languageCode": "eng",
-            "role": "free translation",
           },
         ],
       },
@@ -2808,10 +2800,6 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
             "role": "original",
             "text": "Chil-term-no-english",
           },
-          {
-            "languageCode": "eng",
-            "role": "free translation",
-          },
         ],
       },
       "tags": [
@@ -2871,10 +2859,6 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
             "languageCode": "clc",
             "role": "original",
             "text": "My Secret Term",
-          },
-          {
-            "languageCode": "eng",
-            "role": "free translation",
           },
         ],
       },
@@ -3239,7 +3223,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           },
           {
             "languageCode": "eng",
-            "role": "literal translation",
+            "role": "free translation",
             "text": "To Sing (Engl)",
           },
         ],
@@ -3331,7 +3315,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           },
           {
             "languageCode": "eng",
-            "role": "literal translation",
+            "role": "free translation",
             "text": "test VL 1 engl",
           },
         ],
@@ -3468,10 +3452,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
             "languageCode": "clc",
             "role": "original",
             "text": "test VL 2 CHIL- no engl name",
-          },
-          {
-            "languageCode": "eng",
-            "role": "literal translation",
           },
         ],
       },
@@ -3711,7 +3691,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           },
           {
             "languageCode": "eng",
-            "role": "literal translation",
+            "role": "free translation",
             "text": "To Sing (Engl)",
           },
         ],
@@ -3803,7 +3783,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           },
           {
             "languageCode": "eng",
-            "role": "literal translation",
+            "role": "free translation",
             "text": "test VL 1 engl",
           },
         ],
@@ -3940,10 +3920,6 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
             "languageCode": "clc",
             "role": "original",
             "text": "test VL 2 CHIL- no engl name",
-          },
-          {
-            "languageCode": "eng",
-            "role": "literal translation",
           },
         ],
       },
