@@ -11,7 +11,7 @@ describe('CommaSeparatedList', () => {
     });
 
     it('Should display a comma separated list of creators', () => {
-        cy.get('.MuiGrid-grid-sm-3 > :nth-child(2)').contains(
+        cy.get('.MuiGrid-grid-sm-2 > :nth-child(4)').contains(
             'Alana Duvernay (author), James Smith (author)'
         );
     });
