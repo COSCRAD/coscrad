@@ -5,8 +5,6 @@ import { useLoadable } from '../../store/slices/resources/shared/hooks';
 import { displayLoadableWithErrorsAndLoading } from '../higher-order-components';
 import { ResourceInfosPresenter } from './presenters';
 
-// `/${routes.resources.ofType(resourceType).index}`
-
 export type ResourceTypesAndLabels = { [K in ResourceType]?: string };
 
 export type ResourceTypesAndRoutes = { [K in ResourceType]?: string };
