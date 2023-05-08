@@ -19,7 +19,8 @@ export const PhotographDetailFullViewPresenter = ({
 
     return (
         <>
-            <ImageFullPageWidth data-testid={id} image={image} />
+            <div data-testid={id} />
+            <ImageFullPageWidth image={image} />
             <ResourceNamePresenter name={name} variant="h2" />
             <SinglePropertyPresenter display="Photograph ID" value={id} />
         </>

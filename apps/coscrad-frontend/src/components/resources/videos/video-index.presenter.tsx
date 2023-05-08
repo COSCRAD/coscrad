@@ -24,14 +24,12 @@ export const VideoIndexPresenter = ({ entities: videos }: VideoIndexState): JSX.
     };
 
     return (
-        <>
-            <IndexTable
-                headingLabels={headingLabels}
-                tableData={videos}
-                cellRenderersDefinition={cellRenderersDefinition}
-                heading={'Videos'}
-                filterableProperties={['text']}
-            />
-        </>
+        <IndexTable
+            headingLabels={headingLabels}
+            tableData={videos}
+            cellRenderersDefinition={cellRenderersDefinition}
+            heading={'Videos'}
+            filterableProperties={['text']}
+        />
     );
 };

@@ -42,14 +42,12 @@ export const BibliographicReferenceIndexPresenter = ({
     };
 
     return (
-        <>
-            <IndexTable
-                headingLabels={headingLabels}
-                tableData={consolidatedViewOfBibliographicReferences}
-                cellRenderersDefinition={cellRenderersDefinition}
-                heading="Bibliographic References"
-                filterableProperties={['title', 'citation', 'type']}
-            />
-        </>
+        <IndexTable
+            headingLabels={headingLabels}
+            tableData={consolidatedViewOfBibliographicReferences}
+            cellRenderersDefinition={cellRenderersDefinition}
+            heading="Bibliographic References"
+            filterableProperties={['title', 'citation', 'type']}
+        />
     );
 };

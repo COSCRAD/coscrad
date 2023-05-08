@@ -23,27 +23,25 @@ export const AudioItemDetailFullViewPresenter = ({
     ));
 
     return (
-        <>
-            <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
-                <div data-testid={id} />
-                <MediaPlayer audioUrl={audioURL} />
-                <SinglePropertyPresenter
-                    display="Duration"
-                    value={`${convertMillisecondsToSeconds(lengthMilliseconds)} secs`}
-                />
-                <SinglePropertyPresenter display="Audio Url" value={audioURL} />
-                <Grid container columns={6} sx={{ mb: 1 }}>
-                    <Grid item xs={1}>
-                        {/* TODO: introduce bold (not heading) custom theme typography variant? */}
-                        <Typography component={'span'} sx={{ fontWeight: 'bold' }}>
-                            Text:
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={5}>
-                        {formatedPlainText}
-                    </Grid>
+        <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
+            <div data-testid={id} />
+            <MediaPlayer audioUrl={audioURL} />
+            <SinglePropertyPresenter
+                display="Duration"
+                value={`${convertMillisecondsToSeconds(lengthMilliseconds)} secs`}
+            />
+            <SinglePropertyPresenter display="Audio Url" value={audioURL} />
+            <Grid container columns={6} sx={{ mb: 1 }}>
+                <Grid item xs={1}>
+                    {/* TODO: introduce bold (not heading) custom theme typography variant? */}
+                    <Typography component={'span'} sx={{ fontWeight: 'bold' }}>
+                        Text:
+                    </Typography>
                 </Grid>
-            </ResourceDetailFullViewPresenter>
-        </>
+                <Grid item xs={5}>
+                    {formatedPlainText}
+                </Grid>
+            </Grid>
+        </ResourceDetailFullViewPresenter>
     );
 };

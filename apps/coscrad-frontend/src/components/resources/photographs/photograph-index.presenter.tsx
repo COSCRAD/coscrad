@@ -19,15 +19,13 @@ export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIn
     };
 
     return (
-        <>
-            <IndexTable
-                headingLabels={headingLabels}
-                tableData={photographs}
-                cellRenderersDefinition={cellRenderersDefinition}
-                // This should be a resource label from resource info
-                heading={'Photographs'}
-                filterableProperties={['photographer']}
-            />
-        </>
+        <IndexTable
+            headingLabels={headingLabels}
+            tableData={photographs}
+            cellRenderersDefinition={cellRenderersDefinition}
+            // This should be a resource label from resource info
+            heading={'Photographs'}
+            filterableProperties={['photographer']}
+        />
     );
 };

@@ -52,22 +52,20 @@ export const SpatialFeatureDetailFullViewPresenter = (
     }
 
     return (
-        <>
-            <Grid container spacing={0}>
-                <Grid item xs={3}>
-                    <div data-testid={id} />
-                    {/* Preview will eventually include images taken from video or photos, etc. */}
-                    <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${id}`} />
-                </Grid>
-                <Grid item xs={9}>
-                    {/* TODO: consider putting a standardized name property on the view models */}
-                    <ResourceNamePresenter name={name} variant="h5" />
-                    <SinglePropertyPresenter display="ID" value={id} />
-                    <SinglePropertyPresenter display="Description" value={description} />
-                    <SinglePropertyPresenter display="Feature Type" value={geometryType} />
-                    <CoordinatesTextPresenter coordinates={coordinates} />
-                </Grid>
+        <Grid container spacing={0}>
+            <Grid item xs={3}>
+                <div data-testid={id} />
+                {/* Preview will eventually include images taken from video or photos, etc. */}
+                <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${id}`} />
             </Grid>
-        </>
+            <Grid item xs={9}>
+                {/* TODO: consider putting a standardized name property on the view models */}
+                <ResourceNamePresenter name={name} variant="h5" />
+                <SinglePropertyPresenter display="ID" value={id} />
+                <SinglePropertyPresenter display="Description" value={description} />
+                <SinglePropertyPresenter display="Feature Type" value={geometryType} />
+                <CoordinatesTextPresenter coordinates={coordinates} />
+            </Grid>
+        </Grid>
     );
 };

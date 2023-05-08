@@ -21,15 +21,13 @@ export const TagIndexPresenter = ({ entities: tags }: TagIndexState): JSX.Elemen
     };
 
     return (
-        <>
-            <IndexTable
-                data-testid="tag-index-presenter"
-                tableData={tags}
-                headingLabels={headingLabels}
-                cellRenderersDefinition={cellRenderersDefinition}
-                heading="Tags"
-                filterableProperties={['label']}
-            />
-        </>
+        <IndexTable
+            data-testid="tag-index-presenter"
+            tableData={tags}
+            headingLabels={headingLabels}
+            cellRenderersDefinition={cellRenderersDefinition}
+            heading="Tags"
+            filterableProperties={['label']}
+        />
     );
 };
