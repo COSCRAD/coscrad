@@ -7,7 +7,6 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Grid, styled } from '@mui/material';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
-import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { LineTextPresenter } from './thumbnail-presenters/line-text-presenter';
 import { PointTextPresenter } from './thumbnail-presenters/point-text-presenter';
@@ -53,22 +52,20 @@ export const SpatialFeatureDetailFullViewPresenter = (
     }
 
     return (
-        <CoscradMainContentContainer>
-            <Grid container spacing={0}>
-                <Grid item xs={3}>
-                    <div data-testid={id} />
-                    {/* Preview will eventually include images taken from video or photos, etc. */}
-                    <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${id}`} />
-                </Grid>
-                <Grid item xs={9}>
-                    {/* TODO: consider putting a standardized name property on the view models */}
-                    <ResourceNamePresenter name={name} variant="h5" />
-                    <SinglePropertyPresenter display="ID" value={id} />
-                    <SinglePropertyPresenter display="Description" value={description} />
-                    <SinglePropertyPresenter display="Feature Type" value={geometryType} />
-                    <CoordinatesTextPresenter coordinates={coordinates} />
-                </Grid>
+        <Grid container spacing={0}>
+            <Grid item xs={3}>
+                <div data-testid={id} />
+                {/* Preview will eventually include images taken from video or photos, etc. */}
+                <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${id}`} />
             </Grid>
-        </CoscradMainContentContainer>
+            <Grid item xs={9}>
+                {/* TODO: consider putting a standardized name property on the view models */}
+                <ResourceNamePresenter name={name} variant="h5" />
+                <SinglePropertyPresenter display="ID" value={id} />
+                <SinglePropertyPresenter display="Description" value={description} />
+                <SinglePropertyPresenter display="Feature Type" value={geometryType} />
+                <CoordinatesTextPresenter coordinates={coordinates} />
+            </Grid>
+        </Grid>
     );
 };

@@ -6,7 +6,6 @@ import { useAppDispatch } from '../../app/hooks';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { userLoginSucceeded } from '../../store/slices/auth';
 import { ImageInContent } from '../../utils/generic-components/presenters/image-in-content';
-import { CoscradMainContentContainer } from '../../utils/generic-components/style-components/coscrad-main-content-container';
 import { TermOfTheDayContainer } from '../term-of-the-day/term-of-the-day.container';
 
 export const Home = (): JSX.Element => {
@@ -44,13 +43,13 @@ export const Home = (): JSX.Element => {
     });
 
     return (
-        <CoscradMainContentContainer>
+        <>
             {/**
              * TODO: consider using a photograph detail presenter for this
              */}
             <ImageInContent image={image} alignment="left" displayWidth="45%" />
             <Typography variant="body1">{siteDescription}</Typography>
             {isNullOrUndefined(termOfTheDayConfig) ? null : <TermOfTheDayContainer />}
-        </CoscradMainContentContainer>
+        </>
     );
 };
