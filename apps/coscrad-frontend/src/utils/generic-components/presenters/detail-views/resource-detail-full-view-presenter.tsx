@@ -1,7 +1,6 @@
 import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
 import { Grid } from '@mui/material';
 import { ReactNode } from 'react';
-import { CoscradMainContentContainer } from '../../style-components/coscrad-main-content-container';
 import { ResourceDetailPresenterHeader } from './resource-detail-presenter-header';
 import { ResourcePreviewIconFactory } from './resource-preview-icon';
 
@@ -30,19 +29,17 @@ export const ResourceDetailFullViewPresenter = ({
     type,
     children,
 }: ResourceDetailFullViewPresenterProps): JSX.Element => (
-    <CoscradMainContentContainer>
-        <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
-            <Grid item xs={2} sm={1} md={2}>
-                {/* Temporary.  We'd like an icon if there's no visual media associated with this resource */}
-                {type !== ResourceType.photograph && (
-                    <ResourcePreviewIconFactory resourceType={type} size="lg" />
-                )}
-            </Grid>
-            <Grid item xs={2} sm={2} md={8}>
-                {/* TODO: consider putting a standardized name property on the view models */}
-                <ResourceDetailPresenterHeader id={id} type={type} name={name} variant="h3" />
-                {children}
-            </Grid>
+    <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
+        <Grid item xs={2} sm={1} md={2}>
+            {/* Temporary.  We'd like an icon if there's no visual media associated with this resource */}
+            {type !== ResourceType.photograph && (
+                <ResourcePreviewIconFactory resourceType={type} size="lg" />
+            )}
         </Grid>
-    </CoscradMainContentContainer>
+        <Grid item xs={2} sm={2} md={8}>
+            {/* TODO: consider putting a standardized name property on the view models */}
+            <ResourceDetailPresenterHeader id={id} type={type} name={name} variant="h3" />
+            {children}
+        </Grid>
+    </Grid>
 );

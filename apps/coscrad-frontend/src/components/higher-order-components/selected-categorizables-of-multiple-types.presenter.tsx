@@ -8,14 +8,13 @@ import { Loading } from '../loading';
 import { ICategorizableDetailPresenterFactory } from '../resources/factories/categorizable-detail-presenter-factory.interface';
 import { SelectedCategorizablesPresenter } from './selected-categorizables-of-single-type.presenter';
 import {
-    getCategorizableTypeForSliceKey,
     ViewModelDetailSnapshot,
     ViewModelIndexSnapshot,
+    getCategorizableTypeForSliceKey,
 } from './use-loadable-categorizables';
 
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Typography } from '@mui/material';
-import { CoscradMainContentContainer } from '../../utils/generic-components/style-components/coscrad-main-content-container';
 
 interface SelectedCategorizablesOfMultipleTypesPresenterProps<
     T extends IBaseViewModel = IBaseViewModel
@@ -33,7 +32,7 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
     heading,
 }: SelectedCategorizablesOfMultipleTypesPresenterProps): JSX.Element => {
     return (
-        <CoscradMainContentContainer>
+        <>
             <div data-testid="multiple-categorizables-view">
                 <Typography variant="h3">
                     {isNonEmptyString(heading) ? heading : 'Connected Resources'}
@@ -81,6 +80,6 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
                         }
                     )}
             </div>
-        </CoscradMainContentContainer>
+        </>
     );
 };

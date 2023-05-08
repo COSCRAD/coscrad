@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { SpatialFeatureIndexState } from '../../../store/slices/resources';
 import { ConnectedResourcesPanel } from '../../../store/slices/resources/shared/connected-resources';
 import { SelfNotesPanelContainer } from '../../../store/slices/resources/shared/notes-for-resource';
-import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { ICoscradMap, SpatialFeatureDetailPresenter } from './map';
 import { Position2D } from './types';
 
@@ -39,7 +38,7 @@ export const SpatialFeatureIndexPresenter = ({
                 selectedSpatialFeatureId={selectedSpatialFeatureId}
             />
 
-            <CoscradMainContentContainer>
+            <>
                 <ConnectedResourcesPanel
                     compositeIdentifier={{
                         type: ResourceType.spatialFeature,
@@ -52,7 +51,7 @@ export const SpatialFeatureIndexPresenter = ({
                         id: selectedSpatialFeatureId,
                     }}
                 />
-            </CoscradMainContentContainer>
+            </>
         </>
     );
 };

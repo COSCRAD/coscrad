@@ -7,7 +7,6 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Grid, styled } from '@mui/material';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
-import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { LineTextPresenter } from './thumbnail-presenters/line-text-presenter';
 import { PointTextPresenter } from './thumbnail-presenters/point-text-presenter';
@@ -53,7 +52,7 @@ export const SpatialFeatureDetailFullViewPresenter = (
     }
 
     return (
-        <CoscradMainContentContainer>
+        <>
             <Grid container spacing={0}>
                 <Grid item xs={3}>
                     <div data-testid={id} />
@@ -69,6 +68,6 @@ export const SpatialFeatureDetailFullViewPresenter = (
                     <CoordinatesTextPresenter coordinates={coordinates} />
                 </Grid>
             </Grid>
-        </CoscradMainContentContainer>
+        </>
     );
 };

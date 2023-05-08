@@ -7,7 +7,6 @@ import { MediaPlayer } from '@coscrad/media-player';
 import { Box, Grid, Typography } from '@mui/material';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
-import { CoscradMainContentContainer } from '../../../utils/generic-components/style-components/coscrad-main-content-container';
 import { convertMillisecondsToSeconds } from '../utils/math';
 
 export const AudioItemDetailFullViewPresenter = ({
@@ -24,7 +23,7 @@ export const AudioItemDetailFullViewPresenter = ({
     ));
 
     return (
-        <CoscradMainContentContainer>
+        <>
             <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.audioItem}>
                 <div data-testid={id} />
                 <MediaPlayer audioUrl={audioURL} />
@@ -45,6 +44,6 @@ export const AudioItemDetailFullViewPresenter = ({
                     </Grid>
                 </Grid>
             </ResourceDetailFullViewPresenter>
-        </CoscradMainContentContainer>
+        </>
     );
 };
