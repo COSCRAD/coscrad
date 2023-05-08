@@ -14,7 +14,11 @@ export const ResourceInfoPresenter = ({
  */
 
 IAggregateInfo<ResourceType> & { route: string }): JSX.Element => {
-    const themeOverride = useTheme();
+    const {
+        palette: {
+            secondary: { main },
+        },
+    } = useTheme();
     return (
         <Link to={`/${route}`}>
             <Card>
@@ -25,7 +29,7 @@ IAggregateInfo<ResourceType> & { route: string }): JSX.Element => {
                             <ResourcePreviewIconFactory
                                 resourceType={type}
                                 size="md"
-                                color={themeOverride.palette.secondary.main}
+                                color={main}
                             />
                         </Grid>
                         {/* For the `xs` see https://github.com/mui/material-ui/issues/11339
