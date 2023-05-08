@@ -1,15 +1,17 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import AudiotrackIcon from '@mui/icons-material/Audiotrack';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
-import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
-import LanguageIcon from '@mui/icons-material/Language';
-import ListIcon from '@mui/icons-material/List';
-import PhotoIcon from '@mui/icons-material/Photo';
-import PlaceIcon from '@mui/icons-material/Place';
-import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import {
+    Audiotrack as AudiotrackIcon,
+    AutoStories as AutoStoriesIcon,
+    CollectionsBookmark as CollectionsBookmarkIcon,
+    Language as LanguageIcon,
+    List as ListIcon,
+    Photo as PhotoIcon,
+    Place as PlaceIcon,
+    PlaylistPlay as PlaylistPlayIcon,
+    Subscriptions as SubscriptionsIcon,
+    Videocam as VideocamIcon,
+    VolumeUp as VolumeUpIcon,
+} from '@mui/icons-material';
 import { Box } from '@mui/material';
 
 /**
@@ -35,19 +37,17 @@ interface ResourcePreviewImageProps {
  */
 
 const lookupTable: { [K in ResourceType]: JSX.Element } = {
-    [ResourceType.audioItem]: <VolumeUpIcon fontSize="inherit" color="primary" />,
-    [ResourceType.bibliographicReference]: (
-        <CollectionsBookmarkIcon fontSize="inherit" color="primary" />
-    ),
-    [ResourceType.book]: <AutoStoriesIcon fontSize="inherit" color="primary" />,
-    [ResourceType.mediaItem]: <SubscriptionsIcon fontSize="inherit" color="primary" />,
-    [ResourceType.photograph]: <PhotoIcon fontSize="inherit" color="primary" />,
-    [ResourceType.song]: <AudiotrackIcon fontSize="inherit" color="primary" />,
-    [ResourceType.spatialFeature]: <PlaceIcon fontSize="inherit" color="primary" />,
-    [ResourceType.term]: <LanguageIcon fontSize="inherit" color="primary" />,
-    [ResourceType.video]: <VideocamIcon fontSize="inherit" color="primary" />,
-    [ResourceType.vocabularyList]: <ListIcon fontSize="inherit" color="primary" />,
-    [ResourceType.playlist]: <PlaylistPlayIcon fontSize="inherit" color="primary" />,
+    [ResourceType.audioItem]: <VolumeUpIcon fontSize="inherit" />,
+    [ResourceType.bibliographicReference]: <CollectionsBookmarkIcon fontSize="inherit" />,
+    [ResourceType.book]: <AutoStoriesIcon fontSize="inherit" />,
+    [ResourceType.mediaItem]: <SubscriptionsIcon fontSize="inherit" />,
+    [ResourceType.photograph]: <PhotoIcon fontSize="inherit" />,
+    [ResourceType.song]: <AudiotrackIcon fontSize="inherit" />,
+    [ResourceType.spatialFeature]: <PlaceIcon fontSize="inherit" />,
+    [ResourceType.term]: <LanguageIcon fontSize="inherit" />,
+    [ResourceType.video]: <VideocamIcon fontSize="inherit" />,
+    [ResourceType.vocabularyList]: <ListIcon fontSize="inherit" />,
+    [ResourceType.playlist]: <PlaylistPlayIcon fontSize="inherit" />,
 };
 
 const sizes = {

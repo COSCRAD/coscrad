@@ -7,18 +7,10 @@ interface CoscradThemeProviderProps {
 }
 
 export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): JSX.Element => {
-    const { theme } = useContext(ConfigurableContentContext);
+    const { themeOverrides } = useContext(ConfigurableContentContext);
 
     const coscradDefaultTheme = responsiveFontSizes(
         createTheme({
-            palette: {
-                primary: {
-                    main: theme.primaryColor,
-                },
-                secondary: {
-                    main: theme.secondaryColor,
-                },
-            },
             typography: {
                 h1: {
                     fontSize: 40,
@@ -53,6 +45,7 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                     },
                 },
             },
+            ...themeOverrides,
         })
     );
 

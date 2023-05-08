@@ -4,6 +4,7 @@ import {
     ICategorizableDetailQueryResult,
 } from '@coscrad/api-interfaces';
 import { CoscradConstraint } from '@coscrad/validation-constraints';
+import { ThemeOptions } from '@mui/material';
 
 export type ListenLivePageConfiguration = {
     title: string;
@@ -19,6 +20,8 @@ export type SimulatedKeyboardConfig = {
     name: string;
     specialCharacterReplacements: Record<string, string>;
 };
+
+export type ThemeOverrides = Pick<ThemeOptions, 'palette'>;
 
 export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
     indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
@@ -39,7 +42,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     termOfTheDayConfig?: Record<string, string>;
     notFoundMessage: string;
     loadingMessage: string;
-    theme: Record<string, string>;
+    themeOverrides: ThemeOverrides;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -63,7 +66,7 @@ export const configurableContentPropertiesAndConstraints: {
     termOfTheDayConfig: [CoscradConstraint.isObject],
     notFoundMessage: [CoscradConstraint.isNonEmptyString],
     loadingMessage: [CoscradConstraint.isString],
-    theme: [CoscradConstraint.isObject],
+    themeOverrides: [CoscradConstraint.isObject],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
