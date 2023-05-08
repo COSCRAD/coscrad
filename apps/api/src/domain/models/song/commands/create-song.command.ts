@@ -1,7 +1,6 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, RawDataObject, URL, UUID } from '@coscrad/data-types';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 
@@ -57,11 +56,19 @@ export class CreateSong implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier<typeof AggregateType.song>;
 
-    @NestedDataType(MultilingualText, {
+    @NonEmptyString({
+        isOptional: true,
         label: 'title',
-        description: 'song title',
+        description: "song's title in the language",
     })
-    readonly title: MultilingualText;
+    readonly title?: string;
+
+    @NonEmptyString({
+        isOptional: true,
+        label: 'title (colonial language)',
+        description: "song's title in the colonial language",
+    })
+    readonly titleEnglish?: string;
 
     /**
      * TODO This property is being removed in favor of edge connections to a

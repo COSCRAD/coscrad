@@ -1,9 +1,13 @@
-import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../types/DTO';
-import { MultilingualText } from '../../common/entities/multilingual-text';
+import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
+import { MultilingualText, MultilingualTextItem } from '../../common/entities/multilingual-text';
+import MissingSongTitleError from '../../domainModelValidators/errors/song/MissingSongTitleError';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../types/ResourceType';
 import { TimeRangeContext } from '../context/time-range-context/time-range-context.entity';
@@ -18,11 +22,19 @@ const isOptional = true;
 export class Song extends Resource implements ITimeBoundable {
     readonly type = ResourceType.song;
 
-    @NestedDataType(MultilingualText, {
-        label: `song title`,
-        description: `title of the song`,
+    @NonEmptyString({
+        isOptional,
+        label: 'title',
+        description: 'the title of the song in the language',
     })
-    readonly title: MultilingualText;
+    readonly title?: string;
+
+    @NonEmptyString({
+        isOptional,
+        label: 'title (colonial language)',
+        description: 'the title of the song in the colonial language',
+    })
+    readonly titleEnglish?: string;
 
     // @NestedDataType(ContributorAndRole, {
     //     isArray: true,
@@ -59,6 +71,7 @@ export class Song extends Resource implements ITimeBoundable {
 
         const {
             title,
+            titleEnglish,
             contributions: contributorAndRoles,
             lyrics,
             audioURL,
@@ -66,7 +79,9 @@ export class Song extends Resource implements ITimeBoundable {
             startMilliseconds,
         } = dto;
 
-        this.title = new MultilingualText(title);
+        this.title = title;
+
+        this.titleEnglish = titleEnglish;
 
         this.contributions = (contributorAndRoles || []).map(
             (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
@@ -81,8 +96,21 @@ export class Song extends Resource implements ITimeBoundable {
         this.startMilliseconds = startMilliseconds;
     }
 
+    /**
+     * TODO [migration] make `title` a `MultilingualText` and remove `titleEnglish`.
+     */
     getName(): MultilingualText {
-        return this.title;
+        const name = buildMultilingualTextWithSingleItem(this.title, LanguageCode.Chilcotin);
+
+        return isNullOrUndefined(this.titleEnglish)
+            ? name
+            : name.append(
+                  new MultilingualTextItem({
+                      text: this.titleEnglish,
+                      languageCode: LanguageCode.English,
+                      role: MultilingualTextItemRole.freeTranslation,
+                  })
+              );
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
@@ -92,7 +120,7 @@ export class Song extends Resource implements ITimeBoundable {
     protected validateComplexInvariants(): InternalError[] {
         const allErrors: InternalError[] = [];
 
-        const { startMilliseconds, lengthMilliseconds } = this;
+        const { startMilliseconds, lengthMilliseconds, title, titleEnglish } = this;
 
         if (startMilliseconds > lengthMilliseconds)
             allErrors.push(
@@ -101,9 +129,8 @@ export class Song extends Resource implements ITimeBoundable {
                 )
             );
 
-        const titleErrors = this.title.validateComplexInvariants();
-
-        if (Array.isArray(titleErrors)) allErrors.push(...titleErrors);
+        if (!isNonEmptyString(title) && !isNonEmptyString(titleEnglish))
+            allErrors.push(new MissingSongTitleError());
 
         return allErrors;
     }

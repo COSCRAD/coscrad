@@ -136,7 +136,9 @@ export class EdgeConnection extends Aggregate {
         ).compositeIdentifier;
 
         return buildMultilingualTextWithSingleItem(
-            `A connection from ${fromMemberCompositeIdentifier} to ${toMemberCompositeIdentifier}`
+            `A connection from ${formatAggregateCompositeIdentifier(
+                fromMemberCompositeIdentifier
+            )} to ${formatAggregateCompositeIdentifier(toMemberCompositeIdentifier)}`
         );
     }
 

@@ -28,6 +28,101 @@ exports[`GET /resources should return the expected result 1`] = `
         "isOptional": false,
         "label": "ID",
       },
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
+      },
       "sourceProject": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the name of the project through which the term was collected",
@@ -92,6 +187,101 @@ exports[`GET /resources should return the expected result 1`] = `
                 "isOptional": false,
                 "label": "ID",
               },
+              "name": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "multilingual text name of the entity",
+                "isArray": false,
+                "isOptional": false,
+                "label": "name",
+                "schema": {
+                  "items": {
+                    "complexDataType": "NESTED_TYPE",
+                    "description": "one item for each provided language",
+                    "isArray": true,
+                    "isOptional": false,
+                    "label": "items",
+                    "schema": {
+                      "languageCode": {
+                        "complexDataType": "ENUM",
+                        "description": "an official identifier of the language",
+                        "enumLabel": "Language_Code",
+                        "enumName": "LangaugeCode",
+                        "isArray": false,
+                        "isOptional": false,
+                        "label": "language code",
+                        "labelsAndValues": [
+                          {
+                            "label": "Chilcotin",
+                            "value": "clc",
+                          },
+                          {
+                            "label": "Haida",
+                            "value": "hai",
+                          },
+                          {
+                            "label": "English",
+                            "value": "eng",
+                          },
+                          {
+                            "label": "French",
+                            "value": "fra",
+                          },
+                          {
+                            "label": "Chinook",
+                            "value": "chn",
+                          },
+                          {
+                            "label": "Zapotec",
+                            "value": "zap",
+                          },
+                          {
+                            "label": "Spanish",
+                            "value": "spa",
+                          },
+                        ],
+                      },
+                      "role": {
+                        "complexDataType": "ENUM",
+                        "description": "role of this text in the translation process",
+                        "enumLabel": "text item role",
+                        "enumName": "Multilingual Text Item Role",
+                        "isArray": false,
+                        "isOptional": false,
+                        "label": "text item role",
+                        "labelsAndValues": [
+                          {
+                            "label": "original",
+                            "value": "original",
+                          },
+                          {
+                            "label": "glossed to",
+                            "value": "glossed to",
+                          },
+                          {
+                            "label": "prompt",
+                            "value": "prompt",
+                          },
+                          {
+                            "label": "free translation",
+                            "value": "free translation",
+                          },
+                          {
+                            "label": "literal translation",
+                            "value": "literal translation",
+                          },
+                        ],
+                      },
+                      "text": {
+                        "coscradDataType": "NON_EMPTY_STRING",
+                        "description": "plain text in the given language",
+                        "isArray": false,
+                        "isOptional": false,
+                        "label": "text",
+                      },
+                    },
+                  },
+                },
+              },
               "sourceProject": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "the name of the project through which the term was collected",
@@ -125,18 +315,99 @@ exports[`GET /resources should return the expected result 1`] = `
         "label": "ID",
       },
       "name": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "name of the vocabulary list in the language",
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
         "isArray": false,
-        "isOptional": true,
-        "label": "name (language)",
-      },
-      "nameEnglish": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "name of the vocabulary list in the colonial language",
-        "isArray": false,
-        "isOptional": true,
-        "label": "name (colonial language)",
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
       },
     },
     "type": "vocabularyList",
@@ -292,6 +563,101 @@ exports[`GET /resources should return the expected result 1`] = `
         "isOptional": false,
         "label": "ID",
       },
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
+      },
       "publicationDate": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a free form string that specifies the publication date",
@@ -335,6 +701,101 @@ exports[`GET /resources should return the expected result 1`] = `
         "isOptional": false,
         "label": "image link",
       },
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
+      },
       "photographer": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "the person who took the picture",
@@ -356,6 +817,101 @@ exports[`GET /resources should return the expected result 1`] = `
         "isArray": false,
         "isOptional": false,
         "label": "ID",
+      },
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
       },
     },
     "type": "spatialFeature",
@@ -622,6 +1178,101 @@ exports[`GET /resources should return the expected result 1`] = `
         "isOptional": false,
         "label": "ID",
       },
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
+      },
     },
     "type": "bibliographicReference",
   },
@@ -658,26 +1309,107 @@ exports[`GET /resources should return the expected result 1`] = `
         "isOptional": true,
         "label": "lyrics",
       },
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
+      },
       "startMilliseconds": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "the starting timestamp for the audio file",
         "isArray": false,
         "isOptional": false,
         "label": "start (ms)",
-      },
-      "title": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "the title of the song in the language",
-        "isArray": false,
-        "isOptional": true,
-        "label": "title",
-      },
-      "titleEnglish": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "the title of the song in the colonial language",
-        "isArray": false,
-        "isOptional": true,
-        "label": "title (colonial language)",
       },
     },
     "type": "song",
@@ -753,19 +1485,100 @@ exports[`GET /resources should return the expected result 1`] = `
           },
         ],
       },
-      "title": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "title of the media item in the language",
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
         "isArray": false,
-        "isOptional": true,
-        "label": "title (language)",
-      },
-      "titleEnglish": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "title of the media item in the colonial language",
-        "isArray": false,
-        "isOptional": true,
-        "label": "title (colonial language)",
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
       },
       "url": {
         "coscradDataType": "URL",

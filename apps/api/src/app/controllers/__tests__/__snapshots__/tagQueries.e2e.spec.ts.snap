@@ -39,6 +39,15 @@ exports[`Tag Queries when fetching a tag by ID when there is a tag with the give
       "type": "note",
     },
   ],
+  "name": {
+    "items": [
+      {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "plants",
+      },
+    ],
+  },
 }
 `;
 
@@ -83,6 +92,15 @@ exports[`Tag Queries when fetching all tags should return the expected result 1`
           "type": "note",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "plants",
+          },
+        ],
+      },
     },
     {
       "actions": [],
@@ -118,6 +136,15 @@ exports[`Tag Queries when fetching all tags should return the expected result 1`
           "type": "video",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "animals",
+          },
+        ],
+      },
     },
     {
       "actions": [],
@@ -141,6 +168,15 @@ exports[`Tag Queries when fetching all tags should return the expected result 1`
           "type": "note",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "placenames",
+          },
+        ],
+      },
     },
     {
       "actions": [],
@@ -160,6 +196,15 @@ exports[`Tag Queries when fetching all tags should return the expected result 1`
           "type": "note",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "songs",
+          },
+        ],
+      },
     },
     {
       "actions": [],
@@ -191,6 +236,15 @@ exports[`Tag Queries when fetching all tags should return the expected result 1`
           "type": "song",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "legends",
+          },
+        ],
+      },
     },
     {
       "actions": [],
@@ -206,6 +260,15 @@ exports[`Tag Queries when fetching all tags should return the expected result 1`
           "type": "playlist",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "law",
+          },
+        ],
+      },
     },
   ],
   "indexScopedActions": [],

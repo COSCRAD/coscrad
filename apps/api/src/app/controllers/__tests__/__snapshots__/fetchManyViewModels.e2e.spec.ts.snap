@@ -159,6 +159,15 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "year": 1999,
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A Day in the Life",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -193,6 +202,15 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
               "type": "video",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "animals",
+              },
+            ],
+          },
         },
       ],
     },
@@ -215,6 +233,15 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Report on the Cariboo Chilcotin Justice inquiry",
+          },
+        ],
+      },
       "tags": [],
     },
     {
@@ -231,6 +258,15 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "2002-07-08_NationTitleCase",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
@@ -245,6 +281,15 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
               "type": "playlist",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "law",
+              },
+            ],
+          },
         },
       ],
     },
@@ -280,6 +325,15 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "year": 1999,
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A Day in the Life",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -314,6 +368,15 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
               "type": "video",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "animals",
+              },
+            ],
+          },
         },
       ],
     },
@@ -336,6 +399,15 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Report on the Cariboo Chilcotin Justice inquiry",
+          },
+        ],
+      },
       "tags": [],
     },
     {
@@ -352,6 +424,15 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "2002-07-08_NationTitleCase",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
@@ -366,6 +447,15 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
               "type": "playlist",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "law",
+              },
+            ],
+          },
         },
       ],
     },
@@ -381,6 +471,15 @@ exports[`When fetching multiple resources GET /resources/books when all of the r
       "actions": [],
       "author": "John Doeburg",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Three Little Pigs",
+          },
+        ],
+      },
       "pages": [
         {
           "identifier": "1",
@@ -433,6 +532,15 @@ exports[`When fetching multiple resources GET /resources/books when all of the r
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
       "title": "Three Little Pigs",
@@ -441,6 +549,15 @@ exports[`When fetching multiple resources GET /resources/books when all of the r
       "actions": [],
       "author": "Jane Donnaldson",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "An Adventure Story",
+          },
+        ],
+      },
       "pages": [
         {
           "identifier": "ix",
@@ -487,6 +604,15 @@ exports[`When fetching multiple resources GET /resources/books when all of the r
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
       "title": "An Adventure Story",
@@ -495,6 +621,15 @@ exports[`When fetching multiple resources GET /resources/books when all of the r
       "actions": [],
       "author": "Jane Donnaldson",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "An Adventure Story II",
+          },
+        ],
+      },
       "pages": [
         {
           "identifier": "ix",
@@ -518,6 +653,15 @@ exports[`When fetching multiple resources GET /resources/books when some of the 
       "actions": [],
       "author": "John Doeburg",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Three Little Pigs",
+          },
+        ],
+      },
       "pages": [
         {
           "identifier": "1",
@@ -570,6 +714,15 @@ exports[`When fetching multiple resources GET /resources/books when some of the 
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
       "title": "Three Little Pigs",
@@ -578,6 +731,15 @@ exports[`When fetching multiple resources GET /resources/books when some of the 
       "actions": [],
       "author": "Jane Donnaldson",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "An Adventure Story",
+          },
+        ],
+      },
       "pages": [
         {
           "identifier": "ix",
@@ -624,6 +786,15 @@ exports[`When fetching multiple resources GET /resources/books when some of the 
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
       "title": "An Adventure Story",
@@ -632,6 +803,15 @@ exports[`When fetching multiple resources GET /resources/books when some of the 
       "actions": [],
       "author": "Jane Donnaldson",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "An Adventure Story II",
+          },
+        ],
+      },
       "pages": [
         {
           "identifier": "ix",
@@ -656,6 +836,20 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 2500,
       "mimeType": "audio/mpeg",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "episode title (in language)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Metal Mondays episode 1",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
@@ -686,10 +880,17 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
               "type": "song",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "legends",
+              },
+            ],
+          },
         },
       ],
-      "title": "episode title (in language)",
-      "titleEnglish": "Metal Mondays episode 1",
       "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
     },
     {
@@ -697,9 +898,21 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "lengthMilliseconds": 910000,
       "mimeType": "video/mp4",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "video title (in language)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "cool video",
+          },
+        ],
+      },
       "tags": [],
-      "title": "video title (in language)",
-      "titleEnglish": "cool video",
       "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
     },
     {
@@ -707,9 +920,21 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "lengthMilliseconds": 2500,
       "mimeType": "audio/mpeg",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "episode title (in language)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Metal Mondays episode 2",
+          },
+        ],
+      },
       "tags": [],
-      "title": "episode title (in language)",
-      "titleEnglish": "Metal Mondays episode 2",
       "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
     },
   ],
@@ -725,6 +950,20 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 2500,
       "mimeType": "audio/mpeg",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "episode title (in language)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Metal Mondays episode 1",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
@@ -755,10 +994,17 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
               "type": "song",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "legends",
+              },
+            ],
+          },
         },
       ],
-      "title": "episode title (in language)",
-      "titleEnglish": "Metal Mondays episode 1",
       "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
     },
     {
@@ -766,9 +1012,21 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "lengthMilliseconds": 910000,
       "mimeType": "video/mp4",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "video title (in language)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "cool video",
+          },
+        ],
+      },
       "tags": [],
-      "title": "video title (in language)",
-      "titleEnglish": "cool video",
       "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
     },
     {
@@ -776,9 +1034,21 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "lengthMilliseconds": 2500,
       "mimeType": "audio/mpeg",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "episode title (in language)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Metal Mondays episode 2",
+          },
+        ],
+      },
       "tags": [],
-      "title": "episode title (in language)",
-      "titleEnglish": "Metal Mondays episode 2",
       "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
     },
   ],
@@ -793,6 +1063,15 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
       "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Adiitsii-Running",
+          },
+        ],
+      },
       "photographer": "Susie McRealart",
       "tags": [
         {
@@ -816,6 +1095,15 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "placenames",
+              },
+            ],
+          },
         },
       ],
     },
@@ -823,6 +1111,15 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Nuu-Story",
+          },
+        ],
+      },
       "photographer": "Robert McRealart",
       "tags": [
         {
@@ -842,6 +1139,15 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "songs",
+              },
+            ],
+          },
         },
       ],
     },
@@ -849,6 +1155,15 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "TwoBrothersPole",
+          },
+        ],
+      },
       "photographer": "Kenny Tree-Huggens",
       "tags": [],
     },
@@ -864,6 +1179,15 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
       "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Adiitsii-Running",
+          },
+        ],
+      },
       "photographer": "Susie McRealart",
       "tags": [
         {
@@ -887,6 +1211,15 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "placenames",
+              },
+            ],
+          },
         },
       ],
     },
@@ -894,6 +1227,15 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Nuu-Story",
+          },
+        ],
+      },
       "photographer": "Robert McRealart",
       "tags": [
         {
@@ -913,6 +1255,15 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "songs",
+              },
+            ],
+          },
         },
       ],
     },
@@ -920,6 +1271,15 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "TwoBrothersPole",
+          },
+        ],
+      },
       "photographer": "Kenny Tree-Huggens",
       "tags": [],
     },
@@ -969,6 +1329,15 @@ exports[`When fetching multiple resources GET /resources/playlists when all of t
               "type": "playlist",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "law",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1018,6 +1387,15 @@ exports[`When fetching multiple resources GET /resources/playlists when some of 
               "type": "playlist",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "law",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1035,6 +1413,20 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 3500,
       "lyrics": "Mary had a little lamb, little lamb.",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Song title in language",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Mary had a little lamb",
+          },
+        ],
+      },
       "startMilliseconds": 0,
       "tags": [
         {
@@ -1066,10 +1458,17 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
               "type": "song",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "legends",
+              },
+            ],
+          },
         },
       ],
-      "title": "Song title in language",
-      "titleEnglish": "Mary had a little lamb",
     },
     {
       "actions": [],
@@ -1077,10 +1476,22 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "lengthMilliseconds": 33000,
       "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Unpublished Song Title (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Unpublished Song Title (Engl)",
+          },
+        ],
+      },
       "startMilliseconds": 0,
       "tags": [],
-      "title": "Unpublished Song Title (lang)",
-      "titleEnglish": "Unpublished Song Title (Engl)",
     },
   ],
   "indexScopedActions": [],
@@ -1096,6 +1507,20 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 3500,
       "lyrics": "Mary had a little lamb, little lamb.",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Song title in language",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Mary had a little lamb",
+          },
+        ],
+      },
       "startMilliseconds": 0,
       "tags": [
         {
@@ -1127,10 +1552,17 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
               "type": "song",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "legends",
+              },
+            ],
+          },
         },
       ],
-      "title": "Song title in language",
-      "titleEnglish": "Mary had a little lamb",
     },
     {
       "actions": [],
@@ -1138,10 +1570,22 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "lengthMilliseconds": 33000,
       "lyrics": "Ain't gonna see the light of day, light of day, light of day",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Unpublished Song Title (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Unpublished Song Title (Engl)",
+          },
+        ],
+      },
       "startMilliseconds": 0,
       "tags": [],
-      "title": "Unpublished Song Title (lang)",
-      "titleEnglish": "Unpublished Song Title (Engl)",
     },
   ],
   "indexScopedActions": [],
@@ -1161,6 +1605,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Name of Point with ID: 100",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 100",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1204,6 +1657,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1217,6 +1679,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Name of Point with ID: 101",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 101",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1252,6 +1723,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
               "type": "song",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "legends",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1265,6 +1745,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Name of Point with ID: 102",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 102",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1304,6 +1793,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
               "type": "video",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "animals",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1317,6 +1815,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110103",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Name of Point with ID: 103",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 103",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1334,6 +1841,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110104",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Name of Point with ID: 104",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 104",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1377,6 +1893,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
         "type": "LineString",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Windy Path",
+          },
+        ],
+      },
       "properties": {
         "description": "One amazing hike!",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1410,6 +1935,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
         "type": "Polygon",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Point with ID: 300 Name",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 300",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1435,6 +1969,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Name of Point with ID: 100",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 100",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1478,6 +2021,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1491,6 +2043,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110101",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Name of Point with ID: 101",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 101",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1526,6 +2087,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
               "type": "song",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "legends",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1539,6 +2109,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110102",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Name of Point with ID: 102",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 102",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1578,6 +2157,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
               "type": "video",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "animals",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1591,6 +2179,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110103",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Name of Point with ID: 103",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 103",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1608,6 +2205,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
         "type": "Point",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110104",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Name of Point with ID: 104",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 104",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1651,6 +2257,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
         "type": "LineString",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Windy Path",
+          },
+        ],
+      },
       "properties": {
         "description": "One amazing hike!",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1684,6 +2299,15 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
         "type": "Polygon",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "Point with ID: 300 Name",
+          },
+        ],
+      },
       "properties": {
         "description": "Description for point 300",
         "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -1703,6 +2327,20 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Chil-term-1",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Engl-term-1",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -1741,6 +2379,15 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
       "term": "Chil-term-1",
@@ -1750,6 +2397,20 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Chil-term-2",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Engl-term-2",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -1784,6 +2445,15 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
               "type": "video",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "animals",
+              },
+            ],
+          },
         },
       ],
       "term": "Chil-term-2",
@@ -1793,6 +2463,19 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Chil-term-no-english",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -1827,6 +2510,15 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
               "type": "video",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "animals",
+              },
+            ],
+          },
         },
       ],
       "term": "Chil-term-no-english",
@@ -1835,6 +2527,19 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "My Secret Term",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+          },
+        ],
+      },
       "tags": [],
       "term": "My Secret Term",
     },
@@ -1842,6 +2547,20 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "I am singing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "I am singing (Engl)",
+          },
+        ],
+      },
       "tags": [],
       "term": "I am singing (lang)",
       "termEnglish": "I am singing (Engl)",
@@ -1850,6 +2569,20 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "You are singing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "You are singing (Engl)",
+          },
+        ],
+      },
       "tags": [],
       "term": "You are singing (lang)",
       "termEnglish": "You are singing (Engl)",
@@ -1858,6 +2591,20 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "She is singing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "She is singing (Engl)",
+          },
+        ],
+      },
       "tags": [],
       "term": "She is singing (lang)",
       "termEnglish": "She is singing (Engl)",
@@ -1866,6 +2613,20 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "I am not singing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "I am not singing (Engl)",
+          },
+        ],
+      },
       "tags": [],
       "term": "I am not singing (lang)",
       "termEnglish": "I am not singing (Engl)",
@@ -1874,6 +2635,20 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "You are not singing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "You are not singing (Engl)",
+          },
+        ],
+      },
       "tags": [],
       "term": "You are not singing (lang)",
       "termEnglish": "You are not singing (Engl)",
@@ -1890,6 +2665,20 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Chil-term-1",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Engl-term-1",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -1928,6 +2717,15 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
       "term": "Chil-term-1",
@@ -1937,6 +2735,20 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Chil-term-2",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "Engl-term-2",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -1971,6 +2783,15 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
               "type": "video",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "animals",
+              },
+            ],
+          },
         },
       ],
       "term": "Chil-term-2",
@@ -1980,6 +2801,19 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "Chil-term-no-english",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -2014,6 +2848,15 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
               "type": "video",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "animals",
+              },
+            ],
+          },
         },
       ],
       "term": "Chil-term-no-english",
@@ -2022,6 +2865,19 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "My Secret Term",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+          },
+        ],
+      },
       "tags": [],
       "term": "My Secret Term",
     },
@@ -2029,6 +2885,20 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "I am singing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "I am singing (Engl)",
+          },
+        ],
+      },
       "tags": [],
       "term": "I am singing (lang)",
       "termEnglish": "I am singing (Engl)",
@@ -2037,6 +2907,20 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "You are singing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "You are singing (Engl)",
+          },
+        ],
+      },
       "tags": [],
       "term": "You are singing (lang)",
       "termEnglish": "You are singing (Engl)",
@@ -2045,6 +2929,20 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "She is singing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "She is singing (Engl)",
+          },
+        ],
+      },
       "tags": [],
       "term": "She is singing (lang)",
       "termEnglish": "She is singing (Engl)",
@@ -2053,6 +2951,20 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "I am not singing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "I am not singing (Engl)",
+          },
+        ],
+      },
       "tags": [],
       "term": "I am not singing (lang)",
       "termEnglish": "I am not singing (Engl)",
@@ -2061,6 +2973,20 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
       "actions": [],
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "You are not singing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "free translation",
+            "text": "You are not singing (Engl)",
+          },
+        ],
+      },
       "tags": [],
       "term": "You are not singing (lang)",
       "termEnglish": "You are not singing (Engl)",
@@ -2134,6 +3060,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "I am singing (lang)",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "I am singing (Engl)",
+                },
+              ],
+            },
             "term": "I am singing (lang)",
             "termEnglish": "I am singing (Engl)",
           },
@@ -2146,6 +3086,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "You are singing (lang)",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "You are singing (Engl)",
+                },
+              ],
+            },
             "term": "You are singing (lang)",
             "termEnglish": "You are singing (Engl)",
           },
@@ -2158,6 +3112,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "She is singing (lang)",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "She is singing (Engl)",
+                },
+              ],
+            },
             "term": "She is singing (lang)",
             "termEnglish": "She is singing (Engl)",
           },
@@ -2170,6 +3138,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "I am not singing (lang)",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "I am not singing (Engl)",
+                },
+              ],
+            },
             "term": "I am not singing (lang)",
             "termEnglish": "I am not singing (Engl)",
           },
@@ -2182,6 +3164,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "You are not singing (lang)",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "You are not singing (Engl)",
+                },
+              ],
+            },
             "term": "You are not singing (lang)",
             "termEnglish": "You are not singing (Engl)",
           },
@@ -2234,8 +3230,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
         ],
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
-      "name": "To Sing (lang)",
-      "nameEnglish": "To Sing (Engl)",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "To Sing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "literal translation",
+            "text": "To Sing (Engl)",
+          },
+        ],
+      },
       "tags": [],
     },
     {
@@ -2245,6 +3253,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "Chil-term-1",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "Engl-term-1",
+                },
+              ],
+            },
             "term": "Chil-term-1",
             "termEnglish": "Engl-term-1",
           },
@@ -2256,6 +3278,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "Chil-term-2",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "Engl-term-2",
+                },
+              ],
+            },
             "term": "Chil-term-2",
             "termEnglish": "Engl-term-2",
           },
@@ -2286,8 +3322,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
         ],
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "name": "test VL 1 chil",
-      "nameEnglish": "test VL 1 engl",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "test VL 1 chil",
+          },
+          {
+            "languageCode": "eng",
+            "role": "literal translation",
+            "text": "test VL 1 engl",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -2326,6 +3374,15 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
     },
@@ -2336,6 +3393,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "Chil-term-2",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "Engl-term-2",
+                },
+              ],
+            },
             "term": "Chil-term-2",
             "termEnglish": "Engl-term-2",
           },
@@ -2347,6 +3418,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "Chil-term-1",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "Engl-term-1",
+                },
+              ],
+            },
             "term": "Chil-term-1",
             "termEnglish": "Engl-term-1",
           },
@@ -2377,7 +3462,19 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
         ],
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "name": "test VL 2 CHIL- no engl name",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "test VL 2 CHIL- no engl name",
+          },
+          {
+            "languageCode": "eng",
+            "role": "literal translation",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
@@ -2408,6 +3505,15 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
               "type": "song",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "legends",
+              },
+            ],
+          },
         },
       ],
     },
@@ -2426,6 +3532,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "I am singing (lang)",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "I am singing (Engl)",
+                },
+              ],
+            },
             "term": "I am singing (lang)",
             "termEnglish": "I am singing (Engl)",
           },
@@ -2438,6 +3558,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "You are singing (lang)",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "You are singing (Engl)",
+                },
+              ],
+            },
             "term": "You are singing (lang)",
             "termEnglish": "You are singing (Engl)",
           },
@@ -2450,6 +3584,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "She is singing (lang)",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "She is singing (Engl)",
+                },
+              ],
+            },
             "term": "She is singing (lang)",
             "termEnglish": "She is singing (Engl)",
           },
@@ -2462,6 +3610,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "I am not singing (lang)",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "I am not singing (Engl)",
+                },
+              ],
+            },
             "term": "I am not singing (lang)",
             "termEnglish": "I am not singing (Engl)",
           },
@@ -2474,6 +3636,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "You are not singing (lang)",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "You are not singing (Engl)",
+                },
+              ],
+            },
             "term": "You are not singing (lang)",
             "termEnglish": "You are not singing (Engl)",
           },
@@ -2526,8 +3702,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
         ],
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
-      "name": "To Sing (lang)",
-      "nameEnglish": "To Sing (Engl)",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "To Sing (lang)",
+          },
+          {
+            "languageCode": "eng",
+            "role": "literal translation",
+            "text": "To Sing (Engl)",
+          },
+        ],
+      },
       "tags": [],
     },
     {
@@ -2537,6 +3725,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "Chil-term-1",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "Engl-term-1",
+                },
+              ],
+            },
             "term": "Chil-term-1",
             "termEnglish": "Engl-term-1",
           },
@@ -2548,6 +3750,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "Chil-term-2",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "Engl-term-2",
+                },
+              ],
+            },
             "term": "Chil-term-2",
             "termEnglish": "Engl-term-2",
           },
@@ -2578,8 +3794,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
         ],
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "name": "test VL 1 chil",
-      "nameEnglish": "test VL 1 engl",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "test VL 1 chil",
+          },
+          {
+            "languageCode": "eng",
+            "role": "literal translation",
+            "text": "test VL 1 engl",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -2618,6 +3846,15 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
     },
@@ -2628,6 +3865,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "Chil-term-2",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "Engl-term-2",
+                },
+              ],
+            },
             "term": "Chil-term-2",
             "termEnglish": "Engl-term-2",
           },
@@ -2639,6 +3890,20 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
           "term": {
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "Chil-term-1",
+                },
+                {
+                  "languageCode": "eng",
+                  "role": "free translation",
+                  "text": "Engl-term-1",
+                },
+              ],
+            },
             "term": "Chil-term-1",
             "termEnglish": "Engl-term-1",
           },
@@ -2669,7 +3934,19 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
         ],
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "name": "test VL 2 CHIL- no engl name",
+      "name": {
+        "items": [
+          {
+            "languageCode": "clc",
+            "role": "original",
+            "text": "test VL 2 CHIL- no engl name",
+          },
+          {
+            "languageCode": "eng",
+            "role": "literal translation",
+          },
+        ],
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
@@ -2700,6 +3977,15 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
               "type": "song",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "legends",
+              },
+            ],
+          },
         },
       ],
     },

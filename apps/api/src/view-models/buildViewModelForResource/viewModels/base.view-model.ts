@@ -1,5 +1,5 @@
 import { IBaseViewModel, IMultilingualText } from '@coscrad/api-interfaces';
-import { FromDomainModel } from '@coscrad/data-types';
+import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import { Aggregate } from '../../../domain/models/aggregate.entity';
@@ -18,7 +18,10 @@ export class BaseViewModel implements IBaseViewModel {
     @FromDomainModel(Aggregate as Ctor<unknown>)
     readonly id: ViewModelId;
 
-    @FromDomainModel(Aggregate as Ctor<unknown>)
+    @NestedDataType(MultilingualText, {
+        description: `multilingual text name of the entity`,
+        label: `name`,
+    })
     readonly name: IMultilingualText;
 
     constructor(domainModel: HasViewModelId & Nameable) {
