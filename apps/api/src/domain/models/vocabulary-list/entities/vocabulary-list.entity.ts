@@ -1,9 +1,12 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
+import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import VocabularyListHasNoEntriesError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoEntriesError';
 import VocabularyListHasNoNameInAnyLanguageError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoNameInAnyLanguageError';
 import { Valid } from '../../../domainModelValidators/Valid';
@@ -75,6 +78,20 @@ export class VocabularyList extends Resource {
         this.variables = Array.isArray(variables)
             ? variables.map((v) => (isNullOrUndefined(v) ? v : cloneToPlainObject(v)))
             : null;
+    }
+
+    getName(): MultilingualText {
+        // TODO[migration]: `name` should be a MultilingualTextProperty on this class.
+        return buildMultilingualTextFromBilingualText(
+            {
+                text: this.name,
+                languageCode: LanguageCode.Chilcotin,
+            },
+            {
+                text: this.nameEnglish,
+                languageCode: LanguageCode.English,
+            }
+        );
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {

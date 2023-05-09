@@ -3,6 +3,8 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
 import { Resource } from '../../resource.entity';
@@ -40,6 +42,11 @@ export class Polygon extends Resource implements ISpatialFeature {
         );
 
         this.properties = new SpatialFeatureProperties(propertiesDTO);
+    }
+
+    getName(): MultilingualText {
+        // TODO Make this multilingual text
+        return buildMultilingualTextWithSingleItem(this.properties.name);
     }
 
     protected validateComplexInvariants(): InternalError[] {

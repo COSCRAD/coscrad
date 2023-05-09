@@ -1,5 +1,6 @@
 import { ICategoryTreeViewModel, ICompositeIdentifier } from '@coscrad/api-interfaces';
 import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { Category } from '../../../domain/models/categories/entities/category.entity';
 import { CategorizableType } from '../../../domain/types/CategorizableType';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
@@ -42,7 +43,8 @@ export class CategoryTreeViewModel
     constructor(categoryTree: Category[]) {
         const tree = buildTreeFromNodes(categoryTree);
 
-        super({ id: tree.id });
+        // TODO remove hack
+        super({ id: tree.id, getName: () => buildMultilingualTextWithSingleItem(tree.label) });
 
         const { label, members, children } = tree;
 

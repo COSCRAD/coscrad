@@ -3,7 +3,7 @@ import { VocabularyListIndexState } from '../../../store/slices/resources/vocabu
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
-import { formatBilingualText } from './utils';
+import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
 export const VocabularyListIndexPresenter = ({
     entities: vocabularyLists,
@@ -15,7 +15,7 @@ export const VocabularyListIndexPresenter = ({
 
     const cellRenderersDefinition: CellRenderersDefinition<IVocabularyListViewModel> = {
         id: renderAggregateIdCell,
-        name: ({ name, nameEnglish }) => formatBilingualText(name, nameEnglish),
+        name: ({ name }) => renderMultilingualTextCell(name),
     };
 
     return (

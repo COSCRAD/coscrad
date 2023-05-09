@@ -101,6 +101,10 @@ class AudioItemBase extends Resource implements IRadioPublishableResource {
         this.transcript = !isNullOrUndefined(transcript) ? new Transcript(transcript) : transcript;
     }
 
+    getName(): MultilingualText {
+        return this.name;
+    }
+
     protected validateComplexInvariants(): InternalError[] {
         return [];
         // const nameValidationResult = this.name.validateComplexInvariants();

@@ -67,11 +67,10 @@ export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewM
     })
     readonly text: string;
 
-    constructor(
-        { id, transcript, mediaItemId, lengthMilliseconds, name }: AudioItem,
-        allMediaItems: MediaItem[]
-    ) {
-        super({ id });
+    constructor(audioItem: AudioItem, allMediaItems: MediaItem[]) {
+        super(audioItem);
+
+        const { transcript, mediaItemId, lengthMilliseconds, name } = audioItem;
 
         this.lengthMilliseconds = lengthMilliseconds;
 

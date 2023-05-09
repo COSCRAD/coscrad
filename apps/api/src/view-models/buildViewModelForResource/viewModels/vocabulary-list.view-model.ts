@@ -6,8 +6,9 @@ import {
     IVocabularyListEntry,
     IVocabularyListViewModel,
 } from '@coscrad/api-interfaces';
-import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { NestedDataType } from '@coscrad/data-types';
+import { ApiProperty } from '@nestjs/swagger';
+import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import { VocabularyListVariable } from '../../../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../../../domain/models/vocabulary-list/entities/vocabulary-list.entity';
@@ -43,8 +44,6 @@ class VocabularyListEntryViewModel implements IVocabularyListEntry<VocabularyLis
     variableValues: VariableValues;
 }
 
-const FromVocabularyList = FromDomainModel(VocabularyList);
-
 const convertVocabularyListVaraibleToFormElement = ({
     type: variableType,
     name,
@@ -65,19 +64,21 @@ const convertVocabularyListVaraibleToFormElement = ({
 });
 
 export class VocabularyListViewModel extends BaseViewModel implements IVocabularyListViewModel {
-    @ApiPropertyOptional({
-        example: 'Vocabulary List Name (in the language)',
-        description: 'name of the vocabulary list, in the language',
-    })
-    @FromVocabularyList
-    readonly name?: string;
+    // @ApiPropertyOptional({
+    //     example: 'Vocabulary List Name (in the language)',
+    //     description: 'name of the vocabulary list, in the language',
+    // })
+    // @FromVocabularyList
+    // readonly name?: string;
 
-    @ApiPropertyOptional({
-        example: 'To pick up <Object>',
-        description: 'name of the vocabulary list, in the translation language',
-    })
-    @FromVocabularyList
-    readonly nameEnglish?: string;
+    // @ApiPropertyOptional({
+    //     example: 'To pick up <Object>',
+    //     description: 'name of the vocabulary list, in the translation language',
+    // })
+    // @FromVocabularyList
+    // readonly nameEnglish?: string;
+
+    readonly name: MultilingualText;
 
     @ApiProperty({
         type: VocabularyListEntry,
@@ -102,18 +103,12 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
 
     readonly #baseAudioURL: string;
 
-    constructor(
-        { entries, id, name, nameEnglish, variables }: VocabularyList,
-        allTerms: Term[],
-        baseAudioURL: string
-    ) {
-        super({ id });
+    constructor(vocabularyList: VocabularyList, allTerms: Term[], baseAudioURL: string) {
+        super(vocabularyList);
+
+        const { entries, variables } = vocabularyList;
 
         this.#baseAudioURL = baseAudioURL;
-
-        this.name = name;
-
-        this.nameEnglish = nameEnglish;
 
         this.form = {
             fields: variables.map(convertVocabularyListVaraibleToFormElement),

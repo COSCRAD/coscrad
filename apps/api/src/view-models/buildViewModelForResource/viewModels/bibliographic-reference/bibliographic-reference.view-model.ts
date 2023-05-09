@@ -31,8 +31,10 @@ export class BibliographicReferenceViewModel
     )
     readonly data: IBibliographicReferenceData;
 
-    constructor({ id, data }: IBibliographicReference) {
-        super({ id });
+    constructor(bibliographicReference: IBibliographicReference) {
+        super(bibliographicReference);
+
+        const { data } = bibliographicReference;
 
         this.data = cloneToPlainObject(data);
     }

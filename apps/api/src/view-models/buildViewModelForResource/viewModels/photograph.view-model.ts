@@ -30,8 +30,10 @@ export class PhotographViewModel extends BaseViewModel implements IPhotographVie
      * there.
      */
 
-    constructor({ id, filename, photographer }: Photograph, baseURL: string) {
-        super({ id });
+    constructor(photograph: Photograph, baseURL: string) {
+        super(photograph);
+
+        const { filename, photographer } = photograph;
 
         // We need to store the MIME/type on the Photograph domain model
         this.imageURL = buildFullDigitalAssetURL(baseURL, filename, 'png');

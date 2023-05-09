@@ -2,6 +2,8 @@ import { NestedDataType } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../types/DTO';
+import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../types/AggregateType';
 import { ResourceType } from '../../../../types/ResourceType';
@@ -29,6 +31,10 @@ export class CourtCaseBibliographicReference
         if (isNullOrUndefined(dto)) return;
 
         this.data = new CourtCaseBibliographicReferenceData(dto.data);
+    }
+
+    getName(): MultilingualText {
+        return buildMultilingualTextWithSingleItem(this.data.caseName);
     }
 
     protected validateComplexInvariants(): InternalError[] {

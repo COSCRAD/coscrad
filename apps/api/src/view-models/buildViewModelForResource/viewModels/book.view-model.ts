@@ -38,8 +38,10 @@ export class BookViewModel extends BaseViewModel implements IBookViewModel {
 
     readonly pages: BookPage[];
 
-    constructor({ id, title, subtitle, author, publicationDate, pages }: Book) {
-        super({ id });
+    constructor(book: Book) {
+        super(book);
+
+        const { title, subtitle, author, publicationDate, pages } = book;
 
         this.title = title;
 

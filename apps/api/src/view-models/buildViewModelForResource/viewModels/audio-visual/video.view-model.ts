@@ -67,11 +67,10 @@ export class VideoViewModel extends BaseViewModel implements IVideoViewModel {
     })
     readonly text: string;
 
-    constructor(
-        { id, transcript, mediaItemId, lengthMilliseconds, name }: Video,
-        allMediaItems: MediaItem[]
-    ) {
-        super({ id });
+    constructor(video: Video, allMediaItems: MediaItem[]) {
+        super(video);
+
+        const { transcript, mediaItemId, lengthMilliseconds, name } = video;
 
         this.lengthMilliseconds = lengthMilliseconds;
 

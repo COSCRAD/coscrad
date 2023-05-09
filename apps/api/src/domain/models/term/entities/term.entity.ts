@@ -1,8 +1,11 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { NonEmptyString } from '@coscrad/data-types';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
+import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import InvalidPublicationStatusError from '../../../domainModelValidators/errors/InvalidPublicationStatusError';
 import TermHasNoTextInAnyLanguageError from '../../../domainModelValidators/errors/term/TermHasNoTextInAnyLanguageError';
 import { Valid } from '../../../domainModelValidators/Valid';
@@ -92,6 +95,23 @@ export class Term extends Resource {
         this.audioFilename = dto.audioFilename;
 
         this.sourceProject = dto.sourceProject;
+    }
+
+    getName(): MultilingualText {
+        /**
+         * TODO[migration] use a `text` property of type `MultilingualText` in
+         * place of `term` and `termEnglish`
+         */
+        return buildMultilingualTextFromBilingualText(
+            {
+                text: this.term,
+                languageCode: LanguageCode.Chilcotin,
+            },
+            {
+                text: this.termEnglish,
+                languageCode: LanguageCode.English,
+            }
+        );
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {

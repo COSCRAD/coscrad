@@ -1,9 +1,12 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { NonEmptyString, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import { DTO } from '../../../types/DTO';
+import { buildMultilingualTextFromBilingualText } from '../../common/build-multilingual-text-from-bilingual-text';
+import { MultilingualText } from '../../common/entities/multilingual-text';
 import MissingSongTitleError from '../../domainModelValidators/errors/song/MissingSongTitleError';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../types/ResourceType';
@@ -91,6 +94,22 @@ export class Song extends Resource implements ITimeBoundable {
         this.lengthMilliseconds = lengthMilliseconds;
 
         this.startMilliseconds = startMilliseconds;
+    }
+
+    /**
+     * TODO [migration] make `title` a `MultilingualText` and remove `titleEnglish`.
+     */
+    getName(): MultilingualText {
+        return buildMultilingualTextFromBilingualText(
+            {
+                text: this.title,
+                languageCode: LanguageCode.Chilcotin,
+            },
+            {
+                text: this.titleEnglish,
+                languageCode: LanguageCode.English,
+            }
+        );
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {

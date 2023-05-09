@@ -5,6 +5,7 @@ import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
+import { MultilingualText } from '../common/entities/multilingual-text';
 import InvariantValidationError from '../domainModelValidators/errors/InvariantValidationError';
 import validateSimpleInvariants from '../domainModelValidators/utilities/validateSimpleInvariants';
 import { isValid, Valid } from '../domainModelValidators/Valid';
@@ -93,6 +94,18 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
     protected abstract validateComplexInvariants(): InternalError[];
 
     abstract getAvailableCommands(): string[];
+
+    /**
+     * It's important that every aggregate has a name to display to the user.
+     * However, it may be the case that
+     * - the property isn't naturally called name on the given aggregate model
+     * - the name needs to be calculated from multiple properties
+     *
+     * So to keep things general, we expose a function for getting the name.
+     * this is used in the view layer to build a `name` property for every
+     * aggregate view.
+     */
+    abstract getName(): MultilingualText;
 
     /**
      * This method should be implemented on each aggregate class to return an array
