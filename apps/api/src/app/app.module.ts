@@ -11,6 +11,7 @@ import buildConfigFilePath from './config/buildConfigFilePath';
 import { validate } from './config/env.validation';
 import { CategoryController } from './controllers/category.controller';
 import { CommandController } from './controllers/command/command.controller';
+import { GameController } from './controllers/command/game.controller';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
 import { ResourceDescriptionController } from './controllers/resources/resource-description.controller';
 import { AudioVisualModule } from './domain-modules/audio-visual.module';
@@ -59,6 +60,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         CategoryController,
         ResourceDescriptionController,
         CommandController,
+        GameController,
     ],
 })
 export class AppModule {}
