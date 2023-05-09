@@ -6,8 +6,10 @@ import { Link } from 'react-router-dom';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { NavMenuContainer } from '../nav-menu/nav-menu-container';
 
-const StyledAppBar = styled(AppBar)({
-    backgroundColor: '#2cb5af',
+const AppBarWithTestIdDataAttribute = ({ children }) => <AppBar data-testid={'app-bar'}>{children}</AppBar>;
+
+const StyledAppBar = styled(AppBarWithTestIdDataAttribute)({
+    backgroundColor: 'primary.main',
     position: 'sticky',
     padding: '.5em',
 });
@@ -30,7 +32,7 @@ export const Header = (): JSX.Element => {
     const { siteTitle } = useContext(ConfigurableContentContext);
 
     return (
-        <StyledAppBar>
+        <StyledAppBar data-testid={'header'}>
             <StyledToolbar>
                 <StyledSiteTitle>
                     <Link to="/">
