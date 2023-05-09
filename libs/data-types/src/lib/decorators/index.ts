@@ -1,4 +1,3 @@
-export * from './Boolean';
 export * from './CompositeIdentifier';
 export * from './CoscradMultilingualText';
 export * from './DiscriminatedBy';
