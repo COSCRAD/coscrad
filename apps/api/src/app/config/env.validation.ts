@@ -100,6 +100,13 @@ export class EnvironmentVariables {
         description: 'the prefix that will come before all endpoints in your API',
     })
     GLOBAL_PREFIX: string;
+
+    // TODO Add Boolean Decorator
+    @NonEmptyString({
+        label: 'Games Endpoint Feature Flag',
+        description: 'whether or not to enable the legacy games data endpoint',
+    })
+    SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT: string;
 }
 
 export const validate = (config: Record<string, unknown>): EnvironmentVariables => {
