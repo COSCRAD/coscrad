@@ -35,14 +35,17 @@ describe(`Term index-to-detail flow`, () => {
 
             cy.contains(textForTerm);
 
-            cy.location('pathname').should('contain', `/Resources/Terms/13`);
+            cy.location('pathname').should(
+                'contain',
+                `/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`
+            );
         });
     });
 
     describe(`the term detail page`, () => {
         describe('when there are notes for the term (2)', () => {
             beforeEach(() => {
-                cy.visit(`/Resources/Terms/2`);
+                cy.visit(`/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`);
             });
             const allNotes = [
                 'This first 4 letters of this term form a syllable that indicates this is a plant ',
@@ -59,7 +62,7 @@ describe(`Term index-to-detail flow`, () => {
 
         describe('when there are no notes for the term (13)', () => {
             beforeEach(() => {
-                cy.visit(`/Resources/Terms/13`);
+                cy.visit(`/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`);
             });
 
             it('should display the no notes message', () => {
@@ -75,7 +78,7 @@ describe(`Term index-to-detail flow`, () => {
 
         describe('when there are connections for the term (2)', () => {
             beforeEach(() => {
-                cy.visit(`/Resources/Terms/2`);
+                cy.visit(`/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002`);
 
                 cy.contains('Notes for');
 
@@ -101,7 +104,7 @@ describe(`Term index-to-detail flow`, () => {
 
         describe('when there are no connections for the term (13)', () => {
             beforeEach(() => {
-                cy.visit(`/Resources/Terms/13`);
+                cy.visit(`/Resources/Terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513`);
             });
 
             it('should display the no connections message', () => {
