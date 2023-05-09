@@ -19,6 +19,7 @@ IAggregateInfo<ResourceType> & { route: string }): JSX.Element => {
             secondary: { main },
         },
     } = useTheme();
+
     return (
         <Link to={`/${route}`}>
             <Card>

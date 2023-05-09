@@ -88,7 +88,7 @@ export const contentConfig: ConfigurableContent = {
         palette: {
             primary: {
                 light: '#FF7B6E',
-                main: '#F12029',
+                main: '#a8a552',
                 dark: '#A40011',
                 contrastText: '#FFFFFF',
             },

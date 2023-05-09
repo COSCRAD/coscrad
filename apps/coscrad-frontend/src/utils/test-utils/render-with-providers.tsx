@@ -4,8 +4,10 @@ import { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 import { ConfigurableContentProvider } from '../../configurable-front-matter/configurable-content-provider';
 import { ConfigurableContent } from '../../configurable-front-matter/data/configurable-content-schema';
+import { CoscradThemeProvider } from '../../coscrad-theme-provider';
 import { AppStore, RootState, setupStore } from '../../store';
 import { getDummyConfigurableContent } from './get-dummy-configurable-content';
+
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
     preloadedState?: PreloadedState<RootState>;
     store?: AppStore;
@@ -29,7 +31,7 @@ export const renderWithProviders = (
     const Wrapper = ({ children }: PropsWithChildren<{}>): JSX.Element => (
         <Provider store={store}>
             <ConfigurableContentProvider value={contentConfig}>
-                {children}
+                <CoscradThemeProvider>{children}</CoscradThemeProvider>
             </ConfigurableContentProvider>
         </Provider>
     );
