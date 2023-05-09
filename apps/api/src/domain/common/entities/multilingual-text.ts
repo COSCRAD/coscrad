@@ -6,6 +6,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { ExternalEnum, NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { InternalError } from '../../../lib/errors/InternalError';
+import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { Valid } from '../../domainModelValidators/Valid';
@@ -112,6 +113,13 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
         }
 
         return this.items.map(({ text, languageCode }) => `{${languageCode}}: ${text}`).join('\n');
+    }
+
+    append(item: MultilingualTextItem): MultilingualText {
+        return this.clone({
+            // avoid shared references
+            items: this.items.concat(item).map((item) => new MultilingualTextItem(item)),
+        } as DeepPartial<DTO<this>>);
     }
 
     validateComplexInvariants(): ResultOrError<Valid> {

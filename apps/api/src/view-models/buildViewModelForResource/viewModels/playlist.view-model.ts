@@ -40,12 +40,10 @@ export class PlaylistViewModel extends BaseViewModel implements IPlayListViewMod
     // TODO establish a view model for episodes
     readonly episodes: PlaylistEpisode[];
 
-    constructor(
-        { id, name, items }: Playlist,
-        allAudioItems: AudioItem[],
-        allMediaItems: MediaItem[]
-    ) {
-        super({ id });
+    constructor(playlist: Playlist, allAudioItems: AudioItem[], allMediaItems: MediaItem[]) {
+        super(playlist);
+
+        const { name, items } = playlist;
 
         this.name = name.clone();
 

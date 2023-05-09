@@ -1,4 +1,3 @@
-import { CoscradUserGroup } from '../../../../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { AggregateType } from '../../../../../domain/types/AggregateType';
 import { CategorizableType } from '../../../../../domain/types/CategorizableType';
 import { ResourceType } from '../../../../../domain/types/ResourceType';
@@ -10,6 +9,7 @@ import { BaseViewModel } from '../../base.view-model';
 import { BibliographicReferenceViewModel } from '../../bibliographic-reference/bibliographic-reference.view-model';
 import { BookViewModel } from '../../book.view-model';
 import { CategoryTreeViewModel } from '../../category-tree.view-model';
+import { CoscradUserGroupViewModel } from '../../coscrad-user-group.view-model';
 import { CoscradUserViewModel } from '../../coscrad-user.view-model';
 import { MediaItemViewModel } from '../../media-item.view-model';
 import { PhotographViewModel } from '../../photograph.view-model';
@@ -36,5 +36,5 @@ export const aggregateTypeToViewModelCtor: { [K in AggregateType]: Ctor<BaseView
     [AggregateType.category]: CategoryTreeViewModel,
     [AggregateType.tag]: TagViewModel,
     [AggregateType.user]: CoscradUserViewModel,
-    [AggregateType.userGroup]: CoscradUserGroup,
+    [AggregateType.userGroup]: CoscradUserGroupViewModel,
 };

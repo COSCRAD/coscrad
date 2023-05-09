@@ -5,6 +5,8 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import formatAggregateType from '../../../../view-models/presentation/formatAggregateType';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { HasLabel } from '../../../interfaces/HasAggregateIdAndLabel';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
@@ -75,6 +77,11 @@ export class Category extends Aggregate implements HasLabel {
         this.members = cloneToPlainObject(members);
 
         this.childrenIDs = Array.isArray(childrenIDs) ? [...childrenIDs] : undefined;
+    }
+
+    getName(): MultilingualText {
+        // Do we need multiling labels? Configurable language for the labels?
+        return buildMultilingualTextWithSingleItem(this.label);
     }
 
     getAvailableCommands(): string[] {

@@ -17,8 +17,10 @@ export class TagViewModel extends BaseViewModel implements ITagViewModel {
     @FromDomainModel(Tag)
     readonly members: CategorizableCompositeIdentifier[];
 
-    constructor({ id, label, members }: Tag) {
-        super({ id });
+    constructor(tag: Tag) {
+        super(tag);
+
+        const { label, members } = tag;
 
         this.label = label;
 

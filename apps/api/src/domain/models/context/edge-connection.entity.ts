@@ -33,6 +33,9 @@ import {
     EdgeConnectionType,
     IEdgeConnectionMember,
 } from '@coscrad/api-interfaces';
+import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../common/entities/multilingual-text';
 
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
     extends BaseDomainModel
@@ -113,6 +116,30 @@ export class EdgeConnection extends Aggregate {
         this.members = members.map((dto) => new EdgeConnectionMember(dto));
 
         this.note = note;
+    }
+
+    getName(): MultilingualText {
+        if (this.connectionType === EdgeConnectionType.self)
+            return buildMultilingualTextWithSingleItem(
+                `A note about ${formatAggregateCompositeIdentifier(
+                    this.members[0].compositeIdentifier
+                )}`
+            );
+
+        // We have a dual Edge Connection
+        const toMemberCompositeIdentifier = this.members.find(
+            ({ role }) => role === EdgeConnectionMemberRole.to
+        ).compositeIdentifier;
+
+        const fromMemberCompositeIdentifier = this.members.find(
+            ({ role }) => role === EdgeConnectionMemberRole.from
+        ).compositeIdentifier;
+
+        return buildMultilingualTextWithSingleItem(
+            `A connection from ${formatAggregateCompositeIdentifier(
+                fromMemberCompositeIdentifier
+            )} to ${formatAggregateCompositeIdentifier(toMemberCompositeIdentifier)}`
+        );
     }
 
     private validateMembersState({ resources }: InMemorySnapshot): InternalError[] {

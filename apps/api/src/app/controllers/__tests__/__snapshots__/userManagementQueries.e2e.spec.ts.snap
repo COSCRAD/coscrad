@@ -28,6 +28,101 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isOptional": false,
         "label": "members",
       },
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
+      },
     },
     "type": "tag",
   },
@@ -64,6 +159,101 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "isOptional": false,
             "label": "members",
           },
+          "name": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "multilingual text name of the entity",
+            "isArray": false,
+            "isOptional": false,
+            "label": "name",
+            "schema": {
+              "items": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "one item for each provided language",
+                "isArray": true,
+                "isOptional": false,
+                "label": "items",
+                "schema": {
+                  "languageCode": {
+                    "complexDataType": "ENUM",
+                    "description": "an official identifier of the language",
+                    "enumLabel": "Language_Code",
+                    "enumName": "LangaugeCode",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "language code",
+                    "labelsAndValues": [
+                      {
+                        "label": "Chilcotin",
+                        "value": "clc",
+                      },
+                      {
+                        "label": "Haida",
+                        "value": "hai",
+                      },
+                      {
+                        "label": "English",
+                        "value": "eng",
+                      },
+                      {
+                        "label": "French",
+                        "value": "fra",
+                      },
+                      {
+                        "label": "Chinook",
+                        "value": "chn",
+                      },
+                      {
+                        "label": "Zapotec",
+                        "value": "zap",
+                      },
+                      {
+                        "label": "Spanish",
+                        "value": "spa",
+                      },
+                    ],
+                  },
+                  "role": {
+                    "complexDataType": "ENUM",
+                    "description": "role of this text in the translation process",
+                    "enumLabel": "text item role",
+                    "enumName": "Multilingual Text Item Role",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text item role",
+                    "labelsAndValues": [
+                      {
+                        "label": "original",
+                        "value": "original",
+                      },
+                      {
+                        "label": "glossed to",
+                        "value": "glossed to",
+                      },
+                      {
+                        "label": "prompt",
+                        "value": "prompt",
+                      },
+                      {
+                        "label": "free translation",
+                        "value": "free translation",
+                      },
+                      {
+                        "label": "literal translation",
+                        "value": "literal translation",
+                      },
+                    ],
+                  },
+                  "text": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "plain text in the given language",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text",
+                  },
+                },
+              },
+            },
+          },
         },
       },
       "id": {
@@ -87,6 +277,101 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isOptional": false,
         "label": "members",
       },
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
+      },
     },
     "type": "category",
   },
@@ -101,6 +386,101 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isArray": false,
         "isOptional": false,
         "label": "ID",
+      },
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
       },
       "profile": {
         "complexDataType": "NESTED_TYPE",
@@ -200,12 +580,280 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "isOptional": false,
         "label": "label",
       },
-      "userIds": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "the ID of every user that is in this group",
+      "name": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "multilingual text name of the entity",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "label": "items",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "eng",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "prompt",
+                    "value": "prompt",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "label": "text",
+              },
+            },
+          },
+        },
+      },
+      "users": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "all users that are in this group",
         "isArray": true,
         "isOptional": false,
-        "label": "user IDs",
+        "label": "users",
+        "schema": {
+          "id": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "name": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "multilingual text name of the entity",
+            "isArray": false,
+            "isOptional": false,
+            "label": "name",
+            "schema": {
+              "items": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "one item for each provided language",
+                "isArray": true,
+                "isOptional": false,
+                "label": "items",
+                "schema": {
+                  "languageCode": {
+                    "complexDataType": "ENUM",
+                    "description": "an official identifier of the language",
+                    "enumLabel": "Language_Code",
+                    "enumName": "LangaugeCode",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "language code",
+                    "labelsAndValues": [
+                      {
+                        "label": "Chilcotin",
+                        "value": "clc",
+                      },
+                      {
+                        "label": "Haida",
+                        "value": "hai",
+                      },
+                      {
+                        "label": "English",
+                        "value": "eng",
+                      },
+                      {
+                        "label": "French",
+                        "value": "fra",
+                      },
+                      {
+                        "label": "Chinook",
+                        "value": "chn",
+                      },
+                      {
+                        "label": "Zapotec",
+                        "value": "zap",
+                      },
+                      {
+                        "label": "Spanish",
+                        "value": "spa",
+                      },
+                    ],
+                  },
+                  "role": {
+                    "complexDataType": "ENUM",
+                    "description": "role of this text in the translation process",
+                    "enumLabel": "text item role",
+                    "enumName": "Multilingual Text Item Role",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text item role",
+                    "labelsAndValues": [
+                      {
+                        "label": "original",
+                        "value": "original",
+                      },
+                      {
+                        "label": "glossed to",
+                        "value": "glossed to",
+                      },
+                      {
+                        "label": "prompt",
+                        "value": "prompt",
+                      },
+                      {
+                        "label": "free translation",
+                        "value": "free translation",
+                      },
+                      {
+                        "label": "literal translation",
+                        "value": "literal translation",
+                      },
+                    ],
+                  },
+                  "text": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "plain text in the given language",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "text",
+                  },
+                },
+              },
+            },
+          },
+          "profile": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "the user's profile information",
+            "isArray": false,
+            "isOptional": true,
+            "label": "profile",
+            "schema": {
+              "email": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "the user's email address",
+                "isArray": false,
+                "isOptional": false,
+                "label": "email",
+              },
+              "name": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "the user's full name",
+                "isArray": false,
+                "isOptional": false,
+                "label": "full name",
+                "schema": {
+                  "firstName": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "the user's first name",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "first name",
+                  },
+                  "lastName": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "the user's last name",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "last name",
+                  },
+                },
+              },
+            },
+          },
+          "roles": {
+            "complexDataType": "ENUM",
+            "description": "the user's roles, which grant privileges to perform certain read \\ write actions",
+            "enumLabel": "User Role",
+            "enumName": "COSCRAD_USER_ROLE",
+            "isArray": true,
+            "isOptional": false,
+            "label": "roles",
+            "labelsAndValues": [
+              {
+                "label": "admin",
+                "value": "projectAdmin",
+              },
+              {
+                "label": "viewer",
+                "value": "viewer",
+              },
+              {
+                "label": "COSCRAD admin",
+                "value": "superAdmin",
+              },
+            ],
+          },
+          "username": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "a human-readable identifier for this user",
+            "isArray": false,
+            "isOptional": false,
+            "label": "username",
+          },
+        },
       },
     },
     "type": "userGroup",
@@ -254,9 +902,27 @@ exports[`User Management Queries when the system user issuing the command is aut
   "description": "This group is for members of the community only.",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "label": "community members",
+  "name": {
+    "items": [
+      {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "community members",
+      },
+    ],
+  },
   "users": [
     {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "cool-james",
+          },
+        ],
+      },
       "profile": {
         "email": "llcj1985@aol.com",
         "name": {
@@ -316,9 +982,27 @@ exports[`User Management Queries when the system user issuing the command is aut
       "description": "This group is for members of the community only.",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "label": "community members",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "community members",
+          },
+        ],
+      },
       "users": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "cool-james",
+              },
+            ],
+          },
           "profile": {
             "email": "llcj1985@aol.com",
             "name": {
@@ -427,6 +1111,15 @@ exports[`User Management Queries when the system user issuing the command is aut
     },
   ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+  "name": {
+    "items": [
+      {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "cool-james",
+      },
+    ],
+  },
   "profile": {
     "email": "llcj1985@aol.com",
     "name": {
@@ -489,6 +1182,15 @@ exports[`User Management Queries when the system user issuing the command is aut
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "cool-james",
+          },
+        ],
+      },
       "profile": {
         "email": "llcj1985@aol.com",
         "name": {
@@ -590,9 +1292,27 @@ exports[`User Management Queries when the system user issuing the command is aut
   "description": "This group is for members of the community only.",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "label": "community members",
+  "name": {
+    "items": [
+      {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "community members",
+      },
+    ],
+  },
   "users": [
     {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "cool-james",
+          },
+        ],
+      },
       "profile": {
         "email": "llcj1985@aol.com",
         "name": {
@@ -652,9 +1372,27 @@ exports[`User Management Queries when the system user issuing the command is aut
       "description": "This group is for members of the community only.",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "label": "community members",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "community members",
+          },
+        ],
+      },
       "users": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "cool-james",
+              },
+            ],
+          },
           "profile": {
             "email": "llcj1985@aol.com",
             "name": {
@@ -763,6 +1501,15 @@ exports[`User Management Queries when the system user issuing the command is aut
     },
   ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+  "name": {
+    "items": [
+      {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "cool-james",
+      },
+    ],
+  },
   "profile": {
     "email": "llcj1985@aol.com",
     "name": {
@@ -825,6 +1572,15 @@ exports[`User Management Queries when the system user issuing the command is aut
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "cool-james",
+          },
+        ],
+      },
       "profile": {
         "email": "llcj1985@aol.com",
         "name": {

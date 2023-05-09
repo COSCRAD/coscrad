@@ -5,6 +5,8 @@ import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
+import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../common/entities/multilingual-text';
 import TagLabelAlreadyInUseError from '../../domainModelValidators/errors/tag/TagLabelAlreadyInUseError';
 import { isValid, Valid } from '../../domainModelValidators/Valid';
 import { HasLabel } from '../../interfaces/HasAggregateIdAndLabel';
@@ -49,6 +51,11 @@ export class Tag extends Aggregate implements HasLabel {
         this.label = label;
 
         this.members = cloneToPlainObject(members);
+    }
+
+    getName(): MultilingualText {
+        // TODO Should tag labels be multilingual text?
+        return buildMultilingualTextWithSingleItem(this.label);
     }
 
     relabel(newLabel: string) {

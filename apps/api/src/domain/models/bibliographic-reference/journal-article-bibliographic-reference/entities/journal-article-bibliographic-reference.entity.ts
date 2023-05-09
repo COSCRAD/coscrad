@@ -2,6 +2,8 @@ import { NestedDataType } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../types/DTO';
+import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
@@ -28,6 +30,10 @@ export class JournalArticleBibliographicReference
         if (isNullOrUndefined(dto)) return;
 
         this.data = new JournalArticleBibliographicReferenceData(dto.data);
+    }
+
+    getName(): MultilingualText {
+        return buildMultilingualTextWithSingleItem(this.data.title);
     }
 
     protected validateComplexInvariants(): InternalError[] {
