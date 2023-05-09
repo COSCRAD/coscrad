@@ -25,7 +25,7 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
         <Box sx={{ display: 'flex' }} data-testid="nav-menu">
             <IconButton
                 id="basic-button"
-                color="primary"
+                color="secondary"
                 aria-controls={isOpen ? 'basic-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={isOpen ? 'true' : undefined}
