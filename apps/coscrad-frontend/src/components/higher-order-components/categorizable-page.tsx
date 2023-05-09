@@ -10,13 +10,13 @@ import {
     AggregateDetailContainerProps,
 } from './aggregate-detail-container';
 
-type DetailPresenter<T extends CategorizableType> = (
-    viewModel: AggregateTypeToViewModel[T]
-) => JSX.Element;
+interface IDetailPresenter<T extends CategorizableType> {
+    (viewModel: AggregateTypeToViewModel[T]): JSX.Element;
+}
 
 interface ResourcePageProps<T extends CategorizableType> {
     categorizableType: CategorizableType;
-    detailPresenterFactory: (categorizableType: T) => DetailPresenter<T>;
+    DetailPresenter: IDetailPresenter<T>;
 }
 
 /**
@@ -28,7 +28,7 @@ interface ResourcePageProps<T extends CategorizableType> {
  */
 export const CategorizablePage = <T extends CategorizableType>({
     categorizableType,
-    detailPresenterFactory,
+    DetailPresenter,
 }: ResourcePageProps<T>): JSX.Element => {
     const id = useIdFromLocation();
 
@@ -47,10 +47,7 @@ export const CategorizablePage = <T extends CategorizableType>({
           )
         : AggregateDetailContainer;
 
-    const EnhancedDetailPresenterFactory = (categorizableType: CategorizableType) => {
-        // @ts-expect-error FIX ME
-        const DetailPresenter = detailPresenterFactory(categorizableType);
-
+    const EnhancedDetailPresenterFactory = () => {
         return (viewModel) => (
             <>
                 <DetailPresenter {...viewModel} />

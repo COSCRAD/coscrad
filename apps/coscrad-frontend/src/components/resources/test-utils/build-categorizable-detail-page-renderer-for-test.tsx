@@ -9,6 +9,8 @@ import { fullViewCategorizablePresenterFactory } from '../factories/full-view-ca
  * Note that this test helper is somewhat coupled to the implementation. We should
  * eventually do this test with Cypress, so that how the component gets rendered
  * when you go to a resource detail path is an implementation detail.
+ *
+ * Consider this now?
  */
 export const buildCategorizableDetailPageRendererForTest =
     (categorizableType: CategorizableType) => (idInLocation: string) =>
@@ -20,7 +22,7 @@ export const buildCategorizableDetailPageRendererForTest =
                     : `/${routes.notes.detail()}/`,
                 <CategorizablePage
                     categorizableType={categorizableType}
-                    detailPresenterFactory={fullViewCategorizablePresenterFactory}
+                    DetailPresenter={fullViewCategorizablePresenterFactory(categorizableType)}
                 />
             )
         );
