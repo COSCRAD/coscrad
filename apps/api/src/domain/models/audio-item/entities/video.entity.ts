@@ -92,6 +92,10 @@ export class VideoBase extends Resource {
         this.transcript = !isNullOrUndefined(transcript) ? new Transcript(transcript) : transcript;
     }
 
+    getName(): MultilingualText {
+        return this.name;
+    }
+
     protected validateComplexInvariants(): InternalError[] {
         const nameValidationResult = this.name.validateComplexInvariants();
 

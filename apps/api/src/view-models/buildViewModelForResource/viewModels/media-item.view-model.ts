@@ -7,12 +7,6 @@ const FromMediaItem = FromDomainModel(MediaItem);
 
 export class MediaItemViewModel extends BaseViewModel implements IMediaItemViewModel {
     @FromMediaItem
-    readonly title?: string;
-
-    @FromMediaItem
-    readonly titleEnglish?: string;
-
-    @FromMediaItem
     readonly url: string;
 
     @FromMediaItem
@@ -22,13 +16,9 @@ export class MediaItemViewModel extends BaseViewModel implements IMediaItemViewM
     readonly lengthMilliseconds: number;
 
     constructor(mediaItem: MediaItem) {
-        const { id, title, titleEnglish, url, mimeType, lengthMilliseconds } = mediaItem;
+        const { url, mimeType, lengthMilliseconds } = mediaItem;
 
-        super({ id });
-
-        this.title = title;
-
-        this.titleEnglish = titleEnglish;
+        super(mediaItem);
 
         this.url = url;
 

@@ -3,23 +3,21 @@ import {
     IVocabularyListViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { Card, CardContent, CardHeader, Divider } from '@mui/material';
+import { Card, CardContent, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
-import { formatBilingualText } from './utils';
+import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
 
 export const VocabularyListDetailThumbnailPresenter = ({
     id,
     name,
-    nameEnglish,
     entries,
 }: ICategorizableDetailQueryResult<IVocabularyListViewModel>): JSX.Element => (
     <div data-testid={id}>
         <Link to={`/${routes.resources.ofType(ResourceType.vocabularyList).detail(id)}`}>
             <Card>
-                <CardHeader title={formatBilingualText(name, nameEnglish)}></CardHeader>
-
                 <CardContent>
+                    <MultilingualTextPresenter text={name} />
                     <Divider />
                     Number of Entries: {entries.length}
                 </CardContent>

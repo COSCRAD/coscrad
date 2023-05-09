@@ -9,6 +9,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
 
     const headingLabels: HeadingLabel<ITermViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
+        // TODO We need to determine the `term` and `termEnglish` from a multilingual text property
         { propertyKey: 'term', headingLabel: 'Term' },
         { propertyKey: 'termEnglish', headingLabel: 'English' },
         { propertyKey: 'audioURL', headingLabel: 'Audio URL' },
@@ -17,6 +18,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
 
     const cellRenderersDefinition: CellRenderersDefinition<ITermViewModel> = {
         id: renderAggregateIdCell,
+        // TODO We need to determine the `term` and `termEnglish` from a multilingual text property
         termEnglish: ({ termEnglish }: ITermViewModel) => termEnglish,
         audioURL: ({ audioURL }: ITermViewModel) => audioURL,
         contributor: ({ contributor }: ITermViewModel) => contributor,
