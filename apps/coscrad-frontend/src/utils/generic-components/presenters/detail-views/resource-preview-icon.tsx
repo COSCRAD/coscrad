@@ -10,7 +10,7 @@ import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import { Box } from '@mui/material';
+import { Box, SvgIconProps } from '@mui/material';
 
 /**
  * TODO[https://www.pivotaltracker.com/story/show/184664117] Create an icon factory that enables custom icons
@@ -21,10 +21,11 @@ type HEX = `#${string}`;
 
 type Color = RGB | RGBA | HEX;
 
-interface ResourcePreviewImageProps {
+export interface ResourcePreviewImageProps {
     resourceType: ResourceType;
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     color?: Color;
+    fontSize?: SvgIconProps['fontSize'];
 }
 
 /**
@@ -60,6 +61,8 @@ export const ResourcePreviewIconFactory = ({
     resourceType,
     size = 'md',
     color,
+    // TODO Use this
+    fontSize: _fontSize,
 }: ResourcePreviewImageProps): JSX.Element => {
     const lookupResult = lookupTable[resourceType];
 

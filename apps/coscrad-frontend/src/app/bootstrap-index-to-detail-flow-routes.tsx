@@ -21,7 +21,7 @@ export const bootstrapIndexToDetailFlowRoutes = ({
             (acc, { categorizableType, route }) => ({
                 ...acc,
                 [categorizableType]:
-                    // we have already filtered out the Notes
+                // we have already filtered out the Notes
                     (route && `Resources/${route}`) ||
                     routes.resources.ofType(categorizableType as ResourceType).index,
             }),
@@ -65,7 +65,14 @@ export const bootstrapIndexToDetailFlowRoutes = ({
                     element: (
                         <CategorizablePage
                             categorizableType={categorizableType}
-                            detailPresenterFactory={detailPresenterFactory}
+                            /**
+                             * TODO Leverage the new top-level presenter factory as follows:
+                             *
+                             * const presenter = presenterFactory(categorizableType); // ResourcePresenterFactory
+                             *
+                             * DetailPresenter =  detailViewType === DetailViewType.thumbnail ?? presenter.buildThumbnailView : presenter.buildFullView
+                             */
+                            DetailPresenter={detailPresenterFactory(categorizableType)}
                         />
                     ),
                 },
