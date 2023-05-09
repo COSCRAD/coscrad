@@ -84,4 +84,41 @@ export const contentConfig: ConfigurableContent = {
     },
     notFoundMessage: 'No result found.',
     loadingMessage: 'Loading',
+    themeOverrides: {
+        palette: {
+            primary: {
+                light: '#FF7B6E',
+                main: '#a8a552',
+                dark: '#A40011',
+                contrastText: '#FFFFFF',
+            },
+            secondary: {
+                light: '#000000',
+                main: '#000000',
+                dark: '#000000',
+                contrastText: '#FFFFFF',
+            },
+            text: {
+                primary: '#212121',
+                secondary: '#757575',
+                disabled: '#BDBDBD',
+            },
+            background: {
+                paper: '#F5F5F5',
+            },
+            action: {
+                hover: '#FFFF00',
+                active: '#A40011',
+                hoverOpacity: 0.08,
+                selected: '#E0E0E0',
+                selectedOpacity: 0.16,
+                disabled: '#BDBDBD',
+                disabledBackground: '#E0E0E0',
+                disabledOpacity: 0.38,
+                focus: '#FFFF00',
+                focusOpacity: 0.12,
+                activatedOpacity: 0.24,
+            },
+        },
+    },
 };

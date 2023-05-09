@@ -8,6 +8,7 @@ import {
     Grid,
     IconButton,
     InputLabel,
+    TableContainer as MUITableContainer,
     MenuItem,
     Paper,
     Select,
@@ -15,7 +16,6 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableContainer as MUITableContainer,
     TableHead,
     TableRow,
     Typography,
@@ -25,7 +25,7 @@ import { NotFoundPresenter } from '../../../../../components/not-found';
 import { ConfigurableContentContext } from '../../../../../configurable-front-matter/configurable-content-provider';
 import { cyclicDecrement, cyclicIncrement } from '../../../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
-import { filterTableData, Matchers } from './filter-table-data';
+import { Matchers, filterTableData } from './filter-table-data';
 import { renderCell } from './render-cell';
 import { SearchBar } from './search-bar';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
@@ -158,7 +158,7 @@ export const IndexTable = <T,>({
             <Box sx={{ width: '100%' }}>
                 <Paper>
                     <MUITableContainer>
-                        <Table aria-labelledby="Resources Table">
+                        <Table aria-labelledby="Resources Table" color="primary">
                             <TableHead>
                                 <TableRow>
                                     {headingLabels.map(({ headingLabel }) => (
