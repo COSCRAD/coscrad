@@ -7,7 +7,7 @@ exports[` 1`] = `
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -18,18 +18,18 @@ exports[` 1`] = `
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -44,7 +44,7 @@ exports[` 1`] = `
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -71,11 +71,11 @@ exports[` 1`] = `
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r0:"
               placeholder="Search..."
               type="text"
@@ -113,7 +113,7 @@ exports[` 1`] = `
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -148,29 +148,30 @@ exports[` 1`] = `
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -181,11 +182,11 @@ exports[` 1`] = `
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/1"
@@ -194,17 +195,17 @@ exports[` 1`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       b and then c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/2"
@@ -213,17 +214,17 @@ exports[` 1`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/3"
@@ -232,7 +233,7 @@ exports[` 1`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     />
                   </tr>
                 </tbody>
@@ -256,13 +257,13 @@ exports[` 1`] = `
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -279,7 +280,7 @@ exports[` 1`] = `
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -303,7 +304,7 @@ exports[` 1`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -327,7 +328,7 @@ exports[` 1`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -364,7 +365,7 @@ exports[` 2`] = `
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -375,18 +376,18 @@ exports[` 2`] = `
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -401,7 +402,7 @@ exports[` 2`] = `
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -428,11 +429,11 @@ exports[` 2`] = `
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r0:"
               placeholder="Search..."
               type="text"
@@ -470,7 +471,7 @@ exports[` 2`] = `
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -505,29 +506,30 @@ exports[` 2`] = `
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -538,11 +540,11 @@ exports[` 2`] = `
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/1"
@@ -551,17 +553,17 @@ exports[` 2`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       b and then c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/2"
@@ -570,17 +572,17 @@ exports[` 2`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/3"
@@ -589,7 +591,7 @@ exports[` 2`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     />
                   </tr>
                 </tbody>
@@ -613,13 +615,13 @@ exports[` 2`] = `
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -636,7 +638,7 @@ exports[` 2`] = `
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -660,7 +662,7 @@ exports[` 2`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -684,7 +686,7 @@ exports[` 2`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -716,7 +718,7 @@ exports[` 2`] = `
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -727,18 +729,18 @@ exports[` 2`] = `
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -753,7 +755,7 @@ exports[` 2`] = `
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -780,11 +782,11 @@ exports[` 2`] = `
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r1:"
               placeholder="Search..."
               type="text"
@@ -822,7 +824,7 @@ exports[` 2`] = `
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -857,29 +859,30 @@ exports[` 2`] = `
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -890,11 +893,11 @@ exports[` 2`] = `
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/1"
@@ -903,17 +906,17 @@ exports[` 2`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/2"
@@ -922,17 +925,17 @@ exports[` 2`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/3"
@@ -941,7 +944,7 @@ exports[` 2`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[]}
                     </td>
@@ -967,13 +970,13 @@ exports[` 2`] = `
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -990,7 +993,7 @@ exports[` 2`] = `
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -1014,7 +1017,7 @@ exports[` 2`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -1038,7 +1041,7 @@ exports[` 2`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -1075,7 +1078,7 @@ exports[` 3`] = `
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -1086,18 +1089,18 @@ exports[` 3`] = `
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -1112,7 +1115,7 @@ exports[` 3`] = `
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -1139,11 +1142,11 @@ exports[` 3`] = `
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r0:"
               placeholder="Search..."
               type="text"
@@ -1181,7 +1184,7 @@ exports[` 3`] = `
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -1216,29 +1219,30 @@ exports[` 3`] = `
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -1249,11 +1253,11 @@ exports[` 3`] = `
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/1"
@@ -1262,17 +1266,17 @@ exports[` 3`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       b and then c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/2"
@@ -1281,17 +1285,17 @@ exports[` 3`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/3"
@@ -1300,7 +1304,7 @@ exports[` 3`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     />
                   </tr>
                 </tbody>
@@ -1324,13 +1328,13 @@ exports[` 3`] = `
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -1347,7 +1351,7 @@ exports[` 3`] = `
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -1371,7 +1375,7 @@ exports[` 3`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -1395,7 +1399,7 @@ exports[` 3`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -1427,7 +1431,7 @@ exports[` 3`] = `
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -1438,18 +1442,18 @@ exports[` 3`] = `
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -1464,7 +1468,7 @@ exports[` 3`] = `
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -1491,11 +1495,11 @@ exports[` 3`] = `
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r1:"
               placeholder="Search..."
               type="text"
@@ -1533,7 +1537,7 @@ exports[` 3`] = `
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -1568,29 +1572,30 @@ exports[` 3`] = `
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -1601,11 +1606,11 @@ exports[` 3`] = `
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/1"
@@ -1614,17 +1619,17 @@ exports[` 3`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/2"
@@ -1633,17 +1638,17 @@ exports[` 3`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/3"
@@ -1652,7 +1657,7 @@ exports[` 3`] = `
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[]}
                     </td>
@@ -1678,13 +1683,13 @@ exports[` 3`] = `
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -1701,7 +1706,7 @@ exports[` 3`] = `
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -1725,7 +1730,7 @@ exports[` 3`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -1749,7 +1754,7 @@ exports[` 3`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -1781,7 +1786,7 @@ exports[` 3`] = `
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -1792,18 +1797,18 @@ exports[` 3`] = `
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -1818,7 +1823,7 @@ exports[` 3`] = `
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -1845,11 +1850,11 @@ exports[` 3`] = `
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r2:"
               placeholder="Search..."
               type="text"
@@ -1887,7 +1892,7 @@ exports[` 3`] = `
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -1922,29 +1927,30 @@ exports[` 3`] = `
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -1955,46 +1961,46 @@ exports[` 3`] = `
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       1
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       2
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       3
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[]}
                     </td>
@@ -2020,13 +2026,13 @@ exports[` 3`] = `
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -2043,7 +2049,7 @@ exports[` 3`] = `
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -2067,7 +2073,7 @@ exports[` 3`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -2091,7 +2097,7 @@ exports[` 3`] = `
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -2128,7 +2134,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -2139,18 +2145,18 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -2165,7 +2171,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -2192,11 +2198,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r4:"
               placeholder="Search..."
               type="text"
@@ -2234,7 +2240,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -2269,41 +2275,42 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Foo
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       The Bars
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -2314,11 +2321,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/1"
@@ -2327,29 +2334,29 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       a
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <div>
                         1
                       </div>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       b and then c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/2"
@@ -2358,29 +2365,29 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       e
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <div>
                         11
                       </div>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/3"
@@ -2389,19 +2396,19 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       hello world
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <div>
                         1
                       </div>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     />
                   </tr>
                 </tbody>
@@ -2425,13 +2432,13 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -2448,7 +2455,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -2472,7 +2479,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -2496,7 +2503,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -2533,7 +2540,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -2544,18 +2551,18 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -2570,7 +2577,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -2597,11 +2604,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r5:"
               placeholder="Search..."
               type="text"
@@ -2639,7 +2646,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -2674,41 +2681,42 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Foo
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       The Bars
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -2719,76 +2727,76 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       1
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       a
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       [1,2,3]
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       2
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       e
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       [11,233,34]
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       3
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       hello world
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       [1,23,34]
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[]}
                     </td>
@@ -2814,13 +2822,13 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -2837,7 +2845,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -2861,7 +2869,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -2885,7 +2893,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -2922,7 +2930,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -2933,18 +2941,18 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -2959,7 +2967,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -2986,11 +2994,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r0:"
               placeholder="Search..."
               type="text"
@@ -3028,7 +3036,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -3063,29 +3071,30 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -3096,11 +3105,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/1"
@@ -3109,17 +3118,17 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       b and then c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/2"
@@ -3128,17 +3137,17 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/3"
@@ -3147,7 +3156,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     />
                   </tr>
                 </tbody>
@@ -3171,13 +3180,13 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -3194,7 +3203,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -3218,7 +3227,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -3242,7 +3251,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -3274,7 +3283,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -3285,18 +3294,18 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -3311,7 +3320,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -3338,11 +3347,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r1:"
               placeholder="Search..."
               type="text"
@@ -3380,7 +3389,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -3415,29 +3424,30 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -3448,11 +3458,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/1"
@@ -3461,17 +3471,17 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/2"
@@ -3480,17 +3490,17 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/3"
@@ -3499,7 +3509,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[]}
                     </td>
@@ -3525,13 +3535,13 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -3548,7 +3558,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -3572,7 +3582,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -3596,7 +3606,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -3628,7 +3638,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -3639,18 +3649,18 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -3665,7 +3675,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -3692,11 +3702,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r2:"
               placeholder="Search..."
               type="text"
@@ -3734,7 +3744,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -3769,29 +3779,30 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -3802,46 +3813,46 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       1
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[b,c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       2
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[c]}
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       3
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       {nestedProp:[]}
                     </td>
@@ -3867,13 +3878,13 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -3890,7 +3901,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -3914,7 +3925,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -3938,7 +3949,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -3970,7 +3981,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
       class="MuiStack-root css-nen11g-MuiStack-root"
     >
       <h2
-        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h2 css-awanlx-MuiTypography-root"
       >
         Widgets
       </h2>
@@ -3981,18 +3992,18 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root css-pe0pe4-MuiFormControl-root"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-122ojfz-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
           >
             Filter
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1257hjr-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-3p7oxy-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
               role="button"
               tabindex="0"
             >
@@ -4007,7 +4018,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-ig9rzq-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -4034,11 +4045,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd css-81qumb-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd css-ekw8yu-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r3:"
               placeholder="Search..."
               type="text"
@@ -4076,7 +4087,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
         class="MuiBox-root css-1l4w6pd"
       >
         <span
-          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+          class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-66jc3z-MuiButtonBase-root-MuiCheckbox-root"
         >
           <input
             checked=""
@@ -4111,41 +4122,42 @@ exports[`IndexTable when the table setup is valid when all properies are include
           class="MuiBox-root css-8atqhb"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-18rrh5f-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-rorn0c-MuiTableContainer-root"
             >
               <table
                 aria-labelledby="Resources Table"
-                class="MuiTable-root css-rqglhn-MuiTable-root"
+                class="MuiTable-root css-181v8m1-MuiTable-root"
+                color="primary"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1q4bson-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       LINK
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Foo
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       The Bars
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-11sptls-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1snibva-MuiTableCell-root"
                       scope="col"
                     >
                       Checkout Baz
@@ -4156,11 +4168,11 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
                 >
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="1"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/1"
@@ -4169,29 +4181,29 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       combined prop: a (1,2,3)
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <div>
                         1
                       </div>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       b and then c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="2"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/2"
@@ -4200,29 +4212,29 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       combined prop: e (11,233,34)
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <div>
                         11
                       </div>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       c
                     </td>
                   </tr>
                   <tr
-                    class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root css-1q4bson-MuiTableRow-root"
                     data-testid="3"
                   >
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <a
                         href="/3"
@@ -4231,19 +4243,19 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       </a>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       combined prop: hello world (1,23,34)
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     >
                       <div>
                         1
                       </div>
                     </td>
                     <td
-                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-p18hke-MuiTableCell-root"
                     />
                   </tr>
                 </tbody>
@@ -4267,13 +4279,13 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     class="MuiFormControl-root css-e363es-MuiFormControl-root"
                   >
                     <div
-                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-m5hdmq-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+                      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl  css-1b5clil-MuiInputBase-root-MuiInput-root-MuiSelect-root"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="mui-component-select-pageSize"
-                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                        class="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-13insne-MuiSelect-select-MuiInputBase-input-MuiInput-input"
                         id="mui-component-select-pageSize"
                         role="button"
                         tabindex="0"
@@ -4290,7 +4302,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                       />
                       <svg
                         aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-11yze5h-MuiSvgIcon-root-MuiSelect-icon"
                         data-testid="ArrowDropDownIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -4314,7 +4326,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >
@@ -4338,7 +4350,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
                   class="MuiGrid-root MuiGrid-item css-ev762u-MuiGrid-root"
                 >
                   <button
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-2vm99c-MuiButtonBase-root-MuiIconButton-root"
                     tabindex="0"
                     type="button"
                   >

@@ -1,25 +1,24 @@
 import { ResourceType } from '@coscrad/api-interfaces';
-import AudiotrackIcon from '@mui/icons-material/Audiotrack';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
-import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
-import LanguageIcon from '@mui/icons-material/Language';
-import ListIcon from '@mui/icons-material/List';
-import PhotoIcon from '@mui/icons-material/Photo';
-import PlaceIcon from '@mui/icons-material/Place';
-import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import {
+    Audiotrack as AudiotrackIcon,
+    AutoStories as AutoStoriesIcon,
+    CollectionsBookmark as CollectionsBookmarkIcon,
+    Language as LanguageIcon,
+    List as ListIcon,
+    Photo as PhotoIcon,
+    Place as PlaceIcon,
+    PlaylistPlay as PlaylistPlayIcon,
+    Subscriptions as SubscriptionsIcon,
+    Videocam as VideocamIcon,
+    VolumeUp as VolumeUpIcon,
+} from '@mui/icons-material';
 import { Box } from '@mui/material';
 
 /**
  * TODO[https://www.pivotaltracker.com/story/show/184664117] Create an icon factory that enables custom icons
  */
-type RGB = `rgb(${number}, ${number}, ${number})`;
-type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
-type HEX = `#${string}`;
 
-type Color = RGB | RGBA | HEX;
+type Color = string;
 
 interface ResourcePreviewImageProps {
     resourceType: ResourceType;
