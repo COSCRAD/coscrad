@@ -3,6 +3,8 @@ import {
     ITermViewModel,
     IVocabularyListEntry,
     IVocabularyListViewModel,
+    LanguageCode,
+    MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
 
 const validValues: string[] = ['1', '2'];
@@ -10,14 +12,34 @@ const validValues: string[] = ['1', '2'];
 const dummyTerms: ITermViewModel[] = [
     {
         id: '1',
-        term: 'term 1 (language)',
+        name: {
+            items: [
+                {
+                    text: 'term 1 (language)',
+                    role: MultilingualTextItemRole.original,
+                    languageCode: LanguageCode.Chilcotin,
+                },
+            ],
+        },
         audioURL: 'https://www.mysoundbox.com/foo.mp3',
         contributor: 'John Doe',
     },
     {
         id: '2',
-        term: 'term 2 (language)- has no audio',
-        termEnglish: 'term 2 (English)',
+        name: {
+            items: [
+                {
+                    text: 'term 2 (language)- has no audio',
+                    role: MultilingualTextItemRole.original,
+                    languageCode: LanguageCode.Chilcotin,
+                },
+                {
+                    text: 'term 2 (English)',
+                    role: MultilingualTextItemRole.freeTranslation,
+                    languageCode: LanguageCode.English,
+                },
+            ],
+        },
         contributor: 'Jane Deer',
     },
 ];
@@ -34,8 +56,15 @@ const dummyEntries: IVocabularyListEntry<boolean | string>[] = dummyTerms.map(
 const dummyVocabularyLists: IVocabularyListViewModel[] = [
     {
         id: '345',
-        name: 'VL name (language)',
-        nameEnglish: 'VL name (English)',
+        name: {
+            items: [
+                {
+                    text: 'VL name (language)',
+                    role: MultilingualTextItemRole.original,
+                    languageCode: LanguageCode.Chilcotin,
+                },
+            ],
+        },
         entries: dummyEntries,
         form: {
             fields: [
@@ -48,6 +77,7 @@ const dummyVocabularyLists: IVocabularyListViewModel[] = [
                         value,
                         display: value,
                     })),
+                    constraints: [],
                 },
             ],
         },

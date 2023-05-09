@@ -8,8 +8,8 @@ import { Box, Typography } from '@mui/material';
 import { useReducer } from 'react';
 import { Carousel } from '../../higher-order-components/carousel';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
+import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 import doValuesMatchFilters from './do-values-match-filters';
-import { formatBilingualText } from './utils';
 import { VocabularyListForm } from './vocabulary-list-form';
 
 type VocabularyListFilterProperty = string | boolean;
@@ -91,7 +91,7 @@ export const VocabularyListDetailFullViewPresenter = ({
 
     return (
         <Box textAlign={'center'} data-testid={id}>
-            <Typography variant="h2">{formatBilingualText(name, nameEnglish)}</Typography>
+            <Typography variant="h2">{renderMultilingualTextCell(name)}</Typography>
             <VocabularyListForm
                 fields={form.fields}
                 onFormChange={(key: string, value: VocabularyListFilterProperty) =>
