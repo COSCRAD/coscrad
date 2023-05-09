@@ -90,9 +90,104 @@ exports[`When querying for edge connections GET /connections/ should return the 
       "isOptional": false,
       "label": "ID",
     },
+    "name": {
+      "complexDataType": "NESTED_TYPE",
+      "description": "multilingual text name of the entity",
+      "isArray": false,
+      "isOptional": false,
+      "label": "name",
+      "schema": {
+        "items": {
+          "complexDataType": "NESTED_TYPE",
+          "description": "one item for each provided language",
+          "isArray": true,
+          "isOptional": false,
+          "label": "items",
+          "schema": {
+            "languageCode": {
+              "complexDataType": "ENUM",
+              "description": "an official identifier of the language",
+              "enumLabel": "Language_Code",
+              "enumName": "LangaugeCode",
+              "isArray": false,
+              "isOptional": false,
+              "label": "language code",
+              "labelsAndValues": [
+                {
+                  "label": "Chilcotin",
+                  "value": "clc",
+                },
+                {
+                  "label": "Haida",
+                  "value": "hai",
+                },
+                {
+                  "label": "English",
+                  "value": "eng",
+                },
+                {
+                  "label": "French",
+                  "value": "fra",
+                },
+                {
+                  "label": "Chinook",
+                  "value": "chn",
+                },
+                {
+                  "label": "Zapotec",
+                  "value": "zap",
+                },
+                {
+                  "label": "Spanish",
+                  "value": "spa",
+                },
+              ],
+            },
+            "role": {
+              "complexDataType": "ENUM",
+              "description": "role of this text in the translation process",
+              "enumLabel": "text item role",
+              "enumName": "Multilingual Text Item Role",
+              "isArray": false,
+              "isOptional": false,
+              "label": "text item role",
+              "labelsAndValues": [
+                {
+                  "label": "original",
+                  "value": "original",
+                },
+                {
+                  "label": "glossed to",
+                  "value": "glossed to",
+                },
+                {
+                  "label": "prompt",
+                  "value": "prompt",
+                },
+                {
+                  "label": "free translation",
+                  "value": "free translation",
+                },
+                {
+                  "label": "literal translation",
+                  "value": "literal translation",
+                },
+              ],
+            },
+            "text": {
+              "coscradDataType": "NON_EMPTY_STRING",
+              "description": "plain text in the given language",
+              "isArray": false,
+              "isOptional": false,
+              "label": "text",
+            },
+          },
+        },
+      },
+    },
     "note": {
       "coscradDataType": "NON_EMPTY_STRING",
-      "description": "",
+      "description": "an note about a resource or pair of connected resources",
       "isArray": false,
       "isOptional": false,
       "label": "note text",
@@ -1150,6 +1245,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
       "tags": [
         {
@@ -1181,6 +1285,15 @@ exports[`When querying for edge connections GET /connections/notes should return
               "type": "song",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "legends",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1203,6 +1316,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          },
+        ],
+      },
       "note": "This page is about bears",
       "tags": [],
     },
@@ -1227,6 +1349,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "This is the first letter of the list name",
       "tags": [
         {
@@ -1246,6 +1377,15 @@ exports[`When querying for edge connections GET /connections/notes should return
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "songs",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1265,6 +1405,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+          },
+        ],
+      },
       "note": "there is a placename for this point at the base of the mountain",
       "tags": [],
     },
@@ -1288,6 +1437,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+          },
+        ],
+      },
       "note": "this clip talks about songs",
       "tags": [
         {
@@ -1311,6 +1469,15 @@ exports[`When querying for edge connections GET /connections/notes should return
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "placenames",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1350,6 +1517,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "this is the stem of the flower",
       "tags": [],
     },
@@ -1373,6 +1549,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "this is the base of the flower",
       "tags": [
         {
@@ -1408,6 +1593,15 @@ exports[`When querying for edge connections GET /connections/notes should return
               "type": "video",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "animals",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1430,6 +1624,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          },
+        ],
+      },
       "note": "this section is the best part of an illustrated book about birds",
       "tags": [],
     },
@@ -1449,6 +1652,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
       "note": "found this in the archives",
       "tags": [
         {
@@ -1488,6 +1700,15 @@ exports[`When querying for edge connections GET /connections/notes should return
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1511,6 +1732,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
       "note": "this is a song",
       "tags": [],
     },
@@ -1535,6 +1765,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
       "note": "this is an awesome show",
       "tags": [
         {
@@ -1574,6 +1813,15 @@ exports[`When querying for edge connections GET /connections/notes should return
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
     },
@@ -1597,6 +1845,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
       "note": "important clip from the show",
       "tags": [],
     },
@@ -1616,6 +1873,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
       "note": "this book is hard to track down",
       "tags": [],
     },
@@ -1639,6 +1905,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+          },
+        ],
+      },
       "note": "this clip talks about birds",
       "tags": [],
     },
@@ -1658,6 +1933,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about playlist/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+          },
+        ],
+      },
       "note": "this playlist is awesome",
       "tags": [],
     },
@@ -1677,6 +1961,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "This first 4 letters of this term form a syllable that indicates this is a plant ",
       "tags": [],
     },
@@ -1696,6 +1989,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          },
+        ],
+      },
       "note": "This page is about bears",
       "tags": [],
     },
@@ -1715,6 +2017,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "This is the first letter of the list name",
       "tags": [],
     },
@@ -1734,6 +2045,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+          },
+        ],
+      },
       "note": "this clip talks about songs",
       "tags": [],
     },
@@ -1753,6 +2073,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "this is the stem of the flower",
       "tags": [],
     },
@@ -1772,6 +2101,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "this is the base of the flower",
       "tags": [],
     },
@@ -1791,6 +2129,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          },
+        ],
+      },
       "note": "this section is the best part of an illustrated book about birds",
       "tags": [],
     },
@@ -1810,6 +2157,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
       "note": "this is a song",
       "tags": [],
     },
@@ -1829,6 +2185,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
       "note": "this is an awesome show",
       "tags": [],
     },
@@ -1848,6 +2213,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
       "note": "important clip from the show",
       "tags": [],
     },
@@ -1867,6 +2241,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "self",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110026",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+          },
+        ],
+      },
       "note": "this clip talks about birds",
       "tags": [],
     },
@@ -1906,6 +2289,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112000",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "That is why term/2 is related to vocabularyList/2",
       "tags": [],
     },
@@ -1944,6 +2336,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110 to vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "That is why vocabularyList/2 is related to audioItem/110",
       "tags": [
         {
@@ -1975,6 +2376,15 @@ exports[`When querying for edge connections GET /connections/notes should return
               "type": "song",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "legends",
+              },
+            ],
+          },
         },
       ],
     },
@@ -2011,6 +2421,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112002",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024 to audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+          },
+        ],
+      },
       "note": "That is why audioItem/110 is related to book/24",
       "tags": [
         {
@@ -2030,6 +2449,15 @@ exports[`When querying for edge connections GET /connections/notes should return
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "songs",
+              },
+            ],
+          },
         },
       ],
     },
@@ -2082,6 +2510,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112003",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          },
+        ],
+      },
       "note": "That is why book/24 is related to photograph/2",
       "tags": [
         {
@@ -2105,6 +2542,15 @@ exports[`When querying for edge connections GET /connections/notes should return
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "placenames",
+              },
+            ],
+          },
         },
       ],
     },
@@ -2154,6 +2600,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112004",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300 to photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "That is why photograph/2 is related to spatialFeature/300",
       "tags": [
         {
@@ -2189,6 +2644,15 @@ exports[`When querying for edge connections GET /connections/notes should return
               "type": "video",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "animals",
+              },
+            ],
+          },
         },
       ],
     },
@@ -2222,6 +2686,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112005",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to spatialFeature/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
+          },
+        ],
+      },
       "note": "That is why spatialFeature/300 is related to song/1",
       "tags": [
         {
@@ -2261,6 +2734,15 @@ exports[`When querying for edge connections GET /connections/notes should return
               "type": "note",
             },
           ],
+          "name": {
+            "items": [
+              {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "plants",
+              },
+            ],
+          },
         },
       ],
     },
@@ -2298,6 +2780,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112006",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223 to song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
       "note": "That is why song/1 is related to video/223",
       "tags": [],
     },
@@ -2331,6 +2822,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112007",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from playlist/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501 to video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+          },
+        ],
+      },
       "note": "That is why video/223 is related to playlist/501",
       "tags": [],
     },
@@ -2365,6 +2865,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b112008",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to playlist/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+          },
+        ],
+      },
       "note": "That is why playlist/501 is related to term/2",
       "tags": [],
     },
@@ -2403,6 +2912,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113001",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+          },
+        ],
+      },
       "note": "this media item mentions a word in the term",
       "tags": [],
     },
@@ -2432,6 +2950,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113002",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          },
+        ],
+      },
       "note": "here is the digital version of the book!",
       "tags": [],
     },
@@ -2468,6 +2995,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113101",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024 to mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
       "note": "this selection from the media item portrays the events in the book",
       "tags": [],
     },
@@ -2501,6 +3037,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113102",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
       "note": "this library book has the lyrics from the song, but we do not have access to the book",
       "tags": [],
     },
@@ -2530,6 +3075,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113201",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          },
+        ],
+      },
       "note": "this is why bibliographic_references/3 is connected to book/24",
       "tags": [],
     },
@@ -2559,6 +3113,15 @@ exports[`When querying for edge connections GET /connections/notes should return
       ],
       "connectionType": "dual",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113202",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          },
+        ],
+      },
       "note": "this is why bibliographic_references/23 is connected to book/24",
       "tags": [],
     },

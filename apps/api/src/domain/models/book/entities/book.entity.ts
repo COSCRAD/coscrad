@@ -2,6 +2,8 @@ import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
@@ -21,6 +23,7 @@ export class Book extends Resource {
         label: 'title',
         description: 'title of the book (in whatever language)',
     })
+    // TODO Make this property a `MultilingualText`
     readonly title: string;
 
     @NonEmptyString({
@@ -71,6 +74,11 @@ export class Book extends Resource {
         this.pages = Array.isArray(pageDTOs)
             ? pageDTOs.map((pageDTO) => new BookPage(pageDTO))
             : undefined;
+    }
+
+    getName(): MultilingualText {
+        // TODO make `title` `MultilingualText`
+        return buildMultilingualTextWithSingleItem(this.title);
     }
 
     protected validateComplexInvariants(): InternalError[] {

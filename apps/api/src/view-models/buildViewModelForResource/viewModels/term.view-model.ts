@@ -63,18 +63,16 @@ export class TermViewModel extends BaseViewModel implements ITermViewModel {
 
     readonly #baseAudioURL: string;
 
-    constructor(
-        {
-            id,
+    constructor(term: Term, baseAudioURL: string) {
+        super(term);
+
+        const {
             contributorId,
             term: text,
             termEnglish: textEnglish,
             audioFilename,
             sourceProject,
-        }: Term,
-        baseAudioURL: string
-    ) {
-        super({ id });
+        } = term;
 
         this.#baseAudioURL = baseAudioURL;
 

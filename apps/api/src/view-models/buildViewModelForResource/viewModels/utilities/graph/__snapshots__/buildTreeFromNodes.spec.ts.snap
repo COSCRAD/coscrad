@@ -19,6 +19,15 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
                       "type": "spatialFeature",
                     },
                   ],
+                  "name": MultilingualText {
+                    "items": [
+                      MultilingualTextItem {
+                        "languageCode": "eng",
+                        "role": "original",
+                        "text": "wolves",
+                      },
+                    ],
+                  },
                 },
                 {
                   "children": [],
@@ -30,6 +39,15 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
                       "type": "photograph",
                     },
                   ],
+                  "name": MultilingualText {
+                    "items": [
+                      MultilingualTextItem {
+                        "languageCode": "eng",
+                        "role": "original",
+                        "text": "domestic dogs",
+                      },
+                    ],
+                  },
                 },
               ],
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110004",
@@ -40,6 +58,15 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
                   "type": "term",
                 },
               ],
+              "name": MultilingualText {
+                "items": [
+                  MultilingualTextItem {
+                    "languageCode": "eng",
+                    "role": "original",
+                    "text": "canines",
+                  },
+                ],
+              },
             },
             {
               "children": [
@@ -48,6 +75,15 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
                   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
                   "label": "big cats",
                   "members": [],
+                  "name": MultilingualText {
+                    "items": [
+                      MultilingualTextItem {
+                        "languageCode": "eng",
+                        "role": "original",
+                        "text": "big cats",
+                      },
+                    ],
+                  },
                 },
                 {
                   "children": [],
@@ -63,11 +99,29 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
                       "type": "photograph",
                     },
                   ],
+                  "name": MultilingualText {
+                    "items": [
+                      MultilingualTextItem {
+                        "languageCode": "eng",
+                        "role": "original",
+                        "text": "domestic cats",
+                      },
+                    ],
+                  },
                 },
               ],
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
               "label": "felines",
               "members": [],
+              "name": MultilingualText {
+                "items": [
+                  MultilingualTextItem {
+                    "languageCode": "eng",
+                    "role": "original",
+                    "text": "felines",
+                  },
+                ],
+              },
             },
             {
               "children": [],
@@ -79,6 +133,15 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
                   "type": "book",
                 },
               ],
+              "name": MultilingualText {
+                "items": [
+                  MultilingualTextItem {
+                    "languageCode": "eng",
+                    "role": "original",
+                    "text": "rodents",
+                  },
+                ],
+              },
             },
           ],
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -97,6 +160,15 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
               "type": "song",
             },
           ],
+          "name": MultilingualText {
+            "items": [
+              MultilingualTextItem {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "mammals",
+              },
+            ],
+          },
         },
         {
           "children": [],
@@ -108,6 +180,15 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
               "type": "video",
             },
           ],
+          "name": MultilingualText {
+            "items": [
+              MultilingualTextItem {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "birds",
+              },
+            ],
+          },
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -118,6 +199,15 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
           "type": "vocabularyList",
         },
       ],
+      "name": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "animals",
+          },
+        ],
+      },
     },
     {
       "children": [
@@ -135,11 +225,29 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
                       "type": "audioItem",
                     },
                   ],
+                  "name": MultilingualText {
+                    "items": [
+                      MultilingualTextItem {
+                        "languageCode": "eng",
+                        "role": "original",
+                        "text": "tools",
+                      },
+                    ],
+                  },
                 },
               ],
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
               "label": "adornments",
               "members": [],
+              "name": MultilingualText {
+                "items": [
+                  MultilingualTextItem {
+                    "languageCode": "eng",
+                    "role": "original",
+                    "text": "adornments",
+                  },
+                ],
+              },
             },
             {
               "children": [],
@@ -155,32 +263,86 @@ exports[`buildTreeFromNodes when given a valid tree should return the expected r
                   "type": "playlist",
                 },
               ],
+              "name": MultilingualText {
+                "items": [
+                  MultilingualTextItem {
+                    "languageCode": "eng",
+                    "role": "original",
+                    "text": "clothing",
+                  },
+                ],
+              },
             },
             {
               "children": [],
               "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
               "label": "tools",
               "members": [],
+              "name": MultilingualText {
+                "items": [
+                  MultilingualTextItem {
+                    "languageCode": "eng",
+                    "role": "original",
+                    "text": "tools",
+                  },
+                ],
+              },
             },
           ],
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
           "label": "props",
           "members": [],
+          "name": MultilingualText {
+            "items": [
+              MultilingualTextItem {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "props",
+              },
+            ],
+          },
         },
         {
           "children": [],
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
           "label": "wardrobe",
           "members": [],
+          "name": MultilingualText {
+            "items": [
+              MultilingualTextItem {
+                "languageCode": "eng",
+                "role": "original",
+                "text": "wardrobe",
+              },
+            ],
+          },
         },
       ],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
       "label": "film",
       "members": [],
+      "name": MultilingualText {
+        "items": [
+          MultilingualTextItem {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "film",
+          },
+        ],
+      },
     },
   ],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
   "label": "tree of knowledge",
   "members": [],
+  "name": MultilingualText {
+    "items": [
+      MultilingualTextItem {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "tree of knowledge",
+      },
+    ],
+  },
 }
 `;

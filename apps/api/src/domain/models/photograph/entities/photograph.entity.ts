@@ -5,6 +5,8 @@ import findAllPointsInLineNotWithinBounds from '../../../../lib/validation/geome
 import isPointWithinBounds from '../../../../lib/validation/geometry/isPointWithinBounds';
 import { DTO } from '../../../../types/DTO';
 import formatPosition2D from '../../../../view-models/presentation/formatPosition2D';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import FreeMultilineContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/freeMultilineContext/FreeMultilineContextOutOfBoundsError';
 import PointContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pointContext/PointContextOutOfBoundsError';
 import { Valid } from '../../../domainModelValidators/Valid';
@@ -53,6 +55,11 @@ export class Photograph extends Resource implements Boundable2D {
         this.photographer = photographer;
 
         this.dimensions = new PhotographDimensions(dimensionsDTO);
+    }
+
+    getName(): MultilingualText {
+        // TODO Consider a second `name` property with type `MultilingualText`
+        return buildMultilingualTextWithSingleItem(this.filename);
     }
 
     rescale(scaleFactor: number) {

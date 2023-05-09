@@ -28,8 +28,10 @@ export class SpatialFeatureViewModel extends BaseViewModel implements ISpatialFe
      */
     readonly properties: ISpatialFeatureProperties;
 
-    constructor({ id, geometry, properties }: ISpatialFeature) {
-        super({ id });
+    constructor(spatialFeature: ISpatialFeature) {
+        super(spatialFeature);
+
+        const { geometry, properties } = spatialFeature;
 
         this.geometry = cloneToPlainObject(geometry);
 

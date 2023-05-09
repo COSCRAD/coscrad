@@ -47,6 +47,15 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     "year": 1999,
   },
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+  "name": {
+    "items": [
+      {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "A Day in the Life",
+      },
+    ],
+  },
   "tags": [
     {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -81,6 +90,15 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
           "type": "video",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "animals",
+          },
+        ],
+      },
     },
   ],
 }
@@ -91,6 +109,15 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "actions": [],
   "author": "John Doeburg",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+  "name": {
+    "items": [
+      {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "Three Little Pigs",
+      },
+    ],
+  },
   "pages": [
     {
       "identifier": "1",
@@ -143,6 +170,15 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
           "type": "note",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "plants",
+          },
+        ],
+      },
     },
   ],
   "title": "Three Little Pigs",
@@ -155,6 +191,20 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 2500,
   "mimeType": "audio/mpeg",
+  "name": {
+    "items": [
+      {
+        "languageCode": "clc",
+        "role": "original",
+        "text": "episode title (in language)",
+      },
+      {
+        "languageCode": "eng",
+        "role": "free translation",
+        "text": "Metal Mondays episode 1",
+      },
+    ],
+  },
   "tags": [
     {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110005",
@@ -185,10 +235,17 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
           "type": "song",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "legends",
+          },
+        ],
+      },
     },
   ],
-  "title": "episode title (in language)",
-  "titleEnglish": "Metal Mondays episode 1",
   "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
 }
 `;
@@ -198,6 +255,15 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "actions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
   "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
+  "name": {
+    "items": [
+      {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "Adiitsii-Running",
+      },
+    ],
+  },
   "photographer": "Susie McRealart",
   "tags": [
     {
@@ -221,6 +287,15 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
           "type": "note",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "placenames",
+          },
+        ],
+      },
     },
   ],
 }
@@ -265,6 +340,15 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
           "type": "playlist",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "law",
+          },
+        ],
+      },
     },
   ],
 }
@@ -277,6 +361,20 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 3500,
   "lyrics": "Mary had a little lamb, little lamb.",
+  "name": {
+    "items": [
+      {
+        "languageCode": "clc",
+        "role": "original",
+        "text": "Song title in language",
+      },
+      {
+        "languageCode": "eng",
+        "role": "free translation",
+        "text": "Mary had a little lamb",
+      },
+    ],
+  },
   "startMilliseconds": 0,
   "tags": [
     {
@@ -308,10 +406,17 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
           "type": "song",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "legends",
+          },
+        ],
+      },
     },
   ],
-  "title": "Song title in language",
-  "titleEnglish": "Mary had a little lamb",
 }
 `;
 
@@ -326,6 +431,15 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     "type": "Point",
   },
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
+  "name": {
+    "items": [
+      {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "Name of Point with ID: 100",
+      },
+    ],
+  },
   "properties": {
     "description": "Description for point 100",
     "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
@@ -369,6 +483,15 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
           "type": "note",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "plants",
+          },
+        ],
+      },
     },
   ],
 }
@@ -379,6 +502,20 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "actions": [],
   "contributor": "",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+  "name": {
+    "items": [
+      {
+        "languageCode": "clc",
+        "role": "original",
+        "text": "Chil-term-1",
+      },
+      {
+        "languageCode": "eng",
+        "role": "free translation",
+        "text": "Engl-term-1",
+      },
+    ],
+  },
   "tags": [
     {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -417,6 +554,15 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
           "type": "note",
         },
       ],
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "plants",
+          },
+        ],
+      },
     },
   ],
   "term": "Chil-term-1",
@@ -454,6 +600,20 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       "term": {
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "I am singing (lang)",
+            },
+            {
+              "languageCode": "eng",
+              "role": "free translation",
+              "text": "I am singing (Engl)",
+            },
+          ],
+        },
         "term": "I am singing (lang)",
         "termEnglish": "I am singing (Engl)",
       },
@@ -466,6 +626,20 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       "term": {
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "You are singing (lang)",
+            },
+            {
+              "languageCode": "eng",
+              "role": "free translation",
+              "text": "You are singing (Engl)",
+            },
+          ],
+        },
         "term": "You are singing (lang)",
         "termEnglish": "You are singing (Engl)",
       },
@@ -478,6 +652,20 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       "term": {
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "She is singing (lang)",
+            },
+            {
+              "languageCode": "eng",
+              "role": "free translation",
+              "text": "She is singing (Engl)",
+            },
+          ],
+        },
         "term": "She is singing (lang)",
         "termEnglish": "She is singing (Engl)",
       },
@@ -490,6 +678,20 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       "term": {
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "I am not singing (lang)",
+            },
+            {
+              "languageCode": "eng",
+              "role": "free translation",
+              "text": "I am not singing (Engl)",
+            },
+          ],
+        },
         "term": "I am not singing (lang)",
         "termEnglish": "I am not singing (Engl)",
       },
@@ -502,6 +704,20 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       "term": {
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "You are not singing (lang)",
+            },
+            {
+              "languageCode": "eng",
+              "role": "free translation",
+              "text": "You are not singing (Engl)",
+            },
+          ],
+        },
         "term": "You are not singing (lang)",
         "termEnglish": "You are not singing (Engl)",
       },
@@ -554,8 +770,20 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     ],
   },
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
-  "name": "To Sing (lang)",
-  "nameEnglish": "To Sing (Engl)",
+  "name": {
+    "items": [
+      {
+        "languageCode": "clc",
+        "role": "original",
+        "text": "To Sing (lang)",
+      },
+      {
+        "languageCode": "eng",
+        "role": "free translation",
+        "text": "To Sing (Engl)",
+      },
+    ],
+  },
   "tags": [],
 }
 `;

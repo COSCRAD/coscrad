@@ -9,6 +9,8 @@ import { RegisterIndexScopedCommands } from '../../../../../../app/controllers/c
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
+import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../../../common/entities/multilingual-text';
 import { isValid, Valid } from '../../../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../../../types/AggregateType';
@@ -82,6 +84,10 @@ export class CoscradUser extends Aggregate {
         this.roles = Array.isArray(roles) ? [...roles] : undefined;
 
         this.authProviderUserId = authProviderUserId;
+    }
+
+    getName(): MultilingualText {
+        return buildMultilingualTextWithSingleItem(this.username);
     }
 
     isAdmin() {
