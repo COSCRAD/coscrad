@@ -32,7 +32,6 @@ describe('When generating a new ID (POST /ids)', () => {
     beforeAll(async () => {
         ({ app, databaseProvider, testRepositoryProvider, idManager } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
-            BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
         }));
 
         await testRepositoryProvider.testSetup();

@@ -32,8 +32,6 @@ const dummyGroup = userGroups[0].clone({ userIds: [dummyUser.id] });
 
 const dummyUserWithGroups = new CoscradUserWithGroups(dummyUser, [dummyGroup]);
 
-const BASE_DIGITAL_ASSET_URL = 'https://www.mysound.org/downloads/';
-
 const assertIndexOkResponse = (
     res: request.Response,
     resourcesWhoseViewModelsShouldBeFound: Resource[]
@@ -145,7 +143,6 @@ describe('Access Control List and Role Based filtering in resource queries', () 
                     ({ app, testRepositoryProvider } = await setUpIntegrationTest(
                         {
                             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                            BASE_DIGITAL_ASSET_URL,
                         },
                         {
                             testUserWithGroups: dummyUserWithGroups,
@@ -269,7 +266,6 @@ describe('Access Control List and Role Based filtering in resource queries', () 
                         ({ app, testRepositoryProvider } = await setUpIntegrationTest(
                             {
                                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                                BASE_DIGITAL_ASSET_URL,
                             },
                             {
                                 testUserWithGroups: dummyAdminUserWithGroups,
@@ -337,7 +333,6 @@ describe('Access Control List and Role Based filtering in resource queries', () 
                     ({ app, testRepositoryProvider } = await setUpIntegrationTest(
                         {
                             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                            BASE_DIGITAL_ASSET_URL,
                         }
                         // no test user will be on the request
                     ));

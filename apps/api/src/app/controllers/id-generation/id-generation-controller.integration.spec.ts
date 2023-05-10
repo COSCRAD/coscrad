@@ -20,7 +20,6 @@ describe('POST /ids', () => {
     beforeAll(async () => {
         ({ app, databaseProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
-            BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads',
         }));
 
         idRepository = new ArangoIdRepository(databaseProvider);

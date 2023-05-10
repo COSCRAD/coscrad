@@ -3,7 +3,6 @@ import { FromDomainModel, NonEmptyString, URL } from '@coscrad/data-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import { BaseViewModel } from './base.view-model';
-import buildFullDigitalAssetURL from './utilities/buildFullDigitalAssetURL';
 
 // TODO Add proper contributors repository \ collection
 const contributors = {
@@ -61,9 +60,7 @@ export class TermViewModel extends BaseViewModel implements ITermViewModel {
     @FromTerm
     readonly sourceProject?: string;
 
-    readonly #baseAudioURL: string;
-
-    constructor(term: Term, baseAudioURL: string) {
+    constructor(term: Term) {
         super(term);
 
         const {
@@ -74,20 +71,14 @@ export class TermViewModel extends BaseViewModel implements ITermViewModel {
             sourceProject,
         } = term;
 
-        this.#baseAudioURL = baseAudioURL;
-
         this.contributor = getContributorNameFromId(contributorId);
 
         this.term = text;
 
         this.termEnglish = textEnglish;
 
-        if (audioFilename) this.audioURL = this.#buildAudioURL(audioFilename);
+        if (audioFilename) this.audioURL = audioFilename;
 
         if (sourceProject) this.sourceProject = sourceProject;
-    }
-
-    #buildAudioURL(filename: string, extension = 'mp3'): string {
-        return buildFullDigitalAssetURL(this.#baseAudioURL, filename, extension);
     }
 }

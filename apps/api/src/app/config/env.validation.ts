@@ -89,12 +89,6 @@ export class EnvironmentVariables {
     })
     AUTH0_AUDIENCE: string;
 
-    @URL({
-        label: 'Base Digital Asset URL',
-        description: 'some media hyperlinks are dynamically constructed and use this prefix',
-    })
-    BASE_DIGITAL_ASSET_URL: string;
-
     @NonEmptyString({
         label: 'Global API Prefix',
         description: 'the prefix that will come before all endpoints in your API',
