@@ -39,7 +39,6 @@ describe('GET  (fetch view models)', () => {
     beforeAll(async () => {
         ({ app, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
-            BASE_DIGITAL_ASSET_URL: 'https://www.mysound.org/downloads/',
         }));
     });
 

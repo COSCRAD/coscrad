@@ -103,12 +103,10 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
 
     readonly #baseAudioURL: string;
 
-    constructor(vocabularyList: VocabularyList, allTerms: Term[], baseAudioURL: string) {
+    constructor(vocabularyList: VocabularyList, allTerms: Term[]) {
         super(vocabularyList);
 
         const { entries, variables } = vocabularyList;
-
-        this.#baseAudioURL = baseAudioURL;
 
         this.form = {
             fields: variables.map(convertVocabularyListVaraibleToFormElement),
@@ -119,9 +117,7 @@ export class VocabularyListViewModel extends BaseViewModel implements IVocabular
                 const termSearchResult = allTerms.find((term) => term.id === termId);
 
                 return {
-                    term: termSearchResult
-                        ? new TermViewModel(termSearchResult, this.#baseAudioURL)
-                        : NotFound,
+                    term: termSearchResult ? new TermViewModel(termSearchResult) : NotFound,
                     variableValues,
                 };
             })
