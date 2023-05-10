@@ -24,7 +24,7 @@ describe('buildAllAggregateDescriptions', () => {
                 expect(doesAggregateTypeHaveADescription(aggregateType)).toBe(true);
             });
 
-            it('whould have only one description', () => {
+            it('should have only one description', () => {
                 const numberOfDescriptionsForThisAggregate = aggregateTypesWithADescription.filter(
                     (type) => type === aggregateType
                 ).length;

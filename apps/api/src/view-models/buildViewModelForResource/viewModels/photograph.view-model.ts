@@ -4,21 +4,19 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Photograph } from '../../../domain/models/photograph/entities/photograph.entity';
 import { BaseViewModel } from './base.view-model';
 
-const FromPhotograph = FromDomainModel(Photograph);
-
 export class PhotographViewModel extends BaseViewModel implements IPhotographViewModel {
     @ApiProperty({
         example: 'https://www.myimages.com/mountains.png',
         description: 'a url where the client can fetch a digital version of the photograph',
     })
-    @FromPhotograph
-    readonly imageURL: string;
+    @FromDomainModel(Photograph)
+    readonly imageUrl: string;
 
     @ApiProperty({
         example: 'Justin Winters',
         description: 'the name of the photographer who took the photograph',
     })
-    @FromPhotograph
+    @FromDomainModel(Photograph)
     readonly photographer: string;
 
     /**
@@ -34,7 +32,7 @@ export class PhotographViewModel extends BaseViewModel implements IPhotographVie
         const { imageUrl, photographer } = photograph;
 
         // TODO make `imageUrl` a `mediaItemId` instead
-        this.imageURL = imageUrl;
+        this.imageUrl = imageUrl;
 
         this.photographer = photographer;
     }
