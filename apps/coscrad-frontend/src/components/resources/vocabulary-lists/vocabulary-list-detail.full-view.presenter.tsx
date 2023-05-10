@@ -70,7 +70,6 @@ const filterEntriesForSelectedTerms = (
 export const VocabularyListDetailFullViewPresenter = ({
     id,
     name,
-    nameEnglish,
     entries,
     form,
 }: ICategorizableDetailQueryResult<IVocabularyListViewModel>): JSX.Element => {
@@ -90,7 +89,7 @@ export const VocabularyListDetailFullViewPresenter = ({
     const selectedEntries = filterEntriesForSelectedTerms(entries, filterWithoutNullAndUndefined);
 
     return (
-        <Box textAlign={'center'} data-testid={id}>
+        <Box data-testid={id}>
             <Typography variant="h2">{renderMultilingualTextCell(name)}</Typography>
             <VocabularyListForm
                 fields={form.fields}
