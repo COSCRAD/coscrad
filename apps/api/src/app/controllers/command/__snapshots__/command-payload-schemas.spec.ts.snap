@@ -1,607 +1,1260 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`command payload schemas The schema for command ADD_USER_TO_GROUP should have the expected value 1`] = `
-{
-  "aggregateCompositeIdentifier": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "system-wide unique identifier",
-    "isArray": false,
-    "isOptional": false,
-    "label": "Composite Identifier",
+exports[`command payload schemas Command payload schema should match the snapshot 1`] = `
+[
+  {
+    "description": "Creates a new media item",
+    "label": "Create Media Item",
     "schema": {
-      "id": {
-        "coscradDataType": "UUID",
-        "description": "unique identifier",
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
         "isArray": false,
         "isOptional": false,
-        "label": "ID",
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "song",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
       },
-      "type": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "user group",
-        "isArray": false,
-        "isOptional": false,
-        "label": "type",
-      },
-    },
-  },
-  "userId": {
-    "coscradDataType": "UUID",
-    "description": "the ID of the user that will be added to this group",
-    "isArray": false,
-    "isOptional": false,
-    "label": "user ID",
-    "referenceTo": "user",
-  },
-}
-`;
-
-exports[`command payload schemas The schema for command CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE should have the expected value 1`] = `
-{
-  "abstract": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "a brief summary of the referenced book",
-    "isArray": false,
-    "isOptional": true,
-    "label": "abstract",
-  },
-  "aggregateCompositeIdentifier": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "system-wide unique identifier",
-    "isArray": false,
-    "isOptional": false,
-    "label": "Composite Identifier",
-    "schema": {
-      "id": {
-        "coscradDataType": "UUID",
-        "description": "unique identifier",
-        "isArray": false,
-        "isOptional": false,
-        "label": "ID",
-      },
-      "type": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
-        "isArray": false,
-        "isOptional": false,
-        "label": "type",
-      },
-    },
-  },
-  "creators": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "the authors of the referenced book",
-    "isArray": true,
-    "isOptional": false,
-    "label": "creators",
-    "schema": {
-      "name": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "full name of work's creator (free-form text)",
-        "isArray": false,
-        "isOptional": false,
-        "label": "name",
-      },
-      "type": {
+      "mimeType": {
         "complexDataType": "ENUM",
-        "description": "the person's role in creating the given work",
-        "enumLabel": "Creator Type",
-        "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
+        "description": "technical specification of the type of this media item",
+        "enumLabel": "MIME Type",
+        "enumName": "MIME_TYPE",
         "isArray": false,
         "isOptional": false,
-        "label": "creator type",
+        "label": "MIME type",
         "labelsAndValues": [
           {
-            "label": "artist",
-            "value": "artist",
+            "label": "mp3",
+            "value": "audio/mpeg",
           },
           {
-            "label": "author",
-            "value": "author",
+            "label": "mp4",
+            "value": "video/mp4",
+          },
+        ],
+      },
+      "rawData": {
+        "coscradDataType": "RAW_DATA",
+        "description": "raw data from a third-party system for posterity",
+        "isArray": false,
+        "isOptional": true,
+        "label": "raw data",
+      },
+      "title": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "title of the media item in the language",
+        "isArray": false,
+        "isOptional": true,
+        "label": "title (language)",
+      },
+      "titleEnglish": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "title of the media item in the colonial language",
+        "isArray": false,
+        "isOptional": true,
+        "label": "title (colonial language)",
+      },
+      "url": {
+        "coscradDataType": "URL",
+        "description": "a web URL link to a digital version of this media item for playback",
+        "isArray": false,
+        "isOptional": false,
+        "label": "audio link",
+      },
+    },
+    "type": "CREATE_MEDIA_ITEM",
+  },
+  {
+    "description": "Creates a new song",
+    "label": "Create Song",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "song",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "audioURL": {
+        "coscradDataType": "URL",
+        "description": "a web URL link to the audio for this song",
+        "isArray": false,
+        "isOptional": false,
+        "label": "audio link",
+      },
+      "lyrics": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "plain text representation of this song's lyrics",
+        "isArray": false,
+        "isOptional": true,
+        "label": "lyrics",
+      },
+      "rawData": {
+        "coscradDataType": "RAW_DATA",
+        "description": "additional data from a legacy \\ third-party system source of the data",
+        "isArray": false,
+        "isOptional": true,
+        "label": "raw data",
+      },
+      "title": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "song's title in the language",
+        "isArray": false,
+        "isOptional": true,
+        "label": "title",
+      },
+      "titleEnglish": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "song's title in the colonial language",
+        "isArray": false,
+        "isOptional": true,
+        "label": "title (colonial language)",
+      },
+    },
+    "type": "CREATE_SONG",
+  },
+  {
+    "description": "Creates a new book bibliographic reference",
+    "label": "Create Book Bibliographic Reference",
+    "schema": {
+      "abstract": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a brief summary of the referenced book",
+        "isArray": false,
+        "isOptional": true,
+        "label": "abstract",
+      },
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "creators": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "the authors of the referenced book",
+        "isArray": true,
+        "isOptional": false,
+        "label": "creators",
+        "schema": {
+          "name": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "full name of work's creator (free-form text)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "name",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "the person's role in creating the given work",
+            "enumLabel": "Creator Type",
+            "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
+            "isArray": false,
+            "isOptional": false,
+            "label": "creator type",
+            "labelsAndValues": [
+              {
+                "label": "artist",
+                "value": "artist",
+              },
+              {
+                "label": "author",
+                "value": "author",
+              },
+              {
+                "label": "director",
+                "value": "director",
+              },
+            ],
+          },
+        },
+      },
+      "isbn": {
+        "coscradDataType": "ISBN",
+        "description": "the ISBN  of the referenced book",
+        "isArray": false,
+        "isOptional": true,
+        "label": "ISBN",
+      },
+      "numberOfPages": {
+        "coscradDataType": "POSITIVE_INTEGER",
+        "description": "the number of pages in the referenced book",
+        "isArray": false,
+        "isOptional": true,
+        "label": "number of pages",
+      },
+      "place": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the place where the referenced book was published",
+        "isArray": false,
+        "isOptional": true,
+        "label": "place of publication",
+      },
+      "publisher": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the publisher who published the referenced book",
+        "isArray": false,
+        "isOptional": true,
+        "label": "publisher",
+      },
+      "rawData": {
+        "coscradDataType": "RAW_DATA",
+        "description": "raw data from a third-party system (e.g. Zotero)",
+        "isArray": false,
+        "isOptional": true,
+        "label": "raw data",
+      },
+      "title": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "title of the book in any language",
+        "isArray": false,
+        "isOptional": false,
+        "label": "title",
+      },
+      "url": {
+        "coscradDataType": "URL",
+        "description": "a link to an external digital representation of the book",
+        "isArray": false,
+        "isOptional": true,
+        "label": "external link",
+      },
+      "year": {
+        "coscradDataType": "YEAR",
+        "description": "a number representing the year the referenced book was published",
+        "isArray": false,
+        "isOptional": true,
+        "label": "year",
+      },
+    },
+    "type": "CREATE_BOOK_BIBLIOGRAPHIC_REFERENCE",
+  },
+  {
+    "description": "Creates a new court case bibliographic reference",
+    "label": "Create Court Case Bibliographic Reference",
+    "schema": {
+      "abstract": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a brief summary of the court case",
+        "isArray": false,
+        "isOptional": true,
+        "label": "abstract",
+      },
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "caseName": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the name of the court case",
+        "isArray": false,
+        "isOptional": false,
+        "label": "case name",
+      },
+      "court": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "name of the court in which the case was decided",
+        "isArray": false,
+        "isOptional": true,
+        "label": "court",
+      },
+      "dateDecided": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the date that the court case was decided",
+        "isArray": false,
+        "isOptional": true,
+        "label": "date decided",
+      },
+      "pages": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a summary a larger document's pages relevant to this court case",
+        "isArray": false,
+        "isOptional": true,
+        "label": "pages",
+      },
+      "rawData": {
+        "coscradDataType": "RAW_DATA",
+        "description": "raw data from third-party system (e.g. Zotero)",
+        "isArray": false,
+        "isOptional": true,
+        "label": "raw data",
+      },
+      "url": {
+        "coscradDataType": "URL",
+        "description": "web link to additional information about the court case",
+        "isArray": false,
+        "isOptional": true,
+        "label": "external link",
+      },
+    },
+    "type": "CREATE_COURT_CASE_BIBLIOGRAPHIC_REFERENCE",
+  },
+  {
+    "description": "Creates a new journal article bibliographic reference",
+    "label": "Create Journal Article Bibliographic Reference",
+    "schema": {
+      "abstract": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a brief summary of the referenced journal article",
+        "isArray": false,
+        "isOptional": true,
+        "label": "abstract",
+      },
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "creators": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "the authors of the referenced journal article",
+        "isArray": true,
+        "isOptional": false,
+        "label": "creators",
+        "schema": {
+          "name": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "full name of work's creator (free-form text)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "name",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "the person's role in creating the given work",
+            "enumLabel": "Creator Type",
+            "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
+            "isArray": false,
+            "isOptional": false,
+            "label": "creator type",
+            "labelsAndValues": [
+              {
+                "label": "artist",
+                "value": "artist",
+              },
+              {
+                "label": "author",
+                "value": "author",
+              },
+              {
+                "label": "director",
+                "value": "director",
+              },
+            ],
+          },
+        },
+      },
+      "doi": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the DOI of the journal article",
+        "isArray": false,
+        "isOptional": true,
+        "label": "DOI",
+      },
+      "issn": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the ISSN of the journal article",
+        "isArray": false,
+        "isOptional": true,
+        "label": "ISSN",
+      },
+      "issueDate": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a free-form text representation of the date of publication",
+        "isArray": false,
+        "isOptional": false,
+        "label": "issue date",
+      },
+      "pages": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "text summary of the pages on which this article appears in the larger journal",
+        "isArray": false,
+        "isOptional": true,
+        "label": "pages",
+      },
+      "publicationTitle": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the name of the journal in which the article was published",
+        "isArray": false,
+        "isOptional": true,
+        "label": "publication title",
+      },
+      "rawData": {
+        "coscradDataType": "RAW_DATA",
+        "description": "raw data from third-party system of origin (e.g. Zotero)",
+        "isArray": false,
+        "isOptional": true,
+        "label": "raw data",
+      },
+      "title": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "title of the referenced journal article",
+        "isArray": false,
+        "isOptional": false,
+        "label": "title",
+      },
+      "url": {
+        "coscradDataType": "URL",
+        "description": "an external web link to the referenced journal article",
+        "isArray": false,
+        "isOptional": true,
+        "label": "external link",
+      },
+    },
+    "type": "CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE",
+  },
+  {
+    "description": "Register a new COSCRAD user after the user has been registered with the auth provider",
+    "label": "Register User",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "user",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "userIdFromAuthProvider": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the auth provider's unique ID for this user (the user must be added to the auth provider first)",
+        "isArray": false,
+        "isOptional": false,
+        "label": "auth provider's ID",
+      },
+      "username": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a human-readable text identifier for this user",
+        "isArray": false,
+        "isOptional": false,
+        "label": "username",
+      },
+    },
+    "type": "REGISTER_USER",
+  },
+  {
+    "description": "Creates a new user group",
+    "label": "Create User Group",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "user group",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "description": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a summary of the purpose of this group (what its members have in common)",
+        "isArray": false,
+        "isOptional": false,
+        "label": "description",
+      },
+      "label": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the name of the user group",
+        "isArray": false,
+        "isOptional": false,
+        "label": "label",
+      },
+    },
+    "type": "CREATE_USER_GROUP",
+  },
+  {
+    "description": "Add an existing user to an existing user group",
+    "label": "Add User to Group",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "user group",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "userId": {
+        "coscradDataType": "UUID",
+        "description": "the ID of the user that will be added to this group",
+        "isArray": false,
+        "isOptional": false,
+        "label": "user ID",
+        "referenceTo": "user",
+      },
+    },
+    "type": "ADD_USER_TO_GROUP",
+  },
+  {
+    "description": "Grant an additional user role to the user",
+    "label": "Grant User Role",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "user",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "role": {
+        "complexDataType": "ENUM",
+        "description": "the role that will be granted to this user",
+        "enumLabel": "User Role",
+        "enumName": "COSCRAD_USER_ROLE",
+        "isArray": false,
+        "isOptional": false,
+        "label": "role",
+        "labelsAndValues": [
+          {
+            "label": "admin",
+            "value": "projectAdmin",
           },
           {
-            "label": "director",
-            "value": "director",
+            "label": "viewer",
+            "value": "viewer",
+          },
+          {
+            "label": "COSCRAD admin",
+            "value": "superAdmin",
           },
         ],
       },
     },
+    "type": "GRANT_USER_ROLE",
   },
-  "isbn": {
-    "coscradDataType": "ISBN",
-    "description": "the ISBN  of the referenced book",
-    "isArray": false,
-    "isOptional": true,
-    "label": "ISBN",
-  },
-  "numberOfPages": {
-    "coscradDataType": "POSITIVE_INTEGER",
-    "description": "the number of pages in the referenced book",
-    "isArray": false,
-    "isOptional": true,
-    "label": "number of pages",
-  },
-  "place": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the place where the referenced book was published",
-    "isArray": false,
-    "isOptional": true,
-    "label": "place of publication",
-  },
-  "publisher": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the publisher who published the referenced book",
-    "isArray": false,
-    "isOptional": true,
-    "label": "publisher",
-  },
-  "rawData": {
-    "coscradDataType": "RAW_DATA",
-    "description": "raw data from a third-party system (e.g. Zotero)",
-    "isArray": false,
-    "isOptional": true,
-    "label": "raw data",
-  },
-  "title": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "title of the book in any language",
-    "isArray": false,
-    "isOptional": false,
-    "label": "title",
-  },
-  "url": {
-    "coscradDataType": "URL",
-    "description": "a link to an external digital representation of the book",
-    "isArray": false,
-    "isOptional": true,
-    "label": "external link",
-  },
-  "year": {
-    "coscradDataType": "YEAR",
-    "description": "a number representing the year the referenced book was published",
-    "isArray": false,
-    "isOptional": true,
-    "label": "year",
-  },
-}
-`;
-
-exports[`command payload schemas The schema for command CREATE_COURT_CASE_BIBLIOGRAPHIC_REFERENCE should have the expected value 1`] = `
-{
-  "abstract": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "a brief summary of the court case",
-    "isArray": false,
-    "isOptional": true,
-    "label": "abstract",
-  },
-  "aggregateCompositeIdentifier": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "system-wide unique identifier",
-    "isArray": false,
-    "isOptional": false,
-    "label": "Composite Identifier",
+  {
+    "description": "Allow a user to view (but not edit) a given resource",
+    "label": "Grant Read Access to User",
     "schema": {
-      "id": {
-        "coscradDataType": "UUID",
-        "description": "unique identifier",
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
         "isArray": false,
         "isOptional": false,
-        "label": "ID",
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "user",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
       },
-      "type": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
+      "resourceCompositeIdentifier": {
+        "coscradDataType": "COMPOSITE_IDENTIFIER",
+        "description": "the composite identifier of the resource to which the user will receive access",
         "isArray": false,
         "isOptional": false,
-        "label": "type",
+        "label": "resource composite identifier",
       },
     },
+    "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
   },
-  "caseName": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the name of the court case",
-    "isArray": false,
-    "isOptional": false,
-    "label": "case name",
-  },
-  "court": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "name of the court in which the case was decided",
-    "isArray": false,
-    "isOptional": true,
-    "label": "court",
-  },
-  "dateDecided": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the date that the court case was decided",
-    "isArray": false,
-    "isOptional": true,
-    "label": "date decided",
-  },
-  "pages": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "a summary a larger document's pages relevant to this court case",
-    "isArray": false,
-    "isOptional": true,
-    "label": "pages",
-  },
-  "rawData": {
-    "coscradDataType": "RAW_DATA",
-    "description": "raw data from third-party system (e.g. Zotero)",
-    "isArray": false,
-    "isOptional": true,
-    "label": "raw data",
-  },
-  "url": {
-    "coscradDataType": "URL",
-    "description": "web link to additional information about the court case",
-    "isArray": false,
-    "isOptional": true,
-    "label": "external link",
-  },
-}
-`;
-
-exports[`command payload schemas The schema for command CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE should have the expected value 1`] = `
-{
-  "abstract": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "a brief summary of the referenced journal article",
-    "isArray": false,
-    "isOptional": true,
-    "label": "abstract",
-  },
-  "aggregateCompositeIdentifier": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "system-wide unique identifier",
-    "isArray": false,
-    "isOptional": false,
-    "label": "Composite Identifier",
+  {
+    "description": "Make a resource visible to the public",
+    "label": "Publish Resource",
     "schema": {
-      "id": {
-        "coscradDataType": "UUID",
-        "description": "unique identifier",
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
         "isArray": false,
         "isOptional": false,
-        "label": "ID",
-      },
-      "type": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "sub-type of bibliographic reference (e.g., book, journal article, or court case)",
-        "isArray": false,
-        "isOptional": false,
-        "label": "type",
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "the resource type",
+            "enumLabel": "resource type",
+            "enumName": "ResourceType",
+            "isArray": false,
+            "isOptional": false,
+            "label": "resource type",
+            "labelsAndValues": [
+              {
+                "label": "Term",
+                "value": "term",
+              },
+              {
+                "label": "Vocabulary List",
+                "value": "vocabularyList",
+              },
+              {
+                "label": "Transcribed Audio Item",
+                "value": "audioItem",
+              },
+              {
+                "label": "Book",
+                "value": "book",
+              },
+              {
+                "label": "Photograph",
+                "value": "photograph",
+              },
+              {
+                "label": "Spatial Feature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "BibliographicReference",
+                "value": "bibliographicReference",
+              },
+              {
+                "label": "Song",
+                "value": "song",
+              },
+              {
+                "label": "Media Item",
+                "value": "mediaItem",
+              },
+              {
+                "label": "Video",
+                "value": "video",
+              },
+              {
+                "label": "Playlist",
+                "value": "playlist",
+              },
+            ],
+          },
+        },
       },
     },
+    "type": "PUBLISH_RESOURCE",
   },
-  "creators": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "the authors of the referenced journal article",
-    "isArray": true,
-    "isOptional": false,
-    "label": "creators",
+  {
+    "description": "Creates a new tag",
+    "label": "Create Tag",
     "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "type",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "tag",
+                "value": "tag",
+              },
+            ],
+          },
+        },
+      },
+      "label": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the tag's name",
+        "isArray": false,
+        "isOptional": false,
+        "label": "label",
+      },
+    },
+    "type": "CREATE_TAG",
+  },
+  {
+    "description": "changes the label for a tag while maintaining its membership",
+    "label": "Relabel Tag",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "type",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "tag",
+                "value": "tag",
+              },
+            ],
+          },
+        },
+      },
+      "newLabel": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the label to replace the tag's old label",
+        "isArray": false,
+        "isOptional": false,
+        "label": "new label",
+      },
+    },
+    "type": "RELABEL_TAG",
+  },
+  {
+    "description": "Assign a tag to a resource or note",
+    "label": "Tag Resource or Note",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for the tag",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Tag's Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "type",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "tag",
+                "value": "tag",
+              },
+            ],
+          },
+        },
+      },
+      "taggedMemberCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for the resource or note being tagged",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Tagged Member's Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "Either "note" or the resource type",
+            "enumLabel": "type",
+            "enumName": "Categorizable Type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "Term",
+                "value": "term",
+              },
+              {
+                "label": "Vocabulary List",
+                "value": "vocabularyList",
+              },
+              {
+                "label": "Transcribed Audio Item",
+                "value": "audioItem",
+              },
+              {
+                "label": "Book",
+                "value": "book",
+              },
+              {
+                "label": "Photograph",
+                "value": "photograph",
+              },
+              {
+                "label": "Spatial Feature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "BibliographicReference",
+                "value": "bibliographicReference",
+              },
+              {
+                "label": "Song",
+                "value": "song",
+              },
+              {
+                "label": "Media Item",
+                "value": "mediaItem",
+              },
+              {
+                "label": "Video",
+                "value": "video",
+              },
+              {
+                "label": "Playlist",
+                "value": "playlist",
+              },
+              {
+                "label": "Note",
+                "value": "note",
+              },
+            ],
+          },
+        },
+      },
+    },
+    "type": "TAG_RESOURCE_OR_NOTE",
+  },
+  {
+    "description": "Create a new video",
+    "label": "Create Video",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "the video ID (generated)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "video",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "lengthMilliseconds": {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "description": "the length of the audio item's media item in milliseconds",
+        "isArray": false,
+        "isOptional": false,
+        "label": "length (ms)",
+      },
+      "mediaItemId": {
+        "coscradDataType": "UUID",
+        "description": "the ID of the audio item's media item",
+        "isArray": false,
+        "isOptional": false,
+        "label": "media item ID",
+        "referenceTo": "mediaItem",
+      },
       "name": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "full name of work's creator (free-form text)",
+        "coscradDataType": "MULTILINGUAL_TEXT",
+        "description": "the name of the video",
         "isArray": false,
         "isOptional": false,
         "label": "name",
       },
-      "type": {
-        "complexDataType": "ENUM",
-        "description": "the person's role in creating the given work",
-        "enumLabel": "Creator Type",
-        "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
+    },
+    "type": "CREATE_VIDEO",
+  },
+  {
+    "description": "Create a new audio item",
+    "label": "Create Audio Item",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
         "isArray": false,
         "isOptional": false,
-        "label": "creator type",
-        "labelsAndValues": [
-          {
-            "label": "artist",
-            "value": "artist",
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "the audio item ID (generated)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
           },
-          {
-            "label": "author",
-            "value": "author",
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "audio item",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
           },
-          {
-            "label": "director",
-            "value": "director",
+        },
+      },
+      "lengthMilliseconds": {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "description": "the length of the audio item's media item in milliseconds",
+        "isArray": false,
+        "isOptional": false,
+        "label": "length (ms)",
+      },
+      "mediaItemId": {
+        "coscradDataType": "UUID",
+        "description": "the ID of the audio item's media item",
+        "isArray": false,
+        "isOptional": false,
+        "label": "media item ID",
+        "referenceTo": "mediaItem",
+      },
+      "name": {
+        "coscradDataType": "MULTILINGUAL_TEXT",
+        "description": "the name of the audio item",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+      },
+    },
+    "type": "CREATE_AUDIO_ITEM",
+  },
+  {
+    "description": "creates a new transcript for an audio item or video",
+    "label": "Create Transcript",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "the audio visual resource's ID (generated)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
           },
-        ],
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "the resource type of the audiovisual item",
+            "enumLabel": "Audiovisual Resource Type",
+            "enumName": "AudiovisualResourceType",
+            "isArray": false,
+            "isOptional": false,
+            "label": "Audiovisual Resource Type",
+            "labelsAndValues": [
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "audio item",
+                "value": "audioItem",
+              },
+            ],
+          },
+        },
       },
     },
+    "type": "CREATE_TRANSCRIPT",
   },
-  "doi": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the DOI of the journal article",
-    "isArray": false,
-    "isOptional": true,
-    "label": "DOI",
-  },
-  "issn": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the ISSN of the journal article",
-    "isArray": false,
-    "isOptional": true,
-    "label": "ISSN",
-  },
-  "issueDate": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "a free-form text representation of the date of publication",
-    "isArray": false,
-    "isOptional": false,
-    "label": "issue date",
-  },
-  "pages": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "text summary of the pages on which this article appears in the larger journal",
-    "isArray": false,
-    "isOptional": true,
-    "label": "pages",
-  },
-  "publicationTitle": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the name of the journal in which the article was published",
-    "isArray": false,
-    "isOptional": true,
-    "label": "publication title",
-  },
-  "rawData": {
-    "coscradDataType": "RAW_DATA",
-    "description": "raw data from third-party system of origin (e.g. Zotero)",
-    "isArray": false,
-    "isOptional": true,
-    "label": "raw data",
-  },
-  "title": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "title of the referenced journal article",
-    "isArray": false,
-    "isOptional": false,
-    "label": "title",
-  },
-  "url": {
-    "coscradDataType": "URL",
-    "description": "an external web link to the referenced journal article",
-    "isArray": false,
-    "isOptional": true,
-    "label": "external link",
-  },
-}
-`;
-
-exports[`command payload schemas The schema for command CREATE_SONG should have the expected value 1`] = `
-{
-  "aggregateCompositeIdentifier": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "system-wide unique identifier",
-    "isArray": false,
-    "isOptional": false,
-    "label": "Composite Identifier",
+  {
+    "description": "Adds a participant to a transcript",
+    "label": "Add Participant to Transcript",
     "schema": {
-      "id": {
-        "coscradDataType": "UUID",
-        "description": "unique identifier",
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
         "isArray": false,
         "isOptional": false,
-        "label": "ID",
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "the audio visual resource's ID (generated)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "the resource type of the audiovisual item",
+            "enumLabel": "Audiovisual Resource Type",
+            "enumName": "AudiovisualResourceType",
+            "isArray": false,
+            "isOptional": false,
+            "label": "Audiovisual Resource Type",
+            "labelsAndValues": [
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "audio item",
+                "value": "audioItem",
+              },
+            ],
+          },
+        },
       },
-      "type": {
+      "initials": {
         "coscradDataType": "NON_EMPTY_STRING",
-        "description": "song",
+        "description": "the initials or identifier to use for this participant",
         "isArray": false,
         "isOptional": false,
-        "label": "type",
+        "label": "participant's initials",
+      },
+      "name": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the full name of the participant",
+        "isArray": false,
+        "isOptional": false,
+        "label": "participant's name",
       },
     },
+    "type": "ADD_PARTICIPANT_TO_TRANSCRIPT",
   },
-  "audioURL": {
-    "coscradDataType": "URL",
-    "description": "a web URL link to the audio for this song",
-    "isArray": false,
-    "isOptional": false,
-    "label": "audio link",
-  },
-  "lyrics": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "plain text representation of this song's lyrics",
-    "isArray": false,
-    "isOptional": true,
-    "label": "lyrics",
-  },
-  "rawData": {
-    "coscradDataType": "RAW_DATA",
-    "description": "additional data from a legacy \\ third-party system source of the data",
-    "isArray": false,
-    "isOptional": true,
-    "label": "raw data",
-  },
-  "title": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "song's title in the language",
-    "isArray": false,
-    "isOptional": true,
-    "label": "title",
-  },
-  "titleEnglish": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "song's title in the colonial language",
-    "isArray": false,
-    "isOptional": true,
-    "label": "title (colonial language)",
-  },
-}
-`;
-
-exports[`command payload schemas The schema for command CREATE_USER_GROUP should have the expected value 1`] = `
-{
-  "aggregateCompositeIdentifier": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "system-wide unique identifier",
-    "isArray": false,
-    "isOptional": false,
-    "label": "Composite Identifier",
+  {
+    "description": "Add another time-stamped text item for this transcript",
+    "label": "Add line item to transcript",
     "schema": {
-      "id": {
-        "coscradDataType": "UUID",
-        "description": "unique identifier",
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
         "isArray": false,
         "isOptional": false,
-        "label": "ID",
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "the audio visual resource's ID (generated)",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "the resource type of the audiovisual item",
+            "enumLabel": "Audiovisual Resource Type",
+            "enumName": "AudiovisualResourceType",
+            "isArray": false,
+            "isOptional": false,
+            "label": "Audiovisual Resource Type",
+            "labelsAndValues": [
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "audio item",
+                "value": "audioItem",
+              },
+            ],
+          },
+        },
       },
-      "type": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "user group",
+      "inPointMilliseconds": {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "description": "the opening timestamp in milliseconds",
         "isArray": false,
         "isOptional": false,
-        "label": "type",
+        "label": "in point (ms)",
+      },
+      "outPointMilliseconds": {
+        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+        "description": "the closing timestamp in milliseconds",
+        "isArray": false,
+        "isOptional": false,
+        "label": "out point (ms)",
+      },
+      "speakerInitials": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the initials of the speaker whose words you are transcribing \\ translating",
+        "isArray": false,
+        "isOptional": false,
+        "label": "speaker initials",
+      },
+      "text": {
+        "coscradDataType": "MULTILINGUAL_TEXT",
+        "description": "multi-lingual text transcription  translation",
+        "isArray": false,
+        "isOptional": false,
+        "label": "text",
       },
     },
+    "type": "ADD_LINE_ITEM_TO_TRANSCRIPT",
   },
-  "description": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "a summary of the purpose of this group (what its members have in common)",
-    "isArray": false,
-    "isOptional": false,
-    "label": "description",
-  },
-  "label": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the name of the user group",
-    "isArray": false,
-    "isOptional": false,
-    "label": "label",
-  },
-}
-`;
-
-exports[`command payload schemas The schema for command GRANT_RESOURCE_READ_ACCESS_TO_USER should have the expected value 1`] = `
-{
-  "aggregateCompositeIdentifier": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "system-wide unique identifier",
-    "isArray": false,
-    "isOptional": false,
-    "label": "Composite Identifier",
-    "schema": {
-      "id": {
-        "coscradDataType": "UUID",
-        "description": "unique identifier",
-        "isArray": false,
-        "isOptional": false,
-        "label": "ID",
-      },
-      "type": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "user",
-        "isArray": false,
-        "isOptional": false,
-        "label": "type",
-      },
-    },
-  },
-  "resourceCompositeIdentifier": {
-    "coscradDataType": "COMPOSITE_IDENTIFIER",
-    "description": "the composite identifier of the resource to which the user will receive access",
-    "isArray": false,
-    "isOptional": false,
-    "label": "resource composite identifier",
-  },
-}
-`;
-
-exports[`command payload schemas The schema for command GRANT_USER_ROLE should have the expected value 1`] = `
-{
-  "aggregateCompositeIdentifier": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "system-wide unique identifier",
-    "isArray": false,
-    "isOptional": false,
-    "label": "Composite Identifier",
-    "schema": {
-      "id": {
-        "coscradDataType": "UUID",
-        "description": "unique identifier",
-        "isArray": false,
-        "isOptional": false,
-        "label": "ID",
-      },
-      "type": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "user",
-        "isArray": false,
-        "isOptional": false,
-        "label": "type",
-      },
-    },
-  },
-  "role": {
-    "complexDataType": "ENUM",
-    "description": "the role that will be granted to this user",
-    "enumLabel": "User Role",
-    "enumName": "COSCRAD_USER_ROLE",
-    "isArray": false,
-    "isOptional": false,
-    "label": "role",
-    "labelsAndValues": [
-      {
-        "label": "admin",
-        "value": "projectAdmin",
-      },
-      {
-        "label": "viewer",
-        "value": "viewer",
-      },
-      {
-        "label": "COSCRAD admin",
-        "value": "superAdmin",
-      },
-    ],
-  },
-}
-`;
-
-exports[`command payload schemas The schema for command REGISTER_USER should have the expected value 1`] = `
-{
-  "aggregateCompositeIdentifier": {
-    "complexDataType": "NESTED_TYPE",
-    "description": "system-wide unique identifier",
-    "isArray": false,
-    "isOptional": false,
-    "label": "Composite Identifier",
-    "schema": {
-      "id": {
-        "coscradDataType": "UUID",
-        "description": "unique identifier",
-        "isArray": false,
-        "isOptional": false,
-        "label": "ID",
-      },
-      "type": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "user",
-        "isArray": false,
-        "isOptional": false,
-        "label": "type",
-      },
-    },
-  },
-  "userIdFromAuthProvider": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the auth provider's unique ID for this user (the user must be added to the auth provider first)",
-    "isArray": false,
-    "isOptional": false,
-    "label": "auth provider's ID",
-  },
-  "username": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "a human-readable text identifier for this user",
-    "isArray": false,
-    "isOptional": false,
-    "label": "username",
-  },
-}
+]
 `;

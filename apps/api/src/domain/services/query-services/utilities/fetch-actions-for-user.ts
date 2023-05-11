@@ -25,5 +25,5 @@ export const fetchActionsForUser = (
         return [];
     }
 
-    return systemUser?.isAdmin() ? commandInfoService.getCommandInfo(commandContext) : [];
+    return systemUser?.isAdmin() ? commandInfoService.getCommandForms(commandContext) : [];
 };
