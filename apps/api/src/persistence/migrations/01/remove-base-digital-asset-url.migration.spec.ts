@@ -4,6 +4,7 @@ import { Term } from '../../../domain/models/term/entities/term.entity';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
+import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
 import { ArangoConnectionProvider } from '../../database/arango-connection.provider';
 import { ArangoQueryRunner } from '../../database/arango-query-runner';
@@ -112,9 +113,13 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
                 .createMany(originalPhotographDocuments);
         });
 
-        it(`should apply the appropriate updates`, async () => {
-            const migrationUnderTest = new RemoveBaseDigitalAssetUrl(baseDigitalAssetUrl);
+        const migrationUnderTest = new RemoveBaseDigitalAssetUrl(baseDigitalAssetUrl);
 
+        const idForTermToCheckManually = buildId(ResourceType.term, 0);
+
+        const idForPhotographToCheckManually = buildId(ResourceType.photograph, 0);
+
+        it(`should apply the appropriate updates`, async () => {
             await migrationUnderTest.up(testQueryRunner);
 
             const updatedTermDocuments = (await testDatabaseProvider
@@ -129,15 +134,11 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
 
             expect(idsOfDocumentsWithoutBaseDigitalAssetUrl).toEqual([]);
 
-            const idForTermToCheckManually = buildId(ResourceType.term, 0);
-
             const { audioFilename } = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.terms)
                 .fetchById(idForTermToCheckManually)) as unknown as DatabaseDocument<DTO<Term>>;
 
             expect(audioFilename).toBe(`https://www.mymedia.org/downloads/bogus.wav`);
-
-            const idForPhotographToCheckManually = buildId(ResourceType.photograph, 0);
 
             const { imageUrl } = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.photographs)
@@ -159,6 +160,46 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
                 );
 
             expect(idsOfPhotographDocumentsWithoutBaseDigitalAssetUrl).toEqual([]);
+        });
+
+        it(`should be reverseable`, async () => {
+            // TODO Consider adding a custom jest matcher instead
+            const removeRevFromDoc = (document: { _rev: string }) => {
+                const cloned = cloneToPlainObject(document);
+
+                delete cloned['_rev'];
+
+                return cloned;
+            };
+
+            const buildMiniSnapshot = async () => {
+                const photographs = await testDatabaseProvider
+                    .getDatabaseForCollection(ArangoCollectionId.photographs)
+                    .fetchMany();
+
+                const terms = await testDatabaseProvider
+                    .getDatabaseForCollection(ArangoCollectionId.terms)
+                    .fetchMany();
+
+                return {
+                    [ArangoCollectionId.photographs]: photographs.map((photograph) =>
+                        removeRevFromDoc(photograph as unknown as { _rev: string })
+                    ),
+                    [ArangoCollectionId.terms]: terms.map((term) =>
+                        removeRevFromDoc(term as unknown as { _rev: string })
+                    ),
+                };
+            };
+
+            const snapshotBefore = await buildMiniSnapshot();
+
+            await migrationUnderTest.up(testQueryRunner);
+
+            await migrationUnderTest.down(testQueryRunner);
+
+            const snapshotAfter = await buildMiniSnapshot();
+
+            expect(snapshotBefore).toEqual(snapshotAfter);
         });
     });
 });
