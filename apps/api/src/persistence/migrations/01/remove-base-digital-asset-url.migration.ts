@@ -21,7 +21,11 @@ const BASE_DIGITAL_ASSET_URL = 'BASE_DIGITAL_ASSET_URL';
 export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
     private readonly baseDigitalAssetUrl: string;
 
-    constructor(baseDigitalAssetUrl: string) {
+    readonly sequenceNumber: 1;
+
+    readonly name: `RemoveBaseDigitalAssetUrl`;
+
+    constructor(baseDigitalAssetUrl?: string) {
         /**
          * Note that we require this to be set as an environment variable so that
          * different instances can run the migration with different values for their
