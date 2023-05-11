@@ -58,7 +58,27 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
         );
     }
 
-    async down(_queryRunner: ICoscradQueryRunner): Promise<void> {
-        throw new Error('Method not implemented.');
+    async down(queryRunner: ICoscradQueryRunner): Promise<void> {
+        await queryRunner.update<TermDocument, TermDocument>(
+            ArangoCollectionId.terms,
+            ({ audioFilename }) => {
+                if (audioFilename.includes(this.baseDigitalAssetUrl)) {
+                    return {
+                        audioFilename: audioFilename.replace(this.baseDigitalAssetUrl, ''),
+                    };
+                }
+            }
+        );
+
+        await queryRunner.update<PhotographDocument, PhotographDocument>(
+            ArangoCollectionId.photographs,
+            ({ imageUrl }) => {
+                if (imageUrl.includes(this.baseDigitalAssetUrl)) {
+                    return {
+                        imageUrl: imageUrl.replace(this.baseDigitalAssetUrl, ''),
+                    };
+                }
+            }
+        );
     }
 }
