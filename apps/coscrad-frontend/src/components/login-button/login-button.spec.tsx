@@ -29,7 +29,7 @@ describe('loginbutton', () => {
             }
         );
 
-        const LoginButtonEl = document.querySelector(`[data-testid="app-bar"]`);
+        const LoginButtonEl = document.querySelector(`[data-testid="login-button"]`);
 
         const style = window.getComputedStyle(LoginButtonEl);
 

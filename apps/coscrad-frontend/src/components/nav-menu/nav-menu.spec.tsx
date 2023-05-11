@@ -47,7 +47,7 @@ describe('Nav Menu', () => {
             }
         );
 
-        const NavMenuPresenterEl = document.querySelector(`[data-testid="app-bar"]`);
+        const NavMenuPresenterEl = document.querySelector(`[data-testid="nav-menu-presenter"]`);
 
         const style = window.getComputedStyle(NavMenuPresenterEl);
 

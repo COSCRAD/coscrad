@@ -4,7 +4,7 @@ import { renderWithProviders } from '../../utils/test-utils';
 import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
 import LogoutButton from './logout-button';
 
-describe('loginbutton', () => {
+describe('logoutbutton', () => {
     it('should apply the custom backgroundColor', () => {
         const dummyColor = '#3440eb';
 
@@ -13,7 +13,7 @@ describe('loginbutton', () => {
         const dummyConfigurableContent = getDummyConfigurableContent({
             themeOverrides: {
                 palette: {
-                    primary: {
+                    secondary: {
                         main: dummyColor,
                     },
                 },
@@ -29,10 +29,10 @@ describe('loginbutton', () => {
             }
         );
 
-        const LogoutButtonEl = document.querySelector(`[data-testid="app-bar"]`);
+        const LogoutButtonEl = document.querySelector(`[data-testid="logout-button"]`);
 
         const style = window.getComputedStyle(LogoutButtonEl);
 
-        expect(style.backgroundColor).toBe(expectedColor);
+        expect(style).toBe(expectedColor);
     });
 });

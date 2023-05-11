@@ -7,7 +7,6 @@ import { getConfig } from '../../config';
 import { hexToRgb } from '../../utils/math/colors';
 import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
 import { renderWithProviders } from '../../utils/test-utils/render-with-providers';
-import { Header } from '../header/header';
 import { ResourceInfoContainer } from './resource-info.container';
 
 const ARTIFICIAL_DELAY = 150;
@@ -213,7 +212,7 @@ describe.skip('AllResources', () => {
 
         renderWithProviders(
             <MemoryRouter>
-                <Header />
+                < />
             </MemoryRouter>,
             {
                 contentConfig: dummyConfigurableContent,
