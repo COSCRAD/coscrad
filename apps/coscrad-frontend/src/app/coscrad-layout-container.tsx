@@ -14,11 +14,15 @@ export const CoscradLayoutContainer = ({ children }: CoscradStyleContainerProps)
             minHeight: '80vh',
         }}
     >
-        <Container disableGutters maxWidth={false} component="div" sx={{ mb: 2 }}>
+        <Container disableGutters maxWidth={false} component="div" sx={{ mt: '64px' }}>
             <Container
                 component="div"
                 disableGutters
-                sx={{ paddingTop: '5%', width: { xs: '90%', md: '80%' }, margin: 'auto' }}
+                sx={{
+                    paddingTop: '5%',
+                    width: { xs: '90%', md: '80%' },
+                    margin: 'auto',
+                }}
             >
                 {children}
                 <FloatSpacerDiv />
