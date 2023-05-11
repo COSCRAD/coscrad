@@ -75,7 +75,7 @@ export class CoscradUserGroupQueryService {
 
         return {
             entities: viewModelsAndActions,
-            indexScopedActions: this.commandInfoService.getCommandInfo(CoscradUserGroup),
+            indexScopedActions: this.commandInfoService.getCommandForms(CoscradUserGroup),
         };
     }
 
@@ -85,7 +85,7 @@ export class CoscradUserGroupQueryService {
     ): IDetailQueryResult<CoscradUserGroupViewModel> {
         return {
             ...new CoscradUserGroupViewModel(userGroup, allUsers),
-            actions: this.commandInfoService.getCommandInfo(userGroup),
+            actions: this.commandInfoService.getCommandForms(userGroup),
         };
     }
 }

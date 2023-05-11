@@ -30,7 +30,7 @@ export class CoscradUserQueryService {
         return {
             ...new CoscradUserViewModel(searchResult),
             // Only admin users can reach this logic to begin with- no need to filter
-            actions: this.commandInfoService.getCommandInfo(searchResult),
+            actions: this.commandInfoService.getCommandForms(searchResult),
         };
     }
 
@@ -51,13 +51,13 @@ export class CoscradUserQueryService {
             })
             .map((user) => ({
                 ...new CoscradUserViewModel(user),
-                actions: this.commandInfoService.getCommandInfo(user),
+                actions: this.commandInfoService.getCommandForms(user),
             }));
 
         return {
             entities: viewModelsAndActions,
             // Only admin users can reach this logic to begin with- no need to filter
-            indexScopedActions: this.commandInfoService.getCommandInfo(CoscradUser),
+            indexScopedActions: this.commandInfoService.getCommandForms(CoscradUser),
         };
     }
 }

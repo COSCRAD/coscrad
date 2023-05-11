@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: book match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: book should match the snapshot 1`] = `
 {
   "data": {
     "complexDataType": "NESTED_TYPE",
@@ -116,7 +116,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: courtCase match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: courtCase should match the snapshot 1`] = `
 {
   "data": {
     "complexDataType": "NESTED_TYPE",
@@ -179,7 +179,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: journalArticle match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a BibliographicReference of subtype: journalArticle should match the snapshot 1`] = `
 {
   "data": {
     "complexDataType": "NESTED_TYPE",
@@ -288,7 +288,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Book  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Book  should match the snapshot 1`] = `
 {
   "author": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -358,7 +358,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Category  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Category  should match the snapshot 1`] = `
 {
   "childrenIDs": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -391,7 +391,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Media Item  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Media Item  should match the snapshot 1`] = `
 {
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -454,7 +454,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Note  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Note  should match the snapshot 1`] = `
 {
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -473,7 +473,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Photograph  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Photograph  should match the snapshot 1`] = `
 {
   "dimensions": {
     "complexDataType": "NESTED_TYPE",
@@ -522,7 +522,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Playlist  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Playlist  should match the snapshot 1`] = `
 {
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -581,7 +581,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Song  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Song  should match the snapshot 1`] = `
 {
   "audioURL": {
     "coscradDataType": "URL",
@@ -635,7 +635,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Spatial Feature of subtype: LineString match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Spatial Feature of subtype: LineString should match the snapshot 1`] = `
 {
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -647,7 +647,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Spatial Feature of subtype: Point match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Spatial Feature of subtype: Point should match the snapshot 1`] = `
 {
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -659,7 +659,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Spatial Feature of subtype: Polygon match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Spatial Feature of subtype: Polygon should match the snapshot 1`] = `
 {
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -671,7 +671,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Tag  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Tag  should match the snapshot 1`] = `
 {
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -697,7 +697,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Term  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Term  should match the snapshot 1`] = `
 {
   "audioFilename": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -744,7 +744,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Transcribed Audio Item  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Transcribed Audio Item  should match the snapshot 1`] = `
 {
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -1022,7 +1022,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a User  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a User  should match the snapshot 1`] = `
 {
   "authProviderUserId": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -1110,7 +1110,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a User Group  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a User Group  should match the snapshot 1`] = `
 {
   "description": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -1143,7 +1143,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Video  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Video  should match the snapshot 1`] = `
 {
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -1421,7 +1421,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
-exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Vocabulary List  match the snapshot 1`] = `
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Vocabulary List  should match the snapshot 1`] = `
 {
   "entries": {
     "complexDataType": "NESTED_TYPE",

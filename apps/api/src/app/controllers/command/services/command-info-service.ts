@@ -42,22 +42,24 @@ export type CommandContext = IndexScopedCommandWriteContext | DetailScopedComman
 export class CommandInfoService {
     constructor(private readonly commandHandlerService: CommandHandlerService) {}
 
+    getCommandSchemasWithMetadata(): CommandInfo[] {
+        return this.commandHandlerService
+            .getAllCommandCtorsAndMetadata()
+            .map(({ constructor: ctor, meta }) => ({
+                ...meta,
+                schema: getCoscradDataSchema(ctor),
+            })) as CommandInfo[];
+    }
+
     // TODO Unit test the filtering logic
-    getCommandInfo(): ICommandFormAndLabels[];
-    getCommandInfo(context: DomainModelCtor): ICommandFormAndLabels[];
-    getCommandInfo(context: DetailScopedCommandWriteContext): ICommandFormAndLabels[];
-    getCommandInfo(context: CommandContext): ICommandFormAndLabels[];
-    getCommandInfo(context?: CommandContext): ICommandFormAndLabels[] {
+    getCommandForms(): ICommandFormAndLabels[];
+    getCommandForms(context: DomainModelCtor): ICommandFormAndLabels[];
+    getCommandForms(context: DetailScopedCommandWriteContext): ICommandFormAndLabels[];
+    getCommandForms(context: CommandContext): ICommandFormAndLabels[];
+    getCommandForms(context?: CommandContext): ICommandFormAndLabels[] {
         const commandTypeFilter = buildCommandTypeFilter(context);
 
-        const allCommandsAndMeta = this.commandHandlerService.getAllCommandCtorsAndMetadata();
-
-        const allCommandInfo = allCommandsAndMeta.map(({ constructor: ctor, meta }) => ({
-            ...meta,
-            schema: getCoscradDataSchema(ctor),
-        })) as CommandInfo[];
-
-        return allCommandInfo
+        return this.getCommandSchemasWithMetadata()
             .filter(({ type }) => commandTypeFilter(type))
             .map(({ label, description, schema, type }) => ({
                 label,
