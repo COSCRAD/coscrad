@@ -38,7 +38,7 @@ describe(`Coscrad Data Schemas for aggregate root domain models`, () => {
         })
         .forEach(([aggregateType, subtype]) =>
             describe(buildDescription(aggregateType, subtype), () => {
-                it('match the snapshot', () => {
+                it('should match the snapshot', () => {
                     const Ctor = getAggregateCtor(aggregateType, subtype as unknown as string);
 
                     const dataSchema = getCoscradDataSchema(Ctor);
