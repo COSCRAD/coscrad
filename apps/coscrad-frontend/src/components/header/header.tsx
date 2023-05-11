@@ -6,7 +6,9 @@ import { Link } from 'react-router-dom';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { NavMenuContainer } from '../nav-menu/nav-menu-container';
 
-const AppBarWithTestIdDataAttribute = ({ children }) => <AppBar data-testid={'app-bar'}>{children}</AppBar>;
+const AppBarWithTestIdDataAttribute = ({ children }) => (
+    <AppBar data-testid={'app-bar'}>{children}</AppBar>
+);
 
 const StyledAppBar = styled(AppBarWithTestIdDataAttribute)({
     backgroundColor: 'primary.main',
@@ -17,6 +19,7 @@ const StyledAppBar = styled(AppBarWithTestIdDataAttribute)({
 const StyledToolbar = styled(Toolbar)({
     display: 'flex',
     justifyContent: 'space-between',
+    height: '64px',
 });
 
 const StyledSiteTitle = styled(Box)`
