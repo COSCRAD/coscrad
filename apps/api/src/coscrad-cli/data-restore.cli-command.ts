@@ -1,12 +1,12 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { DataImporter } from '../persistence/repositories/data-importer';
+import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 
-@Command({
+@CliCommand({
     name: 'data-restore',
     description: 'restores the database state from a snapshot file',
 })
-export class DomainRestoreCliCommand extends CommandRunner {
+export class DomainRestoreCliCommand extends CliCommandRunner {
     dataImporter: DataImporter;
 
     constructor(databaseProvider: ArangoDatabaseProvider) {
@@ -19,7 +19,7 @@ export class DomainRestoreCliCommand extends CommandRunner {
         return this.dataImporter.restore({ filepath });
     }
 
-    @Option({
+    @CliCommandOption({
         flags: '-f, --filepath [filepath]',
         description: 'the path to write the output to',
         required: true,
