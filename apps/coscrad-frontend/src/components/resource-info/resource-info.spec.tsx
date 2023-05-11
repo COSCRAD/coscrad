@@ -4,7 +4,10 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
+import { hexToRgb } from '../../utils/math/colors';
+import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
 import { renderWithProviders } from '../../utils/test-utils/render-with-providers';
+import { Header } from '../header/header';
 import { ResourceInfoContainer } from './resource-info.container';
 
 const ARTIFICIAL_DELAY = 150;
@@ -191,5 +194,36 @@ describe.skip('AllResources', () => {
 
             await waitFor(() => expect(screen.getByTestId('error')).toBeTruthy());
         });
+    });
+
+    it('should apply the custom backgroundColor', () => {
+        const dummyColor = '#3440eb';
+
+        const expectedColor = hexToRgb(dummyColor);
+
+        const dummyConfigurableContent = getDummyConfigurableContent({
+            themeOverrides: {
+                palette: {
+                    primary: {
+                        main: dummyColor,
+                    },
+                },
+            },
+        });
+
+        renderWithProviders(
+            <MemoryRouter>
+                <Header />
+            </MemoryRouter>,
+            {
+                contentConfig: dummyConfigurableContent,
+            }
+        );
+
+        const AllResourcesEl = document.querySelector(`[data-testid="app-bar"]`);
+
+        const style = window.getComputedStyle(AllResourcesEl);
+
+        expect(style.backgroundColor).toBe(expectedColor);
     });
 });

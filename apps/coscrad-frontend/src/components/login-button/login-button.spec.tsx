@@ -2,27 +2,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { hexToRgb } from '../../utils/math/colors';
 import { renderWithProviders } from '../../utils/test-utils';
 import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
-import { NavMenuContainer } from './nav-menu-container';
-import { NavMenuPresenter } from './nav-menu-presenter';
+import LoginButton from './login-button';
 
-/**
- *
- * This is just a sanity check for now.  When we implement the container and
- * presenter separation we can test more thoroughly.
- * We probably also want Cypress tests to ensure the navigation works:
- * https://www.pivotaltracker.com/story/show/184576697
- *
- */
-describe('Nav Menu', () => {
-    it('should render successfully', () => {
-        const { baseElement } = renderWithProviders(
-            <MemoryRouter>
-                <NavMenuContainer />
-            </MemoryRouter>
-        );
-        expect(baseElement).toBeTruthy();
-    });
-
+describe('loginbutton', () => {
     it('should apply the custom backgroundColor', () => {
         const dummyColor = '#3440eb';
 
@@ -40,16 +22,16 @@ describe('Nav Menu', () => {
 
         renderWithProviders(
             <MemoryRouter>
-                <NavMenuPresenter navItemInfos={[]} />
+                <LoginButton />
             </MemoryRouter>,
             {
                 contentConfig: dummyConfigurableContent,
             }
         );
 
-        const NavMenuPresenterEl = document.querySelector(`[data-testid="app-bar"]`);
+        const LoginButtonEl = document.querySelector(`[data-testid="app-bar"]`);
 
-        const style = window.getComputedStyle(NavMenuPresenterEl);
+        const style = window.getComputedStyle(LoginButtonEl);
 
         expect(style.backgroundColor).toBe(expectedColor);
     });
