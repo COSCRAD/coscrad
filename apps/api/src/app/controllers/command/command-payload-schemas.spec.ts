@@ -14,8 +14,6 @@ describe('command payload schemas', () => {
         await testModule.get<CommandModule>(CommandModule).onApplicationBootstrap();
 
         commandInfoService = testModule.get<CommandInfoService>(CommandInfoService);
-
-        console.log({ commandInfoService });
     });
 
     describe(`Command payload schema`, () => {
@@ -24,17 +22,5 @@ describe('command payload schemas', () => {
 
             expect(schema).toMatchSnapshot();
         });
-
-        // commandInfoService
-        //     .getCommandSchemasWithMetadata()
-        //     .map(({ type, schema }) => [type, schema])
-        //     .forEach(([commandType, schema]) => {
-
-        //         describe(`The schema for command ${commandType}`, () => {
-        //             it('should have the expected value', () => {
-        //                 expect(schema).toMatchSnapshot();
-        //             });
-        //         });
-        //     });
     });
 });
