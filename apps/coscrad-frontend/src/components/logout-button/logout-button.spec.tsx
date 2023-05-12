@@ -2,26 +2,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { hexToRgb } from '../../utils/math/colors';
 import { renderWithProviders } from '../../utils/test-utils';
 import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
-import { NavMenuContainer } from './nav-menu-container';
+import LogoutButton from './logout-button';
 
-/**
- *
- * This is just a sanity check for now.  When we implement the container and
- * presenter separation we can test more thoroughly.
- * We probably also want Cypress tests to ensure the navigation works:
- * https://www.pivotaltracker.com/story/show/184576697
- *
- */
-describe('Nav Menu', () => {
-    it('should render successfully', () => {
-        const { baseElement } = renderWithProviders(
-            <MemoryRouter>
-                <NavMenuContainer />
-            </MemoryRouter>
-        );
-        expect(baseElement).toBeTruthy();
-    });
-
+describe('logoutbutton', () => {
     it('should apply the custom backgroundColor', () => {
         const dummyColor = '#3440eb';
 
@@ -39,16 +22,16 @@ describe('Nav Menu', () => {
 
         renderWithProviders(
             <MemoryRouter>
-                <NavMenuContainer />
+                <LogoutButton />
             </MemoryRouter>,
             {
                 contentConfig: dummyConfigurableContent,
             }
         );
 
-        const NavMenuPresenterEl = document.querySelector(`[data-testid="nav-menu-icon"]`);
+        const LogoutButtonEl = document.querySelector(`[data-testid="logout-button"]`);
 
-        const style = window.getComputedStyle(NavMenuPresenterEl);
+        const style = window.getComputedStyle(LogoutButtonEl);
 
         expect(style.color).toBe(expectedColor);
     });
