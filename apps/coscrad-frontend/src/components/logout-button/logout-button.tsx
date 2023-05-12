@@ -11,6 +11,7 @@ const LogoutButton = () => {
 
     return (
         <IconButton
+            data-testid="logout-button"
             color="secondary"
             onClick={() => {
                 dispatch(userLoggedOut());
