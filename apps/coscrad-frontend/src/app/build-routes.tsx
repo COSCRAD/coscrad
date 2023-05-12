@@ -24,8 +24,12 @@ export type CoscradRoute = {
 };
 
 export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] => {
-    const { indexToDetailFlows, shouldEnableWebOfKnowledgeForResources, listenLive } =
-        contentConfig;
+    const {
+        indexToDetailFlows,
+        shouldEnableWebOfKnowledgeForResources,
+        listenLive,
+        resourceIndexLabel,
+    } = contentConfig;
 
     const noteIndexToDetailConfig = indexToDetailFlows.find(
         ({ categorizableType }) => categorizableType === CategorizableType.note
@@ -70,7 +74,7 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         },
         {
             path: 'Resources',
-            label: 'Browse Resources',
+            label: resourceIndexLabel,
             element: (
                 <ResourceInfoContainer
                     resourceTypesAndLabels={resourceTypesAndLabels}
