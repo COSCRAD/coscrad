@@ -23,6 +23,22 @@ const buildIndexToDetailConfig = <T extends CategorizableType>(
 });
 
 describe(`dynamic routes`, () => {
+    describe(`the label for the resource index page`, () => {
+        it(`should use the custom label from the config`, () => {
+            const dummyLabel = 'Boo Yah';
+
+            const contentConfig = buildDummyConfig({
+                resourceIndexLabel: dummyLabel,
+            });
+
+            const result = buildRoutes(contentConfig);
+
+            const resourcesLabel = result.find(({ path }) => path === `Resources`).label;
+
+            expect(resourcesLabel).toBe(dummyLabel);
+        });
+    });
+
     describe(`routes for index-to-detail flows`, () => {
         Object.values(ResourceType).forEach((resourceType) => {
             describe(`for resource type: ${resourceType}`, () => {
