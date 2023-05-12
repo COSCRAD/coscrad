@@ -121,4 +121,5 @@ export const contentConfig: ConfigurableContent = {
             },
         },
     },
+    resourceIndexLabel: 'Available Resources',
 };
