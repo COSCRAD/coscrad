@@ -39,26 +39,24 @@ export const Header = (): JSX.Element => {
     return (
         <StyledAppBar data-testid={'header'}>
             <StyledToolbar>
-                <Box style={{ display: 'flex', alignItems: 'center' }}>
-                    <StyledSiteTitle
-                        sx={{ marginRight: '20px', display: 'flex', alignItems: 'center' }}
-                    >
-                        <Link to="/">
+                <Link to="/">
+                    <Box style={{ display: 'flex', alignItems: 'center' }}>
+                        <StyledSiteTitle
+                            sx={{ marginRight: '20px', display: 'flex', alignItems: 'center' }}
+                        >
                             <StyledImage
                                 sx={{ width: '30px' }}
                                 src={organizationLogoUrl}
                                 alt={siteTitle}
                             />
-                        </Link>
-                    </StyledSiteTitle>
-                    <StyledSiteTitle>
-                        <Link to="/">
+                        </StyledSiteTitle>
+                        <StyledSiteTitle>
                             <Typography fontSize={'calc(18px + 0.5vw) !important'} variant="h1">
                                 {siteTitle}
                             </Typography>
-                        </Link>
-                    </StyledSiteTitle>
-                </Box>
+                        </StyledSiteTitle>
+                    </Box>
+                </Link>
                 <NavMenuContainer />
             </StyledToolbar>
         </StyledAppBar>
