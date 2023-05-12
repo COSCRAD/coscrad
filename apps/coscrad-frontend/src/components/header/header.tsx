@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { AppBar, Hidden, Toolbar, Typography } from '@mui/material';
+import { AppBar, Toolbar, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
@@ -39,22 +39,26 @@ export const Header = (): JSX.Element => {
     return (
         <StyledAppBar data-testid={'header'}>
             <StyledToolbar>
-                <Hidden smUp>
-                    <Link to="/">
-                        <StyledImage
-                            sx={{ width: '30px' }}
-                            src={organizationLogoUrl}
-                            alt={siteTitle}
-                        />
-                    </Link>
-                </Hidden>
-                <Hidden smDown>
-                    <StyledSiteTitle>
+                <Box style={{ display: 'flex', alignItems: 'center' }}>
+                    <StyledSiteTitle
+                        sx={{ marginRight: '20px', display: 'flex', alignItems: 'center' }}
+                    >
                         <Link to="/">
-                            <Typography variant="h1">{siteTitle}</Typography>
+                            <StyledImage
+                                sx={{ width: '30px' }}
+                                src={organizationLogoUrl}
+                                alt={siteTitle}
+                            />
                         </Link>
                     </StyledSiteTitle>
-                </Hidden>
+                    <StyledSiteTitle>
+                        <Link to="/">
+                            <Typography fontSize={'calc(18px + 0.5vw) !important'} variant="h1">
+                                {siteTitle}
+                            </Typography>
+                        </Link>
+                    </StyledSiteTitle>
+                </Box>
                 <NavMenuContainer />
             </StyledToolbar>
         </StyledAppBar>
