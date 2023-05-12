@@ -11,7 +11,7 @@ exports[`dynamic navigation menu when all properties are provided should return 
     "link": "About",
   },
   {
-    "label": "Browse Resources",
+    "label": "Available Resources",
     "link": "Resources",
   },
   {
