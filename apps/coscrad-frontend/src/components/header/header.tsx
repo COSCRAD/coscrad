@@ -51,7 +51,7 @@ export const Header = (): JSX.Element => {
                             />
                         </StyledSiteTitle>
                         <StyledSiteTitle>
-                            <Typography fontSize={'calc(18px + 0.5vw) !important'} variant="h1">
+                            <Typography fontSize={'calc(16px + 0.7vw) !important'} variant="h1">
                                 {siteTitle}
                             </Typography>
                         </StyledSiteTitle>
