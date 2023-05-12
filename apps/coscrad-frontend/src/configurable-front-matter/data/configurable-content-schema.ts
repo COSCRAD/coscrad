@@ -43,6 +43,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     notFoundMessage: string;
     loadingMessage: string;
     themeOverrides: ThemeOverrides;
+    resourceIndexLabel: string;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -67,6 +68,7 @@ export const configurableContentPropertiesAndConstraints: {
     notFoundMessage: [CoscradConstraint.isNonEmptyString],
     loadingMessage: [CoscradConstraint.isString],
     themeOverrides: [CoscradConstraint.isObject],
+    resourceIndexLabel: [CoscradConstraint.isString],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
