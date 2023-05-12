@@ -7,6 +7,7 @@ import { getConfig } from '../../config';
 import { hexToRgb } from '../../utils/math/colors';
 import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
 import { renderWithProviders } from '../../utils/test-utils/render-with-providers';
+import { ResourceInfosPresenter } from './presenters';
 import { ResourceInfoContainer } from './resource-info.container';
 
 const ARTIFICIAL_DELAY = 150;
@@ -194,6 +195,32 @@ describe('AllResources', () => {
 
             await waitFor(() => expect(screen.getByTestId('error')).toBeTruthy());
         });
+    });
+
+    it('should use the custom label', () => {
+        const dummyLabel = 'My resources';
+
+        const dummyConfig = getDummyConfigurableContent({
+            resourceIndexLabel: dummyLabel,
+        });
+
+        renderWithProviders(
+            <MemoryRouter>
+                <ResourceInfosPresenter
+                    data={[]}
+                    resourceTypesAndLabels={resourceTypesAndLabels}
+                    resourceTypesAndRoutes={resourceTypesAndRoutes}
+                />
+            </MemoryRouter>,
+            {
+                contentConfig: dummyConfig,
+            }
+        );
+
+        const searchPattern = new RegExp(dummyLabel);
+        const screenRes = screen.getByText(searchPattern);
+
+        expect(screenRes).toBeTruthy();
     });
 
     it('should apply the custom backgroundColor', () => {
