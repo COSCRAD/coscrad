@@ -4,6 +4,7 @@ import { Box } from '@mui/system';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
+import { StyledImage } from '../../utils/generic-components/presenters/styled-image';
 import { NavMenuContainer } from '../nav-menu/nav-menu-container';
 
 const AppBarWithTestIdDataAttribute = ({ children }) => (
@@ -33,15 +34,32 @@ export const Header = (): JSX.Element => {
      * TODO: Move data (ConfigurableContentContext) out of presenter
      */
     const { siteTitle } = useContext(ConfigurableContentContext);
+    const { organizationLogoUrl } = useContext(ConfigurableContentContext);
 
     return (
         <StyledAppBar data-testid={'header'}>
             <StyledToolbar>
-                <StyledSiteTitle>
-                    <Link to="/">
-                        <Typography variant="h1">{siteTitle}</Typography>
-                    </Link>
-                </StyledSiteTitle>
+                <Link to="/">
+                    <Box sx={{ display: 'flex', alignItems: 'center', color: 'Background' }}>
+                        <StyledSiteTitle
+                            sx={{ marginRight: '20px', display: 'flex', alignItems: 'center' }}
+                        >
+                            <StyledImage
+                                sx={{ width: '30px' }}
+                                src={organizationLogoUrl}
+                                alt={siteTitle}
+                            />
+                        </StyledSiteTitle>
+                        <StyledSiteTitle>
+                            <Typography
+                                sx={{ fontSize: 'calc(16px + 0.7vw) !important' }}
+                                variant="h1"
+                            >
+                                {siteTitle}
+                            </Typography>
+                        </StyledSiteTitle>
+                    </Box>
+                </Link>
                 <NavMenuContainer />
             </StyledToolbar>
         </StyledAppBar>

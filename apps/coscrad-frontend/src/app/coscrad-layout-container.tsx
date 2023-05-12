@@ -19,7 +19,7 @@ export const CoscradLayoutContainer = ({ children }: CoscradStyleContainerProps)
                 component="div"
                 disableGutters
                 sx={{
-                    paddingTop: '5%',
+                    paddingTop: '2.5%',
                     width: { xs: '90%', md: '80%' },
                     margin: 'auto',
                 }}
