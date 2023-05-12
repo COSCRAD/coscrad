@@ -40,7 +40,7 @@ export const Header = (): JSX.Element => {
         <StyledAppBar data-testid={'header'}>
             <StyledToolbar>
                 <Link to="/">
-                    <Box style={{ display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', color: 'Background' }}>
                         <StyledSiteTitle
                             sx={{ marginRight: '20px', display: 'flex', alignItems: 'center' }}
                         >
@@ -52,7 +52,6 @@ export const Header = (): JSX.Element => {
                         </StyledSiteTitle>
                         <StyledSiteTitle>
                             <Typography
-                                color={'text.secondary'}
                                 sx={{ fontSize: 'calc(16px + 0.7vw) !important' }}
                                 variant="h1"
                             >
