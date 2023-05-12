@@ -22,8 +22,9 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
     };
 
     return (
-        <Box sx={{ display: 'flex' }} data-testid="nav-menu">
+        <Box sx={{ display: 'flex' }}>
             <IconButton
+                data-testid="nav-menu-icon"
                 id="basic-button"
                 color="secondary"
                 aria-controls={isOpen ? 'basic-menu' : undefined}
