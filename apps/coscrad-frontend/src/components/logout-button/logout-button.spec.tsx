@@ -33,6 +33,6 @@ describe('logoutbutton', () => {
 
         const style = window.getComputedStyle(LogoutButtonEl);
 
-        expect(style).toBe(expectedColor);
+        expect(style.color).toBe(expectedColor);
     });
 });

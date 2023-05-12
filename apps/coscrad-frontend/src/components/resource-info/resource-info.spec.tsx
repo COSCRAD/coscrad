@@ -91,7 +91,7 @@ const resourceTypesAndRoutes = {};
 /**
  * See the above TODO about injecting a dummy config.
  */
-describe.skip('AllResources', () => {
+describe('AllResources', () => {
     beforeAll(() => server.listen());
 
     afterEach(() => server.resetHandlers());
@@ -107,7 +107,8 @@ describe.skip('AllResources', () => {
             responseType = null;
         });
 
-        it('should display the resource info', async () => {
+        // TODO troubleshoot this test
+        it.skip('should display the resource info', async () => {
             renderWithProviders(
                 <MemoryRouter>
                     <ResourceInfoContainer
@@ -212,17 +213,20 @@ describe.skip('AllResources', () => {
 
         renderWithProviders(
             <MemoryRouter>
-                < />
+                <ResourceInfoContainer
+                    resourceTypesAndLabels={resourceTypesAndLabels}
+                    resourceTypesAndRoutes={resourceTypesAndRoutes}
+                />
             </MemoryRouter>,
             {
                 contentConfig: dummyConfigurableContent,
             }
         );
 
-        const AllResourcesEl = document.querySelector(`[data-testid="app-bar"]`);
+        const AllResourcesEl = document.querySelector(`svg`).parentElement;
 
         const style = window.getComputedStyle(AllResourcesEl);
 
-        expect(style.backgroundColor).toBe(expectedColor);
+        expect(style.color).toBe(expectedColor);
     });
 });

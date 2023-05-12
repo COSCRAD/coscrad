@@ -3,7 +3,6 @@ import { hexToRgb } from '../../utils/math/colors';
 import { renderWithProviders } from '../../utils/test-utils';
 import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
 import { NavMenuContainer } from './nav-menu-container';
-import { NavMenuPresenter } from './nav-menu-presenter';
 
 /**
  *
@@ -31,7 +30,7 @@ describe('Nav Menu', () => {
         const dummyConfigurableContent = getDummyConfigurableContent({
             themeOverrides: {
                 palette: {
-                    primary: {
+                    secondary: {
                         main: dummyColor,
                     },
                 },
@@ -40,17 +39,17 @@ describe('Nav Menu', () => {
 
         renderWithProviders(
             <MemoryRouter>
-                <NavMenuPresenter navItemInfos={[]} />
+                <NavMenuContainer />
             </MemoryRouter>,
             {
                 contentConfig: dummyConfigurableContent,
             }
         );
 
-        const NavMenuPresenterEl = document.querySelector(`[data-testid="nav-menu-presenter"]`);
+        const NavMenuPresenterEl = document.querySelector(`[data-testid="nav-menu-icon"]`);
 
         const style = window.getComputedStyle(NavMenuPresenterEl);
 
-        expect(style.backgroundColor).toBe(expectedColor);
+        expect(style.color).toBe(expectedColor);
     });
 });

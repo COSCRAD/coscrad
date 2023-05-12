@@ -13,7 +13,7 @@ describe('loginbutton', () => {
         const dummyConfigurableContent = getDummyConfigurableContent({
             themeOverrides: {
                 palette: {
-                    primary: {
+                    secondary: {
                         main: dummyColor,
                     },
                 },
@@ -29,10 +29,10 @@ describe('loginbutton', () => {
             }
         );
 
-        const LoginButtonEl = document.querySelector(`[data-testid="login-button"]`);
+        const LoginButtonEl = document.querySelector(`[data-testid='login-button']`);
 
         const style = window.getComputedStyle(LoginButtonEl);
 
-        expect(style.backgroundColor).toBe(expectedColor);
+        expect(style.color).toBe(expectedColor);
     });
 });
