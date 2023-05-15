@@ -6,6 +6,7 @@ import {
 import { configurableContentPropertiesAndConstraints } from '../data/configurable-content-schema';
 
 export const validateConfigurableContent = (instance: unknown): Error[] =>
+    // TODO validate that defaultLanguageCode is a LanguageCode
     Object.entries(configurableContentPropertiesAndConstraints).reduce(
         (accumulatedErrors: Error[], [propertyName, constraints]) => {
             if (isNullOrUndefined(instance)) {
