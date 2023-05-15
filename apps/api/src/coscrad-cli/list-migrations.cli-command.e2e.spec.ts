@@ -1,4 +1,3 @@
-import { Logger } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
@@ -86,10 +85,6 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
     const originalEnv = process.env;
 
-    const logger = {
-        log: jest.fn().mockImplementation(),
-    };
-
     const dummyBaseUrl = 'https://www.myorg.io/assets/';
 
     const dummyMigrator = new Migrator();
@@ -129,8 +124,6 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
             .useValue(testAppModule)
             .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
             .useValue(testRepositoryProvider)
-            .overrideProvider(Logger)
-            .useValue(logger)
             .overrideProvider(Migrator)
             .useValue(dummyMigrator)
             .overrideProvider(COSCRAD_CLI_LOGGER_TOKEN)
