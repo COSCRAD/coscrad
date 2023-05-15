@@ -1,12 +1,19 @@
+import { Logger } from '@nestjs/common';
 import { Migrator } from '../persistence/migrations/migrator';
-import { CliCommandRunner } from './cli-command.decorator';
+import { CliCommand, CliCommandRunner } from './cli-command.decorator';
 
+@CliCommand({
+    description: `lists available database migrations`,
+    name: `list-migrations`,
+})
 export class ListMigrationsCliCommand extends CliCommandRunner {
-    constructor(private readonly migrator: Migrator) {
+    constructor(private readonly migrator: Migrator, private readonly logger: Logger) {
         super();
     }
 
     async run() {
-        throw new Error(`run method not implemented on ListMigrations command!`);
+        const migrations = await this.migrator.list();
+
+        this.logger.log(migrations);
     }
 }

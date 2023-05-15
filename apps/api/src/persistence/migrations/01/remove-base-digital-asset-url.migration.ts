@@ -7,6 +7,7 @@ import { ArangoCollectionId } from '../../database/collection-references/ArangoC
 import { DatabaseDocument } from '../../database/utilities/mapEntityDTOToDatabaseDTO';
 import { ICoscradMigration } from '../coscrad-migration.interface';
 import { ICoscradQueryRunner } from '../coscrad-query-runner.interface';
+import { Migration } from '../decorators/migration.decorator';
 
 type TermDocument = DatabaseDocument<DTO<Term>>;
 
@@ -16,16 +17,21 @@ type PhotographDocument = DatabaseDocument<DTO<Photograph>>;
  * This is the name of the environment variable where the base digital asset url
  * (includes a trailing slash) should be stored.
  */
-const BASE_DIGITAL_ASSET_URL = 'BASE_DIGITAL_ASSET_URL';
+export const BASE_DIGITAL_ASSET_URL = 'BASE_DIGITAL_ASSET_URL';
 
+@Migration({
+    description: `convert legacy media urls from relative to absolute paths`,
+    // TODO Should this be a date instead?
+    dateAuthored: '20230513',
+})
 export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
     private readonly baseDigitalAssetUrl: string;
 
-    readonly sequenceNumber: 1;
+    readonly sequenceNumber = 1;
 
-    readonly name: `RemoveBaseDigitalAssetUrl`;
+    readonly name = `RemoveBaseDigitalAssetUrl`;
 
-    constructor(baseDigitalAssetUrl?: string) {
+    constructor() {
         /**
          * Note that we require this to be set as an environment variable so that
          * different instances can run the migration with different values for their
@@ -34,9 +40,7 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
          * interfere with the actual environment-variable based config. This is
          * also why we do not inject a config service here.
          */
-        this.baseDigitalAssetUrl = isNonEmptyString(baseDigitalAssetUrl)
-            ? baseDigitalAssetUrl
-            : process.env[BASE_DIGITAL_ASSET_URL];
+        this.baseDigitalAssetUrl = process.env[BASE_DIGITAL_ASSET_URL] || null;
 
         if (!isNonEmptyString(this.baseDigitalAssetUrl)) {
             // fail fast
