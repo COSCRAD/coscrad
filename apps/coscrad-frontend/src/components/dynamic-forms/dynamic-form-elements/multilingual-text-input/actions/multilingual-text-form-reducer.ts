@@ -28,6 +28,7 @@ export const multilingualTextFormReducer = (
                 items: state.items.concat(
                     state.items.concat({
                         languageCode: languageCode,
+                        defaultLanguageCode: languageCode,
                         text: null,
                         role: newRole,
                     })
@@ -63,6 +64,7 @@ export const multilingualTextFormReducer = (
                   )
                 : state.items.concat({
                       languageCode: languageCode,
+                      defaultLanguageCode: languageCode,
                       text: newText,
                       role: null,
                   }),
