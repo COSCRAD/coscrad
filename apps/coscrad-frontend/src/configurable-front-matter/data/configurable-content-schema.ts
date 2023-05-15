@@ -2,6 +2,7 @@ import {
     AggregateTypeToViewModel,
     CategorizableType,
     ICategorizableDetailQueryResult,
+    LanguageCode,
 } from '@coscrad/api-interfaces';
 import { CoscradConstraint } from '@coscrad/validation-constraints';
 import { ThemeOptions } from '@mui/material';
@@ -44,6 +45,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     loadingMessage: string;
     themeOverrides: ThemeOverrides;
     resourceIndexLabel: string;
+    defaultLanguageCode: LanguageCode;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -69,6 +71,7 @@ export const configurableContentPropertiesAndConstraints: {
     loadingMessage: [CoscradConstraint.isString],
     themeOverrides: [CoscradConstraint.isObject],
     resourceIndexLabel: [CoscradConstraint.isString],
+    defaultLanguageCode: [CoscradConstraint.isNonEmptyString],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
