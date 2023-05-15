@@ -1,4 +1,4 @@
-import { CategorizableType } from '@coscrad/api-interfaces';
+import { CategorizableType, LanguageCode } from '@coscrad/api-interfaces';
 import { ConfigurableContent, DetailViewType } from './configurable-content-schema';
 
 export const contentConfig: ConfigurableContent = {
@@ -122,4 +122,5 @@ export const contentConfig: ConfigurableContent = {
         },
     },
     resourceIndexLabel: 'Available Resources',
+    defaultLanguageCode: LanguageCode.Chilcotin,
 };
