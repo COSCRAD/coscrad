@@ -6,7 +6,8 @@ import { Migrator } from './migrator';
 
 @Module({
     imports: [PersistenceModule],
-    providers: [Migrator, RemoveBaseDigitalAssetUrl],
+    providers: [Migrator, RemoveBaseDigitalAssetUrl, MigrationFinderService],
+    exports: [Migrator],
 })
 export class MigrationModule implements OnApplicationBootstrap {
     constructor(

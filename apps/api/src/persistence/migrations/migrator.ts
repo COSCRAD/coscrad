@@ -22,8 +22,10 @@ export class Migrator {
     }
 
     list(): string {
+        const labelAndMigrationDataPairs = [...this.knownMigrations];
+
         return (
-            Object.entries(this.knownMigrations)
+            labelAndMigrationDataPairs
                 // sort with most recent (highest sequence number) first
                 .sort(
                     (
