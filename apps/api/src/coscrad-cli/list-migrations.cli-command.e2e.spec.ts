@@ -12,6 +12,8 @@ import { Migrator } from '../persistence/migrations/migrator';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import { CoscradCliModule } from './coscrad-cli.module';
+import { COSCRAD_CLI_LOGGER_TOKEN } from './logging';
+import { buildMockLogger } from './logging/__tests__';
 
 const cliCommandName = 'list-migrations';
 
@@ -75,6 +77,8 @@ class DummyMigration3 implements ICoscradMigration {
     }
 }
 
+const mockLogger = buildMockLogger();
+
 describe(`CLI Command: **${cliCommandName}**`, () => {
     let commandInstance: TestingModule;
 
@@ -129,7 +133,8 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
             .useValue(logger)
             .overrideProvider(Migrator)
             .useValue(dummyMigrator)
-
+            .overrideProvider(COSCRAD_CLI_LOGGER_TOKEN)
+            .useValue(mockLogger)
             .compile();
     });
 
@@ -140,7 +145,7 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
     it(`should list the available migrations`, async () => {
         await CommandTestFactory.run(commandInstance, [cliCommandName]);
 
-        const logMessage = logger.log.mock.calls[0][0];
+        const logMessage = mockLogger.log.mock.calls[0][0];
 
         const migrationDatesThatAreMissing = dummyMigrationDates.filter(
             (date) => !logMessage.includes(date)

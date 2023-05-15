@@ -22,6 +22,19 @@ export class Migrator {
     }
 
     list(): string {
+        return this.getKnownMigrations()
+            .map(
+                ([
+                    name,
+                    {
+                        metadata: { description, dateAuthored },
+                    },
+                ]: [string, MigrationAndMeta]) => `${name} [${dateAuthored}]: ${description}`
+            )
+            .join(`\n`);
+    }
+
+    private getKnownMigrations(): [string, MigrationAndMeta][] {
         const labelAndMigrationDataPairs = [...this.knownMigrations];
 
         return (
@@ -43,15 +56,6 @@ export class Migrator {
                         ]: [string, MigrationAndMeta]
                     ) => b - a
                 )
-                .map(
-                    ([
-                        name,
-                        {
-                            metadata: { description, dateAuthored },
-                        },
-                    ]: [string, MigrationAndMeta]) => `${name} [${dateAuthored}]: ${description}`
-                )
-                .join(`\n`)
         );
     }
 }
