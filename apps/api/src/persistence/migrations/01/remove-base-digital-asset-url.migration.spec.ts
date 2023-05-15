@@ -13,7 +13,14 @@ import { ArangoDatabaseProvider } from '../../database/database.provider';
 import { DatabaseDocument, DatabaseDTO } from '../../database/utilities/mapEntityDTOToDatabaseDTO';
 import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../repositories/__tests__/TestRepositoryProvider';
-import { RemoveBaseDigitalAssetUrl } from './remove-base-digital-asset-url.migration';
+import {
+    BASE_DIGITAL_ASSET_URL,
+    RemoveBaseDigitalAssetUrl,
+} from './remove-base-digital-asset-url.migration';
+
+const baseDigitalAssetUrl = `https://www.mymedia.org/downloads/`;
+
+process.env[BASE_DIGITAL_ASSET_URL] = baseDigitalAssetUrl;
 
 describe(`RemoveBaseDigitalAssetUrl`, () => {
     let testDatabaseProvider: ArangoDatabaseProvider;
@@ -21,30 +28,6 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
     let testQueryRunner: ArangoQueryRunner;
 
     let testRepositoryProvider: TestRepositoryProvider;
-
-    beforeAll(async () => {
-        const testModule = await createTestModule({
-            ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-        });
-
-        const arangoConnectionProvider = testModule.get(ArangoConnectionProvider);
-
-        testDatabaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
-
-        /**
-         * It's a bit awkward that we need this because we are not working at
-         * the repositories level of abstraction. However, we have added test
-         * setup and teardown logic at this level for the purpose of commadn and
-         * query integration tests. So instead of rewriting this logic on a
-         * `TestDatabaseProvider`, we will just leverage this existing logic for
-         * test teardown.
-         */
-        testRepositoryProvider = new TestRepositoryProvider(testDatabaseProvider);
-
-        testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);
-    });
-
-    const baseDigitalAssetUrl = `https://www.mymedia.org/downloads/`;
 
     const buildId = (resourceType: ResourceType, index: number): string => {
         if (resourceType === ResourceType.term) return buildDummyUuid(index);
@@ -57,6 +40,28 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
     };
 
     describe(`when there are documents (terms, vocabularyLists, and photographs) that should be updated`, () => {
+        beforeAll(async () => {
+            const testModule = await createTestModule({
+                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+            });
+
+            const arangoConnectionProvider = testModule.get(ArangoConnectionProvider);
+
+            testDatabaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
+
+            /**
+             * It's a bit awkward that we need this because we are not working at
+             * the repositories level of abstraction. However, we have added test
+             * setup and teardown logic at this level for the purpose of commadn and
+             * query integration tests. So instead of rewriting this logic on a
+             * `TestDatabaseProvider`, we will just leverage this existing logic for
+             * test teardown.
+             */
+            testRepositoryProvider = new TestRepositoryProvider(testDatabaseProvider);
+
+            testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);
+        });
+
         // TERMS
         const dtoForTermToCheckManually: Omit<DatabaseDocument<DTO<Term>>, '_key'> = {
             term: `so bogus`,
@@ -113,7 +118,7 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
                 .createMany(originalPhotographDocuments);
         });
 
-        const migrationUnderTest = new RemoveBaseDigitalAssetUrl(baseDigitalAssetUrl);
+        const migrationUnderTest = new RemoveBaseDigitalAssetUrl();
 
         const idForTermToCheckManually = buildId(ResourceType.term, 0);
 
