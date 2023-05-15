@@ -1,4 +1,5 @@
 import { HasId } from '@coscrad/api-interfaces';
+import { Injectable } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
 import { ICoscradQueryRunner } from '../migrations/coscrad-query-runner.interface';
 import { ArangoDatabase } from './arango-database';
@@ -6,6 +7,7 @@ import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from './database.provider';
 import { DatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
 
+@Injectable()
 export class ArangoQueryRunner implements ICoscradQueryRunner {
     private readonly arangoDatabase: ArangoDatabase;
 

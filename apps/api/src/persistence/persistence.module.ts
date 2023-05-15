@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ID_RESPOSITORY_TOKEN } from '../lib/id-generation/interfaces/id-repository.interface';
 import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
+import { ArangoQueryRunner } from './database/arango-query-runner';
 import { ArangoDatabaseProvider } from './database/database.provider';
 import { ArangoIdRepository } from './repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from './repositories/arango-repository.provider';
@@ -50,6 +51,13 @@ export class PersistenceModule {
             inject: [ArangoConnectionProvider],
         };
 
+        const arangoQueryRunnerProvider = {
+            provide: ArangoQueryRunner,
+            useFactory: (arangoDatabaseProvider: ArangoDatabaseProvider) =>
+                new ArangoQueryRunner(arangoDatabaseProvider),
+            inject: [ArangoDatabaseProvider],
+        };
+
         return {
             module: PersistenceModule,
             imports: [ConfigModule],
@@ -58,12 +66,14 @@ export class PersistenceModule {
                 repositoryProvider,
                 idRepositoryProvider,
                 arangoDatabaseProvider,
+                arangoQueryRunnerProvider,
             ],
             exports: [
                 arangoConnectionProvider,
                 repositoryProvider,
                 idRepositoryProvider,
                 arangoDatabaseProvider,
+                arangoQueryRunnerProvider,
             ],
             global: true,
         };

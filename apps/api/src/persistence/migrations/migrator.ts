@@ -1,5 +1,6 @@
 import { Ctor } from '../../lib/types/Ctor';
 import { ICoscradMigration } from './coscrad-migration.interface';
+import { ICoscradQueryRunner } from './coscrad-query-runner.interface';
 import { CoscradMigrationMetadata } from './decorators/migration.decorator';
 
 export type MigrationAndMeta = {
@@ -32,6 +33,16 @@ export class Migrator {
                 ]: [string, MigrationAndMeta]) => `${name} [${dateAuthored}]: ${description}`
             )
             .join(`\n`);
+    }
+
+    async runAllAvailableMigrations(queryRunner: ICoscradQueryRunner): Promise<void> {
+        for (const [migrationName, { migration, metadata }] of this.getKnownMigrations()) {
+            console.log(
+                `running migration #${migration.sequenceNumber}: ${migrationName} (${migration.name}) [${metadata.dateAuthored}]`
+            );
+
+            await migration.up(queryRunner);
+        }
     }
 
     private getKnownMigrations(): [string, MigrationAndMeta][] {
