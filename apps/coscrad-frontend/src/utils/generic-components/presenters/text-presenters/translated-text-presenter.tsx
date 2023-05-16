@@ -1,5 +1,19 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { AccordionDetails, Typography } from '@mui/material';
+
+const getLabelForLanguage = (languageCodeToFind: LanguageCode): string => {
+    const label =
+        Object.entries(LanguageCode).find(
+            ([_label, languageCode]) => languageCode === languageCodeToFind
+        )?.[0] || null;
+
+    if (isNullOrUndefined(label)) {
+        throw new Error(`failed to find a label for language code: ${languageCodeToFind}`);
+    }
+
+    return label;
+};
 
 interface TranslatedLanguageTextPresenterProps {
     languageCode: LanguageCode;
@@ -17,7 +31,7 @@ export const TranslatedLanguageTextPresenter = ({
             <Typography color={'text.primary'}>
                 {text}
                 <br />
-                {`${languageCode}, '${role}'`}
+                {`${getLabelForLanguage(languageCode)}, '${role}'`}
             </Typography>
         </AccordionDetails>
     );
