@@ -9,7 +9,7 @@ import { ResourceType } from '../../../types/ResourceType';
 import { Resource } from '../../resource.entity';
 import { PlaylistItem } from './playlist-item.entity';
 
-@RegisterIndexScopedCommands([])
+@RegisterIndexScopedCommands(['CREATE_PLAYLIST'])
 export class Playlist extends Resource {
     readonly type = ResourceType.playlist;
 
