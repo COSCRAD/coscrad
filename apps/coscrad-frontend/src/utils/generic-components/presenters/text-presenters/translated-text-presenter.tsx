@@ -1,6 +1,7 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { AccordionDetails, Typography } from '@mui/material';
+import LanguageIcon from '@mui/icons-material/Language';
+import { AccordionDetails, IconButton, Tooltip, Typography } from '@mui/material';
 
 const getLabelForLanguage = (languageCodeToFind: LanguageCode): string => {
     const label =
@@ -30,8 +31,11 @@ export const TranslatedLanguageTextPresenter = ({
         <AccordionDetails key={`${languageCode}-${role}`}>
             <Typography color={'text.primary'}>
                 {text}
-                <br />
-                {`${getLabelForLanguage(languageCode)}, '${role}'`}
+                <Tooltip title={`${getLabelForLanguage(languageCode)}, '${role}'`}>
+                    <IconButton>
+                        <LanguageIcon />
+                    </IconButton>
+                </Tooltip>
             </Typography>
         </AccordionDetails>
     );
