@@ -1,8 +1,8 @@
 import { IMultilingualText } from '@coscrad/api-interfaces';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from '@mui/material';
-import { ConfigurableContentContext } from 'apps/coscrad-frontend/src/configurable-front-matter/configurable-content-provider';
 import { useContext } from 'react';
+import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 
 // TODO use contentConfigContext
 // default language code
@@ -43,20 +43,20 @@ export const MultilingualTextPresenter = ({
                 ))}
             </Box>
             <Box>
-                {translations.map(({ languageCode, text, role }) => (
-                    <Accordion key={`${languageCode}-${role}`}>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />} color={'secondary.dark'}>
-                            <Typography>Translations</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
+                <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography>Translations</Typography>
+                    </AccordionSummary>
+                    {translations.map(({ languageCode, text, role }) => (
+                        <AccordionDetails key={`${languageCode}-${role}`}>
                             <Typography color={'text.primary'}>
                                 {text}
                                 <br />
                                 {`${languageCode}, '${role}'`}
                             </Typography>
                         </AccordionDetails>
-                    </Accordion>
-                ))}
+                    ))}
+                </Accordion>
             </Box>
         </>
     );
