@@ -69,7 +69,7 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
         const dtoForTermToCheckManually: Omit<DatabaseDocument<DTO<Term>>, '_key'> = {
             term: `so bogus`,
             termEnglish: `so bogus (English)`,
-            audioFilename: `bogus.wav`,
+            audioFilename: `bogus`,
             type: ResourceType.term,
             published: true,
             contributorId: '55',
@@ -90,7 +90,7 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
             '_key'
         > = {
             type: ResourceType.photograph,
-            filename: `flowers.png`,
+            filename: `flowers`,
             photographer: `James Rames`,
             dimensions: {
                 widthPX: 300,
@@ -149,7 +149,7 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
                 .getDatabaseForCollection(ArangoCollectionId.terms)
                 .fetchById(idForTermToCheckManually)) as unknown as DatabaseDocument<DTO<Term>>;
 
-            expect(audioFilename).toBe(`https://www.mymedia.org/downloads/bogus.wav`);
+            expect(audioFilename).toBe(`https://www.mymedia.org/downloads/bogus.mp3`);
 
             const { imageUrl } = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.photographs)
