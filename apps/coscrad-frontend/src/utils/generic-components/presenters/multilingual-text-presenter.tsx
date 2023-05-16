@@ -1,9 +1,9 @@
 import { IMultilingualText } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionSummary, Box, Typography } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
-import { DefaultLanguageTextPresenter } from './text-presenters/default-language-text-presenter';
 import { TranslatedLanguageTextPresenter } from './text-presenters/translated-text-presenter';
 
 // TODO use contentConfigContext
@@ -24,36 +24,29 @@ export const MultilingualTextPresenter = ({
 
     const { items } = text;
 
-    const filteredItems = items.filter((item) => item.languageCode === defaultLanguageCode);
+    const textItemWithDefaultLanguage =
+        items.find((item) => item.languageCode === defaultLanguageCode) || null;
 
     const translations = items.filter((items) => items.languageCode !== defaultLanguageCode);
 
     return (
-        <>
-            <Box>
-                {filteredItems.map(({ languageCode, text, role }) => (
-                    <DefaultLanguageTextPresenter
+        <Box>
+            <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography>
+                        {isNullOrUndefined(textItemWithDefaultLanguage)
+                            ? 'Translations'
+                            : textItemWithDefaultLanguage.text}
+                    </Typography>
+                </AccordionSummary>
+                {translations.map(({ languageCode, text, role }) => (
+                    <TranslatedLanguageTextPresenter
                         languageCode={languageCode}
                         text={text}
                         role={role}
                     />
                 ))}
-            </Box>
-
-            <Box>
-                <Accordion>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography>Translations</Typography>
-                    </AccordionSummary>
-                    {translations.map(({ languageCode, text, role }) => (
-                        <TranslatedLanguageTextPresenter
-                            languageCode={languageCode}
-                            text={text}
-                            role={role}
-                        />
-                    ))}
-                </Accordion>
-            </Box>
-        </>
+            </Accordion>
+        </Box>
     );
 };
