@@ -1256,5 +1256,42 @@ exports[`command payload schemas Command payload schema should match the snapsho
     },
     "type": "ADD_LINE_ITEM_TO_TRANSCRIPT",
   },
+  {
+    "description": "Creates a new playlist",
+    "label": "Create PLaylist",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "song",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "name": {
+        "coscradDataType": "MULTILINGUAL_TEXT",
+        "description": "the name of the playlist",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+      },
+    },
+    "type": "CREATE_PLAYLIST",
+  },
 ]
 `;
