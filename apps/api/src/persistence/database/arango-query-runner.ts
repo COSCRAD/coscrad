@@ -30,8 +30,6 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
             // avoid unnecessary writes
             .filter((update) => !isDeepStrictEqual(update, {}));
 
-        await Promise.all(
-            updates.map((update) => this.arangoDatabase.update(update._key, update, collectionName))
-        );
+        await this.arangoDatabase.updateMany(updates, collectionName);
     }
 }

@@ -242,6 +242,34 @@ export class ArangoDatabase {
             });
     };
 
+    updateMany = async <TUpdatedDoc extends { _key: string }>(
+        docUpdates: TUpdatedDoc[],
+        collectionName: string
+    ): Promise<void> => {
+        const query = `
+            FOR docUpdate in @docUpdates
+            UPDATE docUpdate IN @@collectionName OPTIONS { keepNull: false }
+        `;
+
+        const bindVars = {
+            docUpdates,
+            '@collectionName': collectionName,
+        };
+
+        await this.#db
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((err) => {
+                throw new InternalError(
+                    `Failed to update dto: ${JSON.stringify(
+                        docUpdates
+                    )} in ${collectionName}. \n Arango errors: ${err}`
+                );
+            });
+    };
+
     // TODO Add Soft Delete
 
     // TODO we should only expose a hard delete for test setup

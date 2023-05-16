@@ -16,6 +16,8 @@ export class RunMigrationsCliCommand extends CliCommandRunner {
         @Inject(COSCRAD_CLI_LOGGER_TOKEN) private readonly logger: ICoscradCliLogger
     ) {
         super();
+
+        console.log(`Instantiating Migration 1`);
     }
 
     async run() {
