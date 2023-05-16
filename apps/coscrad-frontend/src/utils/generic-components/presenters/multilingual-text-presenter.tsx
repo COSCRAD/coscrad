@@ -1,8 +1,10 @@
 import { IMultilingualText } from '@coscrad/api-interfaces';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from '@mui/material';
+import { Accordion, AccordionSummary, Box, Typography } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { DefaultLanguageTextPresenter } from './text-presenters/default-language-text-presenter';
+import { TranslatedLanguageTextPresenter } from './text-presenters/translated-text-presenter';
 
 // TODO use contentConfigContext
 // default language code
@@ -26,35 +28,29 @@ export const MultilingualTextPresenter = ({
 
     const translations = items.filter((items) => items.languageCode !== defaultLanguageCode);
 
-    if (!Array.isArray(filteredItems)) {
-        throw new Error(`invalid input to Multlingual text!: ${text}`);
-    }
-
     return (
         <>
             <Box>
                 {filteredItems.map(({ languageCode, text, role }) => (
-                    <Box key={`${languageCode}-${role}`}>
-                        {text}
-                        <Typography variant="subtitle1" color={'secondary.dark'}>
-                            {`${languageCode}, '${role}'`}
-                        </Typography>
-                    </Box>
+                    <DefaultLanguageTextPresenter
+                        languageCode={languageCode}
+                        text={text}
+                        role={role}
+                    />
                 ))}
             </Box>
+
             <Box>
                 <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Translations</Typography>
                     </AccordionSummary>
                     {translations.map(({ languageCode, text, role }) => (
-                        <AccordionDetails key={`${languageCode}-${role}`}>
-                            <Typography color={'text.primary'}>
-                                {text}
-                                <br />
-                                {`${languageCode}, '${role}'`}
-                            </Typography>
-                        </AccordionDetails>
+                        <TranslatedLanguageTextPresenter
+                            languageCode={languageCode}
+                            text={text}
+                            role={role}
+                        />
                     ))}
                 </Accordion>
             </Box>
