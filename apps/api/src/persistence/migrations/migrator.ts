@@ -1,3 +1,4 @@
+import { InternalError } from '../../lib/errors/InternalError';
 import { Ctor } from '../../lib/types/Ctor';
 import { ICoscradMigration } from './coscrad-migration.interface';
 import { ICoscradQueryRunner } from './coscrad-query-runner.interface';
@@ -36,7 +37,15 @@ export class Migrator {
     }
 
     async runAllAvailableMigrations(queryRunner: ICoscradQueryRunner): Promise<void> {
-        for (const [migrationName, { migration, metadata }] of this.getKnownMigrations()) {
+        const migrations = this.getKnownMigrations();
+
+        if (migrations.length > 1) {
+            throw new InternalError(
+                `Not Implemented: Running multiple migrations at once is not yet supported`
+            );
+        }
+
+        for (const [migrationName, { migration, metadata }] of migrations) {
             console.log(
                 `running migration #${migration.sequenceNumber}: ${migrationName} (${migration.name}) [${metadata.dateAuthored}]`
             );
