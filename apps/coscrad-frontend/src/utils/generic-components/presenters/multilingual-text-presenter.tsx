@@ -1,9 +1,19 @@
 import { IMultilingualText } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionSummary, Box, Typography } from '@mui/material';
+import LanguageIcon from '@mui/icons-material/Language';
+import {
+    Accordion,
+    AccordionSummary,
+    Box,
+    Divider,
+    IconButton,
+    Tooltip,
+    Typography,
+} from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { getLabelForLanguage } from './text-presenters/get-label-for-language';
 import { TranslatedLanguageTextPresenter } from './text-presenters/translated-text-presenter';
 
 // TODO use contentConfigContext
@@ -31,14 +41,25 @@ export const MultilingualTextPresenter = ({
 
     return (
         <Box>
-            <Accordion>
+            <Accordion defaultExpanded variant="outlined">
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography>
+                    <Typography variant="h3" sx={{ margin: '0' }}>
                         {isNullOrUndefined(textItemWithDefaultLanguage)
                             ? 'Translations'
                             : textItemWithDefaultLanguage.text}
                     </Typography>
+                    <Tooltip
+                        title={`${getLabelForLanguage(
+                            textItemWithDefaultLanguage.languageCode
+                        )}, '${textItemWithDefaultLanguage.role}'`}
+                    >
+                        <IconButton>
+                            <LanguageIcon />
+                        </IconButton>
+                    </Tooltip>
                 </AccordionSummary>
+                <Divider />
+
                 {translations.map(({ languageCode, text, role }) => (
                     <TranslatedLanguageTextPresenter
                         languageCode={languageCode}

@@ -2,13 +2,13 @@ import {
     ICategorizableDetailQueryResult,
     IVocabularyListEntry,
     IVocabularyListViewModel,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, Typography } from '@mui/material';
+import { ResourceDetailFullViewPresenter } from 'apps/coscrad-frontend/src/utils/generic-components';
 import { useReducer } from 'react';
 import { Carousel } from '../../higher-order-components/carousel';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
-import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 import doValuesMatchFilters from './do-values-match-filters';
 import { VocabularyListForm } from './vocabulary-list-form';
 
@@ -89,8 +89,12 @@ export const VocabularyListDetailFullViewPresenter = ({
     const selectedEntries = filterEntriesForSelectedTerms(entries, filterWithoutNullAndUndefined);
 
     return (
-        <Box data-testid={id}>
-            <Typography variant="h2">{renderMultilingualTextCell(name)}</Typography>
+        <ResourceDetailFullViewPresenter
+            name={name}
+            id={id}
+            type={ResourceType.vocabularyList}
+            data-testid={id}
+        >
             <VocabularyListForm
                 fields={form.fields}
                 onFormChange={(key: string, value: VocabularyListFilterProperty) =>
@@ -102,6 +106,6 @@ export const VocabularyListDetailFullViewPresenter = ({
                 propsForItems={selectedEntries.map(({ term }) => term)}
                 Presenter={TermDetailFullViewPresenter}
             />
-        </Box>
+        </ResourceDetailFullViewPresenter>
     );
 };
