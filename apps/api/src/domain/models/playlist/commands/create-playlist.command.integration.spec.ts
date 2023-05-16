@@ -5,16 +5,18 @@ import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpInt
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../lib/types/not-available';
 import { NotFound } from '../../../../lib/types/not-found';
-import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../types/DTO';
-import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
+import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { assertCommandFailsDueToTypeError } from '../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
@@ -23,8 +25,6 @@ import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/ge
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
-import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
-import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { Playlist } from '../entities';
 import { CreatePlayList } from './create-playlist.command';
 

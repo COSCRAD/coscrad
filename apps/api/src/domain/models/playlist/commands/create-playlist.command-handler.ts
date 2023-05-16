@@ -5,6 +5,7 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/per
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
+import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
@@ -50,7 +51,11 @@ export class CreatePlayListCommandHandler extends BaseCreateCommandHandler<Playl
             published: false,
         };
 
-        return new Playlist(createDto);
+        const newInstanceOrError = getInstanceFactoryForResource<Playlist>(ResourceType.playlist)(
+            createDto
+        );
+
+        return newInstanceOrError;
     }
 
     protected async fetchRequiredExternalState(
