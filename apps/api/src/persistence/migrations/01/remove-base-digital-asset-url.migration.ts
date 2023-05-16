@@ -11,9 +11,13 @@ import { Migration } from '../decorators/migration.decorator';
 
 type TermDocument = DatabaseDocument<DTO<Term>>;
 
+const defaultAudioExtension = 'mp3';
+
 type PhotographDocument = DatabaseDocument<DTO<Photograph>>;
 
 type OldPhotographDocument = Omit<PhotographDocument, 'imageUrl'> & { filename: string };
+
+const defaultPhotographExtension = 'png';
 
 /**
  * This is the name of the environment variable where the base digital asset url
@@ -56,14 +60,14 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
         await queryRunner.update<TermDocument, TermDocument>(
             ArangoCollectionId.terms,
             ({ audioFilename }) => ({
-                audioFilename: `${this.baseDigitalAssetUrl}${audioFilename}`,
+                audioFilename: `${this.baseDigitalAssetUrl}${audioFilename}.${defaultAudioExtension}`,
             })
         );
 
         await queryRunner.update<OldPhotographDocument, PhotographDocument>(
             ArangoCollectionId.photographs,
             ({ filename }) => ({
-                imageUrl: `${this.baseDigitalAssetUrl}${filename}`,
+                imageUrl: `${this.baseDigitalAssetUrl}${filename}.${defaultPhotographExtension}`,
                 filename: null,
             })
         );
@@ -75,7 +79,9 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
             ({ audioFilename }) => {
                 if (audioFilename.includes(this.baseDigitalAssetUrl)) {
                     return {
-                        audioFilename: audioFilename.replace(this.baseDigitalAssetUrl, ''),
+                        audioFilename: audioFilename
+                            .replace(this.baseDigitalAssetUrl, '')
+                            .replace(`.${defaultAudioExtension}`, ''),
                     };
                 }
             }
@@ -86,7 +92,9 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
             ({ imageUrl }) => {
                 if (imageUrl.includes(this.baseDigitalAssetUrl)) {
                     return {
-                        filename: imageUrl.replace(this.baseDigitalAssetUrl, ''),
+                        filename: imageUrl
+                            .replace(this.baseDigitalAssetUrl, '')
+                            .replace(`.${defaultPhotographExtension}`, ''),
                         imageUrl: null,
                     };
                 }
