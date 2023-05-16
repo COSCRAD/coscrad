@@ -3,6 +3,7 @@ import { Photograph } from '../../../domain/models/photograph/entities/photograp
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceType } from '../../../domain/types/ResourceType';
+import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
@@ -21,6 +22,8 @@ import {
 const baseDigitalAssetUrl = `https://www.mymedia.org/downloads/`;
 
 process.env[BASE_DIGITAL_ASSET_URL] = baseDigitalAssetUrl;
+
+type OldPhotograph = Omit<Photograph, 'imageUrl'> & { filename: string };
 
 describe(`RemoveBaseDigitalAssetUrl`, () => {
     let testDatabaseProvider: ArangoDatabaseProvider;
@@ -82,9 +85,12 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
         }));
 
         // PHOTOGRAPHS
-        const dtoForPhotographToCheckManually: Omit<DatabaseDocument<DTO<Photograph>>, '_key'> = {
+        const dtoForPhotographToCheckManually: Omit<
+            DatabaseDocument<DTO<OldPhotograph>>,
+            '_key'
+        > = {
             type: ResourceType.photograph,
-            imageUrl: `flowers.png`,
+            filename: `flowers.png`,
             photographer: `James Rames`,
             dimensions: {
                 widthPX: 300,
@@ -94,7 +100,7 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
         };
 
         const originalPhotographDocumentsWithoutKeys: Omit<
-            DatabaseDocument<DTO<Photograph>>,
+            DatabaseDocument<DTO<OldPhotograph>>,
             '_key'
         >[] = [dtoForPhotographToCheckManually];
 
@@ -165,6 +171,12 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
                 );
 
             expect(idsOfPhotographDocumentsWithoutBaseDigitalAssetUrl).toEqual([]);
+
+            const idsOfPhotographsWithVestigialFilenameProperty = updatedPhotographDocuments.filter(
+                (newDoc) => !isNullOrUndefined((newDoc as unknown as OldPhotograph).filename)
+            );
+
+            expect(idsOfPhotographsWithVestigialFilenameProperty).toEqual([]);
         });
 
         it(`should be reverseable`, async () => {

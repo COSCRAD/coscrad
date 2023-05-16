@@ -211,7 +211,7 @@ export class ArangoDatabase {
             throw new Error(`No property '_key' was found on document: ${documentToUpdate}`);
 
         const query = `
-            UPDATE @updatedDto IN @@collectionName
+            UPDATE @updatedDto IN @@collectionName OPTIONS { keepNull: false }
         `;
 
         const bindVars = {
