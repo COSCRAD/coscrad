@@ -13,6 +13,8 @@ type TermDocument = DatabaseDocument<DTO<Term>>;
 
 type PhotographDocument = DatabaseDocument<DTO<Photograph>>;
 
+type OldPhotographDocument = Omit<PhotographDocument, 'imageUrl'> & { filename: string };
+
 /**
  * This is the name of the environment variable where the base digital asset url
  * (includes a trailing slash) should be stored.
@@ -58,10 +60,11 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
             })
         );
 
-        await queryRunner.update<PhotographDocument, PhotographDocument>(
+        await queryRunner.update<OldPhotographDocument, PhotographDocument>(
             ArangoCollectionId.photographs,
-            ({ imageUrl }) => ({
-                imageUrl: `${this.baseDigitalAssetUrl}${imageUrl}`,
+            ({ filename }) => ({
+                imageUrl: `${this.baseDigitalAssetUrl}${filename}`,
+                filename: null,
             })
         );
     }
@@ -78,12 +81,13 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
             }
         );
 
-        await queryRunner.update<PhotographDocument, PhotographDocument>(
+        await queryRunner.update<PhotographDocument, OldPhotographDocument>(
             ArangoCollectionId.photographs,
             ({ imageUrl }) => {
                 if (imageUrl.includes(this.baseDigitalAssetUrl)) {
                     return {
-                        imageUrl: imageUrl.replace(this.baseDigitalAssetUrl, ''),
+                        filename: imageUrl.replace(this.baseDigitalAssetUrl, ''),
+                        imageUrl: null,
                     };
                 }
             }
