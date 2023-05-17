@@ -51,6 +51,14 @@ export class Migrator {
             );
 
             await migration.up(queryRunner);
+
+            await queryRunner.create('migrations', {
+                _key: migration.sequenceNumber.toString(),
+                sequenceNumber: migration.sequenceNumber,
+                name: migration.name,
+                metadata,
+                dateApplied: Date.now(),
+            });
         }
     }
 

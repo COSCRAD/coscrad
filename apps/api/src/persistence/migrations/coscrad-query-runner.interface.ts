@@ -20,4 +20,6 @@ export interface ICoscradQueryRunner {
         collectionName: string,
         calculateUpdate: (oldDoc: TOldDocument) => Partial<UNewDocument>
     ): Promise<void>;
+
+    create<T>(collectionName: string, document: T): Promise<void>;
 }

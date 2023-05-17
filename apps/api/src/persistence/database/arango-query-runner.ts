@@ -34,4 +34,8 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
 
         await this.arangoDatabase.updateMany(updates, collectionName);
     }
+
+    async create<T>(collectionName: ArangoCollectionId, document: T) {
+        await this.arangoDatabase.create(document, collectionName);
+    }
 }
