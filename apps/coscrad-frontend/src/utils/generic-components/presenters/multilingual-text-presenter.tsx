@@ -48,21 +48,23 @@ export const MultilingualTextPresenter = ({
                             ? 'Translations'
                             : textItemWithDefaultLanguage.text}
                     </Typography>
-                    <Tooltip
-                        sx={{ paddingTop: 0, marginBottom: 0 }}
-                        title={`${getLabelForLanguage(
-                            textItemWithDefaultLanguage.languageCode
-                        )}, '${textItemWithDefaultLanguage.role}'`}
-                    >
-                        <IconButton>
-                            <LanguageIcon />
-                        </IconButton>
-                    </Tooltip>
+                    {isNullOrUndefined(textItemWithDefaultLanguage) ? null : (
+                        <Tooltip
+                            sx={{ paddingTop: 0, marginBottom: 0 }}
+                            title={`${getLabelForLanguage(
+                                textItemWithDefaultLanguage.languageCode
+                            )}, '${textItemWithDefaultLanguage.role}'`}
+                        >
+                            <IconButton>
+                                <LanguageIcon />
+                            </IconButton>
+                        </Tooltip>
+                    )}
                 </AccordionSummary>
                 <Divider />
-
                 {translations.map(({ languageCode, text, role }) => (
                     <TranslatedLanguageTextPresenter
+                        key={`${languageCode}-${role}`}
                         languageCode={languageCode}
                         text={text}
                         role={role}

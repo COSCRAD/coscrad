@@ -96,6 +96,7 @@ export const VocabularyListDetailFullViewPresenter = ({
             type={ResourceType.vocabularyList}
             data-testid={id}
         >
+            <div data-testid={id} />
             <Divider sx={{ marginTop: 2, marginBottom: 2, backgroundColor: 'primary.main' }} />
             <Carousel
                 propsForItems={selectedEntries.map(({ term }) => term)}
