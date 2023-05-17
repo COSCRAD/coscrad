@@ -10,7 +10,7 @@ import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { ResultOrError } from '../../types/ResultOrError';
 import { REPOSITORY_PROVIDER_TOKEN } from '../constants/persistenceConstants';
 
-export class DataExporter {
+export class DomainDataExporter {
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN) private readonly repositoryProvider: IRepositoryProvider
     ) {}

@@ -154,9 +154,6 @@ export abstract class ResourceQueryService<
     }
 
     public async validate(userWithGroups?: CoscradUserWithGroups): Promise<Maybe<string[]>> {
-        console.log({
-            userWithGroups,
-        });
         if (!userWithGroups || !userWithGroups.isAdmin()) return NotFound;
 
         const searchResult = await this.fetchManyDomainModels();

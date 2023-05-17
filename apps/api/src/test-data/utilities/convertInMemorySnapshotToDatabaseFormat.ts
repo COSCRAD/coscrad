@@ -12,11 +12,13 @@ import buildEdgeDocumentsFromCategoryNodeDTOs from '../../persistence/database/u
 import mapCategoryDTOToArangoDocument from '../../persistence/database/utilities/category/mapCategoryDTOToArangoDocument';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../../persistence/database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../../persistence/database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoMigrationRecord } from '../../persistence/migrations/arango-migration-record';
+import { DTO } from '../../types/DTO';
 
-type InMemoryDatabaseSnapshot = {
+export type InMemoryDatabaseSnapshot = {
     document: {
-        [K in Exclude<ArangoCollectionId, 'uuids'>]: unknown[];
-    } & { uuids: UuidDocument[] };
+        [K in Exclude<ArangoCollectionId, 'uuids' | 'migrations'>]: unknown[];
+    } & { uuids: UuidDocument[]; migrations: DTO<ArangoMigrationRecord>[] };
 
     edge: {
         [K in ArangoEdgeCollectionId]: Record<string, unknown>[];
@@ -24,6 +26,10 @@ type InMemoryDatabaseSnapshot = {
 };
 
 /**
+ * TODO [https://www.pivotaltracker.com/story/show/185212566]
+ * Consider having a single source of truth for domain-to-persistence
+ * layer mapping.
+ *
  * TODO Leverage `DeluxeInMemroySnapshot` for this logic.
  */
 export default (snapshot: InMemorySnapshot): InMemoryDatabaseSnapshot => {
