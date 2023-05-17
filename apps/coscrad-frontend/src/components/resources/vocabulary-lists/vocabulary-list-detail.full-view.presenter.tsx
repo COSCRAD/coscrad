@@ -6,8 +6,8 @@ import {
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Divider } from '@mui/material';
-import { ResourceDetailFullViewPresenter } from 'apps/coscrad-frontend/src/utils/generic-components';
 import { useReducer } from 'react';
+import { ResourceDetailFullViewPresenter } from '../../../../../../apps/coscrad-frontend/src/utils/generic-components';
 import { Carousel } from '../../higher-order-components/carousel';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
 import doValuesMatchFilters from './do-values-match-filters';
@@ -96,7 +96,7 @@ export const VocabularyListDetailFullViewPresenter = ({
             type={ResourceType.vocabularyList}
             data-testid={id}
         >
-            <Divider sx={{ marginTop: 1, marginBottom: 1 }} />
+            <Divider sx={{ marginTop: 2, marginBottom: 2, backgroundColor: 'primary.main' }} />
             <Carousel
                 propsForItems={selectedEntries.map(({ term }) => term)}
                 Presenter={TermDetailFullViewPresenter}

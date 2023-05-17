@@ -41,7 +41,7 @@ export const MultilingualTextPresenter = ({
 
     return (
         <Box>
-            <Accordion defaultExpanded variant="outlined">
+            <Accordion variant="outlined">
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography variant="h4" sx={{ margin: '0' }}>
                         {isNullOrUndefined(textItemWithDefaultLanguage)

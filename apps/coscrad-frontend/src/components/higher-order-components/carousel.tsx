@@ -1,4 +1,4 @@
-import { Box, Button, Divider } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useState } from 'react';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 
@@ -34,7 +34,6 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
     return (
         <Box>
             <Presenter {...propsForSelectedItem} />
-            <Divider sx={{ mb: 1 }} />
             <Box sx={{ textAlign: 'center' }}>
                 <Button
                     color="primary"
@@ -42,7 +41,7 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
                     sx={{ borderRadius: '20px 0px 0px 20px' }}
                     onClick={(_) => setIndex(cyclicDecrement(indexToUse, numberOfItems))}
                 >
-                    <ArrowBackIosIcon />
+                    <ArrowBackIosIcon sx={{ fontSize: '2em' }} />
                 </Button>
                 <Button
                     color="primary"
@@ -50,7 +49,7 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
                     sx={{ borderRadius: '0px 20px 20px 0px' }}
                     onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}
                 >
-                    <ArrowForwardIosIcon />
+                    <ArrowForwardIosIcon sx={{ fontSize: '2em' }} />
                 </Button>
             </Box>
         </Box>

@@ -15,7 +15,6 @@ export const VocabularyListForm = ({
     formState,
 }: VocabularyListFormProps): JSX.Element => (
     <Box sx={{ display: 'flex' }} mt={1} mb={1}>
-        {/* <Typography variant="h4">Filter the Vocabulary List</Typography> */}
         {/* TODO [https://www.pivotaltracker.com/story/show/184066412] Use `DynamicForm` for this */}
         {/* Alternate option is to pass the Stack component inline on FormControl */}
 
