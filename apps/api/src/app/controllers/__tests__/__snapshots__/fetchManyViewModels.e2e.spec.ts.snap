@@ -1062,13 +1062,13 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-      "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
+      "imageUrl": "https://kaaltsidakah.net/coscrad/Adiitsii-Running.png",
       "name": {
         "items": [
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "Adiitsii-Running",
+            "text": "https://kaaltsidakah.net/coscrad/Adiitsii-Running.png",
           },
         ],
       },
@@ -1110,13 +1110,13 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
+      "imageUrl": "https://kaaltsidakah.net/coscrad/Nuu-Story.png",
       "name": {
         "items": [
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "Nuu-Story",
+            "text": "https://kaaltsidakah.net/coscrad/Nuu-Story.png",
           },
         ],
       },
@@ -1154,13 +1154,13 @@ exports[`When fetching multiple resources GET /resources/photographs when all of
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
+      "imageUrl": "https://kaaltsidakah.net/coscrad/TwoBrothersPole.png",
       "name": {
         "items": [
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "TwoBrothersPole",
+            "text": "https://kaaltsidakah.net/coscrad/TwoBrothersPole.png",
           },
         ],
       },
@@ -1178,13 +1178,13 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110000",
-      "imageURL": "https://www.mysound.org/downloads/Adiitsii-Running.png",
+      "imageUrl": "https://kaaltsidakah.net/coscrad/Adiitsii-Running.png",
       "name": {
         "items": [
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "Adiitsii-Running",
+            "text": "https://kaaltsidakah.net/coscrad/Adiitsii-Running.png",
           },
         ],
       },
@@ -1226,13 +1226,13 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "imageURL": "https://www.mysound.org/downloads/Nuu-Story.png",
+      "imageUrl": "https://kaaltsidakah.net/coscrad/Nuu-Story.png",
       "name": {
         "items": [
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "Nuu-Story",
+            "text": "https://kaaltsidakah.net/coscrad/Nuu-Story.png",
           },
         ],
       },
@@ -1270,13 +1270,13 @@ exports[`When fetching multiple resources GET /resources/photographs when some o
     {
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-      "imageURL": "https://www.mysound.org/downloads/TwoBrothersPole.png",
+      "imageUrl": "https://kaaltsidakah.net/coscrad/TwoBrothersPole.png",
       "name": {
         "items": [
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "TwoBrothersPole",
+            "text": "https://kaaltsidakah.net/coscrad/TwoBrothersPole.png",
           },
         ],
       },

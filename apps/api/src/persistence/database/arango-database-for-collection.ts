@@ -6,7 +6,7 @@ import { Maybe } from '../../lib/types/maybe';
 import { DeepPartial } from '../../types/DeepPartial';
 import { ArangoDatabase } from './arango-database';
 import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
-import { DatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
 
 /**
  * Note that at this level we are working with a `DatabaseDocument` (has _key
@@ -30,15 +30,18 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     }
 
     // Queries (return information)
-    fetchById(id: AggregateId): Promise<Maybe<DatabaseDocument<TEntity>>> {
-        return this.#arangoDatabase.fetchById<DatabaseDocument<TEntity>>(id, this.#collectionID);
+    fetchById(id: AggregateId): Promise<Maybe<ArangoDatabaseDocument<TEntity>>> {
+        return this.#arangoDatabase.fetchById<ArangoDatabaseDocument<TEntity>>(
+            id,
+            this.#collectionID
+        );
     }
 
-    fetchMany(specification?: ISpecification<TEntity>): Promise<DatabaseDocument<TEntity>[]> {
-        return this.#arangoDatabase.fetchMany<DatabaseDocument<TEntity>>(
+    fetchMany(specification?: ISpecification<TEntity>): Promise<ArangoDatabaseDocument<TEntity>[]> {
+        return this.#arangoDatabase.fetchMany<ArangoDatabaseDocument<TEntity>>(
             this.#collectionID,
             // TODO remove cast, handle mapping layer
-            specification as unknown as ISpecification<DatabaseDocument<TEntity>>
+            specification as unknown as ISpecification<ArangoDatabaseDocument<TEntity>>
         );
     }
 
@@ -47,16 +50,16 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     }
 
     // Commands (mutate state)
-    create(DatabaseDocument: DatabaseDocument<TEntity>) {
+    create(DatabaseDocument: ArangoDatabaseDocument<TEntity>) {
         // Handle the difference in _id \ _key between model and database
         return this.#arangoDatabase.create(DatabaseDocument, this.#collectionID);
     }
 
-    createMany(DatabaseDocuments: DatabaseDocument<TEntity>[]) {
+    createMany(DatabaseDocuments: ArangoDatabaseDocument<TEntity>[]) {
         return this.#arangoDatabase.createMany(DatabaseDocuments, this.#collectionID);
     }
 
-    update(id: AggregateId, updateDTO: DeepPartial<DatabaseDocument<TEntity>>) {
+    update(id: AggregateId, updateDTO: DeepPartial<ArangoDatabaseDocument<TEntity>>) {
         return this.#arangoDatabase.update(id, updateDTO, this.#collectionID);
     }
 }

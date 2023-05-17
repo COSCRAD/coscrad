@@ -694,7 +694,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "isOptional": false,
         "label": "ID",
       },
-      "imageURL": {
+      "imageUrl": {
         "coscradDataType": "URL",
         "description": "a web link to a digital version of the photograph",
         "isArray": false,

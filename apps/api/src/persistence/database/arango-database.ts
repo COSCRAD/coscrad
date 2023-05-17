@@ -40,6 +40,10 @@ export class ArangoDatabase {
         this.#db = database;
     }
 
+    getDatabaseName(): string {
+        return this.#db.name;
+    }
+
     fetchById = async <TDatabaseDTO extends DatabaseDTO<HasAggregateId>>(
         id: string,
         collectionName: string
@@ -211,7 +215,7 @@ export class ArangoDatabase {
             throw new Error(`No property '_key' was found on document: ${documentToUpdate}`);
 
         const query = `
-            UPDATE @updatedDto IN @@collectionName
+            UPDATE @updatedDto IN @@collectionName OPTIONS { keepNull: false }
         `;
 
         const bindVars = {
@@ -238,6 +242,34 @@ export class ArangoDatabase {
             .catch((err) => {
                 throw new InternalError(
                     `Failed to update dto: ${updatedDto} in ${collectionName}. \n Arango errors: ${err}`
+                );
+            });
+    };
+
+    updateMany = async <TUpdatedDoc extends { _key: string }>(
+        docUpdates: TUpdatedDoc[],
+        collectionName: string
+    ): Promise<void> => {
+        const query = `
+            FOR docUpdate in @docUpdates
+            UPDATE docUpdate IN @@collectionName OPTIONS { keepNull: false }
+        `;
+
+        const bindVars = {
+            docUpdates,
+            '@collectionName': collectionName,
+        };
+
+        await this.#db
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((err) => {
+                throw new InternalError(
+                    `Failed to update dto: ${JSON.stringify(
+                        docUpdates
+                    )} in ${collectionName}. \n Arango errors: ${err}`
                 );
             });
     };

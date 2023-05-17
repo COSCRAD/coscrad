@@ -49,7 +49,7 @@ export class Term extends Resource {
     @NonEmptyString({
         isOptional,
         label: 'Audio Filename',
-        description: 'the name of the audio file',
+        description: 'a url link to the audio file',
     })
     readonly audioFilename?: string;
 
