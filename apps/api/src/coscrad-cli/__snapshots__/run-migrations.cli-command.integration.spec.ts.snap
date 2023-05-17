@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`run migrations when there is one migration to run should run the migration with updates to the db 1`] = `
+{
+  "_id": "migrations/1",
+  "_key": "1",
+  "_rev": "_gAshz4i---",
+  "dateApplied": 1684359337893,
+  "metadata": {
+    "dateAuthored": "20230513",
+    "description": "convert legacy term and photograph media urls from relative to absolute paths and append extensions",
+  },
+  "name": "RemoveBaseDigitalAssetUrl",
+  "sequenceNumber": 1,
+}
+`;

@@ -5,7 +5,6 @@ import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDumm
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../../lib/errors/InternalError';
-import { NotFound } from '../../../lib/types/not-found';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
 import { ArangoConnectionProvider } from '../../database/arango-connection.provider';
@@ -182,16 +181,6 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
             );
 
             expect(idsOfPhotographsWithVestigialFilenameProperty).toEqual([]);
-
-            const migrationSequenceNumber = 1;
-
-            const migrationRecord = await testDatabaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.migrations)
-                .fetchById(migrationSequenceNumber.toString());
-
-            expect(migrationRecord).not.toBe(NotFound);
-
-            expect(migrationRecord).toMatchSnapshot();
         });
 
         it(`should be reverseable`, async () => {

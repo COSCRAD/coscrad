@@ -4,6 +4,7 @@ import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { ResourceType } from '../domain/types/ResourceType';
+import { NotFound } from '../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
@@ -113,6 +114,16 @@ describe(`run migrations`, () => {
             );
 
             expect((updatedDocument as unknown as { filename: string }).filename).toBeUndefined();
+
+            const migrationSequenceNumber = 1;
+
+            const migrationRecord = await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.migrations)
+                .fetchById(migrationSequenceNumber.toString());
+
+            expect(migrationRecord).not.toBe(NotFound);
+
+            expect(migrationRecord).toMatchSnapshot();
         });
     });
 });

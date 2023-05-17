@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`RemoveBaseDigitalAssetUrl when there are documents (terms, vocabularyLists, and photographs) that should be updated should apply the appropriate updates 1`] = `Promise {}`;
