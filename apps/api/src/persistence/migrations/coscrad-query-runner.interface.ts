@@ -1,16 +1,22 @@
 import { HasId } from '@coscrad/api-interfaces';
-import { DatabaseDTO } from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDTO';
 
 export interface UpdateQueryOptions<TOldDocument> {
     propertiesToRemove?: (keyof TOldDocument)[];
 }
 
 /**
- * There's not much reason for this interface if we are going to use `DatabaseDTO`,
- * which is Arango specific, here. We might want to do away with this.
+ * Note that this really isn't doing a lot right now. That's because the
+ * it depends on the `ArangoDatabaseDocument` specific type. To move to
+ * another db, we would need to abstract over this by forcing the caller
+ * to inject the `thin mapping layer` to convert a domain DTO to a database document.
+ * When doing this for arango, we convert `id` to `_key`, for example.
  */
 export interface ICoscradQueryRunner {
-    update<TOldDocument extends DatabaseDTO<HasId>, UNewDocument>(
+    update<
+        TOldDocument extends ArangoDatabaseDocument<HasId>,
+        UNewDocument extends ArangoDatabaseDocument<HasId>
+    >(
         collectionName: string,
         calculateUpdate: (oldDoc: TOldDocument) => Partial<UNewDocument>
     ): Promise<void>;

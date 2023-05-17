@@ -5,7 +5,7 @@ import { ICoscradQueryRunner } from '../migrations/coscrad-query-runner.interfac
 import { ArangoDatabase } from './arango-database';
 import { ArangoCollectionId } from './collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from './database.provider';
-import { DatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDTO';
 
 @Injectable()
 export class ArangoQueryRunner implements ICoscradQueryRunner {
@@ -15,7 +15,7 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
         this.arangoDatabase = arangoDatabaseProvider.getDBInstance();
     }
 
-    async update<TOldDocument extends DatabaseDocument<HasId>, UNewDocument>(
+    async update<TOldDocument extends ArangoDatabaseDocument<HasId>, UNewDocument>(
         collectionName: ArangoCollectionId,
         calculateUpdate: (oldDocument: TOldDocument) => UNewDocument
     ): Promise<void> {

@@ -1,8 +1,8 @@
 import { Category } from '../../../../domain/models/categories/entities/category.entity';
 import buildCategoryDocHandle from './../buildCategoryDocHandle';
-import { DatabaseDocument } from './../mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from './../mapEntityDTOToDatabaseDTO';
 
-export default (categoryNodes: Category[]): DatabaseDocument<Category>[] =>
+export default (categoryNodes: Category[]): ArangoDatabaseDocument<Category>[] =>
     categoryNodes.reduce(
         (acc, { childrenIDs, id: parentId }) =>
             childrenIDs.length === 0

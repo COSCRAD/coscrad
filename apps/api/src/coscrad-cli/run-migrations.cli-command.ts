@@ -1,8 +1,8 @@
 import { Inject } from '@nestjs/common';
 import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
-import { Migrator } from '../persistence/migrations/migrator';
+import { Migrator } from '../persistence/migrations';
 import { CliCommand, CliCommandRunner } from './cli-command.decorator';
-import { COSCRAD_CLI_LOGGER_TOKEN, ICoscradCliLogger } from './logging';
+import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
 @CliCommand({
     description: `runs all available database migrations`,
@@ -13,7 +13,7 @@ export class RunMigrationsCliCommand extends CliCommandRunner {
         private readonly migrator: Migrator,
         // TODO program to ICoscradQueryRunner and inject at run-time
         private readonly queryRunner: ArangoQueryRunner,
-        @Inject(COSCRAD_CLI_LOGGER_TOKEN) private readonly logger: ICoscradCliLogger
+        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         super();
 

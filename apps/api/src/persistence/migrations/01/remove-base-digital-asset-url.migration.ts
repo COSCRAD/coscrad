@@ -4,16 +4,16 @@ import { Term } from '../../../domain/models/term/entities/term.entity';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DTO } from '../../../types/DTO';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
-import { DatabaseDocument } from '../../database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from '../../database/utilities/mapEntityDTOToDatabaseDTO';
 import { ICoscradMigration } from '../coscrad-migration.interface';
 import { ICoscradQueryRunner } from '../coscrad-query-runner.interface';
 import { Migration } from '../decorators/migration.decorator';
 
-type TermDocument = DatabaseDocument<DTO<Term>>;
+type TermDocument = ArangoDatabaseDocument<DTO<Term>>;
 
 const defaultAudioExtension = 'mp3';
 
-type PhotographDocument = DatabaseDocument<DTO<Photograph>>;
+type PhotographDocument = ArangoDatabaseDocument<DTO<Photograph>>;
 
 type OldPhotographDocument = Omit<PhotographDocument, 'imageUrl'> & { filename: string };
 

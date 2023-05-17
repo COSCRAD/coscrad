@@ -5,13 +5,11 @@ import createTestModule from '../app/controllers/__tests__/createTestModule';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
-import { ICoscradMigration } from '../persistence/migrations/coscrad-migration.interface';
-import { Migration } from '../persistence/migrations/decorators/migration.decorator';
-import { Migrator } from '../persistence/migrations/migrator';
+import { ICoscradMigration, Migration, Migrator } from '../persistence/migrations';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import { CoscradCliModule } from './coscrad-cli.module';
-import { COSCRAD_CLI_LOGGER_TOKEN } from './logging';
+import { COSCRAD_LOGGER_TOKEN } from './logging';
 import { buildMockLogger } from './logging/__tests__';
 
 const cliCommandName = 'list-migrations';
@@ -126,7 +124,7 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
             .useValue(testRepositoryProvider)
             .overrideProvider(Migrator)
             .useValue(dummyMigrator)
-            .overrideProvider(COSCRAD_CLI_LOGGER_TOKEN)
+            .overrideProvider(COSCRAD_LOGGER_TOKEN)
             .useValue(mockLogger)
             .compile();
     });

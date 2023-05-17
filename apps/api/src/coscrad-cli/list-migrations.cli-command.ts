@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
-import { Migrator } from '../persistence/migrations/migrator';
+import { Migrator } from '../persistence/migrations';
 import { CliCommand, CliCommandRunner } from './cli-command.decorator';
-import { COSCRAD_CLI_LOGGER_TOKEN, ICoscradCliLogger } from './logging';
+import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
 @CliCommand({
     description: `lists available database migrations`,
@@ -10,7 +10,7 @@ import { COSCRAD_CLI_LOGGER_TOKEN, ICoscradCliLogger } from './logging';
 export class ListMigrationsCliCommand extends CliCommandRunner {
     constructor(
         private readonly migrator: Migrator,
-        @Inject(COSCRAD_CLI_LOGGER_TOKEN) private readonly logger: ICoscradCliLogger
+        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         super();
     }

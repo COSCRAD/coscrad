@@ -12,7 +12,7 @@ import { ResultOrError } from '../../types/ResultOrError';
 import { ArangoDatabaseForCollection } from '../database/arango-database-for-collection';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../database/database.provider';
-import { DatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDTO';
+import { ArangoDatabaseDocument } from '../database/utilities/mapEntityDTOToDatabaseDTO';
 
 /**
  * TODO We need to add error handling. It is especially important that if
@@ -29,9 +29,9 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
     // Typically just uses the model constructor
     #instanceFactory: InstanceFactory<TEntity>;
 
-    #mapDocumentToEntityDTO: (doc: DatabaseDocument<TEntity>) => DTO<TEntity>;
+    #mapDocumentToEntityDTO: (doc: ArangoDatabaseDocument<TEntity>) => DTO<TEntity>;
 
-    #mapEntityDTOToDocument: (dto: DTO<TEntity>) => DatabaseDocument<TEntity>;
+    #mapEntityDTOToDocument: (dto: DTO<TEntity>) => ArangoDatabaseDocument<TEntity>;
 
     constructor(
         arangoDatabaseProvider: ArangoDatabaseProvider,
@@ -88,7 +88,7 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
             .map((dto) => this.#mapEntityDTOToDocument(dto));
 
         return this.#arangoDatabaseForEntitysCollection
-            .createMany(createDTOs as DatabaseDocument<TEntity>[])
+            .createMany(createDTOs as ArangoDatabaseDocument<TEntity>[])
             .catch((err) => {
                 throw new InternalError(
                     `Failed to create many entities: ${JSON.stringify(
@@ -112,7 +112,7 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
 
         return this.#arangoDatabaseForEntitysCollection.update(
             updatedEntity.id,
-            updatedDTO as DeepPartial<DatabaseDocument<TEntity>>
+            updatedDTO as DeepPartial<ArangoDatabaseDocument<TEntity>>
         );
     }
 }

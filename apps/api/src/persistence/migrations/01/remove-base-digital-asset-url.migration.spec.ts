@@ -11,7 +11,10 @@ import { ArangoConnectionProvider } from '../../database/arango-connection.provi
 import { ArangoQueryRunner } from '../../database/arango-query-runner';
 import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../database/database.provider';
-import { DatabaseDocument, DatabaseDTO } from '../../database/utilities/mapEntityDTOToDatabaseDTO';
+import {
+    ArangoDatabaseDocument,
+    DatabaseDTO,
+} from '../../database/utilities/mapEntityDTOToDatabaseDTO';
 import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../repositories/__tests__/TestRepositoryProvider';
 import {
@@ -66,7 +69,7 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
         });
 
         // TERMS
-        const dtoForTermToCheckManually: Omit<DatabaseDocument<DTO<Term>>, '_key'> = {
+        const dtoForTermToCheckManually: Omit<ArangoDatabaseDocument<DTO<Term>>, '_key'> = {
             term: `so bogus`,
             termEnglish: `so bogus (English)`,
             audioFilename: `bogus`,
@@ -75,9 +78,8 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
             contributorId: '55',
         };
 
-        const originalTermDocumentsWithoutKeys: Omit<DatabaseDocument<DTO<Term>>, '_key'>[] = [
-            dtoForTermToCheckManually,
-        ];
+        const originalTermDocumentsWithoutKeys: Omit<ArangoDatabaseDocument<DTO<Term>>, '_key'>[] =
+            [dtoForTermToCheckManually];
 
         const originalTermDocuments = originalTermDocumentsWithoutKeys.map((partialDto, index) => ({
             ...partialDto,
@@ -86,7 +88,7 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
 
         // PHOTOGRAPHS
         const dtoForPhotographToCheckManually: Omit<
-            DatabaseDocument<DTO<OldPhotograph>>,
+            ArangoDatabaseDocument<DTO<OldPhotograph>>,
             '_key'
         > = {
             type: ResourceType.photograph,
@@ -100,7 +102,7 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
         };
 
         const originalPhotographDocumentsWithoutKeys: Omit<
-            DatabaseDocument<DTO<OldPhotograph>>,
+            ArangoDatabaseDocument<DTO<OldPhotograph>>,
             '_key'
         >[] = [dtoForPhotographToCheckManually];
 
@@ -147,13 +149,15 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
 
             const { audioFilename } = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.terms)
-                .fetchById(idForTermToCheckManually)) as unknown as DatabaseDocument<DTO<Term>>;
+                .fetchById(idForTermToCheckManually)) as unknown as ArangoDatabaseDocument<
+                DTO<Term>
+            >;
 
             expect(audioFilename).toBe(`https://www.mymedia.org/downloads/bogus.mp3`);
 
             const { imageUrl } = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.photographs)
-                .fetchById(idForPhotographToCheckManually)) as unknown as DatabaseDocument<
+                .fetchById(idForPhotographToCheckManually)) as unknown as ArangoDatabaseDocument<
                 DTO<Photograph>
             >;
 
