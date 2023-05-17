@@ -1,7 +1,6 @@
-import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { CoscradMultilingualText, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { ExternalEnum, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 
 export class PlayListCompositeId {
@@ -41,9 +40,25 @@ export class CreatePlayList implements ICommandBase {
         typeof AggregateType.playlist
     >;
 
-    @CoscradMultilingualText({
+    @NonEmptyString({
         label: 'name',
-        description: 'the name of the playlist',
+        description: 'name of the playlist',
     })
-    readonly name: MultilingualText;
+    name: string;
+
+    @ExternalEnum(
+        {
+            enumLabel: `language code`,
+            enumName: `LanguageCode`,
+            labelsAndValues: Object.entries(LanguageCode).map(([label, languageCode]) => ({
+                label,
+                value: languageCode,
+            })),
+        },
+        {
+            label: 'language code',
+            description: 'the language being used to name the playlist',
+        }
+    )
+    languageCodeForName: LanguageCode;
 }

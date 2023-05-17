@@ -1,4 +1,4 @@
-import { LanguageCode, MultilingualTextItemRole, ResourceType } from '@coscrad/api-interfaces';
+import { LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
@@ -8,7 +8,6 @@ import { NotFound } from '../../../../lib/types/not-found';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../types/DTO';
-import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
@@ -36,28 +35,8 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreatePla
     type: commandType,
     payload: {
         aggregateCompositeIdentifier: { id, type: AggregateType.playlist },
-        name: new MultilingualText({
-            items: [],
-        })
-            .append(
-                new MultilingualTextItem({
-                    languageCode: LanguageCode.Chilcotin,
-                    role: MultilingualTextItemRole.original,
-                    text: 'dummy playlist name',
-                })
-            )
-            .toDTO(),
-    },
-});
-
-const buildInvalidFSA = (
-    id: AggregateId,
-    payloadOverrides: Partial<Record<keyof CreatePlayList, unknown>> = {}
-): FluxStandardAction<DTO<CreatePlayList>> => ({
-    type: commandType,
-    payload: {
-        ...buildValidCommandFSA(id).payload,
-        ...(payloadOverrides as Partial<CreatePlayList>),
+        name: 'dummy playlist name',
+        languageCodeForName: LanguageCode.Chilcotin,
     },
 });
 
@@ -197,18 +176,5 @@ describe(commandType, () => {
         });
     });
 
-    describe('when an invariant validation rule is not satisfied by the new playlist', () => {
-        describe('when the playlist has no name in any language', () => {
-            it('should fail', async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    systemUserId: dummyAdminUserId,
-                    buildCommandFSA: (id: AggregateId) =>
-                        buildInvalidFSA(id, {
-                            name: new MultilingualText({ items: [] }),
-                        }),
-                    initialState: emptyInitialState,
-                });
-            });
-        });
-    });
+    // Note that it's not possible to invalidate the invariants by design
 });

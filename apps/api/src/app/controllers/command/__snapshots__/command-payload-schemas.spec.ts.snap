@@ -1283,9 +1283,48 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
         },
       },
+      "languageCodeForName": {
+        "complexDataType": "ENUM",
+        "description": "the language being used to name the playlist",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language code",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "eng",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
       "name": {
-        "coscradDataType": "MULTILINGUAL_TEXT",
-        "description": "the name of the playlist",
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "name of the playlist",
         "isArray": false,
         "isOptional": false,
         "label": "name",
