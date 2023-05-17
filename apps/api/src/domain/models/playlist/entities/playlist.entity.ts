@@ -3,13 +3,14 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { Resource } from '../../resource.entity';
 import { PlaylistItem } from './playlist-item.entity';
 
-@RegisterIndexScopedCommands([])
+@RegisterIndexScopedCommands(['CREATE_PLAYLIST'])
 export class Playlist extends Resource {
     readonly type = ResourceType.playlist;
 
@@ -51,8 +52,9 @@ export class Playlist extends Resource {
     }
 
     protected validateComplexInvariants(): InternalError[] {
-        // TODO validate invariants and tests
-        return [];
+        const nameValidationResult = this.name.validateComplexInvariants();
+
+        return isValid(nameValidationResult) ? [] : [nameValidationResult];
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier<AggregateType>[] {
