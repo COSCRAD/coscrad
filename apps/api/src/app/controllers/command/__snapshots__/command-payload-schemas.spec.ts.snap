@@ -1256,5 +1256,81 @@ exports[`command payload schemas Command payload schema should match the snapsho
     },
     "type": "ADD_LINE_ITEM_TO_TRANSCRIPT",
   },
+  {
+    "description": "Creates a new playlist",
+    "label": "Create PLaylist",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "song",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "languageCodeForName": {
+        "complexDataType": "ENUM",
+        "description": "the language being used to name the playlist",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language code",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "eng",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "name": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "name of the playlist",
+        "isArray": false,
+        "isOptional": false,
+        "label": "name",
+      },
+    },
+    "type": "CREATE_PLAYLIST",
+  },
 ]
 `;
