@@ -1,20 +1,16 @@
 import { IPhotographViewModel } from '@coscrad/api-interfaces';
-import { FromDomainModel, URL } from '@coscrad/data-types';
+import { FromDomainModel } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Photograph } from '../../../domain/models/photograph/entities/photograph.entity';
 import { BaseViewModel } from './base.view-model';
-import buildFullDigitalAssetURL from './utilities/buildFullDigitalAssetURL';
 
 export class PhotographViewModel extends BaseViewModel implements IPhotographViewModel {
     @ApiProperty({
         example: 'https://www.myimages.com/mountains.png',
         description: 'a url where the client can fetch a digital version of the photograph',
     })
-    @URL({
-        label: 'image link',
-        description: 'a web link to a digital version of the photograph',
-    })
-    readonly imageURL: string;
+    @FromDomainModel(Photograph)
+    readonly imageUrl: string;
 
     @ApiProperty({
         example: 'Justin Winters',
@@ -30,13 +26,13 @@ export class PhotographViewModel extends BaseViewModel implements IPhotographVie
      * there.
      */
 
-    constructor(photograph: Photograph, baseURL: string) {
+    constructor(photograph: Photograph) {
         super(photograph);
 
-        const { filename, photographer } = photograph;
+        const { imageUrl, photographer } = photograph;
 
-        // We need to store the MIME/type on the Photograph domain model
-        this.imageURL = buildFullDigitalAssetURL(baseURL, filename, 'png');
+        // TODO make `imageUrl` a `mediaItemId` instead
+        this.imageUrl = imageUrl;
 
         this.photographer = photographer;
     }

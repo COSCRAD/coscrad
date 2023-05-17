@@ -1,6 +1,5 @@
 import { ITermViewModel } from '@coscrad/api-interfaces';
 import { Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
@@ -17,16 +16,13 @@ export class TermQueryService extends ResourceQueryService<Term, ITermViewModel>
 
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider,
-        @Inject(CommandInfoService) commandInfoService: CommandInfoService,
-        private readonly configService: ConfigService
+        @Inject(CommandInfoService) commandInfoService: CommandInfoService
     ) {
         super(repositoryProvider, commandInfoService);
     }
 
     buildViewModel(term: Term) {
-        const baseAudioURL = this.configService.get<string>('BASE_DIGITAL_ASSET_URL');
-
-        return new TermViewModel(term, baseAudioURL);
+        return new TermViewModel(term);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {

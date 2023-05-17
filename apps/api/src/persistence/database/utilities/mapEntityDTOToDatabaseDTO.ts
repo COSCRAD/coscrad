@@ -12,7 +12,7 @@ export type DatabaseDTO<TEntityDTO extends HasAggregateId = HasAggregateId> = Om
     _key: string;
 };
 
-export type DatabaseDocument<TEntity extends HasAggregateId> = TEntity extends EdgeConnection
+export type ArangoDatabaseDocument<TEntity extends HasAggregateId> = TEntity extends EdgeConnection
     ? HasArangoDocumentDirectionAttributes<DatabaseDTO<TEntity>>
     : DatabaseDTO<TEntity>;
 
