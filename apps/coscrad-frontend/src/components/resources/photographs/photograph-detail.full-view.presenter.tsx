@@ -5,13 +5,13 @@ import { ResourceNamePresenter } from '../../../utils/generic-components/present
 
 export const PhotographDetailFullViewPresenter = ({
     id,
-    imageURL,
+    imageUrl,
 }: ICategorizableDetailQueryResult<IPhotographViewModel>): JSX.Element => {
     const name = 'Totem Pole';
 
     // Simulating image object retrieved from Digital Asset Manager
     const image = {
-        src: imageURL,
+        src: imageUrl,
         width: 2000,
         height: 1329,
         title: 'Haida play Singii Ganguu',

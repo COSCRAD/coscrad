@@ -1,6 +1,5 @@
 import { IPhotographViewModel } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
@@ -16,17 +15,13 @@ export class PhotographQueryService extends ResourceQueryService<Photograph, IPh
 
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider,
-        @Inject(CommandInfoService) commandInfoService: CommandInfoService,
-        private readonly configService: ConfigService
+        @Inject(CommandInfoService) commandInfoService: CommandInfoService
     ) {
         super(repositoryProvider, commandInfoService);
     }
 
     buildViewModel(photo: Photograph): IPhotographViewModel {
-        return new PhotographViewModel(
-            photo,
-            this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
-        );
+        return new PhotographViewModel(photo);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {

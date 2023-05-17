@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
@@ -24,8 +23,7 @@ export class VocabularyListQueryService extends ResourceQueryService<
 
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider,
-        @Inject(CommandInfoService) commandInfoService: CommandInfoService,
-        private readonly configService: ConfigService
+        @Inject(CommandInfoService) commandInfoService: CommandInfoService
     ) {
         super(repositoryProvider, commandInfoService);
     }
@@ -34,11 +32,7 @@ export class VocabularyListQueryService extends ResourceQueryService<
         vocabularyList: VocabularyList,
         { resources: { term: allTerms } }: InMemorySnapshot
     ): VocabularyListViewModel {
-        return new VocabularyListViewModel(
-            vocabularyList,
-            allTerms,
-            this.configService.get<string>('BASE_DIGITAL_ASSET_URL')
-        );
+        return new VocabularyListViewModel(vocabularyList, allTerms);
     }
 
     override async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
