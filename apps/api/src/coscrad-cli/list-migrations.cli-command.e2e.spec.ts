@@ -126,6 +126,8 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
             .useValue(dummyMigrator)
             .overrideProvider(COSCRAD_LOGGER_TOKEN)
             .useValue(mockLogger)
+            .overrideProvider(ArangoDatabaseProvider)
+            .useValue(databaseProvider)
             .compile();
     });
 

@@ -26,7 +26,7 @@ const defaultPhotographExtension = 'png';
 export const BASE_DIGITAL_ASSET_URL = 'BASE_DIGITAL_ASSET_URL';
 
 @Migration({
-    description: `convert legacy media urls from relative to absolute paths`,
+    description: `convert legacy term and photograph media urls from relative to absolute paths and append extensions`,
     // TODO Should this be a date instead?
     dateAuthored: '20230513',
 })
@@ -38,6 +38,10 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
     readonly name = `RemoveBaseDigitalAssetUrl`;
 
     constructor() {
+        this.baseDigitalAssetUrl = process.env[BASE_DIGITAL_ASSET_URL] || null;
+    }
+
+    async up(queryRunner: ICoscradQueryRunner): Promise<void> {
         /**
          * Note that we require this to be set as an environment variable so that
          * different instances can run the migration with different values for their
@@ -46,7 +50,6 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
          * interfere with the actual environment-variable based config. This is
          * also why we do not inject a config service here.
          */
-        this.baseDigitalAssetUrl = process.env[BASE_DIGITAL_ASSET_URL] || null;
 
         if (!isNonEmptyString(this.baseDigitalAssetUrl)) {
             // fail fast
@@ -54,9 +57,7 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
                 `Failed to parse ${BASE_DIGITAL_ASSET_URL} from the environment for migration`
             );
         }
-    }
 
-    async up(queryRunner: ICoscradQueryRunner): Promise<void> {
         await queryRunner.update<TermDocument, TermDocument>(
             ArangoCollectionId.terms,
             ({ audioFilename }) => ({
@@ -74,6 +75,13 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
     }
 
     async down(queryRunner: ICoscradQueryRunner): Promise<void> {
+        if (!isNonEmptyString(this.baseDigitalAssetUrl)) {
+            // fail fast
+            throw new InternalError(
+                `Failed to parse ${BASE_DIGITAL_ASSET_URL} from the environment for migration`
+            );
+        }
+
         await queryRunner.update<TermDocument, TermDocument>(
             ArangoCollectionId.terms,
             ({ audioFilename }) => {

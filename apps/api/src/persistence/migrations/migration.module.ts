@@ -18,6 +18,8 @@ export class MigrationModule implements OnApplicationBootstrap {
     async onApplicationBootstrap() {
         const migrationCtorsAndMetadata = await this.finderService.find();
 
+        console.log({ migrationCtorsAndMetadata });
+
         migrationCtorsAndMetadata.forEach(({ metadata, migrationCtor }) => {
             this.migrator.register(migrationCtor, metadata);
         });

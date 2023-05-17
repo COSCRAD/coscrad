@@ -6,6 +6,7 @@ import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid'
 import { ResourceType } from '../domain/types/ResourceType';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
+import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
 import { ArangoCollectionId } from '../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { BASE_DIGITAL_ASSET_URL } from '../persistence/migrations/01/remove-base-digital-asset-url.migration';
@@ -62,6 +63,10 @@ describe(`run migrations`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
+        console.log(
+            `running test with database: ${databaseProvider.getDBInstance().getDatabaseName()}`
+        );
+
         testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
 
         commandInstance = await CommandTestFactory.createTestingCommand({
@@ -73,6 +78,8 @@ describe(`run migrations`, () => {
             .useValue(testRepositoryProvider)
             .overrideProvider(COSCRAD_LOGGER_TOKEN)
             .useValue(mockLogger)
+            .overrideProvider(ArangoQueryRunner)
+            .useValue(new ArangoQueryRunner(databaseProvider))
             .compile();
     });
 

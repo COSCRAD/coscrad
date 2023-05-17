@@ -13,9 +13,13 @@ export class ListMigrationsCliCommand extends CliCommandRunner {
         @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         super();
+
+        console.log('ListMigrationsCliCommand constructor called');
     }
 
     async run() {
+        console.log('running list-migrations');
+
         const migrations = await this.migrator.list();
 
         this.logger.log(migrations);

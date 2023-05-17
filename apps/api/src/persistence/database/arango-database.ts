@@ -40,6 +40,10 @@ export class ArangoDatabase {
         this.#db = database;
     }
 
+    getDatabaseName(): string {
+        return this.#db.name;
+    }
+
     fetchById = async <TDatabaseDTO extends DatabaseDTO<HasAggregateId>>(
         id: string,
         collectionName: string
