@@ -15,12 +15,14 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
         this.arangoDatabase = arangoDatabaseProvider.getDBInstance();
     }
 
+    async fetchMany<TDocument>(collectionName: string): Promise<TDocument[]> {
+        return this.arangoDatabase.fetchMany(collectionName);
+    }
+
     async update<TOldDocument extends ArangoDatabaseDocument<HasId>, UNewDocument>(
         collectionName: ArangoCollectionId,
         calculateUpdate: (oldDocument: TOldDocument) => UNewDocument
     ): Promise<void> {
-        console.log(`running update queries with: ${this.arangoDatabase.getDatabaseName()}`);
-
         const existingDocs = await this.arangoDatabase.fetchMany<TOldDocument>(collectionName);
 
         const updates = existingDocs

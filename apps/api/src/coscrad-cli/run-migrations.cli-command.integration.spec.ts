@@ -3,6 +3,7 @@ import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
+import { buildFakeTimersConfig } from '../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { ResourceType } from '../domain/types/ResourceType';
 import { NotFound } from '../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
@@ -64,10 +65,6 @@ describe(`run migrations`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        console.log(
-            `running test with database: ${databaseProvider.getDBInstance().getDatabaseName()}`
-        );
-
         testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
 
         commandInstance = await CommandTestFactory.createTestingCommand({
@@ -82,6 +79,8 @@ describe(`run migrations`, () => {
             .overrideProvider(ArangoQueryRunner)
             .useValue(new ArangoQueryRunner(databaseProvider))
             .compile();
+
+        jest.useFakeTimers(buildFakeTimersConfig());
     });
 
     // TODO Update the setup and write all other migrations as already run dynamically
@@ -122,6 +121,8 @@ describe(`run migrations`, () => {
                 .fetchById(migrationSequenceNumber.toString());
 
             expect(migrationRecord).not.toBe(NotFound);
+
+            delete migrationRecord['_rev'];
 
             expect(migrationRecord).toMatchSnapshot();
         });

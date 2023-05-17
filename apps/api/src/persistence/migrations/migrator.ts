@@ -1,8 +1,10 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import { Ctor } from '../../lib/types/Ctor';
+import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { ICoscradMigration } from './coscrad-migration.interface';
 import { ICoscradQueryRunner } from './coscrad-query-runner.interface';
 import { CoscradMigrationMetadata } from './decorators/migration.decorator';
+import { ArangoMigrationRecord } from './migration-record';
 
 export type MigrationAndMeta = {
     metadata: CoscradMigrationMetadata;
@@ -23,8 +25,15 @@ export class Migrator {
         return this;
     }
 
-    list(): string {
-        return this.getKnownMigrations()
+    async list(
+        queryRunner: ICoscradQueryRunner,
+        { includeAlreadyRun = false }: { includeAlreadyRun: boolean }
+    ): Promise<string> {
+        const migrationsToList = includeAlreadyRun
+            ? this.getKnownMigrations()
+            : await this.getAvailableMigrations(queryRunner);
+
+        return migrationsToList
             .map(
                 ([
                     name,
@@ -37,7 +46,7 @@ export class Migrator {
     }
 
     async runAllAvailableMigrations(queryRunner: ICoscradQueryRunner): Promise<void> {
-        const migrations = this.getKnownMigrations();
+        const migrations = await this.getAvailableMigrations(queryRunner);
 
         if (migrations.length > 1) {
             throw new InternalError(
@@ -46,20 +55,39 @@ export class Migrator {
         }
 
         for (const [migrationName, { migration, metadata }] of migrations) {
+            // TODO Use the actual logger for this
             console.log(
                 `running migration #${migration.sequenceNumber}: ${migrationName} (${migration.name}) [${metadata.dateAuthored}]`
             );
 
             await migration.up(queryRunner);
 
-            await queryRunner.create('migrations', {
-                _key: migration.sequenceNumber.toString(),
-                sequenceNumber: migration.sequenceNumber,
-                name: migration.name,
-                metadata,
-                dateApplied: Date.now(),
-            });
+            await queryRunner.create(
+                'migrations',
+                new ArangoMigrationRecord(migration, metadata).toDTO()
+            );
         }
+    }
+
+    private async getAvailableMigrations(
+        queryRunner: ICoscradQueryRunner
+    ): Promise<[string, MigrationAndMeta][]> {
+        const alreadyRunMigrations = await queryRunner.fetchMany<ArangoMigrationRecord>(
+            ArangoCollectionId.migrations
+        );
+
+        const sequenceNumbersOfMigrationsToExclude = alreadyRunMigrations.map(
+            ({ sequenceNumber }) => sequenceNumber
+        );
+
+        return this.getKnownMigrations().filter(
+            ([
+                _name,
+                {
+                    migration: { sequenceNumber },
+                },
+            ]) => !sequenceNumbersOfMigrationsToExclude.includes(sequenceNumber)
+        );
     }
 
     private getKnownMigrations(): [string, MigrationAndMeta][] {

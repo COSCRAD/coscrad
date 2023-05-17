@@ -4,8 +4,7 @@ exports[`run migrations when there is one migration to run should run the migrat
 {
   "_id": "migrations/1",
   "_key": "1",
-  "_rev": "_gAshz4i---",
-  "dateApplied": 1684359337893,
+  "dateApplied": 1664237194356,
   "metadata": {
     "dateAuthored": "20230513",
     "description": "convert legacy term and photograph media urls from relative to absolute paths and append extensions",

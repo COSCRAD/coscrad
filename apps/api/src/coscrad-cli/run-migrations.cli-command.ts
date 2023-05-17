@@ -16,12 +16,14 @@ export class RunMigrationsCliCommand extends CliCommandRunner {
         @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         super();
-
-        console.log(`Instantiating Migration 1`);
     }
 
     async run() {
-        this.logger.log(`Running the following migrations: \n`.concat(this.migrator.list()));
+        const migrationsToRun = await this.migrator.list(this.queryRunner, {
+            includeAlreadyRun: false,
+        });
+
+        this.logger.log(`Running the following migrations: \n`.concat(migrationsToRun));
 
         await this.migrator.runAllAvailableMigrations(this.queryRunner);
     }
