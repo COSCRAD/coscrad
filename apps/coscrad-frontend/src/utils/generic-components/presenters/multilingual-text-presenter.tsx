@@ -43,12 +43,13 @@ export const MultilingualTextPresenter = ({
         <Box>
             <Accordion defaultExpanded variant="outlined">
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="h3" sx={{ margin: '0' }}>
+                    <Typography variant="h4" sx={{ margin: '0' }}>
                         {isNullOrUndefined(textItemWithDefaultLanguage)
                             ? 'Translations'
                             : textItemWithDefaultLanguage.text}
                     </Typography>
                     <Tooltip
+                        sx={{ paddingTop: 0, marginBottom: 0 }}
                         title={`${getLabelForLanguage(
                             textItemWithDefaultLanguage.languageCode
                         )}, '${textItemWithDefaultLanguage.role}'`}
