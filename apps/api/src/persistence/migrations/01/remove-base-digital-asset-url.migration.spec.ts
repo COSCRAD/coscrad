@@ -1,0 +1,226 @@
+import createTestModule from '../../../app/controllers/__tests__/createTestModule';
+import { Photograph } from '../../../domain/models/photograph/entities/photograph.entity';
+import { Term } from '../../../domain/models/term/entities/term.entity';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
+import { ResourceType } from '../../../domain/types/ResourceType';
+import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-or-undefined';
+import { InternalError } from '../../../lib/errors/InternalError';
+import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
+import { DTO } from '../../../types/DTO';
+import { ArangoConnectionProvider } from '../../database/arango-connection.provider';
+import { ArangoQueryRunner } from '../../database/arango-query-runner';
+import { ArangoCollectionId } from '../../database/collection-references/ArangoCollectionId';
+import { ArangoDatabaseProvider } from '../../database/database.provider';
+import {
+    ArangoDatabaseDocument,
+    DatabaseDTO,
+} from '../../database/utilities/mapEntityDTOToDatabaseDTO';
+import generateDatabaseNameForTestSuite from '../../repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../repositories/__tests__/TestRepositoryProvider';
+import {
+    BASE_DIGITAL_ASSET_URL,
+    RemoveBaseDigitalAssetUrl,
+} from './remove-base-digital-asset-url.migration';
+
+const baseDigitalAssetUrl = `https://www.mymedia.org/downloads/`;
+
+process.env[BASE_DIGITAL_ASSET_URL] = baseDigitalAssetUrl;
+
+type OldPhotograph = Omit<Photograph, 'imageUrl'> & { filename: string };
+
+describe(`RemoveBaseDigitalAssetUrl`, () => {
+    let testDatabaseProvider: ArangoDatabaseProvider;
+
+    let testQueryRunner: ArangoQueryRunner;
+
+    let testRepositoryProvider: TestRepositoryProvider;
+
+    const buildId = (resourceType: ResourceType, index: number): string => {
+        if (resourceType === ResourceType.term) return buildDummyUuid(index);
+
+        if (resourceType === ResourceType.photograph) return buildDummyUuid(100 + index);
+
+        throw new InternalError(
+            `resource type: ${resourceType} is not supported in this ID generation scheme`
+        );
+    };
+
+    describe(`when there are documents (terms, vocabularyLists, and photographs) that should be updated`, () => {
+        beforeAll(async () => {
+            const testModule = await createTestModule({
+                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+            });
+
+            const arangoConnectionProvider = testModule.get(ArangoConnectionProvider);
+
+            testDatabaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
+
+            /**
+             * It's a bit awkward that we need this because we are not working at
+             * the repositories level of abstraction. However, we have added test
+             * setup and teardown logic at this level for the purpose of commadn and
+             * query integration tests. So instead of rewriting this logic on a
+             * `TestDatabaseProvider`, we will just leverage this existing logic for
+             * test teardown.
+             */
+            testRepositoryProvider = new TestRepositoryProvider(testDatabaseProvider);
+
+            testQueryRunner = new ArangoQueryRunner(testDatabaseProvider);
+        });
+
+        // TERMS
+        const dtoForTermToCheckManually: Omit<ArangoDatabaseDocument<DTO<Term>>, '_key'> = {
+            term: `so bogus`,
+            termEnglish: `so bogus (English)`,
+            audioFilename: `bogus`,
+            type: ResourceType.term,
+            published: true,
+            contributorId: '55',
+        };
+
+        const originalTermDocumentsWithoutKeys: Omit<ArangoDatabaseDocument<DTO<Term>>, '_key'>[] =
+            [dtoForTermToCheckManually];
+
+        const originalTermDocuments = originalTermDocumentsWithoutKeys.map((partialDto, index) => ({
+            ...partialDto,
+            _key: buildId(ResourceType.term, index),
+        }));
+
+        // PHOTOGRAPHS
+        const dtoForPhotographToCheckManually: Omit<
+            ArangoDatabaseDocument<DTO<OldPhotograph>>,
+            '_key'
+        > = {
+            type: ResourceType.photograph,
+            filename: `flowers`,
+            photographer: `James Rames`,
+            dimensions: {
+                widthPX: 300,
+                heightPX: 400,
+            },
+            published: true,
+        };
+
+        const originalPhotographDocumentsWithoutKeys: Omit<
+            ArangoDatabaseDocument<DTO<OldPhotograph>>,
+            '_key'
+        >[] = [dtoForPhotographToCheckManually];
+
+        const originalPhotographDocuments = originalPhotographDocumentsWithoutKeys.map(
+            (partialDto, index) => ({
+                ...partialDto,
+                _key: buildId(ResourceType.photograph, index),
+            })
+        );
+
+        beforeEach(async () => {
+            // We use the `TestRepositoryProvider` for test teardown only
+            await testRepositoryProvider.testTeardown();
+
+            await testDatabaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.terms)
+                .createMany(originalTermDocuments);
+
+            await testDatabaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.photographs)
+                .createMany(originalPhotographDocuments);
+        });
+
+        const migrationUnderTest = new RemoveBaseDigitalAssetUrl();
+
+        const idForTermToCheckManually = buildId(ResourceType.term, 0);
+
+        const idForPhotographToCheckManually = buildId(ResourceType.photograph, 0);
+
+        it(`should apply the appropriate updates`, async () => {
+            await migrationUnderTest.up(testQueryRunner);
+
+            const updatedTermDocuments = (await testDatabaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.terms)
+                .fetchMany()) as DatabaseDTO<DTO<Term>>[];
+
+            expect(updatedTermDocuments.length).toBe(originalTermDocuments.length);
+
+            const idsOfDocumentsWithoutBaseDigitalAssetUrl = updatedTermDocuments.filter(
+                ({ audioFilename }) => !audioFilename.includes(baseDigitalAssetUrl)
+            );
+
+            expect(idsOfDocumentsWithoutBaseDigitalAssetUrl).toEqual([]);
+
+            const { audioFilename } = (await testDatabaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.terms)
+                .fetchById(idForTermToCheckManually)) as unknown as ArangoDatabaseDocument<
+                DTO<Term>
+            >;
+
+            expect(audioFilename).toBe(`https://www.mymedia.org/downloads/bogus.mp3`);
+
+            const { imageUrl } = (await testDatabaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.photographs)
+                .fetchById(idForPhotographToCheckManually)) as unknown as ArangoDatabaseDocument<
+                DTO<Photograph>
+            >;
+
+            expect(imageUrl).toBe(`https://www.mymedia.org/downloads/flowers.png`);
+
+            const updatedPhotographDocuments = (await testDatabaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.photographs)
+                .fetchMany()) as DatabaseDTO<DTO<Photograph>>[];
+
+            expect(updatedPhotographDocuments.length).toBe(originalPhotographDocuments.length);
+
+            const idsOfPhotographDocumentsWithoutBaseDigitalAssetUrl =
+                updatedPhotographDocuments.filter(
+                    ({ imageUrl }) => !imageUrl.includes(baseDigitalAssetUrl)
+                );
+
+            expect(idsOfPhotographDocumentsWithoutBaseDigitalAssetUrl).toEqual([]);
+
+            const idsOfPhotographsWithVestigialFilenameProperty = updatedPhotographDocuments.filter(
+                (newDoc) => !isNullOrUndefined((newDoc as unknown as OldPhotograph).filename)
+            );
+
+            expect(idsOfPhotographsWithVestigialFilenameProperty).toEqual([]);
+        });
+
+        it(`should be reverseable`, async () => {
+            // TODO Consider adding a custom jest matcher instead
+            const removeRevFromDoc = (document: { _rev: string }) => {
+                const cloned = cloneToPlainObject(document);
+
+                delete cloned['_rev'];
+
+                return cloned;
+            };
+
+            const buildMiniSnapshot = async () => {
+                const photographs = await testDatabaseProvider
+                    .getDatabaseForCollection(ArangoCollectionId.photographs)
+                    .fetchMany();
+
+                const terms = await testDatabaseProvider
+                    .getDatabaseForCollection(ArangoCollectionId.terms)
+                    .fetchMany();
+
+                return {
+                    [ArangoCollectionId.photographs]: photographs.map((photograph) =>
+                        removeRevFromDoc(photograph as unknown as { _rev: string })
+                    ),
+                    [ArangoCollectionId.terms]: terms.map((term) =>
+                        removeRevFromDoc(term as unknown as { _rev: string })
+                    ),
+                };
+            };
+
+            const snapshotBefore = await buildMiniSnapshot();
+
+            await migrationUnderTest.up(testQueryRunner);
+
+            await migrationUnderTest.down(testQueryRunner);
+
+            const snapshotAfter = await buildMiniSnapshot();
+
+            expect(snapshotBefore).toEqual(snapshotAfter);
+        });
+    });
+});

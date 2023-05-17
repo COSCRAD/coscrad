@@ -1,4 +1,4 @@
-import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import findAllPointsInLineNotWithinBounds from '../../../../lib/validation/geometry/findAllPointsInLineNotWithinBounds';
@@ -24,11 +24,11 @@ export class Photograph extends Resource implements Boundable2D {
     readonly type = ResourceType.photograph;
 
     // TODO Make this a `mediaItemId` @UUID
-    @NonEmptyString({
-        label: 'file name',
-        description: 'the name (not full URL \\ path) of the digital file',
+    @URL({
+        label: 'image link',
+        description: 'a web link to a digital version of the photograph',
     })
-    readonly filename: string;
+    readonly imageUrl: string;
 
     // TODO make this a `contributorID`
     @NonEmptyString({
@@ -48,9 +48,9 @@ export class Photograph extends Resource implements Boundable2D {
 
         if (!dto) return;
 
-        const { filename, photographer, dimensions: dimensionsDTO } = dto;
+        const { imageUrl: filename, photographer, dimensions: dimensionsDTO } = dto;
 
-        this.filename = filename;
+        this.imageUrl = filename;
 
         this.photographer = photographer;
 
@@ -59,7 +59,7 @@ export class Photograph extends Resource implements Boundable2D {
 
     getName(): MultilingualText {
         // TODO Consider a second `name` property with type `MultilingualText`
-        return buildMultilingualTextWithSingleItem(this.filename);
+        return buildMultilingualTextWithSingleItem(this.imageUrl);
     }
 
     rescale(scaleFactor: number) {

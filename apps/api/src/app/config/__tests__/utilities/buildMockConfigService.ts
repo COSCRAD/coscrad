@@ -20,7 +20,6 @@ export default (configOverrides: ConfigOverrides, envFilePath: string) => {
         ARANGO_DB_NAME: process.env.ARANGO_DB_NAME,
         AUTH0_ISSUER_URL: process.env.AUTH0_ISSUER_URL,
         AUTH0_AUDIENCE: process.env.AUTH0_AUDIENCE,
-        BASE_DIGITAL_ASSET_URL: process.env.BASE_DIGITAL_ASSET_URL,
         GLOBAL_PREFIX: process.env.GLOBAL_PREFIX,
         ...realConfig,
         ...configOverrides,

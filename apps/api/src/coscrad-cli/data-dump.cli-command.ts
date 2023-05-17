@@ -1,16 +1,16 @@
 import { Inject } from '@nestjs/common';
 import { writeFileSync } from 'fs';
-import { Command, CommandRunner, Option } from 'nest-commander';
 import { IRepositoryProvider } from '../domain/repositories/interfaces/repository-provider.interface';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { DataExporter } from '../persistence/repositories/data-exporter';
 import convertInMemorySnapshotToDatabaseFormat from '../test-data/utilities/convertInMemorySnapshotToDatabaseFormat';
+import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 
-@Command({
+@CliCommand({
     name: 'data-dump',
     description: 'dumps the database state to a snapshot file',
 })
-export class DomainDumpCliCommand extends CommandRunner {
+export class DomainDumpCliCommand extends CliCommandRunner {
     private readonly dataExporter: DataExporter;
 
     constructor(@Inject(REPOSITORY_PROVIDER_TOKEN) repositoryProvider: IRepositoryProvider) {
@@ -34,7 +34,7 @@ export class DomainDumpCliCommand extends CommandRunner {
         );
     }
 
-    @Option({
+    @CliCommandOption({
         flags: '-f, --filepath [filepath]',
         description: 'the path to write the output to',
         required: true,

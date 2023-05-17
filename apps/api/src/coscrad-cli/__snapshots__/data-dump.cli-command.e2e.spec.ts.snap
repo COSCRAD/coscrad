@@ -636,7 +636,7 @@ exports[`CLI Command: **data-dump** when the command is valid when using the ful
           "widthPX": 300,
         },
         "eventHistory": [],
-        "filename": "Adiitsii-Running",
+        "imageUrl": "https://kaaltsidakah.net/coscrad/Adiitsii-Running.png",
         "photographer": "Susie McRealart",
         "published": true,
         "queryAccessControlList": {
@@ -652,7 +652,7 @@ exports[`CLI Command: **data-dump** when the command is valid when using the ful
           "widthPX": 420,
         },
         "eventHistory": [],
-        "filename": "Nuu-Story",
+        "imageUrl": "https://kaaltsidakah.net/coscrad/Nuu-Story.png",
         "photographer": "Robert McRealart",
         "published": true,
         "queryAccessControlList": {
@@ -668,7 +668,7 @@ exports[`CLI Command: **data-dump** when the command is valid when using the ful
           "widthPX": 1200,
         },
         "eventHistory": [],
-        "filename": "TwoBrothersPole",
+        "imageUrl": "https://kaaltsidakah.net/coscrad/TwoBrothersPole.png",
         "photographer": "Kenny Tree-Huggens",
         "published": true,
         "queryAccessControlList": {
@@ -3168,7 +3168,7 @@ exports[`CLI Command: **data-dump** when the command is valid when using the ful
           "widthPX": 300,
         },
         "eventHistory": [],
-        "filename": "Adiitsii-Running",
+        "imageUrl": "https://kaaltsidakah.net/coscrad/Adiitsii-Running.png",
         "photographer": "Susie McRealart",
         "published": true,
         "queryAccessControlList": {
@@ -3184,7 +3184,7 @@ exports[`CLI Command: **data-dump** when the command is valid when using the ful
           "widthPX": 420,
         },
         "eventHistory": [],
-        "filename": "Nuu-Story",
+        "imageUrl": "https://kaaltsidakah.net/coscrad/Nuu-Story.png",
         "photographer": "Robert McRealart",
         "published": true,
         "queryAccessControlList": {
@@ -3200,7 +3200,7 @@ exports[`CLI Command: **data-dump** when the command is valid when using the ful
           "widthPX": 1200,
         },
         "eventHistory": [],
-        "filename": "TwoBrothersPole",
+        "imageUrl": "https://kaaltsidakah.net/coscrad/TwoBrothersPole.png",
         "photographer": "Kenny Tree-Huggens",
         "published": true,
         "queryAccessControlList": {

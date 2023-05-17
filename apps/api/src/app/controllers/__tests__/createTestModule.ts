@@ -201,23 +201,16 @@ export default async (
                 provide: TermQueryService,
                 useFactory: (
                     repositoryProvider: ArangoRepositoryProvider,
-                    commandInfoService: CommandInfoService,
-                    configService: ConfigService
-                ) => new TermQueryService(repositoryProvider, commandInfoService, configService),
+                    commandInfoService: CommandInfoService
+                ) => new TermQueryService(repositoryProvider, commandInfoService),
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: VocabularyListQueryService,
                 useFactory: (
                     repositoryProvider: ArangoRepositoryProvider,
-                    commandInfoService: CommandInfoService,
-                    configService: ConfigService
-                ) =>
-                    new VocabularyListQueryService(
-                        repositoryProvider,
-                        commandInfoService,
-                        configService
-                    ),
+                    commandInfoService: CommandInfoService
+                ) => new VocabularyListQueryService(repositoryProvider, commandInfoService),
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
@@ -248,14 +241,8 @@ export default async (
                 provide: PhotographQueryService,
                 useFactory: (
                     repositoryProvider: ArangoRepositoryProvider,
-                    commandInfoService: CommandInfoService,
-                    configService: ConfigService
-                ) =>
-                    new PhotographQueryService(
-                        repositoryProvider,
-                        commandInfoService,
-                        configService
-                    ),
+                    commandInfoService: CommandInfoService
+                ) => new PhotographQueryService(repositoryProvider, commandInfoService),
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {

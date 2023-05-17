@@ -8,14 +8,14 @@ import { renderPhotographThumbnailLinkCell } from '../utils/render-photograph-th
 export const PhotographIndexPresenter = ({ entities: photographs }: PhotographIndexState) => {
     const headingLabels: HeadingLabel<IPhotographViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
-        { propertyKey: 'imageURL', headingLabel: 'Image URL' },
+        { propertyKey: 'imageUrl', headingLabel: 'Image URL' },
         { propertyKey: 'photographer', headingLabel: 'Photographer' },
     ];
 
     const cellRenderersDefinition: CellRenderersDefinition<IPhotographViewModel> = {
         id: renderAggregateIdCell,
-        imageURL: ({ id, imageURL }: IPhotographViewModel) =>
-            renderPhotographThumbnailLinkCell(id, imageURL),
+        imageUrl: ({ id, imageUrl }: IPhotographViewModel) =>
+            renderPhotographThumbnailLinkCell(id, imageUrl),
     };
 
     return (

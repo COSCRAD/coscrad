@@ -498,19 +498,19 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
       },
     },
   },
-  "filename": {
-    "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the name (not full URL \\ path) of the digital file",
-    "isArray": false,
-    "isOptional": false,
-    "label": "file name",
-  },
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
     "label": "ID",
+  },
+  "imageUrl": {
+    "coscradDataType": "URL",
+    "description": "a web link to a digital version of the photograph",
+    "isArray": false,
+    "isOptional": false,
+    "label": "image link",
   },
   "photographer": {
     "coscradDataType": "NON_EMPTY_STRING",
@@ -701,7 +701,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 {
   "audioFilename": {
     "coscradDataType": "NON_EMPTY_STRING",
-    "description": "the name of the audio file",
+    "description": "a url link to the audio file",
     "isArray": false,
     "isOptional": true,
     "label": "Audio Filename",
