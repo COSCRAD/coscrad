@@ -13,6 +13,8 @@ export interface UpdateQueryOptions<TOldDocument> {
  * When doing this for arango, we convert `id` to `_key`, for example.
  */
 export interface ICoscradQueryRunner {
+    fetchMany<TDocument>(collectionName: string): Promise<TDocument[]>;
+
     update<
         TOldDocument extends ArangoDatabaseDocument<HasId>,
         UNewDocument extends ArangoDatabaseDocument<HasId>
@@ -20,4 +22,6 @@ export interface ICoscradQueryRunner {
         collectionName: string,
         calculateUpdate: (oldDoc: TOldDocument) => Partial<UNewDocument>
     ): Promise<void>;
+
+    create<T>(collectionName: string, document: T): Promise<void>;
 }
