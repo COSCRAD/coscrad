@@ -70,6 +70,7 @@ export const ResourcePreviewIconFactory = ({
 
     return (
         <Box sx={{ fontSize: iconSize, maxHeight: iconSize, color: color }}>
+            {/* TODO: capitalize resource type */}
             <Tooltip title={resourceType}>{lookupResult}</Tooltip>
         </Box>
     );
