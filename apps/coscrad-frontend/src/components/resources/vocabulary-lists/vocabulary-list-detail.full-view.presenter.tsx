@@ -5,8 +5,9 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { ResourceDetailFullViewPresenter } from 'apps/coscrad-frontend/src/utils/generic-components';
+import { Divider } from '@mui/material';
 import { useReducer } from 'react';
+import { ResourceDetailFullViewPresenter } from '../../../../../../apps/coscrad-frontend/src/utils/generic-components';
 import { Carousel } from '../../higher-order-components/carousel';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
 import doValuesMatchFilters from './do-values-match-filters';
@@ -95,16 +96,18 @@ export const VocabularyListDetailFullViewPresenter = ({
             type={ResourceType.vocabularyList}
             data-testid={id}
         >
+            <div data-testid={id} />
+            <Divider sx={{ marginTop: 2, marginBottom: 2, backgroundColor: 'primary.main' }} />
+            <Carousel
+                propsForItems={selectedEntries.map(({ term }) => term)}
+                Presenter={TermDetailFullViewPresenter}
+            />
             <VocabularyListForm
                 fields={form.fields}
                 onFormChange={(key: string, value: VocabularyListFilterProperty) =>
                     dispatch(updateVocabularyListFilter(key, value))
                 }
                 formState={filterWithoutNullAndUndefined}
-            />
-            <Carousel
-                propsForItems={selectedEntries.map(({ term }) => term)}
-                Presenter={TermDetailFullViewPresenter}
             />
         </ResourceDetailFullViewPresenter>
     );
