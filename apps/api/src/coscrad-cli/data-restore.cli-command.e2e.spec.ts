@@ -8,7 +8,7 @@ import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
-import { DataExporter } from '../persistence/repositories/data-exporter';
+import { DomainDataExporter } from '../persistence/repositories/domain-data-exporter';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
@@ -104,7 +104,7 @@ describe(`CLI Command: **data-restore**`, () => {
                     `--filepath=${fileToRestore}`,
                 ]);
 
-                const dataExporter = new DataExporter(testRepositoryProvider);
+                const dataExporter = new DomainDataExporter(testRepositoryProvider);
 
                 const inMemoryStore = await dataExporter.fetchSnapshot();
 
@@ -145,7 +145,7 @@ describe(`CLI Command: **data-restore**`, () => {
                     fileToRestore,
                 ]);
 
-                const dataExporter = new DataExporter(testRepositoryProvider);
+                const dataExporter = new DomainDataExporter(testRepositoryProvider);
 
                 const inMemoryStore = await dataExporter.fetchSnapshot();
 

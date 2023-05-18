@@ -4,8 +4,10 @@ import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
+import { ArangoCollectionId } from '../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { ICoscradMigration, Migration, Migrator } from '../persistence/migrations';
+import { ArangoMigrationRecord } from '../persistence/migrations/arango-migration-record';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import { CoscradCliModule } from './coscrad-cli.module';
@@ -20,11 +22,13 @@ const dummyMigrationDescriptions = Array(3)
 
 const dummyMigrationDates = ['20230503', '20230509', '20230622'];
 
-@Migration({
+const migration1Metadata = {
     description: dummyMigrationDescriptions[0],
     dateAuthored: dummyMigrationDates[0],
-})
-class DummyMigration1 implements ICoscradMigration {
+};
+
+@Migration(migration1Metadata)
+class DummyMigration1AlreadyRun implements ICoscradMigration {
     sequenceNumber = 101;
 
     name = 'dummy migration (1)';
@@ -88,7 +92,7 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
     const dummyMigrator = new Migrator();
 
     dummyMigrator
-        .register(DummyMigration1, {
+        .register(DummyMigration1AlreadyRun, {
             description: dummyMigrationDescriptions[0],
             dateAuthored: dummyMigrationDates[0],
         })
@@ -129,6 +133,12 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
             .overrideProvider(ArangoDatabaseProvider)
             .useValue(databaseProvider)
             .compile();
+
+        await testRepositoryProvider.testSetup();
+
+        await databaseProvider
+            .getDatabaseForCollection(ArangoCollectionId.migrations)
+            .create(new ArangoMigrationRecord(new DummyMigration1AlreadyRun(), migration1Metadata));
     });
 
     afterAll(() => {
@@ -140,16 +150,24 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
         const logMessage = mockLogger.log.mock.calls[0][0];
 
-        const migrationDatesThatAreMissing = dummyMigrationDates.filter(
-            (date) => !logMessage.includes(date)
-        );
+        // Note that we ignore migration 1 as it has already been run
+        const migrationDatesThatAreMissing = dummyMigrationDates
+            .filter((_, index) => index !== 0)
+            .filter((date) => !logMessage.includes(date));
 
         expect(migrationDatesThatAreMissing).toEqual([]);
 
-        const migrationDescriptionsThatAreMissing = dummyMigrationDescriptions.filter(
-            (description) => !logMessage.includes(description)
-        );
+        const migrationDescriptionsThatAreMissing = dummyMigrationDescriptions
+            .filter((_, index) => index !== 0)
+
+            .filter((description) => !logMessage.includes(description));
 
         expect(migrationDescriptionsThatAreMissing).toEqual([]);
+
+        const isMigration1Listed =
+            logMessage.includes(dummyMigrationDates[0]) ||
+            logMessage.includes(dummyMigrationDescriptions[0]);
+
+        expect(isMigration1Listed).toBe(false);
     });
 });
