@@ -9,7 +9,10 @@ import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../lib/types/not-found';
-import { isArangoCollectionId } from './collection-references/ArangoCollectionId';
+import {
+    ArangoCollectionId,
+    isArangoCollectionId,
+} from './collection-references/ArangoCollectionId';
 import buildArangoDocumentHandle from './utilities/buildArangoDocumentHandle';
 import { DatabaseDTO } from './utilities/mapEntityDTOToDatabaseDTO';
 
@@ -276,7 +279,7 @@ export class ArangoDatabase {
 
     // TODO Add Soft Delete
 
-    // TODO we should only expose a hard delete for test setup
+    // We only allow hard-deletes for non-aggregate root collections (e.g. migrations)
     delete = async (id: string, collectionName: string): Promise<void> => {
         const documentToRemove = await this.fetchById(id, collectionName);
 
@@ -285,7 +288,29 @@ export class ArangoDatabase {
                 `You cannot remove document ${id} in collection ${collectionName} as it does not exist`
             );
 
-        throw new InternalError('ArangoDatabase.delete Not Implemented');
+        if (collectionName !== ArangoCollectionId.migrations) {
+            throw new InternalError('ArangoDatabase.delete Not Implemented except for migrations');
+        }
+
+        const query = `
+            REMOVE @id in @@collectionName
+            `;
+
+        const bindVars = {
+            id,
+            '@collectionName': collectionName,
+        };
+
+        await this.#db
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((err) => {
+                throw new InternalError(
+                    `Failed to remove document ${id} from ${collectionName}. \n Arango errors: ${err}`
+                );
+            });
     };
 
     // TODO We only want this power within test utilities!

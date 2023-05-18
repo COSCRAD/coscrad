@@ -1,3 +1,5 @@
+import { ICoscradLogger } from '../../coscrad-cli/logging';
+import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Ctor } from '../../lib/types/Ctor';
 import { DTO } from '../../types/DTO';
@@ -13,6 +15,21 @@ export type MigrationAndMeta = {
     metadata: CoscradMigrationMetadata;
     migration: ICoscradMigration;
 };
+
+const sortMigrationAndMeta = (
+    [
+        _,
+        {
+            migration: { sequenceNumber: a },
+        },
+    ]: [string, MigrationAndMeta],
+    [
+        __,
+        {
+            migration: { sequenceNumber: b },
+        },
+    ]: [string, MigrationAndMeta]
+) => b - a;
 
 export class Migrator {
     private readonly knownMigrations: Map<string, MigrationAndMeta> = new Map();
@@ -91,12 +108,61 @@ export class Migrator {
         }
     }
 
-    private async getAvailableMigrations(
+    async revertLatestMigration(
+        queryRunner: ArangoQueryRunner,
+        dataExporter: ArangoDataExporter,
+        logger: ICoscradLogger
+    ): Promise<void> {
+        const alreadyRunMigrations = await this.fetchAlreadyRunMigrationRecords(queryRunner);
+
+        const latestMigrationRecord = alreadyRunMigrations.sort(
+            (
+                { sequenceNumber: a }: ArangoMigrationRecord,
+                { sequenceNumber: b }: ArangoMigrationRecord
+            ) => a - b
+        )?.[0];
+
+        if (isNullOrUndefined(latestMigrationRecord)) {
+            logger.log(`No migrations found.`);
+
+            return;
+        }
+
+        const { migration: latestMigration, metadata } = this.knownMigrations.get(
+            latestMigrationRecord.name
+        );
+
+        logger.log(
+            `**REVERTING** migration #${latestMigration.sequenceNumber}: ${latestMigration.name}  [${metadata.dateAuthored}]`
+        );
+
+        const migrationDirectoryName = `migration-REVERT-${latestMigration.sequenceNumber}-${
+            latestMigration.name
+        }-${Date.now()}`;
+
+        await dataExporter.dumpSnapshot(migrationDirectoryName, 'pre-revert.data.json');
+
+        await latestMigration.down(queryRunner);
+
+        await dataExporter.dumpSnapshot(migrationDirectoryName, 'post-revert.data.json');
+
+        await queryRunner.delete('migrations', latestMigrationRecord._key);
+    }
+
+    private async fetchAlreadyRunMigrationRecords(
         queryRunner: ICoscradQueryRunner
-    ): Promise<[string, MigrationAndMeta][]> {
+    ): Promise<ArangoMigrationRecord[]> {
         const alreadyRunMigrations = await queryRunner.fetchMany<ArangoMigrationRecord>(
             ArangoCollectionId.migrations
         );
+
+        return alreadyRunMigrations;
+    }
+
+    private async getAvailableMigrations(
+        queryRunner: ICoscradQueryRunner
+    ): Promise<[string, MigrationAndMeta][]> {
+        const alreadyRunMigrations = await this.fetchAlreadyRunMigrationRecords(queryRunner);
 
         const sequenceNumbersOfMigrationsToExclude = alreadyRunMigrations.map(
             ({ sequenceNumber }) => sequenceNumber
@@ -118,22 +184,7 @@ export class Migrator {
         return (
             labelAndMigrationDataPairs
                 // sort with most recent (highest sequence number) first
-                .sort(
-                    (
-                        [
-                            _,
-                            {
-                                migration: { sequenceNumber: a },
-                            },
-                        ]: [string, MigrationAndMeta],
-                        [
-                            __,
-                            {
-                                migration: { sequenceNumber: b },
-                            },
-                        ]: [string, MigrationAndMeta]
-                    ) => b - a
-                )
+                .sort(sortMigrationAndMeta)
         );
     }
 }
