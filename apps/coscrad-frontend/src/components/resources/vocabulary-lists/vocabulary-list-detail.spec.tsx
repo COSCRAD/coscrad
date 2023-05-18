@@ -22,6 +22,7 @@ const idToFind = dummyVocabularyLists[0].id;
 const endpoint = `${getConfig().apiUrl}/resources/vocabularyLists`;
 
 const act = buildCategorizableDetailPageRendererForTest(ResourceType.vocabularyList);
+
 const mockGetNotesHandler = buildMockGetNotesHandler();
 
 describe('vocabulary list detail', () => {
