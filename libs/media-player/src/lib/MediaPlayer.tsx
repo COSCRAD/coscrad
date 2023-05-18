@@ -8,11 +8,9 @@ export interface MediaPlayerProps {
     listenMessage?: string;
 }
 
-const DEFAULT_LISTEN_MESSAGE = 'Listen Live!';
-
-export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
+export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
-
+    const [isPlaying, setIsPlaying] = useState(false);
     const [canPlayThrough, setCanPlayThrough] = useState(false);
 
     const safePlay = () => {
@@ -21,9 +19,17 @@ export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
         }
 
         audio.play();
+        setIsPlaying(true);
     };
 
-    //  const toggle: MouseEventHandler<HTMLButtonElement> = (): void => setPlaying(!playing);
+    const handlePause = () => {
+        audio?.pause();
+        setIsPlaying(false);
+    };
+
+    const handleAudioNotPlaying = () => {
+        setIsPlaying(false);
+    };
 
     useEffect(() => {
         const audioElement = new Audio();
@@ -32,25 +38,36 @@ export function MediaPlayer({ audioUrl, listenMessage }: MediaPlayerProps) {
         audioElement.addEventListener('canplaythrough', () => {
             setCanPlayThrough(true);
         });
+        audioElement.addEventListener('ended', handleAudioNotPlaying);
         setAudio(audioElement);
+
+        return () => {
+            audioElement.removeEventListener('ended', handleAudioNotPlaying);
+        };
     }, [audioUrl]);
 
     return (
         <div className={styles['container']}>
             {audio && (
                 <>
-                    <PlayCircleFilledIcon
-                        className={styles['media-controls']}
-                        onClick={() => safePlay()}
-                    >
-                        Play
-                    </PlayCircleFilledIcon>
-                    <PauseCircleFilledIcon
-                        className={styles['media-controls']}
-                        onClick={() => audio.pause()}
-                    >
-                        Pause
-                    </PauseCircleFilledIcon>
+                    {!isPlaying && (
+                        <PlayCircleFilledIcon
+                            sx={{
+                                cursor: 'pointer',
+                            }}
+                            color="primary"
+                            className={styles['media-controls']}
+                            onClick={() => safePlay()}
+                        />
+                    )}
+                    {isPlaying && (
+                        <PauseCircleFilledIcon
+                            sx={{ cursor: 'pointer' }}
+                            color="secondary"
+                            className={styles['media-controls']}
+                            onClick={() => handlePause()}
+                        />
+                    )}
                 </>
             )}
         </div>
