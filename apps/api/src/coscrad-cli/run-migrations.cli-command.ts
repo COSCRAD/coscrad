@@ -1,4 +1,5 @@
 import { Inject } from '@nestjs/common';
+import cloneToPlainObject from '../lib/utilities/cloneToPlainObject';
 import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
 import { Migrator } from '../persistence/migrations';
 import { ArangoMigrationRecord } from '../persistence/migrations/arango-migration-record';
@@ -30,7 +31,11 @@ export class RunMigrationsCliCommand extends CliCommandRunner {
         await this.migrator.runAllAvailableMigrations(
             this.queryRunner,
             new ArangoDataExporter(this.queryRunner),
-            (migration, metadata) => new ArangoMigrationRecord(migration, metadata).toDTO()
+            (migration, metadata) => {
+                const instance = new ArangoMigrationRecord(migration, metadata);
+
+                return cloneToPlainObject(instance);
+            }
         );
     }
 }

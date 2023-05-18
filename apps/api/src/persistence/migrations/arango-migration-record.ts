@@ -1,9 +1,8 @@
-import BaseDomainModel from '../../domain/models/BaseDomainModel';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { ICoscradMigration } from './coscrad-migration.interface';
 import { CoscradMigrationMetadata } from './decorators';
 
-export class ArangoMigrationRecord extends BaseDomainModel {
+export class ArangoMigrationRecord {
     readonly sequenceNumber: number;
 
     readonly name: string;
@@ -15,8 +14,6 @@ export class ArangoMigrationRecord extends BaseDomainModel {
     readonly dateApplied: number;
 
     constructor({ name, sequenceNumber }: ICoscradMigration, metadata: CoscradMigrationMetadata) {
-        super();
-
         this._key = sequenceNumber.toString();
 
         this.name = name;
