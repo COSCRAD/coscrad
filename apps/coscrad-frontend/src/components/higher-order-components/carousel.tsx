@@ -34,12 +34,24 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
     return (
         <Box>
             <Presenter {...propsForSelectedItem} />
-            <Button onClick={(_) => setIndex(cyclicDecrement(indexToUse, numberOfItems))}>
-                <ArrowBackIosIcon sx={{ fontSize: '3em' }} />
-            </Button>
-            <Button onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}>
-                <ArrowForwardIosIcon sx={{ fontSize: '3em' }} />
-            </Button>
+            <Box sx={{ textAlign: 'center' }}>
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    sx={{ borderRadius: '20px 0px 0px 20px' }}
+                    onClick={(_) => setIndex(cyclicDecrement(indexToUse, numberOfItems))}
+                >
+                    <ArrowBackIosIcon sx={{ fontSize: '2em' }} />
+                </Button>
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    sx={{ borderRadius: '0px 20px 20px 0px' }}
+                    onClick={(_) => setIndex(cyclicIncrement(indexToUse, numberOfItems))}
+                >
+                    <ArrowForwardIosIcon sx={{ fontSize: '2em' }} />
+                </Button>
+            </Box>
         </Box>
     );
 };

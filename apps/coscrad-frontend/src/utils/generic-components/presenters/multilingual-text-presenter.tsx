@@ -16,13 +16,6 @@ import { ConfigurableContentContext } from '../../../configurable-front-matter/c
 import { getLabelForLanguage } from './text-presenters/get-label-for-language';
 import { TranslatedLanguageTextPresenter } from './text-presenters/translated-text-presenter';
 
-// TODO use contentConfigContext
-// default language code
-// find the text iterm with the default language code
-// find the text item with english
-// note: either of these may not exist (fallback logic)
-// build an appropriate presentation of these properties
-
 export interface MultilingualTextPresenterProps {
     text: IMultilingualText;
 }
@@ -41,27 +34,30 @@ export const MultilingualTextPresenter = ({
 
     return (
         <Box>
-            <Accordion defaultExpanded variant="outlined">
+            <Accordion variant="outlined">
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="h3" sx={{ margin: '0' }}>
+                    <Typography variant="h4" sx={{ margin: '0' }}>
                         {isNullOrUndefined(textItemWithDefaultLanguage)
                             ? 'Translations'
                             : textItemWithDefaultLanguage.text}
                     </Typography>
-                    <Tooltip
-                        title={`${getLabelForLanguage(
-                            textItemWithDefaultLanguage.languageCode
-                        )}, '${textItemWithDefaultLanguage.role}'`}
-                    >
-                        <IconButton>
-                            <LanguageIcon />
-                        </IconButton>
-                    </Tooltip>
+                    {isNullOrUndefined(textItemWithDefaultLanguage) ? null : (
+                        <Tooltip
+                            sx={{ paddingTop: 0, marginBottom: 0 }}
+                            title={`${getLabelForLanguage(
+                                textItemWithDefaultLanguage.languageCode
+                            )}, '${textItemWithDefaultLanguage.role}'`}
+                        >
+                            <IconButton>
+                                <LanguageIcon />
+                            </IconButton>
+                        </Tooltip>
+                    )}
                 </AccordionSummary>
                 <Divider />
-
                 {translations.map(({ languageCode, text, role }) => (
                     <TranslatedLanguageTextPresenter
+                        key={`${languageCode}-${role}`}
                         languageCode={languageCode}
                         text={text}
                         role={role}
