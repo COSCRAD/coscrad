@@ -12,7 +12,7 @@ import {
     Videocam as VideocamIcon,
     VolumeUp as VolumeUpIcon,
 } from '@mui/icons-material';
-import { Box } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 
 /**
  * TODO[https://www.pivotaltracker.com/story/show/184664117] Create an icon factory that enables custom icons
@@ -68,5 +68,9 @@ export const ResourcePreviewIconFactory = ({
         throw new Error(`Failed to build an icon for resource type: ${resourceType}`);
     }
 
-    return <Box sx={{ fontSize: iconSize, maxHeight: iconSize, color: color }}>{lookupResult}</Box>;
+    return (
+        <Box sx={{ fontSize: iconSize, maxHeight: iconSize, color: color }}>
+            <Tooltip title={resourceType}>{lookupResult}</Tooltip>
+        </Box>
+    );
 };
