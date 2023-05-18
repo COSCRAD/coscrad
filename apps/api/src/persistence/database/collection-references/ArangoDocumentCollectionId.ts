@@ -5,6 +5,7 @@ const NonResourceCollectionId = {
     tags: 'tags',
     categories: 'categories',
     uuids: 'uuids',
+    migrations: 'migrations',
     users: 'users',
     groups: 'groups',
 } as const;
