@@ -5,6 +5,7 @@ import { REPOSITORY_PROVIDER_TOKEN } from './constants/persistenceConstants';
 import { ArangoConnectionProvider } from './database/arango-connection.provider';
 import { ArangoQueryRunner } from './database/arango-query-runner';
 import { ArangoDatabaseProvider } from './database/database.provider';
+import { ArangoDataExporter } from './repositories/arango-data-exporter';
 import { ArangoIdRepository } from './repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from './repositories/arango-repository.provider';
 
@@ -58,6 +59,13 @@ export class PersistenceModule {
             inject: [ArangoDatabaseProvider],
         };
 
+        const arangoDataExporterProvider = {
+            provide: ArangoDataExporter,
+            useFactory: (arangoQueryRunner: ArangoQueryRunner) =>
+                new ArangoDataExporter(arangoQueryRunner),
+            inject: [ArangoQueryRunner],
+        };
+
         return {
             module: PersistenceModule,
             imports: [ConfigModule],
@@ -67,6 +75,7 @@ export class PersistenceModule {
                 idRepositoryProvider,
                 arangoDatabaseProvider,
                 arangoQueryRunnerProvider,
+                arangoDataExporterProvider,
             ],
             exports: [
                 arangoConnectionProvider,
@@ -74,6 +83,7 @@ export class PersistenceModule {
                 idRepositoryProvider,
                 arangoDatabaseProvider,
                 arangoQueryRunnerProvider,
+                arangoDataExporterProvider,
             ],
             global: true,
         };

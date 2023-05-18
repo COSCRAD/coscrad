@@ -7,7 +7,11 @@ import { AggregateType } from '../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { isNullOrUndefined } from '../domain/utilities/validation/is-null-or-undefined';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
+import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
+import { ArangoDocumentCollectionId } from '../persistence/database/collection-references/ArangoDocumentCollectionId';
+import { ArangoEdgeCollectionId } from '../persistence/database/collection-references/ArangoEdgeCollectionId';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
+import { ArangoDataExporter } from '../persistence/repositories/arango-data-exporter';
 import { DomainDataExporter } from '../persistence/repositories/domain-data-exporter';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -30,6 +34,8 @@ describe(`CLI Command: **data-restore**`, () => {
 
     let testRepositoryProvider: TestRepositoryProvider;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     beforeAll(async () => {
         const testAppModule = await createTestModule({
             ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
@@ -38,7 +44,7 @@ describe(`CLI Command: **data-restore**`, () => {
         const arangoConnectionProvider =
             testAppModule.get<ArangoConnectionProvider>(ArangoConnectionProvider);
 
-        const databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
+        databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
         testRepositoryProvider = new TestRepositoryProvider(databaseProvider);
 
@@ -104,19 +110,16 @@ describe(`CLI Command: **data-restore**`, () => {
                     `--filepath=${fileToRestore}`,
                 ]);
 
-                const dataExporter = new DomainDataExporter(testRepositoryProvider);
+                const dataExporter = new ArangoDataExporter(
+                    new ArangoQueryRunner(databaseProvider)
+                );
 
-                const inMemoryStore = await dataExporter.fetchSnapshot();
+                const databaseSnapshot = await dataExporter.fetchSnapshot();
 
-                const snapshot = inMemoryStore.fetchFullSnapshot();
-
-                const aggregatesNotInSnapshot = Object.values(AggregateType).reduce(
-                    (acc: AggregateType[], aggregateType) =>
-                        isNullOrUndefined(snapshot[aggregateType]) ||
-                        snapshot[aggregateType]?.length === 0
-                            ? acc.concat(aggregateType)
-                            : acc,
-                    []
+                const documentCollectionsNotInSnapshot = Object.values(
+                    ArangoDocumentCollectionId
+                ).filter((collectionId) =>
+                    isNullOrUndefined(databaseSnapshot.document[collectionId]?.length)
                 );
 
                 /**
@@ -124,9 +127,22 @@ describe(`CLI Command: **data-restore**`, () => {
                  * least one instnace of each aggregate in the post-restore state
                  * is a good sanity check.
                  */
-                expect(aggregatesNotInSnapshot).toEqual([]);
+                expect(documentCollectionsNotInSnapshot).toEqual([]);
 
-                expect(snapshot).toMatchSnapshot();
+                const edgeCollectionsNotInSnapshot = Object.values(ArangoEdgeCollectionId).filter(
+                    (collectionId) => isNullOrUndefined(databaseSnapshot.edge[collectionId]?.length)
+                );
+
+                /**
+                 * The test data is comprehensive, so checking that there is at
+                 * least one instnace of each aggregate in the post-restore state
+                 * is a good sanity check.
+                 */
+                expect(edgeCollectionsNotInSnapshot).toEqual([]);
+
+                // Add an assertoin helper
+
+                // We don't need a snapshot, this is more of an integration test. We rely on the unit test the data exporter.
             });
         });
 
@@ -151,6 +167,12 @@ describe(`CLI Command: **data-restore**`, () => {
 
                 const snapshot = inMemoryStore.fetchFullSnapshot();
 
+                /**
+                 * We could refactor this the same as the other test case. But
+                 * since this is just a sanity check that the -f flag works instead
+                 * of --filename, we have left it with the data check at the level of
+                 * the domain (instead of persistence layer).
+                 */
                 const aggregatesNotInSnapshot = Object.values(AggregateType).reduce(
                     (acc: AggregateType[], aggregateType) =>
                         isNullOrUndefined(snapshot[aggregateType]) ||
