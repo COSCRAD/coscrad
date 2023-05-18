@@ -77,7 +77,7 @@ describe(`**${cliCommandName}**`, () => {
         jest.useFakeTimers(fakeTimersConfig);
     });
 
-    describe(`when there is a latest migration`, () => {
+    describe(`when running migrations`, () => {
         const migrationUpDumpDir = `migration-1-RemoveBaseDigitalAssetUrl-${fakeTimersConfig.now}`;
 
         const dumpDir = `migration-REVERT-1-RemoveBaseDigitalAssetUrl-${fakeTimersConfig.now}`;
