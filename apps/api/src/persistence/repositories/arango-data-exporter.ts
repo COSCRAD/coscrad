@@ -44,6 +44,11 @@ export class ArangoDataExporter {
 
         const snapshot = await this.fetchSnapshot();
 
-        writeFileSync(`${directory}/${filename}`, JSON.stringify(snapshot, null, 4));
+        try {
+            // TODO We need an abstraction for writing files
+            writeFileSync(`${directory}/${filename}`, JSON.stringify(snapshot, null, 4));
+        } catch (error) {
+            throw new Error(`failed to write snapshot`);
+        }
     }
 }
