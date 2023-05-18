@@ -24,4 +24,6 @@ export interface ICoscradQueryRunner {
     ): Promise<void>;
 
     create<T>(collectionName: string, document: T): Promise<void>;
+
+    delete(collectionName: string, documentId: string): Promise<void>;
 }

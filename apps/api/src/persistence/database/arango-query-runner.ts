@@ -40,4 +40,14 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
     async create<T>(collectionName: ArangoCollectionId, document: T) {
         await this.arangoDatabase.create(document, collectionName);
     }
+
+    async delete(collectionName: ArangoCollectionId, documentId: string) {
+        if (collectionName !== ArangoCollectionId.migrations) {
+            throw new Error(
+                `Hard deletes are not allowed for aggregate roots. Please use a soft delete instead.`
+            );
+        }
+
+        await this.arangoDatabase.delete(documentId, collectionName);
+    }
 }
