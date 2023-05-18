@@ -1,6 +1,9 @@
 import { Inject } from '@nestjs/common';
+import cloneToPlainObject from '../lib/utilities/cloneToPlainObject';
 import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
 import { Migrator } from '../persistence/migrations';
+import { ArangoMigrationRecord } from '../persistence/migrations/arango-migration-record';
+import { ArangoDataExporter } from '../persistence/repositories/arango-data-exporter';
 import { CliCommand, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
@@ -16,13 +19,23 @@ export class RunMigrationsCliCommand extends CliCommandRunner {
         @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         super();
-
-        console.log(`Instantiating Migration 1`);
     }
 
     async run() {
-        this.logger.log(`Running the following migrations: \n`.concat(this.migrator.list()));
+        const migrationsToRun = await this.migrator.list(this.queryRunner, {
+            includeAlreadyRun: false,
+        });
 
-        await this.migrator.runAllAvailableMigrations(this.queryRunner);
+        this.logger.log(`Running the following migrations: \n`.concat(migrationsToRun));
+
+        await this.migrator.runAllAvailableMigrations(
+            this.queryRunner,
+            new ArangoDataExporter(this.queryRunner),
+            (migration, metadata) => {
+                const instance = new ArangoMigrationRecord(migration, metadata);
+
+                return cloneToPlainObject(instance);
+            }
+        );
     }
 }

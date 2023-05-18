@@ -1,5 +1,10 @@
 import { InternalError } from '../../lib/errors/InternalError';
 import { Ctor } from '../../lib/types/Ctor';
+import { DTO } from '../../types/DTO';
+import { ArangoQueryRunner } from '../database/arango-query-runner';
+import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
+import { ArangoDataExporter } from '../repositories/arango-data-exporter';
+import { ArangoMigrationRecord } from './arango-migration-record';
 import { ICoscradMigration } from './coscrad-migration.interface';
 import { ICoscradQueryRunner } from './coscrad-query-runner.interface';
 import { CoscradMigrationMetadata } from './decorators/migration.decorator';
@@ -23,8 +28,15 @@ export class Migrator {
         return this;
     }
 
-    list(): string {
-        return this.getKnownMigrations()
+    async list(
+        queryRunner: ICoscradQueryRunner,
+        { includeAlreadyRun = false }: { includeAlreadyRun: boolean }
+    ): Promise<string> {
+        const migrationsToList = includeAlreadyRun
+            ? this.getKnownMigrations()
+            : await this.getAvailableMigrations(queryRunner);
+
+        return migrationsToList
             .map(
                 ([
                     name,
@@ -36,8 +48,22 @@ export class Migrator {
             .join(`\n`);
     }
 
-    async runAllAvailableMigrations(queryRunner: ICoscradQueryRunner): Promise<void> {
-        const migrations = this.getKnownMigrations();
+    /**
+     * In the future, we may want to abstract over the persistence mechanism.
+     * this is only really helpful in the event that we introduce a second
+     * option for backing database. Most of the complexity is around abstracting
+     * over the way identity is represented in Arango, i.e. maintaining a
+     * COSCRAD persistence layer independent of the Arango persistence layer.
+     */
+    async runAllAvailableMigrations(
+        queryRunner: ArangoQueryRunner,
+        dataExporter: ArangoDataExporter,
+        buildMigrationRecord: (
+            migration: ICoscradMigration,
+            metadata: CoscradMigrationMetadata
+        ) => DTO<ArangoMigrationRecord>
+    ): Promise<void> {
+        const migrations = await this.getAvailableMigrations(queryRunner);
 
         if (migrations.length > 1) {
             throw new InternalError(
@@ -46,12 +72,44 @@ export class Migrator {
         }
 
         for (const [migrationName, { migration, metadata }] of migrations) {
+            // TODO Use the actual logger for this
             console.log(
                 `running migration #${migration.sequenceNumber}: ${migrationName} (${migration.name}) [${metadata.dateAuthored}]`
             );
 
+            const migrationDirectoryName = `migration-${migration.sequenceNumber}-${
+                migration.name
+            }-${Date.now()}`;
+
+            await dataExporter.dumpSnapshot(migrationDirectoryName, 'pre.data.json');
+
             await migration.up(queryRunner);
+
+            await dataExporter.dumpSnapshot(migrationDirectoryName, 'post.data.json');
+
+            await queryRunner.create('migrations', buildMigrationRecord(migration, metadata));
         }
+    }
+
+    private async getAvailableMigrations(
+        queryRunner: ICoscradQueryRunner
+    ): Promise<[string, MigrationAndMeta][]> {
+        const alreadyRunMigrations = await queryRunner.fetchMany<ArangoMigrationRecord>(
+            ArangoCollectionId.migrations
+        );
+
+        const sequenceNumbersOfMigrationsToExclude = alreadyRunMigrations.map(
+            ({ sequenceNumber }) => sequenceNumber
+        );
+
+        return this.getKnownMigrations().filter(
+            ([
+                _name,
+                {
+                    migration: { sequenceNumber },
+                },
+            ]) => !sequenceNumbersOfMigrationsToExclude.includes(sequenceNumber)
+        );
     }
 
     private getKnownMigrations(): [string, MigrationAndMeta][] {
