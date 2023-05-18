@@ -6,6 +6,7 @@ import { DomainDumpCliCommand } from './data-dump.cli-command';
 import { DomainRestoreCliCommand } from './data-restore.cli-command';
 import { ListMigrationsCliCommand } from './list-migrations.cli-command';
 import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from './logging';
+import { RevertLatestMigrationCliCommand } from './revert-latest-migration';
 import { RunMigrationsCliCommand } from './run-migrations.cli-command';
 
 @Module({
@@ -14,6 +15,7 @@ import { RunMigrationsCliCommand } from './run-migrations.cli-command';
         DomainRestoreCliCommand,
         ListMigrationsCliCommand,
         RunMigrationsCliCommand,
+        RevertLatestMigrationCliCommand,
         {
             provide: COSCRAD_LOGGER_TOKEN,
             useClass: ConsoleCoscradCliLogger,
