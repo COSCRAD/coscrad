@@ -66,7 +66,7 @@ describe(`**${cliCommandName}**`, () => {
 
     describe(`when the database state is valid`, () => {
         beforeEach(async () => {
-            testRepositoryProvider.testSetup();
+            await testRepositoryProvider.testSetup();
 
             const fullValidSnapshot = new DeluxeInMemoryStore(
                 buildTestDataInFlatFormat()
@@ -105,7 +105,7 @@ describe(`**${cliCommandName}**`, () => {
         delete testDataWithoutTerms[AggregateType.term];
 
         beforeEach(async () => {
-            testRepositoryProvider.testSetup();
+            await testRepositoryProvider.testSetup();
 
             const snapshotWithInvalidTerm = new DeluxeInMemoryStore({
                 ...testDataWithoutTerms,
