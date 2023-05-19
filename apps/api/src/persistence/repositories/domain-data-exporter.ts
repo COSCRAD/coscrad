@@ -46,6 +46,10 @@ export class DomainDataExporter {
     async validateAllInvariants(): Promise<InternalError[]> {
         const snapshotWithErrors = await this.fetchAllAggregateRoots();
 
+        /**
+         * Iterate through all `aggregate type` keys in the snapshot and filter out
+         * invariant validation errors from repository fetch many call.
+         */
         const allErrors = Object.entries(snapshotWithErrors).reduce(
             (allErrors: InternalError[], [_, instancesOrErrors]) => {
                 const errorsForThisAggregateType = instancesOrErrors.filter(isInternalError);

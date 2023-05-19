@@ -18,6 +18,23 @@ export type MigrationAndMeta = {
     migration: ICoscradMigration;
 };
 
+const SUCCESS = 'success';
+
+const FAILURE = 'failure';
+
+type MigrationVerificationStatus = typeof SUCCESS | typeof FAILURE;
+
+type MigrationVerificationCheck = {
+    name: string;
+    status: MigrationVerificationStatus;
+    errors: InternalError[];
+};
+
+type MigrationVerificationReport = {
+    status: MigrationVerificationStatus;
+    checks: MigrationVerificationCheck[];
+};
+
 const sortMigrationAndMeta = (
     [
         _,
@@ -113,17 +130,17 @@ export class Migrator {
 
             const { status, checks } = verifcationReport;
 
-            if (status !== 'success') {
+            if (status !== SUCCESS) {
                 logger.log(
                     `Migration succeeded, but verification failed the following checks: ${checks.filter(
-                        ({ status }) => status === 'failure'
+                        ({ status }) => status === FAILURE
                     )}`
                 );
             }
 
             const dataToWrite = JSON.stringify(verifcationReport, null, 4);
 
-            // TODO write an abstraction for this!
+            // TODO [https://www.pivotaltracker.com/story/show/185215587] write an abstraction for this!
             writeFileSync(`${migrationDirectoryName}/verification.data.json`, dataToWrite);
         }
     }
@@ -208,21 +225,23 @@ export class Migrator {
         );
     }
 
-    private async verifyMigration(domainDataExporter: DomainDataExporter) {
+    private async verifyMigration(
+        domainDataExporter: DomainDataExporter
+    ): Promise<MigrationVerificationReport> {
         const invariantValidationErrors = await domainDataExporter.validateAllInvariants();
 
-        const migrationStatus = invariantValidationErrors.length > 0 ? 'failure' : 'success';
+        const migrationStatus = invariantValidationErrors.length > 0 ? FAILURE : SUCCESS;
 
-        const checks = [
+        const checks: MigrationVerificationCheck[] = [
             {
+                name: 'invariant validation',
                 status: migrationStatus,
                 errors: invariantValidationErrors,
             },
         ];
 
-        const overallStatus = checks.every(({ status }) => status === 'success')
-            ? 'success'
-            : 'failure';
+        // TODO break this out and add proper constants \ typing when we allow additional checks
+        const overallStatus = checks.every(({ status }) => status === SUCCESS) ? SUCCESS : FAILURE;
 
         return {
             status: overallStatus,

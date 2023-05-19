@@ -133,7 +133,7 @@ describe(`**${cliCommandName}**`, () => {
 
             await CommandTestFactory.run(commandInstance, [cliCommandName]);
 
-            expect(mockLogger.log.mock.calls[1][0].toLowerCase().includes(`searching`)).toBe(true);
+            expect(mockLogger.log.mock.calls[2][0].toLowerCase().includes(`searching`)).toBe(true);
 
             const finalDocument = await databaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.photographs)
