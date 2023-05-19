@@ -8,6 +8,7 @@ import { ArangoDatabaseProvider } from './database/database.provider';
 import { ArangoDataExporter } from './repositories/arango-data-exporter';
 import { ArangoIdRepository } from './repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from './repositories/arango-repository.provider';
+import { DomainDataExporter } from './repositories/domain-data-exporter';
 
 @Global()
 @Module({})
@@ -66,6 +67,13 @@ export class PersistenceModule {
             inject: [ArangoQueryRunner],
         };
 
+        const domainDataExporterProvider = {
+            provide: DomainDataExporter,
+            useFactory: (arangoRepositoryProvider: ArangoRepositoryProvider) =>
+                new DomainDataExporter(arangoRepositoryProvider),
+            inject: [REPOSITORY_PROVIDER_TOKEN],
+        };
+
         return {
             module: PersistenceModule,
             imports: [ConfigModule],
@@ -76,6 +84,7 @@ export class PersistenceModule {
                 arangoDatabaseProvider,
                 arangoQueryRunnerProvider,
                 arangoDataExporterProvider,
+                domainDataExporterProvider,
             ],
             exports: [
                 arangoConnectionProvider,
@@ -84,6 +93,7 @@ export class PersistenceModule {
                 arangoDatabaseProvider,
                 arangoQueryRunnerProvider,
                 arangoDataExporterProvider,
+                domainDataExporterProvider,
             ],
             global: true,
         };

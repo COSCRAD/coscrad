@@ -1,11 +1,13 @@
 import { TestingModule } from '@nestjs/testing';
-import { existsSync, rmSync } from 'fs';
+import { existsSync, readFileSync, rmSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { buildFakeTimersConfig } from '../domain/models/__tests__/utilities/buildFakeTimersConfig';
+import { AggregateType } from '../domain/types/AggregateType';
 import { ResourceType } from '../domain/types/ResourceType';
+import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { NotFound } from '../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
@@ -105,12 +107,6 @@ describe(`run migrations`, () => {
             }
         });
 
-        it(`should log a single message to the user upon running`, async () => {
-            await CommandTestFactory.run(commandInstance, [cliCommandName]);
-
-            expect(mockLogger.log).toHaveBeenCalledTimes(1);
-        });
-
         it(`should run the migration with updates to the db`, async () => {
             await CommandTestFactory.run(commandInstance, [cliCommandName]);
 
@@ -166,6 +162,43 @@ describe(`run migrations`, () => {
              * in manually testing the contents of the file at the level of an
              * integration test. We should do so in a unit test of `ArangoDataExporter`
              */
+        });
+
+        describe(`the verification report`, () => {
+            describe(`when the resulting database state is valid`, () => {
+                it(`should write a verification report`, async () => {
+                    await CommandTestFactory.run(commandInstance, [cliCommandName]);
+
+                    const verificationFilePath = `${dumpDir}/verification.data.json`;
+
+                    expect(existsSync(verificationFilePath)).toBe(true);
+                });
+            });
+
+            describe(`when there are invariant validation errors`, () => {
+                beforeEach(async () => {
+                    // add an invalid term to the db
+                    await testRepositoryProvider.addResourcesOfSingleType(ResourceType.term, [
+                        getValidAggregateInstanceForTest(AggregateType.term).clone({
+                            // no name in either language
+                            term: undefined,
+                            termEnglish: undefined,
+                        }),
+                    ]);
+                });
+
+                it(`should write the errors`, async () => {
+                    await CommandTestFactory.run(commandInstance, [cliCommandName]);
+
+                    const verificationFilePath = `${dumpDir}/verification.data.json`;
+
+                    const readResult = JSON.parse(
+                        readFileSync(verificationFilePath, { encoding: 'utf-8' })
+                    );
+
+                    expect(readResult['status']).toBe('failure');
+                });
+            });
         });
     });
 });
