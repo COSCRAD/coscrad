@@ -105,12 +105,6 @@ describe(`run migrations`, () => {
             }
         });
 
-        it(`should log a single message to the user upon running`, async () => {
-            await CommandTestFactory.run(commandInstance, [cliCommandName]);
-
-            expect(mockLogger.log).toHaveBeenCalledTimes(1);
-        });
-
         it(`should run the migration with updates to the db`, async () => {
             await CommandTestFactory.run(commandInstance, [cliCommandName]);
 
@@ -166,6 +160,14 @@ describe(`run migrations`, () => {
              * in manually testing the contents of the file at the level of an
              * integration test. We should do so in a unit test of `ArangoDataExporter`
              */
+        });
+
+        it(`should write a verification report`, async () => {
+            await CommandTestFactory.run(commandInstance, [cliCommandName]);
+
+            const verificationFilePath = `${dumpDir}/verification.data.json`;
+
+            expect(existsSync(verificationFilePath)).toBe(true);
         });
     });
 });

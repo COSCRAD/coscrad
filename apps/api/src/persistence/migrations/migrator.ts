@@ -1,3 +1,4 @@
+import { writeFileSync } from 'fs';
 import { ICoscradLogger } from '../../coscrad-cli/logging';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { InternalError } from '../../lib/errors/InternalError';
@@ -6,6 +7,7 @@ import { DTO } from '../../types/DTO';
 import { ArangoQueryRunner } from '../database/arango-query-runner';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { ArangoDataExporter } from '../repositories/arango-data-exporter';
+import { DomainDataExporter } from '../repositories/domain-data-exporter';
 import { ArangoMigrationRecord } from './arango-migration-record';
 import { ICoscradMigration } from './coscrad-migration.interface';
 import { ICoscradQueryRunner } from './coscrad-query-runner.interface';
@@ -75,10 +77,12 @@ export class Migrator {
     async runAllAvailableMigrations(
         queryRunner: ArangoQueryRunner,
         dataExporter: ArangoDataExporter,
+        domainDataExporter: DomainDataExporter,
         buildMigrationRecord: (
             migration: ICoscradMigration,
             metadata: CoscradMigrationMetadata
-        ) => DTO<ArangoMigrationRecord>
+        ) => DTO<ArangoMigrationRecord>,
+        logger: ICoscradLogger
     ): Promise<void> {
         const migrations = await this.getAvailableMigrations(queryRunner);
 
@@ -89,8 +93,7 @@ export class Migrator {
         }
 
         for (const [migrationName, { migration, metadata }] of migrations) {
-            // TODO Use the actual logger for this
-            console.log(
+            logger.log(
                 `running migration #${migration.sequenceNumber}: ${migrationName} (${migration.name}) [${metadata.dateAuthored}]`
             );
 
@@ -105,6 +108,23 @@ export class Migrator {
             await dataExporter.dumpSnapshot(migrationDirectoryName, 'post.data.json');
 
             await queryRunner.create('migrations', buildMigrationRecord(migration, metadata));
+
+            const verifcationReport = await this.verifyMigration(domainDataExporter);
+
+            const { status, checks } = verifcationReport;
+
+            if (status !== 'success') {
+                logger.log(
+                    `Migration succeeded, but verification failed the following checks: ${checks.filter(
+                        ({ status }) => status === 'failure'
+                    )}`
+                );
+            }
+
+            const dataToWrite = JSON.stringify(verifcationReport, null, 4);
+
+            // TODO write an abstraction for this!
+            writeFileSync(`${migrationDirectoryName}/verification.data.json`, dataToWrite);
         }
     }
 
@@ -186,5 +206,27 @@ export class Migrator {
                 // sort with most recent (highest sequence number) first
                 .sort(sortMigrationAndMeta)
         );
+    }
+
+    private async verifyMigration(domainDataExporter: DomainDataExporter) {
+        const invariantValidationErrors = await domainDataExporter.validateAllInvariants();
+
+        const migrationStatus = invariantValidationErrors.length > 0 ? 'failure' : 'success';
+
+        const checks = [
+            {
+                status: migrationStatus,
+                errors: invariantValidationErrors,
+            },
+        ];
+
+        const overallStatus = checks.every(({ status }) => status === 'success')
+            ? 'success'
+            : 'failure';
+
+        return {
+            status: overallStatus,
+            checks,
+        };
     }
 }
