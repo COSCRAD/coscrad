@@ -64,40 +64,43 @@ describe(`CLI Command: **data-restore**`, () => {
         }
     });
 
+    beforeEach(async () => {
+        await testRepositoryProvider.testTeardown();
+
+        const testDataInFlatFormat = buildTestDataInFlatFormat();
+
+        const testDataWithUniqueKeys = Object.entries(testDataInFlatFormat).reduce(
+            (acc, [aggregateType, instances]) => ({
+                ...acc,
+                [aggregateType]: instances.map((instance) =>
+                    instance.clone({
+                        id: `${aggregateType.toUpperCase()}.${instance.id}`,
+                    })
+                ),
+            }),
+            {}
+        );
+
+        if (existsSync(fileToRestore)) unlinkSync(fileToRestore);
+
+        writeFileSync(
+            fileToRestore,
+            JSON.stringify(
+                convertInMemorySnapshotToDatabaseFormat(
+                    new DeluxeInMemoryStore(
+                        testDataWithUniqueKeys
+                    ).fetchFullSnapshotInLegacyFormat()
+                ),
+                null,
+                4
+            )
+        );
+        await testRepositoryProvider.testTeardown();
+    });
+
     describe(`when the command is valid`, () => {
         beforeEach(async () => {
             process.env.DATA_MODE = 'import';
-
-            await testRepositoryProvider.testTeardown();
-
-            const testDataInFlatFormat = buildTestDataInFlatFormat();
-
-            const testDataWithUniqueKeys = Object.entries(testDataInFlatFormat).reduce(
-                (acc, [aggregateType, instances]) => ({
-                    ...acc,
-                    [aggregateType]: instances.map((instance) =>
-                        instance.clone({
-                            id: `${aggregateType.toUpperCase()}.${instance.id}`,
-                        })
-                    ),
-                }),
-                {}
-            );
-
-            if (existsSync(fileToRestore)) unlinkSync(fileToRestore);
-
-            writeFileSync(
-                fileToRestore,
-                JSON.stringify(
-                    convertInMemorySnapshotToDatabaseFormat(
-                        new DeluxeInMemoryStore(
-                            testDataWithUniqueKeys
-                        ).fetchFullSnapshotInLegacyFormat()
-                    ),
-                    null,
-                    4
-                )
-            );
         });
 
         afterEach(() => {
@@ -203,37 +206,6 @@ describe(`CLI Command: **data-restore**`, () => {
     describe(`when the environment variable DATA_MODE is not set to 'import'`, () => {
         beforeEach(async () => {
             process.env.DATA_MODE = 'definitely_not_import';
-
-            await testRepositoryProvider.testTeardown();
-
-            const testDataInFlatFormat = buildTestDataInFlatFormat();
-
-            const testDataWithUniqueKeys = Object.entries(testDataInFlatFormat).reduce(
-                (acc, [aggregateType, instances]) => ({
-                    ...acc,
-                    [aggregateType]: instances.map((instance) =>
-                        instance.clone({
-                            id: `${aggregateType.toUpperCase()}.${instance.id}`,
-                        })
-                    ),
-                }),
-                {}
-            );
-
-            if (existsSync(fileToRestore)) unlinkSync(fileToRestore);
-
-            writeFileSync(
-                fileToRestore,
-                JSON.stringify(
-                    convertInMemorySnapshotToDatabaseFormat(
-                        new DeluxeInMemoryStore(
-                            testDataWithUniqueKeys
-                        ).fetchFullSnapshotInLegacyFormat()
-                    ),
-                    null,
-                    4
-                )
-            );
         });
 
         afterEach(() => {
