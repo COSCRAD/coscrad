@@ -1,7 +1,6 @@
-import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
-import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
-import { useEffect, useState } from 'react';
-import styles from './MediaPlayer.module.scss';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import { Box, IconButton } from '@mui/material';
+import { useEffect, useRef } from 'react';
 
 export interface MediaPlayerProps {
     audioUrl: string;
@@ -9,67 +8,53 @@ export interface MediaPlayerProps {
 }
 
 export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
-    const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [canPlayThrough, setCanPlayThrough] = useState(false);
-
-    const safePlay = () => {
-        if (!canPlayThrough || !audio) {
-            return;
-        }
-
-        audio.play();
-        setIsPlaying(true);
-    };
-
-    const handlePause = () => {
-        audio?.pause();
-        setIsPlaying(false);
-    };
-
-    const handleAudioNotPlaying = () => {
-        setIsPlaying(false);
-    };
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const playButtonRef = useRef<HTMLButtonElement | null>(null);
 
     useEffect(() => {
-        const audioElement = new Audio();
-        audioElement.src = audioUrl;
-        audioElement.preload = 'auto';
-        audioElement.addEventListener('canplaythrough', () => {
-            setCanPlayThrough(true);
-        });
-        audioElement.addEventListener('ended', handleAudioNotPlaying);
-        setAudio(audioElement);
+        const AudioContext = window.AudioContext || window.AudioContext;
+        const audioContext = new AudioContext();
 
-        return () => {
-            audioElement.removeEventListener('ended', handleAudioNotPlaying);
-        };
+        const audioElement = audioRef.current;
+        const playButton = playButtonRef.current;
+
+        if (audioElement) {
+            if (!audioElement.src || audioElement.src !== audioUrl) {
+                audioElement.src = audioUrl;
+            }
+
+            if (!audioElement) {
+                const track = audioContext.createMediaElementSource(audioElement);
+                track.connect(audioContext.destination);
+            }
+        } else {
+            console.error('Audio is null');
+        }
+
+        if (playButton) {
+            playButton.addEventListener('click', () => {
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume().then(() => {
+                        audioElement?.play();
+                    });
+                } else if (audioContext.state === 'running') {
+                    audioElement?.play();
+                }
+            });
+        } else {
+            console.error('Play button is null');
+        }
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        return () => {};
     }, [audioUrl]);
 
     return (
-        <div className={styles['container']}>
-            {audio && (
-                <>
-                    {!isPlaying && (
-                        <PlayCircleFilledIcon
-                            sx={{
-                                cursor: 'pointer',
-                            }}
-                            color="primary"
-                            className={styles['media-controls']}
-                            onClick={() => safePlay()}
-                        />
-                    )}
-                    {isPlaying && (
-                        <PauseCircleFilledIcon
-                            sx={{ cursor: 'pointer' }}
-                            color="secondary"
-                            className={styles['media-controls']}
-                            onClick={() => handlePause()}
-                        />
-                    )}
-                </>
-            )}
-        </div>
+        <Box>
+            <audio ref={audioRef}></audio>
+
+            <IconButton ref={playButtonRef}>
+                <PlayCircleIcon color="secondary" />
+            </IconButton>
+        </Box>
     );
 }
