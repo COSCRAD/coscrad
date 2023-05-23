@@ -24,6 +24,12 @@ export class ListMigrationsCliCommand extends CliCommandRunner {
             includeAlreadyRun: false,
         });
 
+        if (migrations.length === 0) {
+            this.logger.log(`no migrations available`);
+
+            return;
+        }
+
         this.logger.log(migrations);
     }
 }

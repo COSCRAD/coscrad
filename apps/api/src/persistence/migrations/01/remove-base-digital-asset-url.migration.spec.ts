@@ -1,3 +1,4 @@
+import { isDeepStrictEqual } from 'util';
 import createTestModule from '../../../app/controllers/__tests__/createTestModule';
 import { Photograph } from '../../../domain/models/photograph/entities/photograph.entity';
 import { Term } from '../../../domain/models/term/entities/term.entity';
@@ -26,7 +27,7 @@ const baseDigitalAssetUrl = `https://www.mymedia.org/downloads/`;
 
 process.env[BASE_DIGITAL_ASSET_URL] = baseDigitalAssetUrl;
 
-type OldPhotograph = Omit<Photograph, 'imageUrl'> & { filename: string };
+type OldPhotograph = Omit<Photograph, 'imageUrl'> & { filename?: string };
 
 describe(`RemoveBaseDigitalAssetUrl`, () => {
     let testDatabaseProvider: ArangoDatabaseProvider;
@@ -78,8 +79,17 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
             contributorId: '55',
         };
 
+        const dtoForTermWithoutAudioFilename = {
+            term: `so bogus`,
+            termEnglish: `so bogus (English)`,
+            // audioFilename: MISSING!,
+            type: ResourceType.term,
+            published: true,
+            contributorId: '55',
+        };
+
         const originalTermDocumentsWithoutKeys: Omit<ArangoDatabaseDocument<DTO<Term>>, '_key'>[] =
-            [dtoForTermToCheckManually];
+            [dtoForTermToCheckManually, dtoForTermWithoutAudioFilename];
 
         const originalTermDocuments = originalTermDocumentsWithoutKeys.map((partialDto, index) => ({
             ...partialDto,
@@ -101,10 +111,24 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
             published: true,
         };
 
+        const dtoForPhotographWithoutFilename: Omit<
+            ArangoDatabaseDocument<DTO<OldPhotograph>>,
+            '_key'
+        > = {
+            type: ResourceType.photograph,
+            // filename: MISSING!,
+            photographer: `James Rames`,
+            dimensions: {
+                widthPX: 300,
+                heightPX: 400,
+            },
+            published: true,
+        };
+
         const originalPhotographDocumentsWithoutKeys: Omit<
             ArangoDatabaseDocument<DTO<OldPhotograph>>,
             '_key'
-        >[] = [dtoForPhotographToCheckManually];
+        >[] = [dtoForPhotographToCheckManually, dtoForPhotographWithoutFilename];
 
         const originalPhotographDocuments = originalPhotographDocumentsWithoutKeys.map(
             (partialDto, index) => ({
@@ -130,7 +154,11 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
 
         const idForTermToCheckManually = buildId(ResourceType.term, 0);
 
+        const idForTermWithoutAudioFilename = buildId(ResourceType.term, 1);
+
         const idForPhotographToCheckManually = buildId(ResourceType.photograph, 0);
+
+        const idForPhotographWithoutFilename = buildId(ResourceType.photograph, 1);
 
         it(`should apply the appropriate updates`, async () => {
             await migrationUnderTest.up(testQueryRunner);
@@ -142,7 +170,9 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
             expect(updatedTermDocuments.length).toBe(originalTermDocuments.length);
 
             const idsOfDocumentsWithoutBaseDigitalAssetUrl = updatedTermDocuments.filter(
-                ({ audioFilename }) => !audioFilename.includes(baseDigitalAssetUrl)
+                ({ audioFilename }) =>
+                    !isNullOrUndefined(audioFilename) &&
+                    !audioFilename.includes(baseDigitalAssetUrl)
             );
 
             expect(idsOfDocumentsWithoutBaseDigitalAssetUrl).toEqual([]);
@@ -155,6 +185,14 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
 
             expect(audioFilename).toBe(`https://www.mymedia.org/downloads/bogus.mp3`);
 
+            const migratedTermWithoutAudiofilename = (await testDatabaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.terms)
+                .fetchById(idForTermWithoutAudioFilename)) as unknown as ArangoDatabaseDocument<
+                DTO<Term>
+            >;
+
+            expect(migratedTermWithoutAudiofilename.audioFilename).not.toBeTruthy();
+
             const { imageUrl } = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.photographs)
                 .fetchById(idForPhotographToCheckManually)) as unknown as ArangoDatabaseDocument<
@@ -162,6 +200,14 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
             >;
 
             expect(imageUrl).toBe(`https://www.mymedia.org/downloads/flowers.png`);
+
+            const dtoForPhotographWithoutFilename = (await testDatabaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.photographs)
+                .fetchById(idForPhotographWithoutFilename)) as unknown as ArangoDatabaseDocument<
+                DTO<Photograph>
+            >;
+
+            expect(dtoForPhotographWithoutFilename.imageUrl).not.toBeTruthy();
 
             const updatedPhotographDocuments = (await testDatabaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.photographs)
@@ -171,7 +217,8 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
 
             const idsOfPhotographDocumentsWithoutBaseDigitalAssetUrl =
                 updatedPhotographDocuments.filter(
-                    ({ imageUrl }) => !imageUrl.includes(baseDigitalAssetUrl)
+                    ({ imageUrl }) =>
+                        !isNullOrUndefined(imageUrl) && !imageUrl.includes(baseDigitalAssetUrl)
                 );
 
             expect(idsOfPhotographDocumentsWithoutBaseDigitalAssetUrl).toEqual([]);
@@ -212,15 +259,26 @@ describe(`RemoveBaseDigitalAssetUrl`, () => {
                 };
             };
 
-            const snapshotBefore = await buildMiniSnapshot();
+            const { terms: termsBefore, photographs: photographsBefore } =
+                await buildMiniSnapshot();
 
             await migrationUnderTest.up(testQueryRunner);
 
             await migrationUnderTest.down(testQueryRunner);
 
-            const snapshotAfter = await buildMiniSnapshot();
+            const { terms: termsAfter, photographs: photographsAfter } = await buildMiniSnapshot();
 
-            expect(snapshotBefore).toEqual(snapshotAfter);
+            const doArraysContainEqualMembers = <T, U>(a: T[], b: U[]) =>
+                a.length === b.length &&
+                a.every((element) =>
+                    b.some((elementFromB) => isDeepStrictEqual(element, elementFromB))
+                );
+
+            // TODO add a custom jest matcher for this
+            // TODO can we optimize this?
+            expect(doArraysContainEqualMembers(termsBefore, termsAfter)).toBe(true);
+
+            expect(doArraysContainEqualMembers(photographsBefore, photographsAfter)).toBe(true);
         });
     });
 });

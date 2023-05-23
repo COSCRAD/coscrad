@@ -1,4 +1,4 @@
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Photograph } from '../../../domain/models/photograph/entities/photograph.entity';
 import { Term } from '../../../domain/models/term/entities/term.entity';
 import { InternalError } from '../../../lib/errors/InternalError';
@@ -60,17 +60,23 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
 
         await queryRunner.update<TermDocument, TermDocument>(
             ArangoCollectionId.terms,
-            ({ audioFilename }) => ({
-                audioFilename: `${this.baseDigitalAssetUrl}${audioFilename}.${defaultAudioExtension}`,
-            })
+            ({ audioFilename }) =>
+                isNullOrUndefined(audioFilename)
+                    ? {}
+                    : {
+                          audioFilename: `${this.baseDigitalAssetUrl}${audioFilename}.${defaultAudioExtension}`,
+                      }
         );
 
         await queryRunner.update<OldPhotographDocument, PhotographDocument>(
             ArangoCollectionId.photographs,
-            ({ filename }) => ({
-                imageUrl: `${this.baseDigitalAssetUrl}${filename}.${defaultPhotographExtension}`,
-                filename: null,
-            })
+            ({ filename }) =>
+                isNullOrUndefined(filename)
+                    ? {}
+                    : {
+                          imageUrl: `${this.baseDigitalAssetUrl}${filename}.${defaultPhotographExtension}`,
+                          filename: null,
+                      }
         );
     }
 
@@ -85,7 +91,7 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
         await queryRunner.update<TermDocument, TermDocument>(
             ArangoCollectionId.terms,
             ({ audioFilename }) => {
-                if (audioFilename.includes(this.baseDigitalAssetUrl)) {
+                if (audioFilename?.includes(this.baseDigitalAssetUrl)) {
                     return {
                         audioFilename: audioFilename
                             .replace(this.baseDigitalAssetUrl, '')
@@ -98,7 +104,7 @@ export class RemoveBaseDigitalAssetUrl implements ICoscradMigration {
         await queryRunner.update<PhotographDocument, OldPhotographDocument>(
             ArangoCollectionId.photographs,
             ({ imageUrl }) => {
-                if (imageUrl.includes(this.baseDigitalAssetUrl)) {
+                if (imageUrl?.includes(this.baseDigitalAssetUrl)) {
                     return {
                         filename: imageUrl
                             .replace(this.baseDigitalAssetUrl, '')
