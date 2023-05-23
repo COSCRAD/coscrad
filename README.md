@@ -35,23 +35,7 @@ that leverage the COSCRAD API. The Many ideas explored in the community projects
 will eventually find their way into Coscrad's core.
 
 **COSCRAD CLI**
-We also have built our own command-line interface, `COSCRAD CLI`. This is used
-for administrative tasks like dumping data snapshots (in persistence layer, domain layer
-and view layer formats), seeding test data and restoring data dumps, dumping
-a JSON version of schemas for our domain models, view models, command and event payloads,
-and so on.
-
-Currently, `COSCRAD CLI` is part of the `api`, and it is available via a custom
-build of the `api`. Run `npx nx build:api:cli` to build the `COSCRAD CLI`. The
-cli will be built to `dist/apps/cosccrad-cli`. Run
-
-```
-node main.js <command> <options>
-```
-
-from within this directory to execute a `COSCRAD CLI` command.
-
-<!-- TODO Add documentation for all commands -->
+The `coscrad-cli` is a command line tool for data administration tasks. Its use is documented [here](./apps/api/cli.README.md)
 
 In the future, once our domain has been moved to a separate lib, we will move
 the `COSCRAD CLI` to a standalone app in the mono-repo.
