@@ -35,11 +35,7 @@ that leverage the COSCRAD API. The Many ideas explored in the community projects
 will eventually find their way into Coscrad's core.
 
 **COSCRAD CLI**
-We also have built our own command-line interface, `COSCRAD CLI`. This is used
-for administrative tasks like dumping data snapshots (in persistence layer, domain layer
-and view layer formats), seeding test data and restoring data dumps, dumping
-a JSON version of schemas for our domain models, view models, command and event payloads,
-and so on.
+We also have built our own command-line interface, which is documented [here](./apps/api/cli.README.md)
 
 Currently, `COSCRAD CLI` is part of the `api`, and it is available via a custom
 build of the `api`. Run `npx nx build:api:cli` to build the `COSCRAD CLI`. The
