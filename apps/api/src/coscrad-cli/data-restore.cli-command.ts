@@ -16,7 +16,7 @@ export class DomainRestoreCliCommand extends CliCommandRunner {
     }
 
     async run(_passedParams: string[], { filepath }: { filepath: string }): Promise<void> {
-        return this.dataImporter.restore({ filepath });
+        return this.dataImporter.import({ filepath });
     }
 
     @CliCommandOption({

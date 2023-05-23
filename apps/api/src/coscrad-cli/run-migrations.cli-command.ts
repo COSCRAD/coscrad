@@ -28,6 +28,12 @@ export class RunMigrationsCliCommand extends CliCommandRunner {
             includeAlreadyRun: false,
         });
 
+        if (migrationsToRun.length === 0) {
+            this.logger.log(`No migrations available. Exiting.`);
+
+            return;
+        }
+
         this.logger.log(`Running the following migrations: \n`.concat(migrationsToRun));
 
         await this.migrator.runAllAvailableMigrations(
