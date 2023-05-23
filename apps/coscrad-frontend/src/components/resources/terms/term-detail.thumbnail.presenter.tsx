@@ -4,6 +4,7 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { MediaPlayer } from '@coscrad/media-player';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import {
     ResourceDetailThumbnailPresenter,
     SingleOptionalPropertyPresenter,
@@ -19,9 +20,11 @@ export const TermDetailThumbnailPresenter = ({
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.term}>
             <div data-testid={id} />
             <SingleOptionalPropertyPresenter display="Contributor" value={contributor} />
-            <div id="media-player">
-                <MediaPlayer listenMessage="Play!" audioUrl={audioURL} />
-            </div>
+            {!isNullOrUndefined(audioURL) ? (
+                <div id="media-player">
+                    <MediaPlayer listenMessage="Play!" audioUrl={audioURL} />
+                </div>
+            ) : null}
         </ResourceDetailThumbnailPresenter>
     );
 };
