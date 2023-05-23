@@ -27,7 +27,7 @@ type MigrationVerificationStatus = typeof SUCCESS | typeof FAILURE;
 type MigrationVerificationCheck = {
     name: string;
     status: MigrationVerificationStatus;
-    errors: InternalError[];
+    errors: string[];
 };
 
 type MigrationVerificationReport = {
@@ -132,9 +132,9 @@ export class Migrator {
 
             if (status !== SUCCESS) {
                 logger.log(
-                    `Migration succeeded, but verification failed the following checks: ${checks.filter(
-                        ({ status }) => status === FAILURE
-                    )}`
+                    `Migration succeeded, but verification failed the following checks: ${checks
+                        .filter(({ status }) => status === FAILURE)
+                        .map(({ name }) => name)}`
                 );
             }
 
@@ -236,7 +236,7 @@ export class Migrator {
             {
                 name: 'invariant validation',
                 status: migrationStatus,
-                errors: invariantValidationErrors,
+                errors: invariantValidationErrors.map((error) => error.toString()),
             },
         ];
 
