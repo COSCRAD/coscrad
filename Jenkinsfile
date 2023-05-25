@@ -108,20 +108,7 @@ pipeline {
                 copyConfig('COSCRAD')
                 configFileProvider([configFile(fileId:'staging.auth.config',  \
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
-                        echo 'Building COSCRAD for deployment'
-                        echo "NODE ENV: ${NODE_ENV}"
-                        echo 'Installing dependencies'
-                        sh 'npm ci --legacy-peer-deps'
-
-                        echo 'Building COSCRAD'
-                        echo 'with node version'
-                        sh 'node --version'
-
-                        sh 'npx nx build coscrad-frontend --prod'
-
-                        sh 'npx nx build api --prod'
-
-                        sh 'npx nx run api:build:cli'
+                    runCoscradBuild()
             }
             }
                 post {
@@ -170,6 +157,10 @@ void copyConfig(String target) {
 void runCoscradBuild() {
     echo 'Building COSCRAD for deployment'
     echo "NODE ENV: ${NODE_ENV}"
+
+    echo 'Installing nx'
+    sh 'npm install -g @nrwl/cli'
+
     echo 'Installing dependencies'
     sh 'npm ci --legacy-peer-deps'
 
@@ -177,9 +168,11 @@ void runCoscradBuild() {
     echo 'with node version'
     sh 'node --version'
 
-    sh 'npx nx build coscrad-frontend --prod'
+    sh 'npm run build:coscrad:prod'
 
-    sh 'npx nx build api --prod'
+    // sh 'npx nx build coscrad-frontend --prod'
 
-    sh 'npx nx run api:build:cli'
+    // sh 'npx nx build api'
+
+// sh 'npx nx run api:build:cli'
 }
