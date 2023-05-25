@@ -33,7 +33,7 @@ pipeline {
                 branch 'PR-*'
             }
             steps {
-                testFunction()
+                copyConfig()
                 configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
                     echo 'PR opened or updated...'
@@ -47,14 +47,6 @@ pipeline {
 
                     echo 'Running lint on all COSCRAD projects'
                     sh 'npm run lint:coscrad'
-
-                /**
-                * Note that the sample content config is actually valid for
-                * our staging build.
-                **/
-                    echo 'copying sample content config for test build'
-                /* groovylint-disable-next-line LineLength */
-                    sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
 
                     echo 'Building COSCRAD'
                     echo 'with node version'
@@ -101,7 +93,9 @@ pipeline {
                 SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
             }
             when {
-                branch 'integration'
+                expression {
+                    return env.BRANCH_NAME == 'integration'
+                }
             }
             steps {
                 configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
@@ -144,6 +138,13 @@ pipeline {
     }
 }
 
-void testFunction() {
-    sh 'echo TESTFUNCTIONWORKS'
+void copyConfig() {
+    /**
+    * Note that the sample content config is actually valid for
+    * our staging build.
+    **/
+    echo 'copying sample content config for test build'
+
+   /* groovylint-disable-next-line LineLength */
+    sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
 }
