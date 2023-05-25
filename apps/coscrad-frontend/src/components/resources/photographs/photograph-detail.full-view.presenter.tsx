@@ -1,4 +1,8 @@
-import { ICategorizableDetailQueryResult, IPhotographViewModel } from '@coscrad/api-interfaces';
+import {
+    ICategorizableDetailQueryResult,
+    IPhotographViewModel,
+    MultilingualTextItemRole,
+} from '@coscrad/api-interfaces';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ImageFullPageWidth } from '../../../utils/generic-components/presenters/image-full-page-width';
 import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
@@ -6,15 +10,16 @@ import { ResourceNamePresenter } from '../../../utils/generic-components/present
 export const PhotographDetailFullViewPresenter = ({
     id,
     imageUrl,
+    name,
 }: ICategorizableDetailQueryResult<IPhotographViewModel>): JSX.Element => {
-    const name = 'Totem Pole';
-
     // Simulating image object retrieved from Digital Asset Manager
     const image = {
         src: imageUrl,
         width: 2000,
         height: 1329,
-        title: 'Haida play Singii Ganguu',
+        title:
+            name.items.find(({ role }) => role === MultilingualTextItemRole.original)?.text ||
+            `photograph/${id}`,
     };
 
     return (
