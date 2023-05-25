@@ -163,6 +163,9 @@ void runCoscradBuild() {
     echo 'Installing nx'
     sh 'npm install -g @nrwl/cli'
 
+    echo 'nx version'
+    sh 'nx --version'
+
     echo 'Installing dependencies'
     sh 'npm ci --legacy-peer-deps'
 
