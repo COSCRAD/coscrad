@@ -33,7 +33,7 @@ pipeline {
                 branch 'PR-*'
             }
             steps {
-                copyConfig()
+                copyConfig('COSCRAD')
                 configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
                     echo 'PR opened or updated...'
@@ -93,11 +93,16 @@ pipeline {
                 SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
             }
             when {
-                expression {
-                    return env.BRANCH_NAME == 'integration'
-                }
+                // TODO return this to integration
+                branch '185261093-reuseable-staging-deployment'
             }
+            // when {
+            //     expression {
+            //         return env.BRANCH_NAME == 'integration'
+            //     }
+            // }
             steps {
+                copyConfig('Haida')
                 configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
                     echo 'Merged to integration'
@@ -108,14 +113,6 @@ pipeline {
                     echo 'Building COSCRAD'
                     echo 'with node version'
                     sh 'node --version'
-
-                /**
-                * Note that the sample content config is actually valid for
-                * our staging build.
-                **/
-                    echo 'copying sample content config for test build'
-                /* groovylint-disable-next-line LineLength */
-                    sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
 
                     sh 'npm run build:coscrad:prod'
 
@@ -138,13 +135,26 @@ pipeline {
     }
 }
 
-void copyConfig() {
+void copyConfig(String target) {
     /**
     * Note that the sample content config is actually valid for
     * our staging build.
     **/
     echo 'copying sample content config for test build'
 
-   /* groovylint-disable-next-line LineLength */
-    sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
+    if (target == 'COSCRAD') {
+        sh 'echo using SAMPLE.content.config as the COSCRAD front-end config'
+
+        /* groovylint-disable-next-line LineLength */
+        sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
+        return
+    }
+
+    if (target == 'Haida') {
+        sh 'echo sing Haida front-end content config'
+        error 'No Haida content-config is specified in Jenkins'
+        return
+    }
+
+    error "unsupported deployment target: ${target}"
 }
