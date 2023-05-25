@@ -74,7 +74,7 @@ pipeline {
             }
             }
         }
-        stage('deploy to staging') {
+        stage('build and deploy to staging') {
             agent {
                 label 'jenkins-build-agent'
             }
@@ -104,21 +104,10 @@ pipeline {
             //     }
             // }
             steps {
-                copyConfig('Haida')
+                copyConfig('COSCRAD')
                 configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
-                    echo 'Merged to integration'
-                    echo "NODE ENV: ${NODE_ENV}"
-                    echo 'Installing dependencies'
-                    sh 'npm ci --legacy-peer-deps'
-
-                    echo 'Building COSCRAD'
-                    echo 'with node version'
-                    sh 'node --version'
-
-                    sh 'npm run build:coscrad:prod'
-
-                    sh 'npx nx run api:build:cli'
+                    runCoscradBuild()
             }
             }
                 post {
@@ -162,4 +151,19 @@ void copyConfig(String target) {
     /* groovylint-disable-next-line LineLength */
     sh "cp ${contentConfigDirectory}${getContentConfigFilename(target)} ${contentConfigDirectory}content.config.ts"
     return
+}
+
+void runCoscradBuild() {
+    echo 'Building COSCRAD for deployment'
+    echo "NODE ENV: ${NODE_ENV}"
+    echo 'Installing dependencies'
+    sh 'npm ci --legacy-peer-deps'
+
+    echo 'Building COSCRAD'
+    echo 'with node version'
+    sh 'node --version'
+
+    sh 'npm run build:coscrad:prod'
+
+    sh 'npx nx run api:build:cli'
 }
