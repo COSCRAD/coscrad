@@ -30,7 +30,9 @@ pipeline {
                 SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
             }
             when {
-                branch 'PR-*'
+                // TODO put me back
+                // branch 'PR-*'
+                expression { return false }
             }
             steps {
                 copyConfig('COSCRAD')
