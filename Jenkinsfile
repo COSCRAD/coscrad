@@ -36,7 +36,7 @@ pipeline {
             }
             steps {
                 copyConfig('COSCRAD')
-                configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
+                configFileProvider([configFile(fileId:'staging.auth.config',  \
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
                     echo 'PR opened or updated...'
                     echo "NODE ENV: ${NODE_ENV}"
@@ -105,7 +105,7 @@ pipeline {
             // }
             steps {
                 copyConfig('COSCRAD')
-                configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
+                configFileProvider([configFile(fileId:'staging.auth.config',  \
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
                     runCoscradBuild()
             }
