@@ -4,10 +4,10 @@ import { ConfigurableContent, DetailViewType } from './configurable-content-sche
 export const contentConfig: ConfigurableContent = {
     siteTitle: 'COSCRAD [-Sandbox-]',
     subTitle: 'Powering a Web of Knowledge',
-    about: 'Add a few sentences about your web of knowledge!',
-    siteDescription: 'Your site decription goes here..',
+    about: 'Welcome to the official COSCRAD sandbox!',
+    siteDescription: 'Here you can test drive our toy intance of the COSCRAD platform',
     siteHomeImageUrl: 'https://www.picbox.org/home-image.png',
-    copyrightHolder: 'My Organization',
+    copyrightHolder: 'COSCRAD',
     coscradLogoUrl: 'https://www.picbox.org/coscrad-logo.png',
     organizationLogoUrl: 'https://www.picbox.org/org-logo.png',
     songIdToCredits: {
