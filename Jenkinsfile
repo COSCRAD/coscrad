@@ -30,13 +30,10 @@ pipeline {
                 SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
             }
             when {
-                // TODO put me back
-                // branch 'PR-*'
-                expression { return false }
+                branch 'PR-*'
             }
             steps {
-                copyConfig('COSCRAD')
-                configFileProvider([configFile(fileId:'staging.auth.config',  \
+                configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
                     echo 'PR opened or updated...'
                     echo "NODE ENV: ${NODE_ENV}"
@@ -49,6 +46,14 @@ pipeline {
 
                     echo 'Running lint on all COSCRAD projects'
                     sh 'npm run lint:coscrad'
+
+                /**
+                * Note that the sample content config is actually valid for
+                * our staging build.
+                **/
+                    echo 'copying sample content config for test build'
+                /* groovylint-disable-next-line LineLength */
+                    sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
 
                     echo 'Building COSCRAD'
                     echo 'with node version'
@@ -74,14 +79,13 @@ pipeline {
             }
             }
         }
-        stage('build and deploy to staging') {
+        stage('deploy to staging') {
             agent {
                 label 'jenkins-build-agent'
             }
             tools { nodejs nodeInstallationName }
             environment {
-                // This is so that webpack will optimize the build
-                NODE_ENV = 'production'
+                NODE_ENV = 'staging'
                 NODE_PORT = 3131
                 ARANGO_DB_HOST_DOMAIN = 'arangotest.digiteched.com'
                 ARANGO_DB_HOST_SCHEME = 'https'
@@ -96,19 +100,31 @@ pipeline {
                 SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
             }
             when {
-                // TODO return this to integration
-                branch 'PR-*'
+                branch 'integration'
             }
-            // when {
-            //     expression {
-            //         return env.BRANCH_NAME == 'integration'
-            //     }
-            // }
             steps {
-                copyConfig('COSCRAD')
-                configFileProvider([configFile(fileId:'staging.auth.config',  \
+                configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
-                    runCoscradBuild()
+                    echo 'Merged to integration'
+                    echo "NODE ENV: ${NODE_ENV}"
+                    echo 'Installing dependencies'
+                    sh 'npm ci --legacy-peer-deps'
+
+                    echo 'Building COSCRAD'
+                    echo 'with node version'
+                    sh 'node --version'
+
+                /**
+                * Note that the sample content config is actually valid for
+                * our staging build.
+                **/
+                    echo 'copying sample content config for test build'
+                /* groovylint-disable-next-line LineLength */
+                    sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
+
+                    sh 'npm run build:coscrad:prod'
+
+                    sh 'npx nx run api:build:cli'
             }
             }
                 post {
@@ -125,59 +141,4 @@ pipeline {
                 }
         }
     }
-}
-
-String getContentConfigFilename(String target) {
-    if (target == 'COSCRAD') { return 'content.config.SAMPLE.ts' }
-
-    if (target == 'Haida') { return 'content.config.STAGING.ts' }
-
-    error "unsupported deployment target: ${target}"
-}
-
-/**
-* # Available Targets
- - COSCRAD
- - Haida
-**/
-void copyConfig(String target) {
-    String contentConfigDirectory = 'apps/coscrad-frontend/src/configurable-front-matter/data/'
-
-    /**
-    * Note that the sample content config is actually valid for
-    * our staging build.
-    **/
-    echo "attempting to copy sample content config for test build for target ${target}"
-
-    /* groovylint-disable-next-line LineLength */
-    sh "cp ${contentConfigDirectory}${getContentConfigFilename(target)} ${contentConfigDirectory}content.config.ts"
-    return
-}
-
-void runCoscradBuild() {
-    echo 'Building COSCRAD for deployment'
-    echo "NODE ENV: ${NODE_ENV}"
-
-    sh 'rm -rf node_modules'
-
-    echo 'Installing nx'
-    sh 'npm install -g @nrwl/cli'
-
-    echo 'nx version'
-    sh 'nx --version'
-
-    echo 'Installing dependencies'
-    sh 'npm ci --legacy-peer-deps'
-
-    echo 'Building COSCRAD'
-    echo 'with node version'
-    sh 'node --version'
-
-    // sh 'npm run build:coscrad:prod'
-
-    sh 'npx nx build coscrad-frontend --prod'
-
-    sh 'npx nx build api'
-
-// sh 'npx nx run api:build:cli'
 }
