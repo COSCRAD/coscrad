@@ -164,7 +164,9 @@ void runCoscradBuild() {
     echo 'with node version'
     sh 'node --version'
 
-    sh 'npm run build:coscrad:prod'
+    sh 'npx nx build coscrad-frontend --prod'
+
+    sh 'npx nx build api --prod'
 
     sh 'npx nx run api:build:cli'
 }
