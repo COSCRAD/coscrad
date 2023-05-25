@@ -2,7 +2,7 @@ import { CategorizableType, LanguageCode } from '@coscrad/api-interfaces';
 import { ConfigurableContent, DetailViewType } from './configurable-content-schema';
 
 export const contentConfig: ConfigurableContent = {
-    siteTitle: 'COSCRAD [-Sandbox-]',
+    siteTitle: 'COSCRAD [-Haida Sandbox-]',
     subTitle: 'Powering a Web of Knowledge',
     about: 'Welcome to the official COSCRAD sandbox!',
     siteDescription: 'Here you can test drive our toy intance of the COSCRAD platform',

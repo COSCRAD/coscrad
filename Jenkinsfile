@@ -137,26 +137,29 @@ pipeline {
     }
 }
 
+String getContentConfigFilename(String target) {
+    if (target == 'COSCRAD') { return 'content.config.SAMPLE.ts' }
+
+    if (target == 'Haida') { return 'content.config.STAGING.ts' }
+
+    error "unsupported deployment target: ${target}"
+}
+
+/**
+* # Available Targets
+ - COSCRAD
+ - Haida
+**/
 void copyConfig(String target) {
+    String contentConfigDirectory = 'apps/coscrad-frontend/src/configurable-front-matter/data/'
+
     /**
     * Note that the sample content config is actually valid for
     * our staging build.
     **/
-    echo 'copying sample content config for test build'
+    echo "attempting to copy sample content config for test build for target ${target}"
 
-    if (target == 'COSCRAD') {
-        sh 'echo using SAMPLE.content.config as the COSCRAD front-end config'
-
-        /* groovylint-disable-next-line LineLength */
-        sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
-        return
-    }
-
-    if (target == 'Haida') {
-        sh 'echo sing Haida front-end content config'
-        error 'No Haida content-config is specified in Jenkins'
-        return
-    }
-
-    error "unsupported deployment target: ${target}"
+    /* groovylint-disable-next-line LineLength */
+    sh "cp ${contentConfigDirectory}${getContentConfigFilename(target)} ${contentConfigDirectory}content.config.ts"
+    return
 }
