@@ -30,7 +30,9 @@ pipeline {
                 SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
             }
             when {
-                branch 'PR-*'
+                expression { return false }
+                // TODO Add me back
+                // branch 'PR-*'
             }
             steps {
                 configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
@@ -100,7 +102,9 @@ pipeline {
                 SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
             }
             when {
-                branch 'integration'
+                branch 'PR-*'
+                // TODO Add me back
+                // branch 'integration'
             }
             steps {
                 configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
@@ -122,9 +126,7 @@ pipeline {
                 /* groovylint-disable-next-line LineLength */
                     sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
 
-                    sh 'npm run build:coscrad:prod'
-
-                    sh 'npx nx run api:build:cli'
+                runCoscradBuild()
             }
             }
                 post {
@@ -141,4 +143,10 @@ pipeline {
                 }
         }
     }
+}
+
+void runCoscradBuild(){
+                    sh 'npm run build:coscrad:prod'
+
+                    sh 'npx nx run api:build:cli'
 }
