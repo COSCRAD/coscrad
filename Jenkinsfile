@@ -80,7 +80,8 @@ pipeline {
             }
             tools { nodejs nodeInstallationName }
             environment {
-                NODE_ENV = 'staging'
+                // This is so that webpack will optimize the build
+                NODE_ENV = 'production'
                 NODE_PORT = 3131
                 ARANGO_DB_HOST_DOMAIN = 'arangotest.digiteched.com'
                 ARANGO_DB_HOST_SCHEME = 'https'
