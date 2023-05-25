@@ -33,6 +33,7 @@ pipeline {
                 branch 'PR-*'
             }
             steps {
+                testFunction()
                 configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
                     echo 'PR opened or updated...'
@@ -141,4 +142,8 @@ pipeline {
                 }
         }
     }
+}
+
+void testFunction() {
+    sh 'echo TESTFUNCTIONWORKS'
 }
