@@ -158,6 +158,8 @@ void runCoscradBuild() {
     echo 'Building COSCRAD for deployment'
     echo "NODE ENV: ${NODE_ENV}"
 
+    sh 'rm -rf node_modules'
+
     echo 'Installing nx'
     sh 'npm install -g @nrwl/cli'
 
@@ -168,11 +170,11 @@ void runCoscradBuild() {
     echo 'with node version'
     sh 'node --version'
 
-    sh 'npm run build:coscrad:prod'
+    // sh 'npm run build:coscrad:prod'
 
-    // sh 'npx nx build coscrad-frontend --prod'
+    sh 'npx nx build coscrad-frontend --prod'
 
-    // sh 'npx nx build api'
+    sh 'npx nx build api'
 
 // sh 'npx nx run api:build:cli'
 }
