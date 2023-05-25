@@ -96,7 +96,7 @@ pipeline {
             }
             when {
                 // TODO return this to integration
-                branch '185261093-reuseable-staging-deployment'
+                branch 'PR-*'
             }
             // when {
             //     expression {
