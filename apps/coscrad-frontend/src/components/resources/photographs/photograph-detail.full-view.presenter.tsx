@@ -18,7 +18,7 @@ export const PhotographDetailFullViewPresenter = ({
         width: 2000,
         height: 1329,
         title:
-            name.items.find(({ role }) => role === MultilingualTextItemRole.original)?.text ||
+            name?.items.find(({ role }) => role === MultilingualTextItemRole.original)?.text ||
             `photograph/${id}`,
     };
 

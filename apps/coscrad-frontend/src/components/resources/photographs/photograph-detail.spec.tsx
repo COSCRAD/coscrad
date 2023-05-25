@@ -1,4 +1,9 @@
-import { IPhotographViewModel, ResourceType } from '@coscrad/api-interfaces';
+import {
+    IPhotographViewModel,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -12,8 +17,17 @@ const idToFind = '123';
 
 const photographToFind: IPhotographViewModel = {
     id: idToFind,
+    name: {
+        items: [
+            {
+                text: 'doghouse',
+                role: MultilingualTextItemRole.original,
+                languageCode: LanguageCode.English,
+            },
+        ],
+    },
     photographer: 'Johnny Blue',
-    imageURL: 'https://jazzysnaps.images.com/doghouse.png',
+    imageUrl: 'https://jazzysnaps.images.com/doghouse.png',
 };
 
 /**
