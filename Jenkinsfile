@@ -3,6 +3,7 @@ def nodeInstallationName = 'NodeJS 18.12.0'
 /* groovylint-disable DuplicateStringLiteral */
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
+    // This PR is just to check if the build is still working on the CI 
     agent any
     options {
         buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', numToKeepStr: '5')
