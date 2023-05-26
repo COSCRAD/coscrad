@@ -1,3 +1,4 @@
+/* groovylint-disable NestedBlockDepth */
 def nodeInstallationName = 'NodeJS 18.12.0'
 
 /* groovylint-disable DuplicateStringLiteral */
@@ -144,6 +145,14 @@ pipeline {
                         sh 'npx nx run api:build:cli'
                     }
                 }
+            }
+            post {
+                    success {
+                        archiveArtifacts artifacts: 'dist/apps/coscrad-frontend/**', followSymlinks: false
+
+                        sshPublisher(
+                        publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf /var/www/html && mv build/dist/apps/coscrad-frontend /var/www/html && rm -rf build', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                    }
             }
         }
     }
