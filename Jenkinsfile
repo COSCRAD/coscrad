@@ -233,17 +233,7 @@ String getDeploymentDirectoryForFrontendBuild(String target) {
     return ''
 }
 
-void deployFrontend(String target) {
-    String basePath = '/var/www/'
-
-    String deploymentDirectory = getDeploymentDirectoryForFrontendBuild(target)
-
-    String fullDeploymentPath = "${basePath}${deploymentDirectory}"
-
-    String command = "rm -rf ${fullDeploymentPath} \
-     && mv build/dist/apps/coscrad-frontend \
-      ${fullDeploymentPath} && rm -rf build "
-
+void publishArtifacts(String postTransferCommand) {
     sshPublisher(
         publishers: [
             sshPublisherDesc(
@@ -252,7 +242,7 @@ void deployFrontend(String target) {
                     sshTransfer(
                         cleanRemote: false,
                         excludes: '',
-                        execCommand: command,
+                        execCommand: postTransferCommand,
                         execTimeout: 120000,
                         flatten: false, makeEmptyDirs:
                         false, noDefaultExcludes: false,
@@ -266,4 +256,18 @@ void deployFrontend(String target) {
                     useWorkspaceInPromotion: false,
                     verbose: false
                     )])
+}
+
+void deployFrontend(String target) {
+    String basePath = '/var/www/'
+
+    String deploymentDirectory = getDeploymentDirectoryForFrontendBuild(target)
+
+    String fullDeploymentPath = "${basePath}${deploymentDirectory}"
+
+    String command = "rm -rf ${fullDeploymentPath} \
+     && mv build/dist/apps/coscrad-frontend \
+      ${fullDeploymentPath} && rm -rf build "
+
+    publishArtifacts(command)
 }
