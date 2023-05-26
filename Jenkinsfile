@@ -121,7 +121,7 @@ pipeline {
                     // }
                 // }
             stages{
-                stage('build and deploy back-end'){
+                stage('install dependencies'){
                     steps{
                         echo 'Running staging build'
                         echo "NODE ENV: ${NODE_ENV}"
@@ -129,7 +129,7 @@ pipeline {
                         sh 'npm ci --legacy-peer-deps'
                     }
                 }
-                stage('build and deploy all'){
+                stage('build and deploy frontend'){
                     steps {
                     configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
                     targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
@@ -138,7 +138,7 @@ pipeline {
                         sh 'node --version'
 
                         copyContentConfig('COSCRAD');
-                        runCoscradBuild()
+                        sh 'npx nx run build coscrad-frontend --prod'
                     }
                     }
                 }
