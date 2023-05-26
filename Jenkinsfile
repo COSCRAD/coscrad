@@ -139,7 +139,7 @@ pipeline {
                             archiveArtifacts artifacts: 'apps/coscrad-frontend/**', followSymlinks: false
 
                             sshPublisher(
-                        publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf /var/www/html && mv build/dist/apps/coscrad-frontend /var/www/html && rm -rf build', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                        publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf /var/www/html && mv build/apps/coscrad-frontend /var/www/html && rm -rf build', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'apps/coscrad-frontend')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                         }
                     }
                 }
@@ -197,6 +197,9 @@ void runFrontendBuild(String target) {
             sh 'node --version'
 
             copyContentConfig(target)
-            sh 'npx nx run build coscrad-frontend --prod'
+            sh 'npx nx build coscrad-frontend --prod'
+
+            echo 'build contents'
+            sh 'ls dist/apps'
                     }
 }
