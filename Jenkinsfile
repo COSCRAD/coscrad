@@ -240,8 +240,30 @@ void deployFrontend(String target) {
 
     String fullDeploymentPath = "${basePath}${deploymentDirectory}"
 
-    String command = "rm -rf ${fullDeploymentPath} && mv build/dist/apps/coscrad-frontend ${fullDeploymentPath} && rm -rf build "
+    String command = "rm -rf ${fullDeploymentPath} \
+     && mv build/dist/apps/coscrad-frontend \
+      ${fullDeploymentPath} && rm -rf build "
 
     sshPublisher(
-        publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: command, execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/apps/coscrad-frontend/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+        publishers: [
+            sshPublisherDesc(
+                configName: 'coscradmin@staging.digiteched.com',
+                transfers: [
+                    sshTransfer(
+                        cleanRemote: false,
+                        excludes: '',
+                        execCommand: command,
+                        execTimeout: 120000,
+                        flatten: false, makeEmptyDirs:
+                        false, noDefaultExcludes: false,
+                        patternSeparator: '[, ]+',
+                        remoteDirectory: 'build',
+                        remoteDirectorySDF: false,
+                        removePrefix: '',
+                        sourceFiles: 'dist/apps/coscrad-frontend/**'
+                        )],
+                    usePromotionTimestamp: false,
+                    useWorkspaceInPromotion: false,
+                    verbose: false
+                    )])
 }
