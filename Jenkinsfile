@@ -121,23 +121,26 @@ pipeline {
                     // }
                 // }
             stages{
-                stage('build and deploy all'){
-                    steps {
-                    configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
-                    targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
+                stage('build and deploy back-end'){
+                    steps{
                         echo 'Running staging build'
                         echo "NODE ENV: ${NODE_ENV}"
                         echo 'Installing dependencies'
                         sh 'npm ci --legacy-peer-deps'
-
+                    }
+                }
+                stage('build and deploy all'){
+                    steps {
+                    configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
+                    targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
                         echo 'Building COSCRAD'
                         echo 'with node version'
                         sh 'node --version'
 
-                    copyContentConfig('COSCRAD');
-                    runCoscradBuild()
-            }
-            }
+                        copyContentConfig('COSCRAD');
+                        runCoscradBuild()
+                    }
+                    }
                 }
             }
         }
