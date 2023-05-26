@@ -136,7 +136,7 @@ pipeline {
                     }
                     post {
                         success {
-                            archiveArtifacts artifacts: 'dist/**', followSymlinks: false
+                            archiveArtifacts artifacts: 'dist/apps/coscrad-frontend/**', followSymlinks: false
 
                             sshPublisher(
                         publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf /var/www/html && mv build/dist/apps/coscrad-frontend /var/www/html && rm -rf build ', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/apps/coscrad-frontend/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
