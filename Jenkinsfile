@@ -233,11 +233,11 @@ String getDeploymentDirectoryForFrontendBuild(String target) {
     return ''
 }
 
-void publishArtifacts(String postTransferCommand) {
+void publishArtifacts(String sshConfigName, String postTransferCommand) {
     sshPublisher(
         publishers: [
             sshPublisherDesc(
-                configName: 'coscradmin@staging.digiteched.com',
+                configName: sshConfigName,
                 transfers: [
                     sshTransfer(
                         cleanRemote: false,
@@ -269,5 +269,5 @@ void deployFrontend(String target) {
      && mv build/dist/apps/coscrad-frontend \
       ${fullDeploymentPath} && rm -rf build "
 
-    publishArtifacts(command)
+    publishArtifacts('coscradmin@staging.digiteched.com', command)
 }
