@@ -129,7 +129,7 @@ pipeline {
                         sh 'npm ci --legacy-peer-deps'
                     }
                 }
-                stage('build and deploy frontend'){
+                stage('build front-end'){
                     steps {
                     configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
                     targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
@@ -140,6 +140,16 @@ pipeline {
                         copyContentConfig('COSCRAD');
                         sh 'npx nx run build coscrad-frontend --prod'
                     }
+                    }
+                }
+                stage('build back-end'){
+                    steps{
+                        sh 'npx nx run build api --prod'
+                    }
+                }
+                stage('build cli'){
+                    steps{
+                        sh 'npx nx run api:build:cli'
                     }
                 }
             }
