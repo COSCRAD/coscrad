@@ -109,7 +109,7 @@ pipeline {
             steps {
                 configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
             targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
-                    echo 'Merged to integration'
+                    echo 'Running staging build'
                     echo "NODE ENV: ${NODE_ENV}"
                     echo 'Installing dependencies'
                     sh 'npm ci --legacy-peer-deps'
@@ -118,31 +118,52 @@ pipeline {
                     echo 'with node version'
                     sh 'node --version'
 
-                /**
-                * Note that the sample content config is actually valid for
-                * our staging build.
-                **/
-                    echo 'copying sample content config for test build'
-                /* groovylint-disable-next-line LineLength */
-                    sh 'cp apps/coscrad-frontend/src/configurable-front-matter/data/content.config.SAMPLE.ts apps/coscrad-frontend/src/configurable-front-matter/data/content.config.ts'
-
+                copyContentConfig('COSCRAD');
                 runCoscradBuild()
             }
             }
-                post {
-                    success {
-                        archiveArtifacts artifacts: 'dist/**, node_modules/**', followSymlinks: false
-                    // Deploy front-end build to staging
-                    sshPublisher(
-                        publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf /var/www/html && mv build/dist/apps/coscrad-frontend /var/www/html && rm -rf build', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                    // TODO Put this back
+                // post {
+                    // success {
+                    //     archiveArtifacts artifacts: 'dist/**, node_modules/**', followSymlinks: false
+                    // // Deploy front-end build to staging
+                    // sshPublisher(
+                    //     publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf /var/www/html && mv build/dist/apps/coscrad-frontend /var/www/html && rm -rf build', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
 
-                    // Deploy back-end build to staging
-                    sshPublisher(
-                        publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-                    }
-                }
+                    // // Deploy back-end build to staging
+                    // sshPublisher(
+                    //     publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                    // }
+                // }
         }
     }
+}
+
+String getContentConfigFilename(String target) {
+    if (target == 'COSCRAD') { return 'content.config.SAMPLE.ts' }
+
+    if (target == 'Haida') { return 'content.config.STAGING.ts' }
+
+    error "unsupported deployment target: ${target}"
+}
+
+/**
+* # Available Targets
+ - COSCRAD
+ - Haida
+**/
+void copyContentConfig(String target) {
+    String contentConfigDirectory = 'apps/coscrad-frontend/src/configurable-front-matter/data/'
+
+    /**
+    * Note that the sample content config is actually valid for
+    * our staging build.
+    **/
+    echo "attempting to copy sample content config for test build for target ${target}"
+
+    /* groovylint-disable-next-line LineLength */
+    sh "cp ${contentConfigDirectory}${getContentConfigFilename(target)} ${contentConfigDirectory}content.config.ts"
+    return
 }
 
 void runCoscradBuild(){
