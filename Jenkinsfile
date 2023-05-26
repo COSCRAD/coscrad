@@ -31,8 +31,8 @@ pipeline {
             }
             when {
                 expression { return false }
-                // TODO Add me back
-                // branch 'PR-*'
+            // TODO Add me back
+            // branch 'PR-*'
             }
             steps {
                 configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
@@ -103,8 +103,8 @@ pipeline {
             }
             when {
                 branch 'PR-*'
-                // TODO Add me back
-                // branch 'integration'
+            // TODO Add me back
+            // branch 'integration'
             }
 
                     // TODO Put this back
@@ -115,35 +115,32 @@ pipeline {
                     // sshPublisher(
                     //     publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf /var/www/html && mv build/dist/apps/coscrad-frontend /var/www/html && rm -rf build', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
 
-                    // // Deploy back-end build to staging
-                    // sshPublisher(
-                    //     publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-                    // }
-                // }
-            stages{
-                stage('install dependencies'){
-                    steps{
+            // // Deploy back-end build to staging
+            // sshPublisher(
+            //     publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            // }
+            // }
+            stages {
+                stage('install dependencies') {
+                    steps {
                         echo 'Running staging build'
                         echo "NODE ENV: ${NODE_ENV}"
                         echo 'Installing dependencies'
                         sh 'npm ci --legacy-peer-deps'
                     }
                 }
-                stage('build front-end'){
+                stage('build front-end') {
                     steps {
-                    configFileProvider([configFile(fileId:'staging.auth.config',  \
-                    targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
-                        frontendBuildAndDeploy('COSCRAD')
-                    }
+                        runFrontendBuild('COSCRAD')
                     }
                 }
-                stage('build back-end'){
-                    steps{
+                stage('build back-end') {
+                    steps {
                         sh 'npx nx run build api --prod'
                     }
                 }
-                stage('build cli'){
-                    steps{
+                stage('build cli') {
+                    steps {
                         sh 'npx nx run api:build:cli'
                     }
                 }
@@ -158,6 +155,9 @@ String getContentConfigFilename(String target) {
     if (target == 'Haida') { return 'content.config.STAGING.ts' }
 
     error "unsupported deployment target: ${target}"
+
+    // This is to satisfy the linter. Maybe we should be explicitly throwing in the line above?
+    return ''
 }
 
 /**
@@ -176,20 +176,18 @@ void copyContentConfig(String target) {
 
     /* groovylint-disable-next-line LineLength */
     sh "cp ${contentConfigDirectory}${getContentConfigFilename(target)} ${contentConfigDirectory}content.config.ts"
+
     return
 }
 
-void runCoscradBuild(){
-                    sh 'npm run build:coscrad:prod'
+void runFrontendBuild(String target) {
+    configFileProvider([configFile(fileId:'staging.auth.config',  \
+                    targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
+            echo "Building COSCRAD front-end for target project: ${target}"
+            echo 'with node version'
+            sh 'node --version'
 
-                    sh 'npx nx run api:build:cli'
-}
-
-void frontendBuildAndDeploy(String target){
-                        echo "Building COSCRAD front-end for target project: ${target}"
-                        echo 'with node version'
-                        sh 'node --version'
-
-                        copyContentConfig(target);
-                        sh 'npx nx run build coscrad-frontend --prod'
+            copyContentConfig(target)
+            sh 'npx nx run build coscrad-frontend --prod'
+                    }
 }
