@@ -138,20 +138,21 @@ pipeline {
                         success {
                             archiveArtifacts artifacts: 'dist/**', followSymlinks: false
 
-                            deployFrontend('COSCRAD')
+                            sshPublisher(
+                        publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls build', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/apps/coscrad-frontend/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                         }
                     }
                 }
-            // stage('build back-end') {
-            //     steps {
-            //         sh 'npx nx run build api --prod'
-            //     }
-            // }
-            // stage('build cli') {
-            //     steps {
-            //         sh 'npx nx run api:build:cli'
-            //     }
-            // }
+                stage('build back-end') {
+                    steps {
+                        sh 'npx nx run build api --prod'
+                    }
+                }
+                stage('build cli') {
+                    steps {
+                        sh 'npx nx run api:build:cli'
+                    }
+                }
             }
         }
     }
@@ -201,27 +202,6 @@ void runFrontendBuild(String target) {
             echo 'build contents'
             sh 'ls dist/apps'
                     }
-}
-
-String getDeploymentDirectoryForTarget(String target) {
-    if (target == 'COSCRAD') {
-        return 'html'
-    }
-
-    if (target == 'Haida') {
-        return 'haida'
-    }
-
-    error "failed to find deployment directory for unsupported target ${target}"
-
-    return ''
-}
-
-void deployFrontend(String target) {
-    String deploymentDirectory = getDeploymentDirectoryForTarget(target)
-
-    sshPublisher(
-                        publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "rm -rf /var/www/${deploymentDirectory} && mv build/apps/coscrad-frontend /var/www/${deploymentDirectory} && rm -rf build", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/apps/coscrad-frontend/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
 }
 
 // 'rm -rf /var/www/html && mv build/apps/coscrad-frontend /var/www/html && rm -rf build'
