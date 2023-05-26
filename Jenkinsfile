@@ -138,8 +138,7 @@ pipeline {
                         success {
                             archiveArtifacts artifacts: 'dist/apps/coscrad-frontend/**', followSymlinks: false
 
-                            sshPublisher(
-                        publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf /var/www/html && mv build/dist/apps/coscrad-frontend /var/www/html && rm -rf build ', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/apps/coscrad-frontend/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                            deployFrontend('COSCRAD')
                         }
                     }
                 }
@@ -158,6 +157,10 @@ pipeline {
     }
 }
 
+/**
+* TODO We might be able to have a single function that switches on `target` and
+* sets several global variables to be used in various steps.
+*/
 String getContentConfigFilename(String target) {
     if (target == 'COSCRAD') { return 'content.config.SAMPLE.ts' }
 
@@ -204,4 +207,29 @@ void runFrontendBuild(String target) {
                     }
 }
 
-// 'rm -rf /var/www/html && mv build/apps/coscrad-frontend /var/www/html && rm -rf build'
+String getDeploymentDirectoryForFrontendBuild(String target) {
+    if (target == 'COSCRAD') {
+        return 'html'
+    }
+
+    if (target == 'Haida') {
+        return 'haida'
+    }
+
+    error "No deployment directory found for unknown build target: ${target}"
+
+    return ''
+}
+
+void deployFrontend(String target) {
+    String basePath = '/var/www/'
+
+    String deploymentDirectory = getDeploymentDirectoryForFrontendBuild(target)
+
+    String fullDeploymentPath = "${basePath}${deploymentDirectory}"
+
+    String command = "rm -rf ${fullDeploymentPath} && mv build/dist/apps/coscrad-frontend ${fullDeploymentPath} && rm -rf build "
+
+    sshPublisher(
+        publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: command, execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/apps/coscrad-frontend/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+}
