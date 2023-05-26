@@ -81,7 +81,7 @@ pipeline {
             }
             }
         }
-        stage('deploy to staging') {
+        stage('build and deploy to staging') {
             agent {
                 label 'jenkins-build-agent'
             }
@@ -106,22 +106,7 @@ pipeline {
                 // TODO Add me back
                 // branch 'integration'
             }
-            steps {
-                configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
-            targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
-                    echo 'Running staging build'
-                    echo "NODE ENV: ${NODE_ENV}"
-                    echo 'Installing dependencies'
-                    sh 'npm ci --legacy-peer-deps'
 
-                    echo 'Building COSCRAD'
-                    echo 'with node version'
-                    sh 'node --version'
-
-                copyContentConfig('COSCRAD');
-                runCoscradBuild()
-            }
-            }
                     // TODO Put this back
                 // post {
                     // success {
@@ -135,6 +120,26 @@ pipeline {
                     //     publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     // }
                 // }
+            stages{
+                stage('build and deploy all'){
+                    steps {
+                    configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
+                    targetLocation: 'apps/coscrad-frontend/src/auth_config.json')]) {
+                        echo 'Running staging build'
+                        echo "NODE ENV: ${NODE_ENV}"
+                        echo 'Installing dependencies'
+                        sh 'npm ci --legacy-peer-deps'
+
+                        echo 'Building COSCRAD'
+                        echo 'with node version'
+                        sh 'node --version'
+
+                    copyContentConfig('COSCRAD');
+                    runCoscradBuild()
+            }
+            }
+                }
+            }
         }
     }
 }
