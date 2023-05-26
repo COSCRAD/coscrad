@@ -233,6 +233,31 @@ String getDeploymentDirectoryForFrontendBuild(String target) {
     return ''
 }
 
+void publishAssets(String sshConfigName, String remoteDirectory, String postTransferCommand, String sourceFilePattern) {
+    sshPublisher(
+        publishers: [
+            sshPublisherDesc(
+                configName: sshConfigName,
+                transfers: [
+                    sshTransfer(
+                        cleanRemote: false,
+                        excludes: '',
+                        execCommand: postTransferCommand,
+                        execTimeout: 120000,
+                        flatten: false, makeEmptyDirs:
+                        false, noDefaultExcludes: false,
+                        patternSeparator: '[, ]+',
+                        remoteDirectory: remoteDirectory,
+                        remoteDirectorySDF: false,
+                        removePrefix: '',
+                        sourceFiles: sourceFilePattern
+                        )],
+                    usePromotionTimestamp: false,
+                    useWorkspaceInPromotion: false,
+                    verbose: false
+                    )])
+}
+
 void deployFrontend(String target) {
     String basePath = '/var/www/'
 
@@ -244,26 +269,5 @@ void deployFrontend(String target) {
      && mv build/dist/apps/coscrad-frontend \
       ${fullDeploymentPath} && rm -rf build "
 
-    sshPublisher(
-        publishers: [
-            sshPublisherDesc(
-                configName: 'coscradmin@staging.digiteched.com',
-                transfers: [
-                    sshTransfer(
-                        cleanRemote: false,
-                        excludes: '',
-                        execCommand: command,
-                        execTimeout: 120000,
-                        flatten: false, makeEmptyDirs:
-                        false, noDefaultExcludes: false,
-                        patternSeparator: '[, ]+',
-                        remoteDirectory: 'build',
-                        remoteDirectorySDF: false,
-                        removePrefix: '',
-                        sourceFiles: 'dist/apps/coscrad-frontend/**'
-                        )],
-                    usePromotionTimestamp: false,
-                    useWorkspaceInPromotion: false,
-                    verbose: false
-                    )])
+    publishAssets('coscradmin@staging.digiteched.com', fullDeploymentPath, command, 'dist/apps/coscrad-frontend/**')
 }
