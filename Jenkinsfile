@@ -130,7 +130,7 @@ pipeline {
                         sh 'npm ci --legacy-peer-deps'
                     }
                 }
-                stage('build front-end') {
+                stage('build front-end for COSCRAD sandbox') {
                     steps {
                         runFrontendBuild('COSCRAD')
                     }
@@ -139,6 +139,18 @@ pipeline {
                             archiveArtifacts artifacts: 'dist/apps/coscrad-frontend/**', followSymlinks: false
 
                             deployFrontend('COSCRAD')
+                        }
+                    }
+                }
+                stage('build front-end for Haida sandbox') {
+                    steps {
+                        runFrontendBuild('Haida')
+                    }
+                    post {
+                        success {
+                            archiveArtifacts artifacts: 'dist/apps/coscrad-frontend/**', followSymlinks: false
+
+                            deployFrontend('Haida')
                         }
                     }
                 }
