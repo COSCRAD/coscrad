@@ -31,7 +31,6 @@ pipeline {
                 SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
             }
             when {
-                expression { return false }
                 branch 'PR-*'
             }
             steps {
