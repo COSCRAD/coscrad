@@ -32,8 +32,7 @@ pipeline {
             }
             when {
                 expression { return false }
-            // TODO Add me back
-            // branch 'PR-*'
+                branch 'PR-*'
             }
             steps {
                 configFileProvider([configFile(fileId:'42feff14-78da-45fc-a8ee-5f98213a313f',  \
@@ -103,9 +102,7 @@ pipeline {
                 SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
             }
             when {
-                branch 'PR-*'
-            // TODO Add me back
-            // branch 'integration'
+                branch 'integration'
             }
             stages {
                 stage('install dependencies') {
