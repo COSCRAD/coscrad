@@ -301,6 +301,6 @@ void deployCli() {
 
     publishArtifacts('coscradmin@api.staging.digiteched.com',
     postDeployCommand, \
-    'build', \
+    'cli', \
     backendArtifactsPattern)
 }
