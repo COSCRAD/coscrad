@@ -114,11 +114,11 @@ pipeline {
                     //     archiveArtifacts artifacts: 'dist/**, node_modules/**', followSymlinks: false
                     // // Deploy front-end build to staging
                     // sshPublisher(
-                    //     publishers: [sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf /var/www/html && mv build/dist/apps/coscrad-frontend /var/www/html && rm -rf build', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                    // sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', execCommand: 'rm -rf /var/www/html && mv build/dist/apps/coscrad-frontend /var/www/html && rm -rf build', execTimeout: 120000, remoteDirectory: 'build',  sourceFiles: 'dist/**'
 
             // // Deploy back-end build to staging
             // sshPublisher(
-            //     publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            //     publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: , execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             // }
             // }
             stages {
@@ -153,6 +153,11 @@ pipeline {
                 stage('build back-end') {
                     steps {
                         sh 'npx nx run build api --prod'
+                    }
+                    post {
+                        success {
+                            deployBackend()
+                        }
                     }
                 }
                 stage('build cli') {
@@ -255,7 +260,7 @@ void publishArtifacts(String sshConfigName,  \
                     useWorkspaceInPromotion: false,
                     verbose: false
                     )])
-}
+    }
 
 void archiveArtifacts(String sourceFilePattern) {
     archiveArtifacts artifacts: sourceFilePattern, followSymlinks: false
@@ -277,4 +282,14 @@ void deployFrontend(String target) {
     archiveArtifacts(sourceFilePattern)
 
     publishArtifacts('coscradmin@staging.digiteched.com', command, 'build', sourceFilePattern)
+}
+
+void deployBackend() {
+    String backendArtifactsPattern = 'dist/apps/api/**'
+
+    String postDeployCommand = 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted'
+
+    archiveArtifacts(backendArtifactsPattern)
+
+    publishArtifacts('coscradmin@api.staging.digiteched.com', postDeployCommand, 'build', backendArtifactsPattern)
 }
