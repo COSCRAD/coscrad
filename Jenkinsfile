@@ -107,20 +107,6 @@ pipeline {
             // TODO Add me back
             // branch 'integration'
             }
-
-                    // TODO Put this back
-                // post {
-                    // success {
-                    //     archiveArtifacts artifacts: 'dist/**, node_modules/**', followSymlinks: false
-                    // // Deploy front-end build to staging
-                    // sshPublisher(
-                    // sshPublisherDesc(configName: 'coscradmin@staging.digiteched.com', execCommand: 'rm -rf /var/www/html && mv build/dist/apps/coscrad-frontend /var/www/html && rm -rf build', execTimeout: 120000, remoteDirectory: 'build',  sourceFiles: 'dist/**'
-
-            // // Deploy back-end build to staging
-            // sshPublisher(
-            //     publishers: [sshPublisherDesc(configName: 'coscradmin@api.staging.digiteched.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: , execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'build', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist/**, node_modules/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-            // }
-            // }
             stages {
                 stage('install dependencies') {
                     steps {
@@ -287,9 +273,16 @@ void deployFrontend(String target) {
 void deployBackend() {
     String backendArtifactsPattern = 'dist/apps/api/**'
 
-    String postDeployCommand = 'rm -rf archive ; mv build archive; touch archive/dist/apps/api/staging.env; PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; echo API restarted'
+    String postDeployCommand = 'rm -rf archive ; \
+        mv build archive; \
+        touch archive/dist/apps/api/staging.env; \
+        PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; \
+        echo API restarted'
 
     archiveArtifacts(backendArtifactsPattern)
 
-    publishArtifacts('coscradmin@api.staging.digiteched.com', postDeployCommand, 'build', backendArtifactsPattern)
+    publishArtifacts('coscradmin@api.staging.digiteched.com',
+    postDeployCommand, \
+    'build', \
+    backendArtifactsPattern)
 }
