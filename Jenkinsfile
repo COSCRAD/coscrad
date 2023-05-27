@@ -151,6 +151,11 @@ pipeline {
                         sh 'npx nx run api:build:cli'
                     }
                 }
+                post {
+                    success {
+                        deployCli()
+                    }
+                }
             }
         }
     }
@@ -278,6 +283,19 @@ void deployBackend() {
         touch archive/dist/apps/api/staging.env; \
         PATH=$PATH://home/coscradmin/.nvm/versions/node/v18.16.0/bin pm2 restart main; \
         echo API restarted'
+
+    archiveArtifacts(backendArtifactsPattern)
+
+    publishArtifacts('coscradmin@api.staging.digiteched.com',
+    postDeployCommand, \
+    'build', \
+    backendArtifactsPattern)
+}
+
+void deployCli() {
+    String backendArtifactsPattern = 'dist/apps/coscrad-cli/**'
+
+    String postDeployCommand = 'echo CLI build copied'
 
     archiveArtifacts(backendArtifactsPattern)
 
