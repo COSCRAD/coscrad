@@ -276,7 +276,7 @@ void deployFrontend(String target) {
 }
 
 void deployBackend() {
-    String backendArtifactsPattern = 'dist/apps/api/**'
+    String backendArtifactsPattern = 'dist/apps/api/**, node_modules/**'
 
     String postDeployCommand = 'rm -rf archive ; \
         mv build archive; \
