@@ -1,5 +1,5 @@
 /* groovylint-disable NestedBlockDepth */
-def nodeInstallationName = 'NodeJS 18.12.0'
+String nodeInstallationName = 'NodeJS 18.12.0'
 
 /* groovylint-disable DuplicateStringLiteral */
 /* groovylint-disable-next-line CompileStatic */
