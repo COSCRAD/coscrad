@@ -136,8 +136,6 @@ pipeline {
                     }
                     post {
                         success {
-                            archiveArtifacts artifacts: 'dist/apps/coscrad-frontend/**', followSymlinks: false
-
                             deployFrontend('COSCRAD')
                         }
                     }
@@ -148,8 +146,6 @@ pipeline {
                     }
                     post {
                         success {
-                            archiveArtifacts artifacts: 'dist/apps/coscrad-frontend/**', followSymlinks: false
-
                             deployFrontend('Haida')
                         }
                     }
@@ -233,7 +229,10 @@ String getDeploymentDirectoryForFrontendBuild(String target) {
     return ''
 }
 
-void publishArtifacts(String sshConfigName, String postTransferCommand, String remoteDirectory, String sourceFilePattern) {
+void publishArtifacts(String sshConfigName,  \
+    String postTransferCommand, \
+    String remoteDirectory, \
+    String sourceFilePattern) {
     sshPublisher(
         publishers: [
             sshPublisherDesc(
@@ -258,6 +257,10 @@ void publishArtifacts(String sshConfigName, String postTransferCommand, String r
                     )])
 }
 
+void archiveArtifacts(String sourceFilePattern) {
+    archiveArtifacts artifacts: sourceFilePattern, followSymlinks: false
+}
+
 void deployFrontend(String target) {
     String basePath = '/var/www/'
 
@@ -269,5 +272,9 @@ void deployFrontend(String target) {
      && mv build/dist/apps/coscrad-frontend \
       ${fullDeploymentPath} && rm -rf build "
 
-    publishArtifacts('coscradmin@staging.digiteched.com', command, 'build', 'dist/apps/coscrad-frontend/**')
+    String sourceFilePattern = 'dist/apps/coscrad-frontend/**'
+
+    archiveArtifacts(sourceFilePattern)
+
+    publishArtifacts('coscradmin@staging.digiteched.com', command, 'build', sourceFilePattern)
 }
