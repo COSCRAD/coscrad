@@ -150,10 +150,10 @@ pipeline {
                     steps {
                         sh 'npx nx run api:build:cli'
                     }
-                }
-                post {
-                    success {
-                        deployCli()
+                    post {
+                        success {
+                            deployCli()
+                        }
                     }
                 }
             }
