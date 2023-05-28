@@ -19,7 +19,8 @@ const songDtos: DTO<Omit<Song, 'id'>>[] = [
         title: 'Song title in language',
         titleEnglish: 'Mary had a little lamb',
         lyrics: 'Mary had a little lamb, little lamb.',
-        audioURL: 'https://www.myaudio.com/lamb.mp3',
+        audioURL:
+            'https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav',
         published: true,
         startMilliseconds: 0,
         lengthMilliseconds: 3500,
@@ -45,7 +46,8 @@ const songDtos: DTO<Omit<Song, 'id'>>[] = [
         title: `Unpublished Song Title (lang)`,
         titleEnglish: 'Unpublished Song Title (Engl)',
         lyrics: "Ain't gonna see the light of day, light of day, light of day",
-        audioURL: 'https://www.myaudio.com/badsong.wav',
+        audioURL:
+            'https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav',
         published: false,
         startMilliseconds: 0,
         lengthMilliseconds: 33000,

@@ -31,9 +31,8 @@ export default (): Polygon[] =>
                 published: true,
                 properties: {
                     name: `Point with ID: ${`${index + 300}`} Name`,
-                    description: `Description for point ${`${index + 300}`}`,
-                    imageUrl:
-                        'https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png',
+                    description: `Description for polygon ${`${index + 300}`}`,
+                    imageUrl: 'https://coscrad.org/wp-content/uploads/2023/05/map-1272165_640.png',
                 },
             })
     );

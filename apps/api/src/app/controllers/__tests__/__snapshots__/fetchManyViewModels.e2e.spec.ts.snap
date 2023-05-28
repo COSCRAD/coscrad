@@ -5,10 +5,10 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
   "entities": [
     {
       "actions": [],
-      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "lengthMilliseconds": 20000,
-      "mimeType": "audio/mpeg",
+      "mimeType": "audio/x-wav",
       "name": {
         "items": [
           {
@@ -24,7 +24,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
     },
     {
       "actions": [],
-      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
@@ -44,10 +44,10 @@ exports[`When fetching multiple resources GET /resources/audioItems when all of 
     },
     {
       "actions": [],
-      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "lengthMilliseconds": 32989,
-      "mimeType": "audio/mpeg",
+      "mimeType": "audio/x-wav",
       "name": {
         "items": [
           {
@@ -71,10 +71,10 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
   "entities": [
     {
       "actions": [],
-      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
       "lengthMilliseconds": 20000,
-      "mimeType": "audio/mpeg",
+      "mimeType": "audio/x-wav",
       "name": {
         "items": [
           {
@@ -90,7 +90,7 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
     },
     {
       "actions": [],
-      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
       "lengthMilliseconds": 23409,
       "mimeType": "audio/mpeg",
@@ -110,10 +110,10 @@ exports[`When fetching multiple resources GET /resources/audioItems when some of
     },
     {
       "actions": [],
-      "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110113",
       "lengthMilliseconds": 32989,
-      "mimeType": "audio/mpeg",
+      "mimeType": "audio/x-wav",
       "name": {
         "items": [
           {
@@ -155,7 +155,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "publisher": "Atlantic Publishing",
         "title": "A Day in the Life",
         "type": "book",
-        "url": "https://atlanticpublishing.com/authors/Duvernay/NewBook/BookInformation/",
+        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf",
         "year": 1999,
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -230,7 +230,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "publicationTitle": "Journal of History",
         "title": "Report on the Cariboo Chilcotin Justice inquiry",
         "type": "journalArticle",
-        "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+        "url": "https://coscrad.org/wp-content/uploads/2023/05/Test-Journal-Article-Sample-PDF.pdf",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
       "name": {
@@ -255,7 +255,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "dateDecided": "Recorded 2002-07-08",
         "pages": "Pages 1-6",
         "type": "courtCase",
-        "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
+        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-reference-3_title-case.pdf",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "name": {
@@ -321,7 +321,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "publisher": "Atlantic Publishing",
         "title": "A Day in the Life",
         "type": "book",
-        "url": "https://atlanticpublishing.com/authors/Duvernay/NewBook/BookInformation/",
+        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf",
         "year": 1999,
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -396,7 +396,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "publicationTitle": "Journal of History",
         "title": "Report on the Cariboo Chilcotin Justice inquiry",
         "type": "journalArticle",
-        "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+        "url": "https://coscrad.org/wp-content/uploads/2023/05/Test-Journal-Article-Sample-PDF.pdf",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
       "name": {
@@ -421,7 +421,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicReferences
         "dateDecided": "Recorded 2002-07-08",
         "pages": "Pages 1-6",
         "type": "courtCase",
-        "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
+        "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-reference-3_title-case.pdf",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
       "name": {
@@ -835,7 +835,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 2500,
-      "mimeType": "audio/mpeg",
+      "mimeType": "audio/x-wav",
       "name": {
         "items": [
           {
@@ -891,7 +891,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
           },
         },
       ],
-      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
     },
     {
       "actions": [],
@@ -913,7 +913,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
     },
     {
       "actions": [],
@@ -935,7 +935,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
         ],
       },
       "tags": [],
-      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
     },
   ],
   "indexScopedActions": [],
@@ -949,7 +949,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
       "actions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 2500,
-      "mimeType": "audio/mpeg",
+      "mimeType": "audio/x-wav",
       "name": {
         "items": [
           {
@@ -1005,7 +1005,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
           },
         },
       ],
-      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
     },
     {
       "actions": [],
@@ -1027,7 +1027,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
     },
     {
       "actions": [],
@@ -1049,7 +1049,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
         ],
       },
       "tags": [],
-      "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+      "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
     },
   ],
   "indexScopedActions": [],
@@ -1295,12 +1295,12 @@ exports[`When fetching multiple resources GET /resources/playlists when all of t
       "actions": [],
       "episodes": [
         {
-          "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
-          "mimeType": "audio/mpeg",
+          "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+          "mimeType": "audio/x-wav",
           "name": "{eng}: The Wooden Boy",
         },
         {
-          "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+          "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
           "mimeType": "audio/mpeg",
           "name": "{clc}: Down at the River",
         },
@@ -1353,12 +1353,12 @@ exports[`When fetching multiple resources GET /resources/playlists when some of 
       "actions": [],
       "episodes": [
         {
-          "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
-          "mimeType": "audio/mpeg",
+          "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+          "mimeType": "audio/x-wav",
           "name": "{eng}: The Wooden Boy",
         },
         {
-          "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+          "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
           "mimeType": "audio/mpeg",
           "name": "{clc}: Down at the River",
         },
@@ -1409,7 +1409,7 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
   "entities": [
     {
       "actions": [],
-      "audioURL": "https://www.myaudio.com/lamb.mp3",
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 3500,
       "lyrics": "Mary had a little lamb, little lamb.",
@@ -1472,7 +1472,7 @@ exports[`When fetching multiple resources GET /resources/songs when all of the r
     },
     {
       "actions": [],
-      "audioURL": "https://www.myaudio.com/badsong.wav",
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "lengthMilliseconds": 33000,
       "lyrics": "Ain't gonna see the light of day, light of day, light of day",
@@ -1503,7 +1503,7 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
   "entities": [
     {
       "actions": [],
-      "audioURL": "https://www.myaudio.com/lamb.mp3",
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "lengthMilliseconds": 3500,
       "lyrics": "Mary had a little lamb, little lamb.",
@@ -1566,7 +1566,7 @@ exports[`When fetching multiple resources GET /resources/songs when some of the 
     },
     {
       "actions": [],
-      "audioURL": "https://www.myaudio.com/badsong.wav",
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
       "lengthMilliseconds": 33000,
       "lyrics": "Ain't gonna see the light of day, light of day, light of day",
@@ -1616,7 +1616,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       },
       "properties": {
         "description": "Description for point 100",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
         "name": "Name of Point with ID: 100",
       },
       "tags": [
@@ -1690,7 +1690,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       },
       "properties": {
         "description": "Description for point 101",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
         "name": "Name of Point with ID: 101",
       },
       "tags": [
@@ -1756,7 +1756,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       },
       "properties": {
         "description": "Description for point 102",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
         "name": "Name of Point with ID: 102",
       },
       "tags": [
@@ -1826,7 +1826,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       },
       "properties": {
         "description": "Description for point 103",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
         "name": "Name of Point with ID: 103",
       },
       "tags": [],
@@ -1852,7 +1852,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       },
       "properties": {
         "description": "Description for point 104",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
         "name": "Name of Point with ID: 104",
       },
       "tags": [],
@@ -1904,7 +1904,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       },
       "properties": {
         "description": "One amazing hike!",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/wind-energy-2029621_1280.png",
         "name": "Windy Path",
       },
       "tags": [],
@@ -1945,8 +1945,8 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
         ],
       },
       "properties": {
-        "description": "Description for point 300",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "description": "Description for polygon 300",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/map-1272165_640.png",
         "name": "Point with ID: 300 Name",
       },
       "tags": [],
@@ -1980,7 +1980,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       },
       "properties": {
         "description": "Description for point 100",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
         "name": "Name of Point with ID: 100",
       },
       "tags": [
@@ -2054,7 +2054,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       },
       "properties": {
         "description": "Description for point 101",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
         "name": "Name of Point with ID: 101",
       },
       "tags": [
@@ -2120,7 +2120,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       },
       "properties": {
         "description": "Description for point 102",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
         "name": "Name of Point with ID: 102",
       },
       "tags": [
@@ -2190,7 +2190,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       },
       "properties": {
         "description": "Description for point 103",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
         "name": "Name of Point with ID: 103",
       },
       "tags": [],
@@ -2216,7 +2216,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       },
       "properties": {
         "description": "Description for point 104",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
         "name": "Name of Point with ID: 104",
       },
       "tags": [],
@@ -2268,7 +2268,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       },
       "properties": {
         "description": "One amazing hike!",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/wind-energy-2029621_1280.png",
         "name": "Windy Path",
       },
       "tags": [],
@@ -2309,8 +2309,8 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
         ],
       },
       "properties": {
-        "description": "Description for point 300",
-        "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+        "description": "Description for polygon 300",
+        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/map-1272165_640.png",
         "name": "Point with ID: 300 Name",
       },
       "tags": [],
@@ -3000,7 +3000,7 @@ exports[`When fetching multiple resources GET /resources/videos when all of the 
       "tags": [],
       "text": "[12000] [DM] {eng}: This is how. [15550]
 [18300] [DM] {eng}: It is done [19240]",
-      "videoUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+      "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
     },
   ],
   "indexScopedActions": [],
@@ -3027,7 +3027,7 @@ exports[`When fetching multiple resources GET /resources/videos when some of the
       "tags": [],
       "text": "[12000] [DM] {eng}: This is how. [15550]
 [18300] [DM] {eng}: It is done [19240]",
-      "videoUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+      "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
     },
   ],
   "indexScopedActions": [],

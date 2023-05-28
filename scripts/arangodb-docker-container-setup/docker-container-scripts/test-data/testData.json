@@ -385,7 +385,7 @@
                 "roles": [
                     "viewer"
                 ],
-                "authProviderUserId": "auth0|123"
+                "authProviderUserId": "auth0|5db729701ead110c5b254553"
             }
         ],
         "groups": [
@@ -1026,7 +1026,7 @@
                 "properties": {
                     "name": "Name of Point with ID: 100",
                     "description": "Description for point 100",
-                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
+                    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png"
                 }
             },
             {
@@ -1048,7 +1048,7 @@
                 "properties": {
                     "name": "Name of Point with ID: 101",
                     "description": "Description for point 101",
-                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
+                    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png"
                 }
             },
             {
@@ -1070,7 +1070,7 @@
                 "properties": {
                     "name": "Name of Point with ID: 102",
                     "description": "Description for point 102",
-                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
+                    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png"
                 }
             },
             {
@@ -1092,7 +1092,7 @@
                 "properties": {
                     "name": "Name of Point with ID: 103",
                     "description": "Description for point 103",
-                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
+                    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png"
                 }
             },
             {
@@ -1114,7 +1114,7 @@
                 "properties": {
                     "name": "Name of Point with ID: 104",
                     "description": "Description for point 104",
-                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
+                    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png"
                 }
             },
             {
@@ -1162,7 +1162,7 @@
                 "properties": {
                     "name": "Windy Path",
                     "description": "One amazing hike!",
-                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
+                    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/wind-energy-2029621_1280.png"
                 }
             },
             {
@@ -1199,8 +1199,8 @@
                 },
                 "properties": {
                     "name": "Point with ID: 300 Name",
-                    "description": "Description for point 300",
-                    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png"
+                    "description": "Description for polygon 300",
+                    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/map-1272165_640.png"
                 }
             }
         ],
@@ -1231,7 +1231,7 @@
                     "year": 1999,
                     "publisher": "Atlantic Publishing",
                     "place": "Kennebunk Port, Maine",
-                    "url": "https://atlanticpublishing.com/authors/Duvernay/NewBook/BookInformation/",
+                    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf",
                     "isbn": "978-1-895811-34-6",
                     "numberOfPages": 455
                 }
@@ -1257,7 +1257,7 @@
                     "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",
                     "issueDate": "Spring 2013",
                     "publicationTitle": "Journal of History",
-                    "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+                    "url": "https://coscrad.org/wp-content/uploads/2023/05/Test-Journal-Article-Sample-PDF.pdf",
                     "issn": "00052949",
                     "doi": "10.14288/bcs.v0i19.784"
                 }
@@ -1277,7 +1277,7 @@
                     "abstract": "Doe, Jane\n- Large Valley\n- Qualifying as an expert in the written language",
                     "dateDecided": "Recorded 2002-07-08",
                     "court": "Supreme Court of British Columbia",
-                    "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
+                    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-reference-3_title-case.pdf",
                     "pages": "Pages 1-6"
                 }
             }
@@ -1301,7 +1301,7 @@
                     }
                 ],
                 "lyrics": "Mary had a little lamb, little lamb.",
-                "audioURL": "https://www.myaudio.com/lamb.mp3",
+                "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
                 "lengthMilliseconds": 3500,
                 "startMilliseconds": 0
             },
@@ -1325,7 +1325,7 @@
                     }
                 ],
                 "lyrics": "Ain't gonna see the light of day, light of day, light of day",
-                "audioURL": "https://www.myaudio.com/badsong.wav",
+                "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-2_UNPUBLISHED_aint-gonna-see-the-light-of-day.wav",
                 "lengthMilliseconds": 33000,
                 "startMilliseconds": 0
             }
@@ -1348,8 +1348,8 @@
                         "role": "host"
                     }
                 ],
-                "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
-                "mimeType": "audio/mpeg",
+                "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+                "mimeType": "audio/x-wav",
                 "lengthMilliseconds": 2500
             },
             {
@@ -1369,7 +1369,7 @@
                         "role": "host"
                     }
                 ],
-                "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+                "url": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
                 "mimeType": "video/mp4",
                 "lengthMilliseconds": 910000
             },
@@ -1390,7 +1390,7 @@
                         "role": "host"
                     }
                 ],
-                "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+                "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
                 "mimeType": "audio/mpeg",
                 "lengthMilliseconds": 2500
             }

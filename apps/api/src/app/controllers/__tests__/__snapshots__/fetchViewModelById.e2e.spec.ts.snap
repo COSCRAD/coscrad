@@ -3,10 +3,10 @@
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/audioItems/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 {
   "actions": [],
-  "audioURL": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
+  "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
   "lengthMilliseconds": 20000,
-  "mimeType": "audio/mpeg",
+  "mimeType": "audio/x-wav",
   "name": {
     "items": [
       {
@@ -43,7 +43,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     "publisher": "Atlantic Publishing",
     "title": "A Day in the Life",
     "type": "book",
-    "url": "https://atlanticpublishing.com/authors/Duvernay/NewBook/BookInformation/",
+    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf",
     "year": 1999,
   },
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -190,7 +190,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "actions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 2500,
-  "mimeType": "audio/mpeg",
+  "mimeType": "audio/x-wav",
   "name": {
     "items": [
       {
@@ -246,7 +246,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       },
     },
   ],
-  "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
+  "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
 }
 `;
 
@@ -306,12 +306,12 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "actions": [],
   "episodes": [
     {
-      "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
-      "mimeType": "audio/mpeg",
+      "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
+      "mimeType": "audio/x-wav",
       "name": "{eng}: The Wooden Boy",
     },
     {
-      "mediaItemUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=5670051.mp3",
+      "mediaItemUrl": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock2_370934__karolist__guitar-solo.mp3",
       "mimeType": "audio/mpeg",
       "name": "{clc}: Down at the River",
     },
@@ -357,7 +357,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
 exports[`GET  (fetch view models) When querying for a single View Model by ID GET /resources/songs/:id when the resource is published when an resource with the id is found should return the expected response 1`] = `
 {
   "actions": [],
-  "audioURL": "https://www.myaudio.com/lamb.mp3",
+  "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 3500,
   "lyrics": "Mary had a little lamb, little lamb.",
@@ -442,7 +442,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   },
   "properties": {
     "description": "Description for point 100",
-    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
     "name": "Name of Point with ID: 100",
   },
   "tags": [
@@ -588,7 +588,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "tags": [],
   "text": "[12000] [DM] {eng}: This is how. [15550]
 [18300] [DM] {eng}: It is done [19240]",
-  "videoUrl": "https://be.tsilhqotinlanguage.ca:3003/download?id=3028_6d3b2a922b.mp4",
+  "videoUrl": "https://coscrad.org/wp-content/uploads/2023/05/Rexy-and-The-Egg-_3D-Dinosaur-Animation_-_-3D-Animation-_-Maya-3D.mp4",
 }
 `;
 

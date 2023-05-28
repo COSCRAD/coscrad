@@ -23,8 +23,7 @@ const dtos: DTO<Line>[] = [
         properties: {
             name: 'Windy Path',
             description: 'One amazing hike!',
-            imageUrl:
-                'https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png',
+            imageUrl: 'https://coscrad.org/wp-content/uploads/2023/05/wind-energy-2029621_1280.png',
         },
     },
 ];

@@ -452,6 +452,10 @@ exports[`GET /resources should return the expected result 1`] = `
             "value": "audio/mpeg",
           },
           {
+            "label": "wav",
+            "value": "audio/x-wav",
+          },
+          {
             "label": "mp4",
             "value": "video/mp4",
           },
@@ -509,6 +513,10 @@ exports[`GET /resources should return the expected result 1`] = `
           {
             "label": "mp3",
             "value": "audio/mpeg",
+          },
+          {
+            "label": "wav",
+            "value": "audio/x-wav",
           },
           {
             "label": "mp4",
@@ -1474,6 +1482,10 @@ exports[`GET /resources should return the expected result 1`] = `
           {
             "label": "mp3",
             "value": "audio/mpeg",
+          },
+          {
+            "label": "wav",
+            "value": "audio/x-wav",
           },
           {
             "label": "mp4",

@@ -83,7 +83,7 @@ BookBibliographicReference {
     "publisher": "Atlantic Publishing",
     "title": "A Day in the Life",
     "type": "book",
-    "url": "https://atlanticpublishing.com/authors/Duvernay/NewBook/BookInformation/",
+    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf",
     "year": 1999,
   },
   "eventHistory": [],
@@ -109,7 +109,7 @@ CourtCaseBibliographicReference {
     "dateDecided": "Recorded 2002-07-08",
     "pages": "Pages 1-6",
     "type": "courtCase",
-    "url": "https://www.myzoterolink.com/bogus-link-to-doc.php",
+    "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-reference-3_title-case.pdf",
   },
   "eventHistory": [],
   "getCompositeIdentifier": [Function],
@@ -139,7 +139,7 @@ JournalArticleBibliographicReference {
     "publicationTitle": "Journal of History",
     "title": "Report on the Cariboo Chilcotin Justice inquiry",
     "type": "journalArticle",
-    "url": "https://search.proquest.com/docview/1682229477/abstract/7836BCEA06014582PQ/1",
+    "url": "https://coscrad.org/wp-content/uploads/2023/05/Test-Journal-Article-Sample-PDF.pdf",
   },
   "eventHistory": [],
   "getCompositeIdentifier": [Function],
@@ -195,7 +195,7 @@ MediaItem {
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 2500,
-  "mimeType": "audio/mpeg",
+  "mimeType": "audio/x-wav",
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": [],
@@ -204,7 +204,7 @@ MediaItem {
   "title": "episode title (in language)",
   "titleEnglish": "Metal Mondays episode 1",
   "type": "mediaItem",
-  "url": "https://be.tsilhqotinlanguage.ca:3003/download?id=5671983.mp3",
+  "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
 }
 `;
 
@@ -267,7 +267,7 @@ Playlist {
 
 exports[`Aggregate factories when attempting to build an instance of type: song from a DTO when the DTO is valid valid song should succeed 1`] = `
 Song {
-  "audioURL": "https://www.myaudio.com/lamb.mp3",
+  "audioURL": "https://coscrad.org/wp-content/uploads/2023/05/mock-song-1_mary-had-a-little-lamb.wav",
   "contributions": [
     ContributorAndRole {
       "contributorId": "1",
@@ -331,7 +331,7 @@ Line {
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "properties": SpatialFeatureProperties {
     "description": "One amazing hike!",
-    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/wind-energy-2029621_1280.png",
     "name": "Windy Path",
   },
   "published": true,
@@ -357,7 +357,7 @@ Point {
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110100",
   "properties": SpatialFeatureProperties {
     "description": "Description for point 100",
-    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
     "name": "Name of Point with ID: 100",
   },
   "published": true,
@@ -398,8 +398,8 @@ Polygon {
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
   "properties": SpatialFeatureProperties {
-    "description": "Description for point 300",
-    "imageUrl": "https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png",
+    "description": "Description for polygon 300",
+    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/map-1272165_640.png",
     "name": "Point with ID: 300 Name",
   },
   "published": true,
