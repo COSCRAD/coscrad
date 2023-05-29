@@ -22,6 +22,14 @@ const enumNameToMetadata: { [K in CoscradEnum]: EnumMetadata } = {
                 label: 'mp4',
                 value: MIMEType.mp4,
             },
+            {
+                label: 'wav',
+                value: MIMEType.wav,
+            },
+            {
+                label: 'mp4',
+                value: MIMEType.mp4,
+            },
         ],
     },
     [CoscradEnum.CoscradUserRole]: {

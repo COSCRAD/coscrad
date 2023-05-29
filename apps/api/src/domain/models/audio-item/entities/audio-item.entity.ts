@@ -199,7 +199,7 @@ class AudioItemBase extends Resource implements IRadioPublishableResource {
     }
 
     private isMIMETypeAllowed(mimeType: MIMEType): boolean {
-        return [MIMEType.mp3].includes(mimeType);
+        return [MIMEType.mp3, MIMEType.wav].includes(mimeType);
     }
 }
 

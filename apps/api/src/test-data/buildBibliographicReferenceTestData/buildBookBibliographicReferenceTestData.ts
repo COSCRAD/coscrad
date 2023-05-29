@@ -25,7 +25,7 @@ const dtos: DTO<BookBibliographicReference>[] = [
             year: 1999,
             publisher: 'Atlantic Publishing',
             place: 'Kennebunk Port, Maine',
-            url: 'https://atlanticpublishing.com/authors/Duvernay/NewBook/BookInformation/',
+            url: 'https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-reference-1_a-day-in-the-life.pdf',
             numberOfPages: 455,
             isbn: '978-1-895811-34-6',
         },
