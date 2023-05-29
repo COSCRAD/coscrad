@@ -48,9 +48,9 @@ export class Photograph extends Resource implements Boundable2D {
 
         if (!dto) return;
 
-        const { imageUrl: filename, photographer, dimensions: dimensionsDTO } = dto;
+        const { imageUrl, photographer, dimensions: dimensionsDTO } = dto;
 
-        this.imageUrl = filename;
+        this.imageUrl = imageUrl;
 
         this.photographer = photographer;
 
