@@ -14,7 +14,7 @@ const dtos: DTO<CourtCaseBibliographicReference>[] = [
                 'Doe, Jane\n- Large Valley\n- Qualifying as an expert in the written language',
             dateDecided: 'Recorded 2002-07-08',
             court: 'Supreme Court of British Columbia',
-            url: 'https://www.myzoterolink.com/bogus-link-to-doc.php',
+            url: 'https://coscrad.org/wp-content/uploads/2023/05/mock-court-case-bibliographic-reference-3_title-case.pdf',
             pages: 'Pages 1-6',
         },
         published: true,

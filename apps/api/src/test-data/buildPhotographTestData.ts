@@ -5,7 +5,7 @@ import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid
 
 const dtos: DTO<Omit<Photograph, 'id' | 'published' | 'type'>>[] = [
     {
-        imageUrl: 'https://kaaltsidakah.net/coscrad/Adiitsii-Running.png',
+        imageUrl: 'https://coscrad.org/wp-content/uploads/2023/05/Adiitsii-Running.png',
         photographer: 'Susie McRealart',
         dimensions: {
             widthPX: 300,
@@ -13,7 +13,7 @@ const dtos: DTO<Omit<Photograph, 'id' | 'published' | 'type'>>[] = [
         },
     },
     {
-        imageUrl: 'https://kaaltsidakah.net/coscrad/Nuu-Story.png',
+        imageUrl: 'https://coscrad.org/wp-content/uploads/2023/05/Nuu-Story.png',
         photographer: 'Robert McRealart',
         dimensions: {
             widthPX: 420,
@@ -21,7 +21,7 @@ const dtos: DTO<Omit<Photograph, 'id' | 'published' | 'type'>>[] = [
         },
     },
     {
-        imageUrl: 'https://kaaltsidakah.net/coscrad/TwoBrothersPole.png',
+        imageUrl: 'https://coscrad.org/wp-content/uploads/2023/05/TwoBrothersPole.png',
         photographer: 'Kenny Tree-Huggens',
         dimensions: {
             widthPX: 1200,

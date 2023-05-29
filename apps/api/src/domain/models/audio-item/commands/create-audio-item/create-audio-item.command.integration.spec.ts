@@ -175,7 +175,7 @@ describe('CREATE_AUDIO_ITEM', () => {
 
         describe('when the MIME type of the media item is not an audio format', () => {
             const disallowedMIMETypes = Object.values(MIMEType).filter(
-                (mimeType) => ![MIMEType.mp3, MIMEType.mp4].includes(mimeType)
+                (mimeType) => ![MIMEType.mp3, MIMEType.wav].includes(mimeType)
             );
 
             disallowedMIMETypes.forEach((mimeType) => {
