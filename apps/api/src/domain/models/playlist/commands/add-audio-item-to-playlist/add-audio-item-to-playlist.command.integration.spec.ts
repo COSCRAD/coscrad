@@ -9,6 +9,7 @@ import { NotFound } from '../../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
+import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
@@ -115,6 +116,30 @@ describe(commandType, () => {
                         dummySystemUserId
                     );
                 },
+            });
+        });
+    });
+
+    describe('when the command is invalid', () => {
+        describe('when the audio item is already in the playlist', () => {
+            it('should fail with the expected errors', async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildCommandFSA: buildValidCommandFSA,
+                    initialState: new DeluxeInMemoryStore({
+                        [AggregateType.audioItem]: [existingAudioItem],
+                        [AggregateType.playlist]: [
+                            existingPlaylist.clone({
+                                items: [
+                                    {
+                                        resourceCompositeIdentifier:
+                                            existingAudioItem.getCompositeIdentifier(),
+                                    },
+                                ],
+                            }),
+                        ],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                });
             });
         });
     });
