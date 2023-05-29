@@ -28,7 +28,7 @@ export class PlayListCompositeId {
 
 @Command({
     type: 'CREATE_PLAYLIST',
-    label: 'Create PLaylist',
+    label: 'Create Playlist',
     description: 'Creates a new playlist',
 })
 export class CreatePlayList implements ICommandBase {

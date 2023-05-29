@@ -47,6 +47,21 @@ export class Playlist extends Resource {
         return this.name;
     }
 
+    has(aggregateCompositeIdentifierToFind: AggregateCompositeIdentifier): boolean {
+        return this.items.some(
+            ({ resourceCompositeIdentifier }) =>
+                resourceCompositeIdentifier === aggregateCompositeIdentifierToFind
+        );
+    }
+
+    addItem(item: PlaylistItem) {
+        // TODO validate the item
+        // TODO make sure the item is not already on this playlist
+        return this.safeClone<Playlist>({
+            items: this.items.concat(item),
+        });
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
