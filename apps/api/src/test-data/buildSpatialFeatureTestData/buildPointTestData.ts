@@ -34,7 +34,7 @@ export default (): Point[] =>
                     name: `Name of Point with ID: ${partialDto.id}`,
                     description: `Description for point ${partialDto.id}`,
                     imageUrl:
-                        'https://www.tsilhqotin.ca/wp-content/uploads/2022/11/tsilhqotin_language_logo_final.png',
+                        'https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png',
                 },
             })
     );

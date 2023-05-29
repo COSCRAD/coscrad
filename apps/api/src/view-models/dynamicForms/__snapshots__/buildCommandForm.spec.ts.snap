@@ -62,6 +62,14 @@ exports[`buildCommandForm should return the expected result 1`] = `
           "display": "mp4",
           "value": "video/mp4",
         },
+        {
+          "display": "wav",
+          "value": "audio/x-wav",
+        },
+        {
+          "display": "mp4",
+          "value": "video/mp4",
+        },
       ],
       "type": "STATIC_SELECT",
     },
