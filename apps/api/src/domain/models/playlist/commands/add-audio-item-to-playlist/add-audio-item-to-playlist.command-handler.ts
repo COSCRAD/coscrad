@@ -33,6 +33,10 @@ export class AddAudioItemToPlaylistCommandHandler extends BaseUpdateCommandHandl
         @Inject(ID_MANAGER_TOKEN) protected readonly idManager: IIdManager
     ) {
         super(repositoryProvider, idManager);
+
+        this.repositoryForCommandsTargetAggregate = repositoryProvider.forResource(
+            ResourceType.playlist
+        );
     }
 
     protected actOnInstance(

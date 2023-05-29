@@ -2,12 +2,12 @@ import { AggregateType, FluxStandardAction, ResourceType } from '@coscrad/api-in
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
+import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { NotFound } from '../../../../../lib/types/not-found';
-import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../../types/DTO';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
@@ -19,7 +19,9 @@ import { AddAudioItemToPlaylist } from './add-audio-item-to-playlist.command';
 
 const commandType = 'ADD_AUDIO_ITEM_TO_PLAYLIST';
 
-const existingPlaylist = getValidAggregateInstanceForTest(AggregateType.playlist);
+const existingPlaylist = getValidAggregateInstanceForTest(AggregateType.playlist).clone({
+    items: [],
+});
 
 const existingAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
 
@@ -72,13 +74,9 @@ describe(commandType, () => {
         await testRepositoryProvider.testSetup();
     });
 
-    afterEach(async () => {
-        await testRepositoryProvider.testTeardown();
-    });
-
     describe('when the command is valid', () => {
         it('should succeed', async () => {
-            assertCommandSuccess(commandAssertionDependencies, {
+            await assertCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA,
                 initialState: new DeluxeInMemoryStore({

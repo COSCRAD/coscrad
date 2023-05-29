@@ -5,7 +5,7 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { PlayListCompositeId } from '../create-playlist.command';
 
 @Command({
-    type: 'ADD_ITEM_TO_PLAYLIST',
+    type: 'ADD_AUDIO_ITEM_TO_PLAYLIST',
     label: 'Add item to Playlist',
     description: 'add item to an existing playlist',
 })

@@ -1,13 +1,16 @@
 import { CoscradMultilingualText, NestedDataType } from '@coscrad/data-types';
+import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { Resource } from '../../resource.entity';
+import { CannotAddDuplicateItemToPlaylist } from '../errors';
 import { PlaylistItem } from './playlist-item.entity';
 
 @RegisterIndexScopedCommands(['CREATE_PLAYLIST'])
@@ -47,16 +50,19 @@ export class Playlist extends Resource {
         return this.name;
     }
 
+    // We need to unit test this domain class
     has(aggregateCompositeIdentifierToFind: AggregateCompositeIdentifier): boolean {
-        return this.items.some(
-            ({ resourceCompositeIdentifier }) =>
-                resourceCompositeIdentifier === aggregateCompositeIdentifierToFind
+        const result = this.items.some(({ resourceCompositeIdentifier }) =>
+            isDeepStrictEqual(resourceCompositeIdentifier, aggregateCompositeIdentifierToFind)
         );
+
+        return result;
     }
 
-    addItem(item: PlaylistItem) {
-        // TODO validate the item
-        // TODO make sure the item is not already on this playlist
+    addItem(item: PlaylistItem): ResultOrError<Playlist> {
+        if (this.has(item.resourceCompositeIdentifier))
+            return new CannotAddDuplicateItemToPlaylist(this.id, item);
+
         return this.safeClone<Playlist>({
             items: this.items.concat(item),
         });
