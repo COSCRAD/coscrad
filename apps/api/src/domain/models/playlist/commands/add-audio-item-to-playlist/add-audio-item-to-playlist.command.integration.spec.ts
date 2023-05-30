@@ -6,12 +6,18 @@ import { IIdManager } from '../../../../../domain/interfaces/id-manager.interfac
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { NotFound } from '../../../../../lib/types/not-found';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DTO } from '../../../../../types/DTO';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { Playlist } from '../../entities';
@@ -139,6 +145,91 @@ describe(commandType, () => {
                     }).fetchFullSnapshotInLegacyFormat(),
                 });
             });
+        });
+
+        describe(`when the audio item does not exist`, () => {
+            it(`should fail with the expected errors`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildCommandFSA: buildValidCommandFSA,
+                    initialState: new DeluxeInMemoryStore({
+                        [AggregateType.playlist]: [existingPlaylist],
+                        // no audio items!
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new InvalidExternalReferenceByAggregateError(
+                                    existingPlaylist.getCompositeIdentifier(),
+                                    [existingAudioItem.getCompositeIdentifier()]
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the playlist does not exist`, () => {
+            it(`should fail with the expected errors`, async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildCommandFSA: buildValidCommandFSA,
+                    initialState: new DeluxeInMemoryStore({
+                        [AggregateType.audioItem]: [existingAudioItem],
+                        // no playlists!
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(
+                                    existingPlaylist.getCompositeIdentifier()
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the aggregate composite identifier is of the wrong type`, () => {
+            Object.values(AggregateType)
+                .filter((aggregateType) => aggregateType !== AggregateType.playlist)
+                .forEach((aggregateType) => {
+                    describe(`when the type is: ${aggregateType}`, () => {
+                        it(`should fail as expected`, async () => {
+                            await assertCommandFailsDueToTypeError(
+                                commandAssertionDependencies,
+                                {
+                                    propertyName: 'aggregateCompositeIdentifier',
+                                    invalidValue: {
+                                        type: aggregateType,
+                                        id: existingPlaylist.id,
+                                    },
+                                },
+                                validCommandFSA
+                            );
+                        });
+                    });
+                });
+        });
+
+        describe('when one of the properties on the command payload has an invalid type', () => {
+            generateCommandFuzzTestCases(AddAudioItemToPlaylist).forEach(
+                ({ description, propertyName, invalidValue }) => {
+                    describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                        it('should fail with the appropriate error', async () => {
+                            await assertCommandFailsDueToTypeError(
+                                commandAssertionDependencies,
+                                { propertyName, invalidValue },
+                                validCommandFSA
+                            );
+                        });
+                    });
+                }
+            );
         });
     });
 });
