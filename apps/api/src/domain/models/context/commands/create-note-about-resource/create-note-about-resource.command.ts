@@ -4,9 +4,9 @@ import {
     IEdgeConnectionContext,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { ExternalEnum, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
-import { isResourceCompositeIdentifier } from '../../../../types/ResourceCompositeIdentifier';
-import { EdgeConnectionContextType } from '../../types/EdgeConnectionContextType';
+import { Command } from '@coscrad/commands';
+import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { ContextUnion } from '../../edge-connection.entity';
 
 export class ResourceCompositeIdentifier {
     // TODO Make this an enum
@@ -42,29 +42,13 @@ export class EdgeConnectionCompositeIdentifier {
     id: string;
 }
 
-class ContextBase {
-    @ExternalEnum(
-        {
-            enumName: `EdgeConnectionContextType`,
-            enumLabel: 'context type',
-            labelsAndValues: [
-                { label: EdgeConnectionContextType.freeMultiline, value: 'free multiline' },
-                { label: EdgeConnectionContextType.general, value: 'general' },
-                { label: EdgeConnectionContextType.identity, value: 'identity' },
-                { label: EdgeConnectionContextType.pageRange, value: 'page range' },
-                { label: EdgeConnectionContextType.point2D, value: '2D point' },
-                { label: EdgeConnectionContextType.textField, value: 'text field' },
-                { label: EdgeConnectionContextType.timeRange, value: 'time range' },
-            ],
-        },
-        {
-            label: `context`,
-            description: `type of context provided for this note`,
-        }
-    )
-    type: EdgeConnectionContextType;
-}
+export const CREATE_NOTE_ABOUT_RESOURCE = 'CREATE_NOTE_ABOUT_RESOURCE';
 
+@Command({
+    type: CREATE_NOTE_ABOUT_RESOURCE,
+    description: 'creates a note about this particular resource',
+    label: 'Create Note',
+})
 export class CreateNoteAboutResource implements ICommandBase {
     @NestedDataType(EdgeConnectionCompositeIdentifier, {
         label: `Composite Identifier`,
@@ -72,15 +56,12 @@ export class CreateNoteAboutResource implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: EdgeConnectionCompositeIdentifier;
 
-    @NestedDataType(isResourceCompositeIdentifier, {
+    @NestedDataType(ResourceCompositeIdentifier, {
         label: `CompositeIdentifier`,
         description: `system-wide unique identifier for the resource about which we are making a note`,
     })
     readonly resourceCompositeIdentifier: ResourceCompositeIdentifier;
 
-    @NestedDataType(ContextBase, {
-        label: `context`,
-        description: 'context for the note',
-    })
+    @ContextUnion
     readonly resourceContext: IEdgeConnectionContext;
 }

@@ -30,6 +30,10 @@ import { CreateJournalArticleBibliographicReference } from '../../../domain/mode
 import { CreateJournalArticleBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command-handler';
 import JournalArticleBibliographicReferenceData from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference-data.entity';
 import {
+    CreateNoteAboutResource,
+    CreateNoteAboutResourceCommandHandler,
+} from '../../../domain/models/context/commands';
+import {
     EdgeConnection,
     EdgeConnectionMember,
 } from '../../../domain/models/context/edge-connection.entity';
@@ -109,10 +113,10 @@ import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeModule } from '../../../validation';
 import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { NoteViewModel } from '../../../view-models/edgeConnectionViewModels/note.view-model';
+import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
 import { EnvironmentVariables } from '../../config/env.validation';
-import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import { AdminController } from '../admin.controller';
 import { CategoryController } from '../category.controller';
 import { AdminJwtGuard, CommandController } from '../command/command.controller';
@@ -345,6 +349,7 @@ export default async (
                 EdgeConnection,
                 EdgeConnectionMember,
                 NoteViewModel,
+                CreateNoteAboutResource,
                 // Context Union
                 GeneralContext,
                 PageRangeContext,
@@ -409,6 +414,8 @@ export default async (
             CreatePlayListCommandHandler,
             AddAudioItemToPlaylistCommandHandler,
             TranslatePlaylistNameCommandHandler,
+
+            CreateNoteAboutResourceCommandHandler,
         ],
 
         controllers: [
