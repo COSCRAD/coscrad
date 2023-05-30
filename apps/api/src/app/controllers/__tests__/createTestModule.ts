@@ -86,10 +86,10 @@ import { ArangoDatabaseProvider } from '../../../persistence/database/database.p
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { DTO } from '../../../types/DTO';
-import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
 import { EnvironmentVariables } from '../../config/env.validation';
+import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import { AdminController } from '../admin.controller';
 import { CategoryController } from '../category.controller';
 import { AdminJwtGuard, CommandController } from '../command/command.controller';

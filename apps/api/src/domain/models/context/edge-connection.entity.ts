@@ -37,6 +37,27 @@ import formatAggregateCompositeIdentifier from '../../../view-models/presentatio
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
 
+/**
+ * This is a decorator (the returned value of a decorator factory). We export
+ * this here for reuse in `EdgeConnection` command payloads.
+ */
+export const ContextUnion = Union(
+    [
+        FreeMultilineContext,
+        GeneralContext,
+        IdentityContext,
+        PageRangeContext,
+        PointContext,
+        TextFieldContext,
+        TimeRangeContext,
+    ],
+    'type',
+    {
+        label: 'context',
+        description: 'contextualizes this resource as a member of this connection',
+    }
+);
+
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
     extends BaseDomainModel
     implements IEdgeConnectionMember
@@ -47,22 +68,7 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
     })
     readonly compositeIdentifier: ResourceCompositeIdentifier;
 
-    @Union(
-        [
-            FreeMultilineContext,
-            GeneralContext,
-            IdentityContext,
-            PageRangeContext,
-            PointContext,
-            TextFieldContext,
-            TimeRangeContext,
-        ],
-        'type',
-        {
-            label: 'context',
-            description: 'contextualizes this resource as a member of this connection',
-        }
-    )
+    @ContextUnion
     context: T;
 
     @Enum(CoscradEnum.EdgeConnectionMemberRole, {
