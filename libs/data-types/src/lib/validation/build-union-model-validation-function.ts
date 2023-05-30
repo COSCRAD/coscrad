@@ -13,15 +13,23 @@ export const buildUnionModelValidationFunction = (
     allCtorCandidates: unknown[],
     { forbidUnknownValues }: { forbidUnknownValues: boolean } = { forbidUnknownValues: true }
 ): SimpleValidationFunction => {
-    const unionMetadata = allCtorCandidates.map(getUnionMetadata).filter(isUnionMetadata);
+    const unionMetadata = allCtorCandidates
+        .map(getUnionMetadata)
+        .filter(isUnionMetadata)
+        .filter(({ unionName }) => unionName === nameOfUnionToValidate);
 
-    if (unionMetadata.length > 1) {
+    const allDiscriminantPathsRegisteredForThisUnion = [
+        ...new Set(unionMetadata.map(({ discriminantPath }) => discriminantPath)),
+    ];
+
+    // TODO It would be nice to design this away
+    if (allDiscriminantPathsRegisteredForThisUnion.length > 1) {
         throw new Error(
             `You have defined more than one union data-type with the name: ${nameOfUnionToValidate}`
         );
     }
 
-    if (unionMetadata.length < 1) {
+    if (allDiscriminantPathsRegisteredForThisUnion.length < 1) {
         throw new Error(`Failed to find a union data-type with the name: ${nameOfUnionToValidate}`);
     }
 
@@ -44,6 +52,7 @@ export const buildUnionModelValidationFunction = (
         .map(({ ctor, discriminantValue }) => [ctor, discriminantValue]);
 
     if (discriminantValuesAndCtors.length === 0) {
+        // TODO Break out proper exceptions here and test for these
         throw new Error(
             `Failed to find any union members (sub-type classes) for the union: ${nameOfUnionToValidate}`
         );
