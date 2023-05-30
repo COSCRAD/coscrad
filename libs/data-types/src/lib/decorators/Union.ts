@@ -6,11 +6,7 @@ import getDiscriminantForUnionMember from '../utilities/getDiscriminantForUnionM
 import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
 import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
 
-/**
- * TODO  [https://www.pivotaltracker.com/n/projects/2536370/stories/183320394]
- * We should have a test that validates the `discriminantPath` or else
- * we should validate the path here.
- */
+// @deprecated We are phasing this out. Use `Union2` and rename this to `Union` eventually.
 export function Union(
     memberClasses: Object[],
     discriminantPath: string,

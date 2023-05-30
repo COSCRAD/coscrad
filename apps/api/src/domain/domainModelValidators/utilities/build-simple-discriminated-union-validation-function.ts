@@ -3,6 +3,9 @@ import { InternalError } from '../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../lib/types/DomainModelCtor';
 import validateSimpleInvariants from './validateSimpleInvariants';
 
+type UnionMemberCtors = Record<string, DomainModelCtor>;
+
+// TODO remove if not used
 /**
  * This helper should only be used with models that have only simple invariant
  * rules (i.e. 'generalized type' rules and no complex invariants that require
@@ -10,7 +13,11 @@ import validateSimpleInvariants from './validateSimpleInvariants';
  * function for a discriminated union's classes by gathering the simple invariant rules
  * from its decorated properties.
  */
-export default (typeAndCtorPairs: [string, DomainModelCtor][]) => {
+export const buildSimpleDiscriminatedUnionValidationFunction = (
+    unionMemberCtors: UnionMemberCtors
+) => {
+    const typeAndCtorPairs = Object.entries(unionMemberCtors);
+
     const typeAndSimpleValidatorPairs = typeAndCtorPairs.map(([type, ctor]) => [
         type,
         (input) => validateSimpleInvariants(ctor, input),

@@ -13,6 +13,8 @@ export * from './RawData';
 export * from './ReferenceTo';
 export * from './String';
 export * from './Union';
+export * from './Union2';
+export * from './Union2Member';
 export * from './URL';
 export * from './UUID';
 export * from './Year';

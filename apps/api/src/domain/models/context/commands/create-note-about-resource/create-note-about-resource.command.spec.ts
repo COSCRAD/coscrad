@@ -8,7 +8,9 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
+import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { TimeRangeContext } from '../../time-range-context/time-range-context.entity';
@@ -38,6 +40,8 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<CreateNoteAbo
         resourceContext: validContext.toDTO(),
     },
 });
+
+const commandFsaFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
 
 describe(commandType, () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -83,6 +87,22 @@ describe(commandType, () => {
                 initialState: new DeluxeInMemoryStore({
                     [AggregateType.audioItem]: [validAudioItem],
                 }).fetchFullSnapshotInLegacyFormat(),
+            });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the context has an invalid type`, () => {
+            it(`should fail with the expected errors`, async () => {
+                await assertCreateCommandError(assertionHelperDependencies, {
+                    buildCommandFSA: (id: AggregateId) =>
+                        commandFsaFactory.build(id, {
+                            // `free multiline` context requires a time range in addition to `contextType`
+                            resourceContext: { contextType: EdgeConnectionContextType.timeRange },
+                        }),
+                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    systemUserId: dummySystemUserId,
+                });
             });
         });
     });

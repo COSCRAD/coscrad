@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import { NonEmptyString, URL, UUID } from '../index';
 import {
-    DiscriminatedBy,
     Enum,
     ISBN,
     NestedDataType,
@@ -9,8 +8,11 @@ import {
     PositiveInteger,
     RawDataObject,
     ReferenceTo,
+    Union2,
+    Union2Member,
     Year,
 } from '../lib/decorators';
+import { TypeDecoratorOptions } from '../lib/decorators/types/TypeDecoratorOptions';
 import { BibliographicSubjectCreatorType, CoscradEnum, MIMEType } from '../lib/enums';
 import { CoscradUserRole } from '../lib/enums/CoscradUserRole';
 
@@ -29,7 +31,11 @@ class Whatsit {
     whatsitId = '25c5824f-6b4b-4341-bb60-3145d8109568';
 }
 
-@DiscriminatedBy('one')
+const THING_UNION = 'THING_UNION';
+
+const ThingUnion = (options: TypeDecoratorOptions) => Union2(THING_UNION, 'type', options);
+
+@Union2Member(THING_UNION, 'one')
 class ThingDataOne {
     type = 'one';
 
@@ -39,7 +45,7 @@ class ThingDataOne {
     strength = 99.5;
 }
 
-@DiscriminatedBy('two')
+@Union2Member(THING_UNION, 'two')
 class ThingDataTwo {
     type = 'two';
 
@@ -118,13 +124,12 @@ export class Widget {
     @ISBN({ isOptional, ...buildDummyLabelAndDescription('optionalISBN') })
     optionalISBN = `979-3-16-148410-0`;
 
-    // TODO Comment back in once we support validating a union type
-    // @Union([ThingDataOne, ThingDataTwo], 'type', { ...buildDummyLabelAndDescription('data') })
-    // data: ThingDataOne | ThingDataTwo = {
-    //     type: 'one',
+    @ThingUnion({ ...buildDummyLabelAndDescription('data') })
+    data: ThingDataOne | ThingDataTwo = {
+        type: 'one',
 
-    //     strength: 67.3,
-    // };
+        strength: 67.3,
+    };
 
     @ReferenceTo('widget')
     @NonEmptyString({ ...buildDummyLabelAndDescription('parentWidgetId') })
@@ -192,10 +197,10 @@ export const buildValidWidgetDto = (): Widget => ({
 
     optionalISBN: `978-3-16-148410-0`,
 
-    // data: {
-    //     type: 'one',
-    //     strength: 85,
-    // },
+    data: {
+        type: 'one',
+        strength: 85,
+    },
 
     catalogId: '25c5824f-6b4b-4341-bb60-3145d8109577',
 
