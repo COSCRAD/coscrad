@@ -50,7 +50,6 @@ export class Playlist extends Resource {
         return this.name;
     }
 
-    // We need to unit test this domain class
     has(aggregateCompositeIdentifierToFind: AggregateCompositeIdentifier): boolean {
         const result = this.items.some(({ resourceCompositeIdentifier }) =>
             isDeepStrictEqual(resourceCompositeIdentifier, aggregateCompositeIdentifierToFind)
@@ -69,7 +68,7 @@ export class Playlist extends Resource {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        return [];
+        return ['ADD_AUDIO_ITEM_TO_PLAYLIST'];
     }
 
     protected validateComplexInvariants(): InternalError[] {

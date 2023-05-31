@@ -4,7 +4,7 @@ import { ExternalEnum, NestedDataType, NonEmptyString, UUID } from '@coscrad/dat
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 
 export class PlayListCompositeId {
-    // TODO Should we have an @FixedValue decorator instead?
+    // TODO [https://github.com/COSCRAD/coscrad/pull/392#discussion_r1210655537] Should we have an @FixedValue decorator instead?
     @ExternalEnum(
         {
             enumName: 'type',

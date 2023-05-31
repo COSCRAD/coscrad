@@ -2,17 +2,14 @@ import { AggregateType, FluxStandardAction, ResourceType } from '@coscrad/api-in
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import { NotFound } from '../../../../../lib/types/not-found';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
-import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { NotFound } from '../../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
-import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
-import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
-import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
@@ -20,7 +17,12 @@ import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/a
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { Playlist } from '../../entities';
+import { PlaylistItem } from '../../entities/playlist-item.entity';
+import { CannotAddDuplicateItemToPlaylist } from '../../errors';
 import { AddAudioItemToPlaylist } from './add-audio-item-to-playlist.command';
 
 const commandType = 'ADD_AUDIO_ITEM_TO_PLAYLIST';
@@ -143,6 +145,20 @@ describe(commandType, () => {
                             }),
                         ],
                     }).fetchFullSnapshotInLegacyFormat(),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new CannotAddDuplicateItemToPlaylist(
+                                    existingPlaylist.id,
+                                    new PlaylistItem({
+                                        resourceCompositeIdentifier:
+                                            existingAudioItem.getCompositeIdentifier(),
+                                    })
+                                ),
+                            ])
+                        );
+                    },
                 });
             });
         });
