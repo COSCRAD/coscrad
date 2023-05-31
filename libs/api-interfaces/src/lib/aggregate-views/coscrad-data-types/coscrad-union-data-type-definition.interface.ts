@@ -10,4 +10,5 @@ export interface ICoscradUnionDataTypeDefinition {
     complexDataType: CoscradComplexDataType.union;
     discriminantPath: string;
     schemaDefinitions: IUnionMemberSchemaDefinition[];
+    unionName: string;
 }

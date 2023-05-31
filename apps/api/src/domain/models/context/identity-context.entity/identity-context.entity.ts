@@ -1,4 +1,4 @@
-import { DiscriminatedBy } from '@coscrad/data-types';
+import { DiscriminatedBy, Union2Member } from '@coscrad/data-types';
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
@@ -8,6 +8,8 @@ import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
  * that leads from the 'card catalogue' to the rich digital representation of a
  * resource, where there exist Edge Connections with more rich context.
  */
+
+@Union2Member('EDGE_CONNECTION_CONTEXT_UNION', EdgeConnectionContextType.identity)
 @DiscriminatedBy(EdgeConnectionContextType.identity)
 export class IdentityContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.identity;

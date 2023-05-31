@@ -55,6 +55,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "isOptional": false,
     "label": "label for property: data",
     "schemaDefinitions": [],
+    "unionName": "THING_UNION",
   },
   "iconUrl": {
     "coscradDataType": "URL",

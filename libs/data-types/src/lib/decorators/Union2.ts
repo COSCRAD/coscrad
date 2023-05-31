@@ -38,6 +38,7 @@ export function Union2(
 ): PropertyDecorator {
     const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
+    // We might not need this. We could put the discriminant-path on the union members with a consistency check
     return (target: Object, propertyKey: string | symbol) => {
         const meta: UnionMetadata = {
             unionName,
@@ -46,12 +47,11 @@ export function Union2(
 
         Reflect.defineMetadata(UNION_METADATA, meta, target);
 
-        const _foo = Reflect.getMetadata(UNION_METADATA, target);
-
         const unionDataTypeDefinition: UnionDataTypeDefinition = {
             complexDataType: ComplexCoscradDataType.union,
             discriminantPath,
-            // TODO remove this property
+            unionName,
+            // This must be updated at bootstrap
             schemaDefinitions: [],
         };
 

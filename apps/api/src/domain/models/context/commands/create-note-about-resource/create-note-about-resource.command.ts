@@ -5,8 +5,7 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
-import { ContextUnion } from '../../edge-connection.entity';
+import { NestedDataType, NonEmptyString, Union2, UUID } from '@coscrad/data-types';
 
 export class ResourceCompositeIdentifier {
     // TODO Make this an enum
@@ -62,6 +61,9 @@ export class CreateNoteAboutResource implements ICommandBase {
     })
     readonly resourceCompositeIdentifier: ResourceCompositeIdentifier;
 
-    @ContextUnion
+    @Union2('EDGE_CONNECTION_CONTEXT_UNION', 'type', {
+        label: 'resource context',
+        description: 'the context for the resource you are making a note about',
+    })
     readonly resourceContext: IEdgeConnectionContext;
 }

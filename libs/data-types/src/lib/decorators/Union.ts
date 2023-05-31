@@ -7,7 +7,7 @@ import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecorator
 import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
 
 // @deprecated We are phasing this out. Use `Union2` and rename this to `Union` eventually.
-export function Union(
+function Union(
     memberClasses: Object[],
     discriminantPath: string,
     userOptions: TypeDecoratorOptions
@@ -18,6 +18,7 @@ export function Union(
         const unionDataTypeDefinition: UnionDataTypeDefinition = {
             complexDataType: ComplexCoscradDataType.union,
             discriminantPath,
+            unionName: 'DEPRECATED PIECE OF TOAST',
             schemaDefinitions: memberClasses.map((MemberClass) => ({
                 discriminant: getDiscriminantForUnionMember(MemberClass),
                 schema: getCoscradDataSchema(MemberClass),

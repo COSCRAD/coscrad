@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DynamicDataTypeFinderService when there is a valid union type definition for a class should bootstrap the schema definitions 1`] = `
+{
+  "complexDataType": "UNION_TYPE",
+  "description": "the context for the resource you are making a note about",
+  "discriminantPath": "type",
+  "isArray": false,
+  "isOptional": false,
+  "label": "resource context",
+  "schemaDefinitions": [],
+}
+`;

@@ -48,9 +48,5 @@ export function Union2Member(
         };
 
         Reflect.defineMetadata(UNION_MEMBER_METADATA, meta, target);
-
-        const _foo = Reflect.getMetadata(UNION_MEMBER_METADATA, target);
-
-        _foo;
     };
 }
