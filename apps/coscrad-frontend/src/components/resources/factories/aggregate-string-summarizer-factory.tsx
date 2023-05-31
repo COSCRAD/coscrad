@@ -1,5 +1,6 @@
 import {
     AggregateType,
+    IAudioItemViewModel,
     IBaseViewModel,
     IBibliographicReferenceViewModel,
     IMediaItemViewModel,
@@ -23,6 +24,10 @@ export const aggregateStringSummarizerFactory = (
     if (aggregateType === AggregateType.mediaItem)
         return ({ title, titleEnglish }: IMediaItemViewModel): string =>
             formatBilingualText(title, titleEnglish);
+
+    if (aggregateType === AggregateType.audioItem)
+        return ({ name }: IAudioItemViewModel): string =>
+            name.items.map(({ text, languageCode }) => `${text} (${languageCode})`).join(', ');
 
     // TODO Support string summarizers for other aggregate types as needed
 
