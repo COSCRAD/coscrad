@@ -1,5 +1,7 @@
-import { styled, useTheme } from '@mui/material';
-import { useEffect, useRef } from 'react';
+import PauseCircleIcon from '@mui/icons-material/PauseCircle';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import { Box, IconButton, styled } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
 
 export interface MediaPlayerProps {
     audioUrl: string;
@@ -7,65 +9,59 @@ export interface MediaPlayerProps {
 }
 
 export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isAudioLoaded, setIsAudioLoaded] = useState(false);
+    const [audioEnded, setAudioEnded] = useState(false);
 
     useEffect(() => {
-        if (audioRef.current !== null) {
-            audioRef.current.src = audioUrl;
-        }
-    }, [audioUrl]);
-
-    const {
-        palette: {
-            secondary: { main },
-        },
-    } = useTheme();
-
-    const StyledMediaPlayer = styled('audio')`
-        & {
-            width: 100px !important;
-            overflow: clip;
-        }
-
-        &::-webkit-media-controls-panel {
-            background: #ffffff;
-            overflow: clip;
-        }
-
-        &::-webkit-media-controls-mute-button,
-        &::-webkit-media-controls-volume-slider,
-        &::-webkit-media-controls-volume-slider-thumb,
-        &::-webkit-media-controls-timeline,
-        &::-webkit-media-controls-current-time-display,
-        &::-webkit-media-controls-time-remaining-display,
-        &::-webkit-media-controls-duration-display,
-        &::-webkit-media-controls-fullscreen-button {
-            display: none;
-        }
-
-        &::-webkit-media-controls-play-button {
-            background-color: ${main};
-            border-radius: 20px;
-            margin: 0 100px 0 0px;
-            overflow: clip !important;
-        }
-
-        /* FIREFOX */
-        @supports (-moz-animation: none) {
-            & {
-                background: ${main} !important;
-                border-radius: 20px;
-                width: 60px !important;
+        if (audioRef.current) {
+            if (isPlaying) {
+                audioRef.current.play();
+            } else {
+                audioRef.current.pause();
             }
         }
+    }, [isPlaying]);
+
+    const updateAudioIcon = () => {
+        return isPlaying ? (
+            <PauseCircleIcon sx={{ fontSize: '40px' }} />
+        ) : (
+            <PlayCircleIcon sx={{ fontSize: '40px' }} />
+        );
+    };
+
+    const handleMediaPlayerIconClick = () => {
+        setIsPlaying(!isPlaying);
+    };
+
+    const handleAudioLoad = () => {
+        setIsAudioLoaded(true);
+    };
+    const handleAudioEnded = () => {
+        setIsPlaying(false);
+        setAudioEnded(true);
+    };
+
+    const StyledMediaPlayer = styled('audio')`
+        display: none;
     `;
 
     return (
-        <StyledMediaPlayer
-            ref={audioRef}
-            controls
-            controlsList="nodownload noplaybackrate"
-            data-testid="audio-player"
-        />
+        <Box>
+            <StyledMediaPlayer
+                controls
+                ref={audioRef}
+                onCanPlay={handleAudioLoad}
+                onEnded={handleAudioEnded}
+            >
+                <source src={audioUrl} type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </StyledMediaPlayer>
+            <IconButton onClick={handleMediaPlayerIconClick} disabled={!isAudioLoaded}>
+                {updateAudioIcon()}
+            </IconButton>
+        </Box>
     );
 }
