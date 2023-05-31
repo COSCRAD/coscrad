@@ -2,8 +2,17 @@ import 'reflect-metadata';
 import getCoscradDataSchema from '../lib/utilities/getCoscradDataSchema';
 import buildSimpleValidationFunction from '../lib/validation/buildSimpleValidationFunction';
 
-import { buildValidWidgetDto, Widget } from './widget';
+import { bootstrapWidgetDataTypes, buildValidWidgetDto, Widget } from './widget';
 describe('NonEmptyString', () => {
+    beforeAll(() => {
+        /**
+         * This step is important because it triggers dynamic data type discovery
+         * (currently for union data types). This should be called once in the application
+         * layer on bootstrap if leveraging dynamic data types.
+         */
+        bootstrapWidgetDataTypes();
+    });
+
     const validWidgetDTO = buildValidWidgetDto();
 
     it('should populate the appropriate metadata', () => {
@@ -22,6 +31,7 @@ describe('NonEmptyString', () => {
         });
     });
 
+    // Can we do this now?
     /**
      * TODO [https://www.pivotaltracker.com/story/show/182578952]
      * test the invalid data cases

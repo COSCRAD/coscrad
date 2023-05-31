@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { NonEmptyString, URL, UUID } from '../index';
+import { bootstrapDynamicTypes, NonEmptyString, URL, UUID } from '../index';
 import {
     Enum,
     ISBN,
@@ -147,6 +147,9 @@ export class Widget {
         Object.assign(this, dto);
     }
 }
+
+export const bootstrapWidgetDataTypes = (): void =>
+    bootstrapDynamicTypes([ThingDataOne, ThingDataTwo, Widget]);
 
 export const buildValidWidgetDto = (): Widget => ({
     widgetName: 'Machine',

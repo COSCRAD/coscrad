@@ -54,7 +54,32 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "isArray": false,
     "isOptional": false,
     "label": "label for property: data",
-    "schemaDefinitions": [],
+    "schemaDefinitions": [
+      {
+        "discriminant": "one",
+        "schema": {
+          "strength": {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "description of property: strength",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label for property: strength",
+          },
+        },
+      },
+      {
+        "discriminant": "two",
+        "schema": {
+          "rating": {
+            "coscradDataType": "POSITIVE_INTEGER",
+            "description": "description of property: rating",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label for property: rating",
+          },
+        },
+      },
+    ],
     "unionName": "THING_UNION",
   },
   "iconUrl": {
