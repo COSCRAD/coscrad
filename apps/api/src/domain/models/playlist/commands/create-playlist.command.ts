@@ -4,19 +4,23 @@ import { ExternalEnum, NestedDataType, NonEmptyString, UUID } from '@coscrad/dat
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 
 export class PlayListCompositeId {
-    /**
-     * This is a bit of a hack. It circumvents our `CoscradDataTypes` and may
-     * cause problems for
-     * - Schema management
-     * - Anyone using our API directly (not via front-end)
-     *
-     * The simple answer is that you always have to tack on an
-     * `aggregateCompositeIdentifier`.
-     */
-    @NonEmptyString({
-        label: 'type',
-        description: 'song',
-    })
+    // TODO [https://github.com/COSCRAD/coscrad/pull/392#discussion_r1210655537] Should we have an @FixedValue decorator instead?
+    @ExternalEnum(
+        {
+            enumName: 'type',
+            enumLabel: 'type',
+            labelsAndValues: [
+                {
+                    label: 'type',
+                    value: AggregateType.playlist,
+                },
+            ],
+        },
+        {
+            label: 'type',
+            description: AggregateType.playlist,
+        }
+    )
     type = AggregateType.playlist;
 
     @UUID({
@@ -28,7 +32,7 @@ export class PlayListCompositeId {
 
 @Command({
     type: 'CREATE_PLAYLIST',
-    label: 'Create PLaylist',
+    label: 'Create Playlist',
     description: 'Creates a new playlist',
 })
 export class CreatePlayList implements ICommandBase {

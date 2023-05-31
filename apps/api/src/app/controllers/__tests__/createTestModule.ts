@@ -29,6 +29,8 @@ import { CreateJournalArticleBibliographicReferenceCommandHandler } from '../../
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item.command-handler';
 import {
+    AddAudioItemToPlaylist,
+    AddAudioItemToPlaylistCommandHandler,
     CreatePlayList,
     CreatePlayListCommandHandler,
 } from '../../../domain/models/playlist/commands';
@@ -352,6 +354,8 @@ export default async (
             AddLineItemtoTranscriptCommandHandler,
             CreatePlayList,
             CreatePlayListCommandHandler,
+            AddAudioItemToPlaylist,
+            AddAudioItemToPlaylistCommandHandler,
         ],
 
         controllers: [
