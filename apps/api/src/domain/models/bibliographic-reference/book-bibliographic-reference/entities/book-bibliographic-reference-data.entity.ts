@@ -1,22 +1,25 @@
 import { IBookBibliographicReferenceData } from '@coscrad/api-interfaces';
 import {
-    DiscriminatedBy,
     ISBN,
     NestedDataType,
     NonEmptyString,
     PositiveInteger,
+    Union2Member,
     URL,
     Year,
 } from '@coscrad/data-types';
+import { Inject } from '@nestjs/common';
 import { DTO } from '../../../../../types/DTO';
+import { BIBLIOGRAPHIC_REFERENCE_DATA_UNION } from '../../../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
+import { EMPTY_DTO_INJECTION_TOKEN } from '../../../context/free-multiline-context/free-multiline-context.entity';
 import BibliographicReferenceCreator from '../../common/bibliographic-reference-creator.entity';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 
 const isOptional = true;
 
-@DiscriminatedBy(BibliographicReferenceType.book)
+@Union2Member(BIBLIOGRAPHIC_REFERENCE_DATA_UNION, BibliographicReferenceType.book)
 export default class BookBibliographicReferenceData
     extends BaseDomainModel
     implements IBookBibliographicReferenceData
@@ -87,7 +90,7 @@ export default class BookBibliographicReferenceData
     })
     readonly isbn?: string;
 
-    constructor(dto: DTO<BookBibliographicReferenceData>) {
+    constructor(@Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<BookBibliographicReferenceData>) {
         super();
 
         if (isNullOrUndefined(dto)) return;

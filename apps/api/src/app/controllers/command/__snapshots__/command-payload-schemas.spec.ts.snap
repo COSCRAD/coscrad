@@ -1349,12 +1349,12 @@ exports[`command payload schemas Command payload schema should match the snapsho
     "type": "CREATE_PLAYLIST",
   },
   {
-    "description": "add item to an existing playlist",
-    "label": "Add item to Playlist",
+    "description": "creates a note about this particular resource",
+    "label": "Create Note",
     "schema": {
       "aggregateCompositeIdentifier": {
         "complexDataType": "NESTED_TYPE",
-        "description": "system-wide unique identifier",
+        "description": "system-wide unique identifier for the edge connection (note) being created",
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
@@ -1367,32 +1367,86 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "complexDataType": "ENUM",
-            "description": "playlist",
-            "enumLabel": "type",
-            "enumName": "type",
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "song",
             "isArray": false,
             "isOptional": false,
             "label": "type",
-            "labelsAndValues": [
-              {
-                "label": "type",
-                "value": "playlist",
-              },
-            ],
           },
         },
       },
-      "audioItemId": {
-        "coscradDataType": "UUID",
-        "description": "the ID of the audio item being added to this playlist",
+      "resourceCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for the resource about which we are making a note",
         "isArray": false,
         "isOptional": false,
-        "label": "audio item ID",
-        "referenceTo": "audioItem",
+        "label": "CompositeIdentifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "song",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "resourceContext": {
+        "complexDataType": "UNION_TYPE",
+        "description": "the context for the resource you are making a note about",
+        "discriminantPath": "type",
+        "isArray": false,
+        "isOptional": false,
+        "label": "resource context",
+        "schemaDefinitions": [
+          {
+            "discriminant": "general",
+            "schema": {},
+          },
+          {
+            "discriminant": "pageRange",
+            "schema": {},
+          },
+          {
+            "discriminant": "timeRange",
+            "schema": {},
+          },
+          {
+            "discriminant": "textField",
+            "schema": {},
+          },
+          {
+            "discriminant": "point2D",
+            "schema": {},
+          },
+          {
+            "discriminant": "freeMultiline",
+            "schema": {
+              "type": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "free multiline",
+                "isArray": false,
+                "isOptional": false,
+                "label": "type",
+              },
+            },
+          },
+          {
+            "discriminant": "identity",
+            "schema": {},
+          },
+        ],
+        "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
       },
     },
-    "type": "ADD_AUDIO_ITEM_TO_PLAYLIST",
+    "type": "CREATE_NOTE_ABOUT_RESOURCE",
   },
 ]
 `;

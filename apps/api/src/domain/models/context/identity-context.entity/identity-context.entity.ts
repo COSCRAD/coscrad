@@ -1,4 +1,4 @@
-import { DiscriminatedBy, Union2Member } from '@coscrad/data-types';
+import { Union2Member } from '@coscrad/data-types';
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
@@ -10,7 +10,6 @@ import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
  */
 
 @Union2Member('EDGE_CONNECTION_CONTEXT_UNION', EdgeConnectionContextType.identity)
-@DiscriminatedBy(EdgeConnectionContextType.identity)
 export class IdentityContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.identity;
 }

@@ -1,9 +1,12 @@
-import { DiscriminatedBy } from '@coscrad/data-types';
+import { Union2Member } from '@coscrad/data-types';
+import { Inject } from '@nestjs/common';
 import { DTO } from '../../../../types/DTO';
 import { EdgeConnectionContext } from '../context.entity';
+import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
+import { EMPTY_DTO_INJECTION_TOKEN } from '../free-multiline-context/free-multiline-context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
-@DiscriminatedBy(EdgeConnectionContextType.general)
+@Union2Member(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.textField)
 export class TextFieldContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.textField;
 
@@ -28,8 +31,12 @@ export class TextFieldContext extends EdgeConnectionContext {
      */
     readonly charRange: [number, number];
 
-    constructor({ target, charRange }: DTO<TextFieldContext>) {
+    constructor(@Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<TextFieldContext>) {
         super();
+
+        if (!dto) return;
+
+        const { target, charRange } = dto;
 
         this.target = target;
 

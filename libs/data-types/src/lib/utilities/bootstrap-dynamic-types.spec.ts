@@ -66,6 +66,11 @@ class ProductionLine {
     machines: (Widget | Whatsit)[];
 }
 
+class HasNestedUnionProperty {
+    @NestedDataType(FactoryRoom, buildOptions('factoryRoom'))
+    factoryRoom: FactoryRoom;
+}
+
 // TODO remove this but it migt be useful for the validation test
 // const validWhatsit: Whatsit = {
 //     type: 'whatsit',
@@ -109,6 +114,30 @@ describe(`bootstrapDynamicTypes`, () => {
 
                     // There are 2 classes that have been decorated as union members here
                     expect(machineForUnionProperty['schemaDefinitions']).toHaveLength(2);
+                });
+            });
+
+            describe(`when there is a nested property that leverages a union type`, () => {
+                it(`should append the data-schema to the metadata`, () => {
+                    bootstrapDynamicTypes(
+                        // FactoryRoom and ProductionLine both leverage a union decorator for the same union
+                        [
+                            Whatsit,
+                            Widget,
+                            Undecorated,
+                            FactoryRoom,
+                            ProductionLine,
+                            HasNestedUnionProperty,
+                        ]
+                    );
+
+                    const meta = getCoscradDataSchema(HasNestedUnionProperty);
+
+                    const factoryRoomDataTypeDefinitionSchema = meta['factoryRoom']['schema'];
+
+                    expect(
+                        factoryRoomDataTypeDefinitionSchema['machine']['schemaDefinitions']
+                    ).toHaveLength(2);
                 });
             });
         });

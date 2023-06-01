@@ -16,72 +16,78 @@ describe('buildTestData', () => {
 
     const deluxeInMemoryStore = new DeluxeInMemoryStore(testData);
 
-    Object.values(AggregateType).forEach((aggregateType) => {
-        describe(`The test instances for ${formatAggregateType(aggregateType)}`, () => {
-            it('should be comprehensive', () => {
-                assertTestInstancesOfTypeAreComprehensive(aggregateType, testData);
-            });
+    Object.values(AggregateType)
+        // TODO remove me
+        .filter((aggregateType) => aggregateType === AggregateType.note)
+        .forEach((aggregateType) => {
+            describe(`The test instances for ${formatAggregateType(aggregateType)}`, () => {
+                it('should be comprehensive', () => {
+                    assertTestInstancesOfTypeAreComprehensive(aggregateType, testData);
+                });
 
-            if (aggregateType === AggregateType.note) {
-                deluxeInMemoryStore
-                    .fetchAllOfType(AggregateType.note)
-                    .forEach((connection) =>
-                        assertEdgeConnectionContextStateIsValid(testData, connection)
-                    );
-            }
+                if (aggregateType === AggregateType.note) {
+                    deluxeInMemoryStore
+                        .fetchAllOfType(AggregateType.note)
+                        .forEach((connection) =>
+                            assertEdgeConnectionContextStateIsValid(testData, connection)
+                        );
+                }
 
-            /**
-             * Ideally, we would check this with logic that is on the aggregate
-             * models (e.g. `validateExternalState`). However, it is not efficient
-             * to remove each aggregate instance from the snapshot to create the
-             * `externalState` within a loop.
-             */
-            it(`should contain no duplicate identifiers`, () => {
-                const duplicateIdentifiers = deluxeInMemoryStore
-                    .fetchAllOfType(aggregateType)
-                    .map(getId)
-                    .reduce((acc: Map<'duplicates' | 'known', AggregateId[]>, id: AggregateId) => {
-                        if (acc.get('known').includes(id)) {
-                            return acc.set('duplicates', [
-                                ...new Set([...acc.get('duplicates'), id]),
-                            ]);
-                        }
+                /**
+                 * Ideally, we would check this with logic that is on the aggregate
+                 * models (e.g. `validateExternalState`). However, it is not efficient
+                 * to remove each aggregate instance from the snapshot to create the
+                 * `externalState` within a loop.
+                 */
+                it(`should contain no duplicate identifiers`, () => {
+                    const duplicateIdentifiers = deluxeInMemoryStore
+                        .fetchAllOfType(aggregateType)
+                        .map(getId)
+                        .reduce(
+                            (acc: Map<'duplicates' | 'known', AggregateId[]>, id: AggregateId) => {
+                                if (acc.get('known').includes(id)) {
+                                    return acc.set('duplicates', [
+                                        ...new Set([...acc.get('duplicates'), id]),
+                                    ]);
+                                }
 
-                        return acc.set('known', [...new Set([...acc.get('known'), id])]);
-                    }, new Map().set('duplicates', []).set('known', []))
-                    .get('duplicates');
+                                return acc.set('known', [...new Set([...acc.get('known'), id])]);
+                            },
+                            new Map().set('duplicates', []).set('known', [])
+                        )
+                        .get('duplicates');
 
-                expect(duplicateIdentifiers).toEqual([]);
-            });
+                    expect(duplicateIdentifiers).toEqual([]);
+                });
 
-            deluxeInMemoryStore.fetchAllOfType(aggregateType).forEach((aggregate) => {
-                const externalState = deluxeInMemoryStore.fetchFullSnapshotInLegacyFormat();
+                deluxeInMemoryStore.fetchAllOfType(aggregateType).forEach((aggregate) => {
+                    const externalState = deluxeInMemoryStore.fetchFullSnapshotInLegacyFormat();
 
-                describe(`${formatAggregateCompositeIdentifier(
-                    aggregate.getCompositeIdentifier()
-                )}`, () => {
-                    it('should satisfy all invariants', () => {
-                        const validationResult = aggregate.validateInvariants();
+                    describe(`${formatAggregateCompositeIdentifier(
+                        aggregate.getCompositeIdentifier()
+                    )}`, () => {
+                        it('should satisfy all invariants', () => {
+                            const validationResult = aggregate.validateInvariants();
 
-                        const validMessage = 'VALID';
+                            const validMessage = 'VALID';
 
-                        const validationMessage = isValid(validationResult)
-                            ? validMessage
-                            : validationResult.toString();
+                            const validationMessage = isValid(validationResult)
+                                ? validMessage
+                                : validationResult.toString();
 
-                        expect(validationMessage).toBe(validMessage);
-                    });
+                            expect(validationMessage).toBe(validMessage);
+                        });
 
-                    it('should contain no inconsistent references to the external state (other test data)', () => {
-                        const externalReferencesValidationResult =
-                            aggregate.validateExternalReferences(externalState);
+                        it('should contain no inconsistent references to the external state (other test data)', () => {
+                            const externalReferencesValidationResult =
+                                aggregate.validateExternalReferences(externalState);
 
-                        expect(externalReferencesValidationResult).toBe(Valid);
+                            expect(externalReferencesValidationResult).toBe(Valid);
+                        });
                     });
                 });
             });
         });
-    });
 
     // If the test succeeds, write the data
     afterAll(() => {

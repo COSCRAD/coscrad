@@ -7,6 +7,8 @@ import { COSCRAD_UNION_MEMBER_METADATA } from '../constants';
  * `@Union(...)` decorator, and should be the value of the property specified
  * there via the `discriminantPath`.
  */
+
+// TODO remove me now!
 export function DiscriminatedBy(discriminantValue: string): ClassDecorator {
     return (target: Object): void => {
         Reflect.defineMetadata(

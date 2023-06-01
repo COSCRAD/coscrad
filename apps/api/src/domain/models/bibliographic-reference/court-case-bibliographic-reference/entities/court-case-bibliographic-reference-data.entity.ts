@@ -1,11 +1,14 @@
 import { ICourtCaseBibliographicReferenceData } from '@coscrad/api-interfaces';
-import { DiscriminatedBy, NonEmptyString, URL } from '@coscrad/data-types';
+import { NonEmptyString, Union2Member, URL } from '@coscrad/data-types';
+import { Inject } from '@nestjs/common';
 import { DTO } from '../../../../../types/DTO';
+import { BIBLIOGRAPHIC_REFERENCE_DATA_UNION } from '../../../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
+import { EMPTY_DTO_INJECTION_TOKEN } from '../../../context/free-multiline-context/free-multiline-context.entity';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 
-@DiscriminatedBy(BibliographicReferenceType.courtCase)
+@Union2Member(BIBLIOGRAPHIC_REFERENCE_DATA_UNION, BibliographicReferenceType.courtCase)
 export class CourtCaseBibliographicReferenceData
     extends BaseDomainModel
     implements ICourtCaseBibliographicReferenceData
@@ -62,7 +65,7 @@ export class CourtCaseBibliographicReferenceData
     })
     readonly pages?: string;
 
-    constructor(dto: DTO<CourtCaseBibliographicReferenceData>) {
+    constructor(@Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<CourtCaseBibliographicReferenceData>) {
         super();
 
         if (isNullOrUndefined(dto)) return;

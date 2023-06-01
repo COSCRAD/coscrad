@@ -108,6 +108,12 @@ export const validateCoscradModelProperty = (
                 );
             }
 
+            if (isNullOrUndefined(actualPropertyValue)) {
+                return [
+                    new Error(`property: ${propertyName} is not an instance of a union member`),
+                ];
+            }
+
             const discriminantValue = actualPropertyValue[discriminantPath];
 
             const schemaDefinitionSearchResult = schemaDefinitions.find(

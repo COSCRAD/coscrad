@@ -193,45 +193,4 @@ export const bootstrapDynamicTypes = (allCtorCandidates: unknown[]) => {
             }
         );
     });
-
-    /**
-     * Now we iterate through all known classes that leverage a union,
-     * setting the schema from the union members.
-     */
-
-    // const allClassesLeveragingAUnion = allCtorCandidates.filter((input) =>
-    //     isUnionMemberMetadata(getUnionMemberMetadata(input))
-    // );
-
-    // allClassesLeveragingAUnion.forEach((classReference) => {
-    //     const { unionName } = getUnionMetadata(classReference) as UnionMetadata;
-
-    //     // We already have checked for this this above
-
-    //     const existingTypeMeta = Reflect.getMetadata(
-    //         COSCRAD_DATA_TYPE_METADATA,
-    //         // @ts-expect-error TODO fix types
-    //         classReference.prototype
-    //     );
-
-    //     if (!existingTypeMeta) {
-    //         throw new Error(
-    //             `There is no COSCRAD data-type metadata for class: ${classReference} that leverages a union: ${unionName}`
-    //         );
-    //     }
-
-    //     const schemaDefinitions = unionMap.get(unionName).forEach((ctor, discriminantValue) => ({
-    //         discriminant: discriminantValue,
-    //         schema: getCoscradDataSchema(ctor),
-    //     }));
-
-    //     Reflect.defineMetadata(
-    //         COSCRAD_DATA_TYPE_METADATA,
-    //         {
-    //             ...existingTypeMeta,
-    //             schemaDefinitions,
-    //         },
-    //         classReference
-    //     );
-    // });
 };

@@ -1,14 +1,17 @@
 import { IJournalArticleBibliographicReferenceData } from '@coscrad/api-interfaces';
-import { DiscriminatedBy, NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, Union2Member, URL } from '@coscrad/data-types';
+import { Inject } from '@nestjs/common';
 import { DTO } from '../../../../../types/DTO';
+import { BIBLIOGRAPHIC_REFERENCE_DATA_UNION } from '../../../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
+import { EMPTY_DTO_INJECTION_TOKEN } from '../../../context/free-multiline-context/free-multiline-context.entity';
 import BibliographicReferenceCreator from '../../common/bibliographic-reference-creator.entity';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 
 const isOptional = true;
 
-@DiscriminatedBy(BibliographicReferenceType.journalArticle)
+@Union2Member(BIBLIOGRAPHIC_REFERENCE_DATA_UNION, BibliographicReferenceType.journalArticle)
 export default class JournalArticleBibliographicReferenceData
     extends BaseDomainModel
     implements IJournalArticleBibliographicReferenceData
@@ -74,7 +77,9 @@ export default class JournalArticleBibliographicReferenceData
     })
     readonly doi?: string;
 
-    constructor(dto: DTO<JournalArticleBibliographicReferenceData>) {
+    constructor(
+        @Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<JournalArticleBibliographicReferenceData>
+    ) {
         super();
 
         if (isNullOrUndefined(dto)) return;

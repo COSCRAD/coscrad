@@ -1,9 +1,10 @@
-import { DiscriminatedBy, NonEmptyString, Union2Member } from '@coscrad/data-types';
+import { NonEmptyString, Union2Member } from '@coscrad/data-types';
 import { Inject } from '@nestjs/common';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { Line2D } from '../../spatial-feature/types/Coordinates/Line2d';
 import { EdgeConnectionContext } from '../context.entity';
+import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
 export const EMPTY_DTO_INJECTION_TOKEN = 'EMPTY_DTO';
@@ -15,8 +16,7 @@ export const EMPTY_DTO_INJECTION_TOKEN = 'EMPTY_DTO';
  * zig-zags, and so on are allowed.
  */
 
-@Union2Member('EDGE_CONNECTION_CONTEXT_UNION', EdgeConnectionContextType.freeMultiline)
-@DiscriminatedBy(EdgeConnectionContextType.freeMultiline)
+@Union2Member(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.freeMultiline)
 export class FreeMultilineContext extends EdgeConnectionContext {
     @NonEmptyString({
         label: 'type',

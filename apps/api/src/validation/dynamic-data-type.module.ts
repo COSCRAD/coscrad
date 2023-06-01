@@ -7,7 +7,7 @@ import { DynamicDataTypeFinderService } from './dynamic-data-type-finder.service
 
 const EmptyDtoProvider = {
     provide: EMPTY_DTO_INJECTION_TOKEN,
-    useValue: {},
+    useValue: null,
 };
 
 @Module({
