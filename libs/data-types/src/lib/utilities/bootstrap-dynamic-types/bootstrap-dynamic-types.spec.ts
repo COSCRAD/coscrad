@@ -1,13 +1,13 @@
+import { bootstrapDynamicTypes } from '.';
 import {
     NestedDataType,
     NonEmptyString,
     NonNegativeFiniteNumber,
     Union2,
     Union2Member,
-} from '../decorators';
-import { TypeDecoratorOptions } from '../decorators/types/TypeDecoratorOptions';
-import { bootstrapDynamicTypes } from './bootstrap-dynamic-types';
-import getCoscradDataSchema from './getCoscradDataSchema';
+} from '../../decorators';
+import { TypeDecoratorOptions } from '../../decorators/types/TypeDecoratorOptions';
+import getCoscradDataSchema from '../getCoscradDataSchema';
 
 const MACHINE_UNION = 'MACHINE_UNION';
 

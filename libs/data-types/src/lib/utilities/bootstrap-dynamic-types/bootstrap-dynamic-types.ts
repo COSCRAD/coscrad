@@ -1,13 +1,14 @@
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
-import { COSCRAD_DATA_TYPE_METADATA } from '../constants';
+import { COSCRAD_DATA_TYPE_METADATA } from '../../constants';
 import {
     getUnionMemberMetadata,
     getUnionMetadata,
     isUnionMemberMetadata,
     isUnionMetadata,
-} from '../decorators';
-import getCoscradDataSchema from './getCoscradDataSchema';
-import { Ctor } from './getCoscradDataSchemaFromPrototype';
+} from '../../decorators';
+import getCoscradDataSchema from './../getCoscradDataSchema';
+import { Ctor } from './../getCoscradDataSchemaFromPrototype';
+import { joinDynamicTypeInfoIntoNestedSchemas } from './joinDynamicTypeInfoIntoNestedSchemas';
 
 type ComplexCoscradDataTypeDefinition = {
     complexDataType: string;
@@ -21,7 +22,6 @@ const isComplexCoscradDataTypeDefinition = (
 
 export const bootstrapDynamicTypes = (allCtorCandidates: unknown[]) => {
     const unionMetadata = allCtorCandidates.map(getUnionMetadata).filter(isUnionMetadata);
-    // .filter(({ unionName }) => unionName === nameOfUnionToValidate);
 
     const unionNames = [...new Set(unionMetadata.map(({ unionName }) => unionName))];
 
@@ -64,7 +64,7 @@ export const bootstrapDynamicTypes = (allCtorCandidates: unknown[]) => {
             .map(({ ctor, discriminantValue }) => [ctor, discriminantValue]);
 
         if (discriminantValuesAndCtors.length === 0) {
-            // TODO Break out proper exceptions here and test for these
+            // TODO Break out proper exceptions here
             throw new Error(
                 `Failed to find any union members (sub-type classes) for the union: ${nameOfUnionToValidate}`
             );
@@ -193,4 +193,11 @@ export const bootstrapDynamicTypes = (allCtorCandidates: unknown[]) => {
             }
         );
     });
+
+    /**
+     * Now that we have written all union member schemas to union types at
+     * the top level, we just need to walk the actual data type definitions
+     * and leverage these full union types in nested data type definitions.
+     */
+    ctorsWithTypeDefinitions.forEach(joinDynamicTypeInfoIntoNestedSchemas);
 };
