@@ -36,8 +36,13 @@ IAggregateInfo<ResourceType> & { route: string }): JSX.Element => {
                         {/* For the `xs` see https://github.com/mui/material-ui/issues/11339
                         Seems like it's still broken in @material-ui/core ^4.12.3 */}
                         <Grid item zeroMinWidth xs>
-                            <Typography variant="h6" color="primary" fontWeight="bold">
-                                {label}
+                            <Typography
+                                variant="h6"
+                                color="primary"
+                                textTransform="capitalize"
+                                fontWeight="bold"
+                            >
+                                {label.replace(/([A-Z]+)*([A-Z][a-z])/g, '$1 $2')}
                             </Typography>
                             <div style={{ height: '1px' }} data-testid={label}>
                                 &nbsp;
