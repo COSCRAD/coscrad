@@ -81,12 +81,22 @@ export enum DetailViewType {
     thumbnail = 'thumbnail-view',
 }
 
+/**
+ * Note that these are all required together if any one is specified. This is to
+ * avoid weird situations where you provide a custom label but fall back to
+ * a default plural label, for example.
+ */
+export type AggregateLabelOverrides = {
+    label: string;
+    pluralLabel: string;
+    route: string;
+};
+
 export type IndexToDetailFlowDefinition<T extends CategorizableType> = {
     categorizableType: T;
     indexFilter?: (
         viewModel: ICategorizableDetailQueryResult<AggregateTypeToViewModel[T]>
     ) => boolean;
     detailViewType: DetailViewType;
-    label?: string; // custom override for resource label
-    route?: string; // custom route `/resources/${route}`
+    labelOverrides?: AggregateLabelOverrides; // custom override for resource label
 };

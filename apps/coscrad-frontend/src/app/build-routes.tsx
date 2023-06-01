@@ -1,4 +1,4 @@
-import { CategorizableType, isResourceType, ResourceType } from '@coscrad/api-interfaces';
+import { CategorizableType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { About } from '../components/about/about';
 import { Credits } from '../components/credits/credits';
@@ -12,7 +12,6 @@ import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
 import { ConfigurableContent } from '../configurable-front-matter/data/configurable-content-schema';
 import { bootstrapIndexToDetailFlowRoutes } from './bootstrap-index-to-detail-flow-routes';
-import { routes } from './routes/routes';
 
 export type CoscradRoute = {
     path: string;
@@ -35,26 +34,7 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         ({ categorizableType }) => categorizableType === CategorizableType.note
     );
 
-    const resourceTypesAndLabels = indexToDetailFlows
-        .filter(({ categorizableType }) => isResourceType(categorizableType))
-        .reduce(
-            (acc, { categorizableType: resourceType, label }) => ({
-                ...acc,
-                [resourceType]: label || `${resourceType}s`,
-            }),
-            {}
-        );
-
-    const resourceTypesAndRoutes = indexToDetailFlows
-        .filter(({ categorizableType }) => isResourceType(categorizableType))
-        .reduce(
-            (acc, { categorizableType, route }) => ({
-                ...acc,
-                [categorizableType]:
-                    route || routes.resources.ofType(categorizableType as ResourceType).index,
-            }),
-            {}
-        );
+    const notesRoute = noteIndexToDetailConfig.labelOverrides?.label || 'Notes';
 
     type RouteFlag = boolean;
 
@@ -75,18 +55,13 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         {
             path: 'Resources',
             label: resourceIndexLabel,
-            element: (
-                <ResourceInfoContainer
-                    resourceTypesAndLabels={resourceTypesAndLabels}
-                    resourceTypesAndRoutes={resourceTypesAndRoutes}
-                />
-            ),
+            element: <ResourceInfoContainer />,
         },
         [
             !isNullOrUndefined(noteIndexToDetailConfig) && shouldEnableWebOfKnowledgeForResources,
             () => ({
-                path: noteIndexToDetailConfig.route || 'Notes',
-                label: noteIndexToDetailConfig.label || 'Notes',
+                path: notesRoute,
+                label: noteIndexToDetailConfig.labelOverrides?.label || 'Notes',
                 element: <NoteIndexContainer />,
             }),
         ],

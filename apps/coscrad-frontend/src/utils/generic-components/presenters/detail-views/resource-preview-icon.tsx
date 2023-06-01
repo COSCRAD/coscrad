@@ -13,6 +13,7 @@ import {
     VolumeUp as VolumeUpIcon,
 } from '@mui/icons-material';
 import { Box, Tooltip } from '@mui/material';
+import { useLoadableResourceInfoWithConfigOverrides } from '../../../../store/slices/resources/resource-info/hooks';
 
 /**
  * TODO[https://www.pivotaltracker.com/story/show/184664117] Create an icon factory that enables custom icons
@@ -62,6 +63,17 @@ export const ResourcePreviewIconFactory = ({
 }: ResourcePreviewImageProps): JSX.Element => {
     const lookupResult = lookupTable[resourceType];
 
+    /**
+     * This may not be the right place to do this. However, it avoids the complexity
+     * of drilling a lot of state through from the resource presenters and keeps
+     * the logic extensible to adding new resource types.
+     */
+    const { data: resourceInfos } = useLoadableResourceInfoWithConfigOverrides();
+
+    const label = resourceInfos.find(
+        ({ type: resourceTypeForThisInfoItem }) => resourceType === resourceTypeForThisInfoItem
+    ).label;
+
     const iconSize = sizes[size];
 
     if (!lookupResult) {
@@ -71,7 +83,7 @@ export const ResourcePreviewIconFactory = ({
     return (
         <Box sx={{ fontSize: iconSize, maxHeight: iconSize, color: color }}>
             {/* TODO: capitalize resource type */}
-            <Tooltip title={resourceType}>{lookupResult}</Tooltip>
+            <Tooltip title={label}>{lookupResult}</Tooltip>
         </Box>
     );
 };

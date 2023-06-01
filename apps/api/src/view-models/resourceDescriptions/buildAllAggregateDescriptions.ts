@@ -4,6 +4,7 @@ import { CategorizableType } from '../../domain/types/CategorizableType';
 import { ResourceType } from '../../domain/types/ResourceType';
 import { getViewModelCtorFromAggregateType } from '../buildViewModelForResource/viewModels/utilities/ViewModelCtorFromResourceType/getViewModelCtorFromAggregateType';
 import formatResourceType from '../presentation/formatAggregateType';
+import getPluralLabelForAggregateType from '../presentation/getPluralLabelForAggregateType';
 import { AggregateInfo } from './types/AggregateInfo';
 
 const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
@@ -94,5 +95,6 @@ export const buildAllAggregateDescriptions = (): Omit<AggregateInfo, 'link'>[] =
         type: resourceType,
         description,
         label: formatResourceType(resourceType),
+        pluralLabel: getPluralLabelForAggregateType(resourceType),
         schema: getCoscradDataSchema(getViewModelCtorFromAggregateType(resourceType)),
     }));

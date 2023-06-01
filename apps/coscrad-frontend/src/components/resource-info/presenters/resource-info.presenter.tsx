@@ -7,6 +7,7 @@ export const ResourceInfoPresenter = ({
     type,
     description,
     label,
+    pluralLabel,
     route,
 }: /**
  * TODO [https://www.pivotaltracker.com/story/show/183766033
@@ -21,8 +22,8 @@ IAggregateInfo<ResourceType> & { route: string }): JSX.Element => {
     } = useTheme();
 
     return (
-        <Link to={`/${route}`}>
-            <Card>
+        <Link to={`/Resources/${route}`}>
+            <Card data-testid={type}>
                 {/* TODO Handle pluralization properly as soon as we have a Resource Type whose plural form is irregular */}
                 <CardContent>
                     <Grid container justifyContent="flex-start" spacing="10" direction="row" mb={2}>
@@ -42,7 +43,7 @@ IAggregateInfo<ResourceType> & { route: string }): JSX.Element => {
                                 textTransform="capitalize"
                                 fontWeight="bold"
                             >
-                                {label.replace(/([A-Z]+)*([A-Z][a-z])/g, '$1 $2')}
+                                {pluralLabel}
                             </Typography>
                             <div style={{ height: '1px' }} data-testid={label}>
                                 &nbsp;
