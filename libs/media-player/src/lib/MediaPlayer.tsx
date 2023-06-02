@@ -11,8 +11,8 @@ export interface MediaPlayerProps {
 export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isAudioLoaded, setIsAudioLoaded] = useState(false);
-    const [audioEnded, setAudioEnded] = useState(false);
+    const [canPlay, setCanPlay] = useState(false);
+    const [_audioEnded, setAudioEnded] = useState(false);
 
     useEffect(() => {
         if (audioRef.current) {
@@ -26,9 +26,9 @@ export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
 
     const updateAudioIcon = () => {
         return isPlaying ? (
-            <PauseCircleIcon sx={{ fontSize: '40px' }} />
+            <PauseCircleIcon data-testid="pause-icon" sx={{ fontSize: '40px' }} />
         ) : (
-            <PlayCircleIcon sx={{ fontSize: '40px' }} />
+            <PlayCircleIcon data-testid="play-icon" sx={{ fontSize: '40px' }} />
         );
     };
 
@@ -37,7 +37,7 @@ export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
     };
 
     const handleAudioLoad = () => {
-        setIsAudioLoaded(true);
+        setCanPlay(true);
     };
     const handleAudioEnded = () => {
         setIsPlaying(false);
@@ -49,7 +49,7 @@ export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
     `;
 
     return (
-        <Box>
+        <Box data-testid="audio-player">
             <StyledMediaPlayer
                 controls
                 ref={audioRef}
@@ -59,7 +59,13 @@ export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
                 <source src={audioUrl} type="audio/mpeg" />
                 Your browser does not support the audio element.
             </StyledMediaPlayer>
-            <IconButton onClick={handleMediaPlayerIconClick} disabled={!isAudioLoaded}>
+
+            {/* Break the button out in another component*/}
+            <IconButton
+                data-testid="audio-play-button"
+                onClick={handleMediaPlayerIconClick}
+                disabled={!canPlay}
+            >
                 {updateAudioIcon()}
             </IconButton>
         </Box>

@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { mount } from 'cypress/react18'
+import { mount } from 'cypress/react18';
 
 // ***********************************************
 // This example commands.ts shows you how to
@@ -12,22 +12,28 @@ import { mount } from 'cypress/react18'
 // ***********************************************
 
 declare global {
-// eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Cypress {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    interface Chainable<Subject> {
-      login(email: string, password: string): void;
-      mount: typeof mount;
+    // eslint-disable-next-line @typescript-eslint/no-namespace
+    namespace Cypress {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        interface Chainable<Subject> {
+            login(email: string, password: string): void;
+            mount: typeof mount;
+
+            getByDataAttribute(value: string, attributeSuffix?: string): Chainable<Subject>;
+        }
     }
-  }
 }
 
-Cypress.Commands.add('mount', mount)
+Cypress.Commands.add('mount', mount);
 
 //
 // -- This is a parent command --
 Cypress.Commands.add('login', (email, password) => {
-  console.log('Custom command example: Login', email, password);
+    console.log('Custom command example: Login', email, password);
+});
+
+Cypress.Commands.add('getByDataAttribute', (value: string, attributeSuffix = 'testid') => {
+    cy.get(`[data-${attributeSuffix}="${value}"]`);
 });
 //
 // -- This is a child command --
