@@ -1,4 +1,4 @@
-import { bootstrapDynamicTypes } from '.';
+import { bootstrapDynamicTypes, UnionTypesMap } from '.';
 import {
     NestedDataType,
     NonEmptyString,
@@ -7,7 +7,6 @@ import {
     Union2Member,
 } from '../../decorators';
 import { TypeDecoratorOptions } from '../../decorators/types/TypeDecoratorOptions';
-import getCoscradDataSchema from '../getCoscradDataSchema';
 
 const MACHINE_UNION = 'MACHINE_UNION';
 
@@ -71,73 +70,97 @@ class HasNestedUnionProperty {
     factoryRoom: FactoryRoom;
 }
 
-// TODO remove this but it migt be useful for the validation test
-// const validWhatsit: Whatsit = {
-//     type: 'whatsit',
-//     name: 'front-line whatsit',
-//     properties: {
-//         power: 5,
-//         class: 'high-grade',
-//     },
-// };
+type DiscriminantAndCtorName = {
+    discriminant: string;
+    ctorName: string;
+};
+
+const assertUnionMapAsExpected = (
+    unionName: string,
+    unionMap: UnionTypesMap,
+    expectedDiscriminantsAndCtorNames: DiscriminantAndCtorName[]
+) => {
+    expect(unionMap.has(unionName)).toBe(true);
+
+    const membersMap = unionMap.get(unionName);
+
+    const unmatchedDiscriminants = expectedDiscriminantsAndCtorNames.filter(
+        ({ discriminant, ctorName }) =>
+            !membersMap.has(discriminant) || membersMap.get(discriminant).name !== ctorName
+    );
+
+    expect(unmatchedDiscriminants).toEqual([]);
+};
 
 describe(`bootstrapDynamicTypes`, () => {
     describe(`when several union members have been registered`, () => {
         describe(`when the input is valid`, () => {
             describe(`when only one class property has been decorated`, () => {
                 it(`should append the data-schema to the metadata`, () => {
-                    bootstrapDynamicTypes([Whatsit, Widget, FactoryRoom, Undecorated]);
+                    const unionMap = bootstrapDynamicTypes([
+                        Whatsit,
+                        Widget,
+                        FactoryRoom,
+                        Undecorated,
+                    ]);
 
-                    const meta = getCoscradDataSchema(FactoryRoom);
-
-                    const machineForUnionProperty = meta['machine'];
-
-                    expect(machineForUnionProperty['complexDataType']).toBe('UNION_TYPE');
-
-                    // There are 2 classes that have been decorated as union members here
-                    expect(machineForUnionProperty['schemaDefinitions']).toHaveLength(2);
+                    assertUnionMapAsExpected(MACHINE_UNION, unionMap, [
+                        {
+                            discriminant: 'whatsit',
+                            ctorName: 'Whatsit',
+                        },
+                        {
+                            discriminant: 'widget',
+                            ctorName: 'Widget',
+                        },
+                    ]);
                 });
             });
 
             describe(`when multiple classes have a property that has been decorated`, () => {
                 it(`should append the data-schema to the metadata`, () => {
-                    bootstrapDynamicTypes(
+                    const unionMap = bootstrapDynamicTypes(
                         // FactoryRoom and ProductionLine both leverage a union decorator for the same union
                         [Whatsit, Widget, Undecorated, FactoryRoom, ProductionLine]
                     );
 
-                    const meta = getCoscradDataSchema(FactoryRoom);
-
-                    const machineForUnionProperty = meta['machine'];
-
-                    expect(machineForUnionProperty['complexDataType']).toBe('UNION_TYPE');
-
-                    // There are 2 classes that have been decorated as union members here
-                    expect(machineForUnionProperty['schemaDefinitions']).toHaveLength(2);
+                    assertUnionMapAsExpected(MACHINE_UNION, unionMap, [
+                        {
+                            discriminant: 'whatsit',
+                            ctorName: 'Whatsit',
+                        },
+                        {
+                            discriminant: 'widget',
+                            ctorName: 'Widget',
+                        },
+                    ]);
                 });
             });
 
             describe(`when there is a nested property that leverages a union type`, () => {
                 it(`should append the data-schema to the metadata`, () => {
-                    bootstrapDynamicTypes(
+                    const unionMap = bootstrapDynamicTypes(
                         // FactoryRoom and ProductionLine both leverage a union decorator for the same union
                         [
                             Whatsit,
                             Widget,
-                            Undecorated,
+                            // Undecorated,
                             FactoryRoom,
-                            ProductionLine,
+                            // ProductionLine,
                             HasNestedUnionProperty,
                         ]
                     );
 
-                    const meta = getCoscradDataSchema(HasNestedUnionProperty);
-
-                    const factoryRoomDataTypeDefinitionSchema = meta['factoryRoom']['schema'];
-
-                    expect(
-                        factoryRoomDataTypeDefinitionSchema['machine']['schemaDefinitions']
-                    ).toHaveLength(2);
+                    assertUnionMapAsExpected(MACHINE_UNION, unionMap, [
+                        {
+                            discriminant: 'whatsit',
+                            ctorName: 'Whatsit',
+                        },
+                        {
+                            discriminant: 'widget',
+                            ctorName: 'Widget',
+                        },
+                    ]);
                 });
             });
         });

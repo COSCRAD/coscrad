@@ -4,13 +4,16 @@ import {
     ComplexCoscradDataType,
     isSimpleCoscradPropertyTypeDefinition,
     NestedTypeDefinition,
+    UnionDataTypeDefinition,
 } from '../../types';
 import getCoscradDataSchema from '../getCoscradDataSchema';
+import { UnionTypesMap } from './bootstrap-dynamic-types';
 
 type CoscradDataSchema = ReturnType<typeof getCoscradDataSchema>;
 
 const joinDynamicTypeInfoIntoSchemaForANestedDataType = (
-    schemaForNestedProperty: NestedTypeDefinition
+    schemaForNestedProperty: NestedTypeDefinition,
+    unionMap: UnionTypesMap
 ): NestedTypeDefinition => {
     const { complexDataType, schema: originalSchema } = schemaForNestedProperty;
 
@@ -36,7 +39,26 @@ const joinDynamicTypeInfoIntoSchemaForANestedDataType = (
             }
 
             if (complexDataType === 'UNION_TYPE') {
-                throw new Error(`Cannot handle a union type definition on a nested data type`);
+                const { unionName } = propertyTypeDefinition;
+
+                const membersMap = unionMap.get(unionName);
+
+                const schemaDefinitions = Object.entries(membersMap).map(
+                    ([discriminant, ctor]) => ({
+                        discriminant,
+                        schema: getCoscradDataSchema(ctor),
+                    })
+                );
+
+                const updatedTypeDefinition: UnionDataTypeDefinition = {
+                    ...propertyTypeDefinition,
+                    schemaDefinitions,
+                };
+
+                return {
+                    ...acc,
+                    [propertyKey]: updatedTypeDefinition,
+                };
             }
 
             if (complexDataType === ComplexCoscradDataType.nested) {
@@ -59,7 +81,7 @@ const joinDynamicTypeInfoIntoSchemaForANestedDataType = (
 };
 
 // Doesn't this lib use camel case for naming files?
-export const joinDynamicTypeInfoIntoNestedSchemas = (c: unknown): void => {
+export const joinDynamicTypeInfoIntoNestedSchemas = (c: unknown, unionMap: UnionTypesMap): void => {
     const originalDataSchema = getCoscradDataSchema(c);
 
     const updatedDataSchema = Object.entries(originalDataSchema).reduce(
@@ -78,8 +100,12 @@ export const joinDynamicTypeInfoIntoNestedSchemas = (c: unknown): void => {
                 ...acc,
                 [propertyKey]: {
                     ...propertySchema,
-                    // @ts-expect-error todo fix types (deal with mismatch between interface and concrete types here)
-                    schema: joinDynamicTypeInfoIntoSchemaForANestedDataType(propertySchema),
+
+                    schema: joinDynamicTypeInfoIntoSchemaForANestedDataType(
+                        // @ts-expect-error todo fix types (deal with mismatch between interface and concrete types here)
+                        propertySchema,
+                        unionMap
+                    ),
                 },
             };
         },
