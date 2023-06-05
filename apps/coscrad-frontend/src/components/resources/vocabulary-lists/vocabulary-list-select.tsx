@@ -21,7 +21,7 @@ export const VocabularyListSelect = ({
         <FormControl size="small">
             <InputLabel>{label}</InputLabel>
             <Select
-                value={currentValue}
+                value={currentValue || ''}
                 label={label}
                 name={name}
                 onChange={(changeEvent) => {

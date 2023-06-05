@@ -1,9 +1,4 @@
-import {
-    CategorizableType,
-    HttpStatusCode,
-    IAggregateInfo,
-    ResourceType,
-} from '@coscrad/api-interfaces';
+import { CategorizableType, HttpStatusCode, ResourceType } from '@coscrad/api-interfaces';
 import { screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
@@ -13,24 +8,12 @@ import { DetailViewType } from '../../configurable-front-matter/data/configurabl
 import { hexToRgb } from '../../utils/math/colors';
 import { getDummyConfigurableContent } from '../../utils/test-utils/get-dummy-configurable-content';
 import { renderWithProviders } from '../../utils/test-utils/render-with-providers';
+import { buildDummyResourceInfos } from './build-dummy-resource-info';
 import { ResourceInfoContainer } from './resource-info.container';
 
 const ARTIFICIAL_DELAY = 150;
 
 const widgetLabel = 'Widget';
-
-const widgetPluralLabel = 'Widgets';
-
-const dummyResourceInfo: IAggregateInfo[] = [
-    {
-        type: ResourceType.book,
-        schema: {},
-        link: '/widgets',
-        description: 'A widget is a cool part',
-        label: widgetLabel,
-        pluralLabel: widgetPluralLabel,
-    },
-];
 
 enum ResponseType {
     ok = 'ok',
@@ -49,7 +32,7 @@ const handlers = [
         }
 
         if (responseType === ResponseType.ok)
-            return res(ctx.json(dummyResourceInfo), ctx.delay(ARTIFICIAL_DELAY));
+            return res(ctx.json(buildDummyResourceInfos()), ctx.delay(ARTIFICIAL_DELAY));
 
         if (responseType === ResponseType.badRequest)
             return res(
@@ -88,9 +71,6 @@ const handlers = [
 
 const server = setupServer(...handlers);
 
-/**
- * See the above TODO about injecting a dummy config.
- */
 describe('Resource Index Page', () => {
     beforeAll(() => server.listen());
 
@@ -171,12 +151,30 @@ describe('Resource Index Page', () => {
             expect(style.color).toBe(expectedColor);
         });
 
-        // TODO troubleshoot this test
-        it.skip('should display the resource info', async () => {
+        it('should display the resource info', async () => {
+            const dummyConfig = getDummyConfigurableContent({
+                resourceIndexLabel: 'Super Widgets',
+                indexToDetailFlows: [
+                    {
+                        categorizableType: CategorizableType.book,
+                        labelOverrides: {
+                            label: 'Widget',
+                            pluralLabel: 'Widgets',
+                            route: 'WIDGETZ',
+                        },
+                        // TODO remove this property all together!
+                        detailViewType: DetailViewType.fullView,
+                    },
+                ],
+            });
+
             renderWithProviders(
                 <MemoryRouter>
                     <ResourceInfoContainer />
-                </MemoryRouter>
+                </MemoryRouter>,
+                {
+                    contentConfig: dummyConfig,
+                }
             );
 
             await waitFor(() => expect(screen.getByTestId(widgetLabel)).toBeTruthy());

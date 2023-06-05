@@ -34,7 +34,7 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         ({ categorizableType }) => categorizableType === CategorizableType.note
     );
 
-    const notesRoute = noteIndexToDetailConfig.labelOverrides?.label || 'Notes';
+    const notesRoute = noteIndexToDetailConfig?.labelOverrides?.label || 'Notes';
 
     type RouteFlag = boolean;
 
@@ -61,7 +61,7 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             !isNullOrUndefined(noteIndexToDetailConfig) && shouldEnableWebOfKnowledgeForResources,
             () => ({
                 path: notesRoute,
-                label: noteIndexToDetailConfig.labelOverrides?.label || 'Notes',
+                label: noteIndexToDetailConfig?.labelOverrides?.label || 'Notes',
                 element: <NoteIndexContainer />,
             }),
         ],

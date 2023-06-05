@@ -6,6 +6,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
+import { buildMockResourceInfoHandler } from '../../resource-info/build-dummy-resource-info';
 import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 import { buildDummyBibliographicReferences } from './test-utils/build-dummy-bibliographic-references';
 
@@ -27,10 +28,12 @@ describe('bibliographic reference detail', () => {
             buildMockSuccessfulGETHandler({
                 endpoint,
                 response: buildMockIndexResponse(
+                    // @ts-expect-error Do we have access to the union type here?
                     dummyBibliographicReferences.map((reference) => [reference, []]),
                     []
                 ),
             }),
+            buildMockResourceInfoHandler(),
             mockGetNotesHandler
         );
 
