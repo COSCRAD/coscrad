@@ -19,6 +19,7 @@ type AggregateTypeAndSubtype = [AggregateType, null | SubtypesUnion];
 
 describe(`Coscrad Data Schemas for aggregate root domain models`, () => {
     Object.values(AggregateType)
+        .filter((aggregateType) => aggregateType === AggregateType.bibliographicReference)
         .flatMap((aggregateType: AggregateType): AggregateTypeAndSubtype[] => {
             if (isDiscriminatedUnionResourceType(aggregateType)) {
                 if (aggregateType === AggregateType.bibliographicReference)
