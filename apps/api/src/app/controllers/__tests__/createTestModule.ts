@@ -50,6 +50,8 @@ import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayList,
     CreatePlayListCommandHandler,
+    TranslatePlaylistName,
+    TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
 import {
     PublishResource,
@@ -404,6 +406,8 @@ export default async (
             CreatePlayListCommandHandler,
             AddAudioItemToPlaylist,
             AddAudioItemToPlaylistCommandHandler,
+            TranslatePlaylistName,
+            TranslatePlaylistNameCommandHandler,
         ],
 
         controllers: [

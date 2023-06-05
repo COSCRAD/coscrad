@@ -4,7 +4,7 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
@@ -64,6 +64,14 @@ export class Playlist extends Resource {
 
         return this.safeClone<Playlist>({
             items: this.items.concat(item),
+        });
+    }
+
+    translateName(textItem: MultilingualTextItem) {
+        // TODO validate the item
+
+        return this.safeClone<Playlist>({
+            name: this.name.append(textItem).toDTO(),
         });
     }
 

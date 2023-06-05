@@ -3,6 +3,21 @@ import { Command } from '@coscrad/commands';
 import { ExternalEnum, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 
+export const LanguageCodeEnum = ExternalEnum(
+    {
+        enumLabel: `language code`,
+        enumName: `LanguageCode`,
+        labelsAndValues: Object.entries(LanguageCode).map(([label, languageCode]) => ({
+            label,
+            value: languageCode,
+        })),
+    },
+    {
+        label: 'language code',
+        description: 'the language being used to name the playlist',
+    }
+);
+
 export class PlayListCompositeId {
     // TODO [https://github.com/COSCRAD/coscrad/pull/392#discussion_r1210655537] Should we have an @FixedValue decorator instead?
     @ExternalEnum(
@@ -50,19 +65,6 @@ export class CreatePlayList implements ICommandBase {
     })
     name: string;
 
-    @ExternalEnum(
-        {
-            enumLabel: `language code`,
-            enumName: `LanguageCode`,
-            labelsAndValues: Object.entries(LanguageCode).map(([label, languageCode]) => ({
-                label,
-                value: languageCode,
-            })),
-        },
-        {
-            label: 'language code',
-            description: 'the language being used to name the playlist',
-        }
-    )
+    @LanguageCodeEnum
     languageCodeForName: LanguageCode;
 }
