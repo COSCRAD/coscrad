@@ -77,7 +77,6 @@ const ResourceIconPresenter = ({
 
     return (
         <Box sx={{ fontSize: iconSize, maxHeight: iconSize, color: color }}>
-            {/* TODO: capitalize resource type */}
             <Tooltip title={label}>{lookupResult}</Tooltip>
         </Box>
     );
@@ -89,11 +88,9 @@ export const ResourcePreviewIconFactory = ({
     color,
 }: ResourcePreviewImageProps): JSX.Element => {
     /**
-     * This may not be the right place to do this. However, it avoids the complexity
+     * We do this here because it  avoids the complexity
      * of drilling a lot of state through from the resource presenters and keeps
      * the logic extensible to adding new resource types.
-     *
-     * TODO Wrap in the loadable behaviour here!
      */
     const loadableResourceInfos = useLoadableResourceInfoWithConfigOverrides();
 

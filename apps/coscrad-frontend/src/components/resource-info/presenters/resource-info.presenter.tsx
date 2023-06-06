@@ -22,6 +22,7 @@ IAggregateInfo<ResourceType> & { route: string }): JSX.Element => {
     } = useTheme();
 
     return (
+        // TODO Use the route builder to build this route
         <Link to={`/Resources/${route}`}>
             <Card data-testid={type}>
                 {/* TODO Handle pluralization properly as soon as we have a Resource Type whose plural form is irregular */}
@@ -37,12 +38,7 @@ IAggregateInfo<ResourceType> & { route: string }): JSX.Element => {
                         {/* For the `xs` see https://github.com/mui/material-ui/issues/11339
                         Seems like it's still broken in @material-ui/core ^4.12.3 */}
                         <Grid item zeroMinWidth xs>
-                            <Typography
-                                variant="h6"
-                                color="primary"
-                                textTransform="capitalize"
-                                fontWeight="bold"
-                            >
+                            <Typography variant="h6" color="primary" fontWeight="bold">
                                 {pluralLabel}
                             </Typography>
                             <div style={{ height: '1px' }} data-testid={label}>

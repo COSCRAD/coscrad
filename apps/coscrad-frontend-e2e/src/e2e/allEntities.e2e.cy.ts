@@ -5,7 +5,6 @@ describe('Resource Info Page (Big Index)', () => {
         cy.visit('/Resources');
     });
 
-    // TODO either share with backend or pull from api?
     const resourceTypes = Object.values(ResourceType);
 
     resourceTypes.forEach((resourceType) => {

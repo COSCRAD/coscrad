@@ -36,17 +36,17 @@ export const useLoadableResourceInfoWithConfigOverrides = () => {
 
                 const route = isNullOrUndefined(labelOverrides) ? null : labelOverrides.route;
 
+                const defaultInfoForThisCategorizable = defaultInfoMap.get(
+                    categorizableType as ResourceType
+                );
+
                 return {
-                    label: label || defaultInfoMap.get(categorizableType as ResourceType).label,
-                    // TODO Update content config and make label, pluralLabel, and route part of a single optional object-valued property
-                    pluralLabel:
-                        pluralLabel ||
-                        defaultInfoMap.get(categorizableType as ResourceType).pluralLabel,
-                    route:
-                        route || defaultInfoMap.get(categorizableType as ResourceType).description,
+                    label: label || defaultInfoForThisCategorizable.label,
+                    pluralLabel: pluralLabel || defaultInfoForThisCategorizable.pluralLabel,
+                    route: route || defaultInfoForThisCategorizable.description,
                     type: categorizableType,
-                    description: defaultInfoMap.get(categorizableType as ResourceType).description,
-                    schema: defaultInfoMap.get(categorizableType as ResourceType).schema,
+                    description: defaultInfoForThisCategorizable.description,
+                    schema: defaultInfoForThisCategorizable.schema,
                     link: route || routes.resources.ofType(categorizableType as ResourceType).index,
                 };
             });

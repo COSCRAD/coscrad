@@ -15,7 +15,6 @@ type ResourceInfosPresenterProps = HasData<IAggregateInfo<ResourceType>[]>;
 export const ResourceInfosPresenter: FunctionalComponent<ResourceInfosPresenterProps> = ({
     data: resourceInfos,
 }: ResourceInfosPresenterProps) => {
-    // Could we just get resourceTypesAndLabels here?
     const { resourceIndexLabel } = useContext(ConfigurableContentContext);
 
     return (

@@ -16,6 +16,13 @@ export const bootstrapIndexToDetailFlowRoutes = ({
     indexToDetailFlows,
     simulatedKeyboard,
 }: ConfigurableContent): CoscradRoute[] => {
+    /**
+     * TODO[https://www.pivotaltracker.com/story/show/185338095]
+     *
+     * We want to inject `resourceInfos` instead of `ConfigurableContent`. At
+     * a higher level we should apply the overrides from the content config to
+     * these.
+     */
     const resourceTypesAndRoutes = indexToDetailFlows
         .filter(({ categorizableType }) => categorizableType !== CategorizableType.note)
         .reduce((acc, { categorizableType, labelOverrides }) => {
