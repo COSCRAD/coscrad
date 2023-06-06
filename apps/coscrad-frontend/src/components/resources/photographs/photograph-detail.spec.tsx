@@ -11,6 +11,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
+import { buildMockResourceInfoHandler } from '../../resource-info/build-dummy-resource-info';
 import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 
 const idToFind = '123';
@@ -48,6 +49,7 @@ describe('photograph detail', () => {
                 // TODO add detail scoped actions and check that they are displayed
                 response: buildMockIndexResponse([[photographToFind, []]], []),
             }),
+            buildMockResourceInfoHandler(),
             mockGetNotesHandler
         );
 

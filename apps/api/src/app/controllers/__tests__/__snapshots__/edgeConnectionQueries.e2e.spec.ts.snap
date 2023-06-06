@@ -5,6 +5,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
   "description": "A note contextualizes a resource in itself or in relation to another resource",
   "label": "Note",
   "link": "/connections",
+  "pluralLabel": "Notes",
   "schema": {
     "connectedResources": {
       "complexDataType": "NESTED_TYPE",

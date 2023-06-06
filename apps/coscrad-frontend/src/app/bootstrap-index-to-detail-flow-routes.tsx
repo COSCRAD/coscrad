@@ -1,4 +1,5 @@
 import { CategorizableType, ResourceType } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { FilteredCategorizableIndexContainer } from '../components/higher-order-components';
 import { CategorizablePage } from '../components/higher-order-components/categorizable-page';
 import { fullViewCategorizablePresenterFactory } from '../components/resources/factories/full-view-categorizable-presenter-factory';
@@ -15,18 +16,26 @@ export const bootstrapIndexToDetailFlowRoutes = ({
     indexToDetailFlows,
     simulatedKeyboard,
 }: ConfigurableContent): CoscradRoute[] => {
+    /**
+     * TODO[https://www.pivotaltracker.com/story/show/185338095]
+     *
+     * We want to inject `resourceInfos` instead of `ConfigurableContent`. At
+     * a higher level we should apply the overrides from the content config to
+     * these.
+     */
     const resourceTypesAndRoutes = indexToDetailFlows
         .filter(({ categorizableType }) => categorizableType !== CategorizableType.note)
-        .reduce(
-            (acc, { categorizableType, route }) => ({
+        .reduce((acc, { categorizableType, labelOverrides }) => {
+            const route = isNullOrUndefined(labelOverrides) ? null : labelOverrides.route;
+
+            return {
                 ...acc,
                 [categorizableType]:
-                    // we have already filtered out the Notes
+                // we have already filtered out the Notes
                     (route && `Resources/${route}`) ||
                     routes.resources.ofType(categorizableType as ResourceType).index,
-            }),
-            {}
-        );
+            };
+        }, {});
 
     const indexToDetailFlowsRoutes: CoscradRoute[] = indexToDetailFlows
         .filter(({ categorizableType }) => categorizableType !== CategorizableType.note)

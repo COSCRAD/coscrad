@@ -6,6 +6,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
     "description": "A tag is used to group related resources or notes in a non-hierarchical manner",
     "label": "Tag",
     "link": "/tags",
+    "pluralLabel": "Tags",
     "schema": {
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -130,6 +131,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
     "description": "A category tree provides a hierarchical organization of resources",
     "label": "Category",
     "link": "/treeOfKnowledge",
+    "pluralLabel": "Categories",
     "schema": {
       "children": {
         "complexDataType": "NESTED_TYPE",
@@ -379,6 +381,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
     "description": "A user may belong to groups and have privileges to access data",
     "label": "User",
     "link": "/admin/users",
+    "pluralLabel": "Users",
     "schema": {
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -558,6 +561,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
     "description": "A user group serves to organize users based on shared privileges to access data",
     "label": "User Group",
     "link": "/admin/userGroups",
+    "pluralLabel": "User Groups",
     "schema": {
       "description": {
         "coscradDataType": "NON_EMPTY_STRING",

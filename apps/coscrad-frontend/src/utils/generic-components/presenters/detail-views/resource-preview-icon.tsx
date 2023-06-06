@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { IAggregateInfo, ResourceType } from '@coscrad/api-interfaces';
 import {
     Audiotrack as AudiotrackIcon,
     AutoStories as AutoStoriesIcon,
@@ -13,6 +13,8 @@ import {
     VolumeUp as VolumeUpIcon,
 } from '@mui/icons-material';
 import { Box, Tooltip } from '@mui/material';
+import { displayLoadableWithErrorsAndLoading } from '../../../../components/higher-order-components';
+import { useLoadableResourceInfoWithConfigOverrides } from '../../../../store/slices/resources/resource-info/hooks';
 
 /**
  * TODO[https://www.pivotaltracker.com/story/show/184664117] Create an icon factory that enables custom icons
@@ -55,23 +57,52 @@ const sizes = {
     xl: '200px',
 };
 
-export const ResourcePreviewIconFactory = ({
+const ResourceIconPresenter = ({
     resourceType,
     size = 'md',
     color,
-}: ResourcePreviewImageProps): JSX.Element => {
+    resourceInfos,
+}: ResourcePreviewImageProps & { resourceInfos: IAggregateInfo[] }): JSX.Element => {
     const lookupResult = lookupTable[resourceType];
-
-    const iconSize = sizes[size];
 
     if (!lookupResult) {
         throw new Error(`Failed to build an icon for resource type: ${resourceType}`);
     }
 
+    const label = resourceInfos.find(
+        ({ type: resourceTypeForThisInfoItem }) => resourceType === resourceTypeForThisInfoItem
+    ).label;
+
+    const iconSize = sizes[size];
+
     return (
         <Box sx={{ fontSize: iconSize, maxHeight: iconSize, color: color }}>
-            {/* TODO: capitalize resource type */}
-            <Tooltip title={resourceType}>{lookupResult}</Tooltip>
+            <Tooltip title={label}>{lookupResult}</Tooltip>
         </Box>
     );
+};
+
+export const ResourcePreviewIconFactory = ({
+    resourceType,
+    size = 'md',
+    color,
+}: ResourcePreviewImageProps): JSX.Element => {
+    /**
+     * We do this here because it  avoids the complexity
+     * of drilling a lot of state through from the resource presenters and keeps
+     * the logic extensible to adding new resource types.
+     */
+    const loadableResourceInfos = useLoadableResourceInfoWithConfigOverrides();
+
+    const Presenter = displayLoadableWithErrorsAndLoading(
+        ResourceIconPresenter,
+        (resourceInfos: IAggregateInfo[]) => ({
+            resourceType,
+            size,
+            color,
+            resourceInfos,
+        })
+    );
+
+    return <Presenter {...loadableResourceInfos} />;
 };

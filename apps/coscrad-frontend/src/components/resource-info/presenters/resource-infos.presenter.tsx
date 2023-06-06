@@ -4,11 +4,9 @@ import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { HasData } from '../../higher-order-components';
-import { ResourceInfoContainerProps } from '../resource-info.container';
 import { ResourceInfoPresenter } from './resource-info.presenter';
 
-type ResourceInfosPresenterProps = HasData<IAggregateInfo<ResourceType>[]> &
-    ResourceInfoContainerProps;
+type ResourceInfosPresenterProps = HasData<IAggregateInfo<ResourceType>[]>;
 /**
  * Note the plural in the name. This presents all of the resource infos. It
  * maps through the singular `ResourceInfoPresenter` to do so.
@@ -16,8 +14,6 @@ type ResourceInfosPresenterProps = HasData<IAggregateInfo<ResourceType>[]> &
 
 export const ResourceInfosPresenter: FunctionalComponent<ResourceInfosPresenterProps> = ({
     data: resourceInfos,
-    resourceTypesAndLabels,
-    resourceTypesAndRoutes,
 }: ResourceInfosPresenterProps) => {
     const { resourceIndexLabel } = useContext(ConfigurableContentContext);
 
@@ -25,16 +21,9 @@ export const ResourceInfosPresenter: FunctionalComponent<ResourceInfosPresenterP
         <>
             <Typography variant="h2">{resourceIndexLabel}</Typography>
             <Stack data-cy="resourceInfos-stack" spacing={1}>
-                {resourceInfos
-                    .filter(({ type }) => Object.keys(resourceTypesAndLabels).includes(type))
-                    .map((info) => (
-                        <ResourceInfoPresenter
-                            {...info}
-                            key={info.type}
-                            label={resourceTypesAndLabels[info.type]}
-                            route={resourceTypesAndRoutes[info.type]}
-                        />
-                    ))}
+                {resourceInfos.map((info) => {
+                    return <ResourceInfoPresenter {...info} key={info.type} route={info.link} />;
+                })}
             </Stack>
         </>
     );

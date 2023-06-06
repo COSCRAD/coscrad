@@ -21,6 +21,7 @@ import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
 const isOptional = true;
+
 @RegisterIndexScopedCommands([])
 export class VocabularyList extends Resource {
     readonly type = ResourceType.vocabularyList;
