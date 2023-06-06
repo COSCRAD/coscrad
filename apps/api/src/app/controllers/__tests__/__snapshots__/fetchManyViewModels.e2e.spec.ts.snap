@@ -2537,6 +2537,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
     },
     {
       "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/511.mp3",
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
       "name": {
@@ -2559,6 +2560,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
     },
     {
       "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/512.mp3",
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
       "name": {
@@ -2581,6 +2583,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
     },
     {
       "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/513.mp3",
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
       "name": {
@@ -2603,6 +2606,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
     },
     {
       "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/501.mp3",
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
       "name": {
@@ -2625,6 +2629,7 @@ exports[`When fetching multiple resources GET /resources/terms when all of the r
     },
     {
       "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/502.mp3",
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
       "name": {
@@ -2867,6 +2872,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
     },
     {
       "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/511.mp3",
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
       "name": {
@@ -2889,6 +2895,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
     },
     {
       "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/512.mp3",
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
       "name": {
@@ -2911,6 +2918,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
     },
     {
       "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/513.mp3",
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
       "name": {
@@ -2933,6 +2941,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
     },
     {
       "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/501.mp3",
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
       "name": {
@@ -2955,6 +2964,7 @@ exports[`When fetching multiple resources GET /resources/terms when some of the 
     },
     {
       "actions": [],
+      "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/502.mp3",
       "contributor": "",
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
       "name": {
@@ -3042,6 +3052,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
       "entries": [
         {
           "term": {
+            "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/511.mp3",
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
             "name": {
@@ -3068,6 +3079,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
         },
         {
           "term": {
+            "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/512.mp3",
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
             "name": {
@@ -3094,6 +3106,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
         },
         {
           "term": {
+            "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/513.mp3",
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
             "name": {
@@ -3120,6 +3133,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
         },
         {
           "term": {
+            "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/501.mp3",
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
             "name": {
@@ -3146,6 +3160,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when al
         },
         {
           "term": {
+            "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/502.mp3",
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
             "name": {
@@ -3510,6 +3525,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
       "entries": [
         {
           "term": {
+            "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/511.mp3",
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
             "name": {
@@ -3536,6 +3552,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
         },
         {
           "term": {
+            "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/512.mp3",
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
             "name": {
@@ -3562,6 +3579,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
         },
         {
           "term": {
+            "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/513.mp3",
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
             "name": {
@@ -3588,6 +3606,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
         },
         {
           "term": {
+            "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/501.mp3",
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
             "name": {
@@ -3614,6 +3633,7 @@ exports[`When fetching multiple resources GET /resources/vocabularyLists when so
         },
         {
           "term": {
+            "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/502.mp3",
             "contributor": "",
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
             "name": {
