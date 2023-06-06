@@ -1,23 +1,34 @@
-import PauseCircleIcon from '@mui/icons-material/PauseCircle';
-import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import { Box, IconButton, styled } from '@mui/material';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { Box, styled } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
+
+interface IPlayPauseButtonProps {
+    isPlaying: boolean;
+    isDisabled: boolean;
+    onButtonClick: () => void;
+}
+
+export interface IPlayPauseButton {
+    (props: IPlayPauseButtonProps): JSX.Element;
+}
 
 export interface MediaPlayerProps {
     audioUrl: string;
     listenMessage?: string;
+    // This is optional. If it's not provided, we render the native audio controls.
+    PlayPauseButton?: IPlayPauseButton;
 }
 
-export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
+export function MediaPlayer({ audioUrl, PlayPauseButton }: MediaPlayerProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [canPlay, setCanPlay] = useState(false);
 
     /**
      * We are allowing the React component's state to "lead the action" here.
-     * Whenever `isPlaying` is update, we initiate play or pause accordingly.
+     * Whenever `isPlaying` is updated, we initiate play or pause accordingly.
      *
-     * Note that technically `play`\`pause` is a false dichotomy when it comes
+     * Note that technically `playing`\`paused` is a false dichotomy when it comes
      * to the native HTML Media Element's state. Most of the complexity is sidestepped
      * by disabling the button until the `canPlayThrough` event has fired, and the
      * rest by the try\catch hack on the call to `Audio.pause()` below.
@@ -51,14 +62,6 @@ export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
         }
     }, [isPlaying]);
 
-    const updateAudioIcon = () => {
-        return isPlaying ? (
-            <PauseCircleIcon data-testid="pause-icon" sx={{ fontSize: '40px' }} />
-        ) : (
-            <PlayCircleIcon data-testid="play-icon" sx={{ fontSize: '40px' }} />
-        );
-    };
-
     const handleMediaPlayerIconClick = () => {
         setIsPlaying(!isPlaying);
     };
@@ -70,9 +73,12 @@ export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
         setIsPlaying(false);
     };
 
-    const StyledMediaPlayer = styled('audio')`
-        display: none;
-    `;
+    // We want to wrap this in only if a PlayPauseButton was provided by the caller
+    const StyledMediaPlayer = isNullOrUndefined(PlayPauseButton)
+        ? styled('audio')``
+        : styled('audio')`
+              display: none;
+          `;
 
     return (
         <Box data-testid="audio-player">
@@ -86,14 +92,13 @@ export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
                 Your browser does not support the audio element.
             </StyledMediaPlayer>
 
-            {/* Break the button out in another component*/}
-            <IconButton
-                data-testid="audio-play-button"
-                onClick={handleMediaPlayerIconClick}
-                disabled={!canPlay}
-            >
-                {updateAudioIcon()}
-            </IconButton>
+            {isNullOrUndefined(PlayPauseButton) ? null : (
+                <PlayPauseButton
+                    isDisabled={!canPlay}
+                    isPlaying={isPlaying}
+                    onButtonClick={handleMediaPlayerIconClick}
+                />
+            )}
         </Box>
     );
 }
