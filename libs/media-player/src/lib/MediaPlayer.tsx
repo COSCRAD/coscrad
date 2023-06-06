@@ -12,14 +12,41 @@ export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [canPlay, setCanPlay] = useState(false);
-    const [_audioEnded, setAudioEnded] = useState(false);
 
+    /**
+     * We are allowing the React component's state to "lead the action" here.
+     * Whenever `isPlaying` is update, we initiate play or pause accordingly.
+     *
+     * Note that technically `play`\`pause` is a false dichotomy when it comes
+     * to the native HTML Media Element's state. Most of the complexity is sidestepped
+     * by disabling the button until the `canPlayThrough` event has fired, and the
+     * rest by the try\catch hack on the call to `Audio.pause()` below.
+     */
     useEffect(() => {
         if (audioRef.current) {
             if (isPlaying) {
                 audioRef.current.play();
             } else {
-                audioRef.current.pause();
+                try {
+                    audioRef.current.pause();
+                } catch {
+                    /**
+                     * Hack alert.
+                     *
+                     * `Audio.play()` is async, unlike `Audio.pause`.  It's possible
+                     * that the call to `Audio.play()` rejects. There is a period
+                     * of time where play is pending, during which we should
+                     * really disallow clicking the pause button and avoid calling
+                     * `Audio.pause(). As a quick hack, we have chosen to simply
+                     * ignore the exception that is thrown.
+                     *
+                     * Note that this was difficult to catch in manual testing,
+                     * but caused browser-specific failures in Chrome (but not
+                     * Firefox) in the Cypress component test.
+                     *
+                     * Read more [here](https://developer.chrome.com/blog/play-request-was-interrupted/).
+                     */
+                }
             }
         }
     }, [isPlaying]);
@@ -41,7 +68,6 @@ export function MediaPlayer({ audioUrl }: MediaPlayerProps) {
     };
     const handleAudioEnded = () => {
         setIsPlaying(false);
-        setAudioEnded(true);
     };
 
     const StyledMediaPlayer = styled('audio')`

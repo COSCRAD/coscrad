@@ -15,6 +15,10 @@ const beAudible = (option?: 'not') => (els: JQuery<HTMLAudioElement>) => {
 };
 
 describe('<MediaPlayer />', () => {
+    const waitBetween = (waitForMs = 100) => {
+        cy.wait(waitForMs);
+    };
+
     describe(`when there is a valid audio url`, () => {
         const validAudioUrl = 'https://be.tsilhqotinlanguage.ca:3003/download?id=hello.mp3';
 
@@ -42,8 +46,12 @@ describe('<MediaPlayer />', () => {
             //play audio
             cy.getByDataAttribute('audio-play-button').click();
 
+            waitBetween();
+
             //pause audio
             cy.getByDataAttribute('audio-play-button').click();
+
+            waitBetween();
 
             cy.get('audio').should(beAudible('not'));
 
@@ -53,9 +61,15 @@ describe('<MediaPlayer />', () => {
         it('should resume playing after pausing', () => {
             cy.getByDataAttribute('audio-play-button').click().as('click');
 
-            cy.get('@click');
+            waitBetween();
 
             cy.get('@click');
+
+            waitBetween();
+
+            cy.get('@click');
+
+            waitBetween();
 
             cy.getByDataAttribute('pause-icon');
         });
