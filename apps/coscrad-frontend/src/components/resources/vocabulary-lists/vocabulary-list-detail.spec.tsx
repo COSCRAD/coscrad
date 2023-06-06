@@ -6,6 +6,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
+import { buildMockResourceInfoHandler } from '../../resource-info/build-dummy-resource-info';
 import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 import { buildDummyVocabularyLists } from './test-utils/build-dummy-vocabulary-lists';
 
@@ -35,6 +36,7 @@ describe('vocabulary list detail', () => {
                     []
                 ),
             }),
+            buildMockResourceInfoHandler(),
             mockGetNotesHandler
         );
 

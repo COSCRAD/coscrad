@@ -1,10 +1,17 @@
-describe.skip('all entities', () => {
-    it('should populate the page with entity data', () => {
-        // TODO either share with backend or pull from api?
-        const entityTypes = ['term', 'vocabularyList', 'tag'];
+import { ResourceType } from '@coscrad/api-interfaces';
 
-        cy.visit('/allEntities');
+describe('Resource Info Page (Big Index)', () => {
+    beforeEach(() => {
+        cy.visit('/Resources');
+    });
 
-        entityTypes.forEach((entityType) => cy.get(`[data-cy-entity-type=${entityType}]`));
+    const resourceTypes = Object.values(ResourceType);
+
+    resourceTypes.forEach((resourceType) => {
+        describe(`for resource type: ${resourceType}`, () => {
+            it('should populate the page with entity data', () => {
+                cy.get(`[data-testid='${resourceType}']`);
+            });
+        });
     });
 });

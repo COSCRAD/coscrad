@@ -7,6 +7,7 @@ export const ResourceInfoPresenter = ({
     type,
     description,
     label,
+    pluralLabel,
     route,
 }: /**
  * TODO [https://www.pivotaltracker.com/story/show/183766033
@@ -21,8 +22,9 @@ IAggregateInfo<ResourceType> & { route: string }): JSX.Element => {
     } = useTheme();
 
     return (
-        <Link to={`/${route}`}>
-            <Card>
+        // TODO Use the route builder to build this route
+        <Link to={`/Resources/${route}`}>
+            <Card data-testid={type}>
                 {/* TODO Handle pluralization properly as soon as we have a Resource Type whose plural form is irregular */}
                 <CardContent>
                     <Grid container justifyContent="flex-start" spacing="10" direction="row" mb={2}>
@@ -37,7 +39,7 @@ IAggregateInfo<ResourceType> & { route: string }): JSX.Element => {
                         Seems like it's still broken in @material-ui/core ^4.12.3 */}
                         <Grid item zeroMinWidth xs>
                             <Typography variant="h6" color="primary" fontWeight="bold">
-                                {label}
+                                {pluralLabel}
                             </Typography>
                             <div style={{ height: '1px' }} data-testid={label}>
                                 &nbsp;

@@ -7,7 +7,6 @@ import { idGenerationReducer } from './slices/id-generation';
 import { ID_GENERATION } from './slices/id-generation/constants';
 import { noteReducer, NOTES } from './slices/notes';
 
-import { resourceInfoReducer, RESOURCE_INFO } from './slices/resource-info-slice';
 import {
     bibliographicReferenceReducer,
     spatialFeatureReducer,
@@ -24,6 +23,10 @@ import { photographReducer } from './slices/resources/photographs';
 import { PHOTOGRAPHS } from './slices/resources/photographs/constants';
 import { PLAYLISTS } from './slices/resources/playlists';
 import { PlaylistReducer } from './slices/resources/playlists/playlist-slice';
+import {
+    resourceInfoReducer,
+    RESOURCE_INFO,
+} from './slices/resources/resource-info/resource-info-slice';
 import { songReducer, SONGS } from './slices/resources/songs';
 import { SPATIAL_FEATURES } from './slices/resources/spatial-features/constants';
 import { TERMS } from './slices/resources/terms/constants';

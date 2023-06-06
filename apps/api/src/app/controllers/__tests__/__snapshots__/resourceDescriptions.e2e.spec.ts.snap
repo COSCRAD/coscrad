@@ -6,6 +6,7 @@ exports[`GET /resources should return the expected result 1`] = `
     "description": "A term is a word, phrase, or sentence.",
     "label": "Term",
     "link": "/resources/terms",
+    "pluralLabel": "Terms",
     "schema": {
       "audioURL": {
         "coscradDataType": "URL",
@@ -151,6 +152,7 @@ exports[`GET /resources should return the expected result 1`] = `
     "description": "A vocabulary list gathers terms with filters that apply within the context of the vocabulary list.",
     "label": "Vocabulary List",
     "link": "/resources/vocabularyLists",
+    "pluralLabel": "Vocabulary Lists",
     "schema": {
       "entries": {
         "complexDataType": "NESTED_TYPE",
@@ -416,6 +418,7 @@ exports[`GET /resources should return the expected result 1`] = `
     "description": "An audio item includes a link for playback and possibly a transcript.",
     "label": "Transcribed Audio Item",
     "link": "/resources/audioItems",
+    "pluralLabel": "Transcribed Audio Items",
     "schema": {
       "audioURL": {
         "coscradDataType": "URL",
@@ -486,6 +489,7 @@ exports[`GET /resources should return the expected result 1`] = `
     "description": "An video includes a link for playback and possibly a transcript.",
     "label": "Video",
     "link": "/resources/videos",
+    "pluralLabel": "Videos",
     "schema": {
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -556,6 +560,7 @@ exports[`GET /resources should return the expected result 1`] = `
     "description": "A book is a digital representation of a text, organized into pages.",
     "label": "Book",
     "link": "/resources/books",
+    "pluralLabel": "Books",
     "schema": {
       "author": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -694,6 +699,7 @@ exports[`GET /resources should return the expected result 1`] = `
     "description": "A photograph is a digital representation of an analog photograph and its metadata.",
     "label": "Photograph",
     "link": "/resources/photographs",
+    "pluralLabel": "Photographs",
     "schema": {
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -818,6 +824,7 @@ exports[`GET /resources should return the expected result 1`] = `
     "description": "A spatial feature may be a point, line, or polygon on the map.",
     "label": "Spatial Feature",
     "link": "/resources/spatialFeatures",
+    "pluralLabel": "Spatial Features",
     "schema": {
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -926,8 +933,9 @@ exports[`GET /resources should return the expected result 1`] = `
   },
   {
     "description": "A bibliographic reference is a reference to, but not a digital representation of, a research resource.",
-    "label": "BibliographicReference",
+    "label": "Bibliographic Reference",
     "link": "/resources/bibliographicReferences",
+    "pluralLabel": "Bibliographic References",
     "schema": {
       "data": {
         "complexDataType": "UNION_TYPE",
@@ -1288,6 +1296,7 @@ exports[`GET /resources should return the expected result 1`] = `
     "description": "A song includes a link to an audio recording along with metadata and lyrics (when available).",
     "label": "Song",
     "link": "/resources/songs",
+    "pluralLabel": "Songs",
     "schema": {
       "audioURL": {
         "coscradDataType": "URL",
@@ -1426,6 +1435,7 @@ exports[`GET /resources should return the expected result 1`] = `
     "description": "A playlist collects media items from serveral resources into a collection for web or radio playback",
     "label": "Playlist",
     "link": "/resources/playlists",
+    "pluralLabel": "Playlists",
     "schema": {
       "episodes": {
         "coscradDataType": "NON_EMPTY_STRING",
@@ -1455,6 +1465,7 @@ exports[`GET /resources should return the expected result 1`] = `
     "description": "A media item is a digital representation of an audio or video recording.",
     "label": "Media Item",
     "link": "/resources/mediaItems",
+    "pluralLabel": "Media Items",
     "schema": {
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",

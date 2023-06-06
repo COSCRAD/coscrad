@@ -763,7 +763,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "spatialFeature",
               },
               {
-                "label": "BibliographicReference",
+                "label": "Bibliographic Reference",
                 "value": "bibliographicReference",
               },
               {
@@ -962,7 +962,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "spatialFeature",
               },
               {
-                "label": "BibliographicReference",
+                "label": "Bibliographic Reference",
                 "value": "bibliographicReference",
               },
               {

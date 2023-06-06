@@ -63,7 +63,7 @@ WithTranscription {
 }
 `;
 
-exports[`Aggregate factories when attempting to build an instance of type: bibliographicReference from a DTO when the DTO is valid valid dto for a BibliographicReference of sub-type: Book should succeed 1`] = `
+exports[`Aggregate factories when attempting to build an instance of type: bibliographicReference from a DTO when the DTO is valid valid dto for a Bibliographic Reference of sub-type: Book should succeed 1`] = `
 BookBibliographicReference {
   "data": BookBibliographicReferenceData {
     "abstract": "This is the abstract, NOT a general note!",
@@ -98,7 +98,7 @@ BookBibliographicReference {
 }
 `;
 
-exports[`Aggregate factories when attempting to build an instance of type: bibliographicReference from a DTO when the DTO is valid valid dto for a BibliographicReference of sub-type: Court Case should succeed 1`] = `
+exports[`Aggregate factories when attempting to build an instance of type: bibliographicReference from a DTO when the DTO is valid valid dto for a Bibliographic Reference of sub-type: Court Case should succeed 1`] = `
 CourtCaseBibliographicReference {
   "data": CourtCaseBibliographicReferenceData {
     "abstract": "Doe, Jane
@@ -123,7 +123,7 @@ CourtCaseBibliographicReference {
 }
 `;
 
-exports[`Aggregate factories when attempting to build an instance of type: bibliographicReference from a DTO when the DTO is valid valid dto for a BibliographicReference of sub-type: Journal Article should succeed 1`] = `
+exports[`Aggregate factories when attempting to build an instance of type: bibliographicReference from a DTO when the DTO is valid valid dto for a Bibliographic Reference of sub-type: Journal Article should succeed 1`] = `
 JournalArticleBibliographicReference {
   "data": JournalArticleBibliographicReferenceData {
     "abstract": "An analysis of the Cariboo Chilcotin Justice inquiry.",

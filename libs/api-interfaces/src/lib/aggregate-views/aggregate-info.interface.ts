@@ -9,6 +9,7 @@ export interface IAggregateInfo<TAggregateType extends string = string> {
     type: TAggregateType;
     description: string;
     label: string;
+    pluralLabel: string;
     schema: ICoscradModelSchema;
     link: string;
 }
