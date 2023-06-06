@@ -464,7 +464,8 @@
                 },
                 "term": "I am singing (lang)",
                 "termEnglish": "I am singing (Engl)",
-                "contributorId": "Sarah Smith"
+                "contributorId": "Sarah Smith",
+                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/511.mp3"
             },
             {
                 "type": "term",
@@ -477,7 +478,8 @@
                 },
                 "term": "You are singing (lang)",
                 "termEnglish": "You are singing (Engl)",
-                "contributorId": "Sarah Smith"
+                "contributorId": "Sarah Smith",
+                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/512.mp3"
             },
             {
                 "type": "term",
@@ -490,7 +492,8 @@
                 },
                 "term": "She is singing (lang)",
                 "termEnglish": "She is singing (Engl)",
-                "contributorId": "Sarah Smith"
+                "contributorId": "Sarah Smith",
+                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/513.mp3"
             },
             {
                 "type": "term",
@@ -503,7 +506,8 @@
                 },
                 "term": "I am not singing (lang)",
                 "termEnglish": "I am not singing (Engl)",
-                "contributorId": "Sarah Smith"
+                "contributorId": "Sarah Smith",
+                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/501.mp3"
             },
             {
                 "type": "term",
@@ -516,7 +520,8 @@
                 },
                 "term": "You are not singing (lang)",
                 "termEnglish": "You are not singing (Engl)",
-                "contributorId": "Sarah Smith"
+                "contributorId": "Sarah Smith",
+                "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/502.mp3"
             }
         ],
         "vocabulary_lists": [
