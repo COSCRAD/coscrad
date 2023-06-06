@@ -9,6 +9,7 @@ export const buildTermsForVocabularyList = (): Term[] =>
             term: 'I am singing (lang)',
             termEnglish: 'I am singing (Engl)',
             contributorId: 'Sarah Smith',
+            audioFilename: 'https://coscrad.org/wp-content/uploads/2023/06/511.mp3',
         },
 
         {
@@ -16,6 +17,7 @@ export const buildTermsForVocabularyList = (): Term[] =>
             term: 'You are singing (lang)',
             termEnglish: 'You are singing (Engl)',
             contributorId: 'Sarah Smith',
+            audioFilename: 'https://coscrad.org/wp-content/uploads/2023/06/512.mp3',
         },
 
         {
@@ -23,6 +25,7 @@ export const buildTermsForVocabularyList = (): Term[] =>
             term: 'She is singing (lang)',
             termEnglish: 'She is singing (Engl)',
             contributorId: 'Sarah Smith',
+            audioFilename: 'https://coscrad.org/wp-content/uploads/2023/06/513.mp3',
         },
 
         {
@@ -30,6 +33,7 @@ export const buildTermsForVocabularyList = (): Term[] =>
             term: 'I am not singing (lang)',
             termEnglish: 'I am not singing (Engl)',
             contributorId: 'Sarah Smith',
+            audioFilename: 'https://coscrad.org/wp-content/uploads/2023/06/501.mp3',
         },
 
         {
@@ -37,6 +41,7 @@ export const buildTermsForVocabularyList = (): Term[] =>
             term: 'You are not singing (lang)',
             termEnglish: 'You are not singing (Engl)',
             contributorId: 'Sarah Smith',
+            audioFilename: 'https://coscrad.org/wp-content/uploads/2023/06/502.mp3',
         },
 
         // Missing entry to check partial filtering behaviour
@@ -45,6 +50,7 @@ export const buildTermsForVocabularyList = (): Term[] =>
         //     term: 'She is not singing (lang)',
         //     termEnglish: 'She is not singing (Engl)',
         //     contributorId: 'Sarah Smith',
+        // audioFilename: 'https://coscrad.org/wp-content/uploads/2023/06/503.mp3'
         // },
     ]
         .map((partialDto) => ({
