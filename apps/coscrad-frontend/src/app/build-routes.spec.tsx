@@ -14,11 +14,16 @@ const capitalizeFirstLetter = (inputString: string): string =>
 
 const buildIndexToDetailConfig = <T extends CategorizableType>(
     categorizableType: T,
-    propertiesToInclude: ('label' | 'route')[] = []
+    { includeLabelOverrides }: { includeLabelOverrides: boolean }
 ): IndexToDetailFlowDefinition<T> => ({
     categorizableType: categorizableType,
-    label: propertiesToInclude.includes('label') ? `labelFor-${categorizableType}` : null,
-    route: propertiesToInclude.includes('route') ? `routeFor-${categorizableType}` : null,
+    labelOverrides: includeLabelOverrides
+        ? {
+              label: `labelFor-${categorizableType}`,
+              pluralLabel: `pluralLabelFor-${categorizableType}`,
+              route: `routeFor-${categorizableType}`,
+          }
+        : null,
     detailViewType: DetailViewType.fullView,
 });
 
@@ -44,7 +49,11 @@ describe(`dynamic routes`, () => {
             describe(`for resource type: ${resourceType}`, () => {
                 describe(`when no custom label or route is defined`, () => {
                     const contentConfig = buildDummyConfig({
-                        indexToDetailFlows: [buildIndexToDetailConfig(resourceType)],
+                        indexToDetailFlows: [
+                            buildIndexToDetailConfig(resourceType, {
+                                includeLabelOverrides: false,
+                            }),
+                        ],
                     });
 
                     const result = buildRoutes(contentConfig);
@@ -65,9 +74,9 @@ describe(`dynamic routes`, () => {
                 });
 
                 describe(`when a custom route is provided`, () => {
-                    const indexToDetailFlowConfig = buildIndexToDetailConfig(resourceType, [
-                        'route',
-                    ]);
+                    const indexToDetailFlowConfig = buildIndexToDetailConfig(resourceType, {
+                        includeLabelOverrides: true,
+                    });
 
                     const contentConfig = buildDummyConfig({
                         indexToDetailFlows: [indexToDetailFlowConfig],
@@ -76,7 +85,7 @@ describe(`dynamic routes`, () => {
                     const result = buildRoutes(contentConfig);
 
                     it('should include the custom route', () => {
-                        const customPath = `Resources/${indexToDetailFlowConfig.route}`;
+                        const customPath = `Resources/${indexToDetailFlowConfig.labelOverrides.route}`;
 
                         const matchingPaths = result.filter(({ path }) => path === customPath);
 

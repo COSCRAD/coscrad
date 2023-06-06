@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { LanguageCode, MultilingualTextItemRole, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithTestIdOnScreen, assertNotFound } from '../../../utils/test-utils';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -6,6 +6,7 @@ import { testContainerComponentErrorHandling } from '../../../utils/test-utils/c
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
 import { buildMockGetNotesHandler } from '../../notes/test-utils/buildMockGetNotesHandler';
+import { buildMockResourceInfoHandler } from '../../resource-info/build-dummy-resource-info';
 import { buildCategorizableDetailPageRendererForTest } from '../test-utils';
 
 jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
@@ -18,6 +19,15 @@ const idOfTermToFind = '123';
 
 const termToFind = {
     id: idOfTermToFind,
+    name: {
+        items: [
+            {
+                text: 'term 123 in Language',
+                languageCode: LanguageCode.Chilcotin,
+                role: MultilingualTextItemRole.original,
+            },
+        ],
+    },
     term: 'term 123 in language',
     termEnglish: 'term 123 translated to English',
 };
@@ -42,6 +52,7 @@ describe('Term Detail', () => {
                     []
                 ),
             }),
+            buildMockResourceInfoHandler(),
             buildMockGetNotesHandler()
         );
 
