@@ -598,6 +598,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "entries": [
     {
       "term": {
+        "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/511.mp3",
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
         "name": {
@@ -624,6 +625,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     },
     {
       "term": {
+        "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/512.mp3",
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
         "name": {
@@ -650,6 +652,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     },
     {
       "term": {
+        "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/513.mp3",
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110513",
         "name": {
@@ -676,6 +679,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     },
     {
       "term": {
+        "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/501.mp3",
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
         "name": {
@@ -702,6 +706,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
     },
     {
       "term": {
+        "audioURL": "https://coscrad.org/wp-content/uploads/2023/06/502.mp3",
         "contributor": "",
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110502",
         "name": {
