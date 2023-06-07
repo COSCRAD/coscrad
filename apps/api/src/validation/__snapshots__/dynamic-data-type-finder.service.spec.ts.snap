@@ -2,12 +2,56 @@
 
 exports[`DynamicDataTypeFinderService when there is a valid union type definition for a class should bootstrap the schema definitions 1`] = `
 {
-  "complexDataType": "UNION_TYPE",
-  "description": "the context for the resource you are making a note about",
-  "discriminantPath": "type",
-  "isArray": false,
-  "isOptional": false,
-  "label": "resource context",
-  "schemaDefinitions": [],
+  "members": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "information about resources that participate in this connection",
+    "isArray": true,
+    "isOptional": false,
+    "label": "members",
+    "schema": {
+      "context": {
+        "complexDataType": "UNION_TYPE",
+        "description": "contextualizes the connection within the resource context",
+        "discriminantPath": "type",
+        "isArray": false,
+        "isOptional": false,
+        "label": "context",
+        "schemaDefinitions": [
+          {
+            "discriminantValue": "one",
+            "schema": {
+              "foo": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "foo",
+                "isArray": false,
+                "isOptional": false,
+                "label": "foo",
+              },
+            },
+          },
+          {
+            "discriminantValue": "two",
+            "schema": {
+              "bar": {
+                "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                "description": "bar",
+                "isArray": false,
+                "isOptional": false,
+                "label": "bar",
+              },
+            },
+          },
+        ],
+        "unionName": "DUMMY_CONTEXT_UNION",
+      },
+      "id": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "ID",
+      },
+    },
+  },
 }
 `;
