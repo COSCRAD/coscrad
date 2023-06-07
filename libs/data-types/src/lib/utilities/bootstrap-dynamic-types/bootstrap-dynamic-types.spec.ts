@@ -84,7 +84,7 @@ describe(`bootstrapDynamicTypes`, () => {
     describe(`when several union members have been registered`, () => {
         describe.only(`when the input is valid`, () => {
             describe(`when only one class property has been decorated`, () => {
-                it(`should append the data-schema to the metadata`, () => {
+                it.only(`should append the data-schema to the metadata`, () => {
                     const initialDataSchema = getCoscradDataSchema(FactoryRoom);
 
                     bootstrapDynamicTypes([Whatsit, Widget, FactoryRoom, Undecorated]);

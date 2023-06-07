@@ -2,6 +2,7 @@ import { UnionMemberMetadata } from '../../decorators';
 import { ClassSchema, isSimpleCoscradPropertyTypeDefinition } from '../../types';
 import getCoscradDataSchema from '../getCoscradDataSchema';
 import { buildUnionTypesMap } from './bootstrap-dynamic-types';
+import { leveragesUniontype } from './leverages-union-type';
 
 export type UnionMemberSchemaDefinition = Pick<UnionMemberMetadata, 'discriminantValue'> & {
     schema: ClassSchema;
@@ -38,8 +39,17 @@ export const resolveMemberSchemasForUnion = (
                 const { complexDataType } = propertyTypeDefinition;
 
                 if (complexDataType === 'NESTED_TYPE') {
+                    const { schema: nestedSchema } = propertyTypeDefinition;
+
+                    // @ts-expect-error fix types
+                    if (!leveragesUniontype(nestedSchema))
+                        return {
+                            ...acc,
+                            [propertyKey]: propertyTypeDefinition,
+                        };
+
                     throw new Error(
-                        `not implemented: failed to resolve union that leverages a nested data type`
+                        `not implemented: cannot resolve union type: ${unionName} as one of its members leverages another union`
                     );
                 }
 

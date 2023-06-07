@@ -9,7 +9,48 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
     "isArray": false,
     "isOptional": false,
     "label": "machine",
-    "schemaDefinitions": [],
+    "schemaDefinitions": [
+      {
+        "discriminantValue": "whatsit",
+        "schema": {
+          "properties": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "description-of-properties",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-properties",
+            "schema": {
+              "class": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "description-of-whatsit",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-whatsit",
+              },
+              "power": {
+                "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                "description": "description-of-power",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-power",
+              },
+            },
+          },
+        },
+      },
+      {
+        "discriminantValue": "widget",
+        "schema": {
+          "name": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "description-of-widget",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-widget",
+          },
+        },
+      },
+    ],
     "unionName": "MACHINE_UNION",
   },
 }
@@ -24,7 +65,48 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
     "isArray": false,
     "isOptional": false,
     "label": "machines",
-    "schemaDefinitions": [],
+    "schemaDefinitions": [
+      {
+        "discriminantValue": "whatsit",
+        "schema": {
+          "properties": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "description-of-properties",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-properties",
+            "schema": {
+              "class": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "description-of-whatsit",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-whatsit",
+              },
+              "power": {
+                "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                "description": "description-of-power",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-power",
+              },
+            },
+          },
+        },
+      },
+      {
+        "discriminantValue": "widget",
+        "schema": {
+          "name": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "description-of-widget",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-widget",
+          },
+        },
+      },
+    ],
     "unionName": "MACHINE_UNION",
   },
 }
@@ -39,7 +121,48 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
     "isArray": false,
     "isOptional": false,
     "label": "machine",
-    "schemaDefinitions": [],
+    "schemaDefinitions": [
+      {
+        "discriminantValue": "whatsit",
+        "schema": {
+          "properties": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "description-of-properties",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-properties",
+            "schema": {
+              "class": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "description-of-whatsit",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-whatsit",
+              },
+              "power": {
+                "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                "description": "description-of-power",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-power",
+              },
+            },
+          },
+        },
+      },
+      {
+        "discriminantValue": "widget",
+        "schema": {
+          "name": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "description-of-widget",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-widget",
+          },
+        },
+      },
+    ],
     "unionName": "MACHINE_UNION",
   },
 }
@@ -61,7 +184,48 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
         "isArray": false,
         "isOptional": false,
         "label": "machine",
-        "schemaDefinitions": [],
+        "schemaDefinitions": [
+          {
+            "discriminantValue": "whatsit",
+            "schema": {
+              "properties": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "description-of-properties",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-properties",
+                "schema": {
+                  "class": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "description-of-whatsit",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "label-for-whatsit",
+                  },
+                  "power": {
+                    "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                    "description": "description-of-power",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "label-for-power",
+                  },
+                },
+              },
+            },
+          },
+          {
+            "discriminantValue": "widget",
+            "schema": {
+              "name": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "description-of-widget",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-widget",
+              },
+            },
+          },
+        ],
         "unionName": "MACHINE_UNION",
       },
     },
