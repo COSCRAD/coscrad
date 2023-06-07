@@ -1,3 +1,4 @@
+import { buildUnionTypesMap, UnionTypesMap } from '.';
 import {
     NestedDataType,
     NonEmptyString,
@@ -6,8 +7,6 @@ import {
     Union2Member,
 } from '../../decorators';
 import { TypeDecoratorOptions } from '../../decorators/types/TypeDecoratorOptions';
-import getCoscradDataSchema from '../getCoscradDataSchema';
-import { bootstrapDynamicTypes } from './bootstrap-dynamic-types';
 
 const MACHINE_UNION = 'MACHINE_UNION';
 
@@ -76,43 +75,71 @@ type DiscriminantAndCtorName = {
     ctorName: string;
 };
 
-const expectDataSchemaToMatchSnapshot = (ctor: unknown) => {
-    expect(getCoscradDataSchema(ctor)).toMatchSnapshot();
+const assertUnionMapAsExpected = (
+    unionName: string,
+    unionMap: UnionTypesMap,
+    expectedDiscriminantsAndCtorNames: DiscriminantAndCtorName[]
+) => {
+    expect(unionMap.has(unionName)).toBe(true);
+
+    const membersMap = unionMap.get(unionName);
+
+    const unmatchedDiscriminants = expectedDiscriminantsAndCtorNames.filter(
+        ({ discriminant, ctorName }) =>
+            !membersMap.has(discriminant) || membersMap.get(discriminant).name !== ctorName
+    );
+
+    expect(unmatchedDiscriminants).toEqual([]);
 };
 
-describe(`bootstrapDynamicTypes`, () => {
+describe(`buildUnionTypesMap`, () => {
     describe(`when several union members have been registered`, () => {
-        describe.only(`when the input is valid`, () => {
+        describe(`when the input is valid`, () => {
             describe(`when only one class property has been decorated`, () => {
                 it(`should append the data-schema to the metadata`, () => {
-                    const initialDataSchema = getCoscradDataSchema(FactoryRoom);
+                    const unionMap = buildUnionTypesMap([
+                        Whatsit,
+                        Widget,
+                        FactoryRoom,
+                        Undecorated,
+                    ]);
 
-                    bootstrapDynamicTypes([Whatsit, Widget, FactoryRoom, Undecorated]);
-
-                    expectDataSchemaToMatchSnapshot(FactoryRoom);
-
-                    const finalDataSchema = getCoscradDataSchema(FactoryRoom);
-
-                    expect(initialDataSchema).not.toEqual(finalDataSchema);
+                    assertUnionMapAsExpected(MACHINE_UNION, unionMap, [
+                        {
+                            discriminant: 'whatsit',
+                            ctorName: 'Whatsit',
+                        },
+                        {
+                            discriminant: 'widget',
+                            ctorName: 'Widget',
+                        },
+                    ]);
                 });
             });
 
             describe(`when multiple classes have a property that has been decorated`, () => {
                 it(`should append the data-schema to the metadata`, () => {
-                    bootstrapDynamicTypes(
+                    const unionMap = buildUnionTypesMap(
                         // FactoryRoom and ProductionLine both leverage a union decorator for the same union
                         [Whatsit, Widget, Undecorated, FactoryRoom, ProductionLine]
                     );
 
-                    expectDataSchemaToMatchSnapshot(FactoryRoom);
-
-                    expectDataSchemaToMatchSnapshot(ProductionLine);
+                    assertUnionMapAsExpected(MACHINE_UNION, unionMap, [
+                        {
+                            discriminant: 'whatsit',
+                            ctorName: 'Whatsit',
+                        },
+                        {
+                            discriminant: 'widget',
+                            ctorName: 'Widget',
+                        },
+                    ]);
                 });
             });
 
             describe(`when there is a nested property that leverages a union type`, () => {
                 it(`should append the data-schema to the metadata`, () => {
-                    const unionMap = bootstrapDynamicTypes(
+                    const unionMap = buildUnionTypesMap(
                         // FactoryRoom and ProductionLine both leverage a union decorator for the same union
                         [
                             Whatsit,
@@ -124,7 +151,16 @@ describe(`bootstrapDynamicTypes`, () => {
                         ]
                     );
 
-                    expectDataSchemaToMatchSnapshot(HasNestedUnionProperty);
+                    assertUnionMapAsExpected(MACHINE_UNION, unionMap, [
+                        {
+                            discriminant: 'whatsit',
+                            ctorName: 'Whatsit',
+                        },
+                        {
+                            discriminant: 'widget',
+                            ctorName: 'Widget',
+                        },
+                    ]);
                 });
             });
         });
@@ -143,7 +179,7 @@ describe(`bootstrapDynamicTypes`, () => {
 
         it(`should throw`, () => {
             const act = () =>
-                bootstrapDynamicTypes([Whatsit, Widget, FactoryRoom, Undecorated, LonelyUnionUser]);
+                buildUnionTypesMap([Whatsit, Widget, FactoryRoom, Undecorated, LonelyUnionUser]);
 
             expect(act).toThrow();
         });
@@ -174,7 +210,7 @@ describe(`bootstrapDynamicTypes`, () => {
 
         it(`should throw`, () => {
             const act = () =>
-                bootstrapDynamicTypes([
+                buildUnionTypesMap([
                     Whatsit,
                     Widget,
                     FactoryRoom,
@@ -201,7 +237,7 @@ describe(`bootstrapDynamicTypes`, () => {
 
         it(`should throw`, () => {
             const act = () =>
-                bootstrapDynamicTypes([Whatsit, Widget, FactoryRoom, Undecorated, WidgetWannabe]);
+                buildUnionTypesMap([Whatsit, Widget, FactoryRoom, Undecorated, WidgetWannabe]);
 
             expect(act).toThrow();
         });

@@ -1,12 +1,16 @@
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { COSCRAD_DATA_TYPE_METADATA } from '../../constants';
 import {
     getUnionMemberMetadata,
     getUnionMetadata,
     isUnionMemberMetadata,
     isUnionMetadata,
 } from '../../decorators';
+import { isSimpleCoscradPropertyTypeDefinition } from '../../types';
 import getCoscradDataSchema from './../getCoscradDataSchema';
 import { Ctor } from './../getCoscradDataSchemaFromPrototype';
+import { leveragesUniontype } from './leverages-union-type';
+import { resolveMemberSchemasForUnion } from './resolve-member-schemas-for-union';
 
 type ComplexCoscradDataTypeDefinition = {
     complexDataType: string;
@@ -20,7 +24,7 @@ const isComplexCoscradDataTypeDefinition = (
 ): input is ComplexCoscradDataTypeDefinition =>
     isNonEmptyString((input as ComplexCoscradDataTypeDefinition).complexDataType);
 
-export const bootstrapDynamicTypes = (allCtorCandidates: unknown[]): UnionTypesMap => {
+export const buildUnionTypesMap = (allCtorCandidates: unknown[]): UnionTypesMap => {
     const unionMetadata = allCtorCandidates.map(getUnionMetadata).filter(isUnionMetadata);
 
     const unionNames = [...new Set(unionMetadata.map(({ unionName }) => unionName))];
@@ -112,6 +116,10 @@ export const bootstrapDynamicTypes = (allCtorCandidates: unknown[]): UnionTypesM
         unionMap.set(nameOfUnionToValidate, membersMapForThisUnion);
     });
 
+    return unionMap;
+};
+
+export const bootstrapDynamicTypes = (allCtorCandidates: unknown[]) => {
     /**
      * Now we iterate through all classes with `CoscradDataType` definitions,
      * writing the schemas for each union property.
@@ -120,86 +128,45 @@ export const bootstrapDynamicTypes = (allCtorCandidates: unknown[]): UnionTypesM
         (input) => !isNullOrUndefined(getCoscradDataSchema(input))
     );
 
-    // ctorsWithTypeDefinitions.forEach((c) => {
-    //     const dataSchema = getCoscradDataSchema(c);
+    const ctorsThatLeverageAUnionType = ctorsWithTypeDefinitions.filter((ctor) =>
+        leveragesUniontype(getCoscradDataSchema(ctor))
+    );
 
-    //     const updates = Object.entries(dataSchema).reduce(
-    //         (acc, [propertyKey, dataSchemaForProperty]) => {
-    //             if (
-    //                 isComplexCoscradDataTypeDefinition(dataSchemaForProperty) &&
-    //                 dataSchemaForProperty.complexDataType === 'UNION_TYPE'
-    //             ) {
-    //                 const { unionName } = dataSchemaForProperty;
+    ctorsThatLeverageAUnionType.forEach((ctor) => {
+        const dataSchema = getCoscradDataSchema(ctor);
 
-    //                 if (!unionMap.has(unionName)) {
-    //                     /**
-    //                      * This situation is impossible by design. The only way
-    //                      * for the union name to appear on a data schema is to
-    //                      * register the union. We add this logic out of an
-    //                      * abundance of caution.
-    //                      */
-    //                     throw new Error(
-    //                         `The union: ${unionName} that appears on property: ${propertyKey} of ${dataSchemaForProperty.label} has not been registered `
-    //                     );
-    //                 }
+        const updatedSchema = Object.entries(dataSchema).reduce(
+            (acc, [propertyKey, propertyTypeDefinition]) => {
+                if (
+                    isSimpleCoscradPropertyTypeDefinition(propertyTypeDefinition) ||
+                    !['NESTED_TYPE', 'UNION_TYPE'].includes(propertyTypeDefinition.complexDataType)
+                )
+                    return {
+                        ...acc,
+                        [propertyKey]: propertyTypeDefinition,
+                    };
 
-    //                 const unionMemberSchemaDefinitons = unionMap.get(unionName);
+                const { complexDataType } = propertyTypeDefinition;
 
-    //                 const unionMemberSchemaDefinitions = [
-    //                     ...unionMemberSchemaDefinitons.entries(),
-    //                 ].map(([discriminantValue, ctor]) => ({
-    //                     discriminant: discriminantValue,
-    //                     schema: getCoscradDataSchema(ctor),
-    //                 }));
+                if (complexDataType === 'NESTED_TYPE') {
+                    throw new Error(`not implemented: we cannot yet bootstrap nested data types`);
+                }
 
-    //                 return {
-    //                     ...acc,
-    //                     [propertyKey]: {
-    //                         schemaDefinitions: unionMemberSchemaDefinitions,
-    //                     },
-    //                 };
-    //             } else {
-    //                 /**
-    //                  * no-op
-    //                  *
-    //                  * Note that it is not necessary to recurse as every class
-    //                  * using data decorators should be exposed to the IoC
-    //                  * registry.
-    //                  */
-    //                 return acc;
-    //             }
-    //         },
-    //         {} as Record<string, { schemaDefinitions: unknown }>
-    //     );
+                if (complexDataType === 'UNION_TYPE') {
+                    const { unionName } = propertyTypeDefinition;
 
-    //     Object.entries(updates).forEach(
-    //         ([propertyKey, { schemaDefinitions: unionDataSchemasForThisProperty }]) => {
-    //             const existingMeta = getCoscradDataSchema(c);
+                    return {
+                        ...acc,
+                        schemaDefinitions: resolveMemberSchemasForUnion(
+                            allCtorCandidates,
+                            unionName
+                        ),
+                    };
+                }
+            },
+            {}
+        );
 
-    //             const newMeta = {
-    //                 ...existingMeta,
-    //                 [propertyKey]: {
-    //                     ...existingMeta[propertyKey],
-    //                     schemaDefinitions: unionDataSchemasForThisProperty,
-    //                 },
-    //             };
-
-    //             Reflect.defineMetadata(
-    //                 COSCRAD_DATA_TYPE_METADATA,
-    //                 newMeta,
-    //                 // @ts-expect-error TODO fix me
-    //                 c.prototype
-    //             );
-    //         }
-    //     );
-    // });
-
-    /**
-     * Now that we have written all union member schemas to union types at
-     * the top level, we just need to walk the actual data type definitions
-     * and leverage these full union types in nested data type definitions.
-     */
-    // ctorsWithTypeDefinitions.forEach((c) => joinDynamicTypeInfoIntoNestedSchemas(c, unionMap));
-
-    return unionMap;
+        Reflect.defineMetadata(COSCRAD_DATA_TYPE_METADATA, updatedSchema, ctor.constructor);
+    });
 };

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { bootstrapDynamicTypes, NonEmptyString, URL, UUID } from '../index';
+import { NonEmptyString, URL, UUID } from '../index';
 import {
     Enum,
     ISBN,
@@ -23,7 +23,7 @@ const buildDummyLabelAndDescription = (name: string): { label: string; descripti
 
 const isOptional = true;
 
-class Whatsit {
+export class Whatsit {
     @NonEmptyString({ isOptional, ...buildDummyLabelAndDescription('whatsitName') })
     whatsitName = 'whatsit 1';
 
@@ -33,10 +33,10 @@ class Whatsit {
 
 const THING_UNION = 'THING_UNION';
 
-const ThingUnion = (options: TypeDecoratorOptions) => Union2(THING_UNION, 'type', options);
+export const ThingUnion = (options: TypeDecoratorOptions) => Union2(THING_UNION, 'type', options);
 
 @Union2Member(THING_UNION, 'one')
-class ThingDataOne {
+export class ThingDataOne {
     type = 'one';
 
     @NonNegativeFiniteNumber({
@@ -46,7 +46,7 @@ class ThingDataOne {
 }
 
 @Union2Member(THING_UNION, 'two')
-class ThingDataTwo {
+export class ThingDataTwo {
     type = 'two';
 
     @PositiveInteger({ ...buildDummyLabelAndDescription('rating') })
@@ -148,8 +148,9 @@ export class Widget {
     }
 }
 
-export const bootstrapWidgetDataTypes = (): void =>
-    bootstrapDynamicTypes([ThingDataOne, ThingDataTwo, Widget]);
+export const bootstrapWidgetDataTypes = (): void => {
+    throw new Error(`not implemented`);
+};
 
 export const buildValidWidgetDto = (): Widget => ({
     widgetName: 'Machine',
