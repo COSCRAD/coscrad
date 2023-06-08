@@ -26,7 +26,23 @@ export const buildUnionTypesMap = (allCtorCandidates: unknown[]): UnionTypesMap 
             ...new Set(unionMetadata.map(({ discriminantPath }) => discriminantPath)),
         ];
 
-        // TODO It would be nice to design this away
+        /**
+         * Note that when using the @Union decorator factory, it's best practice to
+         * export a single decorator factory per union that curries the property-specific
+         * user options but closes over the `unionName` and `discriminantPath`.
+         *
+         * ```ts
+         * export const MachineUnion = (options) => @Union('MACHINE_UNION','type',options)
+         *
+         * // ...
+         *
+         * @MachineUnion({
+         *     label: 'machine',
+         *     description: 'the machine that is in this location'
+         * })
+         * readonly machine: Widget | Whatsit;
+         * ```
+         */
         if (allDiscriminantPathsRegisteredForThisUnion.length > 1) {
             throw new Error(
                 `You have defined more than one union data-type with the name: ${nameOfUnionToValidate}`

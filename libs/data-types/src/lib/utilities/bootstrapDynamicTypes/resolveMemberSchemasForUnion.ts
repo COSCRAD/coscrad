@@ -2,6 +2,7 @@ import { UnionMemberMetadata } from '../../decorators';
 import { ClassSchema, isSimpleCoscradPropertyTypeDefinition } from '../../types';
 import getCoscradDataSchema from '../getCoscradDataSchema';
 import { buildUnionTypesMap } from './bootstrapDynamicTypes';
+import { UnionLeveragesAnotherException } from './exceptions';
 import { leveragesUniontype } from './leveragesUnionType';
 
 export type UnionMemberSchemaDefinition = Pick<UnionMemberMetadata, 'discriminant'> & {
@@ -48,9 +49,7 @@ export const resolveMemberSchemasForUnion = (
                             [propertyKey]: propertyTypeDefinition,
                         };
 
-                    throw new Error(
-                        `not implemented: cannot resolve union type: ${unionName} as one of its members leverages another union`
-                    );
+                    throw new UnionLeveragesAnotherException(unionName);
                 }
 
                 if (complexDataType === 'UNION_TYPE')
