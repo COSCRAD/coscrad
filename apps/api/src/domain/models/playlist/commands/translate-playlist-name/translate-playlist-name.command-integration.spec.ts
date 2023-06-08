@@ -7,6 +7,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
+import assertErrorAsExpected from 'apps/api/src/lib/__tests__/assertErrorAsExpected';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import {
@@ -22,6 +23,7 @@ import { DTO } from '../../../../../types/DTO';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { Playlist } from '../../entities';
 import { TranslatePlaylistName } from './translate-playlist-name.command';
 
@@ -118,5 +120,28 @@ describe(commandType, () => {
                 },
             });
         });
+    });
+
+    describe('when the command is invalid', () => {
+        describe('when the playlist already exists', () => {
+            it('should fail with the expected errors',async () => {
+                return await assertCommandSuccess(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildCommandFSA: buildValidCommandFSA,
+                    initialState: new DeluxeInMemoryStore({
+                        [AggregateType.playlist]: [existingPlaylist]
+                }).fetchFullSnapshotInLegacyFormat(),
+                checkError: (error) => {
+                    assertErrorAsExpected(
+                        error,
+                        new CommandExecutionError([
+                            new CannotAddDuplicateNameOfPlaylist(
+                                existingPlaylist
+                            )
+                        ])
+                    )
+                }
+            })
+        })
     });
 });
