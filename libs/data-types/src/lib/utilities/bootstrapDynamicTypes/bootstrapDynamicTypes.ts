@@ -1,4 +1,4 @@
-import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { COSCRAD_DATA_TYPE_METADATA } from '../../constants';
 import {
     getUnionMemberMetadata,
@@ -12,17 +12,7 @@ import { Ctor } from '../getCoscradDataSchemaFromPrototype';
 import { leveragesUniontype } from './leveragesUnionType';
 import { resolveMemberSchemasForUnion } from './resolveMemberSchemasForUnion';
 
-type ComplexCoscradDataTypeDefinition = {
-    complexDataType: string;
-};
-
 export type UnionTypesMap = Map<string, Map<string | number, Ctor<Object>>>;
-
-// We duplicate this here to avoid circular build dependencies
-const isComplexCoscradDataTypeDefinition = (
-    input: unknown
-): input is ComplexCoscradDataTypeDefinition =>
-    isNonEmptyString((input as ComplexCoscradDataTypeDefinition).complexDataType);
 
 export const buildUnionTypesMap = (allCtorCandidates: unknown[]): UnionTypesMap => {
     const unionMetadata = allCtorCandidates.map(getUnionMetadata).filter(isUnionMetadata);

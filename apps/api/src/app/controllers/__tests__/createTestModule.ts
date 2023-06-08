@@ -404,22 +404,6 @@ export default async (
             CreatePlayListCommandHandler,
             AddAudioItemToPlaylist,
             AddAudioItemToPlaylistCommandHandler,
-            // Classes with dynamic union data types
-            CourtCaseBibliographicReferenceData,
-            JournalArticleBibliographicReferenceData,
-            BookBibliographicReferenceData,
-            // Edge Connetions
-            EdgeConnection,
-            EdgeConnectionMember,
-            NoteViewModel,
-            // Context Union
-            GeneralContext,
-            PageRangeContext,
-            TimeRangeContext,
-            TextFieldContext,
-            PointContext,
-            FreeMultilineContext,
-            IdentityContext,
         ],
 
         controllers: [

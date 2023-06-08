@@ -1348,5 +1348,51 @@ exports[`command payload schemas Command payload schema should match the snapsho
     },
     "type": "CREATE_PLAYLIST",
   },
+  {
+    "description": "add item to an existing playlist",
+    "label": "Add item to Playlist",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "playlist",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "type",
+                "value": "playlist",
+              },
+            ],
+          },
+        },
+      },
+      "audioItemId": {
+        "coscradDataType": "UUID",
+        "description": "the ID of the audio item being added to this playlist",
+        "isArray": false,
+        "isOptional": false,
+        "label": "audio item ID",
+        "referenceTo": "audioItem",
+      },
+    },
+    "type": "ADD_AUDIO_ITEM_TO_PLAYLIST",
+  },
 ]
 `;
