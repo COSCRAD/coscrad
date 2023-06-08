@@ -1,4 +1,4 @@
-import { Union2Member } from '@coscrad/data-types';
+import { UnionMember } from '@coscrad/data-types';
 import { Inject } from '@nestjs/common';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
@@ -12,7 +12,7 @@ import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 // TODO Improve the naming
 export type TimeRangeWithoutData = Pick<TranscriptItem, 'inPoint' | 'outPoint'>;
 
-@Union2Member(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.timeRange)
+@UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.timeRange)
 export class TimeRangeContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.timeRange;
 

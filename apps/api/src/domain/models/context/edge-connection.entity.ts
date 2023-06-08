@@ -4,7 +4,7 @@ import {
     Enum,
     NestedDataType,
     NonEmptyString,
-    Union2,
+    Union,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
@@ -33,7 +33,7 @@ import {
     EdgeConnectionType,
     IEdgeConnectionMember,
 } from '@coscrad/api-interfaces';
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ResultOrError } from '../../../types/ResultOrError';
 import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
@@ -48,7 +48,7 @@ export const EDGE_CONNECTION_CONTEXT_UNION = 'EDGE_CONNECTION_CONTEXT_UNION';
  * this here for reuse in `EdgeConnection` command payloads.
  */
 export const ContextUnion = ({ label, description }: { label: string; description: string }) =>
-    Union2(EDGE_CONNECTION_CONTEXT_UNION, 'type', { label, description });
+    Union(EDGE_CONNECTION_CONTEXT_UNION, 'type', { label, description });
 
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
     extends BaseDomainModel
@@ -72,7 +72,7 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
     })
     role: EdgeConnectionMemberRole;
 
-    constructor(dto: DTO<EdgeConnectionMember>) {
+    constructor(@Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<EdgeConnectionMember>) {
         super();
 
         if (!dto) return;
@@ -91,6 +91,7 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
     }
 }
 
+@Injectable()
 @RegisterIndexScopedCommands([])
 export class EdgeConnection extends Aggregate {
     type = AggregateType.note;

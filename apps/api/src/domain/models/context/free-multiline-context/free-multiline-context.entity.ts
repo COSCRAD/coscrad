@@ -1,4 +1,4 @@
-import { NonEmptyString, Union2Member } from '@coscrad/data-types';
+import { NonEmptyString, UnionMember } from '@coscrad/data-types';
 import { Inject } from '@nestjs/common';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
@@ -16,7 +16,7 @@ export const EMPTY_DTO_INJECTION_TOKEN = 'EMPTY_DTO';
  * zig-zags, and so on are allowed.
  */
 
-@Union2Member(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.freeMultiline)
+@UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.freeMultiline)
 export class FreeMultilineContext extends EdgeConnectionContext {
     @NonEmptyString({
         label: 'type',

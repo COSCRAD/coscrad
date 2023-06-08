@@ -2,8 +2,8 @@ import { ThingDataOne, ThingDataTwo, Widget } from '../../../test/widget';
 import {
     NestedDataType,
     NonNegativeFiniteNumber,
-    Union2,
-    Union2Member,
+    Union,
+    UnionMember,
     UUID,
 } from '../../decorators';
 import {
@@ -50,7 +50,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
             durability: number;
         }
 
-        @Union2Member('THING_UNION', 'three')
+        @UnionMember('THING_UNION', 'three')
         class ThingDataThree {
             type = 'three';
 
@@ -70,7 +70,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
             })
             locationId: string;
 
-            @Union2('THING_UNION', 'type', {
+            @Union('THING_UNION', 'type', {
                 description: 'the machines in this tool room',
                 label: 'machines',
             })

@@ -33,10 +33,8 @@ export const isUnionMemberMetadata = (
  * @param unionName the name of the union type of which this class represents one member
  * @param discriminantValue the value of the discriminant that marks this sub-type (e.g. widget as in `type=widget`)- the discriminant path is specified on the @Union
  * @returns class decorator that can be used to annotate your class as a member of a discriminated union type
- *
- * TODO Rename this `UnionMember` when phasing out `Union` and replacing it with `Union2`
  */
-export function Union2Member(
+export function UnionMember(
     unionName: string,
     discriminantValue: DiscriminantValue
 ): ClassDecorator {

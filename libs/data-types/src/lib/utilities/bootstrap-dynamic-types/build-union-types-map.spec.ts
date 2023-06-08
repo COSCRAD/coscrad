@@ -3,8 +3,8 @@ import {
     NestedDataType,
     NonEmptyString,
     NonNegativeFiniteNumber,
-    Union2,
-    Union2Member,
+    Union,
+    UnionMember,
 } from '../../decorators';
 import { TypeDecoratorOptions } from '../../decorators/types/TypeDecoratorOptions';
 
@@ -23,7 +23,7 @@ class WhatsitProperty {
     class: string;
 }
 
-@Union2Member(MACHINE_UNION, 'widget')
+@UnionMember(MACHINE_UNION, 'widget')
 class Widget {
     type = 'widget';
 
@@ -31,7 +31,7 @@ class Widget {
     name: string;
 }
 
-@Union2Member(MACHINE_UNION, 'whatsit')
+@UnionMember(MACHINE_UNION, 'whatsit')
 class Whatsit {
     type = 'whatsit';
 
@@ -47,7 +47,7 @@ class Undecorated {
     bar: string;
 }
 
-const MachineUnion = (options: TypeDecoratorOptions) => Union2(MACHINE_UNION, 'type', options);
+const MachineUnion = (options: TypeDecoratorOptions) => Union(MACHINE_UNION, 'type', options);
 
 class FactoryRoom {
     @MachineUnion({
@@ -170,7 +170,7 @@ describe(`buildUnionTypesMap`, () => {
         const LONELY_UNION = 'LONELY_HEARTS_CLUB';
 
         class LonelyUnionUser {
-            @Union2(LONELY_UNION, 'type', {
+            @Union(LONELY_UNION, 'type', {
                 label: 'foo',
                 description: `bar can be as lonely as foo, it's the loneliest var in the village hoo`,
             })
@@ -189,21 +189,21 @@ describe(`buildUnionTypesMap`, () => {
         const DUPLICATED_UNION = 'DUPLICATED_UNION';
 
         class Woo {
-            @Union2(DUPLICATED_UNION, 'type', buildOptions('foo'))
+            @Union(DUPLICATED_UNION, 'type', buildOptions('foo'))
             foo: unknown;
         }
 
         class Boo {
-            @Union2(DUPLICATED_UNION, 'inconsistentDiscriminantFieldName', buildOptions('baz'))
+            @Union(DUPLICATED_UNION, 'inconsistentDiscriminantFieldName', buildOptions('baz'))
             baz: unknown;
         }
 
-        @Union2Member(DUPLICATED_UNION, 'A')
+        @UnionMember(DUPLICATED_UNION, 'A')
         class UnionMemberA {
             inconsistentDiscriminantFieldName = 'A';
         }
 
-        @Union2Member(DUPLICATED_UNION, 'B')
+        @UnionMember(DUPLICATED_UNION, 'B')
         class UnionMemberB {
             type = 'B';
         }
@@ -227,7 +227,7 @@ describe(`buildUnionTypesMap`, () => {
 
     describe(`when two union members have registered the same discriminant value`, () => {
         // Duplicates Widget discriminant value
-        @Union2Member(MACHINE_UNION, 'widget')
+        @UnionMember(MACHINE_UNION, 'widget')
         class WidgetWannabe {
             type = 'widget';
 

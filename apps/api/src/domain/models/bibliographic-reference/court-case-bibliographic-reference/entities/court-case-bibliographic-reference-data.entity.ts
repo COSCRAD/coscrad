@@ -1,14 +1,14 @@
 import { ICourtCaseBibliographicReferenceData } from '@coscrad/api-interfaces';
-import { NonEmptyString, Union2Member, URL } from '@coscrad/data-types';
+import { NonEmptyString, URL } from '@coscrad/data-types';
 import { Inject } from '@nestjs/common';
 import { DTO } from '../../../../../types/DTO';
-import { BIBLIOGRAPHIC_REFERENCE_DATA_UNION } from '../../../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
 import { EMPTY_DTO_INJECTION_TOKEN } from '../../../context/free-multiline-context/free-multiline-context.entity';
+import { BibliographicReferenceDataUnionMember } from '../../shared/bibliographic-reference-union-data-member.decorator';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 
-@Union2Member(BIBLIOGRAPHIC_REFERENCE_DATA_UNION, BibliographicReferenceType.courtCase)
+@BibliographicReferenceDataUnionMember(BibliographicReferenceType.courtCase)
 export class CourtCaseBibliographicReferenceData
     extends BaseDomainModel
     implements ICourtCaseBibliographicReferenceData

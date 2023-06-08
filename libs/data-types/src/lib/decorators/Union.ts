@@ -1,28 +1,58 @@
-import { ComplexCoscradDataType } from '../types/ComplexDataTypes/ComplexCoscradDataType';
-import { UnionDataTypeDefinition } from '../types/ComplexDataTypes/UnionDataTypeDefinition';
-import { getCoscradDataSchema } from '../utilities';
+import { ComplexCoscradDataType, UnionDataTypeDefinition } from '../types';
 import appendMetadata from '../utilities/appendMetadata';
-import getDiscriminantForUnionMember from '../utilities/getDiscriminantForUnionMember';
 import mixinDefaultTypeDecoratorOptions from './common/mixinDefaultTypeDecoratorOptions';
 import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
 
-// @deprecated We are phasing this out. Use `Union2` and rename this to `Union` eventually.
-function Union(
-    memberClasses: Object[],
+export const UNION_METADATA = '__UNION_METADATA__';
+
+export type UnionMetadata = {
+    unionName: string;
+    discriminantPath: string;
+};
+
+export const NotTaggedAsUnion = Symbol('this property has not been annotated as a union');
+
+export type NotTaggedAsUnion = typeof NotTaggedAsUnion;
+
+export const getUnionMetadata = (target: Object): UnionMetadata | NotTaggedAsUnion => {
+    /**
+     * Note that the target of a property decorator is the class constructor's prototype.
+     * This is in distinction to a class decorator, whose target is the class
+     * constructor itself (at least for instance properties).
+     */
+    // @ts-expect-error fix me
+    const metadata = Reflect.getMetadata(UNION_METADATA, target.prototype);
+
+    if (metadata === null || typeof metadata === 'undefined') return NotTaggedAsUnion;
+
+    return metadata as UnionMetadata;
+};
+
+export const isUnionMetadata = (input: NotTaggedAsUnion | UnionMetadata): input is UnionMetadata =>
+    input !== NotTaggedAsUnion;
+
+export function Union(
+    unionName: string,
     discriminantPath: string,
     userOptions: TypeDecoratorOptions
 ): PropertyDecorator {
     const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
+    // We might not need this. We could put the discriminant-path on the union members with a consistency check
     return (target: Object, propertyKey: string | symbol) => {
+        const meta: UnionMetadata = {
+            unionName,
+            discriminantPath,
+        };
+
+        Reflect.defineMetadata(UNION_METADATA, meta, target);
+
         const unionDataTypeDefinition: UnionDataTypeDefinition = {
             complexDataType: ComplexCoscradDataType.union,
             discriminantPath,
-            unionName: 'DEPRECATED PIECE OF TOAST',
-            schemaDefinitions: memberClasses.map((MemberClass) => ({
-                discriminant: getDiscriminantForUnionMember(MemberClass),
-                schema: getCoscradDataSchema(MemberClass),
-            })),
+            unionName,
+            // This must be updated at bootstrap
+            schemaDefinitions: [],
         };
 
         appendMetadata(target, propertyKey, unionDataTypeDefinition, options);

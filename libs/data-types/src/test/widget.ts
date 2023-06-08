@@ -8,8 +8,8 @@ import {
     PositiveInteger,
     RawDataObject,
     ReferenceTo,
-    Union2,
-    Union2Member,
+    Union,
+    UnionMember,
     Year,
 } from '../lib/decorators';
 import { TypeDecoratorOptions } from '../lib/decorators/types/TypeDecoratorOptions';
@@ -33,9 +33,9 @@ export class Whatsit {
 
 const THING_UNION = 'THING_UNION';
 
-export const ThingUnion = (options: TypeDecoratorOptions) => Union2(THING_UNION, 'type', options);
+export const ThingUnion = (options: TypeDecoratorOptions) => Union(THING_UNION, 'type', options);
 
-@Union2Member(THING_UNION, 'one')
+@UnionMember(THING_UNION, 'one')
 export class ThingDataOne {
     type = 'one';
 
@@ -45,7 +45,7 @@ export class ThingDataOne {
     strength = 99.5;
 }
 
-@Union2Member(THING_UNION, 'two')
+@UnionMember(THING_UNION, 'two')
 export class ThingDataTwo {
     type = 'two';
 

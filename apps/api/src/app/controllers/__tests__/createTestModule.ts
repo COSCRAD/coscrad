@@ -33,7 +33,10 @@ import {
     EdgeConnection,
     EdgeConnectionMember,
 } from '../../../domain/models/context/edge-connection.entity';
-import { FreeMultilineContext } from '../../../domain/models/context/free-multiline-context/free-multiline-context.entity';
+import {
+    EMPTY_DTO_INJECTION_TOKEN,
+    FreeMultilineContext,
+} from '../../../domain/models/context/free-multiline-context/free-multiline-context.entity';
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { IdentityContext } from '../../../domain/models/context/identity-context.entity/identity-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
@@ -94,6 +97,7 @@ import { VocabularyListQueryService } from '../../../domain/services/query-servi
 import { InternalError } from '../../../lib/errors/InternalError';
 import { IdManagementService } from '../../../lib/id-generation/id-management.service';
 import { MockIdManagementService } from '../../../lib/id-generation/mock-id-management.service';
+import { Ctor } from '../../../lib/types/Ctor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
@@ -101,6 +105,7 @@ import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeModule } from '../../../validation';
+import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { NoteViewModel } from '../../../view-models/edgeConnectionViewModels/note.view-model';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
@@ -327,6 +332,29 @@ export default async (
                 provide: JwtStrategy,
                 useFactory: () => new MockJwtStrategy(testUserWithGroups),
             },
+            ...[
+                // Classes with dynamic union data types
+                // Bibliographic References
+                BibliographicReferenceViewModel,
+                CourtCaseBibliographicReferenceData,
+                JournalArticleBibliographicReferenceData,
+                BookBibliographicReferenceData,
+                // Edge Connetions
+                EdgeConnection,
+                EdgeConnectionMember,
+                NoteViewModel,
+                // Context Union
+                GeneralContext,
+                PageRangeContext,
+                TimeRangeContext,
+                TextFieldContext,
+                PointContext,
+                FreeMultilineContext,
+                IdentityContext,
+            ].map((ctor: Ctor<unknown>) => ({
+                provide: ctor,
+                useValue: ctor,
+            })),
             /**
              * TODO [https://www.pivotaltracker.com/story/show/182576828]
              *
@@ -417,6 +445,8 @@ export default async (
             AdminController,
         ],
     })
+        .overrideProvider(EMPTY_DTO_INJECTION_TOKEN)
+        .useValue(null)
         .overrideGuard(OptionalJwtAuthGuard)
         .useValue(new MockJwtAuthGuard(testUserWithGroups, true))
         .overrideGuard(AdminJwtGuard)

@@ -467,6 +467,55 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isOptional": false,
     "label": "ID",
   },
+  "members": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "the resource for the note or the resources involved in the connection",
+    "isArray": true,
+    "isOptional": false,
+    "label": "members",
+    "schema": {
+      "compositeIdentifier": {
+        "coscradDataType": "COMPOSITE_IDENTIFIER",
+        "description": "composite identifier of the members's resource",
+        "isArray": false,
+        "isOptional": false,
+        "label": "composite identifier",
+      },
+      "context": {
+        "complexDataType": "UNION_TYPE",
+        "description": "contextualizes the note or connection for this member",
+        "discriminantPath": "type",
+        "isArray": false,
+        "isOptional": false,
+        "label": "context",
+        "schemaDefinitions": [],
+        "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
+      },
+      "role": {
+        "complexDataType": "ENUM",
+        "description": "is",
+        "enumLabel": "Edge Connection Member Role",
+        "enumName": "EDGE_CONNECTION_MEMBER_ROLE",
+        "isArray": false,
+        "isOptional": false,
+        "label": "role",
+        "labelsAndValues": [
+          {
+            "label": "from",
+            "value": "from",
+          },
+          {
+            "label": "to",
+            "value": "to",
+          },
+          {
+            "label": "self",
+            "value": "self",
+          },
+        ],
+      },
+    },
+  },
   "note": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "text summary of why this connection is relevant",

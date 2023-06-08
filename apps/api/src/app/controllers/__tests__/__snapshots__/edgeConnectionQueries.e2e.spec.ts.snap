@@ -23,41 +23,38 @@ exports[`When querying for edge connections GET /connections/ should return the 
         },
         "context": {
           "complexDataType": "UNION_TYPE",
-          "description": "contextualizes this resource as a member of this connection",
+          "description": "contextualizes the note or connection for this member",
           "discriminantPath": "type",
           "isArray": false,
           "isOptional": false,
           "label": "context",
           "schemaDefinitions": [
             {
-              "discriminant": "freeMultiline",
+              "discriminantValue": "general",
               "schema": {},
             },
             {
-              "discriminant": "general",
+              "discriminantValue": "pageRange",
               "schema": {},
             },
             {
-              "discriminant": "identity",
+              "discriminantValue": "timeRange",
               "schema": {},
             },
             {
-              "discriminant": "pageRange",
+              "discriminantValue": "textField",
               "schema": {},
             },
             {
-              "discriminant": "general",
+              "discriminantValue": "point2D",
               "schema": {},
             },
             {
-              "discriminant": "general",
-              "schema": {},
-            },
-            {
-              "discriminant": "general",
+              "discriminantValue": "identity",
               "schema": {},
             },
           ],
+          "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
         },
         "role": {
           "complexDataType": "ENUM",

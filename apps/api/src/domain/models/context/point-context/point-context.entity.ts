@@ -1,4 +1,4 @@
-import { Union2Member } from '@coscrad/data-types';
+import { UnionMember } from '@coscrad/data-types';
 import { Inject } from '@nestjs/common';
 import { DTO } from '../../../../types/DTO';
 import { Position2D } from '../../spatial-feature/types/Coordinates/Position2D';
@@ -7,7 +7,7 @@ import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
 import { EMPTY_DTO_INJECTION_TOKEN } from '../free-multiline-context/free-multiline-context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
-@Union2Member(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.point2D)
+@UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.point2D)
 export class PointContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.point2D;
 

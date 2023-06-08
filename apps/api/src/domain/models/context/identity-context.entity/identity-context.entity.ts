@@ -1,4 +1,4 @@
-import { Union2Member } from '@coscrad/data-types';
+import { UnionMember } from '@coscrad/data-types';
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
@@ -9,7 +9,7 @@ import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
  * resource, where there exist Edge Connections with more rich context.
  */
 
-@Union2Member('EDGE_CONNECTION_CONTEXT_UNION', EdgeConnectionContextType.identity)
+@UnionMember('EDGE_CONNECTION_CONTEXT_UNION', EdgeConnectionContextType.identity)
 export class IdentityContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.identity;
 }
