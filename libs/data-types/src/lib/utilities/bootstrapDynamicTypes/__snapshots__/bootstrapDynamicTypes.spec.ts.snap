@@ -1,0 +1,234 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bootstrapDynamicTypes when several union members have been registered when the input is valid when multiple classes have a property that has been decorated should append the data-schema to the metadata 1`] = `
+{
+  "machine": {
+    "complexDataType": "UNION_TYPE",
+    "description": "the machine that is in this factory room",
+    "discriminantPath": "type",
+    "isArray": false,
+    "isOptional": false,
+    "label": "machine",
+    "schemaDefinitions": [
+      {
+        "discriminant": "whatsit",
+        "schema": {
+          "properties": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "description-of-properties",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-properties",
+            "schema": {
+              "class": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "description-of-whatsit",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-whatsit",
+              },
+              "power": {
+                "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                "description": "description-of-power",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-power",
+              },
+            },
+          },
+        },
+      },
+      {
+        "discriminant": "widget",
+        "schema": {
+          "name": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "description-of-widget",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-widget",
+          },
+        },
+      },
+    ],
+    "unionName": "MACHINE_UNION",
+  },
+}
+`;
+
+exports[`bootstrapDynamicTypes when several union members have been registered when the input is valid when multiple classes have a property that has been decorated should append the data-schema to the metadata 2`] = `
+{
+  "machines": {
+    "complexDataType": "UNION_TYPE",
+    "description": "all machines that are part of this line, in order",
+    "discriminantPath": "type",
+    "isArray": false,
+    "isOptional": false,
+    "label": "machines",
+    "schemaDefinitions": [
+      {
+        "discriminant": "whatsit",
+        "schema": {
+          "properties": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "description-of-properties",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-properties",
+            "schema": {
+              "class": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "description-of-whatsit",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-whatsit",
+              },
+              "power": {
+                "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                "description": "description-of-power",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-power",
+              },
+            },
+          },
+        },
+      },
+      {
+        "discriminant": "widget",
+        "schema": {
+          "name": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "description-of-widget",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-widget",
+          },
+        },
+      },
+    ],
+    "unionName": "MACHINE_UNION",
+  },
+}
+`;
+
+exports[`bootstrapDynamicTypes when several union members have been registered when the input is valid when only one class property has been decorated should append the data-schema to the metadata 1`] = `
+{
+  "machine": {
+    "complexDataType": "UNION_TYPE",
+    "description": "the machine that is in this factory room",
+    "discriminantPath": "type",
+    "isArray": false,
+    "isOptional": false,
+    "label": "machine",
+    "schemaDefinitions": [
+      {
+        "discriminant": "whatsit",
+        "schema": {
+          "properties": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "description-of-properties",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-properties",
+            "schema": {
+              "class": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "description-of-whatsit",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-whatsit",
+              },
+              "power": {
+                "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                "description": "description-of-power",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-power",
+              },
+            },
+          },
+        },
+      },
+      {
+        "discriminant": "widget",
+        "schema": {
+          "name": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "description-of-widget",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label-for-widget",
+          },
+        },
+      },
+    ],
+    "unionName": "MACHINE_UNION",
+  },
+}
+`;
+
+exports[`bootstrapDynamicTypes when several union members have been registered when the input is valid when there is a nested property that leverages a union type should append the data-schema to the metadata 1`] = `
+{
+  "factoryRoom": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "description-of-factoryRoom",
+    "isArray": false,
+    "isOptional": false,
+    "label": "label-for-factoryRoom",
+    "schema": {
+      "machine": {
+        "complexDataType": "UNION_TYPE",
+        "description": "the machine that is in this factory room",
+        "discriminantPath": "type",
+        "isArray": false,
+        "isOptional": false,
+        "label": "machine",
+        "schemaDefinitions": [
+          {
+            "discriminant": "whatsit",
+            "schema": {
+              "properties": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "description-of-properties",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-properties",
+                "schema": {
+                  "class": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "description-of-whatsit",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "label-for-whatsit",
+                  },
+                  "power": {
+                    "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                    "description": "description-of-power",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "label-for-power",
+                  },
+                },
+              },
+            },
+          },
+          {
+            "discriminant": "widget",
+            "schema": {
+              "name": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "description-of-widget",
+                "isArray": false,
+                "isOptional": false,
+                "label": "label-for-widget",
+              },
+            },
+          },
+        ],
+        "unionName": "MACHINE_UNION",
+      },
+    },
+  },
+}
+`;

@@ -1,9 +1,10 @@
-import { DiscriminatedBy } from '@coscrad/data-types';
+import { UnionMember } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import { EdgeConnectionContext } from '../context.entity';
+import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
-@DiscriminatedBy(EdgeConnectionContextType.general)
+@UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.textField)
 export class TextFieldContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.textField;
 
@@ -28,8 +29,12 @@ export class TextFieldContext extends EdgeConnectionContext {
      */
     readonly charRange: [number, number];
 
-    constructor({ target, charRange }: DTO<TextFieldContext>) {
+    constructor(dto: DTO<TextFieldContext>) {
         super();
+
+        if (!dto) return;
+
+        const { target, charRange } = dto;
 
         this.target = target;
 

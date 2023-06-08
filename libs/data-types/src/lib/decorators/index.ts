@@ -1,6 +1,5 @@
 export * from './CompositeIdentifier';
 export * from './CoscradMultilingualText';
-export * from './DiscriminatedBy';
 export * from './Enum';
 export * from './ExternalEnum';
 export * from './FromDomainModel';
@@ -13,6 +12,7 @@ export * from './RawData';
 export * from './ReferenceTo';
 export * from './String';
 export * from './Union';
+export * from './UnionMember';
 export * from './URL';
 export * from './UUID';
 export * from './Year';

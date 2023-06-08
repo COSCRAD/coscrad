@@ -9,8 +9,11 @@ import { ResourceType } from '../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import { Resource } from '../../../resource.entity';
 import { IBibliographicReference } from '../../interfaces/bibliographic-reference.interface';
+import { BibliographicReferenceUnionMember } from '../../shared';
+import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 import JournalArticleBibliographicReferenceData from './journal-article-bibliographic-reference-data.entity';
 
+@BibliographicReferenceUnionMember(BibliographicReferenceType.journalArticle)
 @RegisterIndexScopedCommands(['CREATE_JOURNAL_ARTICLE_BIBLIOGRAPHIC_REFERENCE'])
 export class JournalArticleBibliographicReference
     extends Resource

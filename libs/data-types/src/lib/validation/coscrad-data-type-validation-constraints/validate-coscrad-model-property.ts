@@ -2,6 +2,7 @@
 import {
     CoscradDataType,
     CoscradPropertyTypeDefinition,
+    ICoscradUnionDataTypeDefinition,
     isComplexCoscradDataTypeDefinition,
 } from '@coscrad/api-interfaces';
 /* eslint-disable-next-line */
@@ -98,7 +99,42 @@ export const validateCoscradModelProperty = (
         }
 
         if (complexDataType === ComplexCoscradDataType.union) {
-            throw new Error(`Union types are not yet supported in validation`);
+            const { schemaDefinitions, discriminantPath } =
+                propertyTypeDefinition as ICoscradUnionDataTypeDefinition;
+
+            if (discriminantPath.includes('.')) {
+                throw new Error(
+                    `nested properties as union type discriminants are not currently supported`
+                );
+            }
+
+            if (isNullOrUndefined(actualPropertyValue)) {
+                return [
+                    new Error(`property: ${propertyName} is not an instance of a union member`),
+                ];
+            }
+
+            const discriminantValue = actualPropertyValue[discriminantPath];
+
+            const schemaDefinitionSearchResult = schemaDefinitions.find(
+                ({ discriminant }) => discriminant === discriminantValue
+            );
+
+            if (isNullOrUndefined(schemaDefinitionSearchResult)) {
+                return [
+                    new Error(
+                        `Property ${propertyName}.type has failed validation: must be one of: ${schemaDefinitions
+                            .map(({ discriminant }) => discriminant)
+                            .join(', ')}`
+                    ),
+                ];
+            }
+
+            const { schema } = schemaDefinitionSearchResult;
+
+            return validateCoscradModelInstance(schema, actualPropertyValue, {
+                forbidUnknownValues,
+            });
         }
 
         // recurse

@@ -22,10 +22,27 @@ import {
 } from '../../../domain/models/audio-item/commands/transcripts/add-participant-to-transcript';
 import { CreateBookBibliographicReference } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command';
 import { CreateBookBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/commands/create-book-bibliographic-reference/create-book-bibliographic-reference.command-handler';
+import BookBibliographicReferenceData from '../../../domain/models/bibliographic-reference/book-bibliographic-reference/entities/book-bibliographic-reference-data.entity';
 import { CreateCourtCaseBibliographicReference } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command';
 import { CreateCourtCaseBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/commands/create-court-case-bibliographic-reference.command-handler';
+import { CourtCaseBibliographicReferenceData } from '../../../domain/models/bibliographic-reference/court-case-bibliographic-reference/entities/court-case-bibliographic-reference-data.entity';
 import { CreateJournalArticleBibliographicReference } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command';
 import { CreateJournalArticleBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command-handler';
+import JournalArticleBibliographicReferenceData from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference-data.entity';
+import {
+    EdgeConnection,
+    EdgeConnectionMember,
+} from '../../../domain/models/context/edge-connection.entity';
+import {
+    EMPTY_DTO_INJECTION_TOKEN,
+    FreeMultilineContext,
+} from '../../../domain/models/context/free-multiline-context/free-multiline-context.entity';
+import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
+import { IdentityContext } from '../../../domain/models/context/identity-context.entity/identity-context.entity';
+import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
+import { PointContext } from '../../../domain/models/context/point-context/point-context.entity';
+import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
+import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item.command-handler';
 import {
@@ -80,16 +97,20 @@ import { VocabularyListQueryService } from '../../../domain/services/query-servi
 import { InternalError } from '../../../lib/errors/InternalError';
 import { IdManagementService } from '../../../lib/id-generation/id-management.service';
 import { MockIdManagementService } from '../../../lib/id-generation/mock-id-management.service';
+import { Ctor } from '../../../lib/types/Ctor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
 import { DTO } from '../../../types/DTO';
-import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
+import { DynamicDataTypeModule } from '../../../validation';
+import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
+import { NoteViewModel } from '../../../view-models/edgeConnectionViewModels/note.view-model';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
 import { EnvironmentVariables } from '../../config/env.validation';
+import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import { AdminController } from '../admin.controller';
 import { CategoryController } from '../category.controller';
 import { AdminJwtGuard, CommandController } from '../command/command.controller';
@@ -130,7 +151,11 @@ export default async (
     };
 
     const testModule = await Test.createTestingModule({
-        imports: [CommandModule, PassportModule.register({ defaultStrategy: 'jwt' })],
+        imports: [
+            CommandModule,
+            PassportModule.register({ defaultStrategy: 'jwt' }),
+            DynamicDataTypeModule,
+        ],
         providers: [
             CommandInfoService,
             {
@@ -307,6 +332,29 @@ export default async (
                 provide: JwtStrategy,
                 useFactory: () => new MockJwtStrategy(testUserWithGroups),
             },
+            ...[
+                // Classes with dynamic union data types
+                // Bibliographic References
+                BibliographicReferenceViewModel,
+                CourtCaseBibliographicReferenceData,
+                JournalArticleBibliographicReferenceData,
+                BookBibliographicReferenceData,
+                // Edge Connections
+                EdgeConnection,
+                EdgeConnectionMember,
+                NoteViewModel,
+                // Context Union
+                GeneralContext,
+                PageRangeContext,
+                TimeRangeContext,
+                TextFieldContext,
+                PointContext,
+                FreeMultilineContext,
+                IdentityContext,
+            ].map((ctor: Ctor<unknown>) => ({
+                provide: ctor,
+                useValue: ctor,
+            })),
             /**
              * TODO [https://www.pivotaltracker.com/story/show/182576828]
              *
@@ -381,6 +429,8 @@ export default async (
             AdminController,
         ],
     })
+        .overrideProvider(EMPTY_DTO_INJECTION_TOKEN)
+        .useValue(null)
         .overrideGuard(OptionalJwtAuthGuard)
         .useValue(new MockJwtAuthGuard(testUserWithGroups, true))
         .overrideGuard(AdminJwtGuard)
@@ -389,6 +439,8 @@ export default async (
         .catch((error) => {
             throw new InternalError(error.message);
         });
+
+    await testModule.init();
 
     return testModule;
 };
