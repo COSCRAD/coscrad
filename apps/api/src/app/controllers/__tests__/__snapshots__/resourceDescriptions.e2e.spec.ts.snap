@@ -946,106 +946,6 @@ exports[`GET /resources should return the expected result 1`] = `
         "label": "reference data",
         "schemaDefinitions": [
           {
-            "discriminant": "book",
-            "schema": {
-              "abstract": {
-                "coscradDataType": "NON_EMPTY_STRING",
-                "description": "a brief summary of the referenced book",
-                "isArray": false,
-                "isOptional": true,
-                "label": "abstract",
-              },
-              "creators": {
-                "complexDataType": "NESTED_TYPE",
-                "description": "those responsible for creating this work",
-                "isArray": true,
-                "isOptional": false,
-                "label": "creators",
-                "schema": {
-                  "name": {
-                    "coscradDataType": "NON_EMPTY_STRING",
-                    "description": "full name of work's creator (free-form text)",
-                    "isArray": false,
-                    "isOptional": false,
-                    "label": "name",
-                  },
-                  "type": {
-                    "complexDataType": "ENUM",
-                    "description": "the person's role in creating the given work",
-                    "enumLabel": "Creator Type",
-                    "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
-                    "isArray": false,
-                    "isOptional": false,
-                    "label": "creator type",
-                    "labelsAndValues": [
-                      {
-                        "label": "artist",
-                        "value": "artist",
-                      },
-                      {
-                        "label": "author",
-                        "value": "author",
-                      },
-                      {
-                        "label": "director",
-                        "value": "director",
-                      },
-                    ],
-                  },
-                },
-              },
-              "isbn": {
-                "coscradDataType": "ISBN",
-                "description": "a standardized globally unique identifier for the referenced book",
-                "isArray": false,
-                "isOptional": true,
-                "label": "ISBN",
-              },
-              "numberOfPages": {
-                "coscradDataType": "POSITIVE_INTEGER",
-                "description": "the total number of pages in the referenced book",
-                "isArray": false,
-                "isOptional": true,
-                "label": "number of pages",
-              },
-              "place": {
-                "coscradDataType": "NON_EMPTY_STRING",
-                "description": "the place where the referenced book was published",
-                "isArray": false,
-                "isOptional": true,
-                "label": "place",
-              },
-              "publisher": {
-                "coscradDataType": "NON_EMPTY_STRING",
-                "description": "the publisher of the referenced book",
-                "isArray": false,
-                "isOptional": true,
-                "label": "publisher",
-              },
-              "title": {
-                "coscradDataType": "NON_EMPTY_STRING",
-                "description": "the title of the referenced book",
-                "isArray": false,
-                "isOptional": false,
-                "label": "title",
-              },
-              "url": {
-                "coscradDataType": "URL",
-                "description": "an link to an external digital representation of the book",
-                "isArray": false,
-                "isOptional": true,
-                "label": "external link",
-              },
-              "year": {
-                "coscradDataType": "YEAR",
-                "description": "A number representing the year of publication",
-                "isArray": false,
-                "isOptional": true,
-                "label": "year",
-              },
-            },
-          },
-          {
             "discriminant": "courtCase",
             "schema": {
               "abstract": {
@@ -1185,7 +1085,108 @@ exports[`GET /resources should return the expected result 1`] = `
               },
             },
           },
+          {
+            "discriminant": "book",
+            "schema": {
+              "abstract": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "a brief summary of the referenced book",
+                "isArray": false,
+                "isOptional": true,
+                "label": "abstract",
+              },
+              "creators": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "those responsible for creating this work",
+                "isArray": true,
+                "isOptional": false,
+                "label": "creators",
+                "schema": {
+                  "name": {
+                    "coscradDataType": "NON_EMPTY_STRING",
+                    "description": "full name of work's creator (free-form text)",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "name",
+                  },
+                  "type": {
+                    "complexDataType": "ENUM",
+                    "description": "the person's role in creating the given work",
+                    "enumLabel": "Creator Type",
+                    "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "creator type",
+                    "labelsAndValues": [
+                      {
+                        "label": "artist",
+                        "value": "artist",
+                      },
+                      {
+                        "label": "author",
+                        "value": "author",
+                      },
+                      {
+                        "label": "director",
+                        "value": "director",
+                      },
+                    ],
+                  },
+                },
+              },
+              "isbn": {
+                "coscradDataType": "ISBN",
+                "description": "a standardized globally unique identifier for the referenced book",
+                "isArray": false,
+                "isOptional": true,
+                "label": "ISBN",
+              },
+              "numberOfPages": {
+                "coscradDataType": "POSITIVE_INTEGER",
+                "description": "the total number of pages in the referenced book",
+                "isArray": false,
+                "isOptional": true,
+                "label": "number of pages",
+              },
+              "place": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "the place where the referenced book was published",
+                "isArray": false,
+                "isOptional": true,
+                "label": "place",
+              },
+              "publisher": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "the publisher of the referenced book",
+                "isArray": false,
+                "isOptional": true,
+                "label": "publisher",
+              },
+              "title": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "the title of the referenced book",
+                "isArray": false,
+                "isOptional": false,
+                "label": "title",
+              },
+              "url": {
+                "coscradDataType": "URL",
+                "description": "an link to an external digital representation of the book",
+                "isArray": false,
+                "isOptional": true,
+                "label": "external link",
+              },
+              "year": {
+                "coscradDataType": "YEAR",
+                "description": "A number representing the year of publication",
+                "isArray": false,
+                "isOptional": true,
+                "label": "year",
+              },
+            },
+          },
         ],
+        "unionName": "BIBLIOGRAPHIC_REFERENCE_DATA_UNION",
       },
       "id": {
         "coscradDataType": "NON_EMPTY_STRING",

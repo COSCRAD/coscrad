@@ -7,6 +7,7 @@ import { TypeDecoratorOptions } from './types/TypeDecoratorOptions';
 // TODO move this to a utility types lib
 type TypeGuard<T> = (input: unknown) => input is T;
 
+// @deprecated Use @NestedDataType(CustomCompositeIdentifierClass,options) instead
 export function CompositeIdentifier(
     AllowedTypesEnum: Record<string, string>,
     idTypeGuard: TypeGuard<string | number>,

@@ -13,6 +13,8 @@ export type SimpleCoscradPropertyTypeDefinition =
 export const isSimpleCoscradPropertyTypeDefinition = (
     input: unknown
 ): input is SimpleCoscradPropertyTypeDefinition => {
+    if (input === null || typeof input === 'undefined') return false;
+
     const { coscradDataType, isArray, isOptional } = input as SimpleCoscradPropertyTypeDefinition;
 
     return isCoscradDataType(coscradDataType) && isBoolean(isArray) && isBoolean(isOptional);

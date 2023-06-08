@@ -23,22 +23,14 @@ exports[`When querying for edge connections GET /connections/ should return the 
         },
         "context": {
           "complexDataType": "UNION_TYPE",
-          "description": "contextualizes this resource as a member of this connection",
+          "description": "contextualizes the note or connection for this member",
           "discriminantPath": "type",
           "isArray": false,
           "isOptional": false,
           "label": "context",
           "schemaDefinitions": [
             {
-              "discriminant": "freeMultiline",
-              "schema": {},
-            },
-            {
               "discriminant": "general",
-              "schema": {},
-            },
-            {
-              "discriminant": "identity",
               "schema": {},
             },
             {
@@ -46,18 +38,35 @@ exports[`When querying for edge connections GET /connections/ should return the 
               "schema": {},
             },
             {
-              "discriminant": "general",
+              "discriminant": "timeRange",
               "schema": {},
             },
             {
-              "discriminant": "general",
+              "discriminant": "textField",
               "schema": {},
             },
             {
-              "discriminant": "general",
+              "discriminant": "point2D",
+              "schema": {},
+            },
+            {
+              "discriminant": "freeMultiline",
+              "schema": {
+                "type": {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "description": "free multiline",
+                  "isArray": false,
+                  "isOptional": false,
+                  "label": "type",
+                },
+              },
+            },
+            {
+              "discriminant": "identity",
               "schema": {},
             },
           ],
+          "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
         },
         "role": {
           "complexDataType": "ENUM",

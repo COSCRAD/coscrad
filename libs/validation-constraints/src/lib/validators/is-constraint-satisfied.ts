@@ -71,6 +71,8 @@ const constraintsLookupTable: { [K in CoscradConstraint]: PredicateFunction } = 
     [CoscradConstraint.isURL]: isURL,
     [CoscradConstraint.isString]: isString,
     [CoscradConstraint.isCompositeIdentifier]: (input: unknown) => {
+        if (isNullOrUndefined(input)) return false;
+
         const { type, id } = input as { type: string; id: string };
 
         // TODO Make the id a `UUID`
