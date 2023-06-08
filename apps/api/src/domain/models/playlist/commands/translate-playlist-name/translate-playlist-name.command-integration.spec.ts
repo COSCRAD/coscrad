@@ -7,7 +7,6 @@ import {
 } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
-import assertErrorAsExpected from 'apps/api/src/lib/__tests__/assertErrorAsExpected';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import {
@@ -16,13 +15,17 @@ import {
 } from '../../../../../domain/common/entities/multilingual-text';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { NotFound } from '../../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
+import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { DuplicateLanguageInMultilingualTextError } from '../../../audio-item/errors/duplicate-language-in-multilingual-text.error';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { Playlist } from '../../entities';
 import { TranslatePlaylistName } from './translate-playlist-name.command';
@@ -89,7 +92,7 @@ describe(commandType, () => {
         await app.close();
     });
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         await testRepositoryProvider.testSetup();
     });
 
@@ -123,25 +126,59 @@ describe(commandType, () => {
     });
 
     describe('when the command is invalid', () => {
-        describe('when the playlist already exists', () => {
-            it('should fail with the expected errors',async () => {
-                return await assertCommandSuccess(commandAssertionDependencies, {
+        describe('when the playlist does not exist', () => {
+            it('should fail with the expected errors', async () => {
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildCommandFSA: buildValidCommandFSA,
+                    initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(
+                                    existingPlaylist.getCompositeIdentifier()
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe('when the original name is in the target translation language', () => {
+            it('should fail with the expected errors', async () => {
+                await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     buildCommandFSA: buildValidCommandFSA,
                     initialState: new DeluxeInMemoryStore({
-                        [AggregateType.playlist]: [existingPlaylist]
-                }).fetchFullSnapshotInLegacyFormat(),
-                checkError: (error) => {
-                    assertErrorAsExpected(
-                        error,
-                        new CommandExecutionError([
-                            new CannotAddDuplicateNameOfPlaylist(
-                                existingPlaylist
-                            )
-                        ])
-                    )
-                }
-            })
-        })
+                        [AggregateType.playlist]: [
+                            existingPlaylist.clone({
+                                name: new MultilingualText({
+                                    items: [
+                                        new MultilingualTextItem({
+                                            text: 'I have the same language as the payload',
+                                            role: MultilingualTextItemRole.original,
+                                            // We invalidate the existing state to already have an original target translation language
+                                            languageCode: validPayload.languageCode,
+                                        }),
+                                    ],
+                                }),
+                            }),
+                        ],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new DuplicateLanguageInMultilingualTextError(
+                                    validPayload.languageCode
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
     });
 });

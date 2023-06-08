@@ -9,6 +9,7 @@ import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
+import { DuplicateLanguageInMultilingualTextError } from '../../audio-item/errors/duplicate-language-in-multilingual-text.error';
 import { Resource } from '../../resource.entity';
 import { CannotAddDuplicateItemToPlaylist } from '../errors';
 import { PlaylistItem } from './playlist-item.entity';
@@ -68,6 +69,8 @@ export class Playlist extends Resource {
     }
 
     translateName(textItem: MultilingualTextItem) {
+        if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
+            return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
         // TODO validate the item
 
         return this.safeClone<Playlist>({
