@@ -2,7 +2,6 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { DynamicDataTypeModule } from '../../../validation';
 import { AggregateInfo } from '../../../view-models/resourceDescriptions/types/AggregateInfo';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
@@ -16,8 +15,6 @@ describe('GET /resources', () => {
             ARANGO_DB_NAME: testDatabaseName,
             GLOBAL_PREFIX: 'testApiPrefix',
         }));
-
-        await app.get<DynamicDataTypeModule>(DynamicDataTypeModule).onApplicationBootstrap();
     });
 
     it('should return a 200', async () => {

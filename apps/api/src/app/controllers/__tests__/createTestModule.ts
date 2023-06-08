@@ -440,5 +440,7 @@ export default async (
             throw new InternalError(error.message);
         });
 
+    await testModule.init();
+
     return testModule;
 };

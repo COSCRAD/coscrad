@@ -9,7 +9,6 @@ import { InternalError } from '../../../lib/errors/InternalError';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
-import { DynamicDataTypeModule } from '../../../validation';
 import formatResourceCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from './setUpIntegrationTest';
@@ -48,8 +47,6 @@ describe('When querying for edge connections', () => {
         ({ app, testRepositoryProvider } = await setUpIntegrationTest({
             ARANGO_DB_NAME: testDatabaseName,
         }));
-
-        await app.get(DynamicDataTypeModule).onApplicationBootstrap();
 
         await testRepositoryProvider.testSetup();
 

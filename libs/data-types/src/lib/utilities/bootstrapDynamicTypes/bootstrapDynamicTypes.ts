@@ -179,6 +179,15 @@ const mixUnionMemberSchemasIntoTypeDefinitionForClass = (
     return updatedSchema as CoscradPropertyTypeDefinition;
 };
 
+/**
+ * When leveraging union types it is important that every class has been registered
+ * first. Because we want to avoid shared references to these classes to minimize
+ * coupling and circular dependencies, we piece the union member schemas back together
+ * at bootstrap. You must call `bootstrapDynamictypes` once at bootstrap, passing
+ * in an array of class ctor references for your data classes. In NestJS, we do
+ * this by walking the IoC containers but we do not assume anything about
+ * the client's dependency injection framework in this lib.
+ */
 export const bootstrapDynamicTypes = (allCtorCandidates: unknown[]) => {
     // Limit ourselves to classes that have COSCRAD data type decorators
     const ctorsWithTypeDefinitions = allCtorCandidates.filter(
