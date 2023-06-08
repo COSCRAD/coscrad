@@ -1,4 +1,11 @@
-import { CompositeIdentifier, CoscradEnum, Enum, NonEmptyString, Union } from '@coscrad/data-types';
+import {
+    CompositeIdentifier,
+    CoscradEnum,
+    Enum,
+    NestedDataType,
+    NonEmptyString,
+    Union,
+} from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
@@ -17,13 +24,6 @@ import AggregateIdAlreadyInUseError from '../shared/common-command-errors/Aggreg
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
 import idEquals from '../shared/functional/idEquals';
 import { EdgeConnectionContext } from './context.entity';
-import { FreeMultilineContext } from './free-multiline-context/free-multiline-context.entity';
-import { GeneralContext } from './general-context/general-context.entity';
-import { IdentityContext } from './identity-context.entity/identity-context.entity';
-import { PageRangeContext } from './page-range-context/page-range.context.entity';
-import { PointContext } from './point-context/point-context.entity';
-import { TextFieldContext } from './text-field-context/text-field-context.entity';
-import { TimeRangeContext } from './time-range-context/time-range-context.entity';
 
 export { isEdgeConnectionType } from '@coscrad/api-interfaces';
 export { EdgeConnectionMemberRole, EdgeConnectionType, IEdgeConnectionMember };
@@ -33,9 +33,21 @@ import {
     EdgeConnectionType,
     IEdgeConnectionMember,
 } from '@coscrad/api-interfaces';
+import { Injectable } from '@nestjs/common';
+import { ResultOrError } from '../../../types/ResultOrError';
 import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
+import InvariantValidationError from '../../domainModelValidators/errors/InvariantValidationError';
+
+export const EDGE_CONNECTION_CONTEXT_UNION = 'EDGE_CONNECTION_CONTEXT_UNION';
+
+/**
+ * This is a decorator (the returned value of a decorator factory). We export
+ * this here for reuse in `EdgeConnection` command payloads.
+ */
+export const ContextUnion = ({ label, description }: { label: string; description: string }) =>
+    Union(EDGE_CONNECTION_CONTEXT_UNION, 'type', { label, description });
 
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
     extends BaseDomainModel
@@ -47,22 +59,10 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
     })
     readonly compositeIdentifier: ResourceCompositeIdentifier;
 
-    @Union(
-        [
-            FreeMultilineContext,
-            GeneralContext,
-            IdentityContext,
-            PageRangeContext,
-            PointContext,
-            TextFieldContext,
-            TimeRangeContext,
-        ],
-        'type',
-        {
-            label: 'context',
-            description: 'contextualizes this resource as a member of this connection',
-        }
-    )
+    @ContextUnion({
+        label: 'context',
+        description: 'contextualizes the note or connection for this member',
+    })
     context: T;
 
     @Enum(CoscradEnum.EdgeConnectionMemberRole, {
@@ -90,12 +90,18 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
     }
 }
 
+@Injectable()
 @RegisterIndexScopedCommands([])
 export class EdgeConnection extends Aggregate {
     type = AggregateType.note;
 
     connectionType: EdgeConnectionType;
 
+    @NestedDataType(EdgeConnectionMember, {
+        isArray: true,
+        label: 'members',
+        description: 'the resource for the note or the resources involved in the connection',
+    })
     readonly members: EdgeConnectionMember[];
 
     @NonEmptyString({
@@ -178,6 +184,20 @@ export class EdgeConnection extends Aggregate {
          * to use an edge connection to mark identity in this way and it may
          * be that we need to improve our representation of the domain.
          */
+    }
+
+    /**
+     * TODO[https://www.pivotaltracker.com/story/show/185363079]
+     *
+     * Note that we are bypassing the decorator-based COSCRAD data-type (simple-invariant)
+     * validation for the time being. We should fix this in the future.
+     */
+    override validateInvariants(): ResultOrError<typeof Valid> {
+        const allErrors = validateEdgeConnection(this);
+
+        return allErrors.length > 0
+            ? new InvariantValidationError(this.getCompositeIdentifier(), allErrors)
+            : Valid;
     }
 
     protected validateComplexInvariants(): InternalError[] {

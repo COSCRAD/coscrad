@@ -6,6 +6,7 @@ import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { ArangoRepositoryProvider } from '../persistence/repositories/arango-repository.provider';
+import { DynamicDataTypeModule } from '../validation';
 import { AppController } from './app.controller';
 import buildConfigFilePath from './config/buildConfigFilePath';
 import { validate } from './config/env.validation';
@@ -54,6 +55,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
         BibliographicReferenceModule,
         SpatialFeatureModule,
         PlaylistModule,
+        DynamicDataTypeModule,
     ],
     controllers: [
         AppController,

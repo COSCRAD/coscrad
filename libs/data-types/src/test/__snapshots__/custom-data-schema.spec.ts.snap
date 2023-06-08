@@ -47,6 +47,41 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
       },
     ],
   },
+  "data": {
+    "complexDataType": "UNION_TYPE",
+    "description": "description of property: data",
+    "discriminantPath": "type",
+    "isArray": false,
+    "isOptional": false,
+    "label": "label for property: data",
+    "schemaDefinitions": [
+      {
+        "discriminant": "one",
+        "schema": {
+          "strength": {
+            "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+            "description": "description of property: strength",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label for property: strength",
+          },
+        },
+      },
+      {
+        "discriminant": "two",
+        "schema": {
+          "rating": {
+            "coscradDataType": "POSITIVE_INTEGER",
+            "description": "description of property: rating",
+            "isArray": false,
+            "isOptional": false,
+            "label": "label for property: rating",
+          },
+        },
+      },
+    ],
+    "unionName": "THING_UNION",
+  },
   "iconUrl": {
     "coscradDataType": "URL",
     "description": "description of property: iconUrl",
@@ -87,6 +122,14 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
       {
         "label": "mp3",
         "value": "audio/mpeg",
+      },
+      {
+        "label": "mp4",
+        "value": "video/mp4",
+      },
+      {
+        "label": "wav",
+        "value": "audio/x-wav",
       },
       {
         "label": "mp4",
