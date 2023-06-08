@@ -38,7 +38,6 @@ export function Union(
 ): PropertyDecorator {
     const options = mixinDefaultTypeDecoratorOptions(userOptions);
 
-    // We might not need this. We could put the discriminant-path on the union members with a consistency check
     return (target: Object, propertyKey: string | symbol) => {
         const meta: UnionMetadata = {
             unionName,

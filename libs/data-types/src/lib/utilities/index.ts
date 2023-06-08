@@ -1,5 +1,5 @@
 import getCoscradDataSchema from './getCoscradDataSchema';
 
-export * from './bootstrap-dynamic-types';
+export * from './bootstrapDynamicTypes';
 export * from './getDiscriminantForUnionMember';
 export { getCoscradDataSchema };

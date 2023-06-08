@@ -1,5 +1,4 @@
 import { NonEmptyString, UnionMember } from '@coscrad/data-types';
-import { Inject } from '@nestjs/common';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { Line2D } from '../../spatial-feature/types/Coordinates/Line2d';
@@ -26,7 +25,7 @@ export class FreeMultilineContext extends EdgeConnectionContext {
 
     readonly lines: Line2D[];
 
-    constructor(@Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<FreeMultilineContext>) {
+    constructor(dto: DTO<FreeMultilineContext>) {
         super();
 
         if (!dto) return;

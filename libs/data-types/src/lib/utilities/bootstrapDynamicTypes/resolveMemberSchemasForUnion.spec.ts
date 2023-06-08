@@ -9,7 +9,7 @@ import {
 import {
     resolveMemberSchemasForUnion,
     UnionMemberSchemaDefinition,
-} from './resolve-member-schemas-for-union';
+} from './resolveMemberSchemasForUnion';
 
 const assertMembersResolved = (
     schemaDefinitions: UnionMemberSchemaDefinition[],
@@ -21,7 +21,7 @@ const assertMembersResolved = (
     const missingMembers = expectedDiscriminantValues.filter(
         (discriminantValue) =>
             !schemaDefinitions.some(
-                ({ discriminantValue: discriminantValueForThisSchema }) =>
+                ({ discriminant: discriminantValueForThisSchema }) =>
                     discriminantValue === discriminantValueForThisSchema
             )
     );
@@ -41,7 +41,7 @@ describe(`resolveMemberSchemasForUnion`, () => {
         });
     });
 
-    describe(`when the one of the union members leverages a nested type`, () => {
+    describe(`when one of the union members leverages a nested type`, () => {
         class Thing3Rating {
             @NonNegativeFiniteNumber({
                 label: 'durability',

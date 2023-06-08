@@ -1,7 +1,6 @@
 import { EdgeConnectionType, INoteViewModel } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
-import { MultilingualText } from '../../domain/common/entities/multilingual-text';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -32,14 +31,7 @@ export class NoteViewModel extends BaseViewModel implements INoteViewModel {
     readonly connectedResources: EdgeConnectionMember[] = [];
 
     constructor(edgeConnection: EdgeConnection) {
-        super(
-            edgeConnection || {
-                id: 'not found',
-                getName: () => new MultilingualText({ items: [] }),
-            }
-        );
-
-        if (!edgeConnection) return;
+        super(edgeConnection);
 
         const { note, members, connectionType } = edgeConnection;
 

@@ -11,7 +11,7 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
     "label": "machine",
     "schemaDefinitions": [
       {
-        "discriminantValue": "whatsit",
+        "discriminant": "whatsit",
         "schema": {
           "properties": {
             "complexDataType": "NESTED_TYPE",
@@ -39,7 +39,7 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
         },
       },
       {
-        "discriminantValue": "widget",
+        "discriminant": "widget",
         "schema": {
           "name": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -67,7 +67,7 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
     "label": "machines",
     "schemaDefinitions": [
       {
-        "discriminantValue": "whatsit",
+        "discriminant": "whatsit",
         "schema": {
           "properties": {
             "complexDataType": "NESTED_TYPE",
@@ -95,7 +95,7 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
         },
       },
       {
-        "discriminantValue": "widget",
+        "discriminant": "widget",
         "schema": {
           "name": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -123,7 +123,7 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
     "label": "machine",
     "schemaDefinitions": [
       {
-        "discriminantValue": "whatsit",
+        "discriminant": "whatsit",
         "schema": {
           "properties": {
             "complexDataType": "NESTED_TYPE",
@@ -151,7 +151,7 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
         },
       },
       {
-        "discriminantValue": "widget",
+        "discriminant": "widget",
         "schema": {
           "name": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -186,7 +186,7 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
         "label": "machine",
         "schemaDefinitions": [
           {
-            "discriminantValue": "whatsit",
+            "discriminant": "whatsit",
             "schema": {
               "properties": {
                 "complexDataType": "NESTED_TYPE",
@@ -214,7 +214,7 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
             },
           },
           {
-            "discriminantValue": "widget",
+            "discriminant": "widget",
             "schema": {
               "name": {
                 "coscradDataType": "NON_EMPTY_STRING",

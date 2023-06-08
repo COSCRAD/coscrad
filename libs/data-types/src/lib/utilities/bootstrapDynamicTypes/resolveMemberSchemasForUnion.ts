@@ -1,10 +1,10 @@
 import { UnionMemberMetadata } from '../../decorators';
 import { ClassSchema, isSimpleCoscradPropertyTypeDefinition } from '../../types';
 import getCoscradDataSchema from '../getCoscradDataSchema';
-import { buildUnionTypesMap } from './bootstrap-dynamic-types';
-import { leveragesUniontype } from './leverages-union-type';
+import { buildUnionTypesMap } from './bootstrapDynamicTypes';
+import { leveragesUniontype } from './leveragesUnionType';
 
-export type UnionMemberSchemaDefinition = Pick<UnionMemberMetadata, 'discriminantValue'> & {
+export type UnionMemberSchemaDefinition = Pick<UnionMemberMetadata, 'discriminant'> & {
     schema: ClassSchema;
 };
 
@@ -69,7 +69,7 @@ export const resolveMemberSchemasForUnion = (
         );
 
         return {
-            discriminantValue,
+            discriminant: discriminantValue,
             schema: updatedSchema,
         };
     });

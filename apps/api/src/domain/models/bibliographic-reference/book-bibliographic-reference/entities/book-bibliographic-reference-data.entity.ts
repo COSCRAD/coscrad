@@ -7,11 +7,9 @@ import {
     URL,
     Year,
 } from '@coscrad/data-types';
-import { Inject } from '@nestjs/common';
 import { DTO } from '../../../../../types/DTO';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
-import { EMPTY_DTO_INJECTION_TOKEN } from '../../../context/free-multiline-context/free-multiline-context.entity';
 import BibliographicReferenceCreator from '../../common/bibliographic-reference-creator.entity';
 import { BibliographicReferenceDataUnionMember } from '../../shared/bibliographic-reference-union-data-member.decorator';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
@@ -89,7 +87,7 @@ export default class BookBibliographicReferenceData
     })
     readonly isbn?: string;
 
-    constructor(@Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<BookBibliographicReferenceData>) {
+    constructor(dto: DTO<BookBibliographicReferenceData>) {
         super();
 
         if (isNullOrUndefined(dto)) return;

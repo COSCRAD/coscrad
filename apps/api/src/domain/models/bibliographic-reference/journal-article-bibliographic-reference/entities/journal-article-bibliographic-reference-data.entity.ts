@@ -1,10 +1,8 @@
 import { IJournalArticleBibliographicReferenceData } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
-import { Inject } from '@nestjs/common';
 import { DTO } from '../../../../../types/DTO';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
-import { EMPTY_DTO_INJECTION_TOKEN } from '../../../context/free-multiline-context/free-multiline-context.entity';
 import BibliographicReferenceCreator from '../../common/bibliographic-reference-creator.entity';
 import { BibliographicReferenceDataUnionMember } from '../../shared/bibliographic-reference-union-data-member.decorator';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
@@ -77,9 +75,7 @@ export default class JournalArticleBibliographicReferenceData
     })
     readonly doi?: string;
 
-    constructor(
-        @Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<JournalArticleBibliographicReferenceData>
-    ) {
+    constructor(dto: DTO<JournalArticleBibliographicReferenceData>) {
         super();
 
         if (isNullOrUndefined(dto)) return;

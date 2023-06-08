@@ -1,10 +1,8 @@
 import { ICourtCaseBibliographicReferenceData } from '@coscrad/api-interfaces';
 import { NonEmptyString, URL } from '@coscrad/data-types';
-import { Inject } from '@nestjs/common';
 import { DTO } from '../../../../../types/DTO';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
 import BaseDomainModel from '../../../BaseDomainModel';
-import { EMPTY_DTO_INJECTION_TOKEN } from '../../../context/free-multiline-context/free-multiline-context.entity';
 import { BibliographicReferenceDataUnionMember } from '../../shared/bibliographic-reference-union-data-member.decorator';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 
@@ -65,7 +63,7 @@ export class CourtCaseBibliographicReferenceData
     })
     readonly pages?: string;
 
-    constructor(@Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<CourtCaseBibliographicReferenceData>) {
+    constructor(dto: DTO<CourtCaseBibliographicReferenceData>) {
         super();
 
         if (isNullOrUndefined(dto)) return;

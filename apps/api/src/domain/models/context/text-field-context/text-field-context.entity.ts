@@ -1,9 +1,7 @@
 import { UnionMember } from '@coscrad/data-types';
-import { Inject } from '@nestjs/common';
 import { DTO } from '../../../../types/DTO';
 import { EdgeConnectionContext } from '../context.entity';
 import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
-import { EMPTY_DTO_INJECTION_TOKEN } from '../free-multiline-context/free-multiline-context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
 @UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.textField)
@@ -31,7 +29,7 @@ export class TextFieldContext extends EdgeConnectionContext {
      */
     readonly charRange: [number, number];
 
-    constructor(@Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<TextFieldContext>) {
+    constructor(dto: DTO<TextFieldContext>) {
         super();
 
         if (!dto) return;

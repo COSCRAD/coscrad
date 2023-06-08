@@ -7,7 +7,7 @@ import {
 } from '../../decorators';
 import { TypeDecoratorOptions } from '../../decorators/types/TypeDecoratorOptions';
 import getCoscradDataSchema from '../getCoscradDataSchema';
-import { bootstrapDynamicTypes } from './bootstrap-dynamic-types';
+import { bootstrapDynamicTypes } from './bootstrapDynamicTypes';
 
 const MACHINE_UNION = 'MACHINE_UNION';
 

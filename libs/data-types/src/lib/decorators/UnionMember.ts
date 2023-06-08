@@ -4,7 +4,7 @@ export const UNION_MEMBER_METADATA = '__UNION_MEMBER_META__';
 
 export type UnionMemberMetadata = {
     unionName: string;
-    discriminantValue: DiscriminantValue;
+    discriminant: DiscriminantValue;
     ctor: Object;
 };
 
@@ -41,7 +41,7 @@ export function UnionMember(
     return (target: Object) => {
         const meta: UnionMemberMetadata = {
             unionName,
-            discriminantValue,
+            discriminant: discriminantValue,
             ctor: target,
         };
 

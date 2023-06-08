@@ -18,7 +18,7 @@ exports[`DynamicDataTypeFinderService when there is a valid union type definitio
         "label": "context",
         "schemaDefinitions": [
           {
-            "discriminantValue": "one",
+            "discriminant": "one",
             "schema": {
               "foo": {
                 "coscradDataType": "NON_EMPTY_STRING",
@@ -30,7 +30,7 @@ exports[`DynamicDataTypeFinderService when there is a valid union type definitio
             },
           },
           {
-            "discriminantValue": "two",
+            "discriminant": "two",
             "schema": {
               "bar": {
                 "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",

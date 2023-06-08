@@ -7,10 +7,10 @@ import {
     isUnionMetadata,
 } from '../../decorators';
 import { CoscradPropertyTypeDefinition, isSimpleCoscradPropertyTypeDefinition } from '../../types';
-import getCoscradDataSchema from './../getCoscradDataSchema';
-import { Ctor } from './../getCoscradDataSchemaFromPrototype';
-import { leveragesUniontype } from './leverages-union-type';
-import { resolveMemberSchemasForUnion } from './resolve-member-schemas-for-union';
+import getCoscradDataSchema from '../getCoscradDataSchema';
+import { Ctor } from '../getCoscradDataSchemaFromPrototype';
+import { leveragesUniontype } from './leveragesUnionType';
+import { resolveMemberSchemasForUnion } from './resolveMemberSchemasForUnion';
 
 type ComplexCoscradDataTypeDefinition = {
     complexDataType: string;
@@ -65,7 +65,7 @@ export const buildUnionTypesMap = (allCtorCandidates: unknown[]): UnionTypesMap 
             .map(getUnionMemberMetadata)
             .filter(isUnionMemberMetadata)
             .filter(({ unionName }) => nameOfUnionToValidate === unionName)
-            .map(({ ctor, discriminantValue }) => [ctor, discriminantValue]);
+            .map(({ ctor, discriminant: discriminantValue }) => [ctor, discriminantValue]);
 
         if (discriminantValuesAndCtors.length === 0) {
             // TODO Break out proper exceptions here
@@ -174,18 +174,20 @@ const mixUnionMemberSchemasIntoTypeDefinitionForClass = (
 };
 
 export const bootstrapDynamicTypes = (allCtorCandidates: unknown[]) => {
-    /**
-     * Now we iterate through all classes with `CoscradDataType` definitions,
-     * writing the schemas for each union property.
-     */
+    // Limit ourselves to classes that have COSCRAD data type decorators
     const ctorsWithTypeDefinitions = allCtorCandidates.filter(
         (input) => !isNullOrUndefined(getCoscradDataSchema(input))
     );
 
+    // Limit metadata updates to classes whose COSCRAD data schemas leverage a union at some depth
     const ctorsThatLeverageAUnionType = ctorsWithTypeDefinitions.filter((ctor) =>
         leveragesUniontype(getCoscradDataSchema(ctor))
     );
 
+    /**
+     * Now we iterate through all classes leveraging COSCRAD unions,
+     * writing the schemas for each union property.
+     */
     ctorsThatLeverageAUnionType.forEach((ctor) => {
         const updatedSchema = mixUnionMemberSchemasIntoTypeDefinitionForClass(
             allCtorCandidates,

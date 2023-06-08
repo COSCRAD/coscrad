@@ -1,7 +1,7 @@
 import { ThingDataOne, ThingDataTwo, ThingUnion } from '../../../test/widget';
 import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '../../decorators';
 import getCoscradDataSchema from '../getCoscradDataSchema';
-import { leveragesUniontype } from './leverages-union-type';
+import { leveragesUniontype } from './leveragesUnionType';
 
 describe(`leverages union type`, () => {
     describe(`when the class does not leverage a union type`, () => {

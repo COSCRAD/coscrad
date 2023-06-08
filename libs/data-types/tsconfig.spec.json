@@ -5,5 +5,5 @@
         "module": "commonjs",
         "types": ["jest", "node"]
     },
-    "include": ["**/*.spec.ts", "**/*.test.ts", "**/*.d.ts", "jest.config.ts"]
+    "include": ["**/*.spec.ts", "**/*.test.ts", "**/*.d.ts", "jest.config.ts", "src/lib/utilities/bootstrapDynamicTypes/bootstrapDynamicTypes.ts", "src/lib/utilities/bootstrapDynamicTypes/buildUnionTypesMap.ts", "src/lib/utilities/bootstrapDynamicTypes/bootstrapDynamicTypes.ts"]
 }

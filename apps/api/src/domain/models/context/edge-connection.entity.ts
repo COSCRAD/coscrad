@@ -33,13 +33,12 @@ import {
     EdgeConnectionType,
     IEdgeConnectionMember,
 } from '@coscrad/api-interfaces';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ResultOrError } from '../../../types/ResultOrError';
 import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
 import InvariantValidationError from '../../domainModelValidators/errors/InvariantValidationError';
-import { EMPTY_DTO_INJECTION_TOKEN } from './free-multiline-context/free-multiline-context.entity';
 
 export const EDGE_CONNECTION_CONTEXT_UNION = 'EDGE_CONNECTION_CONTEXT_UNION';
 
@@ -72,7 +71,7 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
     })
     role: EdgeConnectionMemberRole;
 
-    constructor(@Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<EdgeConnectionMember>) {
+    constructor(dto: DTO<EdgeConnectionMember>) {
         super();
 
         if (!dto) return;
@@ -111,7 +110,7 @@ export class EdgeConnection extends Aggregate {
     })
     readonly note: string;
 
-    constructor(@Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<EdgeConnection>) {
+    constructor(dto: DTO<EdgeConnection>) {
         super(dto);
 
         if (!dto) return;
@@ -188,6 +187,8 @@ export class EdgeConnection extends Aggregate {
     }
 
     /**
+     * TODO[https://www.pivotaltracker.com/story/show/185363079]
+     *
      * Note that we are bypassing the decorator-based COSCRAD data-type (simple-invariant)
      * validation for the time being. We should fix this in the future.
      */

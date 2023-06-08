@@ -1,11 +1,9 @@
 import { UnionMember } from '@coscrad/data-types';
-import { Inject } from '@nestjs/common';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { TranscriptItem } from '../../audio-item/entities/transcript-item.entity';
 import { EdgeConnectionContext } from '../context.entity';
 import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
-import { EMPTY_DTO_INJECTION_TOKEN } from '../free-multiline-context/free-multiline-context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
 // We don't want the `data` type and we don't need OO baggage for this prop
@@ -18,7 +16,7 @@ export class TimeRangeContext extends EdgeConnectionContext {
 
     timeRange: TimeRangeWithoutData;
 
-    constructor(@Inject(EMPTY_DTO_INJECTION_TOKEN) dto: DTO<TimeRangeContext>) {
+    constructor(dto: DTO<TimeRangeContext>) {
         super();
 
         if (!dto) return;

@@ -339,7 +339,7 @@ export default async (
                 CourtCaseBibliographicReferenceData,
                 JournalArticleBibliographicReferenceData,
                 BookBibliographicReferenceData,
-                // Edge Connetions
+                // Edge Connections
                 EdgeConnection,
                 EdgeConnectionMember,
                 NoteViewModel,

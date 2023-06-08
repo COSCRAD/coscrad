@@ -30,27 +30,39 @@ exports[`When querying for edge connections GET /connections/ should return the 
           "label": "context",
           "schemaDefinitions": [
             {
-              "discriminantValue": "general",
+              "discriminant": "general",
               "schema": {},
             },
             {
-              "discriminantValue": "pageRange",
+              "discriminant": "pageRange",
               "schema": {},
             },
             {
-              "discriminantValue": "timeRange",
+              "discriminant": "timeRange",
               "schema": {},
             },
             {
-              "discriminantValue": "textField",
+              "discriminant": "textField",
               "schema": {},
             },
             {
-              "discriminantValue": "point2D",
+              "discriminant": "point2D",
               "schema": {},
             },
             {
-              "discriminantValue": "identity",
+              "discriminant": "freeMultiline",
+              "schema": {
+                "type": {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "description": "free multiline",
+                  "isArray": false,
+                  "isOptional": false,
+                  "label": "type",
+                },
+              },
+            },
+            {
+              "discriminant": "identity",
               "schema": {},
             },
           ],

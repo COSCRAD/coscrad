@@ -9,5 +9,5 @@ export default (MemberClass: object): string => {
         throw new NoDiscriminantRegisteredForUnionModelException(MemberClass);
     }
 
-    return rawMetadata.discriminantValue;
+    return rawMetadata.discriminant;
 };
