@@ -3,7 +3,7 @@ import {
     ITermViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { MediaPlayer } from '@coscrad/media-player';
+import { AudioClipPlayer, DefaultPlayPauseButton } from '@coscrad/media-player';
 import {
     ResourceDetailFullViewPresenter,
     SingleOptionalPropertyPresenter,
@@ -21,7 +21,8 @@ export const TermDetailFullViewPresenter = ({
             <div data-testid={id} />
             <SingleOptionalPropertyPresenter display="Contributor" value={contributor} />
             <div id="media-player">
-                <MediaPlayer listenMessage="Play!" audioUrl={audioURL} />
+                {/* <MediaPlayer listenMessage="Play!" audioUrl={audioURL} /> */}
+                <AudioClipPlayer audioUrl={audioURL} PlayPauseButton={DefaultPlayPauseButton} />
             </div>
         </ResourceDetailFullViewPresenter>
     );
