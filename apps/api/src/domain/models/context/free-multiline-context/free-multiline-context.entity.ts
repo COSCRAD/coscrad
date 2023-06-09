@@ -1,4 +1,4 @@
-import { NonEmptyString, UnionMember } from '@coscrad/data-types';
+import { UnionMember } from '@coscrad/data-types';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { Line2D } from '../../spatial-feature/types/Coordinates/Line2d';
@@ -17,10 +17,6 @@ export const EMPTY_DTO_INJECTION_TOKEN = 'EMPTY_DTO';
 
 @UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.freeMultiline)
 export class FreeMultilineContext extends EdgeConnectionContext {
-    @NonEmptyString({
-        label: 'type',
-        description: 'free multiline',
-    })
     readonly type = EdgeConnectionContextType.freeMultiline;
 
     readonly lines: Line2D[];

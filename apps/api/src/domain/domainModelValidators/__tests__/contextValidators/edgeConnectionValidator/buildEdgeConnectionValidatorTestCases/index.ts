@@ -264,6 +264,26 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                 ]),
             },
             {
+                description: 'the context type is not a registered context type',
+                invalidDTO: {
+                    ...validBookSelfConnection,
+                    members: [
+                        {
+                            ...validBookSelfConnection.members[0],
+                            context: {
+                                type: 'BOGUS CONTEXT TYPE',
+                            },
+                        },
+                    ],
+                },
+                expectedError: buildTopLevelError(validBookSelfConnection.id, [
+                    new ContextTypeIsNotAllowedForGivenResourceTypeError(
+                        'BOGUS CONTEXT TYPE',
+                        ResourceType.book
+                    ),
+                ]),
+            },
+            {
                 description:
                     'the context type is not consistent with the resource type in the composite id',
                 invalidDTO: {

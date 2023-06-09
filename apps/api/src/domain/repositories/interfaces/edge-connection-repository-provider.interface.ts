@@ -1,9 +1,6 @@
-import { IEdgeConnectionRepository } from './edge-connection-repository.interface';
+import { EdgeConnection } from '../../models/context/edge-connection.entity';
+import { IRepositoryForAggregate } from './repository-for-aggregate.interface';
 
 export interface IEdgeConnectionRepositoryProvider {
-    getEdgeConnectionRepository: () => IEdgeConnectionRepository;
-
-    // forResource(
-    //     resourceCompositeIdentifier: ResourceCompositeIdentifier
-    // ): IConnectionRepositoryForResource;
+    getEdgeConnectionRepository: () => IRepositoryForAggregate<EdgeConnection>;
 }

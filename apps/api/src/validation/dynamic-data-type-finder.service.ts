@@ -18,6 +18,8 @@ export class DynamicDataTypeFinderService {
     }
 
     private async findCtorsForUnions() {
+        const all = await this.discoverService.providers((provider) => !!provider);
+        all;
         const dataTypeProviders = await this.discoverService.providers(
             (provider) => !provider.injectType && isClass(provider.instance)
         );

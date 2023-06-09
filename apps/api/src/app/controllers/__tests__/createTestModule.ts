@@ -362,6 +362,7 @@ export default async (
                 CreatePlayList,
                 AddAudioItemToPlaylist,
                 TranslatePlaylistName,
+                CreateNoteAboutResource,
             ].map((ctor: Ctor<unknown>) => ({
                 provide: ctor,
                 useValue: ctor,
@@ -414,7 +415,6 @@ export default async (
             CreatePlayListCommandHandler,
             AddAudioItemToPlaylistCommandHandler,
             TranslatePlaylistNameCommandHandler,
-
             CreateNoteAboutResourceCommandHandler,
         ],
 

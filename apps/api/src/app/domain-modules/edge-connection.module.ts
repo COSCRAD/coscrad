@@ -2,7 +2,7 @@ import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import {
     EdgeConnection,
-    EdgeConnectionMember
+    EdgeConnectionMember,
 } from '../../domain/models/context/edge-connection.entity';
 import { FreeMultilineContext } from '../../domain/models/context/free-multiline-context/free-multiline-context.entity';
 import { GeneralContext } from '../../domain/models/context/general-context/general-context.entity';
@@ -18,6 +18,7 @@ import { NoteViewModel } from '../../view-models/edgeConnectionViewModels/note.v
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { EdgeConnectionController } from '../controllers/edgeConnection.controller';
 
+import {
     CreateNoteAboutResource,
     CreateNoteAboutResourceCommandHandler,
 } from '../../domain/models/context/commands';
@@ -41,11 +42,13 @@ import { EdgeConnectionController } from '../controllers/edgeConnection.controll
             PointContext,
             TextFieldContext,
             IdentityContext,
+            // Commands
+            CreateNoteAboutResource,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),
-        CreateNoteAboutResource,
+
         CreateNoteAboutResourceCommandHandler,
     ],
 })

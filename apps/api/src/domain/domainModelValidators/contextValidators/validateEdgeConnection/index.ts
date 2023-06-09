@@ -1,4 +1,3 @@
-import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import isContextAllowedForGivenResourceType from '../../../models/allowedContexts/isContextAllowedForGivenResourceType';
 import {
@@ -26,15 +25,9 @@ export default (input: unknown): InternalError[] => {
      */
     const test = input as EdgeConnection;
 
-    const { connectionType: edgeConnectionType, members, note } = test;
+    const { connectionType: edgeConnectionType, members } = test;
 
     const allErrors: InternalError[] = [];
-
-    // TODO Opt-in to decorator-based type validation
-    if (!isNonEmptyString(note))
-        allErrors.push(
-            new InternalError(`The property note has failed validation: must be a non-empty string`)
-        );
 
     // TODO Validate members array is not null or undefined (part of type checks)
     const numberOfMembers = members.length;

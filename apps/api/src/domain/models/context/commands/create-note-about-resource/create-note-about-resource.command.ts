@@ -62,6 +62,17 @@ export class CreateNoteAboutResource implements ICommandBase {
     })
     readonly resourceCompositeIdentifier: ResourceCompositeIdentifier;
 
-    @ContextUnion
+    @ContextUnion({
+        label: 'context for resource',
+        description: 'contextualizes the note for the resource',
+    })
     readonly resourceContext: IEdgeConnectionContext;
+
+    @NonEmptyString({
+        label: 'text',
+        description: 'text for the note',
+    })
+    readonly text: string;
+
+    // TODO Add language code
 }

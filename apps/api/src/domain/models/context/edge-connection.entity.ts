@@ -2,6 +2,7 @@ import {
     CompositeIdentifier,
     CoscradEnum,
     Enum,
+    ExternalEnum,
     NestedDataType,
     NonEmptyString,
     Union,
@@ -34,11 +35,9 @@ import {
     IEdgeConnectionMember,
 } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
-import { ResultOrError } from '../../../types/ResultOrError';
 import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
-import InvariantValidationError from '../../domainModelValidators/errors/InvariantValidationError';
 
 export const EDGE_CONNECTION_CONTEXT_UNION = 'EDGE_CONNECTION_CONTEXT_UNION';
 
@@ -95,6 +94,26 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
 export class EdgeConnection extends Aggregate {
     type = AggregateType.note;
 
+    @ExternalEnum(
+        {
+            enumName: 'EdgeConnectionType',
+            enumLabel: 'Edge Connection Type',
+            labelsAndValues: [
+                {
+                    label: 'note',
+                    value: EdgeConnectionType.self,
+                },
+                {
+                    label: 'connection',
+                    value: EdgeConnectionType.dual,
+                },
+            ],
+        },
+        {
+            label: 'type',
+            description: 'either note or connection',
+        }
+    )
     connectionType: EdgeConnectionType;
 
     @NestedDataType(EdgeConnectionMember, {
@@ -184,20 +203,6 @@ export class EdgeConnection extends Aggregate {
          * to use an edge connection to mark identity in this way and it may
          * be that we need to improve our representation of the domain.
          */
-    }
-
-    /**
-     * TODO[https://www.pivotaltracker.com/story/show/185363079]
-     *
-     * Note that we are bypassing the decorator-based COSCRAD data-type (simple-invariant)
-     * validation for the time being. We should fix this in the future.
-     */
-    override validateInvariants(): ResultOrError<typeof Valid> {
-        const allErrors = validateEdgeConnection(this);
-
-        return allErrors.length > 0
-            ? new InvariantValidationError(this.getCompositeIdentifier(), allErrors)
-            : Valid;
     }
 
     protected validateComplexInvariants(): InternalError[] {

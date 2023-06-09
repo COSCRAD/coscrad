@@ -77,5 +77,7 @@ export const getAllowedContextsForModel = (
     return isNullOrUndefined(allowedContexts) ? [] : cloneToPlainObject(allowedContexts);
 };
 
-export default (contextType: EdgeConnectionContextType, resourceType: ResourceType): boolean =>
-    resourceTypeToAllowedContextTypes[resourceType].includes(contextType);
+export default (contextType: string, resourceType: ResourceType): boolean =>
+    resourceTypeToAllowedContextTypes[resourceType].includes(
+        contextType as EdgeConnectionContextType
+    );
