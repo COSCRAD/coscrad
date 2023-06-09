@@ -383,7 +383,7 @@
                 },
                 "username": "cool-james",
                 "roles": [
-                    "viewer"
+                    "projectAdmin"
                 ],
                 "authProviderUserId": "auth0|5db729701ead110c5b254553"
             }
