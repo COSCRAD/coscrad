@@ -21,8 +21,13 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
+import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
+import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { DuplicateLanguageInMultilingualTextError } from '../../../audio-item/errors/duplicate-language-in-multilingual-text.error';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
@@ -96,6 +101,8 @@ describe(commandType, () => {
         await testRepositoryProvider.testSetup();
     });
 
+    const commandFSAFactory = new DummyCommandFSAFactory(() => validCommandFSA);
+
     describe('when the command is valid', () => {
         it('should succeed', async () => {
             await assertCommandSuccess(commandAssertionDependencies, {
@@ -120,6 +127,12 @@ describe(commandType, () => {
                     );
 
                     expect(englishTextItem.text).toBe(englishName);
+
+                    assertEventRecordPersisted(
+                        playlist,
+                        'PLAYLIST_NAME_TRANSLATED',
+                        dummySystemUserId
+                    );
                 },
             });
         });
@@ -179,6 +192,24 @@ describe(commandType, () => {
                     },
                 });
             });
+        });
+
+        describe('when the command payload type is invalid', () => {
+            generateCommandFuzzTestCases(TranslatePlaylistName).forEach(
+                ({ description, propertyName, invalidValue }) => {
+                    describe(`when the property ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                        it('should fail with the appropriate error', async () => {
+                            await assertCommandFailsDueToTypeError(
+                                commandAssertionDependencies,
+                                { propertyName, invalidValue },
+                                commandFSAFactory.build(buildDummyUuid(789), {
+                                    [propertyName]: invalidValue,
+                                })
+                            );
+                        });
+                    });
+                }
+            );
         });
     });
 });

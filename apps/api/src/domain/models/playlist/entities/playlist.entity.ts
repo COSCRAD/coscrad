@@ -71,7 +71,6 @@ export class Playlist extends Resource {
     translateName(textItem: MultilingualTextItem) {
         if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
             return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
-        // TODO validate the item
 
         return this.safeClone<Playlist>({
             name: this.name.append(textItem).toDTO(),
