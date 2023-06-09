@@ -78,7 +78,7 @@ export class Playlist extends Resource {
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
-        return ['ADD_AUDIO_ITEM_TO_PLAYLIST'];
+        return ['ADD_AUDIO_ITEM_TO_PLAYLIST', 'TRANSLATE_PLAYLIST_NAME'];
     }
 
     protected validateComplexInvariants(): InternalError[] {

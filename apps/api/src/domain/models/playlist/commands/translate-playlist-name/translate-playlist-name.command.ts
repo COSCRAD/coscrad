@@ -1,7 +1,8 @@
 import { ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
-import { LanguageCodeEnum, PlayListCompositeId } from '../create-playlist.command';
+import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
+import { PlayListCompositeId } from '../create-playlist.command';
 
 @Command({
     type: 'TRANSLATE_PLAYLIST_NAME',
@@ -15,7 +16,10 @@ export class TranslatePlaylistName implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: PlayListCompositeId;
 
-    @LanguageCodeEnum
+    @LanguageCodeEnum({
+        label: 'language code',
+        description: 'the language in which you are naming the new playlist',
+    })
     readonly languageCode: LanguageCode;
 
     @NonEmptyString({
