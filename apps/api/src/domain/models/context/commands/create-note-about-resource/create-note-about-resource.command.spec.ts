@@ -1,15 +1,15 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import formatAggregateType from '../../../../../view-models/presentation/formatAggregateType';
+import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../../types/ResourceType';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
@@ -52,6 +52,15 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<CreateNoteAbo
 });
 
 const commandFSAFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
+
+/**
+ * We need to make the test cases comprehensive
+ * **Valid Cases**
+ * - For every `ResourceType`
+ *     - For every `ContextType` consistent with this `ResourceType
+ *     - find the self note from the test data with this resource type and context type and attempt to create it it anew
+ *         - note that we should not load the edge connections, but only the resources from the test data
+ */
 
 describe(commandType, () => {
     let testRepositoryProvider: TestRepositoryProvider;
