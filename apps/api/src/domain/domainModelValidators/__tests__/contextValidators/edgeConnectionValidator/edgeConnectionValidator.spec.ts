@@ -6,12 +6,24 @@
  * more of a high level test compared to `edgeConnectionContextValidators.spec.ts`.
  */
 
+import { Test } from '@nestjs/testing';
+import { buildAllDataClassProviders } from '../../../../../app/controllers/__tests__/createTestModule';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
+import { DynamicDataTypeModule } from '../../../../../validation';
 import { EdgeConnection } from '../../../../models/context/edge-connection.entity';
 import { Valid } from '../../../Valid';
 import buildEdgeConnectionValidatorTestCases from './buildEdgeConnectionValidatorTestCases';
 
 buildEdgeConnectionValidatorTestCases().forEach(({ validCases, invalidCases }) => {
+    beforeAll(async () => {
+        const testModule = await Test.createTestingModule({
+            imports: [DynamicDataTypeModule],
+            providers: [...buildAllDataClassProviders()],
+        }).compile();
+
+        await testModule.init();
+    });
+
     validCases.forEach(({ description, dto }, index) => {
         describe('When the DTO for an Edge Connection is valid', () => {
             describe(description || `Valid test case #${index}`, () => {

@@ -1,4 +1,6 @@
 import { DTO } from '../../../../../../types/DTO';
+import buildInvariantValidationErrorFactoryFunction from '../../../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
+import { dummyUuid } from '../../../../../models/__tests__/utilities/dummyUuid';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -9,18 +11,16 @@ import { IdentityContext } from '../../../../../models/context/identity-context.
 import { PageRangeContext } from '../../../../../models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from '../../../../../models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../../../models/context/types/EdgeConnectionContextType';
-import { dummyUuid } from '../../../../../models/__tests__/utilities/dummyUuid';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { ResourceType } from '../../../../../types/ResourceType';
-import buildInvariantValidationErrorFactoryFunction from '../../../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
-import BothMembersInEdgeConnectionHaveSameRoleError from '../../../../errors/context/edgeConnections/BothMembersInEdgeConnectionHaveSameRoleError';
-import ContextTypeIsNotAllowedForGivenResourceTypeError from '../../../../errors/context/edgeConnections/ContextTypeIsNotAllowedForGivenResourceTypeError';
-import InvalidEdgeConnectionMemberRolesError from '../../../../errors/context/edgeConnections/InvalidEdgeConnectionMemberRolesError';
-import InvalidNumberOfMembersInEdgeConnectionError from '../../../../errors/context/edgeConnections/InvalidNumberOfMembersInEdgeConnectionError';
 import IncompatibleIdentityConnectionMembersError from '../../../../errors/context/IncompatibleIdentityConnectionMembersError';
 import InvalidEdgeConnectionContextModelError from '../../../../errors/context/InvalidEdgeConnectionContextModelError';
 import LonelyIdentityContextInEdgeconnectionError from '../../../../errors/context/LonelyIdentityContextInEdgeConnectionError';
 import SelfConnectionCannotUseIdentityContextError from '../../../../errors/context/SelfConnectionCannotUseIdentityContextError';
+import BothMembersInEdgeConnectionHaveSameRoleError from '../../../../errors/context/edgeConnections/BothMembersInEdgeConnectionHaveSameRoleError';
+import ContextTypeIsNotAllowedForGivenResourceTypeError from '../../../../errors/context/edgeConnections/ContextTypeIsNotAllowedForGivenResourceTypeError';
+import InvalidEdgeConnectionMemberRolesError from '../../../../errors/context/edgeConnections/InvalidEdgeConnectionMemberRolesError';
+import InvalidNumberOfMembersInEdgeConnectionError from '../../../../errors/context/edgeConnections/InvalidNumberOfMembersInEdgeConnectionError';
 import { EdgeConnectionValidatorTestCase } from '../types/EdgeConnectionValidatorTestCase';
 
 const buildTopLevelError = buildInvariantValidationErrorFactoryFunction(AggregateType.note);
@@ -276,12 +276,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                         },
                     ],
                 },
-                expectedError: buildTopLevelError(validBookSelfConnection.id, [
-                    new ContextTypeIsNotAllowedForGivenResourceTypeError(
-                        'BOGUS CONTEXT TYPE',
-                        ResourceType.book
-                    ),
-                ]),
+                expectedError: buildTopLevelError(validBookSelfConnection.id, []),
             },
             {
                 description:

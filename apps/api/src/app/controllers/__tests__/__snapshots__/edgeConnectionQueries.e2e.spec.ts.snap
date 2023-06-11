@@ -39,7 +39,38 @@ exports[`When querying for edge connections GET /connections/ should return the 
             },
             {
               "discriminant": "timeRange",
-              "schema": {},
+              "schema": {
+                "timeRange": {
+                  "complexDataType": "NESTED_TYPE",
+                  "description": "specifies the time range (in and out points) of a segment of a media item",
+                  "isArray": false,
+                  "isOptional": false,
+                  "label": "time range",
+                  "schema": {
+                    "inPoint": {
+                      "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                      "description": "starting time stamp",
+                      "isArray": false,
+                      "isOptional": false,
+                      "label": "in point",
+                    },
+                    "outPoint": {
+                      "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                      "description": "ending time stamp",
+                      "isArray": false,
+                      "isOptional": false,
+                      "label": "out point",
+                    },
+                  },
+                },
+                "type": {
+                  "coscradDataType": "FIXED_VALUE",
+                  "description": "type",
+                  "isArray": false,
+                  "isOptional": false,
+                  "label": "type",
+                },
+              },
             },
             {
               "discriminant": "textField",
@@ -51,15 +82,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
             },
             {
               "discriminant": "freeMultiline",
-              "schema": {
-                "type": {
-                  "coscradDataType": "NON_EMPTY_STRING",
-                  "description": "free multiline",
-                  "isArray": false,
-                  "isOptional": false,
-                  "label": "type",
-                },
-              },
+              "schema": {},
             },
             {
               "discriminant": "identity",

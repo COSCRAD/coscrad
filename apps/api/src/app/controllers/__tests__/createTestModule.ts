@@ -50,11 +50,8 @@ import { TimeRangeContext } from '../../../domain/models/context/time-range-cont
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item.command-handler';
 import {
-    AddAudioItemToPlaylist,
     AddAudioItemToPlaylistCommandHandler,
-    CreatePlayList,
     CreatePlayListCommandHandler,
-    TranslatePlaylistName,
     TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
 import {
@@ -146,6 +143,32 @@ type CreateTestModuleOptions = {
 
 // If not specified, there will be no test user attached to requests
 const optionDefaults = { shouldMockIdGenerator: false };
+
+export const buildAllDataClassProviders = () =>
+    [
+        // Classes with dynamic union data types
+        // Bibliographic References
+        BibliographicReferenceViewModel,
+        CourtCaseBibliographicReferenceData,
+        JournalArticleBibliographicReferenceData,
+        BookBibliographicReferenceData,
+        // Edge Connections
+        EdgeConnection,
+        EdgeConnectionMember,
+        NoteViewModel,
+        // Context Union
+        GeneralContext,
+        PageRangeContext,
+        TimeRangeContext,
+        TextFieldContext,
+        PointContext,
+        FreeMultilineContext,
+        IdentityContext,
+        CreateNoteAboutResource,
+    ].map((ctor: Ctor<unknown>) => ({
+        provide: ctor,
+        useValue: ctor,
+    }));
 
 export default async (
     configOverrides: Partial<DTO<EnvironmentVariables>>,
@@ -338,35 +361,7 @@ export default async (
                 provide: JwtStrategy,
                 useFactory: () => new MockJwtStrategy(testUserWithGroups),
             },
-            ...[
-                // Classes with dynamic union data types
-                // Bibliographic References
-                BibliographicReferenceViewModel,
-                CourtCaseBibliographicReferenceData,
-                JournalArticleBibliographicReferenceData,
-                BookBibliographicReferenceData,
-                // Edge Connections
-                EdgeConnection,
-                EdgeConnectionMember,
-                NoteViewModel,
-                CreateNoteAboutResource,
-                // Context Union
-                GeneralContext,
-                PageRangeContext,
-                TimeRangeContext,
-                TextFieldContext,
-                PointContext,
-                FreeMultilineContext,
-                IdentityContext,
-                // Playlists
-                CreatePlayList,
-                AddAudioItemToPlaylist,
-                TranslatePlaylistName,
-                CreateNoteAboutResource,
-            ].map((ctor: Ctor<unknown>) => ({
-                provide: ctor,
-                useValue: ctor,
-            })),
+            ...buildAllDataClassProviders(),
             /**
              * TODO [https://www.pivotaltracker.com/story/show/182576828]
              *

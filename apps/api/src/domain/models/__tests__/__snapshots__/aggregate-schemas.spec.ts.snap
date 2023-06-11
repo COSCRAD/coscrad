@@ -460,6 +460,25 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Note  should match the snapshot 1`] = `
 {
+  "connectionType": {
+    "complexDataType": "ENUM",
+    "description": "either note or connection",
+    "enumLabel": "Edge Connection Type",
+    "enumName": "EdgeConnectionType",
+    "isArray": false,
+    "isOptional": false,
+    "label": "type",
+    "labelsAndValues": [
+      {
+        "label": "note",
+        "value": "self",
+      },
+      {
+        "label": "connection",
+        "value": "dual",
+      },
+    ],
+  },
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",

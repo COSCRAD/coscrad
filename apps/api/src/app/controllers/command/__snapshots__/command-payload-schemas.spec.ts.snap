@@ -1401,6 +1401,12 @@ exports[`command payload schemas Command payload schema should match the snapsho
       "aggregateCompositeIdentifier": {
         "complexDataType": "NESTED_TYPE",
         "description": "system-wide unqiue identifier",
+    "description": "creates a note about this particular resource",
+    "label": "Create Note",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for the edge connection (note) being created",
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
@@ -1471,12 +1477,117 @@ exports[`command payload schemas Command payload schema should match the snapsho
       "text": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "text for the translated name",
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "song",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "resourceCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for the resource about which we are making a note",
+        "isArray": false,
+        "isOptional": false,
+        "label": "CompositeIdentifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "song",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "resourceContext": {
+        "complexDataType": "UNION_TYPE",
+        "description": "contextualizes the note for the resource",
+        "discriminantPath": "type",
+        "isArray": false,
+        "isOptional": false,
+        "label": "context for resource",
+        "schemaDefinitions": [
+          {
+            "discriminant": "general",
+            "schema": {},
+          },
+          {
+            "discriminant": "pageRange",
+            "schema": {},
+          },
+          {
+            "discriminant": "timeRange",
+            "schema": {
+              "timeRange": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "specifies the time range (in and out points) of a segment of a media item",
+                "isArray": false,
+                "isOptional": false,
+                "label": "time range",
+                "schema": {
+                  "inPoint": {
+                    "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                    "description": "starting time stamp",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "in point",
+                  },
+                  "outPoint": {
+                    "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                    "description": "ending time stamp",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "out point",
+                  },
+                },
+              },
+              "type": {
+                "coscradDataType": "FIXED_VALUE",
+                "description": "type",
+                "isArray": false,
+                "isOptional": false,
+                "label": "type",
+              },
+            },
+          },
+          {
+            "discriminant": "textField",
+            "schema": {},
+          },
+          {
+            "discriminant": "point2D",
+            "schema": {},
+          },
+          {
+            "discriminant": "freeMultiline",
+            "schema": {},
+          },
+          {
+            "discriminant": "identity",
+            "schema": {},
+          },
+        ],
+        "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
+      },
+      "text": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "text for the note",
         "isArray": false,
         "isOptional": false,
         "label": "text",
       },
     },
     "type": "TRANSLATE_PLAYLIST_NAME",
+    "type": "CREATE_NOTE_ABOUT_RESOURCE",
   },
 ]
 `;
