@@ -9,6 +9,9 @@ import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
+import InvalidEdgeConnectionContextError from '../../../domainModelValidators/errors/context/InvalidEdgeConnectionContextError';
+import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
+import validateAllCoordinatesInLinearStructure from '../../spatial-feature/validation/validateAllCoordinatesInLinearStructure';
 import { EdgeConnectionContext } from '../context.entity';
 import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
@@ -100,17 +103,45 @@ export class FreeMultilineContext extends EdgeConnectionContext {
         this.lines = Array.isArray(lines) && lines.length > 0 ? cloneToPlainObject(lines) : [];
     }
 
-    validateComplexInvariants(): ResultOrError<Valid> {
-        const allErrors: InternalError[] = this.lines.flatMap((_line, _index) => {
-            throw new Error(`not implemented: FreeMultilineContext.validateComplexInvariants`);
-            // const validationResult = validateAllCoordinatesInLinearStructure(line);
+    /**
+     * TODO Share this logic with `Aggregate` and also with other context models.
+     *
+     * Wouldn't mixins be nice here?
+     */
+    validateInvariants() {
+        const simpleValidationResult = validateSimpleInvariants(
+            Object.getPrototypeOf(this).constructor,
+            this
+        );
 
-            // if(validationResult.length>0) return new
+        const complexValidationResult = this.validateComplexInvariants();
+
+        const allErrors = [...simpleValidationResult, ...complexValidationResult];
+
+        return allErrors.length > 0
+            ? new InvalidEdgeConnectionContextError(
+                  EdgeConnectionContextType.freeMultiline,
+                  allErrors
+              )
+            : Valid;
+    }
+
+    validateComplexInvariants(): InternalError[] {
+        const allErrors: InternalError[] = this.lines.flatMap((line, index) => {
+            const errorsForThisLine = validateAllCoordinatesInLinearStructure(line);
+
+            if (errorsForThisLine.length > 0)
+                return [
+                    new InternalError(
+                        `Encountered an invalid line at index: ${index} as part of a Free Mutliline Context.`,
+                        errorsForThisLine
+                    ),
+                ];
+
+            return [];
         });
 
-        return allErrors.length
-            ? new InternalError(`Invalid Free Multiline Context encoutnered.`, allErrors)
-            : Valid;
+        return allErrors;
     }
 
     getCoordinates(): [number, number][][] {
