@@ -5,12 +5,12 @@ import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCas
 
 const validCases = buildAllValidTestCasesForResource(ResourceType.photograph);
 
-const validPhotograph = validCases[0].resource.clone({
-    dimensions: {
-        widthPX: 100,
-        heightPX: 100,
-    },
-});
+// const validPhotograph = validCases[0].resource.clone({
+//     dimensions: {
+//         widthPX: 100,
+//         heightPX: 100,
+//     },
+// });
 
 const invalidCases: ResourceModelContextStateValidatorInvalidTestCase[] = [
     ...buildAllInvalidTestCasesForResource(ResourceType.photograph),

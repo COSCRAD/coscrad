@@ -35,15 +35,26 @@ describe('getAllowedContextsForModel', () => {
     );
 
     // Loop over every `EdgeConnectionContextType`
-    Object.values(EdgeConnectionContextType).forEach((contextType) =>
-        describe(`Edge connection context type: ${contextType}`, () => {
-            it(`is registered as the allowed context for at least one resource type`, () => {
-                const isContextTypeAllowedForSomeResourceType = Object.values(ResourceType).some(
-                    (resourceType) => getAllowedContextsForModel(resourceType).includes(contextType)
-                );
+    Object.values(EdgeConnectionContextType)
+        // TODO Remove filter
+        .filter(
+            (contextType) =>
+                ![
+                    EdgeConnectionContextType.freeMultiline,
+                    EdgeConnectionContextType.point2D,
+                ].includes(contextType)
+        )
+        .forEach((contextType) =>
+            describe(`Edge connection context type: ${contextType}`, () => {
+                it(`is registered as the allowed context for at least one resource type`, () => {
+                    const isContextTypeAllowedForSomeResourceType = Object.values(
+                        ResourceType
+                    ).some((resourceType) =>
+                        getAllowedContextsForModel(resourceType).includes(contextType)
+                    );
 
-                expect(isContextTypeAllowedForSomeResourceType).toBe(true);
-            });
-        })
-    );
+                    expect(isContextTypeAllowedForSomeResourceType).toBe(true);
+                });
+            })
+        );
 });

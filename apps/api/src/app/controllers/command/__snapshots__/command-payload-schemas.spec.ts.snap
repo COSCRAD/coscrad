@@ -1629,47 +1629,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
             },
           },
           {
-            "discriminant": "point2D",
-            "schema": {},
-          },
-          {
-            "discriminant": "freeMultiline",
-            "schema": {
-              "lines": {
-                "complexDataType": "NESTED_TYPE",
-                "description": "a list of line segments that provide context for this resource or note",
-                "isArray": true,
-                "isOptional": false,
-                "label": "lines",
-                "schema": {
-                  "points": {
-                    "complexDataType": "NESTED_TYPE",
-                    "description": "a list of 2D points in this 2D line",
-                    "isArray": true,
-                    "isOptional": false,
-                    "label": "points",
-                    "schema": {
-                      "coordinates": {
-                        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
-                        "description": "a list of the form [x,y]",
-                        "isArray": true,
-                        "isOptional": false,
-                        "label": "coordinates",
-                      },
-                    },
-                  },
-                },
-              },
-              "type": {
-                "coscradDataType": "FIXED_VALUE",
-                "description": "must be freeMultiline",
-                "isArray": false,
-                "isOptional": false,
-                "label": "context type",
-              },
-            },
-          },
-          {
             "discriminant": "identity",
             "schema": {},
           },
