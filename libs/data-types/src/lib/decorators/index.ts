@@ -11,6 +11,7 @@ export * from './PositiveInteger';
 export * from './RawData';
 export * from './ReferenceTo';
 export * from './String';
+export * from './types';
 export * from './Union';
 export * from './UnionMember';
 export * from './URL';

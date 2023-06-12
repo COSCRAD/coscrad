@@ -23,7 +23,7 @@ IAggregateInfo<ResourceType> & { route: string }): JSX.Element => {
 
     return (
         // TODO Use the route builder to build this route
-        <Link to={`/Resources/${route}`}>
+        <Link to={`/${route}`}>
             <Card data-testid={type}>
                 {/* TODO Handle pluralization properly as soon as we have a Resource Type whose plural form is irregular */}
                 <CardContent>

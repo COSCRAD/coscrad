@@ -4,11 +4,12 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
+import { DuplicateLanguageInMultilingualTextError } from '../../audio-item/errors/duplicate-language-in-multilingual-text.error';
 import { Resource } from '../../resource.entity';
 import { CannotAddDuplicateItemToPlaylist } from '../errors';
 import { PlaylistItem } from './playlist-item.entity';
@@ -67,8 +68,17 @@ export class Playlist extends Resource {
         });
     }
 
+    translateName(textItem: MultilingualTextItem) {
+        if (this.name.items.some(({ languageCode }) => languageCode === textItem.languageCode))
+            return new DuplicateLanguageInMultilingualTextError(textItem.languageCode);
+
+        return this.safeClone<Playlist>({
+            name: this.name.append(textItem).toDTO(),
+        });
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
-        return ['ADD_AUDIO_ITEM_TO_PLAYLIST'];
+        return ['ADD_AUDIO_ITEM_TO_PLAYLIST', 'TRANSLATE_PLAYLIST_NAME'];
     }
 
     protected validateComplexInvariants(): InternalError[] {
