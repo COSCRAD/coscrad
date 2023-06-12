@@ -4,7 +4,12 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import { ExternalEnum, NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import {
+    ExternalEnum,
+    NestedDataType,
+    NonEmptyString,
+    TypeDecoratorOptions,
+} from '@coscrad/data-types';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
@@ -17,6 +22,19 @@ import BaseDomainModel from '../../models/BaseDomainModel';
 import { isNull, isUndefined } from '../../utilities/validation/is-null-or-undefined';
 
 export { MultilingualTextItemRole };
+
+export const LanguageCodeEnum = (options: TypeDecoratorOptions) =>
+    ExternalEnum(
+        {
+            enumLabel: `language code`,
+            enumName: `LanguageCode`,
+            labelsAndValues: Object.entries(LanguageCode).map(([label, languageCode]) => ({
+                label,
+                value: languageCode,
+            })),
+        },
+        options
+    );
 
 export class MultilingualTextItem extends BaseDomainModel implements IMultlingualTextItem {
     @ExternalEnum(
