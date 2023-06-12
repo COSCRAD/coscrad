@@ -1401,12 +1401,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
       "aggregateCompositeIdentifier": {
         "complexDataType": "NESTED_TYPE",
         "description": "system-wide unqiue identifier",
-    "description": "creates a note about this particular resource",
-    "label": "Create Note",
-    "schema": {
-      "aggregateCompositeIdentifier": {
-        "complexDataType": "NESTED_TYPE",
-        "description": "system-wide unique identifier for the edge connection (note) being created",
         "isArray": false,
         "isOptional": false,
         "label": "Composite Identifier",
@@ -1477,6 +1471,32 @@ exports[`command payload schemas Command payload schema should match the snapsho
       "text": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "text for the translated name",
+        "isArray": false,
+        "isOptional": false,
+        "label": "text",
+      },
+    },
+    "type": "TRANSLATE_PLAYLIST_NAME",
+  },
+  {
+    "description": "creates a note about this particular resource",
+    "label": "Create Note",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for the edge connection (note) being created",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
             "coscradDataType": "NON_EMPTY_STRING",
             "description": "song",
             "isArray": false,
@@ -1518,11 +1538,34 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "schemaDefinitions": [
           {
             "discriminant": "general",
-            "schema": {},
+            "schema": {
+              "type": {
+                "coscradDataType": "FIXED_VALUE",
+                "description": "must be: general",
+                "isArray": false,
+                "isOptional": false,
+                "label": "context type",
+              },
+            },
           },
           {
             "discriminant": "pageRange",
-            "schema": {},
+            "schema": {
+              "pageIdentifiers": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "a list of page identifiers relevant to this note or connection",
+                "isArray": true,
+                "isOptional": false,
+                "label": "page identifiers",
+              },
+              "type": {
+                "coscradDataType": "FIXED_VALUE",
+                "description": "must be: pageRange",
+                "isArray": false,
+                "isOptional": false,
+                "label": "context type",
+              },
+            },
           },
           {
             "discriminant": "timeRange",
@@ -1561,7 +1604,29 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "discriminant": "textField",
-            "schema": {},
+            "schema": {
+              "charRange": {
+                "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                "description": "specifies a range of characters in a text that are relevant to a note or connection",
+                "isArray": true,
+                "isOptional": false,
+                "label": "character range",
+              },
+              "target": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "the text-valued property that provides the context for this note or connection",
+                "isArray": false,
+                "isOptional": false,
+                "label": "target property",
+              },
+              "type": {
+                "coscradDataType": "FIXED_VALUE",
+                "description": "text field",
+                "isArray": false,
+                "isOptional": false,
+                "label": "context type",
+              },
+            },
           },
           {
             "discriminant": "point2D",
@@ -1569,7 +1634,40 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           {
             "discriminant": "freeMultiline",
-            "schema": {},
+            "schema": {
+              "lines": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "a list of line segments that provide context for this resource or note",
+                "isArray": true,
+                "isOptional": false,
+                "label": "lines",
+                "schema": {
+                  "points": {
+                    "complexDataType": "NESTED_TYPE",
+                    "description": "a list of 2D points in this 2D line",
+                    "isArray": true,
+                    "isOptional": false,
+                    "label": "points",
+                    "schema": {
+                      "coordinates": {
+                        "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                        "description": "a list of the form [x,y]",
+                        "isArray": true,
+                        "isOptional": false,
+                        "label": "coordinates",
+                      },
+                    },
+                  },
+                },
+              },
+              "type": {
+                "coscradDataType": "FIXED_VALUE",
+                "description": "must be freeMultiline",
+                "isArray": false,
+                "isOptional": false,
+                "label": "context type",
+              },
+            },
           },
           {
             "discriminant": "identity",
@@ -1586,7 +1684,6 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "label": "text",
       },
     },
-    "type": "TRANSLATE_PLAYLIST_NAME",
     "type": "CREATE_NOTE_ABOUT_RESOURCE",
   },
 ]

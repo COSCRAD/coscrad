@@ -4,11 +4,11 @@ import {
     NonNegativeFiniteNumber,
     UnionMember,
 } from '@coscrad/data-types';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
-import validateAllCoordinatesInLinearStructure from '../../spatial-feature/validation/validateAllCoordinatesInLinearStructure';
 import { EdgeConnectionContext } from '../context.entity';
 import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
@@ -100,15 +100,17 @@ export class FreeMultilineContext extends EdgeConnectionContext {
         this.lines = Array.isArray(lines) && lines.length > 0 ? cloneToPlainObject(lines) : [];
     }
 
-    validateComplexInvariants(): ResultOrError<Valid>{
-        return this.lines.flatMap(
-            (line,index) =>{
-                const validationResult = validateAllCoordinatesInLinearStructure(line);
+    validateComplexInvariants(): ResultOrError<Valid> {
+        const allErrors: InternalError[] = this.lines.flatMap((_line, _index) => {
+            throw new Error(`not implemented: FreeMultilineContext.validateComplexInvariants`);
+            // const validationResult = validateAllCoordinatesInLinearStructure(line);
 
-                if(validationResult.length>0) return new 
-            }
-        )
-        )
+            // if(validationResult.length>0) return new
+        });
+
+        return allErrors.length
+            ? new InternalError(`Invalid Free Multiline Context encoutnered.`, allErrors)
+            : Valid;
     }
 
     getCoordinates(): [number, number][][] {
