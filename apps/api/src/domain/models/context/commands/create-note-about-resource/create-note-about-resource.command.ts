@@ -6,7 +6,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
-import { ContextUnion } from '../../edge-connection.entity';
+import { ContextUnion } from '../../constants';
 
 export class ResourceCompositeIdentifier {
     // TODO Make this an enum

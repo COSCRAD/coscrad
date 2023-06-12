@@ -5,7 +5,6 @@ import {
     ExternalEnum,
     NestedDataType,
     NonEmptyString,
-    Union,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
@@ -39,15 +38,7 @@ import formatAggregateCompositeIdentifier from '../../../view-models/presentatio
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
 import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
-
-export const EDGE_CONNECTION_CONTEXT_UNION = 'EDGE_CONNECTION_CONTEXT_UNION';
-
-/**
- * This is a decorator (the returned value of a decorator factory). We export
- * this here for reuse in `EdgeConnection` command payloads.
- */
-export const ContextUnion = ({ label, description }: { label: string; description: string }) =>
-    Union(EDGE_CONNECTION_CONTEXT_UNION, 'type', { label, description });
+import { ContextUnion } from './constants';
 
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
     extends BaseDomainModel

@@ -23,8 +23,10 @@ const resourceTypeToAllowedContextTypes = {
     ],
     [ResourceType.photograph]: [
         EdgeConnectionContextType.general,
-        EdgeConnectionContextType.point2D,
-        EdgeConnectionContextType.freeMultiline,
+        // TODO Support point2D context for Photographs
+        // EdgeConnectionContextType.point2D,
+        // TODO Support FreeMultilineContext for Photographs
+        // EdgeConnectionContextType.freeMultiline,
     ],
     [ResourceType.spatialFeature]: [
         EdgeConnectionContextType.general,

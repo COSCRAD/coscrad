@@ -28,19 +28,21 @@ describe('buildTestData', () => {
 
     const deluxeInMemoryStore = new DeluxeInMemoryStore(testData);
 
+    deluxeInMemoryStore.fetchAllOfType(AggregateType.note).forEach((connection) => {
+        describe(`${formatAggregateCompositeIdentifier(
+            connection.getCompositeIdentifier()
+        )}`, () => {
+            it(`should have valid context state`, () => {
+                assertEdgeConnectionContextStateIsValid(testData, connection);
+            });
+        });
+    });
+
     Object.values(AggregateType).forEach((aggregateType) => {
         describe(`The test instances for ${formatAggregateType(aggregateType)}`, () => {
             it('should be comprehensive', () => {
                 assertTestInstancesOfTypeAreComprehensive(aggregateType, testData);
             });
-
-            if (aggregateType === AggregateType.note) {
-                deluxeInMemoryStore
-                    .fetchAllOfType(AggregateType.note)
-                    .forEach((connection) =>
-                        assertEdgeConnectionContextStateIsValid(testData, connection)
-                    );
-            }
 
             /**
              * Ideally, we would check this with logic that is on the aggregate

@@ -78,7 +78,9 @@ export class Photograph extends Resource implements Boundable2D {
     }
 
     // TODO break out the validate point logic into a validation library instead
-    validateFreeMultilineContext({ lines }: FreeMultilineContext): Valid | InternalError {
+    validateFreeMultilineContext(context: FreeMultilineContext): Valid | InternalError {
+        const lines = context.lines;
+
         const allErrors: InternalError[] = lines
             .map((line) => line.getCoordinates())
             .reduce((accumulatedErrors: InternalError[], line, index) => {

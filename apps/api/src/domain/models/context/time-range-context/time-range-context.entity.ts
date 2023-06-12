@@ -5,10 +5,10 @@ import {
     UnionMember,
 } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
-import { TranscriptItem } from '../../audio-item/entities/transcript-item.entity';
 import BaseDomainModel from '../../BaseDomainModel';
+import { TranscriptItem } from '../../audio-item/entities/transcript-item.entity';
+import { EDGE_CONNECTION_CONTEXT_UNION } from '../constants';
 import { EdgeConnectionContext } from '../context.entity';
-import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
 export class TimeRange extends BaseDomainModel {

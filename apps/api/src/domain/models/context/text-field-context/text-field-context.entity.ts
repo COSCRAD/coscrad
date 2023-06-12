@@ -5,8 +5,8 @@ import {
     UnionMember,
 } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
+import { EDGE_CONNECTION_CONTEXT_UNION } from '../constants';
 import { EdgeConnectionContext } from '../context.entity';
-import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
 @UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.textField)

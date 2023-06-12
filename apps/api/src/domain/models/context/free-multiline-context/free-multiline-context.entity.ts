@@ -1,11 +1,5 @@
-import {
-    FixedValue,
-    NestedDataType,
-    NonNegativeFiniteNumber,
-    UnionMember,
-} from '@coscrad/data-types';
+import { FixedValue, NestedDataType, NonNegativeFiniteNumber } from '@coscrad/data-types';
 import { InternalError } from '../../../../lib/errors/InternalError';
-import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
@@ -13,7 +7,6 @@ import InvalidEdgeConnectionContextError from '../../../domainModelValidators/er
 import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
 import validateAllCoordinatesInLinearStructure from '../../spatial-feature/validation/validateAllCoordinatesInLinearStructure';
 import { EdgeConnectionContext } from '../context.entity';
-import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
 export const EMPTY_DTO_INJECTION_TOKEN = 'EMPTY_DTO';
@@ -73,7 +66,11 @@ export class Line2DForContext {
  * zig-zags, and so on are allowed.
  */
 
-@UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.freeMultiline)
+/**
+ * TODO Restore support for free-multiline context once we have an edge connection factory.
+ */
+
+// @UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.freeMultiline)
 export class FreeMultilineContext extends EdgeConnectionContext {
     @FixedValue({
         // EdgeConnectionType.freeMultiline,
@@ -100,7 +97,7 @@ export class FreeMultilineContext extends EdgeConnectionContext {
         const { lines } = dto;
 
         // Avoid side-effects
-        this.lines = Array.isArray(lines) && lines.length > 0 ? cloneToPlainObject(lines) : [];
+        this.lines = lines.map((line) => new Line2DForContext(line));
     }
 
     /**

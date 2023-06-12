@@ -1,5 +1,7 @@
+import { IEdgeConnectionContext } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
+import { isDeepStrictEqual } from 'util';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -19,13 +21,15 @@ import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
+import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../edge-connection.entity';
 import { GeneralContext } from '../../general-context/general-context.entity';
-import { PointContext } from '../../point-context/point-context.entity';
+import { PageRangeContext } from '../../page-range-context/page-range.context.entity';
+import { TextFieldContext } from '../../text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../types/EdgeConnectionContextType';
 import { CreateNoteAboutResource } from './create-note-about-resource.command';
@@ -34,29 +38,72 @@ const commandType = 'CREATE_NOTE_ABOUT_RESOURCE';
 
 const { resources: dummyResources, note: dummyNotes } = buildTestData();
 
-const notesToCreate = dummyNotes.reduce(
-    ({ seenResourceTypes, keepers }, note) => {
-        const resourceType = note.members[0].compositeIdentifier.type;
+type SeenAndKeepers = {
+    seenResourceContextCombos: {
+        resourceType: ResourceType;
+        contextType: string;
+    }[];
+    keepers: EdgeConnection[];
+};
 
-        if (seenResourceTypes.includes(resourceType)) {
-            // no-op
-            return {
-                seenResourceTypes,
-                keepers,
+const notesToCreate = dummyNotes
+    .filter(({ connectionType }) => connectionType === EdgeConnectionType.self)
+    .reduce(
+        ({ seenResourceContextCombos, keepers }: SeenAndKeepers, note: EdgeConnection) => {
+            const firstMember = note.members[0];
+
+            const resourceType = firstMember.compositeIdentifier.type;
+
+            const contextType = firstMember.context.type;
+
+            const nextCombo = {
+                resourceType,
+                contextType,
             };
-        }
 
-        return {
-            seenResourceTypes: seenResourceTypes.concat(resourceType),
-            // keep this note and mark its member's resource type as seen
-            keepers: keepers.concat(note),
-        };
+            if (seenResourceContextCombos.some((combo) => isDeepStrictEqual(combo, nextCombo))) {
+                // no-op
+                return {
+                    seenResourceContextCombos,
+                    keepers,
+                };
+            }
+
+            return {
+                seenResourceContextCombos: seenResourceContextCombos.concat(nextCombo),
+                // keep this note and mark its member's resource type as seen
+                keepers: keepers.concat(note),
+            };
+        },
+        {
+            seenResourceContextCombos: [],
+            keepers: [],
+        } as unknown as SeenAndKeepers
+    ).keepers;
+
+/**
+ * This will allow us to get a context model instance by type on-demand.
+ */
+const contextModelMap = notesToCreate.reduce(
+    (acc, { members }) => {
+        const { context } = members[0];
+
+        /**
+         * If this is the first context instance for the given `contextType`,
+         * register it in the map.
+         */
+        if (!acc.has(context.type)) return acc.set(context.type, context);
+
+        // no-op
+        return acc;
     },
-    {
-        seenResourceTypes: [],
-        keepers: [],
-    }
-).keepers;
+
+    new Map<string, IEdgeConnectionContext>()
+);
+
+const allContextTypes = [
+    ...new Set(notesToCreate.flatMap(({ members }) => members).map(({ context }) => context.type)),
+];
 
 const validAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
 
@@ -183,36 +230,32 @@ describe(commandType, () => {
 
     // TODO make this comprehensive across all compatible resource type \ context type combos
     describe(`when the command is valid`, () => {
-        comprehensiveValidFSAs
-            .filter(
-                (fsa) => fsa.payload.resourceCompositeIdentifier.type === ResourceType.photograph
-            )
-            .forEach((fsa) => {
-                const { payload } = fsa;
+        comprehensiveValidFSAs.forEach((fsa) => {
+            const { payload } = fsa;
 
-                const { resourceCompositeIdentifier, resourceContext } = payload;
+            const { resourceCompositeIdentifier, resourceContext } = payload;
 
-                const { type: resourceType } = resourceCompositeIdentifier;
+            const { type: resourceType } = resourceCompositeIdentifier;
 
-                describe(`resource type: ${resourceType}, context type: ${resourceContext.type}`, () => {
-                    it.only(`should succeed with the expected database updates`, async () => {
-                        await assertCreateCommandSuccess(assertionHelperDependencies, {
-                            systemUserId: dummySystemUserId,
-                            buildValidCommandFSA: (id: AggregateId) => ({
-                                type: commandType,
-                                payload: {
-                                    ...payload,
-                                    aggregateCompositeIdentifier: {
-                                        type: AggregateType.note,
-                                        id,
-                                    },
+            describe(`resource type: ${resourceType}, context type: ${resourceContext.type}`, () => {
+                it(`should succeed with the expected database updates`, async () => {
+                    await assertCreateCommandSuccess(assertionHelperDependencies, {
+                        systemUserId: dummySystemUserId,
+                        buildValidCommandFSA: (id: AggregateId) => ({
+                            type: commandType,
+                            payload: {
+                                ...payload,
+                                aggregateCompositeIdentifier: {
+                                    type: AggregateType.note,
+                                    id,
                                 },
-                            }),
-                            initialState: validInitialState,
-                        });
+                            },
+                        }),
+                        initialState: validInitialState,
                     });
                 });
             });
+        });
         // it(`should succeed with the expected updates to the database`, async () => {
         //     await assertCreateCommandSuccess(assertionHelperDependencies, {
         //         systemUserId: dummySystemUserId,
@@ -247,43 +290,103 @@ describe(commandType, () => {
         });
 
         describe(`when the context type is not allowed for the given resource type`, () => {
-            it(`should fail with the expected errors`, async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    systemUserId: dummySystemUserId,
-                    buildCommandFSA: (id) =>
-                        commandFSAFactory.build(id, {
-                            resourceContext: new PointContext({
-                                type: EdgeConnectionContextType.point2D,
-                                point: [1, 2],
-                            }),
-                        }),
-                    initialState: new DeluxeInMemoryStore({
-                        [ResourceType.audioItem]: [validAudioItem],
-                    }).fetchFullSnapshotInLegacyFormat(),
+            comprehensiveValidFSAs.forEach((validFsa) => {
+                const resourceType = validFsa.payload.resourceCompositeIdentifier.type;
+
+                describe(`resource type: ${resourceType}`, () => {
+                    const invalidContextInstancesForThisResource = allContextTypes
+                        .filter(
+                            (contextType) =>
+                                !isContextAllowedForGivenResourceType(contextType, resourceType)
+                        )
+                        .map((contextType) => contextModelMap.get(contextType));
+
+                    invalidContextInstancesForThisResource.forEach((context) => {
+                        describe(`when the context type: ${context.type} is not allowed`, () => {
+                            it(`should fail with the expected errors`, async () => {
+                                await assertCreateCommandError(assertionHelperDependencies, {
+                                    systemUserId: dummySystemUserId,
+                                    buildCommandFSA: (id) =>
+                                        commandFSAFactory.build(id, {
+                                            resourceCompositeIdentifier:
+                                                validFsa.payload.resourceCompositeIdentifier,
+                                            resourceContext: context,
+                                        }),
+                                    initialState: new DeluxeInMemoryStore({
+                                        [ResourceType.audioItem]: [validAudioItem],
+                                    }).fetchFullSnapshotInLegacyFormat(),
+                                });
+                            });
+                        });
+                    });
                 });
             });
         });
 
         describe(`when the context is inconsistent with the state of the resource it contextualizes`, () => {
-            it(`should fail with the expected errors`, async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    systemUserId: dummySystemUserId,
-                    buildCommandFSA: (id) =>
-                        commandFSAFactory.build(id, {
-                            resourceContext: new TimeRangeContext({
-                                type: EdgeConnectionContextType.timeRange,
-                                timeRange: {
-                                    inPoint: 0,
-                                    // out of bounds
-                                    outPoint: validAudioItem.getTimeBounds[1] + 100,
-                                },
-                            }),
-                        }),
-                    initialState: new DeluxeInMemoryStore({
-                        [ResourceType.audioItem]: [validAudioItem],
-                    }).fetchFullSnapshotInLegacyFormat(),
+            const comicallyInvalidContextModels: Record<string, IEdgeConnectionContext> = {
+                [EdgeConnectionContextType.timeRange]: new TimeRangeContext({
+                    type: EdgeConnectionContextType.timeRange,
+                    timeRange: {
+                        inPoint: 0,
+                        // surely out of bounds for any dummy data
+                        outPoint: 100000000000000,
+                    },
+                }),
+                [EdgeConnectionContextType.textField]: new TextFieldContext({
+                    type: EdgeConnectionContextType.textField,
+                    target: 'booooogus_FIELD',
+                    charRange: [0, 5],
+                }),
+                [EdgeConnectionContextType.pageRange]: new PageRangeContext({
+                    type: EdgeConnectionContextType.pageRange,
+                    pageIdentifiers: ['kfuifn393mdf-XXXXjlokiaueoea'],
+                }),
+            };
+
+            const getInvalidContextModelOfType = (type: string): IEdgeConnectionContext => {
+                const searchResult = comicallyInvalidContextModels[type];
+
+                if (!searchResult)
+                    throw new Error(
+                        `Failed to find an invalid state context model instance of context type: ${type}`
+                    );
+
+                return searchResult;
+            };
+
+            comprehensiveValidFSAs
+                .filter(
+                    // It is not possible to have inconsistent state for the following context types
+                    (fsa) =>
+                        ![
+                            EdgeConnectionContextType.general,
+                            EdgeConnectionContextType.identity,
+                        ].includes(fsa.payload.resourceContext.type as EdgeConnectionContextType)
+                )
+                .forEach((fsa) => {
+                    const {
+                        payload: { resourceCompositeIdentifier, resourceContext },
+                    } = fsa;
+
+                    const { type: resourceType } = resourceCompositeIdentifier;
+
+                    const { type: contextType } = resourceContext;
+
+                    describe(`resource type: ${resourceType}, context type: ${contextType}`, () => {
+                        it(`should fail with the expected errors`, async () => {
+                            await assertCreateCommandError(assertionHelperDependencies, {
+                                systemUserId: dummySystemUserId,
+                                buildCommandFSA: (id) =>
+                                    commandFSAFactory.build(id, {
+                                        // Overwrite the valid FSA's context with one that is designed to have inconsistent state with the corresponding resource
+                                        resourceContext: getInvalidContextModelOfType(contextType),
+                                    }),
+                                initialState: validInitialState,
+                            });
+                        });
+                    });
                 });
-            });
         });
 
         describe(`when the resource does not exist`, () => {
@@ -305,6 +408,7 @@ describe(commandType, () => {
                             initialState: new DeluxeInMemoryStore({
                                 // Empty
                             }).fetchFullSnapshotInLegacyFormat(),
+                            // TODO Check errors!
                         });
                     });
                 });

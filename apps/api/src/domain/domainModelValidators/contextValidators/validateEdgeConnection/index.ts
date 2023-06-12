@@ -91,12 +91,15 @@ export default (input: unknown): InternalError[] => {
         (
             accumulatedErrors: InternalError[],
             { context: { type }, compositeIdentifier: { type: resourceType } }
-        ) =>
-            isContextAllowedForGivenResourceType(type, resourceType)
-                ? accumulatedErrors
-                : accumulatedErrors.concat(
-                      new ContextTypeIsNotAllowedForGivenResourceTypeError(type, resourceType)
-                  ),
+        ) => {
+            const isAllowed = isContextAllowedForGivenResourceType(type, resourceType);
+
+            if (isAllowed) return accumulatedErrors;
+
+            return accumulatedErrors.concat(
+                new ContextTypeIsNotAllowedForGivenResourceTypeError(type, resourceType)
+            );
+        },
         []
     );
 

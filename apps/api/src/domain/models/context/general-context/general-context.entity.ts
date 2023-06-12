@@ -1,6 +1,6 @@
 import { FixedValue, UnionMember } from '@coscrad/data-types';
+import { EDGE_CONNECTION_CONTEXT_UNION } from '../constants';
 import { EdgeConnectionContext } from '../context.entity';
-import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
 @UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.general)

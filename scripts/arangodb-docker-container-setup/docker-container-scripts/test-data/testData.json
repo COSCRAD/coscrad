@@ -1682,43 +1682,6 @@
                     {
                         "role": "self",
                         "context": {
-                            "type": "freeMultiline",
-                            "lines": [
-                                [
-                                    [
-                                        0,
-                                        200
-                                    ],
-                                    [
-                                        100,
-                                        300
-                                    ],
-                                    [
-                                        200,
-                                        400
-                                    ],
-                                    [
-                                        250,
-                                        475
-                                    ]
-                                ]
-                            ]
-                        }
-                    }
-                ],
-                "note": "this is the stem of the flower"
-            },
-            {
-                "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
-                "eventHistory": [],
-                "connectionType": "self",
-                "members": [
-                    {
-                        "role": "self",
-                        "context": {
                             "type": "point2D",
                             "point": [
                                 0,
@@ -1733,7 +1696,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110007",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1753,7 +1716,7 @@
                 "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110008",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1770,7 +1733,7 @@
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110009",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1791,7 +1754,7 @@
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1813,7 +1776,7 @@
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1834,7 +1797,7 @@
                 "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1851,7 +1814,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1872,7 +1835,7 @@
                 "_to": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "_from": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1889,7 +1852,7 @@
                 "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1906,7 +1869,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1923,7 +1886,7 @@
                 "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1940,7 +1903,7 @@
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "_from": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1957,24 +1920,7 @@
                 "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
-                "eventHistory": [],
-                "connectionType": "self",
-                "members": [
-                    {
-                        "role": "self",
-                        "context": {
-                            "type": "general"
-                        }
-                    }
-                ],
-                "note": "this is the stem of the flower"
-            },
-            {
-                "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "_from": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-                "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1991,7 +1937,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2008,7 +1954,7 @@
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2025,7 +1971,7 @@
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2042,7 +1988,7 @@
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2059,7 +2005,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110026",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2187,26 +2133,10 @@
                     {
                         "role": "from",
                         "context": {
-                            "type": "freeMultiline",
-                            "lines": [
-                                [
-                                    [
-                                        0,
-                                        200
-                                    ],
-                                    [
-                                        100,
-                                        300
-                                    ],
-                                    [
-                                        200,
-                                        400
-                                    ],
-                                    [
-                                        250,
-                                        475
-                                    ]
-                                ]
+                            "type": "point2D",
+                            "point": [
+                                0,
+                                200
                             ]
                         }
                     }
@@ -2224,26 +2154,10 @@
                     {
                         "role": "to",
                         "context": {
-                            "type": "freeMultiline",
-                            "lines": [
-                                [
-                                    [
-                                        0,
-                                        200
-                                    ],
-                                    [
-                                        100,
-                                        300
-                                    ],
-                                    [
-                                        200,
-                                        400
-                                    ],
-                                    [
-                                        250,
-                                        475
-                                    ]
-                                ]
+                            "type": "point2D",
+                            "point": [
+                                0,
+                                200
                             ]
                         }
                     },
