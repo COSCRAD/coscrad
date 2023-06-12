@@ -1,6 +1,7 @@
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { Resource } from '../../../domain/models/resource.entity';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import getId from '../../../domain/models/shared/functional/getId';
@@ -8,9 +9,8 @@ import { CoscradUserWithGroups } from '../../../domain/models/user-management/us
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
-import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../test-data/buildTestData';
 import { BaseViewModel } from '../../../view-models/buildViewModelForResource/viewModels/base.view-model';
 import formatAggregateType from '../../../view-models/presentation/formatAggregateType';
@@ -26,7 +26,9 @@ const PUBLISHED_ID_PREFIX = 'PUBLISHED-';
 
 const { user: users, userGroup: userGroups } = buildTestData();
 
-const dummyUser = users[0];
+const dummyUser = users[0].clone({
+    roles: [CoscradUserRole.viewer],
+});
 
 const dummyGroup = userGroups[0].clone({ userIds: [dummyUser.id] });
 

@@ -935,7 +935,7 @@ exports[`User Management Queries when the system user issuing the command is aut
         },
       },
       "roles": [
-        "viewer",
+        "projectAdmin",
       ],
       "username": "cool-james",
     },
@@ -1015,7 +1015,7 @@ exports[`User Management Queries when the system user issuing the command is aut
             },
           },
           "roles": [
-            "viewer",
+            "projectAdmin",
           ],
           "username": "cool-james",
         },
@@ -1132,7 +1132,7 @@ exports[`User Management Queries when the system user issuing the command is aut
     },
   },
   "roles": [
-    "viewer",
+    "projectAdmin",
   ],
   "username": "cool-james",
 }
@@ -1203,7 +1203,7 @@ exports[`User Management Queries when the system user issuing the command is aut
         },
       },
       "roles": [
-        "viewer",
+        "projectAdmin",
       ],
       "username": "cool-james",
     },
@@ -1325,7 +1325,7 @@ exports[`User Management Queries when the system user issuing the command is aut
         },
       },
       "roles": [
-        "viewer",
+        "projectAdmin",
       ],
       "username": "cool-james",
     },
@@ -1405,7 +1405,7 @@ exports[`User Management Queries when the system user issuing the command is aut
             },
           },
           "roles": [
-            "viewer",
+            "projectAdmin",
           ],
           "username": "cool-james",
         },
@@ -1522,7 +1522,7 @@ exports[`User Management Queries when the system user issuing the command is aut
     },
   },
   "roles": [
-    "viewer",
+    "projectAdmin",
   ],
   "username": "cool-james",
 }
@@ -1593,7 +1593,7 @@ exports[`User Management Queries when the system user issuing the command is aut
         },
       },
       "roles": [
-        "viewer",
+        "projectAdmin",
       ],
       "username": "cool-james",
     },
