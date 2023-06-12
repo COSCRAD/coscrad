@@ -50,6 +50,8 @@ import {
     AddAudioItemToPlaylistCommandHandler,
     CreatePlayList,
     CreatePlayListCommandHandler,
+    TranslatePlaylistName,
+    TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
 import {
     PublishResource,
@@ -351,6 +353,10 @@ export default async (
                 PointContext,
                 FreeMultilineContext,
                 IdentityContext,
+                // Playlists
+                CreatePlayList,
+                AddAudioItemToPlaylist,
+                TranslatePlaylistName,
             ].map((ctor: Ctor<unknown>) => ({
                 provide: ctor,
                 useValue: ctor,
@@ -400,10 +406,9 @@ export default async (
             AddParticipantToTranscriptCommandHandler,
             AddLineItemToTranscript,
             AddLineItemtoTranscriptCommandHandler,
-            CreatePlayList,
             CreatePlayListCommandHandler,
-            AddAudioItemToPlaylist,
             AddAudioItemToPlaylistCommandHandler,
+            TranslatePlaylistNameCommandHandler,
         ],
 
         controllers: [

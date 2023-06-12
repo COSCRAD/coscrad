@@ -1301,12 +1301,12 @@ exports[`command payload schemas Command payload schema should match the snapsho
       },
       "languageCodeForName": {
         "complexDataType": "ENUM",
-        "description": "the language being used to name the playlist",
+        "description": "the language in which you are naming this playlist",
         "enumLabel": "language code",
         "enumName": "LanguageCode",
         "isArray": false,
         "isOptional": false,
-        "label": "language code",
+        "label": "language code for name",
         "labelsAndValues": [
           {
             "label": "Chilcotin",
@@ -1393,6 +1393,90 @@ exports[`command payload schemas Command payload schema should match the snapsho
       },
     },
     "type": "ADD_AUDIO_ITEM_TO_PLAYLIST",
+  },
+  {
+    "description": "translating playlist names",
+    "label": "translate playlist name",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unqiue identifier",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "complexDataType": "ENUM",
+            "description": "playlist",
+            "enumLabel": "type",
+            "enumName": "type",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+            "labelsAndValues": [
+              {
+                "label": "type",
+                "value": "playlist",
+              },
+            ],
+          },
+        },
+      },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are naming the new playlist",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language code",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "eng",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "text": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "text for the translated name",
+        "isArray": false,
+        "isOptional": false,
+        "label": "text",
+      },
+    },
+    "type": "TRANSLATE_PLAYLIST_NAME",
   },
 ]
 `;

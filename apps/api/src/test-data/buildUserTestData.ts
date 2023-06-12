@@ -20,7 +20,7 @@ const dtos: DTO<CoscradUser>[] = [
         authProviderUserId: 'auth0|5db729701ead110c5b254553',
         profile: new CoscradUserProfile(dummyProfile),
         username: 'cool-james',
-        roles: [CoscradUserRole.viewer],
+        roles: [CoscradUserRole.projectAdmin],
     },
 ];
 
