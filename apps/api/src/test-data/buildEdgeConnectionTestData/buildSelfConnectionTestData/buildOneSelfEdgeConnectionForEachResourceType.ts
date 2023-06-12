@@ -3,7 +3,11 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
-import { FreeMultilineContext } from '../../../domain/models/context/free-multiline-context/free-multiline-context.entity';
+import {
+    FreeMultilineContext,
+    Line2DForContext,
+    Point2DForContext,
+} from '../../../domain/models/context/free-multiline-context/free-multiline-context.entity';
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { PointContext } from '../../../domain/models/context/point-context/point-context.entity';
@@ -111,14 +115,23 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                 },
                 context: new FreeMultilineContext({
                     type: EdgeConnectionContextType.freeMultiline,
-                    lines: [
+                    lines: (
                         [
-                            [0, 200],
-                            [100, 300],
-                            [200, 400],
-                            [250, 475],
-                        ],
-                    ],
+                            [
+                                [0, 200],
+                                [100, 300],
+                                [200, 400],
+                                [250, 475],
+                            ],
+                        ] as [number, number][][]
+                    ).map(
+                        (pointsForLine) =>
+                            new Line2DForContext({
+                                points: pointsForLine.map(
+                                    (point) => new Point2DForContext({ coordinates: point })
+                                ),
+                            })
+                    ),
                 }),
             },
         ],

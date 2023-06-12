@@ -1,4 +1,9 @@
-import { UnionMember } from '@coscrad/data-types';
+import {
+    FixedValue,
+    NonEmptyString,
+    NonNegativeFiniteNumber,
+    UnionMember,
+} from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import { EdgeConnectionContext } from '../context.entity';
 import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
@@ -6,10 +11,24 @@ import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
 @UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.textField)
 export class TextFieldContext extends EdgeConnectionContext {
+    @FixedValue(
+        // EdgeConnectionType.textField,
+        {
+            label: 'context type',
+            description: 'text field',
+        }
+    )
     readonly type = EdgeConnectionContextType.textField;
 
     // This is the key (field name) of the target text property on the model
+    @NonEmptyString({
+        label: 'target property',
+        description:
+            'the text-valued property that provides the context for this note or connection',
+    })
     readonly target: string;
+
+    // given that all text is to be Multilingual text, do we need a `langaugeCode` property here as well?
 
     /**
      * The range of characters to use for the context.
@@ -27,6 +46,18 @@ export class TextFieldContext extends EdgeConnectionContext {
      *        constant so you are certain \ acting with intent.
      *  - Have a separate context type for this case
      */
+    /**
+     * TODO: We either need to introduce a `CharRange` data class and leverage it
+     * as an @NestedType(...) here, or Introduce some kind of `Tuple` decorator
+     * or metadata option. Note the latter would sidestep the type issues our
+     * DTO helper type has.
+     */
+    @NonNegativeFiniteNumber({
+        isArray: true,
+        label: 'character range',
+        description:
+            'specifies a range of characters in a text that are relevant to a note or connection',
+    })
     readonly charRange: [number, number];
 
     constructor(dto: DTO<TextFieldContext>) {

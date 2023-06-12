@@ -7,9 +7,9 @@ import { DTO } from '../../../../types/DTO';
 import formatPosition2D from '../../../../view-models/presentation/formatPosition2D';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { Valid } from '../../../domainModelValidators/Valid';
 import FreeMultilineContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/freeMultilineContext/FreeMultilineContextOutOfBoundsError';
 import PointContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pointContext/PointContextOutOfBoundsError';
-import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
 import { FreeMultilineContext } from '../../context/free-multiline-context/free-multiline-context.entity';
@@ -79,8 +79,9 @@ export class Photograph extends Resource implements Boundable2D {
 
     // TODO break out the validate point logic into a validation library instead
     validateFreeMultilineContext({ lines }: FreeMultilineContext): Valid | InternalError {
-        const allErrors: InternalError[] = lines.reduce(
-            (accumulatedErrors: InternalError[], line, index) => {
+        const allErrors: InternalError[] = lines
+            .map((line) => line.getCoordinates())
+            .reduce((accumulatedErrors: InternalError[], line, index) => {
                 const invalidPointsForThisLine = findAllPointsInLineNotWithinBounds(
                     line,
                     this.getGeometricBounds()
@@ -106,9 +107,7 @@ export class Photograph extends Resource implements Boundable2D {
                 }
 
                 return accumulatedErrors;
-            },
-            []
-        );
+            }, []);
 
         if (allErrors.length > 0)
             return new FreeMultilineContextOutOfBoundsError(

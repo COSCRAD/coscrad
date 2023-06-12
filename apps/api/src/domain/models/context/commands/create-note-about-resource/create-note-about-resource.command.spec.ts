@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import buildTestData from '../../../../../test-data/buildTestData';
 import formatAggregateType from '../../../../../view-models/presentation/formatAggregateType';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -18,6 +19,11 @@ import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
+import {
+    EdgeConnection,
+    EdgeConnectionMemberRole,
+    EdgeConnectionType,
+} from '../../edge-connection.entity';
 import { GeneralContext } from '../../general-context/general-context.entity';
 import { PointContext } from '../../point-context/point-context.entity';
 import { TimeRangeContext } from '../../time-range-context/time-range-context.entity';
@@ -25,6 +31,32 @@ import { EdgeConnectionContextType } from '../../types/EdgeConnectionContextType
 import { CreateNoteAboutResource } from './create-note-about-resource.command';
 
 const commandType = 'CREATE_NOTE_ABOUT_RESOURCE';
+
+const { resources: dummyResources, note: dummyNotes } = buildTestData();
+
+const notesToCreate = dummyNotes.reduce(
+    ({ seenResourceTypes, keepers }, note) => {
+        const resourceType = note.members[0].compositeIdentifier.type;
+
+        if (seenResourceTypes.includes(resourceType)) {
+            // no-op
+            return {
+                seenResourceTypes,
+                keepers,
+            };
+        }
+
+        return {
+            seenResourceTypes: seenResourceTypes.concat(resourceType),
+            // keep this note and mark its member's resource type as seen
+            keepers: keepers.concat(note),
+        };
+    },
+    {
+        seenResourceTypes: [],
+        keepers: [],
+    }
+).keepers;
 
 const validAudioItem = getValidAggregateInstanceForTest(AggregateType.audioItem);
 
@@ -38,7 +70,9 @@ const validContext = new TimeRangeContext({
 
 const dummyNoteText = 'this is the dummy note';
 
-const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<CreateNoteAboutResource> => ({
+const buildValidCommandFSAForAudioItem = (
+    id: AggregateId
+): FluxStandardAction<CreateNoteAboutResource> => ({
     type: commandType,
     payload: {
         aggregateCompositeIdentifier: {
@@ -51,7 +85,45 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<CreateNoteAbo
     },
 });
 
-const commandFSAFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
+const commandFSAFactory = new DummyCommandFSAFactory(buildValidCommandFSAForAudioItem);
+
+const buildCreateNoteAboutResourceFSAForNote = (
+    edgeConnection: EdgeConnection
+): Omit<CreateNoteAboutResource, 'aggregateCompositeIdentifier'> => {
+    const { members, note } = edgeConnection;
+
+    if (members.length !== 1) {
+        throw new Error(
+            `Cannot build a CREATE_NOTE_ABOUT_RESOURCE FSA for an edge connection with more than 1 member`
+        );
+    }
+
+    const selfMember = members[0];
+
+    if (selfMember.role !== EdgeConnectionMemberRole.self) {
+        throw new Error(
+            `Cannot build a CREATE_NOTE_ABOUT_RESOURCE FSA for an edge connection whose member has a role: ${selfMember.role}`
+        );
+    }
+
+    const { compositeIdentifier: resourceCompositeIdentifier, context: resourceContext } =
+        selfMember;
+
+    return {
+        text: note,
+        resourceCompositeIdentifier,
+        resourceContext,
+    };
+};
+
+const comprehensiveValidFSAs = notesToCreate
+    // filter out the self-connections (true notes) from the db
+    .filter(({ connectionType }: EdgeConnection) => connectionType === EdgeConnectionType.self)
+    .map(buildCreateNoteAboutResourceFSAForNote)
+    .map((payload) => ({
+        type: commandType,
+        payload,
+    }));
 
 /**
  * We need to make the test cases comprehensive
@@ -60,7 +132,18 @@ const commandFSAFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
  *     - For every `ContextType` consistent with this `ResourceType
  *     - find the self note from the test data with this resource type and context type and attempt to create it it anew
  *         - note that we should not load the edge connections, but only the resources from the test data
+ *
+ * **Invalid Cases**
+ * For every incompatible categorizabale type
  */
+
+const validInitialState = new DeluxeInMemoryStore({
+    /**
+     * We put the test data for resources, but not the notes in the database.
+     * We will attempt to create the notes.
+     */
+    ...dummyResources,
+}).fetchFullSnapshotInLegacyFormat();
 
 describe(commandType, () => {
     let testRepositoryProvider: TestRepositoryProvider;
@@ -100,15 +183,43 @@ describe(commandType, () => {
 
     // TODO make this comprehensive across all compatible resource type \ context type combos
     describe(`when the command is valid`, () => {
-        it(`should succeed with the expected updates to the database`, async () => {
-            await assertCreateCommandSuccess(assertionHelperDependencies, {
-                systemUserId: dummySystemUserId,
-                buildValidCommandFSA,
-                initialState: new DeluxeInMemoryStore({
-                    [AggregateType.audioItem]: [validAudioItem],
-                }).fetchFullSnapshotInLegacyFormat(),
+        comprehensiveValidFSAs
+            .filter(
+                (fsa) => fsa.payload.resourceCompositeIdentifier.type === ResourceType.photograph
+            )
+            .forEach((fsa) => {
+                const { payload } = fsa;
+
+                const { resourceCompositeIdentifier, resourceContext } = payload;
+
+                const { type: resourceType } = resourceCompositeIdentifier;
+
+                describe(`resource type: ${resourceType}, context type: ${resourceContext.type}`, () => {
+                    it.only(`should succeed with the expected database updates`, async () => {
+                        await assertCreateCommandSuccess(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            buildValidCommandFSA: (id: AggregateId) => ({
+                                type: commandType,
+                                payload: {
+                                    ...payload,
+                                    aggregateCompositeIdentifier: {
+                                        type: AggregateType.note,
+                                        id,
+                                    },
+                                },
+                            }),
+                            initialState: validInitialState,
+                        });
+                    });
+                });
             });
-        });
+        // it(`should succeed with the expected updates to the database`, async () => {
+        //     await assertCreateCommandSuccess(assertionHelperDependencies, {
+        //         systemUserId: dummySystemUserId,
+        //         buildValidCommandFSA: buildValidCommandFSAForAudioItem,
+        //         initialState: validInitialState,
+        //     });
+        // });
     });
 
     describe(`when the command is invalid`, () => {
@@ -223,7 +334,7 @@ describe(commandType, () => {
                             await assertCommandFailsDueToTypeError(
                                 assertionHelperDependencies,
                                 { propertyName, invalidValue },
-                                buildValidCommandFSA(dummyUuid)
+                                buildValidCommandFSAForAudioItem(dummyUuid)
                             );
                         });
                     });

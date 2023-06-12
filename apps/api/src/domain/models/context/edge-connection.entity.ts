@@ -8,18 +8,18 @@ import {
     Union,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
+import { Valid, isValid } from '../../domainModelValidators/Valid';
 import validateEdgeConnection from '../../domainModelValidators/contextValidators/validateEdgeConnection';
-import { isValid, Valid } from '../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../types/AggregateType';
 import { ResourceCompositeIdentifier } from '../../types/ResourceCompositeIdentifier';
-import { InMemorySnapshot, isResourceType, ResourceType } from '../../types/ResourceType';
-import { Aggregate } from '../aggregate.entity';
+import { InMemorySnapshot, ResourceType, isResourceType } from '../../types/ResourceType';
 import BaseDomainModel from '../BaseDomainModel';
+import { Aggregate } from '../aggregate.entity';
 import { Resource } from '../resource.entity';
 import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
@@ -38,6 +38,7 @@ import { Injectable } from '@nestjs/common';
 import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
+import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
 
 export const EDGE_CONNECTION_CONTEXT_UNION = 'EDGE_CONNECTION_CONTEXT_UNION';
 
@@ -170,10 +171,16 @@ export class EdgeConnection extends Aggregate {
     private validateMembersState({ resources }: InMemorySnapshot): InternalError[] {
         return this.members
             .map(({ compositeIdentifier: { type, id }, context }) => ({
-                resource: (resources[type] as Resource[]).find((resource) => resource.id === id),
+                resource:
+                    (resources[type] as Resource[]).find((resource) => resource.id === id) ||
+                    new AggregateNotFoundError({ type, id }),
                 context,
             }))
-            .map(({ resource, context }) => resource.validateContext(context))
+            .map(({ resource, context }) => {
+                if (isInternalError(resource)) return resource;
+
+                return resource.validateContext(context);
+            })
             .filter((result): result is InternalError => !isValid(result));
     }
 
