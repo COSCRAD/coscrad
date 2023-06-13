@@ -1,9 +1,9 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { DefaultPlayButton } from './default-clip-player-button';
 
 interface IPlayButtonProps {
-    isDisabled: boolean;
     onButtonClick: () => void;
 }
 
@@ -13,33 +13,56 @@ export interface IPlayButton {
 
 export interface AudioClipPlayerProps {
     audioUrl: string;
-    PlayButton?: IPlayButton;
+    UserDefinedPlayButton?: IPlayButton;
 }
 
-export function AudioClipPlayer({ audioUrl, PlayButton }: AudioClipPlayerProps) {
-    const [canPlay, setCanPlay] = useState(false);
+enum AudioState {
+    loading = 'loading',
+    error = 'error',
+    canPlay = 'canPlay',
+}
+
+export function AudioClipPlayer({ audioUrl, UserDefinedPlayButton }: AudioClipPlayerProps) {
+    const [audioState, setAudioState] = useState<AudioState>(AudioState.loading);
+
+    useEffect(() => {
+        const onCanPlay = () => {
+            setAudioState(AudioState.canPlay);
+        };
+
+        const onError = () => {
+            setAudioState(AudioState.error);
+        };
+
+        /**
+         * This audio instance will never be played. We are using it to test whether
+         * the URL is valid.
+         */
+        const testAudio = new Audio(audioUrl);
+
+        testAudio.addEventListener('canplaythrough', onCanPlay);
+
+        testAudio.addEventListener('error', onError);
+    }, [audioUrl]);
 
     const handleMediaPlayerIconClick = () => {
-        new Audio(audioUrl).play().catch(console.log);
+        console.log(`attempting to play audio`);
+
+        new Audio(audioUrl).play().catch((err) => console.log(`failed to play audio: ${err}`));
     };
 
-    const handleAudioLoad = () => {
-        setCanPlay(true);
-    };
+    const PlayButton = isNullOrUndefined(UserDefinedPlayButton)
+        ? DefaultPlayButton
+        : UserDefinedPlayButton;
 
-    return (
-        <Box data-testid="audio-clip-player">
-            <audio src={audioUrl} onCanPlay={handleAudioLoad} />
+    if (audioState === AudioState.loading) return <div>Loading</div>;
 
-            {isNullOrUndefined(PlayButton) ? (
-                <audio src={audioUrl} controls onCanPlay={handleAudioLoad} />
-            ) : (
-                <PlayButton
-                    isDisabled={!canPlay}
-                    key={audioUrl}
-                    onButtonClick={handleMediaPlayerIconClick}
-                />
-            )}
-        </Box>
-    );
+    if (audioState === AudioState.canPlay)
+        return (
+            <Box>
+                <PlayButton key={audioUrl} onButtonClick={handleMediaPlayerIconClick} />
+            </Box>
+        );
+
+    return <div>audio not available</div>;
 }
