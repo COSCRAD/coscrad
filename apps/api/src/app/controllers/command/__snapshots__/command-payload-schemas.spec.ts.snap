@@ -1478,5 +1478,172 @@ exports[`command payload schemas Command payload schema should match the snapsho
     },
     "type": "TRANSLATE_PLAYLIST_NAME",
   },
+  {
+    "description": "creates a note about this particular resource",
+    "label": "Create Note",
+    "schema": {
+      "aggregateCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for the edge connection (note) being created",
+        "isArray": false,
+        "isOptional": false,
+        "label": "Composite Identifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "FIXED_VALUE",
+            "description": "must be: note",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "resourceCompositeIdentifier": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "system-wide unique identifier for the resource about which we are making a note",
+        "isArray": false,
+        "isOptional": false,
+        "label": "CompositeIdentifier",
+        "schema": {
+          "id": {
+            "coscradDataType": "UUID",
+            "description": "unique identifier",
+            "isArray": false,
+            "isOptional": false,
+            "label": "ID",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "song",
+            "isArray": false,
+            "isOptional": false,
+            "label": "type",
+          },
+        },
+      },
+      "resourceContext": {
+        "complexDataType": "UNION_TYPE",
+        "description": "contextualizes the note for the resource",
+        "discriminantPath": "type",
+        "isArray": false,
+        "isOptional": false,
+        "label": "context for resource",
+        "schemaDefinitions": [
+          {
+            "discriminant": "general",
+            "schema": {
+              "type": {
+                "coscradDataType": "FIXED_VALUE",
+                "description": "must be: general",
+                "isArray": false,
+                "isOptional": false,
+                "label": "context type",
+              },
+            },
+          },
+          {
+            "discriminant": "pageRange",
+            "schema": {
+              "pageIdentifiers": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "a list of page identifiers relevant to this note or connection",
+                "isArray": true,
+                "isOptional": false,
+                "label": "page identifiers",
+              },
+              "type": {
+                "coscradDataType": "FIXED_VALUE",
+                "description": "must be: pageRange",
+                "isArray": false,
+                "isOptional": false,
+                "label": "context type",
+              },
+            },
+          },
+          {
+            "discriminant": "timeRange",
+            "schema": {
+              "timeRange": {
+                "complexDataType": "NESTED_TYPE",
+                "description": "specifies the time range (in and out points) of a segment of a media item",
+                "isArray": false,
+                "isOptional": false,
+                "label": "time range",
+                "schema": {
+                  "inPoint": {
+                    "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                    "description": "starting time stamp",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "in point",
+                  },
+                  "outPoint": {
+                    "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                    "description": "ending time stamp",
+                    "isArray": false,
+                    "isOptional": false,
+                    "label": "out point",
+                  },
+                },
+              },
+              "type": {
+                "coscradDataType": "FIXED_VALUE",
+                "description": "type",
+                "isArray": false,
+                "isOptional": false,
+                "label": "type",
+              },
+            },
+          },
+          {
+            "discriminant": "textField",
+            "schema": {
+              "charRange": {
+                "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                "description": "specifies a range of characters in a text that are relevant to a note or connection",
+                "isArray": true,
+                "isOptional": false,
+                "label": "character range",
+              },
+              "target": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "the text-valued property that provides the context for this note or connection",
+                "isArray": false,
+                "isOptional": false,
+                "label": "target property",
+              },
+              "type": {
+                "coscradDataType": "FIXED_VALUE",
+                "description": "text field",
+                "isArray": false,
+                "isOptional": false,
+                "label": "context type",
+              },
+            },
+          },
+          {
+            "discriminant": "identity",
+            "schema": {},
+          },
+        ],
+        "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
+      },
+      "text": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "text for the note",
+        "isArray": false,
+        "isOptional": false,
+        "label": "text",
+      },
+    },
+    "type": "CREATE_NOTE_ABOUT_RESOURCE",
+  },
 ]
 `;

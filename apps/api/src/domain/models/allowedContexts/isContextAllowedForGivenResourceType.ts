@@ -14,8 +14,9 @@ import { EdgeConnectionContextType } from '../context/types/EdgeConnectionContex
  * and then on the Context classes:
  * @EdgeConnectionContext(contextType)
  * becomes the source of truth for the various context types.
+ *
  */
-const resourceTypeToAllowedContextTypes = {
+const resourceTypeToAllowedContextTypes: Record<ResourceType, string[]> = {
     [ResourceType.book]: [
         EdgeConnectionContextType.general,
         EdgeConnectionContextType.identity,
@@ -23,8 +24,10 @@ const resourceTypeToAllowedContextTypes = {
     ],
     [ResourceType.photograph]: [
         EdgeConnectionContextType.general,
-        EdgeConnectionContextType.point2D,
-        EdgeConnectionContextType.freeMultiline,
+        // TODO Support point2D context for Photographs
+        // EdgeConnectionContextType.point2D,
+        // TODO Support FreeMultilineContext for Photographs
+        // EdgeConnectionContextType.freeMultiline,
     ],
     [ResourceType.spatialFeature]: [
         EdgeConnectionContextType.general,
@@ -69,13 +72,11 @@ export const getResourceTypesThatOnlySupportGeneralContext = (): ResourceType[] 
         return value.length === 1 && value[0] === EdgeConnectionContextType.general;
     }) as ResourceType[];
 
-export const getAllowedContextsForModel = (
-    resourceType: ResourceType
-): EdgeConnectionContextType[] => {
+export const getAllowedContextsForModel = (resourceType: ResourceType): string[] => {
     const allowedContexts = resourceTypeToAllowedContextTypes[resourceType];
 
     return isNullOrUndefined(allowedContexts) ? [] : cloneToPlainObject(allowedContexts);
 };
 
-export default (contextType: EdgeConnectionContextType, resourceType: ResourceType): boolean =>
+export default (contextType: string, resourceType: ResourceType): boolean =>
     resourceTypeToAllowedContextTypes[resourceType].includes(contextType);

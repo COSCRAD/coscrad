@@ -88,6 +88,13 @@ describe(`resource model context state validators`, () => {
         it('should have at least one invalid test case for each resource type \\ context type combo', () => {
             const missingValidCases = allResourceTypeContextTypeCombos
                 .filter(([_, contextType]) => !getTrivialContextTypes().includes(contextType))
+                .filter(
+                    ([_, contextType]) =>
+                        ![
+                            EdgeConnectionContextType.point2D,
+                            EdgeConnectionContextType.freeMultiline,
+                        ].includes(contextType)
+                )
                 .reduce(
                     (
                         acc: [ResourceType, EdgeConnectionContextType][],

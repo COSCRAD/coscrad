@@ -32,6 +32,8 @@ const lookupTable: { [K in CoscradDataType]: FormFieldType } = {
     [CoscradDataType.BOOLEAN]: FormFieldType.switch,
     [CoscradDataType.String]: FormFieldType.textField,
     [CoscradDataType.MultilingualText]: FormFieldType.multilingualText,
+    // TODO Remove the following
+    [CoscradDataType.FixedValue]: FormFieldType.textField,
 };
 
 const buildSimpleFormField = (

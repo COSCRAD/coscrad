@@ -68,6 +68,7 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.String]: ['emptyString', 'arbitraryString', 'uuid', 'isbn10', 'isbn13'],
     // TODO Add valid example here
     [CoscradDataType.MultilingualText]: [],
+    [CoscradDataType.FixedValue]: [],
 };
 
 export const generateValidValuesOfType = (

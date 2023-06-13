@@ -1,11 +1,10 @@
-import { UnionMember } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import { Position2D } from '../../spatial-feature/types/Coordinates/Position2D';
 import { EdgeConnectionContext } from '../context.entity';
-import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
-@UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.point2D)
+// TODO Add support for point2D context
+// @UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.point2D)
 export class PointContext extends EdgeConnectionContext {
     readonly type = EdgeConnectionContextType.point2D;
 

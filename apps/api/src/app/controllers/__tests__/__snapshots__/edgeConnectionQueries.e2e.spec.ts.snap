@@ -31,33 +31,93 @@ exports[`When querying for edge connections GET /connections/ should return the 
           "schemaDefinitions": [
             {
               "discriminant": "general",
-              "schema": {},
+              "schema": {
+                "type": {
+                  "coscradDataType": "FIXED_VALUE",
+                  "description": "must be: general",
+                  "isArray": false,
+                  "isOptional": false,
+                  "label": "context type",
+                },
+              },
             },
             {
               "discriminant": "pageRange",
-              "schema": {},
+              "schema": {
+                "pageIdentifiers": {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "description": "a list of page identifiers relevant to this note or connection",
+                  "isArray": true,
+                  "isOptional": false,
+                  "label": "page identifiers",
+                },
+                "type": {
+                  "coscradDataType": "FIXED_VALUE",
+                  "description": "must be: pageRange",
+                  "isArray": false,
+                  "isOptional": false,
+                  "label": "context type",
+                },
+              },
             },
             {
               "discriminant": "timeRange",
-              "schema": {},
-            },
-            {
-              "discriminant": "textField",
-              "schema": {},
-            },
-            {
-              "discriminant": "point2D",
-              "schema": {},
-            },
-            {
-              "discriminant": "freeMultiline",
               "schema": {
+                "timeRange": {
+                  "complexDataType": "NESTED_TYPE",
+                  "description": "specifies the time range (in and out points) of a segment of a media item",
+                  "isArray": false,
+                  "isOptional": false,
+                  "label": "time range",
+                  "schema": {
+                    "inPoint": {
+                      "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                      "description": "starting time stamp",
+                      "isArray": false,
+                      "isOptional": false,
+                      "label": "in point",
+                    },
+                    "outPoint": {
+                      "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                      "description": "ending time stamp",
+                      "isArray": false,
+                      "isOptional": false,
+                      "label": "out point",
+                    },
+                  },
+                },
                 "type": {
-                  "coscradDataType": "NON_EMPTY_STRING",
-                  "description": "free multiline",
+                  "coscradDataType": "FIXED_VALUE",
+                  "description": "type",
                   "isArray": false,
                   "isOptional": false,
                   "label": "type",
+                },
+              },
+            },
+            {
+              "discriminant": "textField",
+              "schema": {
+                "charRange": {
+                  "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
+                  "description": "specifies a range of characters in a text that are relevant to a note or connection",
+                  "isArray": true,
+                  "isOptional": false,
+                  "label": "character range",
+                },
+                "target": {
+                  "coscradDataType": "NON_EMPTY_STRING",
+                  "description": "the text-valued property that provides the context for this note or connection",
+                  "isArray": false,
+                  "isOptional": false,
+                  "label": "target property",
+                },
+                "type": {
+                  "coscradDataType": "FIXED_VALUE",
+                  "description": "text field",
+                  "isArray": false,
+                  "isOptional": false,
+                  "label": "context type",
                 },
               },
             },
@@ -1500,27 +1560,7 @@ exports[`When querying for edge connections GET /connections/notes should return
             "type": "photograph",
           },
           "context": {
-            "lines": [
-              [
-                [
-                  0,
-                  200,
-                ],
-                [
-                  100,
-                  300,
-                ],
-                [
-                  200,
-                  400,
-                ],
-                [
-                  250,
-                  475,
-                ],
-              ],
-            ],
-            "type": "freeMultiline",
+            "type": "general",
           },
           "role": "self",
         },
@@ -1544,15 +1584,14 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-            "type": "photograph",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
           },
           "context": {
-            "point": [
-              0,
-              200,
+            "pageIdentifiers": [
+              "ix",
             ],
-            "type": "point2D",
+            "type": "pageRange",
           },
           "role": "self",
         },
@@ -1564,11 +1603,11 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "A note about photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
           },
         ],
       },
-      "note": "this is the base of the flower",
+      "note": "this section is the best part of an illustrated book about birds",
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -1620,14 +1659,11 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
-            "type": "book",
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "bibliographicReference",
           },
           "context": {
-            "pageIdentifiers": [
-              "ix",
-            ],
-            "type": "pageRange",
+            "type": "general",
           },
           "role": "self",
         },
@@ -1639,11 +1675,11 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "A note about book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "text": "A note about bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
         ],
       },
-      "note": "this section is the best part of an illustrated book about birds",
+      "note": "found this in the archives",
       "tags": [],
     },
     {
@@ -1652,10 +1688,14 @@ exports[`When querying for edge connections GET /connections/notes should return
         {
           "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-            "type": "bibliographicReference",
+            "type": "song",
           },
           "context": {
-            "type": "general",
+            "timeRange": {
+              "inPoint": 300,
+              "outPoint": 500,
+            },
+            "type": "timeRange",
           },
           "role": "self",
         },
@@ -1667,11 +1707,11 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "A note about bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "text": "A note about song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
         ],
       },
-      "note": "found this in the archives",
+      "note": "this is a song",
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -1721,38 +1761,6 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
         },
       ],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-            "type": "song",
-          },
-          "context": {
-            "timeRange": {
-              "inPoint": 300,
-              "outPoint": 500,
-            },
-            "type": "timeRange",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
-      "name": {
-        "items": [
-          {
-            "languageCode": "eng",
-            "role": "original",
-            "text": "A note about song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          },
-        ],
-      },
-      "note": "this is a song",
-      "tags": [],
     },
     {
       "actions": [],
@@ -1774,7 +1782,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110010",
       "name": {
         "items": [
           {
@@ -1785,6 +1793,38 @@ exports[`When querying for edge connections GET /connections/notes should return
         ],
       },
       "note": "this is an awesome show",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "mediaItem",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 650,
+              "outPoint": 1230,
+            },
+            "type": "timeRange",
+          },
+          "role": "self",
+        },
+      ],
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A note about mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
+      "note": "important clip from the show",
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -1841,38 +1881,6 @@ exports[`When querying for edge connections GET /connections/notes should return
         {
           "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-            "type": "mediaItem",
-          },
-          "context": {
-            "timeRange": {
-              "inPoint": 650,
-              "outPoint": 1230,
-            },
-            "type": "timeRange",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
-      "name": {
-        "items": [
-          {
-            "languageCode": "eng",
-            "role": "original",
-            "text": "A note about mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          },
-        ],
-      },
-      "note": "important clip from the show",
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "bibliographicReference",
           },
           "context": {
@@ -1882,7 +1890,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
       "name": {
         "items": [
           {
@@ -1914,7 +1922,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
       "name": {
         "items": [
           {
@@ -1942,7 +1950,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
       "name": {
         "items": [
           {
@@ -1970,7 +1978,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
       "name": {
         "items": [
           {
@@ -1998,7 +2006,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
       "name": {
         "items": [
           {
@@ -2026,7 +2034,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
       "name": {
         "items": [
           {
@@ -2054,7 +2062,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
       "name": {
         "items": [
           {
@@ -2072,62 +2080,6 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-            "type": "photograph",
-          },
-          "context": {
-            "type": "general",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
-      "name": {
-        "items": [
-          {
-            "languageCode": "eng",
-            "role": "original",
-            "text": "A note about photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-          },
-        ],
-      },
-      "note": "this is the stem of the flower",
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-            "type": "photograph",
-          },
-          "context": {
-            "type": "general",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
-      "name": {
-        "items": [
-          {
-            "languageCode": "eng",
-            "role": "original",
-            "text": "A note about photograph/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
-          },
-        ],
-      },
-      "note": "this is the base of the flower",
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
             "type": "book",
           },
@@ -2138,7 +2090,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
       "name": {
         "items": [
           {
@@ -2166,7 +2118,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
       "name": {
         "items": [
           {
@@ -2194,7 +2146,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
       "name": {
         "items": [
           {
@@ -2222,7 +2174,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
       "name": {
         "items": [
           {
@@ -2250,7 +2202,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110026",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
       "name": {
         "items": [
           {
@@ -2493,27 +2445,7 @@ exports[`When querying for edge connections GET /connections/notes should return
             "type": "photograph",
           },
           "context": {
-            "lines": [
-              [
-                [
-                  0,
-                  200,
-                ],
-                [
-                  100,
-                  300,
-                ],
-                [
-                  200,
-                  400,
-                ],
-                [
-                  250,
-                  475,
-                ],
-              ],
-            ],
-            "type": "freeMultiline",
+            "type": "general",
           },
           "role": "from",
         },
@@ -2573,27 +2505,7 @@ exports[`When querying for edge connections GET /connections/notes should return
             "type": "photograph",
           },
           "context": {
-            "lines": [
-              [
-                [
-                  0,
-                  200,
-                ],
-                [
-                  100,
-                  300,
-                ],
-                [
-                  200,
-                  400,
-                ],
-                [
-                  250,
-                  475,
-                ],
-              ],
-            ],
-            "type": "freeMultiline",
+            "type": "general",
           },
           "role": "to",
         },

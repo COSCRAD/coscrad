@@ -2,23 +2,23 @@ import {
     CompositeIdentifier,
     CoscradEnum,
     Enum,
+    ExternalEnum,
     NestedDataType,
     NonEmptyString,
-    Union,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { InternalError } from '../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
+import { Valid, isValid } from '../../domainModelValidators/Valid';
 import validateEdgeConnection from '../../domainModelValidators/contextValidators/validateEdgeConnection';
-import { isValid, Valid } from '../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../types/AggregateType';
 import { ResourceCompositeIdentifier } from '../../types/ResourceCompositeIdentifier';
-import { InMemorySnapshot, isResourceType, ResourceType } from '../../types/ResourceType';
-import { Aggregate } from '../aggregate.entity';
+import { InMemorySnapshot, ResourceType, isResourceType } from '../../types/ResourceType';
 import BaseDomainModel from '../BaseDomainModel';
+import { Aggregate } from '../aggregate.entity';
 import { Resource } from '../resource.entity';
 import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
@@ -34,20 +34,11 @@ import {
     IEdgeConnectionMember,
 } from '@coscrad/api-interfaces';
 import { Injectable } from '@nestjs/common';
-import { ResultOrError } from '../../../types/ResultOrError';
 import formatAggregateCompositeIdentifier from '../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
-import InvariantValidationError from '../../domainModelValidators/errors/InvariantValidationError';
-
-export const EDGE_CONNECTION_CONTEXT_UNION = 'EDGE_CONNECTION_CONTEXT_UNION';
-
-/**
- * This is a decorator (the returned value of a decorator factory). We export
- * this here for reuse in `EdgeConnection` command payloads.
- */
-export const ContextUnion = ({ label, description }: { label: string; description: string }) =>
-    Union(EDGE_CONNECTION_CONTEXT_UNION, 'type', { label, description });
+import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
+import { ContextUnion } from './edge-connection-context-union';
 
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
     extends BaseDomainModel
@@ -95,6 +86,26 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
 export class EdgeConnection extends Aggregate {
     type = AggregateType.note;
 
+    @ExternalEnum(
+        {
+            enumName: 'EdgeConnectionType',
+            enumLabel: 'Edge Connection Type',
+            labelsAndValues: [
+                {
+                    label: 'note',
+                    value: EdgeConnectionType.self,
+                },
+                {
+                    label: 'connection',
+                    value: EdgeConnectionType.dual,
+                },
+            ],
+        },
+        {
+            label: 'type',
+            description: 'either note or connection',
+        }
+    )
     connectionType: EdgeConnectionType;
 
     @NestedDataType(EdgeConnectionMember, {
@@ -151,10 +162,16 @@ export class EdgeConnection extends Aggregate {
     private validateMembersState({ resources }: InMemorySnapshot): InternalError[] {
         return this.members
             .map(({ compositeIdentifier: { type, id }, context }) => ({
-                resource: (resources[type] as Resource[]).find((resource) => resource.id === id),
+                resource:
+                    (resources[type] as Resource[]).find((resource) => resource.id === id) ||
+                    new AggregateNotFoundError({ type, id }),
                 context,
             }))
-            .map(({ resource, context }) => resource.validateContext(context))
+            .map(({ resource, context }) => {
+                if (isInternalError(resource)) return resource;
+
+                return resource.validateContext(context);
+            })
             .filter((result): result is InternalError => !isValid(result));
     }
 
@@ -184,20 +201,6 @@ export class EdgeConnection extends Aggregate {
          * to use an edge connection to mark identity in this way and it may
          * be that we need to improve our representation of the domain.
          */
-    }
-
-    /**
-     * TODO[https://www.pivotaltracker.com/story/show/185363079]
-     *
-     * Note that we are bypassing the decorator-based COSCRAD data-type (simple-invariant)
-     * validation for the time being. We should fix this in the future.
-     */
-    override validateInvariants(): ResultOrError<typeof Valid> {
-        const allErrors = validateEdgeConnection(this);
-
-        return allErrors.length > 0
-            ? new InvariantValidationError(this.getCompositeIdentifier(), allErrors)
-            : Valid;
     }
 
     protected validateComplexInvariants(): InternalError[] {
