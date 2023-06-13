@@ -19,6 +19,7 @@ import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/a
 import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
 import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
@@ -431,6 +432,30 @@ describe(commandType, () => {
         });
 
         describe('when the payload has an invalid type', () => {
+            describe(`when the aggregate composite identifier does not have the type: note`, () => {
+                Object.values(AggregateType)
+                    .filter((aggregateType) => aggregateType !== AggregateType.note)
+                    .forEach((aggregateType) => {
+                        describe(`when aggregateCompositeIdentifier.type = ${aggregateType}`, () => {
+                            it(`should fail with a type error`, async () => {
+                                await assertCommandFailsDueToTypeError(
+                                    assertionHelperDependencies,
+                                    {
+                                        propertyName: 'aggregateCompositeIdentifier',
+                                        invalidValue: {
+                                            type: aggregateType,
+                                            // This shouldn't matter as long as it has the right format for type validation
+                                            id: buildDummyUuid(123),
+                                        },
+                                    },
+                                    buildValidCommandFSAForAudioItem(dummyUuid)
+                                );
+                            });
+                        });
+                    });
+            });
+
+            // Fuzz test cases
             generateCommandFuzzTestCases(CreateNoteAboutResource).forEach(
                 ({ description, propertyName, invalidValue }) => {
                     describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {

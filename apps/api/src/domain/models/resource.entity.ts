@@ -11,10 +11,7 @@ import { ResourceType } from '../types/ResourceType';
 import { Aggregate } from './aggregate.entity';
 import { getAllowedContextsForModel } from './allowedContexts/isContextAllowedForGivenResourceType';
 import { EdgeConnectionContext } from './context/context.entity';
-import {
-    EdgeConnectionContextType,
-    isEdgeConnectionContextType,
-} from './context/types/EdgeConnectionContextType';
+import { EdgeConnectionContextType } from './context/types/EdgeConnectionContextType';
 import ResourceAlreadyPublishedError from './ResourceAlreadyPublishedError';
 import { AccessControlList } from './shared/access-control/access-control-list.entity';
 import UserAlreadyHasReadAccessError from './shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
@@ -77,10 +74,6 @@ export abstract class Resource extends Aggregate {
      */
     validateContext(context: EdgeConnectionContext): Valid | InternalError {
         const { type } = context;
-
-        if (!isEdgeConnectionContextType(type)) {
-            return new InternalError(`Encountered an invalid Edge Connection type: ${type}`);
-        }
 
         if (type === EdgeConnectionContextType.general) return Valid;
 

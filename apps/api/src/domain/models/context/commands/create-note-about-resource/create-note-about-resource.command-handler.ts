@@ -27,7 +27,7 @@ import { NoteAboutResourceCreated } from './note-about-resource-created.event';
 export class CreateNoteAboutResourceCommandHandler extends BaseCreateCommandHandler<EdgeConnection> {
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<EdgeConnection>;
 
-    protected aggregateType: AggregateType;
+    protected aggregateType: AggregateType = AggregateType.note;
 
     constructor(
         @Inject(REPOSITORY_PROVIDER_TOKEN)

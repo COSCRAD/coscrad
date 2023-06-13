@@ -38,7 +38,7 @@ import formatAggregateCompositeIdentifier from '../../../view-models/presentatio
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
 import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
-import { ContextUnion } from './constants';
+import { ContextUnion } from './edge-connection-context-union';
 
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
     extends BaseDomainModel

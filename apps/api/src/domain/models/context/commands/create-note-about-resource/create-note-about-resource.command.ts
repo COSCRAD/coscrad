@@ -5,8 +5,8 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
-import { ContextUnion } from '../../constants';
+import { FixedValue, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { ContextUnion } from '../../edge-connection-context-union';
 
 export class ResourceCompositeIdentifier {
     // TODO Make this an enum
@@ -27,9 +27,9 @@ export class ResourceCompositeIdentifier {
 
 export class EdgeConnectionCompositeIdentifier {
     // TODO Use a more restrictive type decorator
-    @NonEmptyString({
+    @FixedValue({
         label: 'type',
-        description: 'song',
+        description: `must be: note`,
     })
     // TODO be sure to test when an invalid aggregate type comes through
     type = AggregateType.note;

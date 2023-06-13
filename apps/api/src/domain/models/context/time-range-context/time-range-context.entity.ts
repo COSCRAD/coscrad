@@ -7,8 +7,8 @@ import {
 import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../BaseDomainModel';
 import { TranscriptItem } from '../../audio-item/entities/transcript-item.entity';
-import { EDGE_CONNECTION_CONTEXT_UNION } from '../constants';
 import { EdgeConnectionContext } from '../context.entity';
+import { EDGE_CONNECTION_CONTEXT_UNION } from '../edge-connection-context-union';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
 export class TimeRange extends BaseDomainModel {
@@ -37,8 +37,7 @@ export class TimeRange extends BaseDomainModel {
     }
 }
 
-// We don't want the `data` type and we don't need OO baggage for this prop
-// TODO Improve the naming
+// TODO Remove this in favor of a proper data class
 export type TimeRangeWithoutData = Pick<TranscriptItem, 'inPoint' | 'outPoint'>;
 
 @UnionMember(EDGE_CONNECTION_CONTEXT_UNION, EdgeConnectionContextType.timeRange)
