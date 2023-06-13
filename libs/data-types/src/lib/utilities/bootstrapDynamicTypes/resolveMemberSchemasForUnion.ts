@@ -1,7 +1,7 @@
 import { UnionMemberMetadata } from '../../decorators';
 import { ClassSchema, isSimpleCoscradPropertyTypeDefinition } from '../../types';
 import getCoscradDataSchema from '../getCoscradDataSchema';
-import { buildUnionTypesMap } from './bootstrapDynamicTypes';
+import { buildUnionTypesMap } from './buildUnionTypesMap';
 import { UnionLeveragesAnotherException } from './exceptions';
 import { leveragesUniontype } from './leveragesUnionType';
 

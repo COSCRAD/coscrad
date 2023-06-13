@@ -1,6 +1,6 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Ctor } from '../getCoscradDataSchemaFromPrototype';
-import { buildUnionTypesMap } from './bootstrapDynamicTypes';
+import { buildUnionTypesMap } from './buildUnionTypesMap';
 
 export interface Builder<T = unknown, U = unknown> {
     build(input: T): U;
@@ -8,7 +8,7 @@ export interface Builder<T = unknown, U = unknown> {
 
 export class UnionFactory<T = unknown, UProduct = unknown> {
     // this assumes a string determinant
-    private readonly unionMememberMap: Map<string, Ctor<T>>;
+    private readonly unionMemberMap: Map<string, Ctor<T>>;
 
     private readonly discriminantPath: string;
 
@@ -21,7 +21,7 @@ export class UnionFactory<T = unknown, UProduct = unknown> {
 
         const { discriminantPath, membersMap } = unionMap.get(unionName);
 
-        this.unionMememberMap = membersMap;
+        this.unionMemberMap = membersMap;
 
         this.discriminantPath = discriminantPath;
     }
@@ -35,7 +35,7 @@ export class UnionFactory<T = unknown, UProduct = unknown> {
 
         const discriminantValue = input[this.discriminantPath] as string;
 
-        const UnionMemberCtor = this.unionMememberMap.get(discriminantValue);
+        const UnionMemberCtor = this.unionMemberMap.get(discriminantValue);
 
         if (!UnionMemberCtor) {
             throw new Error(
