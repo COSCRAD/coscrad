@@ -34,6 +34,10 @@ import {
     CreateNoteAboutResourceCommandHandler,
 } from '../../../domain/models/context/commands';
 import {
+    ConnectResourcesWithNote,
+    ConnectResourcesWithNoteCommandHandler,
+} from '../../../domain/models/context/commands/connect-resources-with-note';
+import {
     EdgeConnection,
     EdgeConnectionMember,
 } from '../../../domain/models/context/edge-connection.entity';
@@ -156,6 +160,9 @@ export const buildAllDataClassProviders = () =>
         EdgeConnection,
         EdgeConnectionMember,
         NoteViewModel,
+        ConnectResourcesWithNote,
+        CreateNoteAboutResource,
+
         // Context Union
         GeneralContext,
         PageRangeContext,
@@ -164,7 +171,6 @@ export const buildAllDataClassProviders = () =>
         PointContext,
         FreeMultilineContext,
         IdentityContext,
-        CreateNoteAboutResource,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,
@@ -411,6 +417,7 @@ export default async (
             AddAudioItemToPlaylistCommandHandler,
             TranslatePlaylistNameCommandHandler,
             CreateNoteAboutResourceCommandHandler,
+            ConnectResourcesWithNoteCommandHandler,
         ],
 
         controllers: [
