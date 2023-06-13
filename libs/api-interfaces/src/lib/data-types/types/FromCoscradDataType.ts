@@ -18,6 +18,7 @@ type CoscradDataTypeToTypeScriptType = {
     [CoscradDataType.Year]: number;
     [CoscradDataType.String]: string;
     [CoscradDataType.MultilingualText]: unknown;
+    [CoscradDataType.FixedValue]: unknown;
 };
 
 // is this still used?

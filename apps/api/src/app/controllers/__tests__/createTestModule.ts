@@ -30,6 +30,10 @@ import { CreateJournalArticleBibliographicReference } from '../../../domain/mode
 import { CreateJournalArticleBibliographicReferenceCommandHandler } from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/commands/create-journal-article-bibliographic-reference.command-handler';
 import JournalArticleBibliographicReferenceData from '../../../domain/models/bibliographic-reference/journal-article-bibliographic-reference/entities/journal-article-bibliographic-reference-data.entity';
 import {
+    CreateNoteAboutResource,
+    CreateNoteAboutResourceCommandHandler,
+} from '../../../domain/models/context/commands';
+import {
     EdgeConnection,
     EdgeConnectionMember,
 } from '../../../domain/models/context/edge-connection.entity';
@@ -46,11 +50,8 @@ import { TimeRangeContext } from '../../../domain/models/context/time-range-cont
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item.command-handler';
 import {
-    AddAudioItemToPlaylist,
     AddAudioItemToPlaylistCommandHandler,
-    CreatePlayList,
     CreatePlayListCommandHandler,
-    TranslatePlaylistName,
     TranslatePlaylistNameCommandHandler,
 } from '../../../domain/models/playlist/commands';
 import {
@@ -109,10 +110,10 @@ import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeModule } from '../../../validation';
 import { BibliographicReferenceViewModel } from '../../../view-models/buildViewModelForResource/viewModels/bibliographic-reference/bibliographic-reference.view-model';
 import { NoteViewModel } from '../../../view-models/edgeConnectionViewModels/note.view-model';
+import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/Environment';
 import { EnvironmentVariables } from '../../config/env.validation';
-import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import { AdminController } from '../admin.controller';
 import { CategoryController } from '../category.controller';
 import { AdminJwtGuard, CommandController } from '../command/command.controller';
@@ -142,6 +143,32 @@ type CreateTestModuleOptions = {
 
 // If not specified, there will be no test user attached to requests
 const optionDefaults = { shouldMockIdGenerator: false };
+
+export const buildAllDataClassProviders = () =>
+    [
+        // Classes with dynamic union data types
+        // Bibliographic References
+        BibliographicReferenceViewModel,
+        CourtCaseBibliographicReferenceData,
+        JournalArticleBibliographicReferenceData,
+        BookBibliographicReferenceData,
+        // Edge Connections
+        EdgeConnection,
+        EdgeConnectionMember,
+        NoteViewModel,
+        // Context Union
+        GeneralContext,
+        PageRangeContext,
+        TimeRangeContext,
+        TextFieldContext,
+        PointContext,
+        FreeMultilineContext,
+        IdentityContext,
+        CreateNoteAboutResource,
+    ].map((ctor: Ctor<unknown>) => ({
+        provide: ctor,
+        useValue: ctor,
+    }));
 
 export default async (
     configOverrides: Partial<DTO<EnvironmentVariables>>,
@@ -334,33 +361,7 @@ export default async (
                 provide: JwtStrategy,
                 useFactory: () => new MockJwtStrategy(testUserWithGroups),
             },
-            ...[
-                // Classes with dynamic union data types
-                // Bibliographic References
-                BibliographicReferenceViewModel,
-                CourtCaseBibliographicReferenceData,
-                JournalArticleBibliographicReferenceData,
-                BookBibliographicReferenceData,
-                // Edge Connections
-                EdgeConnection,
-                EdgeConnectionMember,
-                NoteViewModel,
-                // Context Union
-                GeneralContext,
-                PageRangeContext,
-                TimeRangeContext,
-                TextFieldContext,
-                PointContext,
-                FreeMultilineContext,
-                IdentityContext,
-                // Playlists
-                CreatePlayList,
-                AddAudioItemToPlaylist,
-                TranslatePlaylistName,
-            ].map((ctor: Ctor<unknown>) => ({
-                provide: ctor,
-                useValue: ctor,
-            })),
+            ...buildAllDataClassProviders(),
             /**
              * TODO [https://www.pivotaltracker.com/story/show/182576828]
              *
@@ -409,6 +410,7 @@ export default async (
             CreatePlayListCommandHandler,
             AddAudioItemToPlaylistCommandHandler,
             TranslatePlaylistNameCommandHandler,
+            CreateNoteAboutResourceCommandHandler,
         ],
 
         controllers: [

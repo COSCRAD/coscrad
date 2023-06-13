@@ -1,5 +1,6 @@
 import { ResourceType, ResourceTypeToResourceModel } from '../../../types/ResourceType';
 import { getAllowedContextsForModel } from '../../allowedContexts/isContextAllowedForGivenResourceType';
+import { EdgeConnectionContextType } from '../../context/types/EdgeConnectionContextType';
 import { ResourceModelContextStateValidatorValidTestCase } from '../resourceModelContextStateValidators.spec';
 import getValidResourceAndContextPairForTest from './getValidResourceAndContextPairForTest';
 
@@ -9,7 +10,7 @@ export default <TResourceType extends ResourceType = ResourceType>(
     getAllowedContextsForModel(resourceType).map((contextType) => {
         const [resource, context] = getValidResourceAndContextPairForTest(
             resourceType,
-            contextType
+            contextType as EdgeConnectionContextType
         );
 
         return {

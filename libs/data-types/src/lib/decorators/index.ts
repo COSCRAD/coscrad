@@ -2,6 +2,7 @@ export * from './CompositeIdentifier';
 export * from './CoscradMultilingualText';
 export * from './Enum';
 export * from './ExternalEnum';
+export * from './FixedValue';
 export * from './FromDomainModel';
 export * from './ISBN';
 export * from './NestedDataType';
