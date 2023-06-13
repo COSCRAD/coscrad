@@ -7,6 +7,7 @@ import {
     UnionMember,
 } from '../../decorators';
 import { TypeDecoratorOptions } from '../../decorators/types/TypeDecoratorOptions';
+import { Ctor } from '../getCoscradDataSchemaFromPrototype';
 
 const MACHINE_UNION = 'MACHINE_UNION';
 
@@ -82,7 +83,7 @@ const assertUnionMapAsExpected = (
 ) => {
     expect(unionMap.has(unionName)).toBe(true);
 
-    const membersMap = unionMap.get(unionName);
+    const { membersMap } = unionMap.get(unionName);
 
     const unmatchedDiscriminants = expectedDiscriminantsAndCtorNames.filter(
         ({ discriminant, ctorName }) =>
@@ -102,7 +103,7 @@ describe(`buildUnionTypesMap`, () => {
                         Widget,
                         FactoryRoom,
                         Undecorated,
-                    ]);
+                    ] as Ctor<unknown>[]);
 
                     assertUnionMapAsExpected(MACHINE_UNION, unionMap, [
                         {
@@ -121,7 +122,13 @@ describe(`buildUnionTypesMap`, () => {
                 it(`should append the data-schema to the metadata`, () => {
                     const unionMap = buildUnionTypesMap(
                         // FactoryRoom and ProductionLine both leverage a union decorator for the same union
-                        [Whatsit, Widget, Undecorated, FactoryRoom, ProductionLine]
+                        [
+                            Whatsit,
+                            Widget,
+                            Undecorated,
+                            FactoryRoom,
+                            ProductionLine,
+                        ] as Ctor<unknown>[]
                     );
 
                     assertUnionMapAsExpected(MACHINE_UNION, unionMap, [
@@ -148,7 +155,7 @@ describe(`buildUnionTypesMap`, () => {
                             FactoryRoom,
                             // ProductionLine,
                             HasNestedUnionProperty,
-                        ]
+                        ] as Ctor<unknown>[]
                     );
 
                     assertUnionMapAsExpected(MACHINE_UNION, unionMap, [
@@ -179,7 +186,13 @@ describe(`buildUnionTypesMap`, () => {
 
         it(`should throw`, () => {
             const act = () =>
-                buildUnionTypesMap([Whatsit, Widget, FactoryRoom, Undecorated, LonelyUnionUser]);
+                buildUnionTypesMap([
+                    Whatsit,
+                    Widget,
+                    FactoryRoom,
+                    Undecorated,
+                    LonelyUnionUser,
+                ] as Ctor<unknown>[]);
 
             expect(act).toThrow();
         });
@@ -219,7 +232,7 @@ describe(`buildUnionTypesMap`, () => {
                     Boo,
                     UnionMemberA,
                     UnionMemberB,
-                ]);
+                ] as Ctor<unknown>[]);
 
             expect(act).toThrow();
         });
@@ -237,7 +250,13 @@ describe(`buildUnionTypesMap`, () => {
 
         it(`should throw`, () => {
             const act = () =>
-                buildUnionTypesMap([Whatsit, Widget, FactoryRoom, Undecorated, WidgetWannabe]);
+                buildUnionTypesMap([
+                    Whatsit,
+                    Widget,
+                    FactoryRoom,
+                    Undecorated,
+                    WidgetWannabe,
+                ] as Ctor<unknown>[]);
 
             expect(act).toThrow();
         });

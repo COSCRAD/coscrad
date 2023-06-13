@@ -12,9 +12,17 @@ import { Ctor } from '../getCoscradDataSchemaFromPrototype';
 import { leveragesUniontype } from './leveragesUnionType';
 import { resolveMemberSchemasForUnion } from './resolveMemberSchemasForUnion';
 
-export type UnionTypesMap = Map<string, Map<string | number, Ctor<Object>>>;
+type MembersMap<T = unknown> = Map<string, Ctor<T>>;
 
-export const buildUnionTypesMap = (allCtorCandidates: unknown[]): UnionTypesMap => {
+export type UnionTypeInfo<T> = {
+    discriminantPath: string;
+    membersMap: MembersMap<T>;
+};
+
+export type UnionTypesMap<T = unknown> = Map<string, UnionTypeInfo<T>>;
+
+// TODO Break this out into a separate file
+export const buildUnionTypesMap = <T = unknown>(allCtorCandidates: Ctor<T>[]): UnionTypesMap<T> => {
     const unionMetadata = allCtorCandidates.map(getUnionMetadata).filter(isUnionMetadata);
 
     const unionNames = [...new Set(unionMetadata.map(({ unionName }) => unionName))];
@@ -114,14 +122,18 @@ export const buildUnionTypesMap = (allCtorCandidates: unknown[]): UnionTypesMap 
         }
 
         const membersMapForThisUnion = discriminantValuesAndCtors.reduce(
-            (acc, [ctor, discriminantValue]: [Ctor<Object>, string | number]) =>
+            (acc, [ctor, discriminantValue]: [Ctor<Object>, string]) =>
                 acc.set(discriminantValue, ctor),
-            new Map<string | number, Ctor<Object>>()
+            new Map<string, Ctor<Object>>()
         );
 
-        unionMap.set(nameOfUnionToValidate, membersMapForThisUnion);
+        unionMap.set(nameOfUnionToValidate, {
+            discriminantPath,
+            membersMap: membersMapForThisUnion,
+        });
     });
 
+    // @ts-expect-error Fix me
     return unionMap;
 };
 

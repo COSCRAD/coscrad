@@ -13,9 +13,10 @@ export const resolveMemberSchemasForUnion = (
     allCtorCandidates: unknown[],
     unionName: string
 ): UnionMemberSchemaDefinition[] => {
+    // @ts-expect-error fix types
     const unionMap = buildUnionTypesMap(allCtorCandidates);
 
-    const membersMap = unionMap.get(unionName);
+    const { membersMap } = unionMap.get(unionName);
 
     if (!membersMap) {
         return [];
