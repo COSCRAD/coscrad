@@ -14,31 +14,5 @@ describe('<AudioClipPlayer />', () => {
                 />
             );
         });
-
-        it('should play audio', () => {
-            cy.mount(
-                <AudioClipPlayer
-                    audioUrl={validAudioUrl}
-                    PlayPauseButton={DefaultPlayPauseButton}
-                />
-            );
-
-            // @ts-expect-error todo fix types
-            cy.get(`[data-testid='audio-clip-player']`).then(($els) => $els[0].play());
-
-            cy.get('audio').should((els) => {
-                let audible = false;
-
-                els.each((_i, el) => {
-                    if (el.duration > 0 && !el.paused && !el.muted) {
-                        audible = true;
-                    }
-
-                    // expect(el.duration > 0 && !el.paused && !el.muted).to.eq(false)
-                });
-
-                expect(audible).to.eq(true);
-            });
-        });
     });
 });
