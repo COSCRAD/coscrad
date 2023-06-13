@@ -1,7 +1,7 @@
 import { UnionMemberMetadata } from '../../decorators';
 import { ClassSchema, isSimpleCoscradPropertyTypeDefinition } from '../../types';
 import getCoscradDataSchema from '../getCoscradDataSchema';
-import { buildUnionTypesMap } from './bootstrapDynamicTypes';
+import { buildUnionTypesMap } from './buildUnionTypesMap';
 import { UnionLeveragesAnotherException } from './exceptions';
 import { leveragesUniontype } from './leveragesUnionType';
 
@@ -13,9 +13,10 @@ export const resolveMemberSchemasForUnion = (
     allCtorCandidates: unknown[],
     unionName: string
 ): UnionMemberSchemaDefinition[] => {
+    // @ts-expect-error fix types
     const unionMap = buildUnionTypesMap(allCtorCandidates);
 
-    const membersMap = unionMap.get(unionName);
+    const { membersMap } = unionMap.get(unionName);
 
     if (!membersMap) {
         return [];

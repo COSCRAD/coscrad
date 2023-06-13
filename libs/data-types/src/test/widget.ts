@@ -31,7 +31,7 @@ export class Whatsit {
     whatsitId = '25c5824f-6b4b-4341-bb60-3145d8109568';
 }
 
-const THING_UNION = 'THING_UNION';
+export const THING_UNION = 'THING_UNION';
 
 export const ThingUnion = (options: TypeDecoratorOptions) => Union(THING_UNION, 'type', options);
 
