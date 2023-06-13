@@ -1,12 +1,8 @@
 import { InternalError } from '../../../lib/errors/InternalError';
+import { DTO } from '../../../types/DTO';
 import { FreeMultilineContext } from '../../models/context/free-multiline-context/free-multiline-context.entity';
 import { EdgeConnectionContextType } from '../../models/context/types/EdgeConnectionContextType';
-import validateAllCoordinatesInLinearStructure from '../../models/spatial-feature/validation/validateAllCoordinatesInLinearStructure';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
-import InvalidEdgeConnectionContextError from '../errors/context/InvalidEdgeConnectionContextError';
-import InvalidLineInFreeMultilineError from '../errors/context/InvalidLineInFreeMultilineError';
-import InvalidLineTypeError from '../errors/context/InvalidLineTypeError';
-import MissingLineContextError from '../errors/context/MissingLineContextError';
 import NullOrUndefinedEdgeConnectionContextDTOError from '../errors/context/NullOrUndefinedEdgeConnectionContextDTOError';
 import { Valid } from '../Valid';
 
@@ -16,34 +12,36 @@ export const freeMultilineContextValidator = (input: unknown): Valid | InternalE
             EdgeConnectionContextType.freeMultiline
         );
 
-    const allErrors: InternalError[] = [];
+    return new FreeMultilineContext(input as DTO<FreeMultilineContext>).validateInvariants();
 
-    const { lines } = input as FreeMultilineContext;
+    // const allErrors: InternalError[] = [];
 
-    if (isNullOrUndefined(lines) || lines.length === 0)
-        return new InvalidEdgeConnectionContextError(
-            EdgeConnectionContextType.freeMultiline,
-            allErrors.concat(new MissingLineContextError())
-        );
+    // const { lines } = input as FreeMultilineContext;
 
-    // It is important that this comes after the null-check
-    if (!Array.isArray(lines))
-        return new InvalidEdgeConnectionContextError(
-            EdgeConnectionContextType.freeMultiline,
-            allErrors.concat(new InvalidLineTypeError(lines))
-        );
+    // if (isNullOrUndefined(lines) || lines.length === 0)
+    //     return new InvalidEdgeConnectionContextError(
+    //         EdgeConnectionContextType.freeMultiline,
+    //         allErrors.concat(new MissingLineContextError())
+    //     );
 
-    const lineErrors = lines.reduce((accumulatedErrors: InternalError[], line, index) => {
-        const validationResult = validateAllCoordinatesInLinearStructure(line);
+    // // It is important that this comes after the null-check
+    // if (!Array.isArray(lines))
+    //     return new InvalidEdgeConnectionContextError(
+    //         EdgeConnectionContextType.freeMultiline,
+    //         allErrors.concat(new InvalidLineTypeError(lines))
+    //     );
 
-        if (validationResult.length === 0) return accumulatedErrors;
+    // const lineErrors = lines.reduce((accumulatedErrors: InternalError[], line, index) => {
+    //     const validationResult = validateAllCoordinatesInLinearStructure(line);
 
-        return accumulatedErrors.concat(new InvalidLineInFreeMultilineError(index));
-    }, []);
+    //     if (validationResult.length === 0) return accumulatedErrors;
 
-    if (lineErrors.length > 0) allErrors.push(...lineErrors);
+    //     return accumulatedErrors.concat(new InvalidLineInFreeMultilineError(index));
+    // }, []);
 
-    return allErrors.length > 0
-        ? new InvalidEdgeConnectionContextError(EdgeConnectionContextType.freeMultiline, allErrors)
-        : Valid;
+    // if (lineErrors.length > 0) allErrors.push(...lineErrors);
+
+    // return allErrors.length > 0
+    //     ? new InvalidEdgeConnectionContextError(EdgeConnectionContextType.freeMultiline, allErrors)
+    //     : Valid;
 };

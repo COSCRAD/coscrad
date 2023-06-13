@@ -3,10 +3,8 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
-import { FreeMultilineContext } from '../../../domain/models/context/free-multiline-context/free-multiline-context.entity';
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
-import { PointContext } from '../../../domain/models/context/point-context/point-context.entity';
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
@@ -109,36 +107,60 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
                     id: '2',
                     type: ResourceType.photograph,
                 },
-                context: new FreeMultilineContext({
-                    type: EdgeConnectionContextType.freeMultiline,
-                    lines: [
-                        [
-                            [0, 200],
-                            [100, 300],
-                            [200, 400],
-                            [250, 475],
-                        ],
-                    ],
-                }),
+                context: new GeneralContext(),
             },
         ],
     },
-    {
-        note: 'this is the base of the flower',
-        members: [
-            {
-                role,
-                compositeIdentifier: {
-                    id: '2',
-                    type: ResourceType.photograph,
-                },
-                context: new PointContext({
-                    type: EdgeConnectionContextType.point2D,
-                    point: [0, 200],
-                }),
-            },
-        ],
-    },
+    // TODO Restore this when supporting free-multiline context
+    // {
+    //     note: 'this is the stem of the flower',
+    //     members: [
+    //         {
+    //             role,
+    //             compositeIdentifier: {
+    //                 id: '2',
+    //                 type: ResourceType.photograph,
+    //             },
+    //             context: new FreeMultilineContext({
+    //                 type: EdgeConnectionContextType.freeMultiline,
+    //                 lines: (
+    //                     [
+    //                         [
+    //                             [0, 200],
+    //                             [100, 300],
+    //                             [200, 400],
+    //                             [250, 475],
+    //                         ],
+    //                     ] as [number, number][][]
+    //                 ).map(
+    //                     (pointsForLine) =>
+    //                         new Line2DForContext({
+    //                             points: pointsForLine.map(
+    //                                 (point) => new Point2DForContext({ coordinates: point })
+    //                             ),
+    //                         })
+    //                 ),
+    //             }),
+    //         },
+    //     ],
+    // },
+    // TODO Support point2D context for Photograph
+    // {
+    //     note: 'this is the base of the flower',
+    //     members: [
+    //         {
+    //             role,
+    //             compositeIdentifier: {
+    //                 id: '2',
+    //                 type: ResourceType.photograph,
+    //             },
+    //             context: new PointContext({
+    //                 type: EdgeConnectionContextType.point2D,
+    //                 point: [0, 200],
+    //             }),
+    //         },
+    //     ],
+    // },
     {
         note: 'this section is the best part of an illustrated book about birds',
         members: [

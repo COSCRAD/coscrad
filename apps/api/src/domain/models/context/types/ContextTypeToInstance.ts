@@ -1,3 +1,4 @@
+import { FreeMultilineContext } from '../free-multiline-context/free-multiline-context.entity';
 import { GeneralContext } from '../general-context/general-context.entity';
 import { IdentityContext } from '../identity-context.entity/identity-context.entity';
 import { PageRangeContext } from '../page-range-context/page-range.context.entity';
@@ -8,7 +9,7 @@ import { EdgeConnectionContextType } from './EdgeConnectionContextType';
 
 // TODO type safety
 export type ContextTypeToInstance = {
-    [EdgeConnectionContextType.freeMultiline]: PageRangeContext;
+    [EdgeConnectionContextType.freeMultiline]: FreeMultilineContext;
     [EdgeConnectionContextType.pageRange]: PageRangeContext;
     [EdgeConnectionContextType.point2D]: PointContext;
     [EdgeConnectionContextType.textField]: TextFieldContext;
