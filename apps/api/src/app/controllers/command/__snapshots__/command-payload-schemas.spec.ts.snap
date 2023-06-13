@@ -1497,8 +1497,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "ID",
           },
           "type": {
-            "coscradDataType": "NON_EMPTY_STRING",
-            "description": "song",
+            "coscradDataType": "FIXED_VALUE",
+            "description": "must be: note",
             "isArray": false,
             "isOptional": false,
             "label": "type",
