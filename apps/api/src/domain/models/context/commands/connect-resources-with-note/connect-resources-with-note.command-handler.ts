@@ -15,10 +15,11 @@ import { ConnectResourcesWithNote } from './connect-resources-with-note.command'
 export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHandler<EdgeConnection> {
     protected repositoryForCommandsTargetAggregate: IRepositoryForAggregate<EdgeConnection>;
 
-    protected aggregateType: AggregateType;
+    protected aggregateType: AggregateType = AggregateType.note;
 
     protected createNewInstance(_command: ICommandBase): ResultOrError<EdgeConnection> {
-        throw new Error('Method not implemented.');
+        // TODO wrap factory in base create command handler when refactor this one!
+        throw new Error(`method not implemented.`);
     }
 
     protected fetchRequiredExternalState(_command?: ICommand): Promise<InMemorySnapshot> {
