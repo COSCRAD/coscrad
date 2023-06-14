@@ -11,11 +11,13 @@ import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
-import { ResourceType } from '../../../../types/ResourceType';
+import { ResourceType, isResourceType } from '../../../../types/ResourceType';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
 import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
 import { contextModelMap } from '../../__tests__';
@@ -333,7 +335,7 @@ describe(commandType, () => {
                 })
                 .forEach((connection) => {
                     describe(buildDescriptionForMembers(connection.members), () => {
-                        it.only(`should fail with the expected error`, async () => {
+                        it(`should fail with the expected error`, async () => {
                             const { to: toMember, from: fromMember } = findToAndFromMembers(
                                 connection.members
                             );
@@ -351,6 +353,28 @@ describe(commandType, () => {
                                     }),
                                 initialState: initialStateWithAllResourcesButNoConnections,
                             });
+                        });
+                    });
+                });
+        });
+
+        describe(`when the resource type for the to member is a non-resource aggregate type`, () => {
+            Object.values(AggregateType)
+                .filter((t) => !isResourceType(t))
+                .forEach((invalidResourceType) => {
+                    describe(`when the resource type is: ${invalidResourceType}`, () => {
+                        it(`should fail with a type error`, async () => {
+                            await assertCommandFailsDueToTypeError(
+                                assertionHelperDependencies,
+                                {
+                                    propertyName: 'toCompositeIdentifier',
+                                    invalidValue: {
+                                        type: invalidResourceType,
+                                        id: buildDummyUuid(567),
+                                    },
+                                },
+                                commandFsaFactory.build(buildDummyUuid(662))
+                            );
                         });
                     });
                 });
