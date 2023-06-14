@@ -11,10 +11,14 @@ import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
+import { ResourceType } from '../../../../types/ResourceType';
+import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
 import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
+import { contextModelMap } from '../../__tests__';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -22,6 +26,7 @@ import {
     EdgeConnectionType,
 } from '../../edge-connection.entity';
 import { GeneralContext } from '../../general-context/general-context.entity';
+import { EdgeConnectionContextType } from '../../types/EdgeConnectionContextType';
 
 const commandType = `CONNECT_RESOURCES_WITH_NOTE`;
 
@@ -221,6 +226,99 @@ describe(commandType, () => {
                     });
                 });
             });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the context type for the to member is not allowed for the given resource type`, () => {
+            comprehensiveConnectionsToCreate
+                .reduce(
+                    (
+                        { keepers, seen }: { seen: ResourceType[]; keepers: EdgeConnection[] },
+                        connection
+                    ) => {
+                        const { to: toMember } = findToAndFromMembers(connection.members);
+
+                        if (seen.includes(toMember.compositeIdentifier.type)) {
+                            // no-op, we already have a connection with a to member with this `ResourceType`
+                            return {
+                                seen,
+                                keepers,
+                            };
+                        }
+
+                        return {
+                            seen: seen.concat(toMember.compositeIdentifier.type),
+                            keepers: keepers.concat(connection),
+                        };
+                    },
+                    {
+                        seen: [],
+                        keepers: [],
+                    }
+                )
+                .keepers.flatMap((connection) => {
+                    const { to: toMember, from: fromMember } = findToAndFromMembers(
+                        connection.members
+                    );
+
+                    return (
+                        Object.values(EdgeConnectionContextType)
+                            // TODO Suppor these models
+                            .filter(
+                                (contextType) =>
+                                    ![
+                                        EdgeConnectionContextType.point2D,
+                                        EdgeConnectionContextType.freeMultiline,
+                                    ].includes(contextType)
+                            )
+                            .filter(
+                                (contextType) =>
+                                    !isContextAllowedForGivenResourceType(
+                                        contextType,
+                                        toMember.compositeIdentifier.type
+                                    )
+                            )
+                            .map((contextType) => {
+                                if (!contextModelMap.has(contextType)) {
+                                    throw new Error(
+                                        `failed to find a context instance of type: ${contextType}`
+                                    );
+                                }
+
+                                const context = contextModelMap.get(contextType);
+
+                                return connection.clone({
+                                    members: [
+                                        fromMember,
+                                        {
+                                            ...toMember,
+                                            context,
+                                        },
+                                    ],
+                                });
+                            })
+                    );
+                })
+                .forEach((connection) => {
+                    const { to: toMember, from: fromMember } = findToAndFromMembers(
+                        connection.members
+                    );
+
+                    it(`should fail with the expected error`, async () => {
+                        await assertCreateCommandError(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            buildCommandFSA: (id) =>
+                                commandFsaFactory.build(id, {
+                                    toMemberCompositeIdentifier: toMember.compositeIdentifier,
+                                    toMemberContext: toMember.context,
+                                    fromMemberCompositeIdentifier: fromMember.compositeIdentifier,
+                                    fromMemberContext: fromMember.context,
+                                }),
+                            initialState: initialStateWithAllResourcesButNoConnections,
+                        });
+                    });
+                });
         });
     });
 });

@@ -23,6 +23,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
 import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
+import { contextModelMap } from '../../__tests__';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -81,26 +82,6 @@ const notesToCreate = dummyNotes
             keepers: [],
         } as unknown as SeenAndKeepers
     ).keepers;
-
-/**
- * This will allow us to get a context model instance by type on-demand.
- */
-const contextModelMap = notesToCreate.reduce(
-    (acc, { members }) => {
-        const { context } = members[0];
-
-        /**
-         * If this is the first context instance for the given `contextType`,
-         * register it in the map.
-         */
-        if (!acc.has(context.type)) return acc.set(context.type, context);
-
-        // no-op
-        return acc;
-    },
-
-    new Map<string, IEdgeConnectionContext>()
-);
 
 const allContextTypes = [
     ...new Set(notesToCreate.flatMap(({ members }) => members).map(({ context }) => context.type)),
