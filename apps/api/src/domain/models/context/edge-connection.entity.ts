@@ -183,7 +183,9 @@ export class EdgeConnection extends Aggregate {
         if (connections.some(idEquals(this.id)))
             allErrors.push(new AggregateIdAlreadyInUseError(this.getCompositeIdentifier()));
 
-        allErrors.push(...this.validateMembersState(externalState));
+        const inconsistentStateErrorsFromMemebers = this.validateMembersState(externalState);
+
+        allErrors.push(...inconsistentStateErrorsFromMemebers);
 
         return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
 

@@ -320,5 +320,40 @@ describe(commandType, () => {
                     });
                 });
         });
+
+        describe(`when the context provided is inconsistent with the to member state`, () => {
+            comprehensiveConnectionsToCreate
+                .filter((connection) => {
+                    const { to: toMember } = findToAndFromMembers(connection.members);
+
+                    return ![
+                        EdgeConnectionContextType.general,
+                        EdgeConnectionContextType.identity,
+                    ].includes(toMember.context.type as EdgeConnectionContextType);
+                })
+                .forEach((connection) => {
+                    describe(buildDescriptionForMembers(connection.members), () => {
+                        it.only(`should fail with the expected error`, async () => {
+                            const { to: toMember, from: fromMember } = findToAndFromMembers(
+                                connection.members
+                            );
+
+                            await assertCreateCommandError(assertionHelperDependencies, {
+                                systemUserId: dummySystemUserId,
+                                buildCommandFSA: (id) =>
+                                    commandFsaFactory.build(id, {
+                                        toMemberCompositeIdentifier: toMember.compositeIdentifier,
+                                        // here we replace the context for the to member with a context that is designed to be invalid against any resource's state
+                                        toMemberContext: contextModelMap.get(toMember.context.type),
+                                        fromMemberCompositeIdentifier:
+                                            fromMember.compositeIdentifier,
+                                        fromMemberContext: fromMember.context,
+                                    }),
+                                initialState: initialStateWithAllResourcesButNoConnections,
+                            });
+                        });
+                    });
+                });
+        });
     });
 });
