@@ -1,15 +1,26 @@
-import { ICommandBase } from '@coscrad/api-interfaces';
+import { EdgeConnectionMemberRole, EdgeConnectionType } from '@coscrad/api-interfaces';
 import { CommandHandler, ICommand } from '@coscrad/commands';
+import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
+import { isNotFound } from '../../../../../lib/types/not-found';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
+import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
+import buildAggregateFactory from '../../../../factories/buildAggregateFactory';
+import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
+import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
 import { AggregateType } from '../../../../types/AggregateType';
+import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
+import { Resource } from '../../../resource.entity';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { validAggregateOrThrow } from '../../../shared/functional';
 import { EdgeConnection } from '../../edge-connection.entity';
 import { ConnectResourcesWithNote } from './connect-resources-with-note.command';
+import { ResourcesConnectedWithNote } from './resources-connected-with-note.event';
 
 @CommandHandler(ConnectResourcesWithNote)
 export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHandler<EdgeConnection> {
@@ -17,23 +28,81 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
 
     protected aggregateType: AggregateType = AggregateType.note;
 
-    protected createNewInstance(_command: ICommandBase): ResultOrError<EdgeConnection> {
-        // TODO wrap factory in base create command handler when refactor this one!
-        throw new Error(`method not implemented.`);
+    constructor(
+        @Inject(REPOSITORY_PROVIDER_TOKEN)
+        protected readonly repositoryProvider: IRepositoryProvider,
+        @Inject('ID_MANAGER') protected readonly idManager: IIdManager
+    ) {
+        super(repositoryProvider, idManager);
+
+        this.repositoryForCommandsTargetAggregate =
+            this.repositoryProvider.getEdgeConnectionRepository();
     }
 
-    protected fetchRequiredExternalState(_command?: ICommand): Promise<InMemorySnapshot> {
-        throw new Error('Method not implemented.');
+    protected createNewInstance({
+        aggregateCompositeIdentifier: { id },
+        toMemberCompositeIdentifier,
+        toMemberContext,
+        fromMemberCompositeIdentifier,
+        fromMemberContext,
+    }: ConnectResourcesWithNote): ResultOrError<EdgeConnection> {
+        // TODO wrap factory in base create command handler when refactor this one!
+        const createDto: DTO<EdgeConnection> = {
+            type: AggregateType.note,
+            id,
+            connectionType: EdgeConnectionType.dual,
+            note: `these two resources are closely related`,
+            members: [
+                {
+                    role: EdgeConnectionMemberRole.to,
+                    compositeIdentifier: toMemberCompositeIdentifier,
+                    context: toMemberContext,
+                },
+                {
+                    role: EdgeConnectionMemberRole.from,
+                    compositeIdentifier: fromMemberCompositeIdentifier,
+                    context: fromMemberContext,
+                },
+            ],
+        };
+
+        return buildAggregateFactory<EdgeConnection>(AggregateType.note)(createDto);
+    }
+
+    protected async fetchRequiredExternalState({
+        toMemberCompositeIdentifier,
+        fromMemberCompositeIdentifier,
+    }: ConnectResourcesWithNote): Promise<InMemorySnapshot> {
+        const requiredResourceSearchResult = await Promise.all(
+            [toMemberCompositeIdentifier, fromMemberCompositeIdentifier].map(
+                ({ type: resourceType, id }) =>
+                    this.repositoryProvider.forResource(resourceType).fetchById(id)
+            )
+        );
+
+        const resources = requiredResourceSearchResult
+            .filter((resource): resource is ResultOrError<Resource> => !isNotFound(resource))
+            .filter(validAggregateOrThrow);
+
+        const snapshot = resources
+            .reduce(
+                (snapshot, nextResource) =>
+                    snapshot.appendAggregates(nextResource.type, [nextResource]),
+                new DeluxeInMemoryStore({})
+            )
+            .fetchFullSnapshotInLegacyFormat();
+
+        return snapshot;
     }
 
     protected validateExternalState(
-        _state: InMemorySnapshot,
-        _instance: EdgeConnection
+        state: InMemorySnapshot,
+        instance: EdgeConnection
     ): InternalError | Valid {
-        throw new Error('Method not implemented.');
+        return instance.validateExternalState(state);
     }
 
-    protected buildEvent(_command: ICommand, _eventId: string, _userId: string): BaseEvent {
-        throw new Error('Method not implemented.');
+    protected buildEvent(command: ICommand, eventId: string, userId: string): BaseEvent {
+        return new ResourcesConnectedWithNote(command, eventId, userId);
     }
 }
