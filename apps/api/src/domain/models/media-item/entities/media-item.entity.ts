@@ -12,15 +12,13 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import { DTO } from '../../../../types/DTO';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
-import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import { Valid } from '../../../domainModelValidators/Valid';
+import MediaItemHasNoTitleInAnyLanguageError from '../../../domainModelValidators/errors/mediaItem/MediaItemHasNoTitleInAnyLanguageError';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../types/ResourceType';
-import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../context/time-range-context/time-range-context.entity';
 import { ITimeBoundable } from '../../interfaces/ITimeBoundable';
 import { Resource } from '../../resource.entity';
-import validateTextFieldContextForModel from '../../shared/contextValidators/validateTextFieldContextForModel';
 import validateTimeRangeContextForModel from '../../shared/contextValidators/validateTimeRangeContextForModel';
 import newInstance from '../../shared/functional/newInstance';
 import { ContributorAndRole } from '../../song/ContributorAndRole';
@@ -127,10 +125,6 @@ export class MediaItem extends Resource implements ITimeBoundable {
 
     protected getExternalReferences(): AggregateCompositeIdentifier[] {
         return [];
-    }
-
-    validateTextFieldContext(context: TextFieldContext): Valid | InternalError {
-        return validateTextFieldContextForModel(this, context);
     }
 
     validateTimeRangeContext(timeRangeContext: TimeRangeContext): Valid | InternalError {
