@@ -2,8 +2,6 @@ import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../types/DTO';
-import { ResultOrError } from '../../../../../types/ResultOrError';
-import getInstanceFactoryForResource from '../../../../factories/getInstanceFactoryForResource';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
@@ -31,7 +29,7 @@ export class CreateCourtCaseBibliographicReferenceCommandHandler extends BaseCre
         );
     }
 
-    protected createNewInstance({
+    protected buildCreateDto({
         aggregateCompositeIdentifier: { id },
         caseName,
         abstract,
@@ -39,7 +37,7 @@ export class CreateCourtCaseBibliographicReferenceCommandHandler extends BaseCre
         court,
         url,
         pages,
-    }: CreateCourtCaseBibliographicReference): ResultOrError<CourtCaseBibliographicReference> {
+    }: CreateCourtCaseBibliographicReference): DTO<CourtCaseBibliographicReference> {
         const createDto: DTO<CourtCaseBibliographicReference> = {
             type: ResourceType.bibliographicReference,
             id,
@@ -56,9 +54,7 @@ export class CreateCourtCaseBibliographicReferenceCommandHandler extends BaseCre
             },
         };
 
-        return getInstanceFactoryForResource<CourtCaseBibliographicReference>(
-            ResourceType.bibliographicReference
-        )(createDto);
+        return createDto;
     }
 
     protected buildEvent(

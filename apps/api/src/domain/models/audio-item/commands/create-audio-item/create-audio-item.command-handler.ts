@@ -1,3 +1,4 @@
+import { ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
@@ -5,6 +6,7 @@ import { DomainModelCtor } from '../../../../../lib/types/DomainModelCtor';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import { MultilingualTextItemRole } from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import buildInstanceFactory from '../../../../factories/utilities/buildInstanceFactory';
 import { ID_MANAGER_TOKEN, IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -35,6 +37,48 @@ export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<Audi
         this.repositoryForCommandsTargetAggregate = this.repositoryProvider.forResource<AudioItem>(
             ResourceType.audioItem
         );
+    }
+
+    protected buildCreateDto(_command: ICommandBase): {
+        readonly type: ResourceType.audioItem;
+        readonly name: {
+            readonly items: {
+                readonly languageCode: LanguageCode;
+                readonly text: string;
+                readonly role: MultilingualTextItemRole;
+            }[];
+        };
+        readonly transcript?: {
+            items: {
+                readonly text: {
+                    readonly items: {
+                        readonly languageCode: LanguageCode;
+                        readonly text: string;
+                        readonly role: MultilingualTextItemRole;
+                    }[];
+                };
+                readonly inPoint: number;
+                readonly outPoint: number;
+                readonly speakerInitials: string;
+            }[];
+            participants: { readonly name: string; readonly initials: string }[];
+        };
+        readonly mediaItemId: string;
+        readonly lengthMilliseconds: number;
+        readonly published: boolean;
+        readonly queryAccessControlList?: {
+            readonly allowedUserIds: string[];
+            readonly allowedGroupIds: string[];
+        };
+        readonly eventHistory?: {
+            type: string;
+            meta: { id: string; dateCreated: number; userId: string };
+            payload: {};
+        }[];
+        readonly id: string;
+    } {
+        // @ts-expect-error fix me
+        return {};
     }
 
     protected createNewInstance({

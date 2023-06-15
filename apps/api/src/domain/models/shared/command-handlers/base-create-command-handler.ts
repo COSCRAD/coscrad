@@ -4,8 +4,10 @@ import { ValidationResult } from '../../../../lib/errors/types/ValidationResult'
 import { isNotAvailable } from '../../../../lib/types/not-available';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { isOK } from '../../../../lib/types/ok';
+import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid, isValid } from '../../../domainModelValidators/Valid';
+import buildAggregateFactory from '../../../factories/buildAggregateFactory';
 import { EVENT } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
@@ -31,7 +33,17 @@ export abstract class BaseCreateCommandHandler<
     // TODO We should be able to get the repository from the `AggregateType`
     protected abstract readonly aggregateType: AggregateType;
 
-    protected abstract createNewInstance(command: ICommandBase): ResultOrError<TAggregate>;
+    /**
+     * The purpose of this method is to adapt the command payload from the
+     * command FSA to the domain, and set any default state.
+     */
+    protected abstract buildCreateDto(command: ICommandBase): DTO<TAggregate>;
+
+    protected createNewInstance(command: ICommandBase): ResultOrError<TAggregate> {
+        const createDto = this.buildCreateDto(command);
+
+        return buildAggregateFactory<TAggregate>(this.aggregateType)(createDto);
+    }
 
     /**
      * TODO Remove this in favor of validating the type property using the

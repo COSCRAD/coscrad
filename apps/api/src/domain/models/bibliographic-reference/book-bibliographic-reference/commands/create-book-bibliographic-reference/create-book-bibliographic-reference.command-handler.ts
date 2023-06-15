@@ -3,9 +3,7 @@ import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../../types/DTO';
-import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../../../factories/getInstanceFactoryForResource';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../../repositories/interfaces/repository-provider.interface';
@@ -39,7 +37,7 @@ export class CreateBookBibliographicReferenceCommandHandler extends BaseCreateCo
         );
     }
 
-    protected createNewInstance({
+    protected buildCreateDto({
         aggregateCompositeIdentifier: { id },
         title,
         creators,
@@ -50,7 +48,7 @@ export class CreateBookBibliographicReferenceCommandHandler extends BaseCreateCo
         url,
         numberOfPages,
         isbn,
-    }: CreateBookBibliographicReference): ResultOrError<BookBibliographicReference> {
+    }: CreateBookBibliographicReference): DTO<BookBibliographicReference> {
         const bookBibliographicReferenceDto: DTO<BookBibliographicReference> = {
             id,
             type: ResourceType.bibliographicReference,
@@ -73,9 +71,7 @@ export class CreateBookBibliographicReferenceCommandHandler extends BaseCreateCo
             },
         };
 
-        return getInstanceFactoryForResource<BookBibliographicReference>(
-            ResourceType.bibliographicReference
-        )(bookBibliographicReferenceDto);
+        return bookBibliographicReferenceDto;
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

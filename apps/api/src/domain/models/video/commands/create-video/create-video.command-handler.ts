@@ -4,10 +4,8 @@ import { InternalError, isInternalError } from '../../../../../lib/errors/Intern
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../types/DTO';
-import { ResultOrError } from '../../../../../types/ResultOrError';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../../factories/getInstanceFactoryForResource';
 import { ID_MANAGER_TOKEN, IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
@@ -38,13 +36,12 @@ export class CreateVideoCommandHandler extends BaseCreateCommandHandler<Video> {
         );
     }
 
-    protected createNewInstance({
+    protected buildCreateDto({
         name,
         aggregateCompositeIdentifier: { id },
         mediaItemId,
         lengthMilliseconds,
-    }: CreateVideo): ResultOrError<Video> {
-        // Due to the mixin, we do not have typesafety in the constructor call bellow, so we type the DTO here
+    }: CreateVideo): DTO<Video> {
         const videoItemDto: DTO<VideoBase> = {
             name,
             id,
@@ -54,8 +51,7 @@ export class CreateVideoCommandHandler extends BaseCreateCommandHandler<Video> {
             published: false,
         };
 
-        // the cast is necessary due to loss of type-safety from using a mixin
-        return getInstanceFactoryForResource<Video>(ResourceType.video)(videoItemDto);
+        return videoItemDto;
     }
 
     protected async fetchRequiredExternalState({

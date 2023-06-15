@@ -7,7 +7,6 @@ import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import buildAggregateFactory from '../../../../factories/buildAggregateFactory';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
@@ -39,14 +38,14 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
             this.repositoryProvider.getEdgeConnectionRepository();
     }
 
-    protected createNewInstance({
+    protected buildCreateDto({
         aggregateCompositeIdentifier: { id },
         toMemberCompositeIdentifier,
         toMemberContext,
         fromMemberCompositeIdentifier,
         fromMemberContext,
         text,
-    }: ConnectResourcesWithNote): ResultOrError<EdgeConnection> {
+    }: ConnectResourcesWithNote): DTO<EdgeConnection> {
         /**
          * TODO[https://www.pivotaltracker.com/story/show/185394721]
          * Wrap factory in base create command handler.
@@ -71,7 +70,7 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
             ],
         };
 
-        return buildAggregateFactory<EdgeConnection>(AggregateType.note)(createDto);
+        return createDto;
     }
 
     protected async fetchRequiredExternalState({

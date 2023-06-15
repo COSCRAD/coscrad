@@ -3,9 +3,7 @@ import { Inject } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../types/DTO';
-import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../factories/getInstanceFactoryForResource';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
@@ -37,7 +35,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
         );
     }
 
-    protected createNewInstance(command: CreateMediaItem): ResultOrError<MediaItem> {
+    protected buildCreateDto(command: CreateMediaItem): DTO<MediaItem> {
         const {
             aggregateCompositeIdentifier: { id },
             title,
@@ -59,7 +57,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
             lengthMilliseconds: 0,
         };
 
-        return getInstanceFactoryForResource<MediaItem>(ResourceType.mediaItem)(createDto);
+        return createDto;
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

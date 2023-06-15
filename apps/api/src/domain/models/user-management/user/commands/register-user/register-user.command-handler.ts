@@ -3,9 +3,7 @@ import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../../types/DTO';
-import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
-import buildInstanceFactory from '../../../../../factories/utilities/buildInstanceFactory';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { IRepositoryProvider } from '../../../../../repositories/interfaces/repository-provider.interface';
 import { IUserRepository } from '../../../../../repositories/interfaces/user-repository.interface';
@@ -36,11 +34,11 @@ export class RegisterUserCommandHandler extends BaseCreateCommandHandler<Coscrad
         this.repositoryForCommandsTargetAggregate = this.repositoryProvider.getUserRepository();
     }
 
-    protected createNewInstance({
+    protected buildCreateDto({
         aggregateCompositeIdentifier: { id },
         userIdFromAuthProvider,
         username,
-    }: RegisterUser): ResultOrError<CoscradUser> {
+    }: RegisterUser): DTO<CoscradUser> {
         const createDto: DTO<CoscradUser> = {
             type: AggregateType.user,
             id,
@@ -51,7 +49,7 @@ export class RegisterUserCommandHandler extends BaseCreateCommandHandler<Coscrad
             // a profile must be created with a separate command
         };
 
-        return buildInstanceFactory(CoscradUser)(createDto);
+        return createDto;
     }
 
     protected buildEvent(

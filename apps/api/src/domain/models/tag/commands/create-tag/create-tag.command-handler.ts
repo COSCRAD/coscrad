@@ -3,9 +3,7 @@ import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../types/DTO';
-import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import buildInstanceFactory from '../../../../factories/utilities/buildInstanceFactory';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
@@ -35,7 +33,7 @@ export class CreateTagCommandHandler extends BaseCreateCommandHandler<Tag> {
         this.repositoryForCommandsTargetAggregate = this.repositoryProvider.getTagRepository();
     }
 
-    createNewInstance({ aggregateCompositeIdentifier, label }: CreateTag): ResultOrError<Tag> {
+    protected buildCreateDto({ aggregateCompositeIdentifier, label }: CreateTag): DTO<Tag> {
         const { id } = aggregateCompositeIdentifier;
 
         const createDto: DTO<Tag> = {
@@ -45,7 +43,7 @@ export class CreateTagCommandHandler extends BaseCreateCommandHandler<Tag> {
             members: [],
         };
 
-        return buildInstanceFactory(Tag)(createDto);
+        return createDto;
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {
