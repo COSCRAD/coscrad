@@ -1818,6 +1818,13 @@ exports[`command payload schemas Command payload schema should match the snapsho
         ],
         "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
       },
+      "text": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "text for the note",
+        "isArray": false,
+        "isOptional": false,
+        "label": "text",
+      },
       "toMemberCompositeIdentifier": {
         "complexDataType": "NESTED_TYPE",
         "description": "system-wide unique identifier for the resource to which you are making a connection",
