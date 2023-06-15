@@ -81,7 +81,19 @@ describe('<AudioClipPlayer />', () => {
             });
 
             it('should not play audio', () => {
-                const expectedErrorMessageText = 'audio not available';
+                const expectedErrorMessageText = 'Audio url is not supported.';
+
+                cy.contains(expectedErrorMessageText);
+            });
+        });
+
+        describe(`when the audio URL is undefined`, () => {
+            beforeEach(() => {
+                cy.mount(<AudioClipPlayer audioUrl={undefined} />);
+            });
+
+            it(`should not play audio`, () => {
+                const expectedErrorMessageText = 'Audio url is undefined.';
 
                 cy.contains(expectedErrorMessageText);
             });

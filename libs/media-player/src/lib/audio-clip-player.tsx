@@ -1,5 +1,7 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box } from '@mui/material';
+import BugReportIcon from '@mui/icons-material/BugReport';
+import LinkOffIcon from '@mui/icons-material/LinkOff';
+import { Box, CircularProgress, IconButton, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { DefaultPlayButton } from './default-clip-player-button';
 
@@ -20,10 +22,12 @@ enum AudioState {
     loading = 'loading',
     error = 'error',
     canPlay = 'canPlay',
+    undefined = 'undefined',
 }
 
 export function AudioClipPlayer({ audioUrl, UserDefinedPlayButton }: AudioClipPlayerProps) {
     const [audioState, setAudioState] = useState<AudioState>(AudioState.loading);
+    console.log(audioUrl, 'howdy');
 
     useEffect(() => {
         const onCanPlay = () => {
@@ -43,6 +47,14 @@ export function AudioClipPlayer({ audioUrl, UserDefinedPlayButton }: AudioClipPl
         testAudio.addEventListener('canplaythrough', onCanPlay);
 
         testAudio.addEventListener('error', onError);
+
+        if (!isNullOrUndefined(audioUrl)) {
+            const testAudio = new Audio(audioUrl);
+
+            testAudio.addEventListener('error', onError);
+        } else {
+            setAudioState(AudioState.undefined);
+        }
     }, [audioUrl]);
 
     const handleMediaPlayerIconClick = () => {
@@ -55,14 +67,36 @@ export function AudioClipPlayer({ audioUrl, UserDefinedPlayButton }: AudioClipPl
         ? DefaultPlayButton
         : UserDefinedPlayButton;
 
-    if (audioState === AudioState.loading) return <div>Loading</div>;
+    if (audioState === AudioState.loading) return <CircularProgress />;
 
     if (audioState === AudioState.canPlay)
         return (
+            <Tooltip title={audioUrl}>
+                <span>
+                    <PlayButton key={audioUrl} onButtonClick={handleMediaPlayerIconClick} />
+                </span>
+            </Tooltip>
+        );
+    if (audioState === AudioState.undefined)
+        return (
             <Box>
-                <PlayButton key={audioUrl} onButtonClick={handleMediaPlayerIconClick} />
+                <Tooltip title={typeof audioUrl}>
+                    <IconButton color="primary">
+                        <LinkOffIcon />
+                    </IconButton>
+                </Tooltip>
+                Audio url is {typeof audioUrl}.
             </Box>
         );
 
-    return <div>audio not available</div>;
+    return (
+        <Box>
+            <Tooltip title={audioUrl}>
+                <IconButton color="primary">
+                    <BugReportIcon />
+                </IconButton>
+            </Tooltip>
+            Audio url is not supported.
+        </Box>
+    );
 }
