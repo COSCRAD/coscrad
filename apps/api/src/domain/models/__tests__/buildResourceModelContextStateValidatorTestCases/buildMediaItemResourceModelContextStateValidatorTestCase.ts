@@ -10,9 +10,11 @@ import buildAllInconsistentContextTypeTestCases from '../utilities/buildAllIncon
 import buildAllValidTestCasesForResource from '../utilities/buildAllValidTestCasesForResource';
 
 const validCases = buildAllValidTestCasesForResource(ResourceType.mediaItem);
+
 const inconsistentContextTypeTestCases = buildAllInconsistentContextTypeTestCases(
     ResourceType.mediaItem
 );
+
 const validMediaItem = validCases[0].resource;
 
 const invalidTimeRangeContext = new TimeRangeContext({

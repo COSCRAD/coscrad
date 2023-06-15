@@ -3,24 +3,24 @@ import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError, isInternalError } from '../../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../../lib/types/not-found';
-import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../../../../test-data/buildTestData';
 import { DTO } from '../../../../../../types/DTO';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../../types/AggregateType';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
-import InvalidExternalReferenceByAggregateError from '../../../../categories/errors/InvalidExternalReferenceByAggregateError';
-import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../../__tests__/command-helpers/assert-event-record-persisted';
 import { assertExternalStateError } from '../../../../__tests__/command-helpers/assert-external-state-error';
-import { DummyCommandFSAFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
+import InvalidExternalReferenceByAggregateError from '../../../../categories/errors/InvalidExternalReferenceByAggregateError';
+import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import { CoscradUserGroup } from '../../entities/coscrad-user-group.entity';
 import { AddUserToGroup } from './add-user-to-group.command';
 
@@ -57,7 +57,7 @@ const validCommandFSA = {
 const buildValidCommandFSA = (): FluxStandardAction<DTO<AddUserToGroup>> => validCommandFSA;
 
 const buildInvalidFSA = (id, payloadOverrides) =>
-    new DummyCommandFSAFactory(buildValidCommandFSA).build(id, payloadOverrides);
+    new DummyCommandFsaFactory(buildValidCommandFSA).build(id, payloadOverrides);
 
 describe('AddUserToGroup', () => {
     let app: INestApplication;

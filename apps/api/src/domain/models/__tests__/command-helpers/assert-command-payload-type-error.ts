@@ -1,7 +1,7 @@
 import { FluxStandardAction, ICommand } from '@coscrad/commands';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import InvalidCommandPayloadTypeError from '../../../models/shared/common-command-errors/InvalidCommandPayloadTypeError';
-import { DummyCommandFSAFactory } from './dummy-command-fsa-factory';
+import { DummyCommandFsaFactory } from './dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from './types/CommandAssertionDependencies';
 
 export const assertCommandPayloadTypeError = (result: unknown, propertyKey: string) => {
@@ -29,7 +29,7 @@ export const assertCommandFailsDueToTypeError = async (
     const validId = await idManager.generate();
 
     const buildInvalidFSA = (id, payloadOverrides) =>
-        new DummyCommandFSAFactory(() => validCommandFSA).build(id, payloadOverrides);
+        new DummyCommandFsaFactory(() => validCommandFSA).build(id, payloadOverrides);
 
     const result = await commandHandlerService.execute(
         buildInvalidFSA(validId, {

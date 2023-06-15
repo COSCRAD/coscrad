@@ -1,7 +1,7 @@
 import { FluxStandardAction, ICommand } from '@coscrad/commands';
 import { AggregateId } from '../../../types/AggregateId';
 
-export class DummyCommandFSAFactory<T extends ICommand> {
+export class DummyCommandFsaFactory<T extends ICommand> {
     // TODO make building a valid FSA the responsibility of this class as well
     constructor(private readonly buildValidFSA: (id?: AggregateId) => FluxStandardAction<T>) {}
 

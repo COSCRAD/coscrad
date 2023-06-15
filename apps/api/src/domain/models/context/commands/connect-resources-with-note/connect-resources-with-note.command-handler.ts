@@ -46,7 +46,10 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
         fromMemberCompositeIdentifier,
         fromMemberContext,
     }: ConnectResourcesWithNote): ResultOrError<EdgeConnection> {
-        // TODO wrap factory in base create command handler when refactor this one!
+        /**
+         * TODO[https://www.pivotaltracker.com/story/show/185394721]
+         * Wrap factory in base create command handler.
+         */
         const createDto: DTO<EdgeConnection> = {
             type: AggregateType.note,
             id,

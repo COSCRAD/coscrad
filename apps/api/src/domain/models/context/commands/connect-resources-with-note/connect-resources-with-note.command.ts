@@ -20,7 +20,10 @@ export class ConnectResourcesWithNote implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: EdgeConnectionCompositeIdentifier;
 
-    // To member will be bound to detail view for the resource where we hit the `CONNECT_RESOURCES` button in that flow
+    /**
+     * To member will be bound to detail view for the resource where we hit the
+     * `CONNECT_RESOURCES` button in that flow
+     */
     @NestedDataType(ResourceCompositeIdentifier, {
         label: 'to member composite identifier',
         description:

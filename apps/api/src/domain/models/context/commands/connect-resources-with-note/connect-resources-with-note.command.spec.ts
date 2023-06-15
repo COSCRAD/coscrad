@@ -16,13 +16,13 @@ import { ResourceType, isResourceType } from '../../../../types/ResourceType';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
-import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
-import { contextModelMap } from '../../__tests__';
+import { buildContextModelMap } from '../../__tests__';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -34,6 +34,8 @@ import { EdgeConnectionContextType } from '../../types/EdgeConnectionContextType
 import { ConnectResourcesWithNote } from './connect-resources-with-note.command';
 
 const commandType = `CONNECT_RESOURCES_WITH_NOTE`;
+
+const contextModelMap = buildContextModelMap();
 
 const testData = buildTestDataInFlatFormat();
 
@@ -68,7 +70,7 @@ const buidlValidFsa = (id: AggregateId) => ({
     payload: buildValidPayload(id),
 });
 
-const commandFsaFactory = new DummyCommandFSAFactory(buidlValidFsa);
+const commandFsaFactory = new DummyCommandFsaFactory(buidlValidFsa);
 
 type ToMember = EdgeConnectionMember & {
     role: typeof EdgeConnectionMemberRole.to;
@@ -478,8 +480,8 @@ describe(commandType, () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
                     initialState: new DeluxeInMemoryStore({
-                        // to member DNE
-                        // ...
+                        // to member does not exist
+
                         // from member
                         [AggregateType.book]: [existingBook],
                     }).fetchFullSnapshotInLegacyFormat(),
@@ -493,9 +495,10 @@ describe(commandType, () => {
                 await assertCreateCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
                     initialState: new DeluxeInMemoryStore({
-                        // to member DNE
+                        // to member
                         [AggregateType.term]: [existingTerm],
-                        // from member DNE
+
+                        // from member Does Not Exist
                     }).fetchFullSnapshotInLegacyFormat(),
                     buildCommandFSA: (id) => commandFsaFactory.build(id),
                 });
