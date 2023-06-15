@@ -5,9 +5,10 @@ import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUp
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../../lib/types/not-available';
 import { NotFound } from '../../../../../lib/types/not-found';
-import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
+import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -18,18 +19,17 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../../types/ResourceType';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
-import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
-import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { AudioItem } from '../../entities/audio-item.entity';
 import { CreateAudioItem } from './create-audio-item.command';
 
@@ -67,7 +67,7 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateAud
 const buildInvalidCommandFSA = (
     id: AggregateId,
     payloadOverrides: Partial<Record<keyof CreateAudioItem, unknown>> = {}
-) => new DummyCommandFSAFactory(buildValidCommandFSA).build(id, payloadOverrides);
+) => new DummyCommandFsaFactory(buildValidCommandFSA).build(id, payloadOverrides);
 
 const validInitialState = new DeluxeInMemoryStore({
     [AggregateType.mediaItem]: [existingMediaItem],

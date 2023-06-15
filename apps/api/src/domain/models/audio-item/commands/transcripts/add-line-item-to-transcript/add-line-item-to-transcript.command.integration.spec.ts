@@ -3,10 +3,11 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
-import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../../types/DTO';
 import formatAggregateType from '../../../../../../view-models/presentation/formatAggregateType';
+import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import {
     MultilingualText,
     MultilingualTextItemRole,
@@ -14,16 +15,15 @@ import {
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
-import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
-import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
-import { DummyCommandFSAFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
+import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { AudioItem } from '../../../entities/audio-item.entity';
 import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { Video } from '../../../entities/video.entity';
@@ -154,7 +154,7 @@ describe(commandType, () => {
 
             const validCommandFSA = buildValidCommandFSA(validInstance);
 
-            const commandFSAFactory = new DummyCommandFSAFactory(() => validCommandFSA);
+            const commandFSAFactory = new DummyCommandFsaFactory(() => validCommandFSA);
 
             const commandFsaWithMultipleOriginalTextItems = commandFSAFactory.build(
                 validCommandFSA.payload.aggregateCompositeIdentifier.id,

@@ -2,27 +2,27 @@ import { AggregateType, FluxStandardAction } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../../lib/types/not-found';
-import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
-import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../../../../../test-data/buildTestDataInFlatFormat';
 import TagLabelAlreadyInUseError from '../../../../domainModelValidators/errors/tag/TagLabelAlreadyInUseError';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
-import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
-import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
-import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
-import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import { Tag } from '../../tag.entity';
 import { RelabelTag } from './relabel-tag.command';
 
@@ -55,7 +55,7 @@ const validFSA: FluxStandardAction<RelabelTag> = {
 
 const buildValidCommandFSA = () => validFSA;
 
-const dummyFsaFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
+const dummyFsaFactory = new DummyCommandFsaFactory(buildValidCommandFSA);
 
 describe('RELABEL_TAG', () => {
     let app: INestApplication;

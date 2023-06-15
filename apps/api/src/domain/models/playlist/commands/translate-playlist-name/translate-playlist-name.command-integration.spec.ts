@@ -24,7 +24,7 @@ import { assertCommandError } from '../../../__tests__/command-helpers/assert-co
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
-import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -101,7 +101,7 @@ describe(commandType, () => {
         await testRepositoryProvider.testSetup();
     });
 
-    const commandFSAFactory = new DummyCommandFSAFactory(() => validCommandFSA);
+    const commandFSAFactory = new DummyCommandFsaFactory(() => validCommandFSA);
 
     describe('when the command is valid', () => {
         it('should succeed', async () => {

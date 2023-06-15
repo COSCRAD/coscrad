@@ -123,7 +123,15 @@ exports[`When querying for edge connections GET /connections/ should return the 
             },
             {
               "discriminant": "identity",
-              "schema": {},
+              "schema": {
+                "type": {
+                  "coscradDataType": "FIXED_VALUE",
+                  "description": "must be: identity",
+                  "isArray": false,
+                  "isOptional": false,
+                  "label": "type",
+                },
+              },
             },
           ],
           "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
@@ -1771,12 +1779,11 @@ exports[`When querying for edge connections GET /connections/notes should return
             "type": "mediaItem",
           },
           "context": {
-            "charRange": [
-              0,
-              2,
-            ],
-            "target": "title",
-            "type": "textField",
+            "timeRange": {
+              "inPoint": 650,
+              "outPoint": 1230,
+            },
+            "type": "timeRange",
           },
           "role": "self",
         },
@@ -1792,7 +1799,7 @@ exports[`When querying for edge connections GET /connections/notes should return
           },
         ],
       },
-      "note": "this is an awesome show",
+      "note": "important clip from the show",
       "tags": [],
     },
     {
@@ -1801,14 +1808,10 @@ exports[`When querying for edge connections GET /connections/notes should return
         {
           "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-            "type": "mediaItem",
+            "type": "bibliographicReference",
           },
           "context": {
-            "timeRange": {
-              "inPoint": 650,
-              "outPoint": 1230,
-            },
-            "type": "timeRange",
+            "type": "general",
           },
           "role": "self",
         },
@@ -1820,11 +1823,11 @@ exports[`When querying for edge connections GET /connections/notes should return
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "A note about mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "text": "A note about bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
           },
         ],
       },
-      "note": "important clip from the show",
+      "note": "this book is hard to track down",
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -1880,34 +1883,6 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-            "type": "bibliographicReference",
-          },
-          "context": {
-            "type": "general",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
-      "name": {
-        "items": [
-          {
-            "languageCode": "eng",
-            "role": "original",
-            "text": "A note about bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          },
-        ],
-      },
-      "note": "this book is hard to track down",
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
             "type": "video",
           },
@@ -1922,7 +1897,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
       "name": {
         "items": [
           {
@@ -1950,7 +1925,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
       "name": {
         "items": [
           {
@@ -1978,7 +1953,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
       "name": {
         "items": [
           {
@@ -2006,7 +1981,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
       "name": {
         "items": [
           {
@@ -2034,7 +2009,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
       "name": {
         "items": [
           {
@@ -2062,7 +2037,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
       "name": {
         "items": [
           {
@@ -2090,7 +2065,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
       "name": {
         "items": [
           {
@@ -2118,7 +2093,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
       "name": {
         "items": [
           {
@@ -2146,35 +2121,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
-      "name": {
-        "items": [
-          {
-            "languageCode": "eng",
-            "role": "original",
-            "text": "A note about mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-          },
-        ],
-      },
-      "note": "this is an awesome show",
-      "tags": [],
-    },
-    {
-      "actions": [],
-      "connectedResources": [
-        {
-          "compositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-            "type": "mediaItem",
-          },
-          "context": {
-            "type": "general",
-          },
-          "role": "self",
-        },
-      ],
-      "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
       "name": {
         "items": [
           {
@@ -2202,7 +2149,7 @@ exports[`When querying for edge connections GET /connections/notes should return
         },
       ],
       "connectionType": "self",
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
       "name": {
         "items": [
           {
@@ -2804,6 +2751,199 @@ exports[`When querying for edge connections GET /connections/notes should return
       "connectedResources": [
         {
           "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+            "type": "book",
+          },
+          "context": {
+            "pageIdentifiers": [
+              "2",
+            ],
+            "type": "pageRange",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+            "type": "term",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113301",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+          },
+        ],
+      },
+      "note": "this term appears on this page of the book",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+            "type": "vocabularyList",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113302",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002 to video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+          },
+        ],
+      },
+      "note": "this vocabulary list should be used in preparation for studying the video",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "vocabularyList",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
+            "type": "audioItem",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113303",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111 to vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
+      "note": "this vocabulary list should be used in preparation for studying this audio interview",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "mediaItem",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113304",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+          },
+        ],
+      },
+      "note": "this media item was extracted from the video",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+            "type": "book",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113305",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+          },
+        ],
+      },
+      "note": "this video is loosely based on the book",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
             "type": "mediaItem",
           },
@@ -2969,6 +3109,323 @@ exports[`When querying for edge connections GET /connections/notes should return
         ],
       },
       "note": "this library book has the lyrics from the song, but we do not have access to the book",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+            "type": "term",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "timeRange": {
+              "inPoint": 500,
+              "outPoint": 778.4,
+            },
+            "type": "timeRange",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113103",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to term/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+          },
+        ],
+      },
+      "note": "this term is used in the song",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+            "type": "video",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113104",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to video/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+          },
+        ],
+      },
+      "note": "this video uses the song",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
+            "type": "vocabularyList",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113105",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to vocabularyList/9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
+          },
+        ],
+      },
+      "note": "this vocabulary list is relevant to learning the song lyrics",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+            "type": "audioItem",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+            "type": "book",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113106",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023 to audioItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+          },
+        ],
+      },
+      "note": "this is an alternative reading of the book",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+            "type": "book",
+          },
+          "context": {
+            "type": "identity",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "bibliographicReference",
+          },
+          "context": {
+            "type": "identity",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113107",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from bibliographicReference/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001 to book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+          },
+        ],
+      },
+      "note": "this is the print version of the digital book",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "song",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+            "type": "book",
+          },
+          "context": {
+            "pageIdentifiers": [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113108",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025 to song/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
+      "note": "this song is mentioned on this page",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "mediaItem",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+            "type": "book",
+          },
+          "context": {
+            "pageIdentifiers": [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113109",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025 to mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
+      "note": "this media item is mentioned in the text",
+      "tags": [],
+    },
+    {
+      "actions": [],
+      "connectedResources": [
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+            "type": "mediaItem",
+          },
+          "context": {
+            "type": "general",
+          },
+          "role": "to",
+        },
+        {
+          "compositeIdentifier": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+            "type": "book",
+          },
+          "context": {
+            "pageIdentifiers": [
+              "ix",
+            ],
+            "type": "pageRange",
+          },
+          "role": "from",
+        },
+      ],
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113110",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "A connection from book/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025 to mediaItem/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+          },
+        ],
+      },
+      "note": "this media item is mentioned in the text",
       "tags": [],
     },
     {
