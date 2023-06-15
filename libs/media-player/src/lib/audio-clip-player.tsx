@@ -27,7 +27,6 @@ enum AudioState {
 
 export function AudioClipPlayer({ audioUrl, UserDefinedPlayButton }: AudioClipPlayerProps) {
     const [audioState, setAudioState] = useState<AudioState>(AudioState.loading);
-    console.log(audioUrl, 'howdy');
 
     useEffect(() => {
         const onCanPlay = () => {
