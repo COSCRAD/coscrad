@@ -210,23 +210,6 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'this is an awesome show',
-        members: [
-            {
-                role,
-                compositeIdentifier: {
-                    id: '1',
-                    type: ResourceType.mediaItem,
-                },
-                context: new TextFieldContext({
-                    target: 'title',
-                    charRange: [0, 2],
-                    type: EdgeConnectionContextType.textField,
-                }),
-            },
-        ],
-    },
-    {
         note: 'important clip from the show',
         members: [
             {

@@ -3,6 +3,10 @@ import formatAggregateCompositeIdentifier from '../../../../view-models/presenta
 import { AggregateId } from '../../../types/AggregateId';
 import { Aggregate } from '../../aggregate.entity';
 
+/**
+ * TODO[https://www.pivotaltracker.com/story/show/185417528]
+ * Make this assertion more specific to the precise event record.
+ */
 export const assertEventRecordPersisted = (
     aggregate: Aggregate,
     eventType: string,

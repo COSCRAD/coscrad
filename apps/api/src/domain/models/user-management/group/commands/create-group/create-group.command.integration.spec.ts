@@ -5,25 +5,25 @@ import { assertExternalStateError } from '../../../../../../domain/models/__test
 import { buildFakeTimersConfig } from '../../../../../../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../../../lib/types/not-available';
-import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../../types/DTO';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../../types/AggregateId';
 import { AggregateType } from '../../../../../types/AggregateType';
 import buildEmptyInMemorySnapshot from '../../../../../utilities/buildEmptyInMemorySnapshot';
 import buildInMemorySnapshot from '../../../../../utilities/buildInMemorySnapshot';
-import AggregateIdAlreadyInUseError from '../../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import { assertCommandFailsDueToTypeError } from '../../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../../__tests__/command-helpers/assert-create-command-success';
 import { assertEventRecordPersisted } from '../../../../__tests__/command-helpers/assert-event-record-persisted';
-import { DummyCommandFSAFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../../__tests__/utilities/dummyUuid';
+import AggregateIdAlreadyInUseError from '../../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import { CoscradUserGroup } from '../../entities/coscrad-user-group.entity';
 import { UserGroupLabelAlreadyInUseError } from '../../errors/external-state-errors/UserGroupLabelAlreadyInUseError';
 import { CreateGroup } from './create-group.command';
@@ -42,7 +42,7 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateGro
 
 const initialState = buildEmptyInMemorySnapshot();
 
-const fsaFactory = new DummyCommandFSAFactory<CreateGroup>(buildValidCommandFSA);
+const fsaFactory = new DummyCommandFsaFactory<CreateGroup>(buildValidCommandFSA);
 
 const buildInvalidFSA = (id, payloadOverrides) => fsaFactory.build(id, payloadOverrides);
 

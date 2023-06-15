@@ -1757,28 +1757,6 @@
                     {
                         "role": "self",
                         "context": {
-                            "type": "textField",
-                            "target": "title",
-                            "charRange": [
-                                0,
-                                2
-                            ]
-                        }
-                    }
-                ],
-                "note": "this is an awesome show"
-            },
-            {
-                "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
-                "eventHistory": [],
-                "connectionType": "self",
-                "members": [
-                    {
-                        "role": "self",
-                        "context": {
                             "type": "timeRange",
                             "timeRange": {
                                 "inPoint": 650,
@@ -1793,7 +1771,7 @@
                 "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110011",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1810,7 +1788,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110012",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1831,7 +1809,7 @@
                 "_to": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "_from": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110013",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1848,7 +1826,7 @@
                 "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110014",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1865,7 +1843,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110015",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1882,7 +1860,7 @@
                 "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "_from": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110016",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1899,7 +1877,7 @@
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "_from": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110017",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1916,7 +1894,7 @@
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110018",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1933,7 +1911,7 @@
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110019",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1950,24 +1928,7 @@
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
-                "eventHistory": [],
-                "connectionType": "self",
-                "members": [
-                    {
-                        "role": "self",
-                        "context": {
-                            "type": "general"
-                        }
-                    }
-                ],
-                "note": "this is an awesome show"
-            },
-            {
-                "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-                "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110022",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110020",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -1984,7 +1945,7 @@
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
                 "type": "note",
-                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110021",
                 "eventHistory": [],
                 "connectionType": "self",
                 "members": [
@@ -2255,6 +2216,124 @@
                 "note": "That is why playlist/501 is related to term/2"
             },
             {
+                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+                "_from": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110512",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113301",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "2"
+                            ]
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this term appears on this page of the book"
+            },
+            {
+                "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+                "_from": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113302",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this vocabulary list should be used in preparation for studying the video"
+            },
+            {
+                "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110111",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113303",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this vocabulary list should be used in preparation for studying this audio interview"
+            },
+            {
+                "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+                "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113304",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this media item was extracted from the video"
+            },
+            {
+                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
+                "_from": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113305",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this video is loosely based on the book"
+            },
+            {
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
                 "type": "note",
@@ -2365,6 +2444,203 @@
                     }
                 ],
                 "note": "this library book has the lyrics from the song, but we do not have access to the book"
+            },
+            {
+                "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
+                "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113103",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "timeRange",
+                            "timeRange": {
+                                "inPoint": 500,
+                                "outPoint": 778.4
+                            }
+                        }
+                    }
+                ],
+                "note": "this term is used in the song"
+            },
+            {
+                "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
+                "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113104",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this video uses the song"
+            },
+            {
+                "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
+                "_from": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113105",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this vocabulary list is relevant to learning the song lyrics"
+            },
+            {
+                "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
+                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113106",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "general"
+                        }
+                    }
+                ],
+                "note": "this is an alternative reading of the book"
+            },
+            {
+                "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
+                "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113107",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "identity"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "identity"
+                        }
+                    }
+                ],
+                "note": "this is the print version of the digital book"
+            },
+            {
+                "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113108",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    }
+                ],
+                "note": "this song is mentioned on this page"
+            },
+            {
+                "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113109",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    }
+                ],
+                "note": "this media item is mentioned in the text"
+            },
+            {
+                "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
+                "_from": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110025",
+                "type": "note",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b113110",
+                "eventHistory": [],
+                "connectionType": "dual",
+                "members": [
+                    {
+                        "role": "to",
+                        "context": {
+                            "type": "general"
+                        }
+                    },
+                    {
+                        "role": "from",
+                        "context": {
+                            "type": "pageRange",
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
+                        }
+                    }
+                ],
+                "note": "this media item is mentioned in the text"
             },
             {
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",

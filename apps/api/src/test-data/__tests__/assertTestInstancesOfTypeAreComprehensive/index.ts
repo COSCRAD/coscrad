@@ -1,6 +1,8 @@
+import isContextAllowedForGivenResourceType from '../../../domain/models/allowedContexts/isContextAllowedForGivenResourceType';
 import { IBibliographicReference } from '../../../domain/models/bibliographic-reference/interfaces/bibliographic-reference.interface';
 import { BibliographicReferenceType } from '../../../domain/models/bibliographic-reference/types/BibliographicReferenceType';
 import { EdgeConnectionMemberRole } from '../../../domain/models/context/edge-connection.entity';
+import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
 import { ISpatialFeature } from '../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
 import { GeometricFeatureType } from '../../../domain/models/spatial-feature/types/GeometricFeatureType';
 import { AggregateType } from '../../../domain/types/AggregateType';
@@ -70,37 +72,66 @@ const aggregateTypeToComprehensiveAssertionFunction: {
             .fetchAllOfType(AggregateType.note)
             .flatMap(({ members }) => members);
 
-        const doesMemberWithResourceTypeAndRoleExist = (
+        const doesMemberWithResourceTypeContextTypeAndRoleExist = (
             targetResourceType: ResourceType,
+            targetContextType: string,
             targetRole: EdgeConnectionMemberRole
         ) =>
             allConnectionMembers
-                .filter(({ compositeIdentifier: { type } }) => type === targetResourceType)
+                .filter(
+                    ({
+                        compositeIdentifier: { type: resourceType },
+                        context: { type: contextType },
+                    }) => resourceType === targetResourceType && contextType === targetContextType
+                )
                 .some(({ role }) => role === targetRole);
 
         /**
          * Ensure there is a `self`,`to`, and `from` edge connection instance
-         * for each resource type.
+         * for each resource type and allowed context type pair.
          */
 
         Object.values(EdgeConnectionMemberRole).forEach((role) => {
-            const resourceTypesWithNoMemberForThisRole = Object.values(ResourceType).reduce(
-                (acc: ResourceType[], resourceType: ResourceType) =>
-                    doesMemberWithResourceTypeAndRoleExist(resourceType, role)
-                        ? acc
-                        : acc.concat(resourceType),
-                []
+            /**
+             * TODO Require there to be one instance with each allowed context type
+             * for this resource type.
+             */
+            const resourceTypeContextTypeCombosWithoutInstanceForThisRole = Object.values(
+                ResourceType
+            ).flatMap((resourceType) =>
+                Object.values(EdgeConnectionContextType)
+                    .filter(
+                        // the rules for whether an identity context is allowed also depend on to \ from roles so we won't enforce these to
+                        (contextType) => contextType !== EdgeConnectionContextType.identity
+                    )
+                    .filter((contextType) =>
+                        isContextAllowedForGivenResourceType(contextType, resourceType)
+                    )
+                    .flatMap((contextType) =>
+                        doesMemberWithResourceTypeContextTypeAndRoleExist(
+                            resourceType,
+                            contextType,
+                            role
+                        )
+                            ? []
+                            : [
+                                  {
+                                      resourceType,
+                                      contextType,
+                                  },
+                              ]
+                    )
             );
 
             // This format ensures the role is visible if the test fails
             const result = {
                 role,
-                resourceTypesWithNoMemberForThisRole,
+                resourceTypeContextTypeCombosWithoutInstanceForThisRole,
             };
 
             expect(result).toEqual({
                 role,
-                resourceTypesWithNoMemberForThisRole: [],
+                resourceTypeContextTypeCombosWithoutInstanceForThisRole: [],
             });
         });
     },
