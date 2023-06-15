@@ -2,29 +2,29 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { assertResourcePersistedProperly } from '../../../../../domain/models/__tests__/command-helpers/assert-resource-persisted-properly';
-import { InternalError } from '../../../../../lib/errors/InternalError';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
-import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { InternalError } from '../../../../../lib/errors/InternalError';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
+import getValidBibliographicReferenceInstanceForTest from '../../../../__tests__/utilities/getValidBibliographicReferenceInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../../types/ResourceType';
-import getValidBibliographicReferenceInstanceForTest from '../../../../__tests__/utilities/getValidBibliographicReferenceInstanceForTest';
-import AggregateIdAlreadyInUseError from '../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
-import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
-import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
-import UuidNotGeneratedInternallyError from '../../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
-import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
+import AggregateIdAlreadyInUseError from '../../../shared/common-command-errors/AggregateIdAlreadyInUseError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
+import UuidNotGeneratedInternallyError from '../../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { BibliographicReferenceType } from '../../types/BibliographicReferenceType';
 import { CreateJournalArticleBibliographicReference } from './create-journal-article-bibliographic-reference.command';
 
@@ -69,7 +69,7 @@ const buildValidCommandFSA = (
     },
 });
 
-const dummyFSAFactory = new DummyCommandFSAFactory(buildValidCommandFSA);
+const dummyFSAFactory = new DummyCommandFsaFactory(buildValidCommandFSA);
 
 describe(`The command: ${commandType}`, () => {
     let testRepositoryProvider: TestRepositoryProvider;

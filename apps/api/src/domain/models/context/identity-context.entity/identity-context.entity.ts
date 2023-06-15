@@ -1,4 +1,4 @@
-import { UnionMember } from '@coscrad/data-types';
+import { FixedValue, UnionMember } from '@coscrad/data-types';
 import { EdgeConnectionContext } from '../context.entity';
 import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
@@ -11,5 +11,9 @@ import { EdgeConnectionContextType } from '../types/EdgeConnectionContextType';
 
 @UnionMember('EDGE_CONNECTION_CONTEXT_UNION', EdgeConnectionContextType.identity)
 export class IdentityContext extends EdgeConnectionContext {
+    @FixedValue({
+        label: 'type',
+        description: `must be: ${EdgeConnectionContextType.identity}`,
+    })
     readonly type = EdgeConnectionContextType.identity;
 }

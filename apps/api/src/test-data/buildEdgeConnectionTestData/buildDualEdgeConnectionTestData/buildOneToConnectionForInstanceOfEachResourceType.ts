@@ -4,6 +4,7 @@ import {
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
+import { IdentityContext } from '../../../domain/models/context/identity-context.entity/identity-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
@@ -68,6 +69,197 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
                         inPoint: 500,
                         outPoint: 778.4,
                     },
+                }),
+            },
+        ],
+    },
+    {
+        id: '3103',
+        note: 'this term is used in the song',
+        members: [
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.term,
+                    id: '511',
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.song,
+                    id: '1',
+                },
+                context: new TimeRangeContext({
+                    type: EdgeConnectionContextType.timeRange,
+                    timeRange: {
+                        inPoint: 500,
+                        outPoint: 778.4,
+                    },
+                }),
+            },
+        ],
+    },
+    {
+        id: '3104',
+        note: 'this video uses the song',
+        members: [
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.video,
+                    id: '223',
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.song,
+                    id: '1',
+                },
+                context: new GeneralContext(),
+            },
+        ],
+    },
+    {
+        id: '3105',
+        note: 'this vocabulary list is relevant to learning the song lyrics',
+        members: [
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.vocabularyList,
+                    id: '4567',
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.song,
+                    id: '1',
+                },
+                context: new GeneralContext(),
+            },
+        ],
+    },
+    {
+        id: '3106',
+        note: 'this is an alternative reading of the book',
+        members: [
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.audioItem,
+                    id: '110',
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.book,
+                    id: '23',
+                },
+                context: new GeneralContext(),
+            },
+        ],
+    },
+    {
+        id: '3107',
+        note: 'this is the print version of the digital book',
+        members: [
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.book,
+                    id: '23',
+                },
+                context: new IdentityContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.bibliographicReference,
+                    id: '1',
+                },
+                context: new IdentityContext(),
+            },
+        ],
+    },
+    {
+        id: '3108',
+        note: 'this song is mentioned on this page',
+        members: [
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.song,
+                    id: '1',
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.book,
+                    id: '25',
+                },
+                context: new PageRangeContext({
+                    type: EdgeConnectionContextType.pageRange,
+                    pageIdentifiers: ['ix'],
+                }),
+            },
+        ],
+    },
+    {
+        id: '3109',
+        note: 'this media item is mentioned in the text',
+        members: [
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.mediaItem,
+                    id: '1',
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.book,
+                    id: '25',
+                },
+                context: new PageRangeContext({
+                    type: EdgeConnectionContextType.pageRange,
+                    pageIdentifiers: ['ix'],
+                }),
+            },
+        ],
+    },
+    {
+        id: '3110',
+        note: 'this media item is mentioned in the text',
+        members: [
+            {
+                role: EdgeConnectionMemberRole.to,
+                compositeIdentifier: {
+                    type: ResourceType.mediaItem,
+                    id: '1',
+                },
+                context: new GeneralContext(),
+            },
+            {
+                role: EdgeConnectionMemberRole.from,
+                compositeIdentifier: {
+                    type: ResourceType.book,
+                    id: '25',
+                },
+                context: new PageRangeContext({
+                    type: EdgeConnectionContextType.pageRange,
+                    pageIdentifiers: ['ix'],
                 }),
             },
         ],

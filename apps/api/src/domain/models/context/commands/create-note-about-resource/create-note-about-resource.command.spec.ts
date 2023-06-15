@@ -16,13 +16,14 @@ import { ResourceType } from '../../../../types/ResourceType';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
-import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
 import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
+import { buildContextModelMap } from '../../__tests__';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -82,26 +83,6 @@ const notesToCreate = dummyNotes
         } as unknown as SeenAndKeepers
     ).keepers;
 
-/**
- * This will allow us to get a context model instance by type on-demand.
- */
-const contextModelMap = notesToCreate.reduce(
-    (acc, { members }) => {
-        const { context } = members[0];
-
-        /**
-         * If this is the first context instance for the given `contextType`,
-         * register it in the map.
-         */
-        if (!acc.has(context.type)) return acc.set(context.type, context);
-
-        // no-op
-        return acc;
-    },
-
-    new Map<string, IEdgeConnectionContext>()
-);
-
 const allContextTypes = [
     ...new Set(notesToCreate.flatMap(({ members }) => members).map(({ context }) => context.type)),
 ];
@@ -133,7 +114,7 @@ const buildValidCommandFSAForAudioItem = (
     },
 });
 
-const commandFSAFactory = new DummyCommandFSAFactory(buildValidCommandFSAForAudioItem);
+const commandFSAFactory = new DummyCommandFsaFactory(buildValidCommandFSAForAudioItem);
 
 const buildCreateNoteAboutResourceFSAForNote = (
     edgeConnection: EdgeConnection
@@ -300,7 +281,7 @@ describe(commandType, () => {
                             (contextType) =>
                                 !isContextAllowedForGivenResourceType(contextType, resourceType)
                         )
-                        .map((contextType) => contextModelMap.get(contextType));
+                        .map((contextType) => buildContextModelMap().get(contextType));
 
                     invalidContextInstancesForThisResource.forEach((context) => {
                         describe(`when the context type: ${context.type} is not allowed`, () => {

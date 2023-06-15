@@ -22,10 +22,7 @@ export default <TResourceType extends ResourceType = ResourceType>(
                 ].includes(conextType)
         )
         .filter((contextType) => !isContextAllowedForGivenResourceType(contextType, resourceType))
-        .map((contextType) => ({
-            contextType,
-        }))
-        .map(({ contextType }) => {
+        .map((contextType) => {
             const expectedError = new DisallowedContextTypeForResourceError(
                 contextType,
                 resource.getCompositeIdentifier()
