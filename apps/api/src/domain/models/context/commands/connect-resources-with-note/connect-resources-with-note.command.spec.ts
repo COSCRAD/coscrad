@@ -2,12 +2,16 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../../lib/errors/InternalError';
+import { NotFound } from '../../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../../../../../test-data/buildTestDataInFlatFormat';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import InvariantValidationError from '../../../../domainModelValidators/errors/InvariantValidationError';
+import ContextTypeIsNotAllowedForGivenResourceTypeError from '../../../../domainModelValidators/errors/context/edgeConnections/ContextTypeIsNotAllowedForGivenResourceTypeError';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
@@ -16,12 +20,17 @@ import { ResourceType, isResourceType } from '../../../../types/ResourceType';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
+import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
+import UuidNotGeneratedInternallyError from '../../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { buildContextModelMap } from '../../__tests__';
 import {
     EdgeConnection,
@@ -63,6 +72,7 @@ const buildValidPayload = (id: AggregateId) => ({
     toMemberContext: new GeneralContext(),
     fromMemberCompositeIdentifier: existingBook.getCompositeIdentifier(),
     fromMemberContext: new GeneralContext(),
+    text: 'this is how these resources are connected',
 });
 
 const buidlValidFsa = (id: AggregateId) => ({
@@ -230,6 +240,28 @@ describe(commandType, () => {
                                 fromMemberContext: fromMember.context,
                             }),
                         initialState: initialStateWithAllResourcesButNoConnections,
+                        checkStateOnSuccess: async ({
+                            aggregateCompositeIdentifier: { id },
+                            text,
+                        }: ConnectResourcesWithNote) => {
+                            const newEdgeConnectionSearchResult = await testRepositoryProvider
+                                .getEdgeConnectionRepository()
+                                .fetchById(id);
+
+                            expect(newEdgeConnectionSearchResult).not.toBe(NotFound);
+
+                            expect(newEdgeConnectionSearchResult).not.toBeInstanceOf(InternalError);
+
+                            const newConnection = newEdgeConnectionSearchResult as EdgeConnection;
+
+                            expect(newConnection.note).toBe(text);
+
+                            assertEventRecordPersisted(
+                                newConnection,
+                                `RESOURCES_CONNECTED_WITH_NOTE`,
+                                dummySystemUserId
+                            );
+                        },
                     });
                 });
             });
@@ -237,15 +269,14 @@ describe(commandType, () => {
     });
 
     describe(`when the command is invalid`, () => {
-        const edgeConnectionTypesToKeep = Object.values(EdgeConnectionContextType)
-            // TODO Suppor these models
-            .filter(
-                (contextType) =>
-                    ![
-                        EdgeConnectionContextType.point2D,
-                        EdgeConnectionContextType.freeMultiline,
-                    ].includes(contextType)
-            );
+        const edgeConnectionTypesToKeep = Object.values(EdgeConnectionContextType).filter(
+            (contextType) =>
+                // TODO Support these models
+                ![
+                    EdgeConnectionContextType.point2D,
+                    EdgeConnectionContextType.freeMultiline,
+                ].includes(contextType)
+        );
 
         describe(`when the context type for a member is not allowed for the given resource type`, () => {
             comprehensiveConnectionsToCreate
@@ -352,6 +383,31 @@ describe(commandType, () => {
                                         fromMemberContext: fromMember.context,
                                     }),
                                 initialState: initialStateWithAllResourcesButNoConnections,
+                                checkError: (result, id) => {
+                                    assertErrorAsExpected(
+                                        result,
+                                        new CommandExecutionError([
+                                            new InvariantValidationError(
+                                                {
+                                                    type: AggregateType.note,
+                                                    id,
+                                                },
+                                                // We check the innermost errors below
+                                                []
+                                            ),
+                                        ])
+                                    );
+
+                                    const innerMostError = result.innerErrors[0].innerErrors[0];
+
+                                    /**
+                                     * We could tighten this up more if we flow through information
+                                     * about whether we have invalidated the to or from member for this test case
+                                     */
+                                    expect(innerMostError).toBeInstanceOf(
+                                        ContextTypeIsNotAllowedForGivenResourceTypeError
+                                    );
+                                },
                             });
                         });
                     });
@@ -387,6 +443,17 @@ describe(commandType, () => {
                                         fromMemberContext: fromMember.context,
                                     }),
                                 initialState: initialStateWithAllResourcesButNoConnections,
+                                checkError: (result) => {
+                                    assertErrorAsExpected(
+                                        result,
+                                        new CommandExecutionError([
+                                            new InvalidExternalStateError(
+                                                // We would need to match errors to context types to check the inner errors
+                                                []
+                                            ),
+                                        ])
+                                    );
+                                },
                             });
                         });
                     });
@@ -424,6 +491,17 @@ describe(commandType, () => {
                                         ),
                                     }),
                                 initialState: initialStateWithAllResourcesButNoConnections,
+                                checkError: (result) => {
+                                    assertErrorAsExpected(
+                                        result,
+                                        new CommandExecutionError([
+                                            new InvalidExternalStateError(
+                                                // We would need to match errors to context types to check the inner errors
+                                                []
+                                            ),
+                                        ])
+                                    );
+                                },
                             });
                         });
                     });
@@ -456,7 +534,7 @@ describe(commandType, () => {
             );
         });
 
-        describe(`when the context for the a member has an unregistered context type`, () => {
+        describe(`when the context for a member has an unregistered context type`, () => {
             const bogusContextType = 'totally-booogus8';
 
             ['toMemberContext', 'fromMemberContext'].forEach((propertyName) => {
@@ -469,6 +547,9 @@ describe(commandType, () => {
                                 commandFsaFactory.build(id, {
                                     [propertyName]: { type: bogusContextType },
                                 }),
+                            checkError: (error) => {
+                                expect(error.toString().includes(propertyName));
+                            },
                         });
                     });
                 });
@@ -486,6 +567,18 @@ describe(commandType, () => {
                         [AggregateType.book]: [existingBook],
                     }).fetchFullSnapshotInLegacyFormat(),
                     buildCommandFSA: (id) => commandFsaFactory.build(id),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new InvalidExternalStateError([
+                                    new AggregateNotFoundError(
+                                        existingTerm.getCompositeIdentifier()
+                                    ),
+                                ]),
+                            ])
+                        );
+                    },
                 });
             });
         });
@@ -501,6 +594,18 @@ describe(commandType, () => {
                         // from member Does Not Exist
                     }).fetchFullSnapshotInLegacyFormat(),
                     buildCommandFSA: (id) => commandFsaFactory.build(id),
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new InvalidExternalStateError([
+                                    new AggregateNotFoundError(
+                                        existingBook.getCompositeIdentifier()
+                                    ),
+                                ]),
+                            ])
+                        );
+                    },
                 });
             });
         });
@@ -562,6 +667,14 @@ describe(commandType, () => {
                             aggregateCompositeIdentifier: { id: bogusId, type: AggregateType.note },
                         }),
                     initialState: initialStateWithAllResourcesButNoConnections,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new UuidNotGeneratedInternallyError(bogusId),
+                            ])
+                        );
+                    },
                 });
             });
         });

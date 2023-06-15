@@ -45,6 +45,7 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
         toMemberContext,
         fromMemberCompositeIdentifier,
         fromMemberContext,
+        text,
     }: ConnectResourcesWithNote): ResultOrError<EdgeConnection> {
         /**
          * TODO[https://www.pivotaltracker.com/story/show/185394721]
@@ -54,7 +55,8 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
             type: AggregateType.note,
             id,
             connectionType: EdgeConnectionType.dual,
-            note: `these two resources are closely related`,
+            // TODO [https://www.pivotaltracker.com/story/show/185394771] make this Multilingual Text
+            note: text,
             members: [
                 {
                     role: EdgeConnectionMemberRole.to,

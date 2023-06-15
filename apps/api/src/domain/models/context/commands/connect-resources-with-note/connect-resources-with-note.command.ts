@@ -1,6 +1,6 @@
 import { ICommandBase, IEdgeConnectionContext } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { ContextUnion } from '../../edge-connection-context-union';
 import {
     EdgeConnectionCompositeIdentifier,
@@ -49,4 +49,12 @@ export class ConnectResourcesWithNote implements ICommandBase {
         description: 'context for the resource from which you are making a connection',
     })
     readonly fromMemberContext: IEdgeConnectionContext;
+
+    @NonEmptyString({
+        label: 'text',
+        description: 'text for the note',
+    })
+    text: string;
+
+    // TODO [https://www.pivotaltracker.com/story/show/185394771] Add languageCode
 }
