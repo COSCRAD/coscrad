@@ -2,6 +2,7 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { InternalError } from '../../../../../lib/errors/InternalError';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../../../../../test-data/buildTestDataInFlatFormat';
@@ -16,6 +17,7 @@ import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-hel
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
 import { DummyCommandFSAFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
@@ -29,6 +31,7 @@ import {
 } from '../../edge-connection.entity';
 import { GeneralContext } from '../../general-context/general-context.entity';
 import { EdgeConnectionContextType } from '../../types/EdgeConnectionContextType';
+import { ConnectResourcesWithNote } from './connect-resources-with-note.command';
 
 const commandType = `CONNECT_RESOURCES_WITH_NOTE`;
 
@@ -378,6 +381,127 @@ describe(commandType, () => {
                         });
                     });
                 });
+        });
+
+        describe(`when the context for the to member has an unregistered context type`, () => {
+            const bogusContextType = 'totally-booogus8';
+
+            it(`should fail with the expected error`, async () => {
+                await assertCreateCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    initialState: initialStateWithAllResourcesButNoConnections,
+                    buildCommandFSA: (id) =>
+                        commandFsaFactory.build(id, {
+                            toMemberContext: { type: bogusContextType },
+                        }),
+                });
+            });
+        });
+
+        describe(`when the to member does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCreateCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    initialState: new DeluxeInMemoryStore({
+                        // to member DNE
+                        // ...
+                        // from member
+                        [AggregateType.book]: [existingBook],
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    buildCommandFSA: (id) => commandFsaFactory.build(id),
+                });
+            });
+        });
+
+        describe(`when the from member does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCreateCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    initialState: new DeluxeInMemoryStore({
+                        // to member DNE
+                        [AggregateType.term]: [existingTerm],
+                        // from member DNE
+                    }).fetchFullSnapshotInLegacyFormat(),
+                    buildCommandFSA: (id) => commandFsaFactory.build(id),
+                });
+            });
+        });
+
+        describe(`when the aggregate composite identifier uses a type other than note`, () => {
+            Object.values(AggregateType)
+                .filter((aggregateType) => aggregateType !== AggregateType.note)
+                .forEach((invalidAggregateType) => {
+                    describe(`when aggregateCompositeIdentifier.type = ${invalidAggregateType}`, () => {
+                        it(`should fail with the exptected errors`, async () => {
+                            await assertCommandFailsDueToTypeError(
+                                assertionHelperDependencies,
+                                {
+                                    propertyName: 'aggregateCompositeIdentifier',
+                                    invalidValue: {
+                                        type: invalidAggregateType,
+                                        id: buildDummyUuid(919),
+                                    },
+                                },
+                                commandFsaFactory.build(buildDummyUuid(920))
+                            );
+                        });
+                    });
+                });
+        });
+
+        describe(`when there is already a note with the given ID`, () => {
+            it(`should fail with the expected error`, async () => {
+                const newId = await idManager.generate();
+
+                const validCommandFSA = commandFsaFactory.build(newId);
+
+                await testRepositoryProvider.addFullSnapshot(
+                    new DeluxeInMemoryStore({
+                        [AggregateType.note]: [
+                            getValidAggregateInstanceForTest(AggregateType.note).clone({
+                                id: newId,
+                            }),
+                        ],
+                    }).fetchFullSnapshotInLegacyFormat()
+                );
+
+                const result = await commandHandlerService.execute(validCommandFSA, {
+                    userId: dummySystemUserId,
+                });
+
+                expect(result).toBeInstanceOf(InternalError);
+            });
+        });
+
+        describe(`when the ID was not generated with our ID generation system`, () => {
+            it(`should fail with the expected error`, async () => {
+                const bogusId = buildDummyUuid(589);
+
+                await assertCreateCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildCommandFSA: (_) =>
+                        commandFsaFactory.build(undefined, {
+                            aggregateCompositeIdentifier: { id: bogusId, type: AggregateType.note },
+                        }),
+                    initialState: initialStateWithAllResourcesButNoConnections,
+                });
+            });
+        });
+
+        describe('when the payload has an invalid type', () => {
+            generateCommandFuzzTestCases(ConnectResourcesWithNote).forEach(
+                ({ description, propertyName, invalidValue }) => {
+                    describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
+                        it('should fail with the appropriate error', async () => {
+                            await assertCommandFailsDueToTypeError(
+                                assertionHelperDependencies,
+                                { propertyName, invalidValue },
+                                commandFsaFactory.build(buildDummyUuid(304))
+                            );
+                        });
+                    });
+                }
+            );
         });
     });
 });
