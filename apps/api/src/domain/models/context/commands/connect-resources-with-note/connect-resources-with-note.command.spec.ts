@@ -235,7 +235,17 @@ describe(commandType, () => {
     });
 
     describe(`when the command is invalid`, () => {
-        describe(`when the context type for the to member is not allowed for the given resource type`, () => {
+        const edgeConnectionTypesToKeep = Object.values(EdgeConnectionContextType)
+            // TODO Suppor these models
+            .filter(
+                (contextType) =>
+                    ![
+                        EdgeConnectionContextType.point2D,
+                        EdgeConnectionContextType.freeMultiline,
+                    ].includes(contextType)
+            );
+
+        describe(`when the context type for a member is not allowed for the given resource type`, () => {
             comprehensiveConnectionsToCreate
                 .reduce(
                     (
@@ -267,16 +277,8 @@ describe(commandType, () => {
                         connection.members
                     );
 
-                    return (
-                        Object.values(EdgeConnectionContextType)
-                            // TODO Suppor these models
-                            .filter(
-                                (contextType) =>
-                                    ![
-                                        EdgeConnectionContextType.point2D,
-                                        EdgeConnectionContextType.freeMultiline,
-                                    ].includes(contextType)
-                            )
+                    return [
+                        ...edgeConnectionTypesToKeep
                             .filter(
                                 (contextType) =>
                                     !isContextAllowedForGivenResourceType(
@@ -296,31 +298,59 @@ describe(commandType, () => {
                                 return connection.clone({
                                     members: [
                                         fromMember,
-                                        {
-                                            ...toMember,
+                                        toMember.clone({
                                             context,
-                                        },
+                                        }),
                                     ],
                                 });
-                            })
-                    );
+                            }),
+                        ...edgeConnectionTypesToKeep
+                            .filter(
+                                (contextType) =>
+                                    !isContextAllowedForGivenResourceType(
+                                        contextType,
+                                        fromMember.compositeIdentifier.type
+                                    )
+                            )
+                            .map((contextType) => {
+                                if (!contextModelMap.has(contextType)) {
+                                    throw new Error(
+                                        `failed to find a context instance of type: ${contextType}`
+                                    );
+                                }
+
+                                const context = contextModelMap.get(contextType);
+
+                                return connection.clone({
+                                    members: [
+                                        fromMember.clone({
+                                            context,
+                                        }),
+                                        toMember,
+                                    ],
+                                });
+                            }),
+                    ];
                 })
                 .forEach((connection) => {
-                    const { to: toMember, from: fromMember } = findToAndFromMembers(
-                        connection.members
-                    );
+                    describe(buildDescriptionForMembers(connection.members), () => {
+                        const { to: toMember, from: fromMember } = findToAndFromMembers(
+                            connection.members
+                        );
 
-                    it(`should fail with the expected error`, async () => {
-                        await assertCreateCommandError(assertionHelperDependencies, {
-                            systemUserId: dummySystemUserId,
-                            buildCommandFSA: (id) =>
-                                commandFsaFactory.build(id, {
-                                    toMemberCompositeIdentifier: toMember.compositeIdentifier,
-                                    toMemberContext: toMember.context,
-                                    fromMemberCompositeIdentifier: fromMember.compositeIdentifier,
-                                    fromMemberContext: fromMember.context,
-                                }),
-                            initialState: initialStateWithAllResourcesButNoConnections,
+                        it(`should fail with the expected error`, async () => {
+                            await assertCreateCommandError(assertionHelperDependencies, {
+                                systemUserId: dummySystemUserId,
+                                buildCommandFSA: (id) =>
+                                    commandFsaFactory.build(id, {
+                                        toMemberCompositeIdentifier: toMember.compositeIdentifier,
+                                        toMemberContext: toMember.context,
+                                        fromMemberCompositeIdentifier:
+                                            fromMember.compositeIdentifier,
+                                        fromMemberContext: fromMember.context,
+                                    }),
+                                initialState: initialStateWithAllResourcesButNoConnections,
+                            });
                         });
                     });
                 });
@@ -361,39 +391,84 @@ describe(commandType, () => {
                 });
         });
 
-        describe(`when the resource type for the to member is a non-resource aggregate type`, () => {
-            Object.values(AggregateType)
-                .filter((t) => !isResourceType(t))
-                .forEach((invalidResourceType) => {
-                    describe(`when the resource type is: ${invalidResourceType}`, () => {
-                        it(`should fail with a type error`, async () => {
-                            await assertCommandFailsDueToTypeError(
-                                assertionHelperDependencies,
-                                {
-                                    propertyName: 'toCompositeIdentifier',
-                                    invalidValue: {
-                                        type: invalidResourceType,
-                                        id: buildDummyUuid(567),
-                                    },
-                                },
-                                commandFsaFactory.build(buildDummyUuid(662))
+        describe(`when the context provided is inconsistent with the from member state`, () => {
+            comprehensiveConnectionsToCreate
+                .filter((connection) => {
+                    const { from: fromMember } = findToAndFromMembers(connection.members);
+
+                    return ![
+                        EdgeConnectionContextType.general,
+                        EdgeConnectionContextType.identity,
+                    ].includes(fromMember.context.type as EdgeConnectionContextType);
+                })
+                .forEach((connection) => {
+                    describe(buildDescriptionForMembers(connection.members), () => {
+                        it(`should fail with the expected error`, async () => {
+                            const { to: toMember, from: fromMember } = findToAndFromMembers(
+                                connection.members
                             );
+
+                            await assertCreateCommandError(assertionHelperDependencies, {
+                                systemUserId: dummySystemUserId,
+                                buildCommandFSA: (id) =>
+                                    commandFsaFactory.build(id, {
+                                        toMemberCompositeIdentifier: toMember.compositeIdentifier,
+                                        toMemberContext: toMember.context,
+                                        fromMemberCompositeIdentifier:
+                                            fromMember.compositeIdentifier,
+                                        // overwrite the from member context with an inconsistent state
+                                        fromMemberContext: contextModelMap.get(
+                                            fromMember.context.type
+                                        ),
+                                    }),
+                                initialState: initialStateWithAllResourcesButNoConnections,
+                            });
                         });
                     });
                 });
         });
 
-        describe(`when the context for the to member has an unregistered context type`, () => {
+        describe(`when the resource type is a non-resource aggregate type on the property`, () => {
+            ['toCompositeIdentifier', 'fromCompositeIdentifier'].forEach((propertyName) =>
+                describe(propertyName, () => {
+                    Object.values(AggregateType)
+                        .filter((t) => !isResourceType(t))
+                        .forEach((invalidResourceType) => {
+                            describe(`when the resource type is: ${invalidResourceType}`, () => {
+                                it(`should fail with a type error`, async () => {
+                                    await assertCommandFailsDueToTypeError(
+                                        assertionHelperDependencies,
+                                        {
+                                            propertyName: propertyName,
+                                            invalidValue: {
+                                                type: invalidResourceType,
+                                                id: buildDummyUuid(567),
+                                            },
+                                        },
+                                        commandFsaFactory.build(buildDummyUuid(662))
+                                    );
+                                });
+                            });
+                        });
+                })
+            );
+        });
+
+        describe(`when the context for the a member has an unregistered context type`, () => {
             const bogusContextType = 'totally-booogus8';
 
-            it(`should fail with the expected error`, async () => {
-                await assertCreateCommandError(assertionHelperDependencies, {
-                    systemUserId: dummySystemUserId,
-                    initialState: initialStateWithAllResourcesButNoConnections,
-                    buildCommandFSA: (id) =>
-                        commandFsaFactory.build(id, {
-                            toMemberContext: { type: bogusContextType },
-                        }),
+            ['toMemberContext', 'fromMemberContext'].forEach((propertyName) => {
+                describe(`${propertyName} : ${bogusContextType}`, () => {
+                    it(`should fail with the expected error`, async () => {
+                        await assertCreateCommandError(assertionHelperDependencies, {
+                            systemUserId: dummySystemUserId,
+                            initialState: initialStateWithAllResourcesButNoConnections,
+                            buildCommandFSA: (id) =>
+                                commandFsaFactory.build(id, {
+                                    [propertyName]: { type: bogusContextType },
+                                }),
+                        });
+                    });
                 });
             });
         });
