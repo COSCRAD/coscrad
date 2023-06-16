@@ -5,6 +5,7 @@ import {
     ResourceCompositeIdentifier,
 } from '@coscrad/api-interfaces';
 import { isNull } from '@coscrad/validation-constraints';
+import { findOriginalTextItem } from '../../../../components/notes/shared/find-original-text-item';
 import { ILoadable } from '../../interfaces/loadable.interface';
 import { compositeIdentifierMatches } from './composite-identifiers-match';
 import { useLoadableNotes } from './use-loadable-notes';
@@ -60,8 +61,14 @@ export const useLoadableSelfNotesForResource = (
              * bit of DDD in our modelling. For now, it's easiest to make the shift
              * here. We could propogate back to the view model or even domain model
              * layer.
+             *
+             * We are mimicking the legacy behaviour of having text in a single
+             * language to sidestep the UX complexity. Invariant rules guarantee
+             * that there will always be an original text item. In the future,
+             * we can localize notes using language codes and provide a rich
+             * multilingual experience.
              */
-            text: note,
+            text: findOriginalTextItem(note).text,
             context: relatedResources[0].context,
         }));
 

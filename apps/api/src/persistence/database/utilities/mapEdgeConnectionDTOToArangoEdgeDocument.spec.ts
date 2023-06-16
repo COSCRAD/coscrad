@@ -1,3 +1,5 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -23,7 +25,7 @@ const selfEdgeConnection = new EdgeConnection({
     id: '123',
     connectionType: EdgeConnectionType.self,
     type: AggregateType.note,
-    note: 'These pages are about bears',
+    note: buildMultilingualTextWithSingleItem('These pages are about bears', LanguageCode.English),
     members: [
         {
             role: EdgeConnectionMemberRole.self,
@@ -83,7 +85,7 @@ const dualEdgeConnection = new EdgeConnection({
         buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
     ],
     id: '123',
-    note: 'These are both about bears',
+    note: buildMultilingualTextWithSingleItem('These are both about bears', LanguageCode.English),
 }).toDTO();
 
 const testCases: TestCase[] = [
@@ -96,7 +98,10 @@ const testCases: TestCase[] = [
             _key: '123',
             connectionType: EdgeConnectionType.self,
             eventHistory: [],
-            note: 'These pages are about bears',
+            note: buildMultilingualTextWithSingleItem(
+                'These pages are about bears',
+                LanguageCode.English
+            ),
             type: AggregateType.note,
             members: [
                 {
@@ -115,7 +120,10 @@ const testCases: TestCase[] = [
             _key: '123',
             connectionType: EdgeConnectionType.dual,
             eventHistory: [],
-            note: 'These are both about bears',
+            note: buildMultilingualTextWithSingleItem(
+                'These are both about bears',
+                LanguageCode.English
+            ),
             type: AggregateType.note,
             members: [
                 {

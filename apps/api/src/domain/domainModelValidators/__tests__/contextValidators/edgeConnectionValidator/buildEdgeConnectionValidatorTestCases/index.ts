@@ -1,5 +1,7 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { DTO } from '../../../../../../types/DTO';
 import buildInvariantValidationErrorFactoryFunction from '../../../../../__tests__/utilities/buildInvariantValidationErrorFactoryFunction';
+import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
 import { dummyUuid } from '../../../../../models/__tests__/utilities/dummyUuid';
 import {
     EdgeConnection,
@@ -64,7 +66,7 @@ const validBookSelfConnection = new EdgeConnection({
     type: AggregateType.note,
     connectionType: EdgeConnectionType.self,
     id: '12345',
-    note: 'This is an awesome note',
+    note: buildMultilingualTextWithSingleItem('This is an awesome note', LanguageCode.English),
     members: [buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.self)],
 });
 
@@ -76,7 +78,7 @@ const validBookToTranscribedAudioDualConnection = new EdgeConnection({
         buildValidTranscribedAudioConnectionMemberDto(EdgeConnectionMemberRole.to),
     ],
     id: dummyUuid,
-    note: 'These are both about bears',
+    note: buildMultilingualTextWithSingleItem('These are both about bears', LanguageCode.English),
 }).toDTO();
 
 const validBookBibliographicReferenceMemberWithIdentityContext: DTO<
@@ -151,7 +153,10 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                     id: dummyUuid,
 
                     members: [],
-                    note: 'This is the note',
+                    note: buildMultilingualTextWithSingleItem(
+                        'This is the note',
+                        LanguageCode.English
+                    ),
                 },
                 expectedError: buildTopLevelError(dummyUuid, [
                     new InvalidNumberOfMembersInEdgeConnectionError(EdgeConnectionType.self, 0),
@@ -225,7 +230,10 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                             EdgeConnectionMemberRole.from
                         ),
                     ],
-                    note: 'This is the note',
+                    note: buildMultilingualTextWithSingleItem(
+                        'This is the note',
+                        LanguageCode.English
+                    ),
                 },
                 expectedError: buildTopLevelError(dummyUuid, [
                     new InvalidEdgeConnectionMemberRolesError(EdgeConnectionType.dual, [
@@ -346,7 +354,10 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                     type: AggregateType.note,
                     connectionType: EdgeConnectionType.dual,
                     id: dummyUuid,
-                    note: 'I do not get how identity context works!',
+                    note: buildMultilingualTextWithSingleItem(
+                        'I do not get how identity context works!',
+                        LanguageCode.English
+                    ),
                     members: [
                         {
                             compositeIdentifier: {
@@ -370,7 +381,10 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                     type: AggregateType.note,
                     connectionType: EdgeConnectionType.dual,
                     id: dummyUuid,
-                    note: 'my from member should be a bibliographic reference, but it is not!',
+                    note: buildMultilingualTextWithSingleItem(
+                        'my from member should be a bibliographic reference, but it is not!',
+                        LanguageCode.English
+                    ),
                     members: [
                         {
                             role: EdgeConnectionMemberRole.from,
@@ -403,7 +417,10 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                     type: AggregateType.note,
                     connectionType: EdgeConnectionType.dual,
                     id: dummyUuid,
-                    note: 'This book reference is having an identity crisis. Thinks it is a term.',
+                    note: buildMultilingualTextWithSingleItem(
+                        'This book reference is having an identity crisis. Thinks it is a term.',
+                        LanguageCode.English
+                    ),
                     members: [
                         validBookBibliographicReferenceMemberWithIdentityContext,
                         {
@@ -440,7 +457,10 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                     type: AggregateType.note,
                     connectionType: EdgeConnectionType.self,
                     id: dummyUuid,
-                    note: 'This self member is having an identity crisis!',
+                    note: buildMultilingualTextWithSingleItem(
+                        'This self member is having an identity crisis!',
+                        LanguageCode.English
+                    ),
                     members: [
                         {
                             role: EdgeConnectionMemberRole.self,

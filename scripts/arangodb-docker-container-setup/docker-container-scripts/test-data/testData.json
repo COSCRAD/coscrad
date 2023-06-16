@@ -1589,7 +1589,15 @@
                         }
                     }
                 ],
-                "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "This first 4 letters of this term form a syllable that indicates this is a plant "
+                        }
+                    ]
+                }
             },
             {
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
@@ -1609,7 +1617,15 @@
                         }
                     }
                 ],
-                "note": "This page is about bears"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "This page is about bears"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -1631,7 +1647,15 @@
                         }
                     }
                 ],
-                "note": "This is the first letter of the list name"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "This is the first letter of the list name"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
@@ -1648,7 +1672,15 @@
                         }
                     }
                 ],
-                "note": "there is a placename for this point at the base of the mountain"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "there is a placename for this point at the base of the mountain"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
@@ -1669,7 +1701,15 @@
                         }
                     }
                 ],
-                "note": "this clip talks about songs"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this clip talks about songs"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -1686,7 +1726,15 @@
                         }
                     }
                 ],
-                "note": "this is the stem of the flower"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this is the stem of the flower"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
@@ -1706,7 +1754,15 @@
                         }
                     }
                 ],
-                "note": "this section is the best part of an illustrated book about birds"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this section is the best part of an illustrated book about birds"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -1723,7 +1779,15 @@
                         }
                     }
                 ],
-                "note": "found this in the archives"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "found this in the archives"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -1744,7 +1808,15 @@
                         }
                     }
                 ],
-                "note": "this is a song"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this is a song"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -1765,7 +1837,15 @@
                         }
                     }
                 ],
-                "note": "important clip from the show"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "important clip from the show"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -1782,7 +1862,15 @@
                         }
                     }
                 ],
-                "note": "this book is hard to track down"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this book is hard to track down"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
@@ -1803,7 +1891,15 @@
                         }
                     }
                 ],
-                "note": "this clip talks about birds"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this clip talks about birds"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
@@ -1820,7 +1916,15 @@
                         }
                     }
                 ],
-                "note": "this playlist is awesome"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this playlist is awesome"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -1837,7 +1941,15 @@
                         }
                     }
                 ],
-                "note": "This first 4 letters of this term form a syllable that indicates this is a plant "
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "This first 4 letters of this term form a syllable that indicates this is a plant "
+                        }
+                    ]
+                }
             },
             {
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
@@ -1854,7 +1966,15 @@
                         }
                     }
                 ],
-                "note": "This page is about bears"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "This page is about bears"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -1871,7 +1991,15 @@
                         }
                     }
                 ],
-                "note": "This is the first letter of the list name"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "This is the first letter of the list name"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
@@ -1888,7 +2016,15 @@
                         }
                     }
                 ],
-                "note": "this clip talks about songs"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this clip talks about songs"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
@@ -1905,7 +2041,15 @@
                         }
                     }
                 ],
-                "note": "this section is the best part of an illustrated book about birds"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this section is the best part of an illustrated book about birds"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -1922,7 +2066,15 @@
                         }
                     }
                 ],
-                "note": "this is a song"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this is a song"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -1939,7 +2091,15 @@
                         }
                     }
                 ],
-                "note": "important clip from the show"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "important clip from the show"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
@@ -1956,7 +2116,15 @@
                         }
                     }
                 ],
-                "note": "this clip talks about birds"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this clip talks about birds"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -1989,7 +2157,15 @@
                         }
                     }
                 ],
-                "note": "That is why term/2 is related to vocabularyList/2"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "That is why term/2 is related to vocabularyList/2"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -2021,7 +2197,15 @@
                         }
                     }
                 ],
-                "note": "That is why vocabularyList/2 is related to audioItem/110"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "That is why vocabularyList/2 is related to audioItem/110"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
@@ -2051,7 +2235,15 @@
                         }
                     }
                 ],
-                "note": "That is why audioItem/110 is related to book/24"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "That is why audioItem/110 is related to book/24"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
@@ -2077,7 +2269,15 @@
                         }
                     }
                 ],
-                "note": "That is why book/24 is related to photograph/2"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "That is why book/24 is related to photograph/2"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "photographs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -2100,7 +2300,15 @@
                         }
                     }
                 ],
-                "note": "That is why photograph/2 is related to spatialFeature/300"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "That is why photograph/2 is related to spatialFeature/300"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "spatial_features/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
@@ -2127,7 +2335,15 @@
                         }
                     }
                 ],
-                "note": "That is why spatialFeature/300 is related to song/1"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "That is why spatialFeature/300 is related to song/1"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -2158,7 +2374,15 @@
                         }
                     }
                 ],
-                "note": "That is why song/1 is related to video/223"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "That is why song/1 is related to video/223"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
@@ -2185,7 +2409,15 @@
                         }
                     }
                 ],
-                "note": "That is why video/223 is related to playlist/501"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "That is why video/223 is related to playlist/501"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "playlists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110501",
@@ -2213,7 +2445,15 @@
                         }
                     }
                 ],
-                "note": "That is why playlist/501 is related to term/2"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "That is why playlist/501 is related to term/2"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
@@ -2239,7 +2479,15 @@
                         }
                     }
                 ],
-                "note": "this term appears on this page of the book"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this term appears on this page of the book"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
@@ -2262,7 +2510,15 @@
                         }
                     }
                 ],
-                "note": "this vocabulary list should be used in preparation for studying the video"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this vocabulary list should be used in preparation for studying the video"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -2285,7 +2541,15 @@
                         }
                     }
                 ],
-                "note": "this vocabulary list should be used in preparation for studying this audio interview"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this vocabulary list should be used in preparation for studying this audio interview"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
@@ -2308,7 +2572,15 @@
                         }
                     }
                 ],
-                "note": "this media item was extracted from the video"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this media item was extracted from the video"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110024",
@@ -2331,7 +2603,15 @@
                         }
                     }
                 ],
-                "note": "this video is loosely based on the book"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this video is loosely based on the book"
+                        }
+                    ]
+                }
             },
             {
                 "_from": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -2363,7 +2643,15 @@
                         }
                     }
                 ],
-                "note": "this media item mentions a word in the term"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this media item mentions a word in the term"
+                        }
+                    ]
+                }
             },
             {
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -2386,7 +2674,15 @@
                         }
                     }
                 ],
-                "note": "here is the digital version of the book!"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "here is the digital version of the book!"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -2416,7 +2712,15 @@
                         }
                     }
                 ],
-                "note": "this selection from the media item portrays the events in the book"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this selection from the media item portrays the events in the book"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -2443,7 +2747,15 @@
                         }
                     }
                 ],
-                "note": "this library book has the lyrics from the song, but we do not have access to the book"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this library book has the lyrics from the song, but we do not have access to the book"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "terms/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
@@ -2470,7 +2782,15 @@
                         }
                     }
                 ],
-                "note": "this term is used in the song"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this term is used in the song"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "videos/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223",
@@ -2493,7 +2813,15 @@
                         }
                     }
                 ],
-                "note": "this video uses the song"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this video uses the song"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "vocabulary_lists/9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
@@ -2516,7 +2844,15 @@
                         }
                     }
                 ],
-                "note": "this vocabulary list is relevant to learning the song lyrics"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this vocabulary list is relevant to learning the song lyrics"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "audio_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110110",
@@ -2539,7 +2875,15 @@
                         }
                     }
                 ],
-                "note": "this is an alternative reading of the book"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this is an alternative reading of the book"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "books/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
@@ -2562,7 +2906,15 @@
                         }
                     }
                 ],
-                "note": "this is the print version of the digital book"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this is the print version of the digital book"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "songs/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -2588,7 +2940,15 @@
                         }
                     }
                 ],
-                "note": "this song is mentioned on this page"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this song is mentioned on this page"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -2614,7 +2974,15 @@
                         }
                     }
                 ],
-                "note": "this media item is mentioned in the text"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this media item is mentioned in the text"
+                        }
+                    ]
+                }
             },
             {
                 "_to": "media_items/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -2640,7 +3008,15 @@
                         }
                     }
                 ],
-                "note": "this media item is mentioned in the text"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this media item is mentioned in the text"
+                        }
+                    ]
+                }
             },
             {
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
@@ -2663,7 +3039,15 @@
                         }
                     }
                 ],
-                "note": "this is why bibliographic_references/3 is connected to book/24"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this is why bibliographic_references/3 is connected to book/24"
+                        }
+                    ]
+                }
             },
             {
                 "_from": "bibliographic_references/9b1deb4d-3b7d-4bad-9bdd-2b0d7b110023",
@@ -2686,7 +3070,15 @@
                         }
                     }
                 ],
-                "note": "this is why bibliographic_references/23 is connected to book/24"
+                "note": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "this is why bibliographic_references/23 is connected to book/24"
+                        }
+                    ]
+                }
             }
         ]
     }

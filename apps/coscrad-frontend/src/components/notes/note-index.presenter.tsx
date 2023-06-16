@@ -9,6 +9,7 @@ import { NoteIndexState } from '../../store/slices/notes/types/note-index-state'
 import { HeadingLabel, IndexTable } from '../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
+import { findOriginalTextItem } from './shared/find-original-text-item';
 
 const formatCompositeIentifier = ({ type, id }: ICompositeIdentifier): string => `${type}/${id}`;
 
@@ -74,7 +75,8 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
 
     const cellRenderersDefinition: CellRenderersDefinition<INoteViewModel> = {
         id: renderAggregateIdCell,
-        // we may want to limit or else wrap the note's text
+        // we may want to limit the note's text
+        note: ({ note }) => findOriginalTextItem(note).text,
         connectedResources: ({ connectedResources, connectionType }: INoteViewModel) => (
             // do we want a simple icon for this instead?
             <DisplayConnectedResourcesInfo

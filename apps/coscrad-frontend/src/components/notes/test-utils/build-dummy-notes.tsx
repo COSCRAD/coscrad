@@ -1,7 +1,10 @@
 import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
+    IMultilingualText,
     INoteViewModel,
+    LanguageCode,
+    MultilingualTextItemRole,
     ResourceCompositeIdentifier,
     ResourceType,
 } from '@coscrad/api-interfaces';
@@ -19,6 +22,16 @@ export const buildMemberWithGeneralContext = (
     compositeIdentifier,
 });
 
+export const buildMultilingualTextFromEnglishOriginal = (text: string): IMultilingualText => ({
+    items: [
+        {
+            text,
+            role: MultilingualTextItemRole.original,
+            languageCode: LanguageCode.English,
+        },
+    ],
+});
+
 const buildOneMemberForEveryResourceType = (role: EdgeConnectionMemberRole) =>
     Object.values(ResourceType).map((resourceType, index) =>
         buildMemberWithGeneralContext({ type: resourceType, id: index.toString() }, role)
@@ -29,7 +42,8 @@ const selfEdgeConnections: INoteViewModel[] = buildOneMemberForEveryResourceType
 ).map((member, index) => ({
     connectionType: EdgeConnectionType.self,
     id: index.toString(),
-    note: `note for item ${index}`,
+    name: buildMultilingualTextFromEnglishOriginal(`name for self-note: ${index}`),
+    note: buildMultilingualTextFromEnglishOriginal(`note for item ${index}`),
     connectedResources: [member],
 }));
 
@@ -43,9 +57,16 @@ export const buildDummyDualEdgeConnection = (
 ): INoteViewModel => ({
     connectionType: EdgeConnectionType.dual,
     id,
-    note: `This is why ${formatCompositeIdentifier(
-        fromCompositeIdentifier
-    )} is connected to ${formatCompositeIdentifier(toCompositeIdentifier)}`,
+    name: buildMultilingualTextFromEnglishOriginal(
+        `This is why ${formatCompositeIdentifier(
+            fromCompositeIdentifier
+        )} is connected to ${formatCompositeIdentifier(toCompositeIdentifier)}`
+    ),
+    note: buildMultilingualTextFromEnglishOriginal(
+        `This is why ${formatCompositeIdentifier(
+            fromCompositeIdentifier
+        )} is connected to ${formatCompositeIdentifier(toCompositeIdentifier)}`
+    ),
     connectedResources: [
         buildMemberWithGeneralContext(fromCompositeIdentifier, EdgeConnectionMemberRole.from),
         buildMemberWithGeneralContext(toCompositeIdentifier, EdgeConnectionMemberRole.to),
@@ -55,7 +76,10 @@ export const buildDummyDualEdgeConnection = (
 const dualEdgeConnections: INoteViewModel[] = [
     {
         id: '111',
-        note: `This is why book 123 is related to media item 29`,
+        name: buildMultilingualTextFromEnglishOriginal('name for 111'),
+        note: buildMultilingualTextFromEnglishOriginal(
+            `This is why book 123 is related to media item 29`
+        ),
         connectedResources: [
             buildMemberWithGeneralContext(
                 {
@@ -75,7 +99,10 @@ const dualEdgeConnections: INoteViewModel[] = [
     },
     {
         id: '112',
-        note: `This is why term 5 is related to audio item 8`,
+        name: buildMultilingualTextFromEnglishOriginal('name for 112'),
+        note: buildMultilingualTextFromEnglishOriginal(
+            `This is why term 5 is related to audio item 8`
+        ),
         connectedResources: [
             buildMemberWithGeneralContext(
                 {
@@ -95,7 +122,10 @@ const dualEdgeConnections: INoteViewModel[] = [
     },
     {
         id: '113',
-        note: `This is why spatial feature 12 is related to photograph 293`,
+        name: buildMultilingualTextFromEnglishOriginal('name for 113'),
+        note: buildMultilingualTextFromEnglishOriginal(
+            `This is why spatial feature 12 is related to photograph 293`
+        ),
         connectedResources: [
             buildMemberWithGeneralContext(
                 {

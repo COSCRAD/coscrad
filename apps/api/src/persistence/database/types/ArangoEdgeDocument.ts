@@ -1,3 +1,4 @@
+import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import { EdgeConnectionContext } from '../../../domain/models/context/context.entity';
 import {
     EdgeConnectionMemberRole,
@@ -19,7 +20,7 @@ type ArangoEdgeDocumentWithoutSystemAttributes = {
 
     connectionType: EdgeConnectionType;
 
-    note: string;
+    note: DTO<MultilingualText>;
 
     members: ArangoEdgeMemberContext[];
 

@@ -5,6 +5,11 @@ import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import buildAggregateFactory from '../../../../factories/buildAggregateFactory';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -44,14 +49,22 @@ export class CreateNoteAboutResourceCommandHandler extends BaseCreateCommandHand
         resourceCompositeIdentifier,
         resourceContext,
         aggregateCompositeIdentifier: { id },
-        text: note,
+        text,
+        languageCode,
     }: CreateNoteAboutResource): ResultOrError<EdgeConnection> {
         const createDto: DTO<EdgeConnection> = {
             type: AggregateType.note,
             id,
             connectionType: EdgeConnectionType.self,
-            // TODO Make note MultilingualText
-            note,
+            note: new MultilingualText({
+                items: [
+                    new MultilingualTextItem({
+                        text,
+                        role: MultilingualTextItemRole.original,
+                        languageCode,
+                    }),
+                ],
+            }),
             members: [
                 {
                     role: EdgeConnectionMemberRole.self,

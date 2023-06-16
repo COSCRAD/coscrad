@@ -2,10 +2,12 @@ import {
     AggregateType,
     ICommandBase,
     IEdgeConnectionContext,
+    LanguageCode,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { FixedValue, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
 import { ContextUnion } from '../../edge-connection-context-union';
 
 export class ResourceCompositeIdentifier {
@@ -74,5 +76,9 @@ export class CreateNoteAboutResource implements ICommandBase {
     })
     readonly text: string;
 
-    // TODO Add language code
+    @LanguageCodeEnum({
+        label: 'language',
+        description: 'the language in which you are writing the note',
+    })
+    languageCode: LanguageCode;
 }

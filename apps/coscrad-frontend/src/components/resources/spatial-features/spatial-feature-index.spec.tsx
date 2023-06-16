@@ -2,6 +2,8 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
     INoteViewModel,
+    LanguageCode,
+    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { MemoryRouter } from 'react-router-dom';
@@ -57,14 +59,48 @@ const member2 = buildMemberWithGeneralContext(
 const selfNote: INoteViewModel = {
     connectionType: EdgeConnectionType.self,
     id: '332',
-    note: 'cool place to be in the summer',
+    note: {
+        items: [
+            {
+                role: MultilingualTextItemRole.original,
+                text: 'cool place to be in the summer',
+                languageCode: LanguageCode.English,
+            },
+        ],
+    },
+    name: {
+        items: [
+            {
+                role: MultilingualTextItemRole.original,
+                text: 'cool place to be in the summer',
+                languageCode: LanguageCode.English,
+            },
+        ],
+    },
     connectedResources: [member1],
 };
 
 const dualNote: INoteViewModel = {
     connectionType: EdgeConnectionType.dual,
     id: '353',
-    note: 'these places are mentioned in the same story',
+    note: {
+        items: [
+            {
+                role: MultilingualTextItemRole.original,
+                text: 'these places are mentioned in the same story',
+                languageCode: LanguageCode.English,
+            },
+        ],
+    },
+    name: {
+        items: [
+            {
+                role: MultilingualTextItemRole.original,
+                text: 'these places are mentioned in the same story',
+                languageCode: LanguageCode.English,
+            },
+        ],
+    },
     connectedResources: [member1, member2],
 };
 

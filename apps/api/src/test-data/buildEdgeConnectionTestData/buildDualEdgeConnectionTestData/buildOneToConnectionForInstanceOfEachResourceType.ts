@@ -1,3 +1,5 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -16,7 +18,10 @@ import { DTO } from '../../../types/DTO';
 const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType'>>[] = [
     {
         id: '3101',
-        note: 'this selection from the media item portrays the events in the book',
+        note: buildMultilingualTextWithSingleItem(
+            'this selection from the media item portrays the events in the book',
+            LanguageCode.English
+        ),
         members: [
             {
                 role: EdgeConnectionMemberRole.to,
@@ -47,7 +52,10 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3102',
-        note: 'this library book has the lyrics from the song, but we do not have access to the book',
+        note: buildMultilingualTextWithSingleItem(
+            'this library book has the lyrics from the song, but we do not have access to the book',
+            LanguageCode.English
+        ),
         members: [
             {
                 role: EdgeConnectionMemberRole.to,
@@ -75,7 +83,10 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3103',
-        note: 'this term is used in the song',
+        note: buildMultilingualTextWithSingleItem(
+            'this term is used in the song',
+            LanguageCode.English
+        ),
         members: [
             {
                 role: EdgeConnectionMemberRole.to,
@@ -103,7 +114,7 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3104',
-        note: 'this video uses the song',
+        note: buildMultilingualTextWithSingleItem('this video uses the song', LanguageCode.English),
         members: [
             {
                 role: EdgeConnectionMemberRole.to,
@@ -125,7 +136,10 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3105',
-        note: 'this vocabulary list is relevant to learning the song lyrics',
+        note: buildMultilingualTextWithSingleItem(
+            'this vocabulary list is relevant to learning the song lyrics',
+            LanguageCode.English
+        ),
         members: [
             {
                 role: EdgeConnectionMemberRole.to,
@@ -147,7 +161,10 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3106',
-        note: 'this is an alternative reading of the book',
+        note: buildMultilingualTextWithSingleItem(
+            'this is an alternative reading of the book',
+            LanguageCode.English
+        ),
         members: [
             {
                 role: EdgeConnectionMemberRole.to,
@@ -169,7 +186,10 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3107',
-        note: 'this is the print version of the digital book',
+        note: buildMultilingualTextWithSingleItem(
+            'this is the print version of the digital book',
+            LanguageCode.English
+        ),
         members: [
             {
                 role: EdgeConnectionMemberRole.to,
@@ -191,7 +211,10 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3108',
-        note: 'this song is mentioned on this page',
+        note: buildMultilingualTextWithSingleItem(
+            'this song is mentioned on this page',
+            LanguageCode.English
+        ),
         members: [
             {
                 role: EdgeConnectionMemberRole.to,
@@ -216,7 +239,10 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3109',
-        note: 'this media item is mentioned in the text',
+        note: buildMultilingualTextWithSingleItem(
+            'this media item is mentioned in the text',
+            LanguageCode.English
+        ),
         members: [
             {
                 role: EdgeConnectionMemberRole.to,
@@ -241,7 +267,10 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3110',
-        note: 'this media item is mentioned in the text',
+        note: buildMultilingualTextWithSingleItem(
+            'this media item is mentioned in the text',
+            LanguageCode.English
+        ),
         members: [
             {
                 role: EdgeConnectionMemberRole.to,
