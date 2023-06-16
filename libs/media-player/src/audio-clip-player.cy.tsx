@@ -9,7 +9,7 @@ describe('<AudioClipPlayer />', () => {
     const OriginalAudio = window.Audio;
 
     // use coscrad media lib
-    const validAudioUrl = 'http://coscrad.org/wp-content/uploads/2023/06/hello.mp3';
+    const validAudioUrl = 'https://coscrad.org/wp-content/uploads/2023/06/hello.mp3';
 
     describe(`when there is a single, fixed value for audioURL`, () => {
         beforeEach(() => {
