@@ -22,13 +22,19 @@ enum AudioState {
     loading = 'loading',
     error = 'error',
     canPlay = 'canPlay',
-    undefined = 'undefined',
+    isMissingAudioLink = 'isMissingAudioLink',
+    null = 'null',
 }
 
 export function AudioClipPlayer({ audioUrl, UserDefinedPlayButton }: AudioClipPlayerProps) {
     const [audioState, setAudioState] = useState<AudioState>(AudioState.loading);
 
     useEffect(() => {
+        if (isNullOrUndefined(audioUrl)) {
+            setAudioState(AudioState.isMissingAudioLink);
+            return;
+        }
+
         const onCanPlay = () => {
             setAudioState(AudioState.canPlay);
         };
@@ -46,19 +52,9 @@ export function AudioClipPlayer({ audioUrl, UserDefinedPlayButton }: AudioClipPl
         testAudio.addEventListener('canplaythrough', onCanPlay);
 
         testAudio.addEventListener('error', onError);
-
-        if (!isNullOrUndefined(audioUrl)) {
-            const testAudio = new Audio(audioUrl);
-
-            testAudio.addEventListener('error', onError);
-        } else {
-            setAudioState(AudioState.undefined);
-        }
     }, [audioUrl]);
 
     const handleMediaPlayerIconClick = () => {
-        console.log(`attempting to play audio`);
-
         new Audio(audioUrl).play().catch((err) => console.log(`failed to play audio: ${err}`));
     };
 
@@ -66,17 +62,20 @@ export function AudioClipPlayer({ audioUrl, UserDefinedPlayButton }: AudioClipPl
         ? DefaultPlayButton
         : UserDefinedPlayButton;
 
+    const PlayButtonToUse = PlayButton || DefaultPlayButton;
+
     if (audioState === AudioState.loading) return <CircularProgress />;
 
     if (audioState === AudioState.canPlay)
         return (
             <Tooltip title={audioUrl}>
                 <span>
-                    <PlayButton key={audioUrl} onButtonClick={handleMediaPlayerIconClick} />
+                    <PlayButtonToUse key={audioUrl} onButtonClick={handleMediaPlayerIconClick} />
                 </span>
             </Tooltip>
         );
-    if (audioState === AudioState.undefined)
+
+    if (audioState === AudioState.isMissingAudioLink)
         return (
             <Box>
                 <Tooltip title={typeof audioUrl}>
@@ -84,13 +83,13 @@ export function AudioClipPlayer({ audioUrl, UserDefinedPlayButton }: AudioClipPl
                         <LinkOffIcon />
                     </IconButton>
                 </Tooltip>
-                Audio url is {typeof audioUrl}.
+                Audio url is not supported.
             </Box>
         );
 
     return (
         <Box>
-            <Tooltip title={audioUrl}>
+            <Tooltip title={JSON.stringify(audioUrl)}>
                 <IconButton color="primary">
                     <BugReportIcon />
                 </IconButton>

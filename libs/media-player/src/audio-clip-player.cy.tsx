@@ -9,7 +9,7 @@ describe('<AudioClipPlayer />', () => {
     const OriginalAudio = window.Audio;
 
     // use coscrad media lib
-    const validAudioUrl = 'https://be.tsilhqotinlanguage.ca:3003/download?id=hello.mp3';
+    const validAudioUrl = 'http://coscrad.org/wp-content/uploads/2023/06/hello.mp3';
 
     describe(`when there is a single, fixed value for audioURL`, () => {
         beforeEach(() => {
@@ -73,6 +73,8 @@ describe('<AudioClipPlayer />', () => {
             });
         });
 
+        const expectedErrorMessageText = 'Audio url is not supported.';
+
         describe(`when the audio URL is invalid`, () => {
             beforeEach(() => {
                 cy.mount(<AudioClipPlayer audioUrl="www.bogusboogers.com/jamz123.mp3" />);
@@ -81,20 +83,26 @@ describe('<AudioClipPlayer />', () => {
             });
 
             it('should not play audio', () => {
-                const expectedErrorMessageText = 'Audio url is not supported.';
-
                 cy.contains(expectedErrorMessageText);
             });
         });
 
         describe(`when the audio URL is undefined`, () => {
             beforeEach(() => {
-                cy.mount(<AudioClipPlayer audioUrl={undefined} />);
+                cy.mount(<AudioClipPlayer audioUrl={undefined as unknown as string} />);
             });
 
             it(`should not play audio`, () => {
-                const expectedErrorMessageText = 'Audio url is undefined.';
+                cy.contains(expectedErrorMessageText);
+            });
+        });
 
+        describe(`when the audio URL is null`, () => {
+            beforeEach(() => {
+                cy.mount(<AudioClipPlayer audioUrl={null as unknown as string} />);
+            });
+
+            it(`should not play audio`, () => {
                 cy.contains(expectedErrorMessageText);
             });
         });
@@ -112,6 +120,10 @@ describe('<AudioClipPlayer />', () => {
             return (
                 <div>
                     <AudioClipPlayer audioUrl={urls[index]} />
+                    <br />
+                    <br />
+                    <br />
+
                     <p
                         data-testid="toggleUrl"
                         onClick={() => {
@@ -162,19 +174,24 @@ describe('<AudioClipPlayer />', () => {
         });
 
         it(`should play multiple clips in sequence`, () => {
+            // play
             cy.get(`button`).click();
 
             cy.wait(9000);
 
+            // toggle source
             cy.get('p').click();
 
+            // play
             cy.get(`button`).click();
 
             // intentionally introduce overlap
             cy.wait(1000);
 
+            // toggle source
             cy.get('p').click();
 
+            // play
             cy.get('button').click();
 
             cy.wait(9000);
