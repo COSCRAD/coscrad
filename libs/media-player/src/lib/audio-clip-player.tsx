@@ -26,7 +26,7 @@ enum AudioState {
     null = 'null',
 }
 
-export function AudioClipPlayer({ audioUrl, UserDefinedPlayButton }: AudioClipPlayerProps) {
+export const AudioClipPlayer = ({ audioUrl, UserDefinedPlayButton }: AudioClipPlayerProps) => {
     const [audioState, setAudioState] = useState<AudioState>(AudioState.loading);
 
     useEffect(() => {
@@ -97,4 +97,4 @@ export function AudioClipPlayer({ audioUrl, UserDefinedPlayButton }: AudioClipPl
             Audio url is not supported.
         </Box>
     );
-}
+};

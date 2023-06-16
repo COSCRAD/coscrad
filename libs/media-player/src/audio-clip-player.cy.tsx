@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AudioClipPlayer } from './lib/audio-clip-player';
+import { AudioClipPlayer, IPlayButton } from './lib/audio-clip-player';
 
 describe('<AudioClipPlayer />', () => {
     let audios: HTMLAudioElement[];
@@ -73,11 +73,41 @@ describe('<AudioClipPlayer />', () => {
             });
         });
 
+        describe(`when a custom play button is provided`, () => {
+            const DummyPlayButton: IPlayButton = ({ onButtonClick }) => (
+                <button onClick={onButtonClick}>Play</button>
+            );
+
+            beforeEach(() => {
+                cy.mount(
+                    <AudioClipPlayer
+                        audioUrl={validAudioUrl}
+                        UserDefinedPlayButton={DummyPlayButton}
+                    />
+                );
+            });
+
+            it('should play audio', () => {
+                const numberOfTimesToPlay = 1;
+
+                // we count the trial instance that is used to validate the url
+                const expectedNumberOfAudioInstancesCreated = numberOfTimesToPlay + 1;
+
+                // TODO leverage a custom `getByDataAttribute` command
+                cy.get(`button`).click();
+
+                // wait for the Audio.play() promise to resolve
+                cy.wait(300);
+
+                cy.wrap(audios).should('have.lengthOf', expectedNumberOfAudioInstancesCreated);
+            });
+        });
+
         const expectedErrorMessageText = 'Audio url is not supported.';
 
         describe(`when the audio URL is invalid`, () => {
             beforeEach(() => {
-                cy.mount(<AudioClipPlayer audioUrl="www.bogusboogers.com/jamz123.mp3" />);
+                cy.mount(<AudioClipPlayer audioUrl="www.bogus.com/jamz123.mp3" />);
 
                 cy.wait(300);
             });
