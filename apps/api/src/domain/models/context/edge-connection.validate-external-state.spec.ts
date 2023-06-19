@@ -1,14 +1,16 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
 import { DTO } from '../../../types/DTO';
-import PageRangeContextHasSuperfluousPageIdentifiersError from '../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
+import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { Valid } from '../../domainModelValidators/Valid';
+import PageRangeContextHasSuperfluousPageIdentifiersError from '../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/PageRangeContextHasSuperfluousPageIdentifiersError';
 import { AggregateType } from '../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { dummyUuid } from '../__tests__/utilities/dummyUuid';
 import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
-import { dummyUuid } from '../__tests__/utilities/dummyUuid';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -55,7 +57,10 @@ const validDualConnection: EdgeConnection = new EdgeConnection({
         validSongFromMemberDTO,
     ],
     id: dummyUuid,
-    note: 'this dual connection is legit',
+    note: buildMultilingualTextWithSingleItem(
+        'this dual connection is legit',
+        LanguageCode.English
+    ),
 });
 
 const validExternalStateForDualConnection: InMemorySnapshot = new DeluxeInMemoryStore({

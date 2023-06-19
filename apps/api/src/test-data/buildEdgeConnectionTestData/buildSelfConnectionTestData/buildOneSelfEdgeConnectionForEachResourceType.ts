@@ -1,3 +1,5 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -16,7 +18,10 @@ const role = EdgeConnectionMemberRole.self;
 
 const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionType'>[] = [
     {
-        note: 'This first 4 letters of this term form a syllable that indicates this is a plant ',
+        note: buildMultilingualTextWithSingleItem(
+            'This first 4 letters of this term form a syllable that indicates this is a plant ',
+            LanguageCode.English
+        ),
         members: [
             {
                 role,
@@ -33,7 +38,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'This page is about bears',
+        note: buildMultilingualTextWithSingleItem('This page is about bears', LanguageCode.English),
         members: [
             {
                 role,
@@ -49,7 +54,10 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'This is the first letter of the list name',
+        note: buildMultilingualTextWithSingleItem(
+            'This is the first letter of the list name',
+            LanguageCode.English
+        ),
         members: [
             {
                 role,
@@ -66,7 +74,10 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'there is a placename for this point at the base of the mountain',
+        note: buildMultilingualTextWithSingleItem(
+            'there is a placename for this point at the base of the mountain',
+            LanguageCode.English
+        ),
         members: [
             {
                 role,
@@ -80,7 +91,10 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'this clip talks about songs',
+        note: buildMultilingualTextWithSingleItem(
+            'this clip talks about songs',
+            LanguageCode.English
+        ),
         members: [
             {
                 role,
@@ -99,7 +113,10 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'this is the stem of the flower',
+        note: buildMultilingualTextWithSingleItem(
+            'this is the stem of the flower',
+            LanguageCode.English
+        ),
         members: [
             {
                 role,
@@ -113,7 +130,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
     },
     // TODO Restore this when supporting free-multiline context
     // {
-    //     note: 'this is the stem of the flower',
+    //     note: buildMultilingualTextWithSingleItem('this is the stem of the flower',LanguageCode.English),
     //     members: [
     //         {
     //             role,
@@ -146,7 +163,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
     // },
     // TODO Support point2D context for Photograph
     // {
-    //     note: 'this is the base of the flower',
+    //     note: buildMultilingualTextWithSingleItem('this is the base of the flower',LanguageCode.English),
     //     members: [
     //         {
     //             role,
@@ -162,7 +179,10 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
     //     ],
     // },
     {
-        note: 'this section is the best part of an illustrated book about birds',
+        note: buildMultilingualTextWithSingleItem(
+            'this section is the best part of an illustrated book about birds',
+            LanguageCode.English
+        ),
         members: [
             {
                 role,
@@ -178,7 +198,10 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'found this in the archives',
+        note: buildMultilingualTextWithSingleItem(
+            'found this in the archives',
+            LanguageCode.English
+        ),
         members: [
             {
                 role,
@@ -191,7 +214,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'this is a song',
+        note: buildMultilingualTextWithSingleItem('this is a song', LanguageCode.English),
         members: [
             {
                 role,
@@ -210,7 +233,10 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'important clip from the show',
+        note: buildMultilingualTextWithSingleItem(
+            'important clip from the show',
+            LanguageCode.English
+        ),
         members: [
             {
                 role,
@@ -229,7 +255,10 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'this book is hard to track down',
+        note: buildMultilingualTextWithSingleItem(
+            'this book is hard to track down',
+            LanguageCode.English
+        ),
         members: [
             {
                 role,
@@ -242,7 +271,10 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'this clip talks about birds',
+        note: buildMultilingualTextWithSingleItem(
+            'this clip talks about birds',
+            LanguageCode.English
+        ),
         members: [
             {
                 role,
@@ -261,7 +293,7 @@ const edgeConnectionDTOs: Omit<DTO<EdgeConnection>, 'type' | 'id' | 'connectionT
         ],
     },
     {
-        note: 'this playlist is awesome',
+        note: buildMultilingualTextWithSingleItem('this playlist is awesome', LanguageCode.English),
         members: [
             {
                 role,

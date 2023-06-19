@@ -1505,6 +1505,45 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
         },
       },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are writing the note",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "eng",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
       "resourceCompositeIdentifier": {
         "complexDataType": "NESTED_TYPE",
         "description": "system-wide unique identifier for the resource about which we are making a note",
@@ -1817,6 +1856,45 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
         ],
         "unionName": "EDGE_CONNECTION_CONTEXT_UNION",
+      },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are writing the note",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "eng",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
       },
       "text": {
         "coscradDataType": "NON_EMPTY_STRING",

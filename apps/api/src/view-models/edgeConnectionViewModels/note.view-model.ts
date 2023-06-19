@@ -1,6 +1,7 @@
 import { EdgeConnectionType, INoteViewModel } from '@coscrad/api-interfaces';
-import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { NestedDataType } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
+import { MultilingualText } from '../../domain/common/entities/multilingual-text';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -16,11 +17,11 @@ export class NoteViewModel extends BaseViewModel implements INoteViewModel {
         example: 'this part is about horses',
         description: 'a note about a resource or the connection between two resources',
     })
-    @NonEmptyString({
+    @NestedDataType(MultilingualText, {
         label: 'note text',
         description: 'an note about a resource or pair of connected resources',
     })
-    readonly note: string;
+    readonly note: MultilingualText;
 
     @NestedDataType(EdgeConnectionMember, {
         isArray: true,
@@ -37,7 +38,7 @@ export class NoteViewModel extends BaseViewModel implements INoteViewModel {
 
         this.connectionType = connectionType;
 
-        this.note = note;
+        this.note = new MultilingualText(note);
 
         this.connectedResources = cloneToPlainObject(members);
     }

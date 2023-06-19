@@ -1,4 +1,4 @@
-import { IEdgeConnectionContext } from '@coscrad/api-interfaces';
+import { IEdgeConnectionContext, LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
@@ -111,6 +111,7 @@ const buildValidCommandFSAForAudioItem = (
         resourceCompositeIdentifier: validAudioItem.getCompositeIdentifier(),
         resourceContext: validContext.toDTO(),
         text: dummyNoteText,
+        languageCode: LanguageCode.English,
     },
 });
 
@@ -138,8 +139,11 @@ const buildCreateNoteAboutResourceFSAForNote = (
     const { compositeIdentifier: resourceCompositeIdentifier, context: resourceContext } =
         selfMember;
 
+    const { languageCode, text } = note.getOriginalTextItem();
+
     return {
-        text: note,
+        text,
+        languageCode,
         resourceCompositeIdentifier,
         resourceContext,
     };

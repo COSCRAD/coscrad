@@ -1,3 +1,5 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -34,7 +36,7 @@ const edgeConnections: DTO<EdgeConnection>[] = [
         type: AggregateType.note,
         connectionType: EdgeConnectionType.self,
         id: '1',
-        note: 'the note',
+        note: buildMultilingualTextWithSingleItem('the note', LanguageCode.English),
         members: [
             {
                 role: EdgeConnectionMemberRole.self,

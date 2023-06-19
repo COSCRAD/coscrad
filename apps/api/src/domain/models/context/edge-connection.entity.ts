@@ -4,7 +4,6 @@ import {
     Enum,
     ExternalEnum,
     NestedDataType,
-    NonEmptyString,
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
@@ -115,11 +114,11 @@ export class EdgeConnection extends Aggregate {
     })
     readonly members: EdgeConnectionMember[];
 
-    @NonEmptyString({
+    @NestedDataType(MultilingualText, {
         label: 'note text',
         description: 'text summary of why this connection is relevant',
     })
-    readonly note: string;
+    readonly note: MultilingualText;
 
     constructor(dto: DTO<EdgeConnection>) {
         super(dto);
@@ -132,7 +131,7 @@ export class EdgeConnection extends Aggregate {
 
         this.members = members.map((dto) => new EdgeConnectionMember(dto));
 
-        this.note = note;
+        this.note = new MultilingualText(note);
     }
 
     getName(): MultilingualText {

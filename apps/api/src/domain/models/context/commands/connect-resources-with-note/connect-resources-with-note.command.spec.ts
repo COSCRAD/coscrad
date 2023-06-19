@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
@@ -73,6 +74,7 @@ const buildValidPayload = (id: AggregateId) => ({
     fromMemberCompositeIdentifier: existingBook.getCompositeIdentifier(),
     fromMemberContext: new GeneralContext(),
     text: 'this is how these resources are connected',
+    languageCode: LanguageCode.English,
 });
 
 const buidlValidFsa = (id: AggregateId) => ({
@@ -254,7 +256,10 @@ describe(commandType, () => {
 
                             const newConnection = newEdgeConnectionSearchResult as EdgeConnection;
 
-                            expect(newConnection.note).toBe(text);
+                            const textForNewConnection =
+                                newConnection.note.getOriginalTextItem().text;
+
+                            expect(textForNewConnection).toBe(text);
 
                             assertEventRecordPersisted(
                                 newConnection,

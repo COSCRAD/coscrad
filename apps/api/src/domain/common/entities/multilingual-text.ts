@@ -11,14 +11,16 @@ import {
     TypeDecoratorOptions,
 } from '@coscrad/data-types';
 import { InternalError } from '../../../lib/errors/InternalError';
-import { DeepPartial } from '../../../types/DeepPartial';
+import { Maybe } from '../../../lib/types/maybe';
+import { NotFound } from '../../../lib/types/not-found';
 import { DTO } from '../../../types/DTO';
+import { DeepPartial } from '../../../types/DeepPartial';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { Valid } from '../../domainModelValidators/Valid';
+import BaseDomainModel from '../../models/BaseDomainModel';
 import { DuplicateLanguageInMultilingualTextError } from '../../models/audio-item/errors/duplicate-language-in-multilingual-text.error';
 import { MultilingualTextHasNoOriginalError } from '../../models/audio-item/errors/multilingual-text-has-no-original.error';
 import { MultipleOriginalsInMultilingualTextError } from '../../models/audio-item/errors/multiple-originals-in-multilingual-text.error';
-import BaseDomainModel from '../../models/BaseDomainModel';
 import { isNull, isUndefined } from '../../utilities/validation/is-null-or-undefined';
 
 export { MultilingualTextItemRole };
@@ -131,6 +133,14 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
         }
 
         return this.items.map(({ text, languageCode }) => `{${languageCode}}: ${text}`).join('\n');
+    }
+
+    in(languageCode: LanguageCode): Maybe<MultilingualTextItem> {
+        return this.items.find((item) => item.languageCode === languageCode) || NotFound;
+    }
+
+    getOriginalTextItem(): MultilingualTextItem {
+        return this.items.find(({ role }) => role === MultilingualTextItemRole.original).clone();
     }
 
     append(item: MultilingualTextItem): MultilingualText {
