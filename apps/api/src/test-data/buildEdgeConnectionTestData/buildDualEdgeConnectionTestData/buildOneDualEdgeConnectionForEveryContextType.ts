@@ -1,3 +1,5 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -13,7 +15,10 @@ export default (): EdgeConnection[] =>
     [
         {
             id: '3301',
-            note: 'this term appears on this page of the book',
+            note: buildMultilingualTextWithSingleItem(
+                'this term appears on this page of the book',
+                LanguageCode.English
+            ),
             members: [
                 {
                     role: EdgeConnectionMemberRole.to,
@@ -38,7 +43,10 @@ export default (): EdgeConnection[] =>
         },
         {
             id: '3302',
-            note: 'this vocabulary list should be used in preparation for studying the video',
+            note: buildMultilingualTextWithSingleItem(
+                'this vocabulary list should be used in preparation for studying the video',
+                LanguageCode.English
+            ),
             members: [
                 {
                     role: EdgeConnectionMemberRole.to,
@@ -60,7 +68,10 @@ export default (): EdgeConnection[] =>
         },
         {
             id: '3303',
-            note: 'this vocabulary list should be used in preparation for studying this audio interview',
+            note: buildMultilingualTextWithSingleItem(
+                'this vocabulary list should be used in preparation for studying this audio interview',
+                LanguageCode.English
+            ),
             members: [
                 {
                     role: EdgeConnectionMemberRole.to,
@@ -82,7 +93,10 @@ export default (): EdgeConnection[] =>
         },
         {
             id: '3304',
-            note: 'this media item was extracted from the video',
+            note: buildMultilingualTextWithSingleItem(
+                'this media item was extracted from the video',
+                LanguageCode.English
+            ),
             members: [
                 {
                     role: EdgeConnectionMemberRole.to,
@@ -104,7 +118,10 @@ export default (): EdgeConnection[] =>
         },
         {
             id: '3305',
-            note: 'this video is loosely based on the book',
+            note: buildMultilingualTextWithSingleItem(
+                'this video is loosely based on the book',
+                LanguageCode.English
+            ),
             members: [
                 {
                     role: EdgeConnectionMemberRole.to,

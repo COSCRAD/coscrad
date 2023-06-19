@@ -1,4 +1,6 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -36,7 +38,7 @@ const selfDocument: ArangoEdgeDocument = {
     type: AggregateType.note,
     eventHistory: [],
     connectionType: EdgeConnectionType.self,
-    note: 'These pages are about deer',
+    note: buildMultilingualTextWithSingleItem('These pages are about deer', LanguageCode.English),
     members: [
         {
             role: EdgeConnectionMemberRole.self,
@@ -49,7 +51,7 @@ const selfEdgeConnection: DTO<EdgeConnection> = {
     id: '5',
     type: AggregateType.note,
     connectionType: EdgeConnectionType.self,
-    note: 'These pages are about deer',
+    note: buildMultilingualTextWithSingleItem('These pages are about deer', LanguageCode.English),
     members: [
         {
             role: EdgeConnectionMemberRole.self,
@@ -70,7 +72,10 @@ const dualEdgeDocument: ArangoEdgeDocument = {
     connectionType: EdgeConnectionType.dual,
     eventHistory: [],
     type: AggregateType.note,
-    note: 'the elder discusses this book in this part of the recording',
+    note: buildMultilingualTextWithSingleItem(
+        'the elder discusses this book in this part of the recording',
+        LanguageCode.English
+    ),
     members: [
         {
             role: EdgeConnectionMemberRole.to,
@@ -87,7 +92,10 @@ const dualEdgeConnection: DTO<EdgeConnection> = {
     type: AggregateType.note,
     connectionType: EdgeConnectionType.dual,
     id: '234',
-    note: 'the elder discusses this book in this part of the recording',
+    note: buildMultilingualTextWithSingleItem(
+        'the elder discusses this book in this part of the recording',
+        LanguageCode.English
+    ),
     members: [
         {
             role: EdgeConnectionMemberRole.from,
