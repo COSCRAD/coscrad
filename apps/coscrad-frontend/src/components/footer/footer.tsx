@@ -1,8 +1,10 @@
-import { Grid, Tooltip, Typography } from '@mui/material';
+import { FacebookOutlined, GitHub, Twitter, YouTube } from '@mui/icons-material';
+import { Grid, IconButton, Typography } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { COSCRADByline } from '../coscrad-byline/coscrad-byline';
 import { Tenant } from '../tenant/tenant';
+
 export const Footer = (): JSX.Element => {
     /**
      * TODO: Move data (ConfigurableContentContext) out of presenter
@@ -25,15 +27,22 @@ export const Footer = (): JSX.Element => {
         >
             <Grid>Phone: {phoneNumber}</Grid>
             <Grid>Address: {address}</Grid>
-            <Grid>
+            <Grid item>
                 {internalLinks.map(({ url, iconUrl, description }) => (
-                    <div>
-                        <Tooltip title={description}>
-                            <a href={url} target="_blank" rel="noopener noreferrer">
-                                <img src={iconUrl} alt={description} />
-                            </a>
-                        </Tooltip>
-                    </div>
+                    // <Tooltip title={description}>
+                    <IconButton
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        color="primary"
+                    >
+                        {/* <img width={100} src={iconUrl} alt={description} /> */}
+                        {url.includes('facebook') && <FacebookOutlined />}
+                        {url.includes('youtube') && <YouTube />}
+                        {url.includes('twitter') && <Twitter />}
+                        {url.includes('github') && <GitHub />}
+                    </IconButton>
+                    // </Tooltip>
                 ))}
             </Grid>
 
