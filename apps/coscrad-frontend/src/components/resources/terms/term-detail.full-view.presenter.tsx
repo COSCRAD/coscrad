@@ -3,7 +3,8 @@ import {
     ITermViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { MediaPlayer } from '@coscrad/media-player';
+import { AudioClipPlayer } from '@coscrad/media-player';
+import { Box } from '@mui/material';
 import {
     ResourceDetailFullViewPresenter,
     SingleOptionalPropertyPresenter,
@@ -18,11 +19,11 @@ export const TermDetailFullViewPresenter = ({
 }: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => {
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.term}>
-            <div data-testid={id} />
+            <Box data-testid={id} />
             <SingleOptionalPropertyPresenter display="Contributor" value={contributor} />
-            <div id="media-player">
-                <MediaPlayer listenMessage="Play!" audioUrl={audioURL} />
-            </div>
+            <Box id="media-player">
+                <AudioClipPlayer audioUrl={audioURL} />
+            </Box>
         </ResourceDetailFullViewPresenter>
     );
 };

@@ -1,4 +1,7 @@
 import { ITermViewModel } from '@coscrad/api-interfaces';
+import { AudioClipPlayer } from '@coscrad/media-player';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { LinkOff } from '@mui/icons-material';
 import { TermIndexState } from '../../../store/slices/resources/terms/types/term-index-state';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
@@ -20,7 +23,12 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
         id: renderAggregateIdCell,
         // TODO We need to determine the `term` and `termEnglish` from a multilingual text property
         termEnglish: ({ termEnglish }: ITermViewModel) => termEnglish,
-        audioURL: ({ audioURL }: ITermViewModel) => audioURL,
+        audioURL: ({ audioURL }: ITermViewModel) =>
+            isNullOrUndefined(audioURL) ? (
+                <LinkOff color="primary" />
+            ) : (
+                <AudioClipPlayer audioUrl={audioURL} />
+            ),
         contributor: ({ contributor }: ITermViewModel) => contributor,
     };
 
