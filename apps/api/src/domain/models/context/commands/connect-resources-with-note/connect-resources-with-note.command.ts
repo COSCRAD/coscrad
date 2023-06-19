@@ -1,6 +1,7 @@
-import { ICommandBase, IEdgeConnectionContext } from '@coscrad/api-interfaces';
+import { ICommandBase, IEdgeConnectionContext, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
 import { ContextUnion } from '../../edge-connection-context-union';
 import {
     EdgeConnectionCompositeIdentifier,
@@ -56,5 +57,9 @@ export class ConnectResourcesWithNote implements ICommandBase {
     })
     text: string;
 
-    // TODO [https://www.pivotaltracker.com/story/show/185394771] Add languageCode
+    @LanguageCodeEnum({
+        label: 'language',
+        description: 'the language in which you are writing the note',
+    })
+    languageCode: LanguageCode;
 }

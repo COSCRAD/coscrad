@@ -1,3 +1,6 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
 import { getResourceTypesThatOnlySupportGeneralContext } from '../../../domain/models/allowedContexts/isContextAllowedForGivenResourceType';
 import {
     EdgeConnection,
@@ -20,13 +23,16 @@ import buildOneToConnectionForInstanceOfEachResourceType from './buildOneToConne
 const buildDummyNoteForDualConnection = (
     toMember: DTO<EdgeConnectionMember>,
     fromMember: DTO<EdgeConnectionMember>
-): string =>
-    [
+): MultilingualText => {
+    const text = [
         `That is why`,
         formatResourceCompositeIdentifier(toMember.compositeIdentifier),
         `is related to`,
         formatResourceCompositeIdentifier(fromMember.compositeIdentifier),
     ].join(' ');
+
+    return buildMultilingualTextWithSingleItem(text, LanguageCode.English);
+};
 
 const resourceTypesThatCurrentlyOnlySupportGeneralContext =
     getResourceTypesThatOnlySupportGeneralContext();
@@ -127,7 +133,10 @@ const additionalDualConnectionsForBibliographicReferenceDTOs = [
                 context: new GeneralContext(),
             },
         ],
-        note: 'this is why bibliographic_references/3 is connected to book/24',
+        note: buildMultilingualTextWithSingleItem(
+            'this is why bibliographic_references/3 is connected to book/24',
+            LanguageCode.English
+        ),
     },
     {
         type: AggregateType.note,
@@ -152,7 +161,10 @@ const additionalDualConnectionsForBibliographicReferenceDTOs = [
                 context: new GeneralContext(),
             },
         ],
-        note: 'this is why bibliographic_references/23 is connected to book/24',
+        note: buildMultilingualTextWithSingleItem(
+            'this is why bibliographic_references/23 is connected to book/24',
+            LanguageCode.English
+        ),
     },
 ];
 

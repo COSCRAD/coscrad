@@ -1,4 +1,10 @@
-import { EdgeConnectionMemberRole, INoteViewModel, ResourceType } from '@coscrad/api-interfaces';
+import {
+    EdgeConnectionMemberRole,
+    INoteViewModel,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { focusDualConnectionOnResource } from './focus-dual-connection-on-resource';
 import { ConnectedResource } from './use-loadable-connections-to-resource';
 
@@ -22,7 +28,15 @@ const bookCompositeIdentifier = {
 
 const dummyEdgeConnection: INoteViewModel = {
     id: '1',
-    note: 'this is why term 123 is related to book 5',
+    note: {
+        items: [
+            {
+                text: 'this is why term 123 is related to book 5',
+                role: MultilingualTextItemRole.original,
+                languageCode: LanguageCode.English,
+            },
+        ],
+    },
     connectedResources: [
         {
             compositeIdentifier: termCompositeIdentifier,

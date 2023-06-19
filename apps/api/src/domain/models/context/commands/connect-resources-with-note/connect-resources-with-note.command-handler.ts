@@ -1,4 +1,8 @@
-import { EdgeConnectionMemberRole, EdgeConnectionType } from '@coscrad/api-interfaces';
+import {
+    EdgeConnectionMemberRole,
+    EdgeConnectionType,
+    MultilingualTextItemRole,
+} from '@coscrad/api-interfaces';
 import { CommandHandler, ICommand } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { InternalError } from '../../../../../lib/errors/InternalError';
@@ -6,6 +10,7 @@ import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
+import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import buildAggregateFactory from '../../../../factories/buildAggregateFactory';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -46,6 +51,7 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
         fromMemberCompositeIdentifier,
         fromMemberContext,
         text,
+        languageCode,
     }: ConnectResourcesWithNote): ResultOrError<EdgeConnection> {
         /**
          * TODO[https://www.pivotaltracker.com/story/show/185394721]
@@ -56,7 +62,15 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
             id,
             connectionType: EdgeConnectionType.dual,
             // TODO [https://www.pivotaltracker.com/story/show/185394771] make this Multilingual Text
-            note: text,
+            note: new MultilingualText({
+                items: [
+                    {
+                        text,
+                        languageCode,
+                        role: MultilingualTextItemRole.original,
+                    },
+                ],
+            }),
             members: [
                 {
                     role: EdgeConnectionMemberRole.to,

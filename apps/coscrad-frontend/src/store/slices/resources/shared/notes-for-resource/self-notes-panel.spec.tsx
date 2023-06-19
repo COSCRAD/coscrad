@@ -2,6 +2,8 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
     INoteViewModel,
+    LanguageCode,
+    MultilingualTextItemRole,
     ResourceCompositeIdentifier,
     ResourceType,
 } from '@coscrad/api-interfaces';
@@ -34,7 +36,24 @@ const dummyNotes: INoteViewModel[] = Array(NUMBER_OF_DUMMY_NOTES)
         (_, index): INoteViewModel => ({
             id: index.toString(),
             connectionType: EdgeConnectionType.self,
-            note: `This is note number: ${index}`,
+            name: {
+                items: [
+                    {
+                        text: `This is note number: ${index}`,
+                        role: MultilingualTextItemRole.original,
+                        languageCode: LanguageCode.English,
+                    },
+                ],
+            },
+            note: {
+                items: [
+                    {
+                        text: `This is note number: ${index}`,
+                        role: MultilingualTextItemRole.original,
+                        languageCode: LanguageCode.English,
+                    },
+                ],
+            },
             connectedResources: [
                 buildMemberWithGeneralContext(
                     compositeIdentifierOfFocus,

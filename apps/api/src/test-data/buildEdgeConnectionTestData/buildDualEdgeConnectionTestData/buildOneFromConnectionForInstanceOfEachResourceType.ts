@@ -1,3 +1,5 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -15,7 +17,10 @@ import { DTO } from '../../../types/DTO';
 const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType'>>[] = [
     {
         id: '3001',
-        note: 'this media item mentions a word in the term',
+        note: buildMultilingualTextWithSingleItem(
+            'this media item mentions a word in the term',
+            LanguageCode.English
+        ),
         members: [
             {
                 role: EdgeConnectionMemberRole.from,
@@ -47,7 +52,10 @@ const dtosWithoutTypeProperty: DTO<Omit<EdgeConnection, 'type' | 'connectionType
     },
     {
         id: '3002',
-        note: 'here is the digital version of the book!',
+        note: buildMultilingualTextWithSingleItem(
+            'here is the digital version of the book!',
+            LanguageCode.English
+        ),
         members: [
             {
                 role: EdgeConnectionMemberRole.from,
