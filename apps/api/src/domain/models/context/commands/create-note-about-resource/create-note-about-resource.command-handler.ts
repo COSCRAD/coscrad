@@ -58,6 +58,7 @@ export class CreateNoteAboutResourceCommandHandler extends BaseCreateCommandHand
             connectionType: EdgeConnectionType.self,
             note: new MultilingualText({
                 items: [
+                    // Note that translation will require a subsequent command
                     new MultilingualTextItem({
                         text,
                         role: MultilingualTextItemRole.original,

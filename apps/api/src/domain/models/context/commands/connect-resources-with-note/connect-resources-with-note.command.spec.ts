@@ -1,4 +1,4 @@
-import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
@@ -256,9 +256,8 @@ describe(commandType, () => {
 
                             const newConnection = newEdgeConnectionSearchResult as EdgeConnection;
 
-                            const textForNewConnection = newConnection.note.items.find(
-                                ({ role }) => role === MultilingualTextItemRole.original
-                            ).text;
+                            const textForNewConnection =
+                                newConnection.note.getOriginalTextItem().text;
 
                             expect(textForNewConnection).toBe(text);
 

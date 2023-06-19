@@ -1,8 +1,4 @@
-import {
-    IEdgeConnectionContext,
-    LanguageCode,
-    MultilingualTextItemRole,
-} from '@coscrad/api-interfaces';
+import { IEdgeConnectionContext, LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
@@ -143,9 +139,7 @@ const buildCreateNoteAboutResourceFSAForNote = (
     const { compositeIdentifier: resourceCompositeIdentifier, context: resourceContext } =
         selfMember;
 
-    const { languageCode, text } = note.items.find(
-        ({ role }) => role === MultilingualTextItemRole.original
-    );
+    const { languageCode, text } = note.getOriginalTextItem();
 
     return {
         text,
