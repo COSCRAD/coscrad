@@ -124,4 +124,7 @@ export const contentConfig: ConfigurableContent = {
     },
     resourceIndexLabel: 'Available Resources',
     defaultLanguageCode: LanguageCode.Chilcotin,
+    phoneNumber: '123456789',
+    address: '',
+    internalLinks: [],
 };
