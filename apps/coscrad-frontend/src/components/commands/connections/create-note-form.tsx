@@ -3,7 +3,16 @@ import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { FormControl, FormGroup, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 
-export const CreateNoteForm = (): JSX.Element => {
+type FormState = {
+    text: string;
+    languageCode: LanguageCode;
+};
+
+export interface CraeteNoteFormProps {
+    onSubmit: (formState?: FormState) => void;
+}
+
+export const CreateNoteForm = ({ onSubmit }: CraeteNoteFormProps): JSX.Element => {
     const [text, setText] = useState<string>('');
 
     const [languageCode, setLanguageCode] = useState<LanguageCode>(null);
@@ -54,11 +63,7 @@ export const CreateNoteForm = (): JSX.Element => {
                     data-testid="submit-new-note"
                     disabled={!isFormComplete}
                     onClick={() => {
-                        console.log({
-                            submitting: 'note',
-                            languageCode,
-                            text,
-                        });
+                        onSubmit();
                     }}
                 >
                     Create

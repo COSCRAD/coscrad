@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel } from '../commands';
-import { CreateNoteForm } from '../commands/connections/create-note-form';
+import { CreateNotePanel } from '../commands/connections/create-note-panel';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { WithWebOfKnowledge } from '../resources/shared';
 import {
@@ -62,7 +62,7 @@ export const CategorizablePage = <T extends CategorizableType>({
                             commandContext={compositeIdentifier}
                         />
                         {/* TODO Remove this for the notes view */}
-                        <CreateNoteForm />
+                        <CreateNotePanel />
                     </>
                 ) : null}
             </>

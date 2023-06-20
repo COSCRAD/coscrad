@@ -64,8 +64,10 @@ describe(`term detail view `, () => {
             });
 
             describe.only(`when the form is complete`, () => {
+                const newNoteText = 'This is an interesting note.';
+
                 beforeEach(() => {
-                    cy.get('#note_text').click().type('This is an interesting note.');
+                    cy.get('#note_text').click().type(newNoteText);
 
                     cy.get('.MuiSelect-select').click().get('[data-value="eng"]').click();
                 });
@@ -74,10 +76,18 @@ describe(`term detail view `, () => {
                     cy.getByDataAttribute('submit-new-note').should('not.be.disabled');
                 });
 
-                it.only(`should submit the command`, () => {
+                it(`should show loading immediately after submitting the command`, () => {
                     cy.getByDataAttribute('submit-new-note').click();
 
                     cy.getByDataAttribute('loading');
+                });
+
+                it.only(`should successfully submit the command`, () => {
+                    cy.getByDataAttribute('submit-new-note').click();
+
+                    cy.getByDataAttribute('loading').should('not.exist');
+
+                    cy.contains(newNoteText);
                 });
             });
         });
