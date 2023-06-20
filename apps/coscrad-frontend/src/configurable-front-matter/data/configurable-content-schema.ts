@@ -32,6 +32,14 @@ export type InternalLink = {
     description: string;
 };
 
+export type SocialMediaLinks = {
+    facebook?: string;
+    twitter?: string;
+    github?: string;
+    youtube?: string;
+    instagram?: string;
+};
+
 export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
     indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
     siteTitle: string;
@@ -57,6 +65,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     phoneNumber: string;
     address: string;
     internalLinks: InternalLink[];
+    socialMediaLinks: SocialMediaLinks;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -86,6 +95,7 @@ export const configurableContentPropertiesAndConstraints: {
     phoneNumber: [CoscradConstraint.isString],
     address: [CoscradConstraint.isString],
     internalLinks: [],
+    socialMediaLinks: [CoscradConstraint.isObject],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;

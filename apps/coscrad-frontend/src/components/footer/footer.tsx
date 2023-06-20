@@ -1,5 +1,5 @@
-import { FacebookOutlined, GitHub, Twitter, YouTube } from '@mui/icons-material';
-import { Grid, IconButton, Typography } from '@mui/material';
+import { FacebookOutlined, GitHub, Instagram, Twitter, YouTube } from '@mui/icons-material';
+import { Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { COSCRADByline } from '../coscrad-byline/coscrad-byline';
@@ -9,9 +9,32 @@ export const Footer = (): JSX.Element => {
     /**
      * TODO: Move data (ConfigurableContentContext) out of presenter
      */
-    const { subTitle, phoneNumber, address, internalLinks } = useContext(
+    const { subTitle, phoneNumber, address, internalLinks, socialMediaLinks } = useContext(
         ConfigurableContentContext
     );
+
+    const socialMediaIcons = [
+        {
+            link: socialMediaLinks.facebook,
+            icon: <FacebookOutlined />,
+        },
+        {
+            link: socialMediaLinks.twitter,
+            icon: <Twitter />,
+        },
+        {
+            link: socialMediaLinks.github,
+            icon: <GitHub />,
+        },
+        {
+            link: socialMediaLinks.youtube,
+            icon: <YouTube />,
+        },
+        {
+            link: socialMediaLinks.instagram,
+            icon: <Instagram />,
+        },
+    ];
 
     return (
         <Grid
@@ -25,24 +48,32 @@ export const Footer = (): JSX.Element => {
                 backgroundColor: '#ededed',
             }}
         >
-            <Grid>Phone: {phoneNumber}</Grid>
-            <Grid>Address: {address}</Grid>
             <Grid item>
-                {internalLinks.map(({ url, iconUrl, description }) => (
-                    // <Tooltip title={description}>
-                    <IconButton
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        color="primary"
-                    >
-                        {/* <img width={100} src={iconUrl} alt={description} /> */}
-                        {url.includes('facebook') && <FacebookOutlined />}
-                        {url.includes('youtube') && <YouTube />}
-                        {url.includes('twitter') && <Twitter />}
-                        {url.includes('github') && <GitHub />}
-                    </IconButton>
-                    // </Tooltip>
+                Phone: {phoneNumber}
+                Address: {address}
+            </Grid>
+            <Grid item sx={{ textAlign: 'center' }}>
+                {socialMediaIcons.map(({ link, icon }) =>
+                    link ? (
+                        <IconButton
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            color="primary"
+                            children={icon}
+                        />
+                    ) : (
+                        ''
+                    )
+                )}
+            </Grid>
+            <Grid item sx={{ textAlign: 'center' }}>
+                {internalLinks.map(({ description, url, iconUrl }) => (
+                    <Tooltip title={description}>
+                        <a href={url} target="_blank" rel="noopener noreferrer">
+                            <img height={50} src={iconUrl} alt={description} />
+                        </a>
+                    </Tooltip>
                 ))}
             </Grid>
 
