@@ -10,7 +10,7 @@ export const CommandSelectionArea = ({
     actions,
     onCommandSelection,
 }: CommandSelectionAreaProps): JSX.Element => (
-    <div>
+    <div data-testid="command-selection-area">
         <h1>Commands</h1>
         {actions.map((action) =>
             CommandButton({

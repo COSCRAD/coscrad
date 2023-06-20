@@ -1362,7 +1362,7 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "title": "episode title (in language)",
+                "title": "episode (media item 1) title (in language)",
                 "titleEnglish": "Metal Mondays episode 1",
                 "contributorAndRoles": [
                     {
@@ -1383,7 +1383,7 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "title": "video title (in language)",
+                "title": "video (media item 2) title (in language)",
                 "titleEnglish": "cool video",
                 "contributorAndRoles": [
                     {
@@ -1404,7 +1404,7 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "title": "episode title (in language)",
+                "title": "episode (media item 3) title (in language)",
                 "titleEnglish": "Metal Mondays episode 2",
                 "contributorAndRoles": [
                     {

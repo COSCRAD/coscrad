@@ -82,6 +82,7 @@ export const DynamicForm = ({
                     ? null
                     : `Please correct the errors before submitting the form`}
                 <Button
+                    data-testid="submit-dynamic-form"
                     onClick={() => {
                         if (!isValid) return;
 

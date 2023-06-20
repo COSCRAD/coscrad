@@ -36,11 +36,12 @@ const SingleLanguageField = ({
     languageName,
     dispatch,
 }: SingleLanguageFieldProps) => (
-    <Accordion>
+    <Accordion data-testid={`${name}:${languageCode}`}>
         <AccordionSummary>{languageName}</AccordionSummary>
         <AccordionDetails>
             <Stack>
                 <TextField
+                    data-testid={`text-item-entry:${languageCode}`}
                     name={`${name}:${languageCode}`}
                     label={label}
                     onChange={(e) => {
@@ -49,6 +50,7 @@ const SingleLanguageField = ({
                     required={false}
                 />
                 <Select
+                    data-testid={`role-entry:${languageCode}`}
                     label={`${label}:role`}
                     name={`${name}:role`}
                     required={true}
@@ -70,9 +72,9 @@ const SingleLanguageField = ({
 );
 
 /**
- * TODO We need to
- * - generate one field for each available language based on a config \ backend query
- * - populate a dropbox for selecting the "role" of the text (original \ prompt \ gloss \ free translation)
+ * TODO Remove this as commands going forward will never direclty use `role` on the
+ * form. Rather, the role will be determined by the kind of `TranslateX` command
+ * that is being executed.
  *
  */
 export const MultilingualTextInput = ({
