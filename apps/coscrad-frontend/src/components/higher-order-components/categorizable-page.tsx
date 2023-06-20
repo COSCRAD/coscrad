@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel } from '../commands';
+import { CreateNoteForm } from '../commands/connections/create-note-form';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { WithWebOfKnowledge } from '../resources/shared';
 import {
@@ -55,10 +56,14 @@ export const CategorizablePage = <T extends CategorizableType>({
             <>
                 <DetailPresenter {...viewModel} />
                 {viewModel?.actions?.length > 0 ? (
-                    <CommandPanel
-                        actions={viewModel.actions}
-                        commandContext={compositeIdentifier}
-                    />
+                    <>
+                        <CommandPanel
+                            actions={viewModel.actions}
+                            commandContext={compositeIdentifier}
+                        />
+                        {/* TODO Remove this for the notes view */}
+                        <CreateNoteForm />
+                    </>
                 ) : null}
             </>
         );

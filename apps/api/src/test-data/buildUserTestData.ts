@@ -22,6 +22,20 @@ const dtos: DTO<CoscradUser>[] = [
         username: 'cool-james',
         roles: [CoscradUserRole.projectAdmin],
     },
+    {
+        type: AggregateType.user,
+        id: '2',
+        authProviderUserId: 'auth0|6407b7bd81d69faf23e9dd7e',
+        profile: new CoscradUserProfile({
+            name: {
+                firstName: 'COSCRAD',
+                lastName: 'Test-User',
+            },
+            email: 'cypress-user@coscrad.org',
+        }),
+        username: 'cscrad-cypress-user',
+        roles: [CoscradUserRole.superAdmin],
+    },
 ];
 
 export default (): CoscradUser[] =>
