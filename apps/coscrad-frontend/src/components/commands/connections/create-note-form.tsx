@@ -63,7 +63,14 @@ export const CreateNoteForm = ({ onSubmit }: CraeteNoteFormProps): JSX.Element =
                     data-testid="submit-new-note"
                     disabled={!isFormComplete}
                     onClick={() => {
-                        onSubmit();
+                        console.log({
+                            formState: {
+                                text,
+                                languageCode,
+                            },
+                        });
+
+                        onSubmit({ text, languageCode });
                     }}
                 >
                     Create

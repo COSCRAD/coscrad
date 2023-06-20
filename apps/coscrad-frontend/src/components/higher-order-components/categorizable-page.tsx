@@ -62,7 +62,14 @@ export const CategorizablePage = <T extends CategorizableType>({
                             commandContext={compositeIdentifier}
                         />
                         {/* TODO Remove this for the notes view */}
-                        <CreateNotePanel />
+                        {categorizableType === CategorizableType.note ? null : (
+                            <CreateNotePanel
+                                resourceCompositeIdentifier={{
+                                    type: categorizableType,
+                                    id: viewModel.id,
+                                }}
+                            />
+                        )}
                     </>
                 ) : null}
             </>

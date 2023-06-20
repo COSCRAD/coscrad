@@ -20,7 +20,7 @@ describe(`term detail view `, () => {
             });
         });
 
-        describe.only(`when the user is logged-in as COSCRAD admin`, () => {
+        describe(`when the user is logged-in as COSCRAD admin`, () => {
             beforeEach(() => {
                 cy.login();
 
@@ -63,7 +63,7 @@ describe(`term detail view `, () => {
                 });
             });
 
-            describe.only(`when the form is complete`, () => {
+            describe(`when the form is complete`, () => {
                 const newNoteText = 'This is an interesting note.';
 
                 beforeEach(() => {
@@ -82,7 +82,21 @@ describe(`term detail view `, () => {
                     cy.getByDataAttribute('loading');
                 });
 
-                it.only(`should successfully submit the command`, () => {
+                it(`should successfully submit the command`, () => {
+                    cy.getByDataAttribute('submit-new-note').click();
+
+                    cy.getByDataAttribute('loading').should('not.exist');
+
+                    cy.contains(newNoteText);
+                });
+
+                it(`should successfully submit multiple commands`, () => {
+                    cy.getByDataAttribute('submit-new-note').click();
+
+                    cy.get('#note_text').click().type('yet another note about this resource');
+
+                    cy.get('.MuiSelect-select').click().get('[data-value="clc"]').click();
+
                     cy.getByDataAttribute('submit-new-note').click();
 
                     cy.getByDataAttribute('loading').should('not.exist');

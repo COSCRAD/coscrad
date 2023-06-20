@@ -29,6 +29,9 @@ export const CreateNotePanel = ({
                 const commandFsa = {
                     ...formState,
                     resourceCompositeIdentifier,
+                    resourceContext: {
+                        type: 'general',
+                    },
                     aggregateCompositeIdentifier: {
                         id,
                         type: 'note',
