@@ -1,8 +1,8 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { ICommandMeta } from '@coscrad/api-interfaces';
 
 interface CommandButtonProps {
     onButtonClick: (commandType: string) => void;
-    commandFormAndLabels: ICommandFormAndLabels;
+    commandFormAndLabels: ICommandMeta;
 }
 
 export const CommandButton = ({

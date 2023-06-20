@@ -2,7 +2,7 @@ import {
     AggregateCompositeIdentifier,
     AggregateType,
     ICommandFormAndLabels,
-    isAggregateType
+    isAggregateType,
 } from '@coscrad/api-interfaces';
 import { isNull } from '@coscrad/validation-constraints';
 import { useState } from 'react';
@@ -10,7 +10,7 @@ import { useAppDispatch } from '../../app/hooks';
 import {
     Ack,
     clearCommandStatus,
-    useLoadableCommandResult
+    useLoadableCommandResult,
 } from '../../store/slices/command-status';
 import { idUsed, useLoadableGeneratedId } from '../../store/slices/id-generation';
 import { useFormState } from '../dynamic-forms/form-state';
@@ -18,13 +18,18 @@ import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
 import { CommandSelectionArea } from './command-selection-area';
 import { CommandWorkspace } from './command-workspace';
+import { CommandExecutionForm } from './dynamic-command-execution-form';
 
 export const INDEX_COMMAND_CONTEXT = 'index';
 
 export type CommandContext = AggregateType | AggregateCompositeIdentifier;
 
+export type ICommandExecutionFormAndLabels = Omit<ICommandFormAndLabels, 'form'> & {
+    form: CommandExecutionForm;
+};
+
 interface CommandPanelProps {
-    actions: ICommandFormAndLabels[];
+    actions: ICommandExecutionFormAndLabels[];
     commandContext: CommandContext;
 }
 
@@ -69,7 +74,7 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
 
     return (
         <CommandWorkspace
-            selectedCommand={selectedCommand}
+            SelectedCommandAndLabels={selectedCommand}
             onFieldUpdate={updateForm}
             formState={formState}
             aggregateCompositeIdentifier={

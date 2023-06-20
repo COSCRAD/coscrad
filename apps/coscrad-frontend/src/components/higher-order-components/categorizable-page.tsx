@@ -1,9 +1,14 @@
-import { AggregateTypeToViewModel, CategorizableType } from '@coscrad/api-interfaces';
+import {
+    AggregateTypeToViewModel,
+    CategorizableType,
+    ICommandFormAndLabels,
+} from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel } from '../commands';
 import { CreateNotePanel } from '../commands/connections/create-note-panel';
+import { buildDynamicCommandExecutionForm } from '../commands/dynamic-command-execution-form';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { WithWebOfKnowledge } from '../resources/shared';
 import {
@@ -52,28 +57,37 @@ export const CategorizablePage = <T extends CategorizableType>({
         // @ts-expect-error FIX ME
         const DetailPresenter = detailPresenterFactory(categorizableType);
 
-        return (viewModel) => (
-            <>
-                <DetailPresenter {...viewModel} />
-                {viewModel?.actions?.length > 0 ? (
-                    <>
-                        <CommandPanel
-                            actions={viewModel.actions}
-                            commandContext={compositeIdentifier}
-                        />
-                        {/* TODO Remove this for the notes view */}
-                        {categorizableType === CategorizableType.note ? null : (
-                            <CreateNotePanel
-                                resourceCompositeIdentifier={{
-                                    type: categorizableType,
-                                    id: viewModel.id,
-                                }}
+        return (viewModel) => {
+            const actionsFromApi = viewModel.actions as ICommandFormAndLabels[];
+
+            const commandExecutionFormsAndLabels = actionsFromApi.map((action) => ({
+                ...action,
+                form: buildDynamicCommandExecutionForm(action),
+            }));
+
+            return (
+                <>
+                    <DetailPresenter {...viewModel} />
+                    {viewModel?.actions?.length > 0 ? (
+                        <>
+                            <CommandPanel
+                                actions={commandExecutionFormsAndLabels}
+                                commandContext={compositeIdentifier}
                             />
-                        )}
-                    </>
-                ) : null}
-            </>
-        );
+                            {/* TODO Remove this for the notes view */}
+                            {categorizableType === CategorizableType.note ? null : (
+                                <CreateNotePanel
+                                    resourceCompositeIdentifier={{
+                                        type: categorizableType,
+                                        id: viewModel.id,
+                                    }}
+                                />
+                            )}
+                        </>
+                    ) : null}
+                </>
+            );
+        };
     };
 
     return (

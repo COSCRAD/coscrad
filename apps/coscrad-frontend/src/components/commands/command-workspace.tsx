@@ -1,12 +1,12 @@
-import { AggregateCompositeIdentifier, ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { AggregateCompositeIdentifier } from '@coscrad/api-interfaces';
 import { Ack, useLoadableCommandResult } from '../../store/slices/command-status';
 import { Loading } from '../loading';
 import { AckNotification } from './ack-notification';
-import { CommandExecutionForm } from './command-execution-form';
+import { ICommandExecutionFormAndLabels } from './command-panel';
 import { NackNotification } from './nack-notification';
 
 interface CommandWorkspaceProps {
-    selectedCommand: ICommandFormAndLabels;
+    SelectedCommandAndLabels: ICommandExecutionFormAndLabels;
     onFieldUpdate: (propertyKey: string, value: unknown) => void;
     onAcknowledgeCommandResult: (didCommandSucceed: boolean) => void;
     formState: Record<string, unknown>;
@@ -14,7 +14,10 @@ interface CommandWorkspaceProps {
 }
 
 export const CommandWorkspace = (props: CommandWorkspaceProps): JSX.Element => {
-    const { onAcknowledgeCommandResult } = props;
+    const {
+        onAcknowledgeCommandResult,
+        SelectedCommandAndLabels: { form: CommandForm },
+    } = props;
 
     const { isLoading, errorInfo, data: commandResult } = useLoadableCommandResult();
 
@@ -32,5 +35,5 @@ export const CommandWorkspace = (props: CommandWorkspaceProps): JSX.Element => {
     if (commandResult === Ack)
         return <AckNotification _onClick={() => onAcknowledgeCommandResult(true)} />;
 
-    return <CommandExecutionForm {...props} />;
+    return <CommandForm {...props} />;
 };

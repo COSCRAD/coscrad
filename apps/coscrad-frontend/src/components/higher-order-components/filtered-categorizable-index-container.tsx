@@ -10,6 +10,7 @@ import { SimulatedKeyboardConfig } from '../../configurable-front-matter/data/co
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { CommandPanel } from '../commands';
+import { buildDynamicCommandExecutionForm } from '../commands/dynamic-command-execution-form';
 import { buildUseLoadableForSingleCategorizableType } from './buildUseLoadableResourcesOfSingleType';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 
@@ -54,7 +55,10 @@ export const FilteredCategorizableIndexContainer = <
             {/* TODO [https://www.pivotaltracker.com/story/show/184107132] Use loadable display helper] */}
             {loadableModels.data?.indexScopedActions?.length > 0 && (
                 <CommandPanel
-                    actions={loadableModels.data.indexScopedActions}
+                    actions={loadableModels.data.indexScopedActions.map((action) => ({
+                        ...action,
+                        form: buildDynamicCommandExecutionForm(action),
+                    }))}
                     commandContext={aggregateType}
                 />
             )}

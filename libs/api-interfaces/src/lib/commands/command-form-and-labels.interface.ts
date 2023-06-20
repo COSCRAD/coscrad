@@ -1,8 +1,11 @@
 import { IDynamicForm } from '../form-data/dynamic-form.interface';
 
-export interface ICommandFormAndLabels {
+export interface ICommandMeta {
     label: string;
     description: string;
-    form: IDynamicForm;
     type: string;
+}
+
+export interface ICommandFormAndLabels extends ICommandMeta {
+    form: IDynamicForm;
 }

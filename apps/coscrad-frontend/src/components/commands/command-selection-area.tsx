@@ -1,8 +1,8 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { ICommandMeta } from '@coscrad/api-interfaces';
 import { CommandButton } from './command-button';
 
 interface CommandSelectionAreaProps {
-    actions: ICommandFormAndLabels[];
+    actions: ICommandMeta[];
     onCommandSelection: (type: string) => void;
 }
 
