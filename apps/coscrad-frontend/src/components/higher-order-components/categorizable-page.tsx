@@ -1,14 +1,17 @@
 import {
     AggregateTypeToViewModel,
     CategorizableType,
-    ICommandFormAndLabels,
+    ICommandFormAndLabels as IBackendCommandFormAndLabels,
 } from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel } from '../commands';
 import { CreateNotePanel } from '../commands/connections/create-note-panel';
-import { buildDynamicCommandExecutionForm } from '../commands/dynamic-command-execution-form';
+import {
+    buildCommandExecutor,
+    buildDynamicCommandForm,
+} from '../commands/dynamic-command-execution-form';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { WithWebOfKnowledge } from '../resources/shared';
 import {
@@ -58,11 +61,11 @@ export const CategorizablePage = <T extends CategorizableType>({
         const DetailPresenter = detailPresenterFactory(categorizableType);
 
         return (viewModel) => {
-            const actionsFromApi = viewModel.actions as ICommandFormAndLabels[];
+            const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
 
             const commandExecutionFormsAndLabels = actionsFromApi.map((action) => ({
                 ...action,
-                form: buildDynamicCommandExecutionForm(action),
+                form: buildCommandExecutor(buildDynamicCommandForm(action)),
             }));
 
             return (

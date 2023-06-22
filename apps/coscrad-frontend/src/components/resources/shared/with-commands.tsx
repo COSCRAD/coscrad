@@ -1,12 +1,15 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { ICommandFormAndLabels as IBackendCommandFormAndLabels } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { CommandContext, CommandPanel } from '../../commands';
-import { buildDynamicCommandExecutionForm } from '../../commands/dynamic-command-execution-form';
+import {
+    buildCommandExecutor,
+    buildDynamicCommandForm,
+} from '../../commands/dynamic-command-execution-form';
 
 export const WithCommands =
     <TProps,>(
         WrappedComponent: FunctionalComponent<TProps>,
-        mapPropsToActions: (props: TProps) => ICommandFormAndLabels[],
+        mapPropsToActions: (props: TProps) => IBackendCommandFormAndLabels[],
         mapPropsToCommandContext: (props: TProps) => CommandContext
     ) =>
     (props: TProps) => {
@@ -18,7 +21,7 @@ export const WithCommands =
                 <CommandPanel
                     actions={actions.map((action) => ({
                         ...action,
-                        form: buildDynamicCommandExecutionForm(action),
+                        form: buildCommandExecutor(buildDynamicCommandForm(action)),
                     }))}
                     commandContext={mapPropsToCommandContext(props)}
                 />

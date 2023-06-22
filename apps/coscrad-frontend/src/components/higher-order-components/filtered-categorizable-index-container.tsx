@@ -10,7 +10,10 @@ import { SimulatedKeyboardConfig } from '../../configurable-front-matter/data/co
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { CommandPanel } from '../commands';
-import { buildDynamicCommandExecutionForm } from '../commands/dynamic-command-execution-form';
+import {
+    buildCommandExecutor,
+    buildDynamicCommandForm,
+} from '../commands/dynamic-command-execution-form';
 import { buildUseLoadableForSingleCategorizableType } from './buildUseLoadableResourcesOfSingleType';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 
@@ -57,7 +60,7 @@ export const FilteredCategorizableIndexContainer = <
                 <CommandPanel
                     actions={loadableModels.data.indexScopedActions.map((action) => ({
                         ...action,
-                        form: buildDynamicCommandExecutionForm(action),
+                        form: buildCommandExecutor(buildDynamicCommandForm(action)),
                     }))}
                     commandContext={aggregateType}
                 />
