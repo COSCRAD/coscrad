@@ -22,19 +22,17 @@ export const CreateNoteForm = ({ onSubmitForm, bindProps }: CreateNoteFormProps)
 
     const [languageCode, setLanguageCode] = useState<LanguageCode>(null);
 
-    //   TODO leverage this
     const isFormComplete =
         isNonEmptyString(text) && Object.values(LanguageCode).includes(languageCode);
 
     return (
         <div>
             <Typography variant="h2">Create Note</Typography>
-            LanguageCode: {languageCode}
-            Text: {text}
             <FormControl fullWidth>
                 <FormGroup>
                     <TextField
                         id="note_text"
+                        name="text"
                         label="note text"
                         value={text}
                         onChange={(e) => {
