@@ -1,4 +1,7 @@
-import { ICommandFormAndLabels as IBackendCommandFormAndLabels } from '@coscrad/api-interfaces';
+import {
+    ICommandFormAndLabels as IBackendCommandFormAndLabels,
+    isAggregateType,
+} from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { CommandContext, CommandPanel } from '../../commands';
 import {
@@ -15,15 +18,20 @@ export const WithCommands =
     (props: TProps) => {
         const actions = mapPropsToActions(props);
 
+        const commandContext = mapPropsToCommandContext(props);
+
         return actions.length > 0 ? (
             <div>
                 {WrappedComponent(props)}
                 <CommandPanel
                     actions={actions.map((action) => ({
                         ...action,
-                        form: buildCommandExecutor(buildDynamicCommandForm(action)),
+                        form: isAggregateType(commandContext)
+                            ? buildCommandExecutor(buildDynamicCommandForm(action), commandContext)
+                            : buildCommandExecutor(buildDynamicCommandForm(action)),
                     }))}
-                    commandContext={mapPropsToCommandContext(props)}
+                    // do we still need this?
+                    commandContext={commandContext}
                 />
             </div>
         ) : (

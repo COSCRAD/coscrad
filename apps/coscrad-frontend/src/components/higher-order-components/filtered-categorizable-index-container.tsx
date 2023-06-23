@@ -60,7 +60,7 @@ export const FilteredCategorizableIndexContainer = <
                 <CommandPanel
                     actions={loadableModels.data.indexScopedActions.map((action) => ({
                         ...action,
-                        form: buildCommandExecutor(buildDynamicCommandForm(action)),
+                        form: buildCommandExecutor(buildDynamicCommandForm(action), aggregateType),
                     }))}
                     commandContext={aggregateType}
                 />

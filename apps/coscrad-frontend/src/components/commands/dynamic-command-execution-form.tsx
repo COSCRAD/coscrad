@@ -1,14 +1,18 @@
 import {
     AggregateCompositeIdentifier,
+    AggregateType,
     ICommandFormAndLabels as IBackendCommandFormAndLabels,
 } from '@coscrad/api-interfaces';
 import { useAppDispatch } from '../../app/hooks';
 import { executeCommand } from '../../store/slices/command-status';
+import { useLoadableGeneratedId } from '../../store/slices/id-generation';
 import { DynamicForm } from '../dynamic-forms/dynamic-form';
+import { ErrorDisplay } from '../error-display/error-display';
+import { Loading } from '../loading';
 import { CommandExecutor } from './dyanmic-command-executor';
 
 interface CommandExecutionFormProps {
-    onSubmitForm: () => void;
+    onSubmitForm: (fsa: { type: string; payload: Record<string, unknown> }) => void;
     onFieldUpdate: (propertyKey: string, value: unknown) => void;
     formState: Record<string, unknown>;
     aggregateCompositeIdentifier: AggregateCompositeIdentifier;
@@ -26,13 +30,21 @@ export interface CommandExecutionForm {
 export type CommandExecutorProps = Omit<CommandExecutionFormProps, 'onSubmitForm'> & {
     commandType: string;
     aggregateCompositeIdentifier: AggregateCompositeIdentifier;
+    onSubmitForm: (fsa: { type: string; payload: Record<string, unknown> }) => void;
 };
 
 export const buildDynamicCommandForm =
-    ({ form: { fields } }: IBackendCommandFormAndLabels) =>
-    ({ onSubmitForm, onFieldUpdate, formState }) =>
+    ({ form: { fields }, type: commandType }: IBackendCommandFormAndLabels) =>
+    ({
+        onSubmitForm,
+        onFieldUpdate,
+        formState,
+        aggregateCompositeIdentifier,
+    }: CommandExecutorProps) =>
         (
             <DynamicForm
+                bindProps={{ aggregateCompositeIdentifier }}
+                commandType={commandType}
                 fields={fields}
                 /**
                  * TODO [https://www.pivotaltracker.com/story/show/184056544]
@@ -47,27 +59,38 @@ export const buildDynamicCommandForm =
         );
 
 export const buildCommandExecutor =
-    (CommandForm: CommandExecutionForm): CommandExecutor =>
-    ({
-        onFieldUpdate,
-        formState,
-        aggregateCompositeIdentifier,
-        commandType,
-    }: CommandExecutorProps) => {
+    (
+        CommandForm: CommandExecutionForm,
+        generateIdForAggregateOfType?: AggregateType
+    ): CommandExecutor =>
+    ({ onFieldUpdate, formState, aggregateCompositeIdentifier }: CommandExecutorProps) => {
         const dispatch = useAppDispatch();
 
-        // TODO handle ID generation here
+        const loadableGeneratedId = generateIdForAggregateOfType ? useLoadableGeneratedId() : null;
 
-        const onSubmitForm = () => {
-            const commandFsa = {
-                type: commandType,
-                payload: {
-                    aggregateCompositeIdentifier,
-                    ...formState,
-                },
-            };
+        if (loadableGeneratedId) {
+            const { errorInfo, isLoading } = loadableGeneratedId;
 
-            dispatch(executeCommand(commandFsa));
+            if (isLoading) return <Loading />;
+
+            if (errorInfo) return <ErrorDisplay {...errorInfo} />;
+        }
+
+        const onSubmitForm = (commandFsa) => {
+            const fullFsa = generateIdForAggregateOfType
+                ? {
+                      ...commandFsa,
+                      payload: {
+                          ...commandFsa.payload,
+                          aggregateCompositeIdentifier: {
+                              type: generateIdForAggregateOfType,
+                              id: loadableGeneratedId.data,
+                          },
+                      },
+                  }
+                : commandFsa;
+
+            dispatch(executeCommand(fullFsa));
         };
 
         return (

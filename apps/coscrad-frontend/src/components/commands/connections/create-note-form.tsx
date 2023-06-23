@@ -1,22 +1,32 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateCompositeIdentifier, AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { FormControl, FormGroup, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
+import { buildCommandExecutor } from '../dynamic-command-execution-form';
+
+import { Button } from '@mui/material';
 
 type FormState = {
     text: string;
     languageCode: LanguageCode;
 };
 
-export interface CraeteNoteFormProps {
-    onSubmit: (formState?: FormState) => void;
+export interface CreateNoteFormProps {
+    onSubmitForm: (fsa?: { type: string; payload: Record<string, unknown> }) => void;
+    bindProps: Record<string, unknown>;
+    aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 }
 
-export const CreateNoteForm = ({ onSubmit }: CraeteNoteFormProps): JSX.Element => {
+export const CreateNoteForm = ({
+    onSubmitForm,
+    bindProps,
+    aggregateCompositeIdentifier,
+}: CreateNoteFormProps): JSX.Element => {
     const [text, setText] = useState<string>('');
 
     const [languageCode, setLanguageCode] = useState<LanguageCode>(null);
 
+    //   TODO leverage this
     const isFormComplete =
         isNonEmptyString(text) && Object.values(LanguageCode).includes(languageCode);
 
@@ -59,7 +69,27 @@ export const CreateNoteForm = ({ onSubmit }: CraeteNoteFormProps): JSX.Element =
                         ))}
                     </Select>
                 </FormGroup>
-                <button
+                <Button
+                    disabled={!isFormComplete}
+                    data-testid="submit-dynamic-form"
+                    onClick={() => {
+                        if (!isFormComplete) return;
+
+                        onSubmitForm({
+                            type: 'CREATE_NOTE_ABOUT_RESOURCE',
+                            payload: {
+                                ...bindProps,
+                                resourceContext: { type: 'general' },
+                                // note that the command executor injects the `aggregateCompositeIdentifier` after generating a new ID
+                                languageCode,
+                                text,
+                            },
+                        });
+                    }}
+                >
+                    Submit
+                </Button>
+                {/* <button
                     data-testid="submit-new-note"
                     disabled={!isFormComplete}
                     onClick={() => {
@@ -74,8 +104,16 @@ export const CreateNoteForm = ({ onSubmit }: CraeteNoteFormProps): JSX.Element =
                     }}
                 >
                     Create
-                </button>
+                </button> */}
             </FormControl>
         </div>
     );
 };
+
+export const buildCreateNoteCommandExecutor = (bindProps: Record<string, unknown>) =>
+    buildCommandExecutor(
+        (props: Omit<CreateNoteFormProps, 'bindProps'>): JSX.Element => (
+            <CreateNoteForm {...props} bindProps={bindProps} />
+        ),
+        AggregateType.note
+    );

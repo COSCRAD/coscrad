@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel } from '../commands';
-import { CreateNotePanel } from '../commands/connections/create-note-panel';
+import { buildCreateNoteCommandExecutor } from '../commands/connections/create-note-form';
 import {
     buildCommandExecutor,
     buildDynamicCommandForm,
@@ -29,6 +29,10 @@ interface ResourcePageProps<T extends CategorizableType> {
 }
 
 /**
+ * A Categorizable is a Resource or a Note. These types of aggregate root share in
+ * common that they can be tagged and categorized, and they collectively constitute
+ * the web-of-knowledge.
+ *
  * We may want to extends this to an `AggregatePage`. We aren't too concerned
  * about that right now as our core value is being extensbile to adding new resource
  * types, while non-resource aggregates are one-offs.
@@ -63,30 +67,46 @@ export const CategorizablePage = <T extends CategorizableType>({
         return (viewModel) => {
             const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
 
-            const commandExecutionFormsAndLabels = actionsFromApi.map((action) => ({
-                ...action,
-                form: buildCommandExecutor(buildDynamicCommandForm(action)),
-            }));
+            const commandExecutionFormsAndLabels = actionsFromApi
+                .map((action) => ({
+                    ...action,
+                    form: buildCommandExecutor(buildDynamicCommandForm(action)),
+                }))
+                /**
+                 * TODO We should expose the following commands via the back-end.
+                 * that will require a mechanism to bind the aggregate context
+                 * for the resource we are viewing (e.g. book/123) to a non-standard
+                 * property (resourceCompositeIdentifier) while generating a new
+                 * ID for the note, which is the proper aggregate context for
+                 * this command.
+                 */
+                .concat(
+                    ...(categorizableType === CategorizableType.note
+                        ? []
+                        : [
+                              {
+                                  // TODO Pull the meta from the back-end
+                                  label: 'Create Note',
+                                  description: 'Create a note about this resource',
+                                  type: 'CREATE_NOTE_ABOUT_RESOURCE',
+                                  form: buildCreateNoteCommandExecutor({
+                                      resourceCompositeIdentifier: {
+                                          type: categorizableType,
+                                          id: viewModel.id,
+                                      },
+                                  }),
+                              },
+                          ])
+                );
 
             return (
                 <>
                     <DetailPresenter {...viewModel} />
                     {viewModel?.actions?.length > 0 ? (
-                        <>
-                            <CommandPanel
-                                actions={commandExecutionFormsAndLabels}
-                                commandContext={compositeIdentifier}
-                            />
-                            {/* TODO Remove this for the notes view */}
-                            {categorizableType === CategorizableType.note ? null : (
-                                <CreateNotePanel
-                                    resourceCompositeIdentifier={{
-                                        type: categorizableType,
-                                        id: viewModel.id,
-                                    }}
-                                />
-                            )}
-                        </>
+                        <CommandPanel
+                            actions={commandExecutionFormsAndLabels}
+                            commandContext={compositeIdentifier}
+                        />
                     ) : null}
                 </>
             );
