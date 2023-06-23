@@ -201,7 +201,7 @@ MediaItem {
     "allowedGroupIds": [],
     "allowedUserIds": [],
   },
-  "title": "episode title (in language)",
+  "title": "episode (media item 1) title (in language)",
   "titleEnglish": "Metal Mondays episode 1",
   "type": "mediaItem",
   "url": "https://coscrad.org/wp-content/uploads/2023/05/metal-mondays-mock1_533847__tosha73__distortion-guitar-power-chord-e.wav",
