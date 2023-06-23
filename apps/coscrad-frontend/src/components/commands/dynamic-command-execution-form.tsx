@@ -16,6 +16,7 @@ interface CommandExecutionFormProps {
     onFieldUpdate: (propertyKey: string, value: unknown) => void;
     formState: Record<string, unknown>;
     aggregateCompositeIdentifier: AggregateCompositeIdentifier;
+    // TODO Is this used?
     generate?: {
         id: {
             path: string;
@@ -39,6 +40,13 @@ export const buildDynamicCommandForm =
         onSubmitForm,
         onFieldUpdate,
         formState,
+        /**
+         * TODO We should sort out bind props vs. generate and use the same
+         * approach as the hard-wired `create-note` for this. We are moving towards
+         * this information coming from the back-end so we can remove this
+         * complexity.
+         *
+         **/
         aggregateCompositeIdentifier,
     }: CommandExecutorProps) =>
         (

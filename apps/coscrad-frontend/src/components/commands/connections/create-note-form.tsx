@@ -17,11 +17,7 @@ export interface CreateNoteFormProps {
     aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 }
 
-export const CreateNoteForm = ({
-    onSubmitForm,
-    bindProps,
-    aggregateCompositeIdentifier,
-}: CreateNoteFormProps): JSX.Element => {
+export const CreateNoteForm = ({ onSubmitForm, bindProps }: CreateNoteFormProps): JSX.Element => {
     const [text, setText] = useState<string>('');
 
     const [languageCode, setLanguageCode] = useState<LanguageCode>(null);
