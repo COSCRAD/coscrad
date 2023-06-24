@@ -30,6 +30,6 @@ export const aggregateStringSummarizerFactory = (
 
     // TODO Support string summarizers for other aggregate types as needed
 
-    // Fallback to simply showing the ID (common to all models)
-    return (viewModel: IBaseViewModel) => viewModel.id;
+    // Fallback to simply showing the name in the original language
+    return (viewModel: IBaseViewModel) => findOriginalTextItem(viewModel.name).text;
 };
