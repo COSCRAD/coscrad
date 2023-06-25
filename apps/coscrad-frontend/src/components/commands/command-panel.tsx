@@ -1,8 +1,7 @@
 import {
     AggregateCompositeIdentifier,
     AggregateType,
-    ICommandFormAndLabels,
-    isAggregateType
+    ICommandFormAndLabels as IBackendCommandFormAndLabels,
 } from '@coscrad/api-interfaces';
 import { isNull } from '@coscrad/validation-constraints';
 import { useState } from 'react';
@@ -10,12 +9,11 @@ import { useAppDispatch } from '../../app/hooks';
 import {
     Ack,
     clearCommandStatus,
-    useLoadableCommandResult
+    useLoadableCommandResult,
 } from '../../store/slices/command-status';
-import { idUsed, useLoadableGeneratedId } from '../../store/slices/id-generation';
+import { idUsed } from '../../store/slices/id-generation';
 import { useFormState } from '../dynamic-forms/form-state';
-import { ErrorDisplay } from '../error-display/error-display';
-import { Loading } from '../loading';
+import { CommandExecutor } from './command-executor';
 import { CommandSelectionArea } from './command-selection-area';
 import { CommandWorkspace } from './command-workspace';
 
@@ -23,8 +21,12 @@ export const INDEX_COMMAND_CONTEXT = 'index';
 
 export type CommandContext = AggregateType | AggregateCompositeIdentifier;
 
+export type ICommandExecutorAndLabels = Omit<IBackendCommandFormAndLabels, 'form'> & {
+    executor: CommandExecutor;
+};
+
 interface CommandPanelProps {
-    actions: ICommandFormAndLabels[];
+    actions: ICommandExecutorAndLabels[];
     commandContext: CommandContext;
 }
 
@@ -37,18 +39,8 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
 
     const { data: commandResult } = useLoadableCommandResult();
 
-    const { isLoading, errorInfo, data: generatedId } = useLoadableGeneratedId();
-
     // Do not render if there are no available actions
     if (actions.length === 0) return null;
-
-    /**
-     * TODO [https://www.pivotaltracker.com/story/show/184107132]
-     * Use `displayLoadable` helper here
-     */
-    if (errorInfo) return <ErrorDisplay {...errorInfo} />;
-
-    if (isLoading || isNull(generatedId)) return <Loading />;
 
     const selectedCommand = actions.find((action) => action.type === selectedCommandType);
 
@@ -62,21 +54,16 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
     if (isNull(selectedCommandType) && commandResult !== Ack)
         return (
             <CommandSelectionArea
-                actions={actions}
+                metaForCommands={actions}
                 onCommandSelection={(type: string) => setSelectedCommandType(type)}
             />
         );
 
     return (
         <CommandWorkspace
-            selectedCommand={selectedCommand}
+            executorAndLabelsForSelectedCommand={selectedCommand}
             onFieldUpdate={updateForm}
             formState={formState}
-            aggregateCompositeIdentifier={
-                isAggregateType(commandContext)
-                    ? { type: commandContext, id: generatedId }
-                    : commandContext
-            }
             onAcknowledgeCommandResult={(didCommandSucceed: boolean) => {
                 setSelectedCommandType(null);
                 dispatch(clearCommandStatus());

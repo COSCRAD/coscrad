@@ -7,8 +7,10 @@ interface AckNotificationProps {
 export const AckNotification = ({ _onClick: onClick }: AckNotificationProps): JSX.Element => (
     <Card>
         <CardContent>
-            The command has succeeded!
-            <Button onClick={onClick}>OK</Button>
+            The command has succeeded.
+            <Button data-testid="command-ack-button" onClick={onClick}>
+                OK
+            </Button>
         </CardContent>
     </Card>
 );

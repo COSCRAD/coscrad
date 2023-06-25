@@ -2,6 +2,7 @@ import { AggregateType, IBaseViewModel, IIndexQueryResult } from '@coscrad/api-i
 import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { FunctionalComponent } from '../../utils/types/functional-component';
 import { CommandPanel } from '../commands';
+import { buildCommandExecutor, buildDynamicCommandForm } from '../commands/command-executor';
 import { displayLoadableWithErrorsAndLoading } from './display-loadable-with-errors-and-loading';
 
 export interface AggregateIndexContainerProps<
@@ -30,7 +31,19 @@ export const AggregateIndexContainer = <T extends IIndexQueryResult<IBaseViewMod
             {/* TODO [https://www.pivotaltracker.com/story/show/183456862] */}
             {loadableModels.data?.indexScopedActions?.length > 0 && (
                 <CommandPanel
-                    actions={loadableModels.data.indexScopedActions}
+                    actions={loadableModels.data.indexScopedActions.map((action) => ({
+                        ...action,
+                        executor: buildCommandExecutor(
+                            buildDynamicCommandForm(action),
+                            /**
+                             * There is no property to bind for index-scoped commands,
+                             * except for the `aggregateCompositeIdentifier` which
+                             * must be added after generating the ID.
+                             */
+                            {},
+                            aggregateType
+                        ),
+                    }))}
                     commandContext={aggregateType}
                 />
             )}
