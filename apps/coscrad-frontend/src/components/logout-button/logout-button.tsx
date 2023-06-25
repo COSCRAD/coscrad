@@ -10,7 +10,7 @@ const LogoutButton = () => {
     const dispatch = useAppDispatch();
 
     return (
-        <Tooltip title="Logout">
+        <Tooltip title="Log Out">
             <IconButton
                 data-testid="logout-button"
                 color="secondary"

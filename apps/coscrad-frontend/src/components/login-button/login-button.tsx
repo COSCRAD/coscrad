@@ -6,7 +6,7 @@ const LoginButton = () => {
     const { loginWithRedirect } = useAuth0();
 
     return (
-        <Tooltip title="Login">
+        <Tooltip title="Log In">
             <IconButton
                 data-testid="login-button"
                 color="secondary"
