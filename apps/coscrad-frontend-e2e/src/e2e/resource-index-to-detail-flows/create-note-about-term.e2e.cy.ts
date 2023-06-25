@@ -14,11 +14,12 @@ describe(`term detail view `, () => {
             });
         });
 
-        describe(`when the user is logged-in, but not an admin`, () => {
-            it(`should not display the panel`, () => {
-                cy.get('woo hooo hooo not found~ test me!');
-            });
-        });
+        //  TODO Add aditional non-admin test users and test this
+        // describe(`when the user is logged-in, but not an admin`, () => {
+        //     it(`should not display the panel`, () => {
+        //         cy.get('woo hooo hooo not found~ test me!');
+        //     });
+        // });
 
         describe(`when the user is logged-in as COSCRAD admin`, () => {
             beforeEach(() => {
@@ -39,10 +40,14 @@ describe(`term detail view `, () => {
                 cy.contains(createNoteLabel);
             });
 
-            describe(`when the form is not complete`, () => {
-                describe(`when the entire is empty`, () => {
+            describe(`when the form is incomplete`, () => {
+                beforeEach(() => {
+                    cy.contains(createNoteLabel).click();
+                });
+
+                describe(`when the entire form is empty`, () => {
                     it(`should be disabled`, () => {
-                        cy.getByDataAttribute('submit-new-note').should('be.disabled');
+                        cy.getByDataAttribute('submit-dynamic-form').should('be.disabled');
                     });
                 });
 
@@ -50,7 +55,7 @@ describe(`term detail view `, () => {
                     it(`should be disabled`, () => {
                         cy.get('#note_text').click().type('This is an interesting note.');
 
-                        cy.getByDataAttribute('submit-new-note').should('be.disabled');
+                        cy.getByDataAttribute('submit-dynamic-form').should('be.disabled');
                     });
                 });
 
@@ -58,7 +63,7 @@ describe(`term detail view `, () => {
                     it(`should be disabled`, () => {
                         cy.get('.MuiSelect-select').click().get('[data-value="eng"]').click();
 
-                        cy.getByDataAttribute('submit-new-note').should('be.disabled');
+                        cy.getByDataAttribute('submit-dynamic-form').should('be.disabled');
                     });
                 });
             });
@@ -67,41 +72,52 @@ describe(`term detail view `, () => {
                 const newNoteText = 'This is an interesting note.';
 
                 beforeEach(() => {
+                    cy.contains(createNoteLabel).click();
+
                     cy.get('#note_text').click().type(newNoteText);
 
-                    cy.get('.MuiSelect-select').click().get('[data-value="eng"]').click();
+                    cy.get('#note_languageCode').click().get('[data-value="clc"').click();
                 });
 
                 it(`should be available`, () => {
-                    cy.getByDataAttribute('submit-new-note').should('not.be.disabled');
+                    cy.getByDataAttribute('submit-dynamic-form').should('not.be.disabled');
                 });
 
                 it(`should show loading immediately after submitting the command`, () => {
-                    cy.getByDataAttribute('submit-new-note').click();
+                    cy.getByDataAttribute('submit-dynamic-form').click();
 
                     cy.getByDataAttribute('loading');
                 });
 
                 it(`should successfully submit the command`, () => {
-                    cy.getByDataAttribute('submit-new-note').click();
+                    cy.getByDataAttribute('submit-dynamic-form').click();
 
                     cy.getByDataAttribute('loading').should('not.exist');
 
                     cy.contains(newNoteText);
                 });
 
-                it(`should successfully submit multiple commands`, () => {
-                    cy.getByDataAttribute('submit-new-note').click();
+                it(`should successfully create multiple notes`, () => {
+                    cy.getByDataAttribute('submit-dynamic-form').click();
+
+                    // Acknowledge success of the first command
+                    cy.getByDataAttribute('command-ack-button').click();
+
+                    // open the form to submit a second command
+                    cy.contains(createNoteLabel).click();
 
                     cy.get('#note_text').click().type('yet another note about this resource');
 
-                    cy.get('.MuiSelect-select').click().get('[data-value="clc"]').click();
+                    cy.get('#note_languageCode').click().get('[data-value="clc"').click();
 
-                    cy.getByDataAttribute('submit-new-note').click();
+                    cy.getByDataAttribute('submit-dynamic-form').click();
 
+                    // wait until the command endpoint responds with an ack
                     cy.getByDataAttribute('loading').should('not.exist');
 
-                    cy.contains(newNoteText);
+                    cy.getByDataAttribute('command-ack-button').click();
+
+                    cy.contains('yet another note about this resource');
                 });
             });
         });

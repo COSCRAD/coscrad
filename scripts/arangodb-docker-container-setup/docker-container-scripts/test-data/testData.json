@@ -398,7 +398,7 @@
                         "lastName": "Test-User"
                     }
                 },
-                "username": "cscrad-cypress-user",
+                "username": "coscrad-cypress-user",
                 "roles": [
                     "superAdmin"
                 ],

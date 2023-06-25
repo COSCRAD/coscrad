@@ -72,7 +72,9 @@ const SingleLanguageField = ({
 );
 
 /**
- * TODO Remove this as commands going forward will never direclty use `role` on the
+ * TODO  [https://www.pivotaltracker.com/story/show/185475146]
+ *
+ * Remove this as commands going forward will never direclty use `role` on the
  * form. Rather, the role will be determined by the kind of `TranslateX` command
  * that is being executed.
  *

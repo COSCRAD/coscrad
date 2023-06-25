@@ -60,7 +60,6 @@ export const DynamicFormElement = ({
     if (type === FormFieldType.textField)
         return (
             <TextInput
-                // we add `data-testid` further up the line
                 formField={formField}
                 onInputChange={onElementChangeWithValidation}
                 required={required}

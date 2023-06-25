@@ -33,7 +33,7 @@ const dtos: DTO<CoscradUser>[] = [
             },
             email: 'cypress-user@coscrad.org',
         }),
-        username: 'cscrad-cypress-user',
+        username: 'coscrad-cypress-user',
         roles: [CoscradUserRole.superAdmin],
     },
 ];

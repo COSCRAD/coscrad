@@ -1257,7 +1257,7 @@ exports[`User Management Queries when the system user issuing the command is aut
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "cscrad-cypress-user",
+            "text": "coscrad-cypress-user",
           },
         ],
       },
@@ -1271,7 +1271,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "roles": [
         "superAdmin",
       ],
-      "username": "cscrad-cypress-user",
+      "username": "coscrad-cypress-user",
     },
   ],
   "indexScopedActions": [
@@ -1713,7 +1713,7 @@ exports[`User Management Queries when the system user issuing the command is aut
           {
             "languageCode": "eng",
             "role": "original",
-            "text": "cscrad-cypress-user",
+            "text": "coscrad-cypress-user",
           },
         ],
       },
@@ -1727,7 +1727,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "roles": [
         "superAdmin",
       ],
-      "username": "cscrad-cypress-user",
+      "username": "coscrad-cypress-user",
     },
   ],
   "indexScopedActions": [

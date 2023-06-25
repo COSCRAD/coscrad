@@ -3,13 +3,22 @@ import {
     AggregateType,
     ICommandFormAndLabels as IBackendCommandFormAndLabels,
 } from '@coscrad/api-interfaces';
+import { Stack, Typography } from '@mui/material';
 import { useAppDispatch } from '../../app/hooks';
 import { executeCommand } from '../../store/slices/command-status';
 import { useLoadableGeneratedId } from '../../store/slices/id-generation';
 import { DynamicForm } from '../dynamic-forms/dynamic-form';
 import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
-import { CommandExecutor } from './dyanmic-command-executor';
+
+export interface CommandExecutorProps {
+    onFieldUpdate: (propertyKey: string, value: unknown) => void;
+    formState: Record<string, unknown>;
+}
+
+export interface CommandExecutor {
+    (props: CommandExecutorProps): JSX.Element;
+}
 
 interface CommandExecutionFormProps {
     onSubmitForm: (fsa: { type: string; payload: Record<string, unknown> }) => void;
@@ -28,14 +37,14 @@ export interface CommandExecutionForm {
     (props: CommandExecutionFormProps): JSX.Element;
 }
 
-export type CommandExecutorProps = Omit<CommandExecutionFormProps, 'onSubmitForm'> & {
+export type DynamicCommandFormProps = Omit<CommandExecutionFormProps, 'onSubmitForm'> & {
     commandType: string;
     aggregateCompositeIdentifier: AggregateCompositeIdentifier;
     onSubmitForm: (fsa: { type: string; payload: Record<string, unknown> }) => void;
 };
 
 export const buildDynamicCommandForm =
-    ({ form: { fields }, type: commandType }: IBackendCommandFormAndLabels) =>
+    ({ form: { fields }, type: commandType, label, description }: IBackendCommandFormAndLabels) =>
     ({
         onSubmitForm,
         onFieldUpdate,
@@ -48,22 +57,28 @@ export const buildDynamicCommandForm =
          *
          **/
         aggregateCompositeIdentifier,
-    }: CommandExecutorProps) =>
+    }: DynamicCommandFormProps) =>
         (
-            <DynamicForm
-                bindProps={{ aggregateCompositeIdentifier }}
-                commandType={commandType}
-                fields={fields}
-                /**
-                 * TODO [https://www.pivotaltracker.com/story/show/184056544]
-                 * In reality, things are a bit more complex than this. We
-                 * will eventually need to display an `Ack` \ `NAck` and then
-                 * an `ok` button via either this panel or a modal.
-                 */
-                onSubmitForm={onSubmitForm}
-                onFieldUpdate={onFieldUpdate}
-                formState={formState}
-            />
+            <Stack>
+                {/* TODO Include the tooltip with appropriate positioning */}
+                {/* <Tooltip title={description}> */}
+                <Typography variant="h3">{label}</Typography>
+                {/* </Tooltip> */}
+                <DynamicForm
+                    bindProps={{ aggregateCompositeIdentifier }}
+                    commandType={commandType}
+                    fields={fields}
+                    /**
+                     * TODO [https://www.pivotaltracker.com/story/show/184056544]
+                     * In reality, things are a bit more complex than this. We
+                     * will eventually need to display an `Ack` \ `NAck` and then
+                     * an `ok` button via either this panel or a modal.
+                     */
+                    onSubmitForm={onSubmitForm}
+                    onFieldUpdate={onFieldUpdate}
+                    formState={formState}
+                />
+            </Stack>
         );
 
 export const buildCommandExecutor =
@@ -71,7 +86,7 @@ export const buildCommandExecutor =
         CommandForm: CommandExecutionForm,
         generateIdForAggregateOfType?: AggregateType
     ): CommandExecutor =>
-    ({ onFieldUpdate, formState, aggregateCompositeIdentifier }: CommandExecutorProps) => {
+    ({ onFieldUpdate, formState, aggregateCompositeIdentifier }: DynamicCommandFormProps) => {
         const dispatch = useAppDispatch();
 
         const loadableGeneratedId = generateIdForAggregateOfType ? useLoadableGeneratedId() : null;

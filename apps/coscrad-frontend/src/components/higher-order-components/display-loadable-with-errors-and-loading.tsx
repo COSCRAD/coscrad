@@ -26,7 +26,7 @@ export const displayLoadableWithErrorsAndLoading =
             return <ErrorDisplay {...errorInfo}></ErrorDisplay>;
         }
 
-        if (isLoading || isNullOrUndefined(data)) return <Loading></Loading>;
+        if (isLoading || isNullOrUndefined(data)) return <Loading />;
 
         // default to the identity map if no map is provided (this typically is what we want with non-array loaded data)
         const props = mapLoadedDataToPresenterProps

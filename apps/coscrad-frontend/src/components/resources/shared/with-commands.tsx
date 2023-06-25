@@ -4,10 +4,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { CommandContext, CommandPanel } from '../../commands';
-import {
-    buildCommandExecutor,
-    buildDynamicCommandForm,
-} from '../../commands/dynamic-command-execution-form';
+import { buildCommandExecutor, buildDynamicCommandForm } from '../../commands/command-executor';
 
 export const WithCommands =
     <TProps,>(
@@ -26,7 +23,7 @@ export const WithCommands =
                 <CommandPanel
                     actions={actions.map((action) => ({
                         ...action,
-                        form: isAggregateType(commandContext)
+                        executor: isAggregateType(commandContext)
                             ? buildCommandExecutor(buildDynamicCommandForm(action), commandContext)
                             : buildCommandExecutor(buildDynamicCommandForm(action)),
                     }))}

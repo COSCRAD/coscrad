@@ -1,6 +1,11 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 
-describe(`note creation`, () => {
+/**
+ * Note that this test is redundant with `create-note-about-term`. We keep it
+ * as a template for a sanity check test that ensures the note creation panel has
+ * been wired up for every resource type.
+ */
+describe.skip(`note creation`, () => {
     const resourceType = ResourceType.term;
 
     const resourceRoute = `/Resources/Terms/`;

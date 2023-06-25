@@ -16,20 +16,20 @@ import { idUsed, useLoadableGeneratedId } from '../../store/slices/id-generation
 import { useFormState } from '../dynamic-forms/form-state';
 import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
+import { CommandExecutor } from './command-executor';
 import { CommandSelectionArea } from './command-selection-area';
 import { CommandWorkspace } from './command-workspace';
-import { CommandExecutor } from './dyanmic-command-executor';
 
 export const INDEX_COMMAND_CONTEXT = 'index';
 
 export type CommandContext = AggregateType | AggregateCompositeIdentifier;
 
-export type ICommandExecutionFormAndLabels = Omit<IBackendCommandFormAndLabels, 'form'> & {
-    form: CommandExecutor;
+export type ICommandExecutorAndLabels = Omit<IBackendCommandFormAndLabels, 'form'> & {
+    executor: CommandExecutor;
 };
 
 interface CommandPanelProps {
-    actions: ICommandExecutionFormAndLabels[];
+    actions: ICommandExecutorAndLabels[];
     commandContext: CommandContext;
 }
 
@@ -67,14 +67,14 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
     if (isNull(selectedCommandType) && commandResult !== Ack)
         return (
             <CommandSelectionArea
-                actions={actions}
+                metaForCommands={actions}
                 onCommandSelection={(type: string) => setSelectedCommandType(type)}
             />
         );
 
     return (
         <CommandWorkspace
-            SelectedForm={selectedCommand}
+            ExecutorAndLabelsForSelectedCommand={selectedCommand}
             onFieldUpdate={updateForm}
             formState={formState}
             aggregateCompositeIdentifier={

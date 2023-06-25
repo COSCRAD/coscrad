@@ -2,11 +2,11 @@ import { AggregateCompositeIdentifier } from '@coscrad/api-interfaces';
 import { Ack, useLoadableCommandResult } from '../../store/slices/command-status';
 import { Loading } from '../loading';
 import { AckNotification } from './ack-notification';
-import { ICommandExecutionFormAndLabels } from './command-panel';
+import { ICommandExecutorAndLabels } from './command-panel';
 import { NackNotification } from './nack-notification';
 
 interface CommandWorkspaceProps {
-    SelectedForm: ICommandExecutionFormAndLabels;
+    ExecutorAndLabelsForSelectedCommand: ICommandExecutorAndLabels;
     onFieldUpdate: (propertyKey: string, value: unknown) => void;
     onAcknowledgeCommandResult: (didCommandSucceed: boolean) => void;
     formState: Record<string, unknown>;
@@ -16,27 +16,8 @@ interface CommandWorkspaceProps {
 export const CommandWorkspace = (props: CommandWorkspaceProps): JSX.Element => {
     const {
         onAcknowledgeCommandResult,
-        SelectedForm: { form: CommandForm, type: commandType },
+        ExecutorAndLabelsForSelectedCommand: { executor: CommandExecutor, type: commandType },
     } = props;
-
-    // TODO move this logic here
-    // const dispatch = useAppDispatch();
-
-    // const { label, description, form, type: commandType } = commandFormAndLabels;
-
-    // const { fields } = form;
-
-    // const onSubmitForm = () => {
-    //     const commandFsa = {
-    //         type: commandType,
-    //         payload: {
-    //             aggregateCompositeIdentifier,
-    //             ...formState,
-    //         },
-    //     };
-
-    //     dispatch(executeCommand(commandFsa));
-    // };
 
     const { isLoading, errorInfo, data: commandResult } = useLoadableCommandResult();
 
@@ -51,9 +32,14 @@ export const CommandWorkspace = (props: CommandWorkspaceProps): JSX.Element => {
             />
         );
 
+    /**
+     * We may want to return to the form and maintain the form state in case
+     * of error acknowledgement so that the user can attempt to fix their
+     * user errors.
+     */
     if (commandResult === Ack)
         return <AckNotification _onClick={() => onAcknowledgeCommandResult(true)} />;
 
-    // @ts-expect-error not clear why this doesn't work
-    return <CommandForm {...props} commandType={commandType} />;
+    // return <CommandExecutor {...props} commandType={commandType} />;
+    return <CommandExecutor {...props} />;
 };

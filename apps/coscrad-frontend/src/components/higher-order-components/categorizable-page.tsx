@@ -6,12 +6,9 @@ import {
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
-import { CommandPanel } from '../commands';
+import { CommandPanel, ICommandExecutorAndLabels } from '../commands';
+import { buildCommandExecutor, buildDynamicCommandForm } from '../commands/command-executor';
 import { buildCreateNoteCommandExecutor } from '../commands/connections/create-note-form';
-import {
-    buildCommandExecutor,
-    buildDynamicCommandForm,
-} from '../commands/dynamic-command-execution-form';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { WithWebOfKnowledge } from '../resources/shared';
 import {
@@ -68,10 +65,12 @@ export const CategorizablePage = <T extends CategorizableType>({
             const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
 
             const commandExecutionFormsAndLabels = actionsFromApi
-                .map((action) => ({
-                    ...action,
-                    form: buildCommandExecutor(buildDynamicCommandForm(action)),
-                }))
+                .map(
+                    (action): ICommandExecutorAndLabels => ({
+                        ...action,
+                        executor: buildCommandExecutor(buildDynamicCommandForm(action)),
+                    })
+                )
                 /**
                  * TODO We should expose the following commands via the back-end.
                  * that will require a mechanism to bind the aggregate context
@@ -89,7 +88,7 @@ export const CategorizablePage = <T extends CategorizableType>({
                                   label: 'Create Note',
                                   description: 'Create a note about this resource',
                                   type: 'CREATE_NOTE_ABOUT_RESOURCE',
-                                  form: buildCreateNoteCommandExecutor({
+                                  executor: buildCreateNoteCommandExecutor({
                                       resourceCompositeIdentifier: {
                                           type: categorizableType,
                                           id: viewModel.id,
