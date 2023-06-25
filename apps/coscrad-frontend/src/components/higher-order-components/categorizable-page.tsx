@@ -1,4 +1,5 @@
 import {
+    AggregateType,
     AggregateTypeToViewModel,
     CategorizableType,
     ICommandFormAndLabels as IBackendCommandFormAndLabels,
@@ -8,7 +9,7 @@ import { ConfigurableContentContext } from '../../configurable-front-matter/conf
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel, ICommandExecutorAndLabels } from '../commands';
 import { buildCommandExecutor, buildDynamicCommandForm } from '../commands/command-executor';
-import { buildCreateNoteCommandExecutor } from '../commands/connections/create-note-form';
+import { CreateNoteForm } from '../commands/connections/create-note-form';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { WithWebOfKnowledge } from '../resources/shared';
 import {
@@ -68,7 +69,17 @@ export const CategorizablePage = <T extends CategorizableType>({
                 .map(
                     (action): ICommandExecutorAndLabels => ({
                         ...action,
-                        executor: buildCommandExecutor(buildDynamicCommandForm(action)),
+                        executor: buildCommandExecutor(buildDynamicCommandForm(action), {
+                            /**
+                             * Any command that naturally appears in the context of
+                             * a categorizable page is an update command for the
+                             * current categorizable (resource or note) in whose detail
+                             * view the user is presently working. Therefore, we must
+                             * bind the `aggregateCompositeIdentifier` prop for this
+                             * categorizable.
+                             */
+                            aggregateCompositeIdentifier: compositeIdentifier,
+                        }),
                     })
                 )
                 /**
@@ -88,12 +99,26 @@ export const CategorizablePage = <T extends CategorizableType>({
                                   label: 'Create Note',
                                   description: 'Create a note about this resource',
                                   type: 'CREATE_NOTE_ABOUT_RESOURCE',
-                                  executor: buildCreateNoteCommandExecutor({
-                                      resourceCompositeIdentifier: {
-                                          type: categorizableType,
-                                          id: viewModel.id,
+                                  executor: buildCommandExecutor(
+                                      CreateNoteForm,
+                                      {
+                                          /**
+                                           * Here we bind the composite identifier
+                                           * for the current page to the payload
+                                           * for `CREATE_NOTE_ABOUT_RESOURCE`. Note
+                                           * that this command is being presented in
+                                           * a foreign aggregate context, so we do
+                                           * not bind to `aggregateCompositeIdentifier`
+                                           * on the payload. This, the ID of the newly
+                                           * created note, must be generated via the
+                                           * ID generation system.
+                                           */
+                                          resourceCompositeIdentifier: {
+                                              ...compositeIdentifier,
+                                          },
                                       },
-                                  }),
+                                      AggregateType.note
+                                  ),
                               },
                           ])
                 );

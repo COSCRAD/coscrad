@@ -1,4 +1,4 @@
-import { AggregateCompositeIdentifier, AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import {
     Box,
@@ -11,14 +11,12 @@ import {
     Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { buildCommandExecutor } from '../command-executor';
 
 import { Button } from '@mui/material';
 
 export interface CreateNoteFormProps {
     onSubmitForm: (fsa?: { type: string; payload: Record<string, unknown> }) => void;
     bindProps: Record<string, unknown>;
-    aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 }
 
 export const CreateNoteForm = ({ onSubmitForm, bindProps }: CreateNoteFormProps): JSX.Element => {
@@ -96,11 +94,3 @@ export const CreateNoteForm = ({ onSubmitForm, bindProps }: CreateNoteFormProps)
         </Box>
     );
 };
-
-export const buildCreateNoteCommandExecutor = (bindProps: Record<string, unknown>) =>
-    buildCommandExecutor(
-        (props: Omit<CreateNoteFormProps, 'bindProps'>): JSX.Element => (
-            <CreateNoteForm {...props} bindProps={bindProps} />
-        ),
-        AggregateType.note
-    );

@@ -1,5 +1,4 @@
 import {
-    AggregateCompositeIdentifier,
     AggregateType,
     ICommandFormAndLabels as IBackendCommandFormAndLabels,
 } from '@coscrad/api-interfaces';
@@ -24,13 +23,7 @@ interface CommandExecutionFormProps {
     onSubmitForm: (fsa: { type: string; payload: Record<string, unknown> }) => void;
     onFieldUpdate: (propertyKey: string, value: unknown) => void;
     formState: Record<string, unknown>;
-    aggregateCompositeIdentifier: AggregateCompositeIdentifier;
-    // TODO Is this used?
-    generate?: {
-        id: {
-            path: string;
-        };
-    };
+    bindProps: Record<string, unknown>;
 }
 
 export interface CommandExecutionForm {
@@ -39,25 +32,13 @@ export interface CommandExecutionForm {
 
 export type DynamicCommandFormProps = Omit<CommandExecutionFormProps, 'onSubmitForm'> & {
     commandType: string;
-    aggregateCompositeIdentifier: AggregateCompositeIdentifier;
+    bindProps: Record<string, unknown>;
     onSubmitForm: (fsa: { type: string; payload: Record<string, unknown> }) => void;
 };
 
 export const buildDynamicCommandForm =
-    ({ form: { fields }, type: commandType, label, description }: IBackendCommandFormAndLabels) =>
-    ({
-        onSubmitForm,
-        onFieldUpdate,
-        formState,
-        /**
-         * TODO We should sort out bind props vs. generate and use the same
-         * approach as the hard-wired `create-note` for this. We are moving towards
-         * this information coming from the back-end so we can remove this
-         * complexity.
-         *
-         **/
-        aggregateCompositeIdentifier,
-    }: DynamicCommandFormProps) =>
+    ({ form: { fields }, type: commandType, label }: IBackendCommandFormAndLabels) =>
+    ({ onSubmitForm, onFieldUpdate, formState, bindProps }: DynamicCommandFormProps) =>
         (
             <Stack>
                 {/* TODO Include the tooltip with appropriate positioning */}
@@ -65,7 +46,7 @@ export const buildDynamicCommandForm =
                 <Typography variant="h3">{label}</Typography>
                 {/* </Tooltip> */}
                 <DynamicForm
-                    bindProps={{ aggregateCompositeIdentifier }}
+                    bindProps={bindProps}
                     commandType={commandType}
                     fields={fields}
                     /**
@@ -84,9 +65,10 @@ export const buildDynamicCommandForm =
 export const buildCommandExecutor =
     (
         CommandForm: CommandExecutionForm,
+        bindProps: Record<string, unknown>,
         generateIdForAggregateOfType?: AggregateType
     ): CommandExecutor =>
-    ({ onFieldUpdate, formState, aggregateCompositeIdentifier }: DynamicCommandFormProps) => {
+    ({ onFieldUpdate, formState }: DynamicCommandFormProps) => {
         const dispatch = useAppDispatch();
 
         const loadableGeneratedId = generateIdForAggregateOfType ? useLoadableGeneratedId() : null;
@@ -105,13 +87,14 @@ export const buildCommandExecutor =
                       ...commandFsa,
                       payload: {
                           ...commandFsa.payload,
+                          ...bindProps,
                           aggregateCompositeIdentifier: {
                               type: generateIdForAggregateOfType,
                               id: loadableGeneratedId.data,
                           },
                       },
                   }
-                : commandFsa;
+                : { ...commandFsa, ...bindProps };
 
             dispatch(executeCommand(fullFsa));
         };
@@ -119,18 +102,10 @@ export const buildCommandExecutor =
         return (
             <>
                 <h1>Execute Command</h1>
-
-                {/* TODO Put this on the Command Form? */}
-                {/* <div>
-                    <h3>{label}</h3>
-                    <br />
-                    <p>{description}</p>
-                    <br />
-                </div> */}
                 <CommandForm
                     formState={formState}
                     onFieldUpdate={onFieldUpdate}
-                    aggregateCompositeIdentifier={aggregateCompositeIdentifier}
+                    bindProps={bindProps}
                     onSubmitForm={onSubmitForm}
                 />
             </>

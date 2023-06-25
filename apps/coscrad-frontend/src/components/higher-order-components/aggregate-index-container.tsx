@@ -35,6 +35,12 @@ export const AggregateIndexContainer = <T extends IIndexQueryResult<IBaseViewMod
                         ...action,
                         executor: buildCommandExecutor(
                             buildDynamicCommandForm(action),
+                            /**
+                             * There is no property to bind for index-scoped commands,
+                             * except for the `aggregateCompositeIdentifier` which
+                             * must be added after generating the ID.
+                             */
+                            {},
                             aggregateType
                         ),
                     }))}

@@ -24,8 +24,14 @@ export const WithCommands =
                     actions={actions.map((action) => ({
                         ...action,
                         executor: isAggregateType(commandContext)
-                            ? buildCommandExecutor(buildDynamicCommandForm(action), commandContext)
-                            : buildCommandExecutor(buildDynamicCommandForm(action)),
+                            ? buildCommandExecutor(
+                                  buildDynamicCommandForm(action),
+                                  {},
+                                  commandContext
+                              )
+                            : buildCommandExecutor(buildDynamicCommandForm(action), {
+                                  aggregateCompositeIdentifier: commandContext,
+                              }),
                     }))}
                     // do we still need this?
                     commandContext={commandContext}

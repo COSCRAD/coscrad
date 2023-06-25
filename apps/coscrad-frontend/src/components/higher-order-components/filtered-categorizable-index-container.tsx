@@ -59,6 +59,13 @@ export const FilteredCategorizableIndexContainer = <
                         ...action,
                         executor: buildCommandExecutor(
                             buildDynamicCommandForm(action),
+                            /**
+                             * Naturally bound index-scoped commands do not require
+                             * any payload properties to be bound aside from the
+                             * `aggregateCompositeIdentifer` that must be bulit from
+                             * the newly generated ID.
+                             */
+                            {},
                             aggregateType
                         ),
                     }))}

@@ -2,7 +2,6 @@ import {
     AggregateCompositeIdentifier,
     AggregateType,
     ICommandFormAndLabels as IBackendCommandFormAndLabels,
-    isAggregateType,
 } from '@coscrad/api-interfaces';
 import { isNull } from '@coscrad/validation-constraints';
 import { useState } from 'react';
@@ -12,10 +11,8 @@ import {
     clearCommandStatus,
     useLoadableCommandResult,
 } from '../../store/slices/command-status';
-import { idUsed, useLoadableGeneratedId } from '../../store/slices/id-generation';
+import { idUsed } from '../../store/slices/id-generation';
 import { useFormState } from '../dynamic-forms/form-state';
-import { ErrorDisplay } from '../error-display/error-display';
-import { Loading } from '../loading';
 import { CommandExecutor } from './command-executor';
 import { CommandSelectionArea } from './command-selection-area';
 import { CommandWorkspace } from './command-workspace';
@@ -42,18 +39,8 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
 
     const { data: commandResult } = useLoadableCommandResult();
 
-    const { isLoading, errorInfo, data: generatedId } = useLoadableGeneratedId();
-
     // Do not render if there are no available actions
     if (actions.length === 0) return null;
-
-    /**
-     * TODO [https://www.pivotaltracker.com/story/show/184107132]
-     * Use `displayLoadable` helper here
-     */
-    if (errorInfo) return <ErrorDisplay {...errorInfo} />;
-
-    if (isLoading || isNull(generatedId)) return <Loading />;
 
     const selectedCommand = actions.find((action) => action.type === selectedCommandType);
 
@@ -74,14 +61,9 @@ export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => 
 
     return (
         <CommandWorkspace
-            ExecutorAndLabelsForSelectedCommand={selectedCommand}
+            executorAndLabelsForSelectedCommand={selectedCommand}
             onFieldUpdate={updateForm}
             formState={formState}
-            aggregateCompositeIdentifier={
-                isAggregateType(commandContext)
-                    ? { type: commandContext, id: generatedId }
-                    : commandContext
-            }
             onAcknowledgeCommandResult={(didCommandSucceed: boolean) => {
                 setSelectedCommandType(null);
                 dispatch(clearCommandStatus());
