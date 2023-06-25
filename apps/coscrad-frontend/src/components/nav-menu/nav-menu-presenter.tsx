@@ -1,6 +1,6 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import { Box, Drawer, IconButton } from '@mui/material';
+import { Box, Drawer, IconButton, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import AuthenticationButton from '../authentication-button/authentication-button';
 import { NavItemInfo } from './nav-menu-container';
@@ -23,17 +23,19 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <IconButton
-                data-testid="nav-menu-icon"
-                id="basic-button"
-                color="secondary"
-                aria-controls={isOpen ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={isOpen ? 'true' : undefined}
-                onClick={handleClick}
-            >
-                <MenuRoundedIcon />
-            </IconButton>
+            <Tooltip title="Menu">
+                <IconButton
+                    data-testid="nav-menu-icon"
+                    id="basic-button"
+                    color="secondary"
+                    aria-controls={isOpen ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={isOpen ? 'true' : undefined}
+                    onClick={handleClick}
+                >
+                    <MenuRoundedIcon />
+                </IconButton>
+            </Tooltip>
             <AuthenticationButton />
             <Box>
                 <Drawer anchor="right" open={isOpen} onClose={handleClose}>
