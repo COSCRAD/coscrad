@@ -386,6 +386,23 @@
                     "projectAdmin"
                 ],
                 "authProviderUserId": "auth0|5db729701ead110c5b254553"
+            },
+            {
+                "type": "user",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "eventHistory": [],
+                "profile": {
+                    "email": "cypress-user@coscrad.org",
+                    "name": {
+                        "firstName": "COSCRAD",
+                        "lastName": "Test-User"
+                    }
+                },
+                "username": "coscrad-cypress-user",
+                "roles": [
+                    "superAdmin"
+                ],
+                "authProviderUserId": "auth0|6407b7bd81d69faf23e9dd7e"
             }
         ],
         "groups": [
@@ -1345,7 +1362,7 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "title": "episode title (in language)",
+                "title": "episode (media item 1) title (in language)",
                 "titleEnglish": "Metal Mondays episode 1",
                 "contributorAndRoles": [
                     {
@@ -1366,7 +1383,7 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "title": "video title (in language)",
+                "title": "video (media item 2) title (in language)",
                 "titleEnglish": "cool video",
                 "contributorAndRoles": [
                     {
@@ -1387,7 +1404,7 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "title": "episode title (in language)",
+                "title": "episode (media item 3) title (in language)",
                 "titleEnglish": "Metal Mondays episode 2",
                 "contributorAndRoles": [
                     {

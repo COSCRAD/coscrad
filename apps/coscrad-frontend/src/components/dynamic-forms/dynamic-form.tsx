@@ -10,10 +10,12 @@ import { DynamicFormElement } from './dynamic-form-elements';
 import { ConstraintValidationResultPresenter } from './dynamic-form-elements/constraint-validator';
 
 type DynamicFormProps = {
+    commandType: string;
     fields: IFormField[];
-    onSubmitForm: () => void;
+    onSubmitForm: (fsa: { type: string; payload: Record<string, unknown> }) => void;
     onFieldUpdate: (propertyKey: string, propertyValue: unknown) => void;
     formState: Record<string, unknown>;
+    bindProps: Record<string, unknown>;
 };
 
 const isOptionallyOmitted = (allConstraints: IFormFieldConstraint[], value) =>
@@ -36,10 +38,12 @@ const validateField = (field: IFormField, value: unknown): string[] =>
     );
 
 export const DynamicForm = ({
+    commandType,
     fields,
     onSubmitForm,
     onFieldUpdate,
     formState,
+    bindProps,
 }: DynamicFormProps): JSX.Element => {
     const fieldNameToErrorMessages = fields.reduce(
         (acc, field) => acc.set(field.name, validateField(field, formState[field.name])),
@@ -82,10 +86,17 @@ export const DynamicForm = ({
                     ? null
                     : `Please correct the errors before submitting the form`}
                 <Button
+                    data-testid="submit-dynamic-form"
                     onClick={() => {
                         if (!isValid) return;
 
-                        onSubmitForm();
+                        onSubmitForm({
+                            type: commandType,
+                            payload: {
+                                ...bindProps,
+                                ...formState,
+                            },
+                        });
                     }}
                 >
                     Submit

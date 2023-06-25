@@ -1,20 +1,21 @@
-import { ICommandFormAndLabels } from '@coscrad/api-interfaces';
+import { ICommandMeta } from '@coscrad/api-interfaces';
+import { Button } from '@mui/material';
 
 interface CommandButtonProps {
     onButtonClick: (commandType: string) => void;
-    commandFormAndLabels: ICommandFormAndLabels;
+    commandMeta: ICommandMeta;
 }
 
 export const CommandButton = ({
-    commandFormAndLabels: { type, label },
+    commandMeta: { type, label },
     onButtonClick,
 }: CommandButtonProps) => (
-    <button
+    <Button
         key={label}
         onClick={() => {
             onButtonClick(type);
         }}
     >
         {label}
-    </button>
+    </Button>
 );
