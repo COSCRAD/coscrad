@@ -49,6 +49,7 @@ export const DynamicFormElement = ({
     if (type === FormFieldType.switch || type === FormFieldType.staticSelect)
         return (
             <StaticSelect
+                data-testid={`command-form:${type}:${formField.name}`}
                 formField={formField}
                 onNewSelection={onElementChangeWithValidation}
                 currentValue={currentValue as string}

@@ -196,7 +196,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
       {
         "languageCode": "clc",
         "role": "original",
-        "text": "episode title (in language)",
+        "text": "episode (media item 1) title (in language)",
       },
       {
         "languageCode": "eng",

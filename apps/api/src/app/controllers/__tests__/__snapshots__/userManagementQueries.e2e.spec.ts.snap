@@ -1207,6 +1207,72 @@ exports[`User Management Queries when the system user issuing the command is aut
       ],
       "username": "cool-james",
     },
+    {
+      "actions": [
+        {
+          "description": "Grant an additional user role to the user",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                ],
+                "description": "the role that will be granted to this user",
+                "label": "User Role",
+                "name": "role",
+                "options": [
+                  {
+                    "display": "admin",
+                    "value": "projectAdmin",
+                  },
+                  {
+                    "display": "viewer",
+                    "value": "viewer",
+                  },
+                  {
+                    "display": "COSCRAD admin",
+                    "value": "superAdmin",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "type": "user",
+              },
+            },
+          },
+          "label": "Grant User Role",
+          "type": "GRANT_USER_ROLE",
+        },
+      ],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "coscrad-cypress-user",
+          },
+        ],
+      },
+      "profile": {
+        "email": "cypress-user@coscrad.org",
+        "name": {
+          "firstName": "COSCRAD",
+          "lastName": "Test-User",
+        },
+      },
+      "roles": [
+        "superAdmin",
+      ],
+      "username": "coscrad-cypress-user",
+    },
   ],
   "indexScopedActions": [
     {
@@ -1596,6 +1662,72 @@ exports[`User Management Queries when the system user issuing the command is aut
         "projectAdmin",
       ],
       "username": "cool-james",
+    },
+    {
+      "actions": [
+        {
+          "description": "Grant an additional user role to the user",
+          "form": {
+            "fields": [
+              {
+                "constraints": [
+                  {
+                    "message": "Must be a valid \${propertyLabel}",
+                    "name": "IS_ENUM",
+                  },
+                ],
+                "description": "the role that will be granted to this user",
+                "label": "User Role",
+                "name": "role",
+                "options": [
+                  {
+                    "display": "admin",
+                    "value": "projectAdmin",
+                  },
+                  {
+                    "display": "viewer",
+                    "value": "viewer",
+                  },
+                  {
+                    "display": "COSCRAD admin",
+                    "value": "superAdmin",
+                  },
+                ],
+                "type": "STATIC_SELECT",
+              },
+            ],
+            "prepopulatedFields": {
+              "aggregateCompositeIdentifier": {
+                "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+                "type": "user",
+              },
+            },
+          },
+          "label": "Grant User Role",
+          "type": "GRANT_USER_ROLE",
+        },
+      ],
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
+      "name": {
+        "items": [
+          {
+            "languageCode": "eng",
+            "role": "original",
+            "text": "coscrad-cypress-user",
+          },
+        ],
+      },
+      "profile": {
+        "email": "cypress-user@coscrad.org",
+        "name": {
+          "firstName": "COSCRAD",
+          "lastName": "Test-User",
+        },
+      },
+      "roles": [
+        "superAdmin",
+      ],
+      "username": "coscrad-cypress-user",
     },
   ],
   "indexScopedActions": [

@@ -841,7 +841,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "episode title (in language)",
+            "text": "episode (media item 1) title (in language)",
           },
           {
             "languageCode": "eng",
@@ -903,7 +903,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "video title (in language)",
+            "text": "video (media item 2) title (in language)",
           },
           {
             "languageCode": "eng",
@@ -925,7 +925,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "episode title (in language)",
+            "text": "episode (media item 3) title (in language)",
           },
           {
             "languageCode": "eng",
@@ -955,7 +955,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "episode title (in language)",
+            "text": "episode (media item 1) title (in language)",
           },
           {
             "languageCode": "eng",
@@ -1017,7 +1017,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "video title (in language)",
+            "text": "video (media item 2) title (in language)",
           },
           {
             "languageCode": "eng",
@@ -1039,7 +1039,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
           {
             "languageCode": "clc",
             "role": "original",
-            "text": "episode title (in language)",
+            "text": "episode (media item 3) title (in language)",
           },
           {
             "languageCode": "eng",

@@ -5,8 +5,8 @@ import {
     IBibliographicReferenceViewModel,
     IMediaItemViewModel,
 } from '@coscrad/api-interfaces';
+import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 import { buildBibliographicReferenceJointViewModel } from '../bibliographic-references/joint-view';
-import { formatBilingualText } from '../vocabulary-lists/utils';
 
 export type AggregateStringSummarizer<T extends IBaseViewModel> = (viewModel: T) => string;
 
@@ -22,8 +22,7 @@ export const aggregateStringSummarizerFactory = (
         };
 
     if (aggregateType === AggregateType.mediaItem)
-        return ({ title, titleEnglish }: IMediaItemViewModel): string =>
-            formatBilingualText(title, titleEnglish);
+        return ({ name }: IMediaItemViewModel): string => findOriginalTextItem(name).text;
 
     if (aggregateType === AggregateType.audioItem)
         return ({ name }: IAudioItemViewModel): string =>

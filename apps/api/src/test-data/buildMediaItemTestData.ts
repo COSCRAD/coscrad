@@ -7,7 +7,7 @@ import { convertAggregatesIdToUuid } from './utilities/convertSequentialIdToUuid
 const dtos: DTO<MediaItem>[] = [
     {
         id: '1',
-        title: 'episode title (in language)',
+        title: 'episode (media item 1) title (in language)',
         titleEnglish: 'Metal Mondays episode 1',
         contributorAndRoles: [
             {
@@ -23,7 +23,7 @@ const dtos: DTO<MediaItem>[] = [
     },
     {
         id: '2',
-        title: 'video title (in language)',
+        title: 'video (media item 2) title (in language)',
         titleEnglish: 'cool video',
         contributorAndRoles: [
             {
@@ -39,7 +39,7 @@ const dtos: DTO<MediaItem>[] = [
     },
     {
         id: '3',
-        title: 'episode title (in language)',
+        title: 'episode (media item 3) title (in language)',
         titleEnglish: 'Metal Mondays episode 2',
         contributorAndRoles: [
             {
