@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { useAppDispatch } from '../../app/hooks';
 import { userLoggedOut } from '../../store/slices/auth';
 
@@ -10,19 +10,21 @@ const LogoutButton = () => {
     const dispatch = useAppDispatch();
 
     return (
-        <IconButton
-            data-testid="logout-button"
-            color="secondary"
-            onClick={() => {
-                dispatch(userLoggedOut());
+        <Tooltip title="Log Out">
+            <IconButton
+                data-testid="logout-button"
+                color="secondary"
+                onClick={() => {
+                    dispatch(userLoggedOut());
 
-                return logout({
-                    returnTo: window.location.origin,
-                });
-            }}
-        >
-            <LogoutIcon />
-        </IconButton>
+                    return logout({
+                        returnTo: window.location.origin,
+                    });
+                }}
+            >
+                <LogoutIcon />
+            </IconButton>
+        </Tooltip>
     );
 };
 
