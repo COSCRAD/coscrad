@@ -1,12 +1,12 @@
 import {
     FormFieldType,
+    IIndexQueryResult,
     ITermViewModel,
     IVocabularyListEntry,
     IVocabularyListViewModel,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
-import { VocabularyListIndexPresenter } from './vocabulary-lists/vocabulary-list-index.presenter';
 
 describe('<VocabularyListIndexPresenter />', () => {
     const validValues: string[] = ['1', '2'];
@@ -63,6 +63,7 @@ describe('<VocabularyListIndexPresenter />', () => {
             contributor: 'John Doe Jr',
         },
     ];
+
     const dummyEntries: IVocabularyListEntry<boolean | string>[] = dummyTerms.map(
         (term, index): IVocabularyListEntry<boolean | string> => ({
             term,
@@ -71,6 +72,7 @@ describe('<VocabularyListIndexPresenter />', () => {
             },
         })
     );
+
     const dummyVocabularyLists: IVocabularyListViewModel[] = [
         {
             id: '345',
@@ -102,16 +104,23 @@ describe('<VocabularyListIndexPresenter />', () => {
         },
     ];
 
-    const buildDummyVocabularyLists = () => dummyVocabularyLists;
+    const dummyIndexQueryResponse: IIndexQueryResult<IVocabularyListViewModel> = {
+        // we're not testing commands so we don't need any actions in the stubbed response
+        indexScopedActions: [],
+        entities: dummyVocabularyLists.map((list) => ({
+            ...list,
+            actions: [],
+        })),
+    };
 
     describe(`when there is a Vocabulary List`, () => {
         beforeEach(() => {
-            cy.mount(
-                <VocabularyListIndexPresenter
-                    entities={[]}
-                    indexScopedActions={[]}
-                    {...buildDummyVocabularyLists}
-                />
+            cy.intercept(
+                {
+                    method: 'GET', // Route all GET requests
+                    url: '/api/vocabulary-lists/', // that have a URL that matches '/users/*'
+                },
+                dummyIndexQueryResponse
             );
         });
     });
