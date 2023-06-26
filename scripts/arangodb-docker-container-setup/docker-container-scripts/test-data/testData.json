@@ -382,7 +382,9 @@
                     }
                 },
                 "username": "cool-james",
-                "roles": ["projectAdmin"],
+                "roles": [
+                    "projectAdmin"
+                ],
                 "authProviderUserId": "auth0|5db729701ead110c5b254553"
             },
             {
@@ -397,7 +399,9 @@
                     }
                 },
                 "username": "cscrad-cypress-user",
-                "roles": ["superAdmin"],
+                "roles": [
+                    "superAdmin"
+                ],
                 "authProviderUserId": "auth0|6407b7bd81d69faf23e9dd7e"
             },
             {
@@ -412,7 +416,9 @@
                     }
                 },
                 "username": "testerkk",
-                "roles": ["superAdmin"],
+                "roles": [
+                    "superAdmin"
+                ],
                 "authProviderUserId": "auth0|6494fe42ca274491fc92f73e"
             }
         ],
@@ -422,7 +428,9 @@
                 "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
                 "eventHistory": [],
                 "label": "community members",
-                "userIds": ["9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"],
+                "userIds": [
+                    "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001"
+                ],
                 "description": "This group is for members of the community only."
             }
         ],
@@ -471,7 +479,9 @@
                 "eventHistory": [],
                 "published": false,
                 "queryAccessControlList": {
-                    "allowedUserIds": ["1"],
+                    "allowedUserIds": [
+                        "1"
+                    ],
                     "allowedGroupIds": []
                 },
                 "term": "My Secret Term",
@@ -1047,7 +1057,10 @@
                 },
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [54.034404852745006, -132.17563335558532]
+                    "coordinates": [
+                        54.034404852745006,
+                        -132.17563335558532
+                    ]
                 },
                 "properties": {
                     "name": "Name of Point with ID: 100",
@@ -1066,7 +1079,10 @@
                 },
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [53.26710566708586, -131.99142447847115]
+                    "coordinates": [
+                        53.26710566708586,
+                        -131.99142447847115
+                    ]
                 },
                 "properties": {
                     "name": "Name of Point with ID: 101",
@@ -1085,7 +1101,10 @@
                 },
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [51.93152097800416, -123.14042112774867]
+                    "coordinates": [
+                        51.93152097800416,
+                        -123.14042112774867
+                    ]
                 },
                 "properties": {
                     "name": "Name of Point with ID: 102",
@@ -1104,7 +1123,10 @@
                 },
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [51.935065638350636, -122.50936316168337]
+                    "coordinates": [
+                        51.935065638350636,
+                        -122.50936316168337
+                    ]
                 },
                 "properties": {
                     "name": "Name of Point with ID: 103",
@@ -1123,7 +1145,10 @@
                 },
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [52.12579975880678, -123.68132823530952]
+                    "coordinates": [
+                        52.12579975880678,
+                        -123.68132823530952
+                    ]
                 },
                 "properties": {
                     "name": "Name of Point with ID: 104",
@@ -1143,13 +1168,34 @@
                 "geometry": {
                     "type": "LineString",
                     "coordinates": [
-                        [52.3, -124.2],
-                        [52.35, -124.85],
-                        [52.21, -124.9],
-                        [52.05, -125.1],
-                        [52.15, -125.1],
-                        [52.33, -125.22],
-                        [52.45, -125.39]
+                        [
+                            52.3,
+                            -124.2
+                        ],
+                        [
+                            52.35,
+                            -124.85
+                        ],
+                        [
+                            52.21,
+                            -124.9
+                        ],
+                        [
+                            52.05,
+                            -125.1
+                        ],
+                        [
+                            52.15,
+                            -125.1
+                        ],
+                        [
+                            52.33,
+                            -125.22
+                        ],
+                        [
+                            52.45,
+                            -125.39
+                        ]
                     ]
                 },
                 "properties": {
@@ -1171,10 +1217,22 @@
                     "type": "Polygon",
                     "coordinates": [
                         [
-                            [52.47, -123.6],
-                            [52.42, -123.95],
-                            [52.05, -123.95],
-                            [52.05, -123.685]
+                            [
+                                52.47,
+                                -123.6
+                            ],
+                            [
+                                52.42,
+                                -123.95
+                            ],
+                            [
+                                52.05,
+                                -123.95
+                            ],
+                            [
+                                52.05,
+                                -123.685
+                            ]
                         ]
                     ]
                 },
@@ -1292,7 +1350,9 @@
                 "eventHistory": [],
                 "published": false,
                 "queryAccessControlList": {
-                    "allowedUserIds": ["1"],
+                    "allowedUserIds": [
+                        "1"
+                    ],
                     "allowedGroupIds": []
                 },
                 "title": "Unpublished Song Title (lang)",
@@ -1556,7 +1616,10 @@
                         "context": {
                             "type": "textField",
                             "target": "term",
-                            "charRange": [0, 3]
+                            "charRange": [
+                                0,
+                                3
+                            ]
                         }
                     }
                 ],
@@ -1582,7 +1645,9 @@
                         "role": "self",
                         "context": {
                             "type": "pageRange",
-                            "pageIdentifiers": ["ix"]
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
                         }
                     }
                 ],
@@ -1609,7 +1674,10 @@
                         "context": {
                             "type": "textField",
                             "target": "name",
-                            "charRange": [0, 1]
+                            "charRange": [
+                                0,
+                                1
+                            ]
                         }
                     }
                 ],
@@ -1714,7 +1782,9 @@
                         "role": "self",
                         "context": {
                             "type": "pageRange",
-                            "pageIdentifiers": ["ix"]
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
                         }
                     }
                 ],
@@ -2103,7 +2173,10 @@
                         "context": {
                             "type": "textField",
                             "target": "term",
-                            "charRange": [0, 3]
+                            "charRange": [
+                                0,
+                                3
+                            ]
                         }
                     },
                     {
@@ -2111,7 +2184,10 @@
                         "context": {
                             "type": "textField",
                             "target": "name",
-                            "charRange": [0, 1]
+                            "charRange": [
+                                0,
+                                1
+                            ]
                         }
                     }
                 ],
@@ -2138,7 +2214,10 @@
                         "context": {
                             "type": "textField",
                             "target": "name",
-                            "charRange": [0, 1]
+                            "charRange": [
+                                0,
+                                1
+                            ]
                         }
                     },
                     {
@@ -2184,7 +2263,9 @@
                         "role": "from",
                         "context": {
                             "type": "pageRange",
-                            "pageIdentifiers": ["ix"]
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
                         }
                     }
                 ],
@@ -2210,7 +2291,9 @@
                         "role": "to",
                         "context": {
                             "type": "pageRange",
-                            "pageIdentifiers": ["ix"]
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
                         }
                     },
                     {
@@ -2389,7 +2472,10 @@
                         "context": {
                             "type": "textField",
                             "target": "term",
-                            "charRange": [0, 3]
+                            "charRange": [
+                                0,
+                                3
+                            ]
                         }
                     }
                 ],
@@ -2415,7 +2501,9 @@
                         "role": "to",
                         "context": {
                             "type": "pageRange",
-                            "pageIdentifiers": ["2"]
+                            "pageIdentifiers": [
+                                "2"
+                            ]
                         }
                     },
                     {
@@ -2582,7 +2670,10 @@
                         "context": {
                             "type": "textField",
                             "target": "term",
-                            "charRange": [1, 4]
+                            "charRange": [
+                                1,
+                                4
+                            ]
                         }
                     }
                 ],
@@ -2649,7 +2740,9 @@
                         "role": "from",
                         "context": {
                             "type": "pageRange",
-                            "pageIdentifiers": ["ix"]
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
                         }
                     }
                 ],
@@ -2875,7 +2968,9 @@
                         "role": "from",
                         "context": {
                             "type": "pageRange",
-                            "pageIdentifiers": ["ix"]
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
                         }
                     }
                 ],
@@ -2907,7 +3002,9 @@
                         "role": "from",
                         "context": {
                             "type": "pageRange",
-                            "pageIdentifiers": ["ix"]
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
                         }
                     }
                 ],
@@ -2939,7 +3036,9 @@
                         "role": "from",
                         "context": {
                             "type": "pageRange",
-                            "pageIdentifiers": ["ix"]
+                            "pageIdentifiers": [
+                                "ix"
+                            ]
                         }
                     }
                 ],
