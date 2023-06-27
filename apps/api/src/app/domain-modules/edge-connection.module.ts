@@ -19,6 +19,8 @@ import { CommandInfoService } from '../controllers/command/services/command-info
 import { EdgeConnectionController } from '../controllers/edgeConnection.controller';
 
 import {
+    ConnectResourcesWithNote,
+    ConnectResourcesWithNoteCommandHandler,
     CreateNoteAboutResource,
     CreateNoteAboutResourceCommandHandler,
 } from '../../domain/models/context/commands';
@@ -44,12 +46,14 @@ import {
             IdentityContext,
             // Commands
             CreateNoteAboutResource,
+            ConnectResourcesWithNote,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),
 
         CreateNoteAboutResourceCommandHandler,
+        ConnectResourcesWithNoteCommandHandler,
     ],
 })
 export class EdgeConnectionModule {}

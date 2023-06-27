@@ -19,7 +19,7 @@ export interface CommandExecutor {
     (props: CommandExecutorProps): JSX.Element;
 }
 
-interface CommandExecutionFormProps {
+export interface CommandExecutionFormProps {
     onSubmitForm: (fsa: { type: string; payload: Record<string, unknown> }) => void;
     onFieldUpdate: (propertyKey: string, value: unknown) => void;
     formState: Record<string, unknown>;

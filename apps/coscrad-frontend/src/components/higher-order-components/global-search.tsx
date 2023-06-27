@@ -17,6 +17,7 @@ export const GlobalSearch = ({ onNewSelection }: GlobalSearchProps) => {
     return (
         <Box>
             <Select
+                data-testid="global_resourceType_select"
                 value={selectedResourceType || ''}
                 onChange={(e) => {
                     setSelectedResourceType(e.target.value as ResourceType);
@@ -43,7 +44,7 @@ export const GlobalSearch = ({ onNewSelection }: GlobalSearchProps) => {
                     required={true}
                     simpleFormField={{
                         label: 'selected resource',
-                        name: 'resourceId',
+                        name: 'global_resourceId',
                         constraints: [],
                         type: FormFieldType.dynamicSelect,
                         description: `the resource to which you'd like to make a connection`,

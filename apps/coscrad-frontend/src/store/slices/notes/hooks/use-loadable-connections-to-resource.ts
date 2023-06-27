@@ -14,6 +14,7 @@ export type ConnectedResource = {
     compositeIdentifier: ResourceCompositeIdentifier;
     selfContext: IEdgeConnectionContext;
     otherContext: IEdgeConnectionContext;
+    text;
 };
 
 export const useLoadableConnectionsToResource = (

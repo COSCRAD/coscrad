@@ -1,12 +1,11 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Typography } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { userLoginSucceeded } from '../../store/slices/auth';
 import { ImageInContent } from '../../utils/generic-components/presenters/image-in-content';
-import { GlobalSearch } from '../higher-order-components/global-search';
 import { TermOfTheDayContainer } from '../term-of-the-day/term-of-the-day.container';
 
 export const Home = (): JSX.Element => {
@@ -21,8 +20,6 @@ export const Home = (): JSX.Element => {
     const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
 
     const dispatch = useAppDispatch();
-
-    const [selectedCompositeId, setSelectedCompositeId] = useState(null);
 
     // Simulating image object retrieved from Digital Asset Manager
     const image = {
@@ -47,8 +44,6 @@ export const Home = (): JSX.Element => {
 
     return (
         <>
-            SELECTED_ID: {JSON.stringify(selectedCompositeId)}
-            <GlobalSearch onNewSelection={(compositeId) => setSelectedCompositeId(compositeId)} />
             {/**
              * TODO: consider using a photograph detail presenter for this
              */}
