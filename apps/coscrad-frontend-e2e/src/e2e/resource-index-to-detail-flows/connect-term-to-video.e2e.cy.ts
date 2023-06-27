@@ -4,8 +4,17 @@ describe(`term detail flow`, () => {
 
         const newNoteText = 'This is an interesting note.';
 
+        const connectedVideoId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223';
+
+        const termId = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002';
+
+        /**
+         * Note that this isn't that important right now based on the way
+         * Auth0 redirects. But it might be important in the future when we
+         * change that.
+         */
         beforeEach(() => {
-            cy.visit(`Resoruces/Terms`);
+            cy.visit(`Resources/Terms`);
         });
 
         describe(`when the user is logged-in as COSCRAD admin`, () => {
@@ -18,9 +27,7 @@ describe(`term detail flow`, () => {
 
                 cy.getByDataAttribute('term').click();
 
-                cy.get(
-                    '[data-testid="9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002"] > :nth-child(1)'
-                ).click();
+                cy.get(`[data-testid="${termId}"] > :nth-child(1)`).click();
             });
 
             it(`should be avilable`, () => {
@@ -45,7 +52,7 @@ describe(`term detail flow`, () => {
 
                         cy.getByDataAttribute('global_resourceId_select')
                             .click()
-                            .get('[data-value="9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223"]')
+                            .get(`[data-value="${connectedVideoId}"]`)
                             .click();
 
                         cy.get('@submit').should('be.disabled');
@@ -63,7 +70,7 @@ describe(`term detail flow`, () => {
 
                         cy.getByDataAttribute('global_resourceId_select')
                             .click()
-                            .get('[data-value="9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223"]')
+                            .get('[data-value=""]')
                             .click();
 
                         cy.get('@submit').should('be.disabled');
@@ -111,7 +118,7 @@ describe(`term detail flow`, () => {
 
                     cy.getByDataAttribute('global_resourceId_select')
                         .click()
-                        .get('[data-value="9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223"]')
+                        .get(`[data-value="${connectedVideoId}"]`)
                         .click();
                 });
 
@@ -122,7 +129,7 @@ describe(`term detail flow`, () => {
                 it.only('should create the new connection', () => {
                     cy.getByDataAttribute('submit-dynamic-form').click();
 
-                    cy.getByDataAttribute(`9b1deb4d-3b7d-4bad-9bdd-2b0d7b110223`);
+                    cy.getByDataAttribute(connectedVideoId);
                 });
             });
         });
