@@ -1,5 +1,6 @@
 import {
     EdgeConnectionMemberRole,
+    EdgeConnectionType,
     INoteViewModel,
     LanguageCode,
     MultilingualTextItemRole,
@@ -26,17 +27,23 @@ const bookCompositeIdentifier = {
     id: '5',
 };
 
+const notesOriginalText = 'this is why term 123 is related to book 5';
+
+const noteMultilingualText = {
+    items: [
+        {
+            text: notesOriginalText,
+            role: MultilingualTextItemRole.original,
+            languageCode: LanguageCode.English,
+        },
+    ],
+};
+
 const dummyEdgeConnection: INoteViewModel = {
     id: '1',
-    note: {
-        items: [
-            {
-                text: 'this is why term 123 is related to book 5',
-                role: MultilingualTextItemRole.original,
-                languageCode: LanguageCode.English,
-            },
-        ],
-    },
+    connectionType: EdgeConnectionType.dual,
+    name: noteMultilingualText,
+    note: noteMultilingualText,
     connectedResources: [
         {
             compositeIdentifier: termCompositeIdentifier,
@@ -55,6 +62,7 @@ const expectedOutput: ConnectedResource = {
     otherContext: bookContext,
     selfContext: termContext,
     compositeIdentifier: bookCompositeIdentifier,
+    text: noteMultilingualText,
 };
 
 describe('focusDualEdgeConnectionOnResource', () => {
