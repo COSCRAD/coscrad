@@ -1,4 +1,4 @@
-import { CoscradMultilingualText, NestedDataType } from '@coscrad/data-types';
+import { NestedDataType } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
@@ -18,7 +18,7 @@ import { PlaylistItem } from './playlist-item.entity';
 export class Playlist extends Resource {
     readonly type = ResourceType.playlist;
 
-    @CoscradMultilingualText({
+    @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'the name of the playlist',
     })
