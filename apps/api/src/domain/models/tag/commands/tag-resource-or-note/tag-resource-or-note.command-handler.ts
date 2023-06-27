@@ -4,14 +4,15 @@ import { InternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../../types/ResultOrError';
-import { Valid } from '../../../../domainModelValidators/Valid';
+import { Valid, isValid } from '../../../../domainModelValidators/Valid';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
 import { AggregateType } from '../../../../types/AggregateType';
 import { CategorizableType } from '../../../../types/CategorizableType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot } from '../../../../types/ResourceType';
+import { InMemorySnapshot, isResourceType } from '../../../../types/ResourceType';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { Tag } from '../../tag.entity';
@@ -57,7 +58,46 @@ export class TagResourceOrNoteCommandHandler extends BaseUpdateCommandHandler<Ta
     }
 
     protected validateExternalState(state: InMemorySnapshot, tag: Tag): InternalError | Valid {
-        return tag.validateExternalReferences(state);
+        const labelCollisionErrors = tag.validateLabelAgainstExternalState(state);
+
+        return labelCollisionErrors;
+    }
+
+    protected async validateAdditionalConstraints(
+        command: TagResourceOrNote
+    ): Promise<InternalError | typeof Valid> {
+        const {
+            taggedMemberCompositeIdentifier,
+            aggregateCompositeIdentifier: tagCompositeIdentifier,
+        } = command;
+
+        const { type: resourceType, id } = taggedMemberCompositeIdentifier;
+
+        const baseValidationResult = await super.validateAdditionalConstraints(
+            taggedMemberCompositeIdentifier
+        );
+
+        const baseValidationErrors = isValid(baseValidationResult) ? [] : [baseValidationResult];
+
+        const repositoryForCategorizable = isResourceType(resourceType)
+            ? this.repositoryProvider.forResource(resourceType)
+            : this.repositoryProvider.getEdgeConnectionRepository();
+
+        const taggedResourceSearchResult = await repositoryForCategorizable.fetchById(id);
+
+        const resourceSearchErrors = isNotFound(taggedResourceSearchResult)
+            ? [
+                  new InvalidExternalReferenceByAggregateError(tagCompositeIdentifier, [
+                      taggedMemberCompositeIdentifier,
+                  ]),
+              ]
+            : [];
+
+        const allErrors = [...baseValidationErrors, ...resourceSearchErrors];
+
+        return allErrors.length > 0
+            ? new InternalError(`The command has failed due to invalid existing state.`, allErrors)
+            : Valid;
     }
 
     protected buildEvent(command: TagResourceOrNote, eventId: string, userId: string): BaseEvent {
