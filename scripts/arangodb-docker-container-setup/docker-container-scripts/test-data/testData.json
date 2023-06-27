@@ -398,11 +398,28 @@
                         "lastName": "Test-User"
                     }
                 },
-                "username": "coscrad-cypress-user",
+                "username": "cscrad-cypress-user",
                 "roles": [
                     "superAdmin"
                 ],
                 "authProviderUserId": "auth0|6407b7bd81d69faf23e9dd7e"
+            },
+            {
+                "type": "user",
+                "_key": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003",
+                "eventHistory": [],
+                "profile": {
+                    "email": "testerkk@coscrad.org",
+                    "name": {
+                        "firstName": "TesterKK",
+                        "lastName": "Test-User"
+                    }
+                },
+                "username": "testerkk",
+                "roles": [
+                    "superAdmin"
+                ],
+                "authProviderUserId": "auth0|6494fe42ca274491fc92f73e"
             }
         ],
         "groups": [
