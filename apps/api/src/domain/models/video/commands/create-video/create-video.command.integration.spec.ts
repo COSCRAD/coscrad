@@ -37,26 +37,16 @@ const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaIt
     mimeType: MIMEType.mp4,
 });
 
-const newVideoName = new MultilingualText({
-    items: [
-        {
-            languageCode: LanguageCode.Haida,
-            text: 'New Video named in Haida',
-            role: MultilingualTextItemRole.original,
-        },
-        {
-            languageCode: LanguageCode.English,
-            text: 'New Video named translated to  English',
-            role: MultilingualTextItemRole.freeTranslation,
-        },
-    ],
-});
+const newVideoName = 'New Video named in Haida';
+
+const languageCodeForNewVideoName = LanguageCode.Haida;
 
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateVideo>> => ({
     type: commandType,
     payload: {
         aggregateCompositeIdentifier: { id, type: AggregateType.video },
         name: newVideoName,
+        languageCodeForName: languageCodeForNewVideoName,
         mediaItemId: existingMediaItem.id,
         lengthMilliseconds: 12345,
     },

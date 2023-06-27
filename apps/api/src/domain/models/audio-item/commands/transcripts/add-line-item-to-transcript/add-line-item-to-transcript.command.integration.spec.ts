@@ -5,13 +5,9 @@ import setUpIntegrationTest from '../../../../../../app/controllers/__tests__/se
 import assertErrorAsExpected from '../../../../../../lib/__tests__/assertErrorAsExpected';
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { DTO } from '../../../../../../types/DTO';
 import formatAggregateType from '../../../../../../view-models/presentation/formatAggregateType';
 import getValidAggregateInstanceForTest from '../../../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import {
-    MultilingualText,
-    MultilingualTextItemRole,
-} from '../../../../../common/entities/multilingual-text';
+import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
@@ -28,8 +24,6 @@ import { AudioItem } from '../../../entities/audio-item.entity';
 import { TranscriptItem } from '../../../entities/transcript-item.entity';
 import { Video } from '../../../entities/video.entity';
 import { TranscriptLineItemOutOfBoundsError } from '../../../errors';
-import { MultilingualTextHasNoOriginalError } from '../../../errors/multilingual-text-has-no-original.error';
-import { MultipleOriginalsInMultilingualTextError } from '../../../errors/multiple-originals-in-multilingual-text.error';
 import { CannotAddInconsistentLineItemError } from '../../../errors/transcript-line-item/cannot-add-inconsistent-line-item.error';
 import { TranscriptParticipantInitialsNotRegisteredError } from '../../../errors/transcript-participant-initials-not-registered.error';
 import { AddLineItemToTranscript } from './add-line-item-to-transcript.command';
@@ -102,20 +96,11 @@ describe(commandType, () => {
                         epsilon,
                 ]);
 
-            const dummyText = new MultilingualText({
-                items: [
-                    {
-                        languageCode: LanguageCode.Chilcotin,
-                        text: 'lha lha lha',
-                        role: MultilingualTextItemRole.original,
-                    },
-                    {
-                        languageCode: LanguageCode.English,
-                        text: 'bla bla bla',
-                        role: MultilingualTextItemRole.literalTranslation,
-                    },
-                ],
-            });
+            const dummyText = 'bla bla bla';
+
+            const languageCode = LanguageCode.Chilcotin;
+
+            const multilingualText = buildMultilingualTextWithSingleItem(dummyText, languageCode);
 
             const buildValidCommandFSA = (
                 validInstance: AudioItem | Video
@@ -129,6 +114,7 @@ describe(commandType, () => {
                     inPointMilliseconds: allTimestamps[0][0],
                     outPointMilliseconds: allTimestamps[0][1],
                     text: dummyText,
+                    languageCode,
                     speakerInitials: validInstance.transcript.participants[0].initials,
                 },
             });
@@ -137,76 +123,9 @@ describe(commandType, () => {
                 [validInstance.type]: [validInstance],
             }).fetchFullSnapshotInLegacyFormat();
 
-            const multilingualTextWithMultipleOriginalItems: DTO<MultilingualText> = {
-                items: [
-                    {
-                        role: MultilingualTextItemRole.original,
-                        text: 'bla bla',
-                        languageCode: LanguageCode.English,
-                    },
-                    {
-                        role: MultilingualTextItemRole.original,
-                        text: 'bla bla',
-                        languageCode: LanguageCode.Haida,
-                    },
-                ],
-            };
-
             const validCommandFSA = buildValidCommandFSA(validInstance);
 
             const commandFSAFactory = new DummyCommandFsaFactory(() => validCommandFSA);
-
-            const commandFsaWithMultipleOriginalTextItems = commandFSAFactory.build(
-                validCommandFSA.payload.aggregateCompositeIdentifier.id,
-                {
-                    aggregateCompositeIdentifier:
-                        validCommandFSA.payload.aggregateCompositeIdentifier,
-                    text: multilingualTextWithMultipleOriginalItems,
-                }
-            );
-
-            const multilingualTextWithNoOriginalItems: DTO<MultilingualText> = {
-                items: [
-                    {
-                        role: MultilingualTextItemRole.freeTranslation,
-                        text: 'bla bla',
-                        languageCode: LanguageCode.English,
-                    },
-                ],
-            };
-
-            const commandFsaNoOriginalTextItems = commandFSAFactory.build(
-                validCommandFSA.payload.aggregateCompositeIdentifier.id,
-                {
-                    aggregateCompositeIdentifier:
-                        validCommandFSA.payload.aggregateCompositeIdentifier,
-                    text: multilingualTextWithNoOriginalItems,
-                }
-            );
-
-            const multilingualTextWithDuplicateLanguageItems: DTO<MultilingualText> = {
-                items: [
-                    {
-                        role: MultilingualTextItemRole.freeTranslation,
-                        text: 'bla bla',
-                        languageCode: LanguageCode.English,
-                    },
-                    {
-                        role: MultilingualTextItemRole.original,
-                        text: 'bla bla',
-                        languageCode: LanguageCode.English,
-                    },
-                ],
-            };
-
-            const commandFsaWithDuplicateItemsForSingleLanguage = commandFSAFactory.build(
-                validCommandFSA.payload.aggregateCompositeIdentifier.id,
-                {
-                    aggregateCompositeIdentifier:
-                        validCommandFSA.payload.aggregateCompositeIdentifier,
-                    text: multilingualTextWithDuplicateLanguageItems,
-                }
-            );
 
             describe(`when the command is valid`, () => {
                 it(`should succeed with the expected database udpates`, async () => {
@@ -283,7 +202,7 @@ describe(commandType, () => {
                                             new TranscriptItem({
                                                 inPoint: inPointMilliseconds,
                                                 outPoint: outPointMilliseconds,
-                                                text: validCommandFSA.payload.text,
+                                                text: multilingualText,
                                                 speakerInitials:
                                                     validCommandFSA.payload.speakerInitials,
                                             }),
@@ -318,7 +237,7 @@ describe(commandType, () => {
                                             new TranscriptItem({
                                                 inPoint: inPointMilliseconds,
                                                 outPoint: outPointMilliseconds,
-                                                text: validCommandFSA.payload.text,
+                                                text: multilingualText,
                                                 speakerInitials:
                                                     validCommandFSA.payload.speakerInitials,
                                             }),
@@ -342,7 +261,7 @@ describe(commandType, () => {
                             inPoint: inPointMilliseconds,
                             outPoint: outPointMilliseconds,
                             speakerInitials: validCommandFSA.payload.speakerInitials,
-                            text: validCommandFSA.payload.text,
+                            text: multilingualText,
                         });
 
                         await assertCommandError(assertionHelperDependencies, {
@@ -393,7 +312,7 @@ describe(commandType, () => {
                                                 inPoint: inPointMilliseconds,
                                                 outPoint: outPointMilliseconds,
                                                 speakerInitials: bogusInitials,
-                                                text: validCommandFSA.payload.text,
+                                                text: multilingualText,
                                             }),
                                             [
                                                 new TranscriptParticipantInitialsNotRegisteredError(
@@ -403,97 +322,6 @@ describe(commandType, () => {
                                         ),
                                     ])
                                 );
-                            },
-                        });
-                    });
-                });
-
-                describe(`when there is more than one text item with the role "original"`, () => {
-                    it(`should fail with the expected error`, async () => {
-                        await assertCommandError(assertionHelperDependencies, {
-                            systemUserId,
-                            initialState: validInitialState,
-                            buildCommandFSA: () => commandFsaWithMultipleOriginalTextItems,
-                            checkError: (error) => {
-                                assertErrorAsExpected(
-                                    error,
-                                    new CommandExecutionError([
-                                        /**
-                                         * TODO Check inner errors. The nesting is starting
-                                         * to get pretty deep. We need to deal with this
-                                         * both from the test point of view but also as a
-                                         * matter of UX.
-                                         */
-                                    ])
-                                );
-
-                                const expectedNestedError =
-                                    new MultipleOriginalsInMultilingualTextError(
-                                        commandFsaWithMultipleOriginalTextItems.payload.text.items
-                                            .filter(
-                                                ({ role }) =>
-                                                    role === MultilingualTextItemRole.original
-                                            )
-                                            .map(({ languageCode }) => languageCode)
-                                    );
-
-                                expect(error.toString().includes(expectedNestedError.toString()));
-                            },
-                        });
-                    });
-                });
-
-                describe(`when there is no text item with the role "original"`, () => {
-                    it(`should fail with the expected error`, async () => {
-                        await assertCommandError(assertionHelperDependencies, {
-                            systemUserId,
-                            initialState: validInitialState,
-                            buildCommandFSA: () => commandFsaNoOriginalTextItems,
-                            checkError: (error) => {
-                                assertErrorAsExpected(
-                                    error,
-                                    new CommandExecutionError([
-                                        /**
-                                         * TODO Check inner errors. The nesting is starting
-                                         * to get pretty deep. We need to deal with this
-                                         * both from the test point of view but also as a
-                                         * matter of UX.
-                                         */
-                                    ])
-                                );
-
-                                const expectedNestedError =
-                                    new MultilingualTextHasNoOriginalError();
-
-                                expect(error.toString().includes(expectedNestedError.toString()));
-                            },
-                        });
-                    });
-                });
-
-                describe(`when there are multiple items with the same language`, () => {
-                    it(`should fail with the expected error`, async () => {
-                        await assertCommandError(assertionHelperDependencies, {
-                            systemUserId,
-                            initialState: validInitialState,
-                            buildCommandFSA: () => commandFsaWithDuplicateItemsForSingleLanguage,
-                            checkError: (error) => {
-                                assertErrorAsExpected(
-                                    error,
-                                    new CommandExecutionError([
-                                        /**
-                                         * TODO Check inner errors. The nesting is starting
-                                         * to get pretty deep. We need to deal with this
-                                         * both from the test point of view but also as a
-                                         * matter of UX.
-                                         */
-                                    ])
-                                );
-
-                                const expectedNestedError =
-                                    new MultilingualTextHasNoOriginalError();
-
-                                expect(error.toString().includes(expectedNestedError.toString()));
                             },
                         });
                     });

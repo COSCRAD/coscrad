@@ -5,6 +5,11 @@ import { DomainModelCtor } from '../../../../../lib/types/DomainModelCtor';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import formatAggregateCompositeIdentifier from '../../../../../view-models/presentation/formatAggregateCompositeIdentifier';
+import {
+    MultilingualText,
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import buildInstanceFactory from '../../../../factories/utilities/buildInstanceFactory';
 import { ID_MANAGER_TOKEN, IIdManager } from '../../../../interfaces/id-manager.interface';
@@ -40,13 +45,23 @@ export class CreateAudioItemCommandHandler extends BaseCreateCommandHandler<Audi
     protected createNewInstance({
         aggregateCompositeIdentifier: { id },
         name,
+        languageCodeForName: languageCode,
         mediaItemId,
         lengthMilliseconds,
     }: CreateAudioItem) {
         const createDto = {
             type: AggregateType.audioItem,
             id,
-            name,
+            name: new MultilingualText({
+                items: [
+                    new MultilingualTextItem({
+                        text: name,
+                        languageCode,
+                        role: MultilingualTextItemRole.original,
+                    }),
+                    // To add additional items, run a translate command
+                ],
+            }),
             mediaItemId,
             lengthMilliseconds,
             published: false,
