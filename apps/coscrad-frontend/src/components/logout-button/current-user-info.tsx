@@ -11,5 +11,9 @@ export const CurrentUserInfo = (): JSX.Element => {
      */
     if (userId === NOT_FOUND) return null;
 
-    return <Typography variant="body1">Currently Logged In</Typography>;
+    return (
+        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+            Logged In
+        </Typography>
+    );
 };

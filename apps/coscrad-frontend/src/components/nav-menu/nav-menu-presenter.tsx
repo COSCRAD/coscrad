@@ -23,7 +23,8 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box columnGap={1} sx={{ display: 'flex', alignItems: 'center' }}>
+            <CurrentUserInfo />
             <Tooltip title="Menu">
                 <IconButton
                     data-testid="nav-menu-icon"
@@ -38,8 +39,6 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
                 </IconButton>
             </Tooltip>
             <AuthenticationButton />
-            {/* TODO We should present the `CurrentUserInfo` below the menu and login icons  */}
-            <CurrentUserInfo />
             <Box>
                 <Drawer anchor="right" open={isOpen} onClose={handleClose}>
                     <Box sx={{ padding: 3 }}>
