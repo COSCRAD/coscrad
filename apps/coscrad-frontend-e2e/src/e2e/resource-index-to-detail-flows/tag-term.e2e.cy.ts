@@ -9,15 +9,16 @@ describe(`tagging a note`, () => {
 
     describe(`when tagging a term`, () => {
         beforeEach(() => {
+            /**
+             * Note that as it stands, clicking the log in button redirects the
+             * user away and they must manually find their way back. So we could visit
+             * any route (even a not found route).
+             */
             cy.visit(`${termBaseRoute}${termId}`);
 
             cy.login();
 
-            cy.getByDataAttribute('nav-menu-icon').click();
-
-            cy.get('[href="/Resources"] > .MuiButtonBase-root').click();
-
-            cy.getByDataAttribute('term').click();
+            cy.navigateToIndex('term');
 
             cy.get(`[data-testid="${termId}"] > :nth-child(1)`).click();
         });
@@ -49,6 +50,11 @@ describe(`tagging a note`, () => {
                     cy.getByDataAttribute(termId);
                 });
             });
+
+            /**
+             * TODO Prevent the user from attempting to apply the same tag twice
+             * by filtering tags used by this resource from the list.
+             */
         });
     });
 });

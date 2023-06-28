@@ -150,6 +150,11 @@ describe(commandType, () => {
                                 const { innerErrors } = error;
 
                                 assertErrorAsExpected(
+                                    /**
+                                     * Drill down to the level where we expect this error.
+                                     * Alternatively, we could call `.toString`
+                                     * and check the message.
+                                     **/
                                     innerErrors[0].innerErrors[0],
                                     new InvalidExternalReferenceByAggregateError(
                                         tagToUpdate.getCompositeIdentifier(),

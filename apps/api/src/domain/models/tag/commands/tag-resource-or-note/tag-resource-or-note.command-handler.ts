@@ -63,6 +63,20 @@ export class TagResourceOrNoteCommandHandler extends BaseUpdateCommandHandler<Ta
         return labelCollisionErrors;
     }
 
+    /**
+     * This is a bit awkward. We are exercising the `escape hatch` on our abstraction.
+     * This is because we don't want to check that every reference to every
+     * tagged resource or note is valid on every tag command. We just want to
+     * check that the latest reference is valid. Deferring to validate external state
+     * on the model doesn't work because it checks all previous references. We
+     * **do not** want to query state for other resources that have already been
+     * validated via previous commands.
+     *
+     * This is a pain point of our current tooling for implementing command handlers.
+     * At some point, it's possible that we could use the `@RefersTo` decorator
+     * \ command payload schema to determine the external existence requirements
+     * so that we never have to write this logic by hand.
+     */
     protected async validateAdditionalConstraints(
         command: TagResourceOrNote
     ): Promise<InternalError | typeof Valid> {

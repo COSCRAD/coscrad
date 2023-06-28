@@ -49,6 +49,7 @@ export const TagResourceOrNoteForm = ({
                             }}
                         >
                             {allTags
+                                // TODO Filter out the tags that have already been used
                                 .map(({ id, name }) => ({
                                     id,
                                     name: findOriginalTextItem(name).text,
