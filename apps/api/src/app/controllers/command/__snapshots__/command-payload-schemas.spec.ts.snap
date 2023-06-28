@@ -1019,6 +1019,45 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
         },
       },
+      "languageCodeForName": {
+        "complexDataType": "ENUM",
+        "description": "the language the video is named in (not necessarily the language the video is in)",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language for name",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "eng",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
       "lengthMilliseconds": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "the length of the audio item's media item in milliseconds",
@@ -1035,7 +1074,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "referenceTo": "mediaItem",
       },
       "name": {
-        "coscradDataType": "MULTILINGUAL_TEXT",
+        "coscradDataType": "NON_EMPTY_STRING",
         "description": "the name of the video",
         "isArray": false,
         "isOptional": false,
@@ -1071,6 +1110,45 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
         },
       },
+      "languageCodeForName": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are naming the audio item (not the language the audio is in)",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language for name",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "eng",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
       "lengthMilliseconds": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "the length of the audio item's media item in milliseconds",
@@ -1087,8 +1165,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "referenceTo": "mediaItem",
       },
       "name": {
-        "coscradDataType": "MULTILINGUAL_TEXT",
-        "description": "the name of the audio item",
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "the name of this audio item",
         "isArray": false,
         "isOptional": false,
         "label": "name",
@@ -1240,6 +1318,45 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isOptional": false,
         "label": "in point (ms)",
       },
+      "languageCode": {
+        "complexDataType": "ENUM",
+        "description": "the language for this text item",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
+        "isArray": false,
+        "isOptional": false,
+        "label": "language",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "eng",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
       "outPointMilliseconds": {
         "coscradDataType": "NON_NEGATIVE_FINITE_NUMBER",
         "description": "the closing timestamp in milliseconds",
@@ -1255,7 +1372,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "label": "speaker initials",
       },
       "text": {
-        "coscradDataType": "MULTILINGUAL_TEXT",
+        "coscradDataType": "NON_EMPTY_STRING",
         "description": "multi-lingual text transcription  translation",
         "isArray": false,
         "isOptional": false,

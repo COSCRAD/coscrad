@@ -4,6 +4,7 @@ import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../persistence/constants/persistenceConstants';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
+import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
 import { Valid } from '../../../../../domainModelValidators/Valid';
 import {
     EVENT,
@@ -56,13 +57,15 @@ export class AddLineItemtoTranscriptCommandHandler extends BaseCommandHandler<Tr
             inPointMilliseconds,
             outPointMilliseconds,
             text,
+            languageCode,
             speakerInitials,
         }: AddLineItemToTranscript
     ): ResultOrError<TranscribableResource> {
         return instance.addLineItemToTranscript({
             inPoint: inPointMilliseconds,
             outPoint: outPointMilliseconds,
-            text,
+            // to add more items, run a translate command
+            text: buildMultilingualTextWithSingleItem(text, languageCode),
             speakerInitials,
         }) as unknown as TranscribableResource;
     }

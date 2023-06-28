@@ -1,12 +1,12 @@
-import { ICommandBase, ResourceCompositeIdentifier, ResourceType } from '@coscrad/api-interfaces';
-import { Command } from '@coscrad/commands';
 import {
-    CoscradMultilingualText,
-    NestedDataType,
-    NonEmptyString,
-    NonNegativeFiniteNumber,
-} from '@coscrad/data-types';
-import { MultilingualText } from '../../../../../common/entities/multilingual-text';
+    ICommandBase,
+    LanguageCode,
+    ResourceCompositeIdentifier,
+    ResourceType,
+} from '@coscrad/api-interfaces';
+import { Command } from '@coscrad/commands';
+import { NestedDataType, NonEmptyString, NonNegativeFiniteNumber } from '@coscrad/data-types';
+import { LanguageCodeEnum } from '../../../../../common/entities/multilingual-text';
 import { AudioVisualCompositeIdentifier } from '../../../entities/audio-item-composite-identifier';
 import { ADD_LINE_ITEM_TO_TRANSCRIPT } from '../constants';
 
@@ -36,11 +36,17 @@ export class AddLineItemToTranscript implements ICommandBase {
     })
     readonly outPointMilliseconds: number;
 
-    @CoscradMultilingualText({
+    @NonEmptyString({
         label: 'text',
         description: 'multi-lingual text transcription  translation',
     })
-    readonly text: MultilingualText;
+    readonly text: string;
+
+    @LanguageCodeEnum({
+        label: 'language',
+        description: 'the language for this text item',
+    })
+    readonly languageCode: LanguageCode;
 
     @NonEmptyString({
         label: 'speaker initials',

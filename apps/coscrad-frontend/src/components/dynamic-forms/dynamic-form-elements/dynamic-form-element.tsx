@@ -7,7 +7,6 @@ import {
 import { useState } from 'react';
 import { ErrorDisplay } from '../../error-display/error-display';
 import { DynamicSelect } from './dynamic-select';
-import { MultilingualTextInput } from './multilingual-text-input/multilingual-text-input';
 import { NumericInput } from './numeric-input';
 import { StaticSelect } from './static-select';
 import { TextInput } from './text-input';
@@ -109,16 +108,6 @@ export const DynamicFormElement = ({
                 currentValue={currentValue as string}
                 required={required}
             />
-        );
-    }
-
-    if (type === FormFieldType.multilingualText) {
-        return (
-            <MultilingualTextInput
-                formField={formField}
-                onInputChange={onElementChangeWithValidation}
-                required={required}
-            ></MultilingualTextInput>
         );
     }
 

@@ -17,7 +17,6 @@ const lookupTable: { [K in CoscradDataType]: CoscradConstraint[] } = {
     [CoscradDataType.Year]: [CoscradConstraint.isYear],
     [CoscradDataType.BOOLEAN]: [CoscradConstraint.isBoolean],
     [CoscradDataType.String]: [CoscradConstraint.isString],
-    [CoscradDataType.MultilingualText]: [CoscradConstraint.isMultilingualText],
     // TODO How does this fit in here? How could we possibly validate this without injecting a value?
     [CoscradDataType.FixedValue]: [],
 };

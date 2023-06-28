@@ -67,7 +67,6 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.BOOLEAN]: ['true', 'false'],
     [CoscradDataType.String]: ['emptyString', 'arbitraryString', 'uuid', 'isbn10', 'isbn13'],
     // TODO Add valid example here
-    [CoscradDataType.MultilingualText]: [],
     [CoscradDataType.FixedValue]: [],
 };
 
