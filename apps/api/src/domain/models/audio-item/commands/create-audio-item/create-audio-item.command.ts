@@ -1,13 +1,13 @@
-import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import {
-    CoscradMultilingualText,
     NestedDataType,
+    NonEmptyString,
     NonNegativeFiniteNumber,
     ReferenceTo,
     UUID,
 } from '@coscrad/data-types';
-import { MultilingualText } from '../../../../common/entities/multilingual-text';
+import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AudioItemCompositeIdentifier } from '../../entities/audio-item-composite-identifier';
@@ -27,11 +27,17 @@ export class CreateAudioItem implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 
-    @CoscradMultilingualText({
+    @NonEmptyString({
         label: 'name',
-        description: 'the name of the audio item',
+        description: 'the name of this audio item',
     })
-    readonly name: MultilingualText;
+    readonly name: string;
+
+    @LanguageCodeEnum({
+        label: 'language for name',
+        description: `the language in which you are naming the audio item (not the language the audio is in)`,
+    })
+    readonly languageCodeForName: LanguageCode;
 
     @ReferenceTo(AggregateType.mediaItem)
     @UUID({
@@ -45,8 +51,6 @@ export class CreateAudioItem implements ICommandBase {
         description: "the length of the audio item's media item in milliseconds",
     })
     readonly lengthMilliseconds: CoscradTimeStamp;
-
-    // TODO Make this multi-lingual text
 
     /**
      * Note that to add `participants` to the transcript, you must run

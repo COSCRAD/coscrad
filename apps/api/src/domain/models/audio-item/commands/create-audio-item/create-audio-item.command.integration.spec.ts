@@ -9,11 +9,6 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
 import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import {
-    MultilingualText,
-    MultilingualTextItem,
-    MultilingualTextItemRole,
-} from '../../../../common/entities/multilingual-text';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
@@ -39,26 +34,16 @@ const existingMediaItem = getValidAggregateInstanceForTest(AggregateType.mediaIt
     id: buildDummyUuid(55),
 });
 
-const newAudioItemName = new MultilingualText({
-    items: [
-        {
-            languageCode: LanguageCode.Chilcotin,
-            text: 'A Walk in the Park (lang)',
-            role: MultilingualTextItemRole.original,
-        },
-        {
-            languageCode: LanguageCode.English,
-            text: 'A Walk in the Park (engl)',
-            role: MultilingualTextItemRole.freeTranslation,
-        },
-    ].map((itemDto) => new MultilingualTextItem(itemDto)),
-}).toDTO();
+const originalTextForNewAudioItemName = 'A Walk in the Park (lang)';
+
+const languageCodeForName = LanguageCode.Chilcotin;
 
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateAudioItem>> => ({
     type: commandType,
     payload: {
         aggregateCompositeIdentifier: { id, type: AggregateType.audioItem },
-        name: newAudioItemName,
+        name: originalTextForNewAudioItemName,
+        languageCodeForName: languageCodeForName,
         mediaItemId: existingMediaItem.id,
         lengthMilliseconds: 34560,
     },

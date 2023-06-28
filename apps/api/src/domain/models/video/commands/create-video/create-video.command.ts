@@ -1,13 +1,18 @@
-import { AggregateCompositeIdentifier, AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import {
+    AggregateCompositeIdentifier,
+    AggregateType,
+    ICommandBase,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import {
-    CoscradMultilingualText,
     NestedDataType,
+    NonEmptyString,
     NonNegativeFiniteNumber,
     ReferenceTo,
     UUID,
 } from '@coscrad/data-types';
-import { MultilingualText } from '../../../../common/entities/multilingual-text';
+import { LanguageCodeEnum } from '../../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../../types/AggregateId';
 import { CoscradTimeStamp } from '../../../audio-item/entities/audio-item.entity';
 import { VideoCompositeIdentifier } from '../../entities';
@@ -25,11 +30,18 @@ export class CreateVideo implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 
-    @CoscradMultilingualText({
+    @NonEmptyString({
         label: 'name',
         description: 'the name of the video',
     })
-    readonly name: MultilingualText;
+    readonly name: string;
+
+    @LanguageCodeEnum({
+        label: 'language for name',
+        description:
+            'the language the video is named in (not necessarily the language the video is in)',
+    })
+    readonly languageCodeForName: LanguageCode;
 
     @ReferenceTo(AggregateType.mediaItem)
     @UUID({

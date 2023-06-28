@@ -1,7 +1,7 @@
 import { IAudioItemViewModel, MIMEType } from '@coscrad/api-interfaces';
 import {
-    CoscradMultilingualText,
     ExternalEnum,
+    NestedDataType,
     NonEmptyString,
     NonNegativeFiniteNumber,
     URL,
@@ -13,7 +13,7 @@ import { MediaItem } from '../../../../domain/models/media-item/entities/media-i
 import { BaseViewModel } from '../base.view-model';
 
 export class AudioItemViewModel extends BaseViewModel implements IAudioItemViewModel {
-    @CoscradMultilingualText({
+    @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name of the audio item',
     })
