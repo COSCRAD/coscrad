@@ -2,6 +2,14 @@ import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp } from '@mui/x
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+type Entity = {
+    id: string;
+    languageCode: string;
+    role: string;
+    text: string;
+    audioURL: string;
+};
+
 type PropertyKeyAndHeading<TKeys> = {
     propertyKey: TKeys;
 
@@ -15,13 +23,14 @@ type DetailAction = unknown;
 type IndexAction = unknown;
 
 type IndexQueryData<T> = {
-    data: T[];
+    // data: T[];
+    entities: Entity[];
     actions: DetailAction[];
 };
 
 // TODO share this with the backend
 type IndexQueryResult<T> = {
-    data: IndexQueryData<T>;
+    entities: IndexQueryData<T>;
     actions: IndexAction[];
 };
 
@@ -42,7 +51,7 @@ const buildStreamlinedViewmodelForTable = <
     keysToKeep: U[]
 ): Omit<T, U> =>
     Object.entries(viewModel).reduce((acc: Omit<T, U>, [key, value]: [keyof T, unknown]) => {
-        if (!keysToKeep.concat('id' as U).includes(key as any)) return acc;
+        if (!keysToKeep.concat('id' as U).includes(key as U)) return acc;
 
         // @ts-expect-error fix this later
         acc[key] = value;
@@ -75,15 +84,16 @@ const buildIndexComponent = <T extends Record<string, unknown>>(
                 .then((res) => res.json())
                 .then((result) => {
                     setAppState({ ...appState, viewModelResults: result });
-                    setSearchResults({ selectedViewModels: result.data });
+                    setSearchResults({ selectedViewModels: result.entities });
                 })
                 .catch((rej) => console.log(rej));
-        }, [setAppState]);
+        }, [appState, setAppState]);
 
         // if (!appState.vocabularyLists || appState.vocabularyLists === []) return <Loading />
 
         const rows: GridRowsProp = searchResults.selectedViewModels
-            .map((result) => result.data)
+            //TODO make this result.entities
+            .map((result) => result.entities)
 
             .map((viewModel) =>
                 buildStreamlinedViewmodelForTable(
