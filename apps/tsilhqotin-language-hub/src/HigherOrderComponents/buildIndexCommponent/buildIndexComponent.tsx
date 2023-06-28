@@ -1,14 +1,12 @@
+import {
+    IBaseViewModel,
+    IDetailQueryResult,
+    IIndexQueryResult,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-type Entity = {
-    id: string;
-    languageCode: string;
-    role: string;
-    text: string;
-    audioURL: string;
-};
 
 type PropertyKeyAndHeading<TKeys> = {
     propertyKey: TKeys;
@@ -18,24 +16,8 @@ type PropertyKeyAndHeading<TKeys> = {
 
 type DetailPageLinkRenderer = (id: string) => string;
 
-type DetailAction = unknown;
-
-type IndexAction = unknown;
-
-type IndexQueryData<T> = {
-    // data: T[];
-    entities: Entity[];
-    actions: DetailAction[];
-};
-
-// TODO share this with the backend
-type IndexQueryResult<T> = {
-    entities: IndexQueryData<T>;
-    actions: IndexAction[];
-};
-
 type IndexComponentState<T extends Record<string, unknown>> = {
-    viewModelResults: IndexQueryData<T>[];
+    viewModelResults: IDetailQueryResult<IBaseViewModel>[];
     searchContext: keyof T;
 };
 
@@ -51,6 +33,12 @@ const buildStreamlinedViewmodelForTable = <
     keysToKeep: U[]
 ): Omit<T, U> =>
     Object.entries(viewModel).reduce((acc: Omit<T, U>, [key, value]: [keyof T, unknown]) => {
+        console.log({
+            keysToKeep,
+            key,
+            value,
+        });
+
         if (!keysToKeep.concat('id' as U).includes(key as U)) return acc;
 
         // @ts-expect-error fix this later
@@ -73,7 +61,7 @@ const buildIndexComponent = <T extends Record<string, unknown>>(
         });
 
         const [searchResults, setSearchResults] = useState({
-            selectedViewModels: appState.viewModelResults,
+            selectedViewModels: [],
         });
 
         useEffect(() => {
@@ -82,26 +70,43 @@ const buildIndexComponent = <T extends Record<string, unknown>>(
 
             fetch(fetchManyEndpoint, { mode: 'cors' })
                 .then((res) => res.json())
-                .then((result) => {
-                    setAppState({ ...appState, viewModelResults: result });
-                    setSearchResults({ selectedViewModels: result.entities });
+                .then((result: IIndexQueryResult<IBaseViewModel>) => {
+                    console.log({ apiResult: result });
+
+                    const adaptedEntities = result.entities.map(({ id, name }) => ({
+                        id,
+                        title: name.items.find(
+                            ({ languageCode }) => languageCode === LanguageCode.Chilcotin
+                        )?.text,
+                        titleEnglish: name.items.find(
+                            ({ languageCode }) => languageCode === LanguageCode.English
+                        )?.text,
+                        // We don't care about the following 2 but the compiler does
+                        name,
+                        actions: [],
+                    }));
+
+                    setAppState({ ...appState, viewModelResults: adaptedEntities });
+                    setSearchResults({ selectedViewModels: adaptedEntities });
                 })
                 .catch((rej) => console.log(rej));
-        }, [appState, setAppState]);
+        }, []);
 
         // if (!appState.vocabularyLists || appState.vocabularyLists === []) return <Loading />
 
         const rows: GridRowsProp = searchResults.selectedViewModels
-            //TODO make this result.entities
-            .map((result) => result.entities)
+            .map((result) => {
+                return result;
+            })
 
             .map((viewModel) =>
                 buildStreamlinedViewmodelForTable(
-                    // @ts-expect-error fix this later
                     viewModel,
                     propertyKeysAndHeadings.map(({ propertyKey }) => propertyKey)
                 )
             );
+
+        console.log({ rows });
 
         const columns: GridColDef[] = propertyKeysAndHeadings.map(({ propertyKey, heading }) => ({
             // we know that we don't use symbol or number for view model property keys

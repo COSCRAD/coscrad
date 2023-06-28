@@ -2,18 +2,34 @@ import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import AppLink from './AppLink';
 
 export default class AppInfo {
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'name',
+        description: 'name of app'
+    })
     readonly name!: string;
 
-    @NonEmptyString()
+    
+    @NonEmptyString({
+        label: 'TODO add me',
+        description: 'TODO add me'
+    })
     readonly image!: string;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'TODO add me',
+        description: 'TODO add me'
+    })
     readonly meta!: string;
 
-    @NonEmptyString()
+    @NonEmptyString({
+        label: 'TODO add me',
+        description: 'TODO add me'
+    })
     readonly description!: string;
 
-    @NestedDataType(AppLink)
+    @NestedDataType(AppLink,{
+        label: 'TODO add me',
+        description: 'TODO add me'
+    })
     readonly links!: AppLink[];
 }
