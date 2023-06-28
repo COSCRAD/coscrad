@@ -61,7 +61,10 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
      * This is a catch-all in case there's some presently unforeseen validation
      * that needs to be done.
      */
-    protected async validateAdditionalConstraints(_: ICommand): Promise<Valid | InternalError> {
+    protected async validateAdditionalConstraints(
+        _: ICommand,
+        __?: InMemorySnapshot
+    ): Promise<Valid | InternalError> {
         return Valid;
     }
 

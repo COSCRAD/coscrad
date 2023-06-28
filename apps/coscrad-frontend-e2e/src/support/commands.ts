@@ -13,6 +13,8 @@ declare namespace Cypress {
         assertValueCopiedToClipboard(value: string): void;
 
         getByDataAttribute(value: string, attributeSuffix?: string): Chainable<Subject>;
+
+        navigateToIndex(resourceType: string): Chainable<Subject>;
     }
 }
 
@@ -109,6 +111,14 @@ Cypress.Commands.add('grantPermissions', (permissionsToAdd: CoscradBrowserPermis
     const exhaustiveCheck: never = permissionsToAdd;
 
     throw new Error(`Unrecognized permission type: ${exhaustiveCheck}`);
+});
+
+Cypress.Commands.add('navigateToIndex', (resourceType: string) => {
+    cy.getByDataAttribute('nav-menu-icon').click();
+
+    cy.get('[href="/Resources"] > .MuiButtonBase-root').click();
+
+    cy.getByDataAttribute(resourceType).click();
 });
 
 //
