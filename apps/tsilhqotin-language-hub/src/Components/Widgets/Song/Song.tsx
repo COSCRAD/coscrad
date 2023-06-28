@@ -14,7 +14,7 @@ export type SongData = {
     // pulled from the config above
     creditsMap: Map<string, string>;
 
-    lyrics: string;
+    lyrics?: string;
 
     audioURL: string;
 };
