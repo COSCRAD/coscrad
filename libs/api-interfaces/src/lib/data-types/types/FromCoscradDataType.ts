@@ -17,7 +17,6 @@ type CoscradDataTypeToTypeScriptType = {
     [CoscradDataType.UUID]: string;
     [CoscradDataType.Year]: number;
     [CoscradDataType.String]: string;
-    [CoscradDataType.MultilingualText]: unknown;
     [CoscradDataType.FixedValue]: unknown;
 };
 
