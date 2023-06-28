@@ -1,6 +1,8 @@
+import { Inject } from '@nestjs/common';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { DataImporter } from '../persistence/repositories/data-importer';
 import { CliCommand, CliCommandRunner } from './cli-command.decorator';
+import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
 @CliCommand({
     name: 'clear-database',
@@ -9,13 +11,18 @@ import { CliCommand, CliCommandRunner } from './cli-command.decorator';
 export class ClearDatabaseCliCommand extends CliCommandRunner {
     dataImporter: DataImporter;
 
-    constructor(databaseProvider: ArangoDatabaseProvider) {
+    constructor(
+        databaseProvider: ArangoDatabaseProvider,
+        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
+    ) {
         super();
 
         this.dataImporter = new DataImporter(databaseProvider);
     }
 
     async run(_passedParams: string[]) {
-        return this.dataImporter.deleteAllData();
+        await this.dataImporter.deleteAllData();
+
+        this.logger.log(`Successfully emptied all collections`);
     }
 }

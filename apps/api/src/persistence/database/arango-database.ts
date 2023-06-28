@@ -315,7 +315,7 @@ export class ArangoDatabase {
 
     // TODO We only want this power within test utilities!
     deleteAll = async (collectionName: string): Promise<void> => {
-        if (process.env.NODE_ENV !== Environment.test) {
+        if (process.env.NODE_ENV !== Environment.test && process.env['DATA_MODE'] !== '_CYPRESS_') {
             throw new InternalError(`You can only delete all in a test environment`);
         }
 
