@@ -1,6 +1,7 @@
 import {
     EdgeConnectionType,
     IEdgeConnectionContext,
+    IMultilingualText,
     INoteViewModel,
     ResourceCompositeIdentifier,
 } from '@coscrad/api-interfaces';
@@ -14,6 +15,7 @@ export type ConnectedResource = {
     compositeIdentifier: ResourceCompositeIdentifier;
     selfContext: IEdgeConnectionContext;
     otherContext: IEdgeConnectionContext;
+    text: IMultilingualText;
 };
 
 export const useLoadableConnectionsToResource = (

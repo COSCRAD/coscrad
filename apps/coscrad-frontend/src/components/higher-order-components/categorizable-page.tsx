@@ -8,7 +8,12 @@ import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel, ICommandExecutorAndLabels } from '../commands';
-import { buildCommandExecutor, buildDynamicCommandForm } from '../commands/command-executor';
+import {
+    CommandExecutionFormProps,
+    buildCommandExecutor,
+    buildDynamicCommandForm,
+} from '../commands/command-executor';
+import { ConnectResourcesWithNoteForm } from '../commands/connections';
 import { CreateNoteForm } from '../commands/connections/create-note-form';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { WithWebOfKnowledge } from '../resources/shared';
@@ -114,6 +119,42 @@ export const CategorizablePage = <T extends CategorizableType>({
                                            * ID generation system.
                                            */
                                           resourceCompositeIdentifier: {
+                                              ...compositeIdentifier,
+                                          },
+                                      },
+                                      AggregateType.note
+                                  ),
+                              },
+                              {
+                                  // TODO Pull the meta from the back-end
+                                  label: 'Create Connection with Note',
+                                  description:
+                                      'Connect this resource to another resource with a note',
+                                  type: 'CONNECT_RESOURCES_WITH_NOTE',
+                                  executor: buildCommandExecutor(
+                                      ({ onSubmitForm }: CommandExecutionFormProps) => (
+                                          <ConnectResourcesWithNoteForm
+                                              fromMemberCompositeIdentifier={compositeIdentifier}
+                                              onSubmitForm={onSubmitForm}
+                                              bindProps={{
+                                                  fromMemberCompositeIdentifier:
+                                                      compositeIdentifier,
+                                              }}
+                                          />
+                                      ),
+                                      {
+                                          /**
+                                           * Here we bind the composite identifier
+                                           * for the current page to the payload
+                                           * for `CONNECT_RESOURCES_WITH_NOTE`. Note
+                                           * that this command is being presented in
+                                           * a foreign aggregate context, so we do
+                                           * not bind to `aggregateCompositeIdentifier`
+                                           * on the payload. This, the ID of the newly
+                                           * created note, must be generated via the
+                                           * ID generation system.
+                                           */
+                                          fromMemberCompositeIdentifier: {
                                               ...compositeIdentifier,
                                           },
                                       },
