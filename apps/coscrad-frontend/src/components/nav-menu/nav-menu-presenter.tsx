@@ -3,6 +3,7 @@ import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import { Box, Drawer, IconButton, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import AuthenticationButton from '../authentication-button/authentication-button';
+import { CurrentUserInfo } from '../logout-button/current-user-info';
 import { NavItemInfo } from './nav-menu-container';
 import { NavMenuItem } from './nav-menu-item';
 
@@ -37,6 +38,8 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
                 </IconButton>
             </Tooltip>
             <AuthenticationButton />
+            {/* TODO We should present the `CurrentUserInfo` below the menu and login icons  */}
+            <CurrentUserInfo />
             <Box>
                 <Drawer anchor="right" open={isOpen} onClose={handleClose}>
                     <Box sx={{ padding: 3 }}>
