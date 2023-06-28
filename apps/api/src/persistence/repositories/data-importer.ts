@@ -37,4 +37,20 @@ export class DataImporter {
 
         await Promise.all(Object.entries(parsedSnapshot.edge).map(writeDocumentData));
     }
+
+    async deleteAllData(): Promise<void> {
+        const dataMode = process.env[DATA_MODE];
+
+        if (dataMode !== '_CYPRESS_') {
+            throw new InternalError(
+                `You must set @DATA_MODE=_CYPRESS_ to enable deleting data from collections`
+            );
+        }
+
+        await Promise.all(
+            Object.values(ArangoCollectionId).map((collectionName) =>
+                this.databaseProvider.getDBInstance().deleteAll(collectionName)
+            )
+        );
+    }
 }
