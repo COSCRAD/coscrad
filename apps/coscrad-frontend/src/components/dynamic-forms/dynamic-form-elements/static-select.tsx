@@ -22,6 +22,7 @@ export const StaticSelect = ({
     return (
         <FormGroup>
             <Select
+                data-testid={`${name}_select`}
                 value={currentValue || ''}
                 label={label}
                 name={name}
