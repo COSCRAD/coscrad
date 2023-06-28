@@ -15,6 +15,7 @@ import {
 } from '../commands/command-executor';
 import { ConnectResourcesWithNoteForm } from '../commands/connections';
 import { CreateNoteForm } from '../commands/connections/create-note-form';
+import { TagResourceOrNoteForm } from '../commands/connections/tag-resource-or-note-form';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { WithWebOfKnowledge } from '../resources/shared';
 import {
@@ -67,6 +68,16 @@ export const CategorizablePage = <T extends CategorizableType>({
         // @ts-expect-error FIX ME
         const DetailPresenter = detailPresenterFactory(categorizableType);
 
+        const tagResourceOrNoteExecutor = {
+            // TODO Pull the meta from the back-end
+            label: 'Tag Resource or Note',
+            description: 'Apply an existing tag to this resource',
+            type: 'TAG_RESOURCE_OR_NOTE',
+            executor: buildCommandExecutor(TagResourceOrNoteForm, {
+                taggedMemberCompositeIdentifier: compositeIdentifier,
+            }),
+        };
+
         return (viewModel) => {
             const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
 
@@ -97,7 +108,7 @@ export const CategorizablePage = <T extends CategorizableType>({
                  */
                 .concat(
                     ...(categorizableType === CategorizableType.note
-                        ? []
+                        ? [tagResourceOrNoteExecutor]
                         : [
                               {
                                   // TODO Pull the meta from the back-end
@@ -161,6 +172,7 @@ export const CategorizablePage = <T extends CategorizableType>({
                                       AggregateType.note
                                   ),
                               },
+                              tagResourceOrNoteExecutor,
                           ])
                 );
 
