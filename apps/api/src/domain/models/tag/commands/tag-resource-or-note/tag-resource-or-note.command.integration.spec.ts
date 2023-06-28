@@ -2,24 +2,24 @@ import { FluxStandardAction } from '@coscrad/commands';
 import setUpIntegrationTest, {
     TestModuleInstances,
 } from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import { InternalError } from '../../../../../lib/errors/InternalError';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
+import { InternalError } from '../../../../../lib/errors/InternalError';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
 import formatAggregateType from '../../../../../view-models/presentation/formatAggregateType';
+import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { AggregateType, isAggregateType } from '../../../../types/AggregateType';
 import { CategorizableType } from '../../../../types/CategorizableType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
-import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
-import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { DuplicateTagError } from '../errors';
 import { TagResourceOrNote } from './tag-resource-or-note.command';
 
@@ -147,14 +147,19 @@ describe(commandType, () => {
                             }).fetchFullSnapshotInLegacyFormat(),
                             systemUserId: dummySystemUserId,
                             checkError: (error: InternalError) => {
+                                const { innerErrors } = error;
+
                                 assertErrorAsExpected(
-                                    error,
-                                    new CommandExecutionError([
-                                        new InvalidExternalReferenceByAggregateError(
-                                            tagToUpdate.getCompositeIdentifier(),
-                                            [categorizableToTag.getCompositeIdentifier()]
-                                        ),
-                                    ])
+                                    /**
+                                     * Drill down to the level where we expect this error.
+                                     * Alternatively, we could call `.toString`
+                                     * and check the message.
+                                     **/
+                                    innerErrors[0].innerErrors[0],
+                                    new InvalidExternalReferenceByAggregateError(
+                                        tagToUpdate.getCompositeIdentifier(),
+                                        [categorizableToTag.getCompositeIdentifier()]
+                                    )
                                 );
                             },
                         });
