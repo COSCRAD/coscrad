@@ -15,6 +15,7 @@ export const TextInput = ({
     return (
         <FormGroup>
             <TextField
+                id={`text-input_${name}`}
                 name={name}
                 label={label}
                 onChange={(e) => {
