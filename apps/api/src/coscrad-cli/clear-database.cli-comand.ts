@@ -17,7 +17,7 @@ export class ClearDatabaseCliCommand extends CliCommandRunner {
     ) {
         super();
 
-        this.dataImporter = new DataImporter(databaseProvider);
+        this.dataImporter = new DataImporter(databaseProvider, this.logger);
     }
 
     async run(_passedParams: string[]) {

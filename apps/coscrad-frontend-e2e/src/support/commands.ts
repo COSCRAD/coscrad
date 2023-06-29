@@ -15,6 +15,8 @@ declare namespace Cypress {
         getByDataAttribute(value: string, attributeSuffix?: string): Chainable<Subject>;
 
         navigateToIndex(resourceType: string): Chainable<Subject>;
+
+        clearDatabase(): Chainable<Subject>;
     }
 }
 
@@ -119,6 +121,10 @@ Cypress.Commands.add('navigateToIndex', (resourceType: string) => {
     cy.get('[href="/Resources"] > .MuiButtonBase-root').click();
 
     cy.getByDataAttribute(resourceType).click();
+});
+
+Cypress.Commands.add(`clearDatabase`, () => {
+    cy.exec(`node ../../dist/apps/coscrad-cli/main.js clear-database`);
 });
 
 //
