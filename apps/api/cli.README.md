@@ -61,4 +61,4 @@ reports invariant validation for all aggregate root instances
 
 > > > clear-database
 
-clears the database between tests (Cypress mode only)
+clears the database between tests (`$DATA_MODE=_CYPRESS_` mode only)
