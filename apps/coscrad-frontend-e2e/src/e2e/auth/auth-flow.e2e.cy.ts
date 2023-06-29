@@ -1,5 +1,5 @@
 describe(`the auth flow`, () => {
-    const loggedInMessage = 'Currently Logged In';
+    const loggedInMessage = 'Logged In';
 
     beforeEach(() => {
         cy.visit('/');
