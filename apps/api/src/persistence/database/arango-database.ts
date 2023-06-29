@@ -1,7 +1,7 @@
 import { Database } from 'arangojs';
 import { aql, AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
-import { Environment } from '../../app/config/constants/Environment';
+import { isTestEnvironment } from '../../app/config/constants/Environment';
 import { QueryOperator } from '../../domain/repositories/interfaces/QueryOperator';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { isAggregateId } from '../../domain/types/AggregateId';
@@ -315,8 +315,11 @@ export class ArangoDatabase {
 
     // TODO We only want this power within test utilities!
     deleteAll = async (collectionName: string): Promise<void> => {
-        if (process.env.NODE_ENV !== Environment.test && process.env['DATA_MODE'] !== '_CYPRESS_') {
-            throw new InternalError(`You can only delete all in a test environment`);
+        // TODO make this or Environment.e2e ?
+        if (!isTestEnvironment(process.env.NODE_ENV)) {
+            throw new InternalError(
+                `You can only delete all in a test environment. Your environment is: ${process.env.NODE_ENV}`
+            );
         }
 
         if (!isArangoCollectionId(collectionName)) {

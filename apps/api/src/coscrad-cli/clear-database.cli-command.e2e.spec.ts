@@ -42,6 +42,12 @@ describe(`CLI Command: **clear-database**`, () => {
             .overrideProvider(ArangoDatabaseProvider)
             .useValue(databaseProvider)
             .compile();
+
+        process.env.NODE_ENV = 'e2e';
+    });
+
+    afterAll(() => {
+        process.env = originalEnv;
     });
 
     beforeEach(async () => {
