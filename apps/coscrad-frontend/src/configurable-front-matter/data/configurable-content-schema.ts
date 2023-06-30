@@ -45,7 +45,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     siteTitle: string;
     subTitle: string;
     about: string;
-    enableLoginButton: boolean;
+    shouldEnableAdminMode: boolean;
     siteDescription: string;
     siteHomeImageUrl: string;
     siteFavicon: string;
@@ -76,7 +76,7 @@ export const configurableContentPropertiesAndConstraints: {
     siteTitle: [CoscradConstraint.isNonEmptyString],
     subTitle: [CoscradConstraint.isNonEmptyString],
     about: [CoscradConstraint.isNonEmptyString],
-    enableLoginButton: [CoscradConstraint.isBoolean],
+    shouldEnableAdminMode: [CoscradConstraint.isBoolean],
     siteDescription: [CoscradConstraint.isNonEmptyString],
     siteHomeImageUrl: [CoscradConstraint.isURL],
     siteFavicon: [CoscradConstraint.isURL],

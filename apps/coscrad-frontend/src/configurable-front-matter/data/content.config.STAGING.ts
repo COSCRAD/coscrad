@@ -5,7 +5,7 @@ export const contentConfig: ConfigurableContent = {
     siteTitle: 'COSCRAD [-Haida Sandbox-]',
     subTitle: 'Powering a Web of Knowledge',
     about: 'Welcome to the official COSCRAD sandbox!',
-    enableLoginButton: false,
+    shouldEnableAdminMode: true,
     siteDescription: 'Here you can test drive our toy intance of the COSCRAD platform',
     siteHomeImageUrl: 'https://coscrad.org/wp-content/uploads/2023/05/earth-3537401_1920.jpg',
     siteFavicon: 'https://www.tsilhqotin.ca/wp-content/uploads/2023/06/tng_logo.png',

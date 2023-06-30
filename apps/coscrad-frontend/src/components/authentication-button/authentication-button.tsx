@@ -7,10 +7,10 @@ import LogoutButton from '../logout-button/logout-button';
 const AuthenticationButton = () => {
     const { isAuthenticated } = useAuth0();
 
-    const { enableLoginButton } = useContext(ConfigurableContentContext);
+    const { shouldEnableAdminMode } = useContext(ConfigurableContentContext);
 
-    if (enableLoginButton === true) return isAuthenticated ? <LogoutButton /> : <LoginButton />;
-    else return;
+    if (!shouldEnableAdminMode) return null;
+    return isAuthenticated ? <LogoutButton /> : <LoginButton />;
 };
 
 export default AuthenticationButton;
