@@ -1,27 +1,19 @@
 import {
-    AggregateType,
     AggregateTypeToViewModel,
     CategorizableType,
     ICommandFormAndLabels as IBackendCommandFormAndLabels,
 } from '@coscrad/api-interfaces';
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
+import { ConnectedResourcesPanel } from '../../store/slices/resources/shared/connected-resources';
+import { SelfNotesPanelContainer } from '../../store/slices/resources/shared/notes-for-resource';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel, ICommandExecutorAndLabels } from '../commands';
-import {
-    CommandExecutionFormProps,
-    buildCommandExecutor,
-    buildDynamicCommandForm,
-} from '../commands/command-executor';
-import { ConnectResourcesWithNoteForm } from '../commands/connections';
-import { CreateNoteForm } from '../commands/connections/create-note-form';
-import { TagResourceOrNoteForm } from '../commands/connections/tag-resource-or-note-form';
+import { buildStaticCommandExecutors } from '../commands/build-static-command-executors';
+import { buildCommandExecutor, buildDynamicCommandForm } from '../commands/command-executor';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
-import { WithWebOfKnowledge } from '../resources/shared';
-import {
-    AggregateDetailContainer,
-    AggregateDetailContainerProps,
-} from './aggregate-detail-container';
+import { AggregateDetailContainer } from './aggregate-detail-container';
 
 type DetailPresenter<T extends CategorizableType> = (
     viewModel: AggregateTypeToViewModel[T]
@@ -57,26 +49,9 @@ export const CategorizablePage = <T extends CategorizableType>({
 
     const compositeIdentifier = { type: categorizableType, id };
 
-    const EnhancedAggregateDetailContainer = shouldEnableWebOfKnowledgeForResources
-        ? // @ts-expect-error FIX ME
-          WithWebOfKnowledge<AggregateDetailContainerProps<AggregateTypeToViewModel<T>>>(
-              AggregateDetailContainer
-          )
-        : AggregateDetailContainer;
-
-    const EnhancedDetailPresenterFactory = (categorizableType: CategorizableType) => {
+    const DetailPresenterWithCommandPanel = (categorizableType: CategorizableType) => {
         // @ts-expect-error FIX ME
         const DetailPresenter = detailPresenterFactory(categorizableType);
-
-        const tagResourceOrNoteExecutor = {
-            // TODO Pull the meta from the back-end
-            label: 'Tag Resource or Note',
-            description: 'Apply an existing tag to this resource',
-            type: 'TAG_RESOURCE_OR_NOTE',
-            executor: buildCommandExecutor(TagResourceOrNoteForm, {
-                taggedMemberCompositeIdentifier: compositeIdentifier,
-            }),
-        };
 
         return (viewModel) => {
             const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
@@ -106,84 +81,25 @@ export const CategorizablePage = <T extends CategorizableType>({
                  * ID for the note, which is the proper aggregate context for
                  * this command.
                  */
-                .concat(
-                    ...(categorizableType === CategorizableType.note
-                        ? [tagResourceOrNoteExecutor]
-                        : [
-                              {
-                                  // TODO Pull the meta from the back-end
-                                  label: 'Create Note',
-                                  description: 'Create a note about this resource',
-                                  type: 'CREATE_NOTE_ABOUT_RESOURCE',
-                                  executor: buildCommandExecutor(
-                                      CreateNoteForm,
-                                      {
-                                          /**
-                                           * Here we bind the composite identifier
-                                           * for the current page to the payload
-                                           * for `CREATE_NOTE_ABOUT_RESOURCE`. Note
-                                           * that this command is being presented in
-                                           * a foreign aggregate context, so we do
-                                           * not bind to `aggregateCompositeIdentifier`
-                                           * on the payload. This, the ID of the newly
-                                           * created note, must be generated via the
-                                           * ID generation system.
-                                           */
-                                          resourceCompositeIdentifier: {
-                                              ...compositeIdentifier,
-                                          },
-                                      },
-                                      AggregateType.note
-                                  ),
-                              },
-                              {
-                                  // TODO Pull the meta from the back-end
-                                  label: 'Create Connection with Note',
-                                  description:
-                                      'Connect this resource to another resource with a note',
-                                  type: 'CONNECT_RESOURCES_WITH_NOTE',
-                                  executor: buildCommandExecutor(
-                                      ({ onSubmitForm }: CommandExecutionFormProps) => (
-                                          <ConnectResourcesWithNoteForm
-                                              fromMemberCompositeIdentifier={compositeIdentifier}
-                                              onSubmitForm={onSubmitForm}
-                                              bindProps={{
-                                                  fromMemberCompositeIdentifier:
-                                                      compositeIdentifier,
-                                              }}
-                                          />
-                                      ),
-                                      {
-                                          /**
-                                           * Here we bind the composite identifier
-                                           * for the current page to the payload
-                                           * for `CONNECT_RESOURCES_WITH_NOTE`. Note
-                                           * that this command is being presented in
-                                           * a foreign aggregate context, so we do
-                                           * not bind to `aggregateCompositeIdentifier`
-                                           * on the payload. This, the ID of the newly
-                                           * created note, must be generated via the
-                                           * ID generation system.
-                                           */
-                                          fromMemberCompositeIdentifier: {
-                                              ...compositeIdentifier,
-                                          },
-                                      },
-                                      AggregateType.note
-                                  ),
-                              },
-                              tagResourceOrNoteExecutor,
-                          ])
-                );
+                .concat(buildStaticCommandExecutors(compositeIdentifier));
 
             return (
                 <>
                     <DetailPresenter {...viewModel} />
+                    {/* Note that we don't mix-in static forms if there were no
+                    actions returned from the back-end as we're not in admin
+                    mode in that case. Note that exposing the forms is only a 
+                    matter of user experience and not security. The command will
+                    fail if the user doesn't have a valid admin token. */}
                     {viewModel?.actions?.length > 0 ? (
-                        <CommandPanel
-                            actions={commandExecutionFormsAndLabels}
-                            commandContext={compositeIdentifier}
-                        />
+                        <Accordion>
+                            <AccordionSummary>
+                                <Typography variant="h3">Commands</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <CommandPanel actions={commandExecutionFormsAndLabels} />
+                            </AccordionDetails>
+                        </Accordion>
                     ) : null}
                 </>
             );
@@ -191,11 +107,17 @@ export const CategorizablePage = <T extends CategorizableType>({
     };
 
     return (
-        <div>
-            <EnhancedAggregateDetailContainer
+        <>
+            <AggregateDetailContainer
                 compositeIdentifier={compositeIdentifier}
-                detailPresenterFactory={EnhancedDetailPresenterFactory}
+                detailPresenterFactory={DetailPresenterWithCommandPanel}
             />
-        </div>
+            {shouldEnableWebOfKnowledgeForResources ? (
+                <>
+                    <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
+                    <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
+                </>
+            ) : null}
+        </>
     );
 };

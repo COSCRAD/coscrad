@@ -27,10 +27,9 @@ export type ICommandExecutorAndLabels = Omit<IBackendCommandFormAndLabels, 'form
 
 interface CommandPanelProps {
     actions: ICommandExecutorAndLabels[];
-    commandContext: CommandContext;
 }
 
-export const CommandPanel = ({ actions, commandContext }: CommandPanelProps) => {
+export const CommandPanel = ({ actions }: CommandPanelProps) => {
     const [selectedCommandType, setSelectedCommandType] = useState<string>(null);
 
     const [formState, updateForm, clearForm] = useFormState();
