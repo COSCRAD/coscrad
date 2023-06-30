@@ -26,7 +26,7 @@ export const Home = (): JSX.Element => {
         src: siteHomeImageUrl,
         width: 2000,
         height: 1329,
-        title: 'Home',
+        title: '',
     };
 
     useEffect(() => {
