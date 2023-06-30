@@ -1,6 +1,8 @@
+import { Inject } from '@nestjs/common';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { DataImporter } from '../persistence/repositories/data-importer';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
+import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
 @CliCommand({
     name: 'data-restore',
@@ -9,10 +11,13 @@ import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.de
 export class DomainRestoreCliCommand extends CliCommandRunner {
     dataImporter: DataImporter;
 
-    constructor(databaseProvider: ArangoDatabaseProvider) {
+    constructor(
+        databaseProvider: ArangoDatabaseProvider,
+        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
+    ) {
         super();
 
-        this.dataImporter = new DataImporter(databaseProvider);
+        this.dataImporter = new DataImporter(databaseProvider, this.logger);
     }
 
     async run(_passedParams: string[], { filepath }: { filepath: string }): Promise<void> {

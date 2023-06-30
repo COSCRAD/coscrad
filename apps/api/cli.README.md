@@ -12,7 +12,7 @@
 
 To build `coscrad-cli`, run
 
-> > > npx run api:build:cli
+> > > nx run api:build:cli
 
 To run `coscrad-cli`, run
 
@@ -58,3 +58,7 @@ reverts the most recently run migration, if there is one
 > > > validate-invariants
 
 reports invariant validation for all aggregate root instances
+
+> > > clear-database
+
+clears the database between tests (`$DATA_MODE=_CYPRESS_` mode only)

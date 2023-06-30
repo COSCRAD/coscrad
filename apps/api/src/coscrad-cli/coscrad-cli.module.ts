@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppModule } from '../app/app.module';
 import { MigrationModule } from '../persistence/migrations';
 import { PersistenceModule } from '../persistence/persistence.module';
+import { ClearDatabaseCliCommand } from './clear-database.cli-comand';
 import { DomainDumpCliCommand } from './data-dump.cli-command';
 import { DomainRestoreCliCommand } from './data-restore.cli-command';
 import { ListMigrationsCliCommand } from './list-migrations.cli-command';
@@ -18,6 +19,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         RunMigrationsCliCommand,
         RevertLatestMigrationCliCommand,
         ValidateInvariantsCliCommand,
+        ClearDatabaseCliCommand,
         {
             provide: COSCRAD_LOGGER_TOKEN,
             useClass: ConsoleCoscradCliLogger,
