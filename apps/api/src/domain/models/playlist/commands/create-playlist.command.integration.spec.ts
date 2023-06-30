@@ -5,31 +5,41 @@ import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpInt
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotAvailable } from '../../../../lib/types/not-available';
 import { NotFound } from '../../../../lib/types/not-found';
-import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../types/DTO';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import buildInMemorySnapshot from '../../../utilities/buildInMemorySnapshot';
-import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
-import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { assertCommandFailsDueToTypeError } from '../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
 import { assertEventRecordPersisted } from '../../__tests__/command-helpers/assert-event-record-persisted';
+import { DummyCommandFsaFactory } from '../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyUuid } from '../../__tests__/utilities/dummyUuid';
+import CommandExecutionError from '../../shared/common-command-errors/CommandExecutionError';
+import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { Playlist } from '../entities';
 import { CreatePlayList } from './create-playlist.command';
 
 const commandType = 'CREATE_PLAYLIST';
 
 const existingPlaylistId = `702096a0-c52f-488f-b5dc-22192e9aca3e`;
+
+const existingPlaylist = getValidAggregateInstanceForTest(ResourceType.playlist).clone({
+    id: existingPlaylistId,
+});
+
+const {
+    text: existingPlaylistOrignalNameText,
+    languageCode: existingPlaylistNameOrignalLanguageCode,
+} = existingPlaylist.name.getOriginalTextItem();
 
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreatePlayList>> => ({
     type: commandType,
@@ -39,6 +49,8 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreatePla
         languageCodeForName: LanguageCode.Chilcotin,
     },
 });
+
+const fsaFactory = new DummyCommandFsaFactory(buildValidCommandFSA);
 
 const emptyInitialState = new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat();
 
@@ -149,11 +161,7 @@ describe(commandType, () => {
                     buildCommandFSA: (_: AggregateId) => buildValidCommandFSA(existingPlaylistId),
                     initialState: buildInMemorySnapshot({
                         resources: {
-                            playlist: [
-                                getValidAggregateInstanceForTest(ResourceType.playlist).clone({
-                                    id: existingPlaylistId,
-                                }),
-                            ],
+                            playlist: [existingPlaylist],
                         },
                     }),
 
@@ -162,7 +170,7 @@ describe(commandType, () => {
 
                         expect(error.innerErrors.length).toBe(1);
 
-                        const innerError = error.innerErrors[0];
+                        const innerError = error.innerErrors[0].innerErrors[0];
 
                         expect(innerError).toEqual(
                             new ResourceIdAlreadyInUseError({
@@ -171,6 +179,22 @@ describe(commandType, () => {
                             })
                         );
                     },
+                });
+            });
+        });
+
+        describe('When there is already a playlist with a given name', () => {
+            it('should fail', async () => {
+                await assertCreateCommandError(assertionHelperDependencies, {
+                    systemUserId: dummyAdminUserId,
+                    buildCommandFSA: (id: AggregateId) =>
+                        fsaFactory.build(id, {
+                            languageCodeForName: existingPlaylistNameOrignalLanguageCode,
+                            name: existingPlaylistOrignalNameText,
+                        }),
+                    initialState: new DeluxeInMemoryStore({
+                        [AggregateType.playlist]: [existingPlaylist],
+                    }).fetchFullSnapshotInLegacyFormat(),
                 });
             });
         });
