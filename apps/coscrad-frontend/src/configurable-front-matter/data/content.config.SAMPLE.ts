@@ -126,7 +126,13 @@ export const contentConfig: ConfigurableContent = {
     defaultLanguageCode: LanguageCode.Chilcotin,
     phoneNumber: '1-{234} 567-8901',
     address: 'Somewhere Drive, Sanctuary , NA',
-    internalLinks: [],
+    internalLinks: [
+        {
+            url: 'www.coscrad.org',
+            iconUrl: 'https://coscrad.org/wp-content/uploads/2023/05/COSCRAD-logo-prototype-1.png',
+            description: 'Coscrad',
+        },
+    ],
     socialMediaLinks: {
         facebook: 'https://www.facebook.com/',
         twitter: 'https://twitter.com/',
