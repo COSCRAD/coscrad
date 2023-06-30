@@ -124,4 +124,14 @@ export const contentConfig: ConfigurableContent = {
     },
     resourceIndexLabel: 'Available Resources',
     defaultLanguageCode: LanguageCode.Chilcotin,
+    phoneNumber: '1-{234} 567-8901',
+    address: 'Somewhere Drive, Sanctuary, NA',
+    internalLinks: [],
+    socialMediaLinks: {
+        facebook: 'https://www.facebook.com/',
+        twitter: 'https://twitter.com/',
+        github: 'https://github.com/',
+        youtube: 'https://www.youtube.com/',
+        instagram: 'https://www.instagram.com/',
+    },
 };
