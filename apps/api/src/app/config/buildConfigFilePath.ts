@@ -8,7 +8,7 @@ export default (envFilePrefix: string): string => {
      * but we override this in some tests to use dummy filenames. For that reason,
      * we assume only that this is a string.
      */
-    const path = [Environment.production, Environment.staging].includes(
+    const path = [Environment.production, Environment.staging, Environment.e2e].includes(
         envFilePrefix as Environment
     )
         ? `${process.cwd()}/${envFilePrefix}.env`

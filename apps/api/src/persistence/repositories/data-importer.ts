@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs';
+import { ICoscradLogger } from '../../coscrad-cli/logging';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
 import { InternalError } from '../../lib/errors/InternalError';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
@@ -8,7 +9,10 @@ import { DatabaseDTO } from '../database/utilities/mapEntityDTOToDatabaseDTO';
 export const DATA_MODE = 'DATA_MODE';
 
 export class DataImporter {
-    constructor(private readonly databaseProvider: ArangoDatabaseProvider) {}
+    constructor(
+        private readonly databaseProvider: ArangoDatabaseProvider,
+        private readonly logger: ICoscradLogger
+    ) {}
 
     /**
      * Note that this method will import additional data from a dump file, stacking
@@ -36,5 +40,27 @@ export class DataImporter {
         await Promise.all(Object.entries(parsedSnapshot.document).map(writeDocumentData));
 
         await Promise.all(Object.entries(parsedSnapshot.edge).map(writeDocumentData));
+    }
+
+    async deleteAllData(): Promise<void> {
+        const dataMode = process.env[DATA_MODE];
+
+        if (dataMode !== '_CYPRESS_') {
+            throw new InternalError(
+                `You must set $DATA_MODE=_CYPRESS_ to enable deleting data from collections`
+            );
+        }
+
+        this.logger.log(
+            `Attempting to delete data from all collections in the database: ${this.databaseProvider
+                .getDBInstance()
+                .getDatabaseName()}`
+        );
+
+        await Promise.all(
+            Object.values(ArangoCollectionId).map((collectionName) =>
+                this.databaseProvider.getDBInstance().deleteAll(collectionName)
+            )
+        );
     }
 }
