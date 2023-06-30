@@ -7,7 +7,6 @@ import { getConfigurableContent } from './configurable-front-matter';
 import { ConfigurableContentProvider } from './configurable-front-matter/configurable-content-provider';
 import { CoscradThemeProvider } from './coscrad-theme-provider';
 import { setupStore } from './store';
-import { QRCodeForThisPage } from './utils/generic-components/qr-codes/qr-code-for-this-page';
 
 const contentConfig = getConfigurableContent();
 
@@ -19,7 +18,6 @@ root.render(
             <ConfigurableContentProvider value={contentConfig}>
                 <CoscradThemeProvider>
                     <RouterProvider router={createAppRouter(contentConfig)} />
-                    <QRCodeForThisPage />
                 </CoscradThemeProvider>
             </ConfigurableContentProvider>
         </Provider>

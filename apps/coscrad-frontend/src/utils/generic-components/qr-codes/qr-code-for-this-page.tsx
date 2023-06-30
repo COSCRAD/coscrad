@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import { Typography } from '@mui/material';
 import QRCode from 'qrcode';
 import { useEffect, useRef } from 'react';
 
@@ -10,11 +10,9 @@ export const QRCodeForThisPage = (): JSX.Element => {
     }, [canvasRef]);
 
     return (
-        <Accordion>
-            <AccordionSummary>QR Code for this Page</AccordionSummary>
-            <AccordionDetails>
-                <canvas ref={canvasRef} />
-            </AccordionDetails>
-        </Accordion>
+        <>
+            <Typography variant="h4">QR Code for this page</Typography>
+            <canvas ref={canvasRef} />
+        </>
     );
 };
