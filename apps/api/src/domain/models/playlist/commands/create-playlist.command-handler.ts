@@ -1,5 +1,6 @@
 import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
+import { isDeepStrictEqual } from 'util';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../types/DTO';
@@ -18,6 +19,7 @@ import { AggregateType } from '../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
+import InvalidExternalStateError from '../../shared/common-command-errors/InvalidExternalStateError';
 import ResourceIdAlreadyInUseError from '../../shared/common-command-errors/ResourceIdAlreadyInUseError';
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import idEquals from '../../shared/functional/idEquals';
@@ -96,13 +98,34 @@ export class CreatePlayListCommandHandler extends BaseCreateCommandHandler<Playl
         { resources: { playlist: preExistingPlayLists } }: InMemorySnapshot,
         instance: Playlist
     ): InternalError | Valid {
-        if (preExistingPlayLists.some(idEquals(instance.id)))
-            return new ResourceIdAlreadyInUseError({
-                id: instance.id,
-                resourceType: ResourceType.playlist,
-            });
+        const allErrors: InternalError[] = [];
 
-        return Valid;
+        if (preExistingPlayLists.some(idEquals(instance.id)))
+            allErrors.push(
+                new ResourceIdAlreadyInUseError({
+                    id: instance.id,
+                    resourceType: ResourceType.playlist,
+                })
+            );
+
+        if (
+            preExistingPlayLists.some((playlist) =>
+                isDeepStrictEqual(
+                    instance.name.getOriginalTextItem(),
+                    playlist.name.getOriginalTextItem()
+                )
+            )
+        ) {
+            allErrors.push(
+                new InternalError(
+                    `there is already a playlist with the name: ${
+                        instance.name.getOriginalTextItem().text
+                    }`
+                )
+            );
+        }
+
+        return allErrors.length > 0 ? new InvalidExternalStateError(allErrors) : Valid;
     }
 
     protected buildEvent(command: CreatePlayList, eventId: string, userId: string): BaseEvent {
