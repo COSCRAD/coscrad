@@ -76,7 +76,9 @@ export const Footer = (): JSX.Element => {
             >
                 <Grid container spacing={4} sx={{ padding: '20px' }}>
                     <Grid item xs={12} sm={3} color="text.secondary" sx={{ paddingLeft: '10px' }}>
-                        <Typography variant="h3">{siteTitle}</Typography>
+                        <Typography color="primary.main" variant="h3">
+                            {siteTitle}
+                        </Typography>
                         <Typography variant="subtitle1">{subTitle}</Typography>
                     </Grid>
                     <Grid
@@ -87,8 +89,10 @@ export const Footer = (): JSX.Element => {
                         variant="subtitle1"
                         color="text.secondary"
                     >
-                        <Typography variant="h3">QR Code</Typography>
-                        <IconButton color={'primary'} onClick={handleOpen}>
+                        <Typography color="primary.main" variant="h3">
+                            QR Code
+                        </Typography>
+                        <IconButton color="secondary" onClick={handleOpen}>
                             <QrCode2Icon />
                         </IconButton>
                         <Modal
@@ -110,16 +114,18 @@ export const Footer = (): JSX.Element => {
                         variant="subtitle1"
                         color="text.secondary"
                     >
-                        <Typography variant="h3">Contact</Typography>
+                        <Typography color="primary.main" variant="h3">
+                            Contact
+                        </Typography>
                         <Box>
-                            <IconButton color="primary">
+                            <IconButton color="secondary">
                                 <Phone />
                             </IconButton>
                             {phoneNumber}
                         </Box>
 
                         <Box>
-                            <IconButton color="primary">
+                            <IconButton color="secondary">
                                 <LocationOn />
                             </IconButton>
                             {address}
@@ -133,7 +139,9 @@ export const Footer = (): JSX.Element => {
                         variant="subtitle1"
                         color="text.secondary"
                     >
-                        <Typography variant="h3">Links</Typography>
+                        <Typography color="primary.main" variant="h3">
+                            Links
+                        </Typography>
                         {socialMediaIcons
                             .map(({ link, icon }) =>
                                 link ? (
@@ -141,7 +149,7 @@ export const Footer = (): JSX.Element => {
                                         href={link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        color="primary"
+                                        color="secondary"
                                         children={icon}
                                     />
                                 ) : (
