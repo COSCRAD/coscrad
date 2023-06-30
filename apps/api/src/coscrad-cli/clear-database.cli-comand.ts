@@ -20,6 +20,7 @@ export class ClearDatabaseCliCommand extends CliCommandRunner {
         this.dataImporter = new DataImporter(databaseProvider, this.logger);
     }
 
+    // note that this will not work unless in a testing environment with `$DATA_MODE=_CYPRESS`
     async run(_passedParams: string[]) {
         await this.dataImporter.deleteAllData();
 
