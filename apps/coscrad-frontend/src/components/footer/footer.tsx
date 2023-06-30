@@ -8,7 +8,7 @@ import {
     YouTube,
 } from '@mui/icons-material';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
-import { Box, Grid, IconButton, Modal, Tooltip, Typography } from '@mui/material';
+import { Box, Grid, IconButton, Modal, Tooltip, Typography, styled } from '@mui/material';
 import React, { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { QRCodeForThisPage } from '../../utils/generic-components/qr-codes/qr-code-for-this-page';
@@ -16,6 +16,17 @@ import { COSCRADByline } from '../coscrad-byline/coscrad-byline';
 import { Tenant } from '../tenant/tenant';
 
 export const Footer = (): JSX.Element => {
+    const StyledQRCode = styled(Box)`
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        box-shadow: 24px;
+        padding: 12px;
+        border-radius: 4px;
+        text-align: center;
+    `;
     /**
      * TODO: Move data (ConfigurableContentContext) out of presenter
      */
@@ -63,19 +74,10 @@ export const Footer = (): JSX.Element => {
                     backgroundColor: '#ededed',
                 }}
             >
-                <Grid container spacing={0} sx={{ padding: '20px' }}>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={3}
-                        component={Typography}
-                        variant="subtitle1"
-                        color="text.secondary"
-                        sx={{ paddingLeft: '10px' }}
-                    >
-                        <h3>{siteTitle}</h3>
-
-                        {subTitle}
+                <Grid container spacing={4} sx={{ padding: '20px' }}>
+                    <Grid item xs={12} sm={3} color="text.secondary" sx={{ paddingLeft: '10px' }}>
+                        <Typography variant="h3">{siteTitle}</Typography>
+                        <Typography variant="subtitle1">{subTitle}</Typography>
                     </Grid>
                     <Grid
                         item
@@ -95,9 +97,9 @@ export const Footer = (): JSX.Element => {
                             aria-labelledby="QR code for this page"
                             aria-describedby="get QR code for the current page"
                         >
-                            <Box>
+                            <StyledQRCode>
                                 <QRCodeForThisPage />
-                            </Box>
+                            </StyledQRCode>
                         </Modal>
                     </Grid>
                     <Grid
