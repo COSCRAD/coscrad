@@ -14,13 +14,6 @@ import { ConfigurableContentContext } from '../../configurable-front-matter/conf
 import { COSCRADByline } from '../coscrad-byline/coscrad-byline';
 import { Tenant } from '../tenant/tenant';
 
-// const style = {
-//     position: 'absolute' as const,
-//     top: '50%',
-//     left: '50%',
-//     transform: 'translate(-50%, -50%)',
-// };
-
 export const Footer = (): JSX.Element => {
     /**
      * TODO: Move data (ConfigurableContentContext) out of presenter
@@ -91,7 +84,7 @@ export const Footer = (): JSX.Element => {
                         variant="subtitle1"
                         color="text.secondary"
                     >
-                        <h3>QR Code</h3>
+                        <Typography variant="h3">QR Code</Typography>
                         <IconButton color={'primary'} onClick={handleOpen}>
                             <QrCode2Icon />
                         </IconButton>
@@ -114,7 +107,7 @@ export const Footer = (): JSX.Element => {
                         variant="subtitle1"
                         color="text.secondary"
                     >
-                        <h3>Contact</h3>
+                        <Typography variant="h3">Contact</Typography>
                         <Box>
                             <IconButton color="primary">
                                 <Phone />
@@ -137,7 +130,7 @@ export const Footer = (): JSX.Element => {
                         variant="subtitle1"
                         color="text.secondary"
                     >
-                        <h3>Links</h3>
+                        <Typography variant="h3">Links</Typography>
                         {socialMediaIcons
                             .map(({ link, icon }) =>
                                 link ? (
