@@ -43,7 +43,12 @@ export class GameController {
 
         if (isNullOrUndefined(searchResult)) return NotFound;
 
-        // We are skipping any  kind of view layer here
+        /**
+         * We are skipping any  kind of view layer here. We can add a data model
+         * and view layer when we are ready to create \ update game data via
+         * an admin panel. For now, we just need a way to serve up legacy JSON
+         * data quickly so we can phase out old systems.
+         */
         return searchResult;
     }
 }
