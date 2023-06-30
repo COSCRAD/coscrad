@@ -7,7 +7,7 @@ export const TenantLogo = (): JSX.Element => {
 
     return (
         <StyledImage
-            sx={{ width: { xs: '40px', sm: '55px', md: '61px' } }}
+            sx={{ width: { xs: '30px', sm: '35px', md: '40px' } }}
             src={organizationLogoUrl}
             alt="COSCRAD Logo"
         />
