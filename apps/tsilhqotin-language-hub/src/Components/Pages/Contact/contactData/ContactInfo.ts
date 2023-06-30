@@ -2,20 +2,20 @@ import { NonEmptyString } from '@coscrad/data-types';
 
 export default class ContactInfo {
     @NonEmptyString({
-        label: 'TODO add me',
-        description: 'TODO add me',
+        label: 'name',
+        description: 'name of contributor',
     })
     readonly name!: string;
 
     @NonEmptyString({
-        label: 'TODO add me',
-        description: 'TODO add me',
+        label: 'title',
+        description: 'job title for contributor',
     })
     readonly title!: string;
 
     @NonEmptyString({
-        label: 'TODO add me',
-        description: 'TODO add me',
+        label: 'department',
+        description: 'job department for contributor',
     })
     readonly department!: string;
 }

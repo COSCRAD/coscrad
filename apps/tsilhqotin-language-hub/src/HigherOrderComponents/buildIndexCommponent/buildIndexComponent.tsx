@@ -106,8 +106,6 @@ const buildIndexComponent = <T extends Record<string, unknown>>(
                 )
             );
 
-        console.log({ rows });
-
         const columns: GridColDef[] = propertyKeysAndHeadings.map(({ propertyKey, heading }) => ({
             // we know that we don't use symbol or number for view model property keys
             field: propertyKey as string,

@@ -4,32 +4,31 @@ import AppLink from './AppLink';
 export default class AppInfo {
     @NonEmptyString({
         label: 'name',
-        description: 'name of app'
+        description: 'name of app',
     })
     readonly name!: string;
 
-    
     @NonEmptyString({
-        label: 'TODO add me',
-        description: 'TODO add me'
+        label: 'image',
+        description: 'app icon url',
     })
     readonly image!: string;
 
     @NonEmptyString({
-        label: 'TODO add me',
-        description: 'TODO add me'
+        label: 'metadata',
+        description: 'information about the app',
     })
     readonly meta!: string;
 
     @NonEmptyString({
-        label: 'TODO add me',
-        description: 'TODO add me'
+        label: 'description',
+        description: 'description about the app',
     })
     readonly description!: string;
 
-    @NestedDataType(AppLink,{
-        label: 'TODO add me',
-        description: 'TODO add me'
+    @NestedDataType(AppLink, {
+        label: 'app link',
+        description: 'a link to the web or mobile app',
     })
     readonly links!: AppLink[];
 }
