@@ -9,7 +9,6 @@ export const COSCRADByline = (): JSX.Element => {
             justifyContent="center"
             alignItems="center"
             sx={{
-                mt: 2,
                 width: '100%',
             }}
         >

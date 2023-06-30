@@ -24,6 +24,22 @@ export type SimulatedKeyboardConfig = {
 
 export type ThemeOverrides = Pick<ThemeOptions, 'palette'>;
 
+export type InternalLink = {
+    url: string;
+
+    iconUrl: string;
+
+    description: string;
+};
+
+export type SocialMediaLinks = {
+    facebook?: string;
+    twitter?: string;
+    github?: string;
+    youtube?: string;
+    instagram?: string;
+};
+
 export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
     indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
     siteTitle: string;
@@ -46,6 +62,10 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     themeOverrides: ThemeOverrides;
     resourceIndexLabel: string;
     defaultLanguageCode: LanguageCode;
+    phoneNumber: string;
+    address: string;
+    internalLinks: InternalLink[];
+    socialMediaLinks: SocialMediaLinks;
 };
 
 export const configurableContentPropertiesAndConstraints: {
@@ -72,6 +92,10 @@ export const configurableContentPropertiesAndConstraints: {
     themeOverrides: [CoscradConstraint.isObject],
     resourceIndexLabel: [CoscradConstraint.isString],
     defaultLanguageCode: [CoscradConstraint.isNonEmptyString],
+    phoneNumber: [CoscradConstraint.isString],
+    address: [CoscradConstraint.isString],
+    internalLinks: [],
+    socialMediaLinks: [CoscradConstraint.isObject],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
