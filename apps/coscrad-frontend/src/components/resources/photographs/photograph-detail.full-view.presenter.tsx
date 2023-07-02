@@ -2,7 +2,9 @@ import {
     ICategorizableDetailQueryResult,
     IPhotographViewModel,
     MultilingualTextItemRole,
+    ResourceType,
 } from '@coscrad/api-interfaces';
+import { IdInfoIcon } from 'apps/coscrad-frontend/src/utils/generic-components/presenters/id-info-icon/id-info-icon';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ImageFullPageWidth } from '../../../utils/generic-components/presenters/image-full-page-width';
 import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
@@ -27,6 +29,7 @@ export const PhotographDetailFullViewPresenter = ({
             <div data-testid={id} />
             <ImageFullPageWidth image={image} />
             <ResourceNamePresenter name={name} variant="h2" />
+            <IdInfoIcon id={id} type={ResourceType.photograph} />
             <SinglePropertyPresenter display="Photograph ID" value={id} />
         </>
     );
