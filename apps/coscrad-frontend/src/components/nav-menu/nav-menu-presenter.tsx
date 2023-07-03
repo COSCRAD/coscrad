@@ -3,6 +3,7 @@ import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import { Box, Drawer, IconButton, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import AuthenticationButton from '../authentication-button/authentication-button';
+import { CurrentUserInfo } from '../logout-button/current-user-info';
 import { NavItemInfo } from './nav-menu-container';
 import { NavMenuItem } from './nav-menu-item';
 
@@ -22,7 +23,8 @@ export const NavMenuPresenter = ({ navItemInfos }: NavMenuPresenterProps): JSX.E
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box columnGap={1} sx={{ display: 'flex', alignItems: 'center' }}>
+            <CurrentUserInfo />
             <Tooltip title="Menu">
                 <IconButton
                     data-testid="nav-menu-icon"
