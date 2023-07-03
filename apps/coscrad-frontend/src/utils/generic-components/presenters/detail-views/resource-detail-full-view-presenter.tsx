@@ -28,18 +28,20 @@ export const ResourceDetailFullViewPresenter = ({
     name,
     type,
     children,
-}: ResourceDetailFullViewPresenterProps): JSX.Element => (
-    <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
-        <Grid item xs={2} sm={1} md={2}>
-            {/* Temporary.  We'd like an icon if there's no visual media associated with this resource */}
-            {type !== ResourceType.photograph && (
-                <ResourcePreviewIconFactory resourceType={type} size="lg" />
-            )}
+}: ResourceDetailFullViewPresenterProps): JSX.Element => {
+    return (
+        <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
+            <Grid item xs={2} sm={1} md={2}>
+                {/* Temporary.  We'd like an icon if there's no visual media associated with this resource */}
+                {type !== ResourceType.photograph && (
+                    <ResourcePreviewIconFactory resourceType={type} size="lg" />
+                )}
+            </Grid>
+            <Grid item xs={2} sm={2} md={8}>
+                {/* TODO: consider putting a standardized name property on the view models */}
+                <ResourceDetailPresenterHeader id={id} type={type} name={name} variant="h3" />
+                {children}
+            </Grid>
         </Grid>
-        <Grid item xs={2} sm={2} md={8}>
-            {/* TODO: consider putting a standardized name property on the view models */}
-            <ResourceDetailPresenterHeader id={id} type={type} name={name} variant="h3" />
-            {children}
-        </Grid>
-    </Grid>
-);
+    );
+};
