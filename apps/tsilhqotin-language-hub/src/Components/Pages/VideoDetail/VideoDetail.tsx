@@ -1,11 +1,12 @@
+import { IMediaItemViewModel, LanguageCode } from '@coscrad/api-interfaces';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getConfig } from '../../../config';
 import { getGlobalConfig } from '../../../Configs/global.config';
+import { getConfig } from '../../../config';
 import { Media, MediaData } from '../../Widgets/Media/Media';
 
 type ComponentState = {
-    mediaData: null | MediaData;
+    mediaData: null | (IMediaItemViewModel & Pick<MediaData, 'creditsMap'>);
 };
 
 export default function MediaDetail() {
@@ -24,7 +25,7 @@ export default function MediaDetail() {
             .then((media) => {
                 setComponentState({
                     mediaData: {
-                        ...media.data,
+                        ...media,
                         creditsMap: new Map(Object.entries(getGlobalConfig().videoIdToCredits)),
                     },
                 });
@@ -34,5 +35,19 @@ export default function MediaDetail() {
 
     if (!componentState.mediaData) return <div className="page">LOADING!</div>;
 
-    return <Media {...componentState.mediaData}></Media>;
+    return (
+        <Media
+            {...componentState.mediaData}
+            title={
+                componentState.mediaData.name.items.find(
+                    ({ languageCode }) => languageCode === LanguageCode.Chilcotin
+                )?.text
+            }
+            titleEnglish={
+                componentState.mediaData.name.items.find(
+                    ({ languageCode }) => languageCode === LanguageCode.English
+                )?.text
+            }
+        ></Media>
+    );
 }

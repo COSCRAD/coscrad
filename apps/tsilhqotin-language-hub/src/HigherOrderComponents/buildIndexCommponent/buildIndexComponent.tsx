@@ -1,3 +1,9 @@
+import {
+    IBaseViewModel,
+    IDetailQueryResult,
+    IIndexQueryResult,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -10,23 +16,8 @@ type PropertyKeyAndHeading<TKeys> = {
 
 type DetailPageLinkRenderer = (id: string) => string;
 
-type DetailAction = unknown;
-
-type IndexAction = unknown;
-
-type IndexQueryData<T> = {
-    data: T[];
-    actions: DetailAction[];
-};
-
-// TODO share this with the backend
-type IndexQueryResult<T> = {
-    data: IndexQueryData<T>;
-    actions: IndexAction[];
-};
-
 type IndexComponentState<T extends Record<string, unknown>> = {
-    viewModelResults: IndexQueryData<T>[];
+    viewModelResults: IDetailQueryResult<IBaseViewModel>[];
     searchContext: keyof T;
 };
 
@@ -42,7 +33,13 @@ const buildStreamlinedViewmodelForTable = <
     keysToKeep: U[]
 ): Omit<T, U> =>
     Object.entries(viewModel).reduce((acc: Omit<T, U>, [key, value]: [keyof T, unknown]) => {
-        if (!keysToKeep.concat('id' as U).includes(key as any)) return acc;
+        console.log({
+            keysToKeep,
+            key,
+            value,
+        });
+
+        if (!keysToKeep.concat('id' as U).includes(key as U)) return acc;
 
         // @ts-expect-error fix this later
         acc[key] = value;
@@ -64,7 +61,7 @@ const buildIndexComponent = <T extends Record<string, unknown>>(
         });
 
         const [searchResults, setSearchResults] = useState({
-            selectedViewModels: appState.viewModelResults,
+            selectedViewModels: [],
         });
 
         useEffect(() => {
@@ -73,21 +70,37 @@ const buildIndexComponent = <T extends Record<string, unknown>>(
 
             fetch(fetchManyEndpoint, { mode: 'cors' })
                 .then((res) => res.json())
-                .then((result) => {
-                    setAppState({ ...appState, viewModelResults: result });
-                    setSearchResults({ selectedViewModels: result.data });
+                .then((result: IIndexQueryResult<IBaseViewModel>) => {
+                    console.log({ apiResult: result });
+
+                    const adaptedEntities = result.entities.map(({ id, name }) => ({
+                        id,
+                        title: name.items.find(
+                            ({ languageCode }) => languageCode === LanguageCode.Chilcotin
+                        )?.text,
+                        titleEnglish: name.items.find(
+                            ({ languageCode }) => languageCode === LanguageCode.English
+                        )?.text,
+                        // We don't care about the following 2 but the compiler does
+                        name,
+                        actions: [],
+                    }));
+
+                    setAppState({ ...appState, viewModelResults: adaptedEntities });
+                    setSearchResults({ selectedViewModels: adaptedEntities });
                 })
                 .catch((rej) => console.log(rej));
-        }, [setAppState]);
+        }, []);
 
         // if (!appState.vocabularyLists || appState.vocabularyLists === []) return <Loading />
 
         const rows: GridRowsProp = searchResults.selectedViewModels
-            .map((result) => result.data)
+            .map((result) => {
+                return result;
+            })
 
             .map((viewModel) =>
                 buildStreamlinedViewmodelForTable(
-                    // @ts-expect-error fix this later
                     viewModel,
                     propertyKeysAndHeadings.map(({ propertyKey }) => propertyKey)
                 )
