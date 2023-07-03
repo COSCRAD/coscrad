@@ -1,18 +1,16 @@
+import { IDetailQueryResult, ISongViewModel, LanguageCode } from '@coscrad/api-interfaces';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getConfig } from '../../../config';
 import { getGlobalConfig } from '../../../Configs/global.config';
+import { getConfig } from '../../../config';
 import SongData, { Song } from '../../Widgets/Song/Song';
 import './SongDetail.module.css';
 
-/* eslint-disable-next-line */
-export interface SongViewModel {}
-
 type ComponentState = {
-    songData: null | SongData;
+    songData: null | (IDetailQueryResult<ISongViewModel> & Pick<SongData, 'creditsMap'>);
 };
 
-export function SongDetail(props: SongViewModel) {
+export function SongDetail() {
     const [componentState, setComponentState] = useState<ComponentState>({
         songData: null,
     });
@@ -28,7 +26,7 @@ export function SongDetail(props: SongViewModel) {
             .then((song) => {
                 setComponentState({
                     songData: {
-                        ...song.data,
+                        ...song,
                         creditsMap: new Map(Object.entries(getGlobalConfig().songIdToCredits)),
                     },
                 });
@@ -38,7 +36,19 @@ export function SongDetail(props: SongViewModel) {
 
     if (!componentState.songData) return <div className="page">LOADING!</div>;
 
-    return <Song songData={componentState.songData}></Song>;
+    return (
+        <Song
+            songData={{
+                ...componentState.songData,
+                title: componentState.songData.name.items.find(
+                    ({ languageCode }) => languageCode === LanguageCode.Chilcotin
+                )?.text,
+                titleEnglish: componentState.songData.name.items.find(
+                    ({ languageCode }) => languageCode === LanguageCode.English
+                )?.text,
+            }}
+        ></Song>
+    );
 }
 
 export default SongDetail;
