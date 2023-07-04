@@ -1,6 +1,8 @@
 import { CommandHandlerService } from '@coscrad/commands';
+import { CoscradUserRole } from '@coscrad/data-types';
 import { Inject } from '@nestjs/common';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
+import { GrantUserRole } from '../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
 import { AggregateType } from '../domain/types/AggregateType';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
@@ -24,12 +26,14 @@ type CommandResult = {
 
 const GENERATE_THIS_ID = 'GENERATE_THIS_ID';
 
+const APPEND_THIS_ID = 'APPEND_THIS_ID';
+
 const createAdminUserCommand: RegisterUser = {
     aggregateCompositeIdentifier: {
         type: AggregateType.user,
         id: GENERATE_THIS_ID,
     },
-    userIdFromAuthProvider: 'auth0|5db729701ead110c5b254553',
+    userIdFromAuthProvider: 'auth0|6407b7bd81d69faf23e9dd7e',
     username: 'Cypress McTester',
 };
 
@@ -38,7 +42,20 @@ const createAdminUserCommandFsa = {
     payload: createAdminUserCommand,
 };
 
-const createAdminUserCommandStream = [createAdminUserCommandFsa];
+const grantUserRoleCommand: GrantUserRole = {
+    aggregateCompositeIdentifier: {
+        type: AggregateType.user,
+        id: APPEND_THIS_ID,
+    },
+    role: CoscradUserRole.projectAdmin,
+};
+
+const grantUserRoleCommandFsa = {
+    type: 'GRANT_USER_ROLE',
+    payload: grantUserRoleCommand,
+};
+
+const createAdminUserCommandStream = [createAdminUserCommandFsa, grantUserRoleCommandFsa];
 
 @CliCommand({
     name: 'execute-command-stream',
@@ -59,27 +76,29 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
     ): Promise<void> {
         const commandResults: CommandResult[] = [];
 
+        let generatedId: string;
+
         for (const [index, fsa] of commandFsas.entries()) {
             const shouldGenerateId =
                 fsa.payload.aggregateCompositeIdentifier.id === GENERATE_THIS_ID;
 
-            let generatedId: string;
-
             if (shouldGenerateId) generatedId = await this.idManager.generate();
 
-            const fsaToExecute = shouldGenerateId
-                ? {
-                      ...fsa,
-                      payload: {
-                          ...fsa.payload,
-                          aggregateCompositeIdentifier: {
-                              ...fsa.payload.aggregateCompositeIdentifier,
-                              id: generatedId,
-                          },
-                      },
-                  }
-                : fsa;
+            /**
+             * Note that we need a more sophisticated way to deal with generating
+             * and appending aggregate context in bulk execution.
+             */
 
+            const fsaToExecute = {
+                ...fsa,
+                payload: {
+                    ...fsa.payload,
+                    aggregateCompositeIdentifier: {
+                        ...fsa.payload.aggregateCompositeIdentifier,
+                        id: generatedId,
+                    },
+                },
+            };
             const commandResult = await this.commandHandlerService.execute(fsaToExecute, {
                 userId: 'COSCRAD Admin',
             });

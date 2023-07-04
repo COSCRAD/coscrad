@@ -14,11 +14,15 @@ declare namespace Cypress {
 
         getByDataAttribute(value: string, attributeSuffix?: string): Chainable<Subject>;
 
-        navigateToIndex(resourceType: string): Chainable<Subject>;
+        navigateToResourceIndex(resourceType: string): Chainable<Subject>;
+
+        navigateToTagIndex(): void;
 
         clearDatabase(): Chainable<Subject>;
 
         executeCommandStream(name: string): Chainable<Subject>;
+
+        getCommandFormSubmissionButton(): Chainable<Subject>;
     }
 }
 
@@ -83,7 +87,7 @@ Cypress.Commands.add('login', () => {
     cy.get('#password').click().type(Cypress.env('password'));
 
     // TODO why doesn't cy.contains("Continue") work?
-    cy.get('.cf772ffae > .c89f1057d').click();
+    cy.getByDataAttribute('true', 'action-button-primary').click();
 });
 
 Cypress.Commands.add('assertValueCopiedToClipboard', (value) => {
@@ -117,12 +121,18 @@ Cypress.Commands.add('grantPermissions', (permissionsToAdd: CoscradBrowserPermis
     throw new Error(`Unrecognized permission type: ${exhaustiveCheck}`);
 });
 
-Cypress.Commands.add('navigateToIndex', (resourceType: string) => {
+Cypress.Commands.add('navigateToResourceIndex', (resourceType: string) => {
     cy.getByDataAttribute('nav-menu-icon').click();
 
     cy.get('[href="/Resources"] > .MuiButtonBase-root').click();
 
     cy.getByDataAttribute(resourceType).click();
+});
+
+Cypress.Commands.add(`navigateToTagIndex`, () => {
+    cy.getByDataAttribute('nav-menu-icon').click();
+
+    cy.get('[href="/Tags"] > .MuiButtonBase-root').click();
 });
 
 Cypress.Commands.add(`clearDatabase`, () =>
@@ -133,14 +143,6 @@ Cypress.Commands.add(`executeCommandStream`, (name: string) =>
     cy.exec(`node ../../dist/apps/coscrad-cli/main.js execute-command-stream --name=${name}`)
 );
 
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+Cypress.Commands.add(`getCommandFormSubmissionButton`, () =>
+    cy.getByDataAttribute('submit-dynamic-form')
+);
