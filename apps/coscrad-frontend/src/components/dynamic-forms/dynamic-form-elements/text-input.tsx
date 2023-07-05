@@ -15,6 +15,7 @@ export const TextInput = ({
     return (
         <FormGroup>
             <TextField
+                data-testid={`text_${name}`}
                 name={name}
                 label={label}
                 onChange={(e) => {

@@ -9,7 +9,7 @@ describe(`when seeding an admin user`, () => {
 
             cy.executeCommandStream('users:create-admin');
 
-            cy.navigateToIndex('term');
+            cy.navigateToResourceIndex('term');
 
             cy.getByDataAttribute('error').should('not.exist');
         });

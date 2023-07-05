@@ -18,7 +18,7 @@ describe(`tagging a note`, () => {
 
             cy.login();
 
-            cy.navigateToIndex('term');
+            cy.navigateToResourceIndex('term');
 
             cy.get(`[data-testid="${termId}"] > :nth-child(1)`).click();
         });
