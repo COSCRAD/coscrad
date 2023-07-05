@@ -53,6 +53,7 @@ describe('book detail', () => {
         });
     });
 
+    // TODO [https://www.pivotaltracker.com/story/show/185546456] Implement this test with Cypress
     describe('when the API request fails or is pending', () => {
         testContainerComponentErrorHandling(() => act(idToFind), endpoint, mockGetNotesHandler);
     });

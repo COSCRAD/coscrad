@@ -18,7 +18,7 @@ export const WithCommands =
         const commandContext = mapPropsToCommandContext(props);
 
         return actions.length > 0 ? (
-            <div>
+            <>
                 {WrappedComponent(props)}
                 <CommandPanel
                     actions={actions.map((action) => ({
@@ -33,10 +33,8 @@ export const WithCommands =
                                   aggregateCompositeIdentifier: commandContext,
                               }),
                     }))}
-                    // do we still need this?
-                    commandContext={commandContext}
                 />
-            </div>
+            </>
         ) : (
             WrappedComponent(props)
         );

@@ -44,7 +44,6 @@ export const AggregateIndexContainer = <T extends IIndexQueryResult<IBaseViewMod
                             aggregateType
                         ),
                     }))}
-                    commandContext={aggregateType}
                 />
             )}
         </div>

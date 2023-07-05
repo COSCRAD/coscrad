@@ -86,6 +86,7 @@ export const DynamicForm = ({
                     ? null
                     : `Please correct the errors before submitting the form`}
                 <Button
+                    disabled={isBoolean(isValid) && !isValid}
                     data-testid="submit-dynamic-form"
                     onClick={() => {
                         if (!isValid) return;

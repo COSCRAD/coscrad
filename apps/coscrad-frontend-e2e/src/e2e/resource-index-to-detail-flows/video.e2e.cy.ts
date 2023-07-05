@@ -65,7 +65,7 @@ describe(`the video flow`, () => {
                     cy.getByDataAttribute('submit-dynamic-form').click();
                 });
 
-                it.only(`should succeed`, () => {
+                it(`should succeed`, () => {
                     cy.getByDataAttribute('loading').should('not.exist');
 
                     cy.contains(videoNameText);
