@@ -4,17 +4,16 @@ import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
+import { IdManagementService } from '../lib/id-generation/id-management.service';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
-import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
-import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
-
-import { IdManagementService } from '../lib/id-generation/id-management.service';
 import { ArangoCollectionId } from '../persistence/database/collection-references/ArangoCollectionId';
+import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { RemoveBaseDigitalAssetUrl } from '../persistence/migrations/01/remove-base-digital-asset-url.migration';
 import { ArangoMigrationRecord } from '../persistence/migrations/arango-migration-record';
-import { ArangoIdRepository } from '../persistence/repositories/arango-id-repository';
+import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ArangoIdRepository } from '../persistence/repositories/arango-id-repository';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
 import { CoscradCliModule } from './coscrad-cli.module';
 
