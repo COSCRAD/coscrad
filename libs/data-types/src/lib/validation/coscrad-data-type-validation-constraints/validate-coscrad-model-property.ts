@@ -93,7 +93,7 @@ export const validateCoscradModelProperty = (
                 ? []
                 : [
                       new Error(
-                          `Property ${propertyName} has failed the validation constraint: is enum ${enumName}`
+                          `Property ${propertyName} (${actualPropertyValue}) has failed the validation constraint: is enum ${enumName}`
                       ),
                   ];
         }
