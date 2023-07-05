@@ -10,6 +10,7 @@ import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 import { LineTextPresenter } from './thumbnail-presenters/line-text-presenter';
 import { PointTextPresenter } from './thumbnail-presenters/point-text-presenter';
 import { PolygonTextPresenter } from './thumbnail-presenters/polygon-text-presenter';
@@ -29,7 +30,7 @@ const StyledPlaceIcon = styled('img')({
 });
 
 export const SpatialFeatureDetailFullViewPresenter = (
-    spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>
+    spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel> & ContextProps
 ): JSX.Element => {
     const { id, geometry, properties } = spatialFeature;
 

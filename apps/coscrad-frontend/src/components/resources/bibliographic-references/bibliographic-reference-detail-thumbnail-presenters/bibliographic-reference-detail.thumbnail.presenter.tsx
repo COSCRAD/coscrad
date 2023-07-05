@@ -2,10 +2,12 @@ import {
     IBibliographicReferenceViewModel,
     ICategorizableDetailQueryResult,
 } from '@coscrad/api-interfaces';
+import { ContextProps } from '../../factories/full-view-categorizable-presenter-factory';
 import { buildBibliographicReferenceDetailThumbnailPresenter } from './build-bibliographic-reference-detail-thumbnail-presenter';
 
 export const BibliographicReferenceDetailThumbnailPresenter = (
-    detailQueryResult: ICategorizableDetailQueryResult<IBibliographicReferenceViewModel>
+    detailQueryResult: ICategorizableDetailQueryResult<IBibliographicReferenceViewModel> &
+        ContextProps
 ): JSX.Element => {
     const {
         data: { type: bibliographicReferenceType },

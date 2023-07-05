@@ -6,6 +6,7 @@ import {
 import { AudioPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Card, Divider } from '@mui/material';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 import { formatBilingualText } from '../vocabulary-lists/utils';
 
 const buildLyricsStatusMessage = (lyrics: IMultilingualText | null | undefined): string =>
@@ -16,7 +17,7 @@ export const SongDetailThumbnailPresenter = ({
     titleEnglish,
     lyrics,
     audioURL,
-}: ICategorizableDetailQueryResult<ISongViewModel>): JSX.Element => (
+}: ICategorizableDetailQueryResult<ISongViewModel> & ContextProps): JSX.Element => (
     <div data-testid={title}>
         <Card className="detail-card">
             <div id="detail-term" className="detail-meta">

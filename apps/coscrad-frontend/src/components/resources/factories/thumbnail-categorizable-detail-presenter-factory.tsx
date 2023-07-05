@@ -9,7 +9,6 @@ import { Card, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
-import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailThumbnailPresenter } from '../../notes/note-detail.thumbnail.presenter';
 import { AudioItemDetailThumbnailPresenter } from '../audio-item/audio-item-detail.thumbnail.presenter';
 import { BibliographicReferenceDetailThumbnailPresenter } from '../bibliographic-references/bibliographic-reference-detail-thumbnail-presenters';
@@ -23,11 +22,14 @@ import { SpatialFeatureDetailThumbnailPresenter } from '../spatial-features/thum
 import { TermDetailThumbnailPresenter } from '../terms/term-detail.thumbnail.presenter';
 import { VideoDetailThumbnailPresenter } from '../videos';
 import { VocabularyListDetailThumbnailPresenter } from '../vocabulary-lists/vocabulary-list-detail.thumbnail.presenter';
+import {
+    ContextProps,
+    ContextualizableComponent,
+} from './full-view-categorizable-presenter-factory';
 
 // TODO Define thumbnail specific presenters
-const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
+const lookupTable: { [K in CategorizableType]: ContextualizableComponent } = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailThumbnailPresenter,
-    [CategorizableType.mediaItem]: MediaItemDetailThumbnailPresenter,
     [CategorizableType.book]: BookDetailThumbnailPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailThumbnailPresenter,
     [CategorizableType.photograph]: PhotographDetailThumbnailPresenter,
@@ -43,7 +45,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
      * circular dependency.
      */
     [CategorizableType.book]: (
-        book: ICategorizableDetailQueryResult<IBookViewModel>
+        book: ICategorizableDetailQueryResult<IBookViewModel> & ContextProps
     ): JSX.Element => {
         const { id, pages } = book;
 

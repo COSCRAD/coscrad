@@ -13,6 +13,7 @@ import { ConfigurableContentContext } from '../../../configurable-front-matter/c
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components';
 import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
 import { Optional } from '../../../utils/generic-components/presenters/optional';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 import { CreditsHack } from './credits-hack';
 
 export const SongDetailFullViewPresenter = ({
@@ -20,7 +21,7 @@ export const SongDetailFullViewPresenter = ({
     name,
     lyrics,
     audioURL,
-}: ICategorizableDetailQueryResult<ISongViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<ISongViewModel> & ContextProps): JSX.Element => {
     const { songIdToCredits } = useContext(ConfigurableContentContext);
 
     const creditsMap = new Map<string, string>(

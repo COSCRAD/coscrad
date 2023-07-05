@@ -11,6 +11,8 @@ import { findOriginalTextItem } from './shared/find-original-text-item';
  */
 export const NoteDetailFullViewPresenter = ({ id, note }: INoteViewModel) => (
     <div data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.note, id)}>
+export const NoteDetailFullViewPresenter = ({ id, note }: INoteViewModel & ContextProps) => (
+    <div data-testid={id}>
         <Card>
             <CardHeader title={'Note'}></CardHeader>
             <CardContent>{findOriginalTextItem(note).text}</CardContent>

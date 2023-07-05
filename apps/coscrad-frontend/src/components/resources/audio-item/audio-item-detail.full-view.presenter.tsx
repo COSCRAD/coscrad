@@ -7,6 +7,7 @@ import { AudioPlayer } from '@coscrad/media-player';
 import { Box, Grid, Typography } from '@mui/material';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
 import { SinglePropertyPresenter } from '../../../utils/generic-components/presenters/single-property-presenter';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 import { convertMillisecondsToSeconds } from '../utils/math';
 
 export const AudioItemDetailFullViewPresenter = ({
@@ -15,7 +16,7 @@ export const AudioItemDetailFullViewPresenter = ({
     audioURL,
     text: plainText,
     name,
-}: ICategorizableDetailQueryResult<IAudioItemViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IAudioItemViewModel> & ContextProps): JSX.Element => {
     const formatedPlainText = plainText.split('\n').map((line, index) => (
         <Box mb={1} key={index}>
             {line}

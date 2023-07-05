@@ -1,22 +1,19 @@
 import {
     AggregateType,
     ICategorizableDetailQueryResult,
-    IPlaylistEpisode,
     IPlayListViewModel,
-    ResourceType,
+    ResourceType
 } from '@coscrad/api-interfaces';
 import { Typography } from '@mui/material';
-import { useState } from 'react';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
-import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
-import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
-import { renderAggregateUrlCell } from '../utils/render-audio-preview';
+import { IndexTable } from '../../../utils/generic-components/presenters/tables';
 
 export const PlaylistDetailFullViewPresenter = ({
     name,
     id,
     episodes,
 }: ICategorizableDetailQueryResult<IPlayListViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IPlayListViewModel> & ContextProps): JSX.Element => {
     const [_url, setUrl] = useState<string | null>(null);
 
     const headingLabels: HeadingLabel<IPlaylistEpisode>[] = [

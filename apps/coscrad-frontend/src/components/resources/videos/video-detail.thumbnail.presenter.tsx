@@ -16,6 +16,7 @@ export const VideoDetailThumbnailPresenter = ({
     name,
     videoUrl,
 }: ICategorizableDetailQueryResult<IVideoViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IVideoViewModel> & ContextProps): JSX.Element => {
     return (
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.video}>
             <SinglePropertyPresenter

@@ -6,6 +6,7 @@ import {
 import { Card, Divider } from '@mui/material';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { MultilingualTextPresenter } from '../../../utils/generic-components/presenters/multilingual-text-presenter';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
 
 export const MediaItemDetailThumbnailPresenter = ({
@@ -13,7 +14,7 @@ export const MediaItemDetailThumbnailPresenter = ({
     name,
     url,
     lengthMilliseconds,
-}: ICategorizableDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IMediaItemViewModel> & ContextProps): JSX.Element => {
     return (
         <div
             data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.mediaItem, id)}

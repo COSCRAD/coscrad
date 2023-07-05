@@ -1,8 +1,7 @@
 import {
     AggregateType,
     ICategorizableDetailQueryResult,
-    IPhotographViewModel,
-    MultilingualTextItemRole,
+    IPhotographViewModel
 } from '@coscrad/api-interfaces';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
@@ -15,6 +14,7 @@ export const PhotographDetailFullViewPresenter = ({
     name,
     photographer,
 }: ICategorizableDetailQueryResult<IPhotographViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IPhotographViewModel> & ContextProps): JSX.Element => {
     // Simulating image object retrieved from Digital Asset Manager
     const image = {
         src: imageUrl,

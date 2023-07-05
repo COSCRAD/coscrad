@@ -9,6 +9,7 @@ import { Divider } from '@mui/material';
 import { useReducer } from 'react';
 import { ResourceDetailFullViewPresenter } from '../../../../../../apps/coscrad-frontend/src/utils/generic-components';
 import { Carousel } from '../../higher-order-components/carousel';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.presenter';
 import doValuesMatchFilters from './do-values-match-filters';
 import { VocabularyListForm } from './vocabulary-list-form';
@@ -73,7 +74,7 @@ export const VocabularyListDetailFullViewPresenter = ({
     name,
     entries,
     form,
-}: ICategorizableDetailQueryResult<IVocabularyListViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IVocabularyListViewModel> & ContextProps): JSX.Element => {
     const [filter, dispatch] = useReducer(filterReducer, {});
 
     const filterWithoutNullAndUndefined = Object.entries(filter).reduce(
