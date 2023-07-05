@@ -2,9 +2,9 @@ import {
     CategorizableType,
     IBookViewModel,
     ICategorizableDetailQueryResult,
+    IEdgeConnectionContext,
 } from '@coscrad/api-interfaces';
 import { Card, CardContent } from '@mui/material';
-import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailFullViewPresenter } from '../../notes/note-detail.full-view.presenter';
 import { AudioItemDetailFullViewPresenter } from '../audio-item/audio-item-detail.full-view.presenter';
 import { BibliographicReferenceDetailPresenter } from '../bibliographic-references/bibliographic-reference-detail.presenter';
@@ -19,10 +19,19 @@ import { TermDetailFullViewPresenter } from '../terms/term-detail.full-view.pres
 import { VideoDetailFullViewPresenter } from '../videos/video-detail.full-view.presenter';
 import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocabulary-list-detail.full-view.presenter';
 
+export interface ContextProps {
+    context: IEdgeConnectionContext;
+    onContextChange: (selectedContext: IEdgeConnectionContext) => void;
+}
+
+export interface ContextualizableComponent {
+    (props: ContextProps): JSX.Element;
+}
+
 /**
  * TODO We could have a mapped type if we need type safety here.
  */
-const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
+const lookupTable: { [K in CategorizableType]: ContextualizableComponent } = {
     [CategorizableType.bibliographicReference]: BibliographicReferenceDetailPresenter,
     [CategorizableType.mediaItem]: MediaItemDetailFullViewPresenter,
     [CategorizableType.photograph]: PhotographDetailFullViewPresenter,
@@ -38,7 +47,7 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
      * circular dependency.
      */
     [CategorizableType.book]: (
-        book: ICategorizableDetailQueryResult<IBookViewModel>
+        book: ICategorizableDetailQueryResult<IBookViewModel> & ContextProps
     ): JSX.Element => {
         const { id, pages } = book;
 

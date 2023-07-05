@@ -5,6 +5,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceDetailFullViewPresenter } from '../../../utils/generic-components/presenters/detail-views';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 import { convertMillisecondsToSeconds } from '../utils/math';
 
 export const VideoDetailFullViewPresenter = ({
@@ -12,7 +13,7 @@ export const VideoDetailFullViewPresenter = ({
     text: plainText,
     name,
     id,
-}: ICategorizableDetailQueryResult<IVideoViewModel>): JSX.Element => (
+}: ICategorizableDetailQueryResult<IVideoViewModel> & ContextProps): JSX.Element => (
     <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.video}>
         <div data-testid={id} />
         <SinglePropertyPresenter

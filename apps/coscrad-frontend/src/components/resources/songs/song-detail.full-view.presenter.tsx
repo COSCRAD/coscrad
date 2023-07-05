@@ -3,6 +3,7 @@ import { MediaPlayer } from '@coscrad/media-player';
 import { Card, Divider } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 import { formatBilingualText } from '../vocabulary-lists/utils';
 import { CreditsHack } from './credits-hack';
 import { SongLyrics } from './song-lyrics';
@@ -13,7 +14,7 @@ export const SongDetailFullViewPresenter = ({
     titleEnglish,
     lyrics,
     audioURL,
-}: ICategorizableDetailQueryResult<ISongViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<ISongViewModel> & ContextProps): JSX.Element => {
     const { songIdToCredits } = useContext(ConfigurableContentContext);
 
     const creditsMap = new Map<string, string>(

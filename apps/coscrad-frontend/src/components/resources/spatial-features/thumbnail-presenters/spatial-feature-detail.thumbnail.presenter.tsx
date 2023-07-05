@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { routes } from '../../../../app/routes/routes';
 import { SinglePropertyPresenter } from '../../../../utils/generic-components';
 import { ResourceNamePresenter } from '../../../../utils/generic-components/presenters/resource-name-presenter';
+import { ContextProps } from '../../factories/full-view-categorizable-presenter-factory';
 
 const StyledPlaceIcon = styled('img')({
     width: '60px',
@@ -22,7 +23,7 @@ const StyledPlaceIcon = styled('img')({
  * presenter for the marker pop-up instead of re-using the thumbnail presenter
  */
 export const SpatialFeatureDetailThumbnailPresenter = (
-    spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>
+    spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel> & ContextProps
 ): JSX.Element => {
     const { id, geometry, properties } = spatialFeature;
 

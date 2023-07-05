@@ -1,5 +1,6 @@
 import { ICategorizableDetailQueryResult, IMediaItemViewModel } from '@coscrad/api-interfaces';
 import { Card, Divider } from '@mui/material';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
 import { formatBilingualText } from '../vocabulary-lists/utils';
 
@@ -9,7 +10,7 @@ export const MediaItemDetailThumbnailPresenter = ({
     titleEnglish,
     url,
     lengthMilliseconds,
-}: ICategorizableDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IMediaItemViewModel> & ContextProps): JSX.Element => {
     return (
         <div data-testid={id}>
             <Card className="detail-card">

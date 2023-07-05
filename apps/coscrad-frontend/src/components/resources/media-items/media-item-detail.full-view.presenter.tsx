@@ -2,6 +2,7 @@ import { ICategorizableDetailQueryResult, IMediaItemViewModel } from '@coscrad/a
 import { Card, Divider } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 import { formatBilingualText } from '../vocabulary-lists/utils';
 import { ContributionsHack } from './contributors-hack';
 
@@ -10,7 +11,7 @@ export const MediaItemDetailFullViewPresenter = ({
     title,
     titleEnglish,
     url,
-}: ICategorizableDetailQueryResult<IMediaItemViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IMediaItemViewModel> & ContextProps): JSX.Element => {
     const { videoIdToCredits } = useContext(ConfigurableContentContext);
 
     const contributionsMap = new Map<string, string>(

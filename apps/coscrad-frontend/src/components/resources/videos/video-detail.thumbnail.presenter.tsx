@@ -6,6 +6,7 @@ import {
 import { Typography } from '@mui/material';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ResourceDetailThumbnailPresenter } from '../../../utils/generic-components/presenters/detail-views';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 import { convertMillisecondsToSeconds } from '../utils/math';
 
 export const VideoDetailThumbnailPresenter = ({
@@ -13,7 +14,7 @@ export const VideoDetailThumbnailPresenter = ({
     lengthMilliseconds,
     text: plainText,
     name,
-}: ICategorizableDetailQueryResult<IVideoViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IVideoViewModel> & ContextProps): JSX.Element => {
     return (
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.video}>
             <SinglePropertyPresenter

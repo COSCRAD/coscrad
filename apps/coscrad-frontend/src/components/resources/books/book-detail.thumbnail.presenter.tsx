@@ -6,6 +6,7 @@ import {
 import { Card, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { routes } from '../../../app/routes/routes';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 
 export const BookDetailThumbnailPresenter = ({
     id,
@@ -14,7 +15,7 @@ export const BookDetailThumbnailPresenter = ({
     subtitle,
     author,
     publicationDate,
-}: ICategorizableDetailQueryResult<IBookViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IBookViewModel> & ContextProps): JSX.Element => {
     return (
         // TODO We may want to automate the link wrapping because it's easy to forget
         <Link to={`/${routes.resources.ofType(ResourceType.book).detail(id)}`}>

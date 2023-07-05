@@ -6,12 +6,13 @@ import {
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
 import { ImageFullPageWidth } from '../../../utils/generic-components/presenters/image-full-page-width';
 import { ResourceNamePresenter } from '../../../utils/generic-components/presenters/resource-name-presenter';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 
 export const PhotographDetailFullViewPresenter = ({
     id,
     imageUrl,
     name,
-}: ICategorizableDetailQueryResult<IPhotographViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<IPhotographViewModel> & ContextProps): JSX.Element => {
     // Simulating image object retrieved from Digital Asset Manager
     const image = {
         src: imageUrl,

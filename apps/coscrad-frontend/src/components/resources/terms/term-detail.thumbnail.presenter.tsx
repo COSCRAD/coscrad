@@ -8,13 +8,14 @@ import {
     ResourceDetailThumbnailPresenter,
     SingleOptionalPropertyPresenter,
 } from '../../../utils/generic-components/';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 
 export const TermDetailThumbnailPresenter = ({
     id,
     name,
     contributor,
     audioURL,
-}: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<ITermViewModel> & ContextProps): JSX.Element => {
     return (
         <ResourceDetailThumbnailPresenter id={id} name={name} type={ResourceType.term}>
             <div data-testid={id} />

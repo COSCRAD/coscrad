@@ -9,6 +9,7 @@ import {
     ResourceDetailFullViewPresenter,
     SingleOptionalPropertyPresenter,
 } from '../../../utils/generic-components/';
+import { ContextProps } from '../factories/full-view-categorizable-presenter-factory';
 
 // TODO[https://www.pivotaltracker.com/story/show/183681722] expose commands
 export const TermDetailFullViewPresenter = ({
@@ -16,7 +17,7 @@ export const TermDetailFullViewPresenter = ({
     name,
     contributor,
     audioURL,
-}: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => {
+}: ICategorizableDetailQueryResult<ITermViewModel> & ContextProps): JSX.Element => {
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.term}>
             <Box data-testid={id} />
