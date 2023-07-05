@@ -98,7 +98,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         if (!wasSuccess) {
             this.logger.log(`One or more commands failed. \n ${JSON.stringify(failures)}`);
 
-            throw new Error(`Bulk command execution complted but with errors`);
+            throw new Error(`Bulk command execution completed but with errors`);
         }
     }
 
