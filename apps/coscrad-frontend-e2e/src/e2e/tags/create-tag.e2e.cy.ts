@@ -21,14 +21,82 @@ describe(`Create Tag`, () => {
         });
 
         describe(`when the form is complete`, () => {
-            it.only(`should succeed`, () => {
-                cy.get('@commandButton').click();
+            describe(`when creating a single tag`, () => {
+                it(`should succeed`, () => {
+                    cy.get('@commandButton').click();
 
-                cy.getByDataAttribute('text_label').click().type(firstTagLabel);
+                    cy.getByDataAttribute('text_label').click().type(firstTagLabel);
 
-                cy.getCommandFormSubmissionButton().click();
+                    cy.getCommandFormSubmissionButton().click();
 
-                cy.getByDataAttribute('error').should('not.exist');
+                    cy.getByDataAttribute('error').should('not.exist');
+
+                    cy.acknowledgeCommandResult();
+
+                    cy.contains(firstTagLabel);
+                });
+            });
+
+            describe(`when creating multiple tags`, () => {
+                const secondTagLabel = 'robots';
+
+                it(`should succeed`, () => {
+                    cy.get('@commandButton').click();
+
+                    cy.getByDataAttribute('text_label').click().type(firstTagLabel);
+
+                    cy.getCommandFormSubmissionButton().click();
+
+                    cy.getByDataAttribute('error').should('not.exist');
+
+                    cy.acknowledgeCommandResult();
+
+                    cy.get('@commandButton').click();
+
+                    cy.getByDataAttribute('text_label').click().type(secondTagLabel);
+
+                    cy.getCommandFormSubmissionButton().click();
+
+                    cy.getByDataAttribute('error').should('not.exist');
+
+                    cy.acknowledgeCommandResult();
+
+                    cy.contains(secondTagLabel);
+                });
+            });
+
+            describe(`when relabelling an existing tag`, () => {
+                const newLabel = 'widgets';
+
+                beforeEach(() => {
+                    // TODO Use `execute-command-stream` to set up the state
+                    cy.get('@commandButton').click();
+
+                    cy.getByDataAttribute('text_label').click().type(firstTagLabel);
+
+                    cy.getCommandFormSubmissionButton().click();
+
+                    cy.getByDataAttribute('error').should('not.exist');
+
+                    cy.acknowledgeCommandResult();
+                });
+
+                it.only(`should succeed`, () => {
+                    // visit detail page for first tag
+                    cy.contains(firstTagLabel).click();
+
+                    cy.contains(`VIEW`).click();
+
+                    cy.contains(`Relabel Tag`).click();
+
+                    cy.getByDataAttribute('text_newLabel').click().type(newLabel);
+
+                    cy.getCommandFormSubmissionButton().click();
+
+                    cy.acknowledgeCommandResult();
+
+                    cy.contains(newLabel);
+                });
             });
         });
     });

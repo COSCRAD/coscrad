@@ -1,16 +1,18 @@
 import {
+    AggregateCompositeIdentifier,
     AggregateType,
-    CategorizableCompositeIdentifier,
     CategorizableType,
 } from '@coscrad/api-interfaces';
 import { CommandExecutionFormProps, buildCommandExecutor } from './command-executor';
 import { ConnectResourcesWithNoteForm, CreateNoteForm } from './connections';
 import { TagResourceOrNoteForm } from './connections/tag-resource-or-note-form';
 
-export const buildStaticCommandExecutors = (
-    compositeIdentifier: CategorizableCompositeIdentifier
-) => {
-    const { type: categorizableType, id } = compositeIdentifier;
+export const buildStaticCommandExecutors = (compositeIdentifier: AggregateCompositeIdentifier) => {
+    const { type: aggregateType, id } = compositeIdentifier;
+
+    if (!Object.values(CategorizableType).includes(aggregateType as CategorizableType)) return [];
+
+    const categorizableType = aggregateType as CategorizableType;
 
     const tagResourceOrNoteExecutor = {
         // TODO Pull the meta from the back-end
