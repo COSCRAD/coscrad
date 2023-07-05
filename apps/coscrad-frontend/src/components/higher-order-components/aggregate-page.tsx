@@ -24,9 +24,9 @@ import { buildUseLoadableSearchResult } from './buildUseLoadableSearchResult';
 
 type DetailPresenter = (viewModel: IDetailQueryResult<IBaseViewModel>) => JSX.Element;
 
-interface ResourcePageProps {
+interface AggregatePageProps {
     aggregateType: AggregateType;
-    detailPresenterFactory: (categorizableType: AggregateType) => DetailPresenter;
+    DetailPresenter: DetailPresenter;
 }
 
 const isCategorizableCompositeIdentifier = (
@@ -73,21 +73,10 @@ const buildCommandExecutionFormsAndLabels = (
     return commandExecutionFormsAndLabels;
 };
 
-/**
- * A Categorizable is a Resource or a Note. These types of aggregate root share in
- * common that they can be tagged and categorized, and they collectively constitute
- * the web-of-knowledge.
- *
- * We may want to extends this to an `AggregatePage`. We aren't too concerned
- * about that right now as our core value is being extensbile to adding new resource
- * types, while non-resource aggregates are one-offs.
- *
- * We may want to put this in `/Components/Resources/Shared`.
- */
 export const AggregatePage = ({
     aggregateType,
-    detailPresenterFactory,
-}: ResourcePageProps): JSX.Element => {
+    DetailPresenter,
+}: AggregatePageProps): JSX.Element => {
     const id = useIdFromLocation();
 
     const useLoadableSearchResult = buildUseLoadableSearchResult(aggregateType);
@@ -112,8 +101,6 @@ export const AggregatePage = ({
     }
 
     const compositeIdentifier = { type: aggregateType, id };
-
-    const DetailPresenter = detailPresenterFactory(aggregateType);
 
     const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
 

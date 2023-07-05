@@ -18,7 +18,6 @@ import { Loading } from '../loading';
 import { AckNotification } from './ack-notification';
 import { CommandExecutor } from './command-executor';
 import { CommandSelectionArea } from './command-selection-area';
-import { CommandWorkspace } from './command-workspace';
 import { NackNotification } from './nack-notification';
 
 export const INDEX_COMMAND_CONTEXT = 'index';
@@ -98,13 +97,11 @@ export const CommandPanel = ({ actions }: CommandPanelProps) => {
             </CommandAccordion>
         );
 
+    const { executor: CommandExecutor } = selectedCommand;
+
     return (
         <CommandAccordion>
-            <CommandWorkspace
-                executorAndLabelsForSelectedCommand={selectedCommand}
-                onFieldUpdate={updateForm}
-                formState={formState}
-            />
+            <CommandExecutor onFieldUpdate={updateForm} formState={formState} />
         </CommandAccordion>
     );
 };

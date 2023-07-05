@@ -89,8 +89,7 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
                 element: (
                     <AggregatePage
                         aggregateType={AggregateType.tag}
-                        // TODO We should just inject the concrete presenter we already know the aggregate type
-                        detailPresenterFactory={(_) => TagDetailPresenter}
+                        DetailPresenter={TagDetailPresenter}
                     />
                 ),
             }),

@@ -74,7 +74,7 @@ export const bootstrapIndexToDetailFlowRoutes = ({
                     element: (
                         <AggregatePage
                             aggregateType={categorizableType}
-                            detailPresenterFactory={detailPresenterFactory}
+                            DetailPresenter={detailPresenterFactory(categorizableType)}
                         />
                     ),
                 },

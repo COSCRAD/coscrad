@@ -20,7 +20,7 @@ export const buildCategorizableDetailPageRendererForTest =
                     : `/${routes.notes.detail()}/`,
                 <AggregatePage
                     aggregateType={categorizableType}
-                    detailPresenterFactory={fullViewCategorizablePresenterFactory}
+                    DetailPresenter={fullViewCategorizablePresenterFactory(categorizableType)}
                 />
             )
         );

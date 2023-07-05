@@ -1,4 +1,4 @@
-import { ITagViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, ITagViewModel } from '@coscrad/api-interfaces';
 import { screen, waitFor } from '@testing-library/react';
 import { getConfig } from '../../config';
 import { assertNotFound, renderWithProviders } from '../../utils/test-utils';
@@ -7,7 +7,8 @@ import { testContainerComponentErrorHandling } from '../../utils/test-utils/comm
 import { setupTestServer } from '../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../utils/test-utils/test-data';
 import { withDetailRoute } from '../../utils/test-utils/with-detail-route';
-import { TagDetailContainer } from './tag-detail.container';
+import { AggregatePage } from '../higher-order-components/aggregate-page';
+import { TagDetailPresenter } from './tag-detail.presenter';
 import { buildDummyTags } from './test-utils';
 
 const allTags: ITagViewModel[] = buildDummyTags();
@@ -24,7 +25,13 @@ const tagToFind = allTags[0];
 const idToFind = tagToFind.id;
 
 const act = (idInLocation: string) =>
-    renderWithProviders(withDetailRoute(idInLocation, `/Tags/`, <TagDetailContainer />));
+    renderWithProviders(
+        withDetailRoute(
+            idInLocation,
+            `/Tags/`,
+            <AggregatePage aggregateType={AggregateType.tag} DetailPresenter={TagDetailPresenter} />
+        )
+    );
 
 describe(`Tag Detail`, () => {
     describe('when the API request is valid', () => {
