@@ -69,7 +69,6 @@ export const FilteredCategorizableIndexContainer = <
                             aggregateType
                         ),
                     }))}
-                    commandContext={aggregateType}
                 />
             )}
         </div>

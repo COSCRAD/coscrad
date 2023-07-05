@@ -22,6 +22,8 @@ declare namespace Cypress {
 
         executeCommandStream(name: string): Chainable<Subject>;
 
+        acknowledgeCommandResult(): void;
+
         getCommandFormSubmissionButton(): Chainable<Subject>;
     }
 }
@@ -146,3 +148,7 @@ Cypress.Commands.add(`executeCommandStream`, (name: string) =>
 Cypress.Commands.add(`getCommandFormSubmissionButton`, () =>
     cy.getByDataAttribute('submit-dynamic-form')
 );
+
+Cypress.Commands.add(`acknowledgeCommandResult`, () => {
+    cy.getByDataAttribute(`command-ack-button`).click();
+});
