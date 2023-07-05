@@ -34,7 +34,7 @@ import { VocabularyListModule } from './domain-modules/vocabulary-list.module';
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: buildConfigFilePath(process.env.NODE_ENV || 'e2e'),
+            envFilePath: buildConfigFilePath(process.env.NODE_ENV),
             cache: false,
             validate,
         }),
