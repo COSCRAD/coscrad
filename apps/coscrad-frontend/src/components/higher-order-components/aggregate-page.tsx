@@ -9,7 +9,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
-import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
+import { IMaybeLoadable, NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { ConnectedResourcesPanel } from '../../store/slices/resources/shared/connected-resources';
 import { SelfNotesPanelContainer } from '../../store/slices/resources/shared/notes-for-resource';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
@@ -18,6 +18,7 @@ import { buildStaticCommandExecutors } from '../commands/build-static-command-ex
 import { buildCommandExecutor, buildDynamicCommandForm } from '../commands/command-executor';
 import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
+import { NotFoundPresenter } from '../not-found';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { buildUseLoadableSearchResult } from './buildUseLoadableSearchResult';
 
@@ -95,23 +96,19 @@ export const AggregatePage = ({
         isLoading,
         errorInfo,
         data: viewModel,
-    } = useLoadableSearchResult(id) as ILoadable<IDetailQueryResult<IBaseViewModel>>;
+    } = useLoadableSearchResult(id) as IMaybeLoadable<IDetailQueryResult<IBaseViewModel>>;
 
     const { shouldEnableWebOfKnowledgeForResources } = useContext(ConfigurableContentContext);
 
-    if (isLoading || viewModel === null) return <Loading />;
-
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;
+
+    if (viewModel === NOT_FOUND) return <NotFoundPresenter />;
+
+    if (isLoading || viewModel === null) return <Loading />;
 
     // TODO Remove this exceptional case
     if (aggregateType === CategorizableType.note) {
         return <NoteDetailPageContainer />;
-    }
-
-    if (aggregateType === AggregateType.tag) {
-        console.log({
-            viewModel,
-        });
     }
 
     const compositeIdentifier = { type: aggregateType, id };

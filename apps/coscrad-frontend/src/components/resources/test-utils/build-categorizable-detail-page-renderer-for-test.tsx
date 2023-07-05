@@ -2,7 +2,7 @@ import { CategorizableType, isResourceType } from '@coscrad/api-interfaces';
 import { routes } from '../../../app/routes/routes';
 import { renderWithProviders } from '../../../utils/test-utils';
 import { withDetailRoute } from '../../../utils/test-utils/with-detail-route';
-import { CategorizablePage } from '../../higher-order-components/aggregate-page';
+import { AggregatePage } from '../../higher-order-components/aggregate-page';
 import { fullViewCategorizablePresenterFactory } from '../factories/full-view-categorizable-presenter-factory';
 
 /**
@@ -18,8 +18,8 @@ export const buildCategorizableDetailPageRendererForTest =
                 isResourceType(categorizableType)
                     ? `/${routes.resources.ofType(categorizableType).detail()}/`
                     : `/${routes.notes.detail()}/`,
-                <CategorizablePage
-                    categorizableType={categorizableType}
+                <AggregatePage
+                    aggregateType={categorizableType}
                     detailPresenterFactory={fullViewCategorizablePresenterFactory}
                 />
             )
