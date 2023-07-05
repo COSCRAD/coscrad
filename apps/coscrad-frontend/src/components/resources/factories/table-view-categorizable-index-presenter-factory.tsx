@@ -30,6 +30,7 @@ const ConcreteSpatialFeaturePresenter = (
 ): JSX.Element => (
     <SpatialFeatureIndexPresenter
         MapComponent={CoscradLeafletMap}
+        // @ts-expect-error fix this when we refactor the presenters
         DetailPresenter={thumbnailCategorizableDetailPresenterFactory(
             CategorizableType.spatialFeature
         )}

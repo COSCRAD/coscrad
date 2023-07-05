@@ -1,4 +1,4 @@
-import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
+import { IEdgeConnectionContext, IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
 import { Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { ResourceDetailPresenterHeader } from './resource-detail-presenter-header';
@@ -13,6 +13,7 @@ export interface ResourceDetailFullViewPresenterProps {
     name: IMultilingualText | string;
     type: ResourceType;
     children?: ReactNode;
+    onContextSelection?: (context: IEdgeConnectionContext & Record<string, unknown>) => void;
 }
 
 /**
@@ -28,6 +29,7 @@ export const ResourceDetailFullViewPresenter = ({
     name,
     type,
     children,
+    onContextSelection,
 }: ResourceDetailFullViewPresenterProps): JSX.Element => {
     return (
         <Grid container spacing={0} columns={{ xs: 2, sm: 4, md: 12 }}>
@@ -39,7 +41,22 @@ export const ResourceDetailFullViewPresenter = ({
             </Grid>
             <Grid item xs={2} sm={2} md={8}>
                 {/* TODO: consider putting a standardized name property on the view models */}
-                <ResourceDetailPresenterHeader id={id} type={type} name={name} variant="h3" />
+                <ResourceDetailPresenterHeader
+                    id={id}
+                    type={type}
+                    name={name}
+                    variant="h3"
+                    onCharRangeSelection={(charRange) => {
+                        if (typeof onContextSelection === 'function')
+                            onContextSelection({
+                                // TODO Fix this
+                                type: 'textField',
+                                target: 'name',
+                                // this is not right- fix this
+                                charRange,
+                            });
+                    }}
+                />
                 {children}
             </Grid>
         </Grid>

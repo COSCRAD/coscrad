@@ -20,8 +20,8 @@ import { VideoDetailFullViewPresenter } from '../videos/video-detail.full-view.p
 import { VocabularyListDetailFullViewPresenter } from '../vocabulary-lists/vocabulary-list-detail.full-view.presenter';
 
 export interface ContextProps {
-    context: IEdgeConnectionContext;
-    onContextChange: (selectedContext: IEdgeConnectionContext) => void;
+    context?: IEdgeConnectionContext;
+    onContextChange?: (selectedContext: IEdgeConnectionContext) => void;
 }
 
 export interface ContextualizableComponent {

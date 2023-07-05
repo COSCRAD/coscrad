@@ -9,6 +9,7 @@ interface ResourceDetailPresenterHeaderProps {
     type: ResourceType;
     name: IMultilingualText | string;
     variant: Variant;
+    onCharRangeSelection?: (charRange: [number, number]) => void;
 }
 
 export const ResourceDetailPresenterHeader = ({
@@ -16,11 +17,16 @@ export const ResourceDetailPresenterHeader = ({
     type,
     name,
     variant,
+    onCharRangeSelection,
 }: ResourceDetailPresenterHeaderProps): JSX.Element => {
     return (
         <Grid container direction="row" spacing={1} alignItems="center" mb={1}>
             <Grid item>
-                <ResourceNamePresenter name={name} variant={variant} />
+                <ResourceNamePresenter
+                    name={name}
+                    variant={variant}
+                    onTextSelection={onCharRangeSelection}
+                />
             </Grid>
             <Grid item>
                 <IdInfoIcon id={id} type={type} />

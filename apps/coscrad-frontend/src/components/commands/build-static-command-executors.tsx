@@ -2,12 +2,16 @@ import {
     AggregateCompositeIdentifier,
     AggregateType,
     CategorizableType,
+    IEdgeConnectionContext,
 } from '@coscrad/api-interfaces';
 import { CommandExecutionFormProps, buildCommandExecutor } from './command-executor';
 import { ConnectResourcesWithNoteForm, CreateNoteForm } from './connections';
 import { TagResourceOrNoteForm } from './connections/tag-resource-or-note-form';
 
-export const buildStaticCommandExecutors = (compositeIdentifier: AggregateCompositeIdentifier) => {
+export const buildStaticCommandExecutors = (
+    compositeIdentifier: AggregateCompositeIdentifier,
+    resourceContext: IEdgeConnectionContext = { type: 'general' }
+) => {
     const { type: aggregateType, id } = compositeIdentifier;
 
     if (!Object.values(CategorizableType).includes(aggregateType as CategorizableType)) return [];
@@ -50,6 +54,7 @@ export const buildStaticCommandExecutors = (compositeIdentifier: AggregateCompos
                               resourceCompositeIdentifier: {
                                   ...compositeIdentifier,
                               },
+                              resourceContext,
                           },
                           AggregateType.note
                       ),
@@ -87,6 +92,7 @@ export const buildStaticCommandExecutors = (compositeIdentifier: AggregateCompos
                               fromMemberCompositeIdentifier: {
                                   ...compositeIdentifier,
                               },
+                              fromMemberContext: resourceContext,
                           },
                           AggregateType.note
                       ),

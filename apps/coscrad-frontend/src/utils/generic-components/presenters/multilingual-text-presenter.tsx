@@ -18,10 +18,13 @@ import { TranslatedLanguageTextPresenter } from './text-presenters/translated-te
 
 export interface MultilingualTextPresenterProps {
     text: IMultilingualText;
+    // TODO include the langauge code
+    onCharRangeSelection?: (charRange: [number, number]) => void;
 }
 
 export const MultilingualTextPresenter = ({
     text,
+    onCharRangeSelection,
 }: MultilingualTextPresenterProps): JSX.Element => {
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
@@ -61,6 +64,7 @@ export const MultilingualTextPresenter = ({
                         languageCode={languageCode}
                         text={text}
                         role={role}
+                        onTextSelection={onCharRangeSelection}
                     />
                 ))}
             </Accordion>
