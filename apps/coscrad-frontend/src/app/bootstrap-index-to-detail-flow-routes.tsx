@@ -1,7 +1,7 @@
 import { CategorizableType, ResourceType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { FilteredCategorizableIndexContainer } from '../components/higher-order-components';
-import { CategorizablePage } from '../components/higher-order-components/categorizable-page';
+import { AggregatePage } from '../components/higher-order-components/aggregate-page';
 import { fullViewCategorizablePresenterFactory } from '../components/resources/factories/full-view-categorizable-presenter-factory';
 import { tableViewCategorizableIndexPresenterFactory } from '../components/resources/factories/table-view-categorizable-index-presenter-factory';
 import { thumbnailCategorizableDetailPresenterFactory } from '../components/resources/factories/thumbnail-categorizable-detail-presenter-factory';
@@ -72,9 +72,9 @@ export const bootstrapIndexToDetailFlowRoutes = ({
                 {
                     path: detailRoute,
                     element: (
-                        <CategorizablePage
-                            categorizableType={categorizableType}
-                            detailPresenterFactory={detailPresenterFactory}
+                        <AggregatePage
+                            aggregateType={categorizableType}
+                            DetailPresenter={detailPresenterFactory(categorizableType)}
                         />
                     ),
                 },

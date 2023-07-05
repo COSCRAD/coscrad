@@ -17,13 +17,13 @@ export const AggregateDetailContainer = <T,>({
     compositeIdentifier,
     detailPresenterFactory,
 }: AggregateDetailContainerProps<T>) => {
-    const { type: resourceType, id } = compositeIdentifier;
+    const { type: categorizableType, id } = compositeIdentifier;
 
-    const useLoadableSearchResult = buildUseLoadableSearchResult(resourceType);
+    const useLoadableSearchResult = buildUseLoadableSearchResult(categorizableType);
 
     const loadableSearchResult = useLoadableSearchResult(id);
 
-    const DetailPresenter = detailPresenterFactory(resourceType);
+    const DetailPresenter = detailPresenterFactory(categorizableType);
 
     // Wrap in error, pending, and not found presentation
     const Presenter = displayLoadableSearchResult(DetailPresenter);

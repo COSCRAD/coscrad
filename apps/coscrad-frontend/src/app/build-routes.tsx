@@ -1,13 +1,14 @@
-import { CategorizableType } from '@coscrad/api-interfaces';
+import { AggregateType, CategorizableType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { About } from '../components/about/about';
 import { Credits } from '../components/credits/credits';
+import { AggregatePage } from '../components/higher-order-components/aggregate-page';
 import { Home } from '../components/home/home';
 import { ListenLivePage } from '../components/listen-live-page/listen-live-page';
 import { NotFoundPresenter } from '../components/not-found';
 import { NoteIndexContainer } from '../components/notes/note-index.container';
 import { ResourceInfoContainer } from '../components/resource-info/resource-info.container';
-import { TagDetailContainer } from '../components/tags/tag-detail.container';
+import { TagDetailPresenter } from '../components/tags/tag-detail.presenter';
 import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
 import { ConfigurableContent } from '../configurable-front-matter/data/configurable-content-schema';
@@ -85,7 +86,12 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             shouldEnableWebOfKnowledgeForResources,
             () => ({
                 path: 'Tags/:id',
-                element: <TagDetailContainer />,
+                element: (
+                    <AggregatePage
+                        aggregateType={AggregateType.tag}
+                        DetailPresenter={TagDetailPresenter}
+                    />
+                ),
             }),
         ],
         [

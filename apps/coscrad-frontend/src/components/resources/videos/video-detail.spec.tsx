@@ -73,6 +73,7 @@ describe('video detail', () => {
         });
     });
 
+    // TODO [https://www.pivotaltracker.com/story/show/185546456] Implement this test with Cypress
     describe('when the API request is invalid or pending', () => {
         testContainerComponentErrorHandling(() => act(idtoFind), endpoint, mockGetNotesHandler);
     });
