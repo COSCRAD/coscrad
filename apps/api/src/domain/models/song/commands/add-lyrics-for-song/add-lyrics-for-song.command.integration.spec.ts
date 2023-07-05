@@ -1,8 +1,9 @@
-import { FluxStandardAction } from '@coscrad/api-interfaces';
+import { AggregateType, FluxStandardAction } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
+import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
@@ -10,6 +11,15 @@ import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 
 const commandType = 'ADD_LYRICS_FOR_SONG';
+
+validPayload: AddLyricsForSong = {
+    aggregateCompositeIdentifier: 
+}
+
+const validCommandFSA = {
+    type: commandType,
+    payload: validPayload,
+}
 
 const buildValidCommandFSA = (): FluxStandardAction<DTO<AddLyricsForSong>> => validCommandFSA;
 
@@ -51,6 +61,10 @@ describe(commandType, () => {
         it('should succeed', async () => {
             await assertCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
+                buildValidCommandFSA,
+                initialState: new DeluxeInMemoryStore({
+                    [AggregateType.song]: [song],
+                }),
             });
         });
     });
