@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ConfigService when NODE_ENV is not inherited from the process should throw 1`] = `[Error: Error: Property NODE_ENV has failed the validation constraint: is enum Environment]`;
+exports[`ConfigService when NODE_ENV is not inherited from the process should throw 1`] = `[Error: Error: Property NODE_ENV (undefined) has failed the validation constraint: is enum Environment]`;
 
 exports[`ConfigService when all environment variables are valid the config service when reading environment variables should obtain the correct values 1`] = `
 {

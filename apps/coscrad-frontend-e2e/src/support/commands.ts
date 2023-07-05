@@ -17,6 +17,8 @@ declare namespace Cypress {
         navigateToIndex(resourceType: string): Chainable<Subject>;
 
         clearDatabase(): Chainable<Subject>;
+
+        executeCommandStream(name: string): Chainable<Subject>;
     }
 }
 
@@ -123,9 +125,13 @@ Cypress.Commands.add('navigateToIndex', (resourceType: string) => {
     cy.getByDataAttribute(resourceType).click();
 });
 
-Cypress.Commands.add(`clearDatabase`, () => {
-    cy.exec(`node ../../dist/apps/coscrad-cli/main.js clear-database`);
-});
+Cypress.Commands.add(`clearDatabase`, () =>
+    cy.exec(`node ../../dist/apps/coscrad-cli/main.js clear-database`)
+);
+
+Cypress.Commands.add(`executeCommandStream`, (name: string) =>
+    cy.exec(`node ../../dist/apps/coscrad-cli/main.js execute-command-stream --name=${name}`)
+);
 
 //
 // -- This is a child command --
