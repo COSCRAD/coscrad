@@ -7,17 +7,32 @@ interface TranslatedLanguageTextPresenterProps {
     languageCode: LanguageCode;
     text: string;
     role: MultilingualTextItemRole;
+    onTextSelection?: (charRange: [number, number]) => void;
 }
 
 export const TranslatedLanguageTextPresenter = ({
     languageCode,
     text,
     role,
+    onTextSelection,
 }: TranslatedLanguageTextPresenterProps): JSX.Element => {
     return (
         <AccordionDetails key={`${languageCode}-${role}`}>
             <Typography color={'text.primary'}>
-                {text}
+                <textarea
+                    onSelect={(e) => {
+                        console.log({ eventdata: e });
+
+                        const charRange: [number, number] = [
+                            e.currentTarget.selectionStart,
+                            e.currentTarget.selectionEnd,
+                        ];
+
+                        if (typeof onTextSelection === 'function') onTextSelection(charRange);
+                    }}
+                >
+                    {text}
+                </textarea>
                 <Tooltip title={`${getLabelForLanguage(languageCode)}, '${role}'`}>
                     <IconButton>
                         <LanguageIcon />

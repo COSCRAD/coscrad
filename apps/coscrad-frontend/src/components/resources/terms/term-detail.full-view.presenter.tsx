@@ -19,12 +19,22 @@ export const TermDetailFullViewPresenter = ({
     name,
     contributor,
     audioURL,
+    context,
+    onContextChange,
 }: ICategorizableDetailQueryResult<ITermViewModel> & ContextProps): JSX.Element => {
     return (
         <ResourceDetailFullViewPresenter name={name} id={id} type={ResourceType.term}>
             <Box
                 data-testid={buildDataAttributeForAggregateDetailComponent(AggregateType.term, id)}
             />
+        <ResourceDetailFullViewPresenter
+            name={name}
+            id={id}
+            type={ResourceType.term}
+            onContextSelection={onContextChange}
+        >
+            <Box data-testid={id} />
+            context: {JSON.stringify(context)}
             <SingleOptionalPropertyPresenter display="Contributor" value={contributor} />
             <Box id="media-player">
                 <AudioClipPlayer audioUrl={audioURL} />

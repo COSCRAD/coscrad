@@ -31,6 +31,10 @@ const ConcreteSpatialFeaturePresenter = (
     <SpatialFeatureIndexPresenter
         MapComponent={CoscradLeafletMap}
         DetailPresenter={fullViewCategorizablePresenterFactory(CategorizableType.spatialFeature)}
+        // @ts-expect-error fix this when we refactor the presenters
+        DetailPresenter={thumbnailCategorizableDetailPresenterFactory(
+            CategorizableType.spatialFeature
+        )}
         {...result}
     />
 );

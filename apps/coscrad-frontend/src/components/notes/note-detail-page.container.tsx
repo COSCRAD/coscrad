@@ -31,6 +31,7 @@ export const NoteDetailPageContainer = (): JSX.Element => {
             <NoteDetailPresenter {...loadableNote} />
             <SelectedCategorizablesOfMultipleTypesPresenter
                 viewModelSnapshot={loadableCategorizables}
+                // @ts-expect-error Fix these types when updating the way we deal with presenters
                 presenterFactory={thumbnailCategorizableDetailPresenterFactory}
                 getPluralLabelForCategorizableType={(categorizableType: CategorizableType) =>
                     `${categorizableType}s`

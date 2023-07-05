@@ -6,8 +6,9 @@ import {
     ICommandFormAndLabels as IBackendCommandFormAndLabels,
     IBaseViewModel,
     IDetailQueryResult,
+    IEdgeConnectionContext,
 } from '@coscrad/api-interfaces';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { ConfigurableContentContext } from '../../configurable-front-matter/configurable-content-provider';
 import { IMaybeLoadable, NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { ConnectedResourcesPanel } from '../../store/slices/resources/shared/connected-resources';
@@ -20,10 +21,13 @@ import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
 import { NotFoundPresenter } from '../not-found';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
+import { ContextProps } from '../resources/factories/full-view-categorizable-presenter-factory';
 import { buildUseLoadableSearchResult } from './buildUseLoadableSearchResult';
 import { CategorizablePageLayout } from './categorizable-page-layout';
 
-type DetailPresenter = (viewModel: IDetailQueryResult<IBaseViewModel>) => JSX.Element;
+type DetailPresenter = (
+    viewModel: IDetailQueryResult<IBaseViewModel> & ContextProps
+) => JSX.Element;
 
 interface AggregatePageProps {
     aggregateType: AggregateType;
@@ -42,7 +46,8 @@ const isCategorizableCompositeIdentifier = (
 
 const buildCommandExecutionFormsAndLabels = (
     actionsFromApi: IBackendCommandFormAndLabels[],
-    compositeIdentifier: AggregateCompositeIdentifier
+    compositeIdentifier: AggregateCompositeIdentifier,
+    resourceContext: IEdgeConnectionContext
 ) => {
     const commandExecutionFormsAndLabels = actionsFromApi
         .map(
@@ -69,7 +74,7 @@ const buildCommandExecutionFormsAndLabels = (
          * ID for the note, which is the proper aggregate context for
          * this command.
          */
-        .concat(buildStaticCommandExecutors(compositeIdentifier));
+        .concat(buildStaticCommandExecutors(compositeIdentifier, resourceContext));
 
     return commandExecutionFormsAndLabels;
 };
@@ -78,6 +83,10 @@ export const AggregatePage = ({
     aggregateType,
     DetailPresenter,
 }: AggregatePageProps): JSX.Element => {
+    const [resourceContext, setResourceContext] = useState<IEdgeConnectionContext>({
+        type: 'general',
+    });
+
     const id = useIdFromLocation();
 
     const useLoadableSearchResult = buildUseLoadableSearchResult(aggregateType);
@@ -107,6 +116,11 @@ export const AggregatePage = ({
 
     const Commands = () => (
         <>
+            <DetailPresenter
+                {...viewModel}
+                context={resourceContext}
+                onContextChange={(newContext) => setResourceContext(newContext)}
+            />
             {/* Note that we don't mix-in static forms if there were no
                     actions returned from the back-end as we're not in admin
                     mode in that case. Note that exposing the forms is only a 
@@ -116,7 +130,8 @@ export const AggregatePage = ({
                 <CommandPanel
                     actions={buildCommandExecutionFormsAndLabels(
                         actionsFromApi,
-                        compositeIdentifier
+                        compositeIdentifier,
+                        resourceContext
                     )}
                 />
             ) : null}

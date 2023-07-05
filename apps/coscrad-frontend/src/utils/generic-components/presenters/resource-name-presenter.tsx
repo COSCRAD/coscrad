@@ -7,11 +7,13 @@ import { MultilingualTextPresenter } from './multilingual-text-presenter';
 interface ResourceNamePresenterProps {
     name: IMultilingualText | string;
     variant: Variant;
+    onTextSelection?: (charRange: [number, number]) => void;
 }
 
 export const ResourceNamePresenter = ({
     name,
     variant,
+    onTextSelection,
 }: ResourceNamePresenterProps): JSX.Element => {
     return (
         <Typography
@@ -24,7 +26,7 @@ export const ResourceNamePresenter = ({
             {isString(name) || isNullOrUndefined(name) ? (
                 name
             ) : (
-                <MultilingualTextPresenter text={name} />
+                <MultilingualTextPresenter text={name} onCharRangeSelection={onTextSelection} />
             )}
         </Typography>
     );

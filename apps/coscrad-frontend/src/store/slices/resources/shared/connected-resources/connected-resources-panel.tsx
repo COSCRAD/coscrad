@@ -24,6 +24,7 @@ export const ConnectedResourcesPanel = ({
 
     return SelectedCategorizablesOfMultipleTypesPresenter({
         viewModelSnapshot: loadableConnectedResources,
+        // @ts-expect-error Fix these types when updating the way we deal with presenters
         presenterFactory: thumbnailCategorizableDetailPresenterFactory,
         // TODO Deal with this properly
         getPluralLabelForCategorizableType: (categorizableType) => `${categorizableType}s`,
