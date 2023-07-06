@@ -1563,7 +1563,7 @@ exports[`When querying for edge connections GET /connections/notes should return
               0,
               1,
             ],
-            "languageCode": "clc",
+            "languageCode": "hai",
             "target": "name",
             "type": "textField",
           },
@@ -1584,7 +1584,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "hai",
             "role": "original",
             "text": "This is the first letter of the list name",
           },
@@ -2271,7 +2271,7 @@ exports[`When querying for edge connections GET /connections/notes should return
       "note": {
         "items": [
           {
-            "languageCode": "eng",
+            "languageCode": "hai",
             "role": "original",
             "text": "This is the first letter of the list name",
           },
@@ -2488,7 +2488,7 @@ exports[`When querying for edge connections GET /connections/notes should return
               0,
               1,
             ],
-            "languageCode": "clc",
+            "languageCode": "hai",
             "target": "name",
             "type": "textField",
           },
@@ -2530,7 +2530,7 @@ exports[`When querying for edge connections GET /connections/notes should return
               0,
               1,
             ],
-            "languageCode": "clc",
+            "languageCode": "hai",
             "target": "name",
             "type": "textField",
           },

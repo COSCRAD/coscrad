@@ -100,7 +100,7 @@ describe(`**${cliCommandName}**`, () => {
 
         const expectedErrorMessage = (
             termValidationError as InternalError
-        ).innerErrors[0].toString();
+        ).innerErrors[0].innerErrors[0].toString();
 
         const testDataWithoutTerms = buildTestDataInFlatFormat();
 
@@ -125,11 +125,12 @@ describe(`**${cliCommandName}**`, () => {
             const processMessageForComparison = (msg: string) =>
                 msg.toLowerCase().replace('\n', '');
 
-            expect(
-                processMessageForComparison(secondLogMessage).includes(
-                    processMessageForComparison(expectedErrorMessage)
-                )
-            ).toBe(true);
+            const normalizedSecondLogMessage = processMessageForComparison(secondLogMessage);
+
+            const normalizedExpectedErrorMessage =
+                processMessageForComparison(expectedErrorMessage);
+
+            expect(normalizedSecondLogMessage.includes(normalizedExpectedErrorMessage)).toBe(true);
         });
     });
 });

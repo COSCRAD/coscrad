@@ -1,5 +1,7 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import buildTestData from '../../test-data/buildTestData';
 import { DTO } from '../../types/DTO';
+import { buildMultilingualTextWithSingleItem } from '../common/build-multilingual-text-with-single-item';
 import { ResourceType } from '../types/ResourceType';
 import { VocabularyList } from './vocabulary-list/entities/vocabulary-list.entity';
 
@@ -27,11 +29,8 @@ describe('the (base) resource clone method', () => {
         describe('when some updates are provided', () => {
             const newName = 'new list name';
 
-            const newNameEnglish = 'new name english';
-
             const updates: Partial<DTO<VocabularyList>> = {
-                name: newName,
-                nameEnglish: newNameEnglish,
+                name: buildMultilingualTextWithSingleItem(newName, LanguageCode.Haida).toDTO(),
             };
 
             const updatedVocabularyList = initialVocabularyList.clone(updates);

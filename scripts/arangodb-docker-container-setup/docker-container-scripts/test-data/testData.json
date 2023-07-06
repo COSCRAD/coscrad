@@ -1827,14 +1827,14 @@
                                 0,
                                 1
                             ],
-                            "languageCode": "clc"
+                            "languageCode": "hai"
                         }
                     }
                 ],
                 "note": {
                     "items": [
                         {
-                            "languageCode": "eng",
+                            "languageCode": "hai",
                             "role": "original",
                             "text": "This is the first letter of the list name"
                         }
@@ -2178,7 +2178,7 @@
                 "note": {
                     "items": [
                         {
-                            "languageCode": "eng",
+                            "languageCode": "hai",
                             "role": "original",
                             "text": "This is the first letter of the list name"
                         }
@@ -2339,7 +2339,7 @@
                                 0,
                                 1
                             ],
-                            "languageCode": "clc"
+                            "languageCode": "hai"
                         }
                     }
                 ],
@@ -2370,7 +2370,7 @@
                                 0,
                                 1
                             ],
-                            "languageCode": "clc"
+                            "languageCode": "hai"
                         }
                     },
                     {
