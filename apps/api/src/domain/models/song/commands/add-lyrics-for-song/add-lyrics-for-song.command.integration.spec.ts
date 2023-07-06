@@ -17,6 +17,7 @@ import { DTO } from '../../../../../types/DTO';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import { AddLyricsForSong } from './add-lyrics-for-song.command';
 
 const commandType = 'ADD_LYRICS_FOR_SONG';
 
@@ -24,10 +25,12 @@ const existingSong = getValidAggregateInstanceForTest(AggregateType.song).clone(
     lyrics: undefined,
 });
 
+const newEnglishLyrics = 'lalala';
+
 const validPayload: AddLyricsForSong = {
     aggregateCompositeIdentifier: existingSong.getCompositeIdentifier(),
-    lyrics: existingSong.lyrics,
-    languageCode: LanguageCode,
+    lyrics: newEnglishLyrics,
+    languageCode: LanguageCode.English,
 };
 
 const validCommandFSA = {
@@ -80,11 +83,11 @@ describe(commandType, () => {
                     [AggregateType.song]: [existingSong],
                 }).fetchFullSnapshotInLegacyFormat(),
                 checkStateOnSuccess: async ({
-                    aggregateCompositeIdentifier: { id: SongCompositeId },
+                    aggregateCompositeIdentifier: { id: SongId },
                 }: AddLyricsForSong) => {
                     const songSearchResult = await testRepositoryProvider
                         .forResource(ResourceType.song)
-                        .fetchById(SongCompositeId);
+                        .fetchById(SongId);
 
                     expect(songSearchResult).not.toBe(NotFound);
                 },
