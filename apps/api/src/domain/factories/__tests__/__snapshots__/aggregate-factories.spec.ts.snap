@@ -432,8 +432,20 @@ Term {
     "allowedUserIds": [],
   },
   "sourceProject": undefined,
-  "term": "Chil-term-1",
-  "termEnglish": "Engl-term-1",
+  "text": MultilingualText {
+    "items": [
+      MultilingualTextItem {
+        "languageCode": "clc",
+        "role": "original",
+        "text": "Chil-term-1",
+      },
+      MultilingualTextItem {
+        "languageCode": "eng",
+        "role": "free translation",
+        "text": "Engl-term-1",
+      },
+    ],
+  },
   "type": "term",
 }
 `;
@@ -543,8 +555,20 @@ VocabularyList {
   "eventHistory": [],
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b114567",
-  "name": "To Sing (lang)",
-  "nameEnglish": "To Sing (Engl)",
+  "name": MultilingualText {
+    "items": [
+      MultilingualTextItem {
+        "languageCode": "clc",
+        "role": "original",
+        "text": "To Sing (lang)",
+      },
+      MultilingualTextItem {
+        "languageCode": "eng",
+        "role": "free translation",
+        "text": "To Sing (Engl)",
+      },
+    ],
+  },
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": [],

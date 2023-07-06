@@ -2,18 +2,19 @@ import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
+import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { MultilingualText } from '../domain/common/entities/multilingual-text';
 import { Valid } from '../domain/domainModelValidators/Valid';
 import { buildFakeTimersConfig } from '../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { AggregateType } from '../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
-import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { InternalError } from '../lib/errors/InternalError';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
-import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
 import { CoscradCliModule } from './coscrad-cli.module';
 import { COSCRAD_LOGGER_TOKEN } from './logging';
@@ -88,8 +89,9 @@ describe(`**${cliCommandName}**`, () => {
 
     describe(`when the database state is invalid`, () => {
         const invalidTerm = getValidAggregateInstanceForTest(AggregateType.term).clone({
-            term: undefined,
-            termEnglish: undefined,
+            text: new MultilingualText({
+                items: [],
+            }),
         });
 
         const termValidationError = invalidTerm.validateInvariants();
