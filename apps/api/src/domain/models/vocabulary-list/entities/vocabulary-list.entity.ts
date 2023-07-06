@@ -1,15 +1,11 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
-import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { NestedDataType } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../types/DTO';
-import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { Valid, isValid } from '../../../domainModelValidators/Valid';
 import VocabularyListHasNoEntriesError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoEntriesError';
-import VocabularyListHasNoNameInAnyLanguageError from '../../../domainModelValidators/errors/vocabularyList/VocabularyListHasNoNameInAnyLanguageError';
-import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
@@ -20,25 +16,32 @@ import validateTextFieldContextForModel from '../../shared/contextValidators/val
 import { VocabularyListEntry } from '../vocabulary-list-entry.entity';
 import { VocabularyListVariable } from './vocabulary-list-variable.entity';
 
-const isOptional = true;
-
 @RegisterIndexScopedCommands([])
 export class VocabularyList extends Resource {
     readonly type = ResourceType.vocabularyList;
 
-    @NonEmptyString({
-        isOptional,
-        label: 'name (language)',
-        description: 'name of the vocabulary list in the language',
-    })
-    readonly name?: string;
+    // @NonEmptyString({
+    //     isOptional,
+    //     label: 'name (language)',
+    //     description: 'name of the vocabulary list in the language',
+    // })
+    // readonly name?: string;
 
-    @NonEmptyString({
-        isOptional,
-        label: 'name (colonial language)',
-        description: 'name of the vocabulary list in the colonial language',
+    // @NonEmptyString({
+    //     isOptional,
+    //     label: 'name (colonial language)',
+    //     description: 'name of the vocabulary list in the colonial language',
+    // })
+    // readonly nameEnglish?: string;
+
+    /**
+     * TODO This change requires a migration.
+     */
+    @NestedDataType(MultilingualText, {
+        label: 'name',
+        description: 'the name of the vocabulary list',
     })
-    readonly nameEnglish?: string;
+    name: MultilingualText;
 
     @NestedDataType(VocabularyListEntry, {
         isArray: true,
@@ -63,11 +66,9 @@ export class VocabularyList extends Resource {
 
         if (!dto) return;
 
-        const { name, nameEnglish, entries, variables } = dto;
+        const { name, entries, variables } = dto;
 
-        this.name = name;
-
-        this.nameEnglish = nameEnglish;
+        this.name = new MultilingualText(name);
 
         this.entries = Array.isArray(entries)
             ? entries.map((entryDto) => new VocabularyListEntry(entryDto))
@@ -82,17 +83,7 @@ export class VocabularyList extends Resource {
     }
 
     getName(): MultilingualText {
-        // TODO[migration]: `name` should be a MultilingualTextProperty on this class.
-        return buildMultilingualTextFromBilingualText(
-            {
-                text: this.name,
-                languageCode: LanguageCode.Chilcotin,
-            },
-            {
-                text: this.nameEnglish,
-                languageCode: LanguageCode.English,
-            }
-        );
+        return this.name.clone();
     }
 
     protected getResourceSpecificAvailableCommands(): string[] {
@@ -102,12 +93,13 @@ export class VocabularyList extends Resource {
     protected validateComplexInvariants(): InternalError[] {
         const allErrors: InternalError[] = [];
 
-        const { name, nameEnglish, id, entries } = this;
+        const { name, id, entries } = this;
+
+        const nameValidationResult = name.validateComplexInvariants();
 
         // TODO Validate vocabulary list variables against entry variables
 
-        if (!isNonEmptyString(name) && !isNonEmptyString(nameEnglish))
-            allErrors.push(new VocabularyListHasNoNameInAnyLanguageError());
+        if (!isValid(nameValidationResult)) allErrors.push(nameValidationResult);
 
         if (!Array.isArray(entries) || !entries.length)
             allErrors.push(new VocabularyListHasNoEntriesError(id));

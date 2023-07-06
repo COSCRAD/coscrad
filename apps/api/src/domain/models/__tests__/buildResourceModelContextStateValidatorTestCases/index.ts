@@ -6,9 +6,7 @@ import buildPhotographResourceModelContextStateValidatorTestCase from './buildPh
 import buildPlaylistResourceModelContextStateValidatorTestCase from './buildPlaylistResourceModelContextStateValidatorTestCase';
 import buildSongResourceModelContextStateValidatorTestCase from './buildSongResourceModelContextStateValidatorTestCase';
 import buildSpatialFeatureResourceModelContextStateValidatorTestCase from './buildSpatialFeatureResourceModelContextStateValidatorTestCase';
-import buildTermResourceModelContextStateValidatorTestCase from './buildTermResourceModelContextStateValidatorTestCase';
 import buildVideoResourceModelContextStateValidatorTestCase from './buildVideoResourceModelContextStateValidatorTestCase';
-import buildVocabularyListResourceModelContextStateValidatorTestCase from './buildVocabularyListResourceModelContextStateValidatorTestCase';
 
 export default () => {
     const testCases = [
@@ -16,10 +14,8 @@ export default () => {
         buildBookResourceModelContextStateValidatorTestCase(),
         buildPhotographResourceModelContextStateValidatorTestCase(),
         buildSpatialFeatureResourceModelContextStateValidatorTestCase(),
-        buildTermResourceModelContextStateValidatorTestCase(),
         buildAudioItemResourceModelContextStateValidatorTestCase(),
         buildVideoResourceModelContextStateValidatorTestCase(),
-        buildVocabularyListResourceModelContextStateValidatorTestCase(),
         buildSongResourceModelContextStateValidatorTestCase(),
         buildMediaItemResourceModelContextStateValidatorTestCase(),
         buildPlaylistResourceModelContextStateValidatorTestCase(),

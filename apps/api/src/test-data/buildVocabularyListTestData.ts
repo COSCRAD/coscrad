@@ -1,3 +1,6 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextFromBilingualText } from '../domain/common/build-multilingual-text-from-bilingual-text';
+import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import { Term } from '../domain/models/term/entities/term.entity';
 import { VocabularyListVariable } from '../domain/models/vocabulary-list/entities/vocabulary-list-variable.entity';
 import { VocabularyList } from '../domain/models/vocabulary-list/entities/vocabulary-list.entity';
@@ -69,8 +72,16 @@ const formFieldForPerson: VocabularyListVariable = {
 
 const detailedVocabularyList: DTO<VocabularyList> = {
     id: '4567',
-    name: 'To Sing (lang)',
-    nameEnglish: 'To Sing (Engl)',
+    name: buildMultilingualTextFromBilingualText(
+        {
+            text: 'To Sing (lang)',
+            languageCode: LanguageCode.Chilcotin,
+        },
+        {
+            text: 'To Sing (Engl)',
+            languageCode: LanguageCode.English,
+        }
+    ),
     entries,
     variables: [formFieldForPositive, formFieldForPerson],
     published: true,
@@ -82,8 +93,16 @@ const vocabularyListDTOs = [
     // Vocabulary List 1
     {
         id: '1',
-        name: 'test VL 1 chil',
-        nameEnglish: 'test VL 1 engl',
+        name: buildMultilingualTextFromBilingualText(
+            {
+                text: 'test VL 1 chil',
+                languageCode: LanguageCode.Chilcotin,
+            },
+            {
+                text: 'test VL 1 engl',
+                languageCode: LanguageCode.English,
+            }
+        ),
         published: true,
         entries: [
             {
@@ -119,7 +138,10 @@ const vocabularyListDTOs = [
     // Vocabulary List 2
     {
         id: '2',
-        name: 'test VL 2 CHIL- no engl name',
+        name: buildMultilingualTextWithSingleItem(
+            'test VL 2 CHIL- no engl name',
+            LanguageCode.Haida
+        ),
         published: true,
         entries: [
             {

@@ -5,9 +5,13 @@ import { Resource } from '../../../../../models/resource.entity';
 
 // TODO we should really alias [number,number] already!
 export default class InconsistentCharRangeError extends InternalError {
-    constructor(charRange: [number, number], targetModel: Resource, targetField: string) {
-        const targetValue = targetModel[targetField];
-
+    constructor(
+        charRange: [number, number],
+        targetModel: Resource,
+        targetField: string,
+        targetValue: string
+        // TODO language code?
+    ) {
         const msg = [
             `The character range ${formatCharacterRange(charRange)}`,
             `is inconsistent with the value of the target property ${targetField}`,

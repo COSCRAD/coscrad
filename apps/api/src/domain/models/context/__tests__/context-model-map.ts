@@ -1,4 +1,4 @@
-import { IEdgeConnectionContext } from '@coscrad/api-interfaces';
+import { IEdgeConnectionContext, LanguageCode } from '@coscrad/api-interfaces';
 import { GeneralContext } from '../general-context/general-context.entity';
 import { IdentityContext } from '../identity-context.entity/identity-context.entity';
 import { PageRangeContext } from '../page-range-context/page-range.context.entity';
@@ -36,6 +36,7 @@ export const buildContextModelMap = () =>
             new TextFieldContext({
                 type: EdgeConnectionContextType.textField,
                 target: 'foobarbaz',
+                languageCode: LanguageCode.English,
                 charRange: [0, 10000000000000],
             })
         )
