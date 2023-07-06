@@ -21,6 +21,7 @@ import { Loading } from '../loading';
 import { NotFoundPresenter } from '../not-found';
 import { NoteDetailPageContainer } from '../notes/note-detail-page.container';
 import { buildUseLoadableSearchResult } from './buildUseLoadableSearchResult';
+import { CategorizablePageLayout } from './categorizable-page-layout';
 
 type DetailPresenter = (viewModel: IDetailQueryResult<IBaseViewModel>) => JSX.Element;
 
@@ -125,14 +126,21 @@ export const AggregatePage = ({
 
     return (
         <>
-            <DetailPresenterWithCommands />
             {shouldEnableWebOfKnowledgeForResources &&
             isCategorizableCompositeIdentifier(compositeIdentifier) ? (
-                <>
-                    <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
-                    <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
-                </>
-            ) : null}
+                <CategorizablePageLayout
+                    bottomDrawer={
+                        <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
+                    }
+                    rightSideDrawer={
+                        <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
+                    }
+                >
+                    <DetailPresenterWithCommands />
+                </CategorizablePageLayout>
+            ) : (
+                <DetailPresenterWithCommands />
+            )}
         </>
     );
 };
