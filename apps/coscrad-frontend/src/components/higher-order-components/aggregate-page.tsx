@@ -105,9 +105,8 @@ export const AggregatePage = ({
 
     const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
 
-    const DetailPresenterWithCommands = () => (
+    const Commands = () => (
         <>
-            <DetailPresenter {...viewModel} />
             {/* Note that we don't mix-in static forms if there were no
                     actions returned from the back-end as we're not in admin
                     mode in that case. Note that exposing the forms is only a 
@@ -129,17 +128,21 @@ export const AggregatePage = ({
             {shouldEnableWebOfKnowledgeForResources &&
             isCategorizableCompositeIdentifier(compositeIdentifier) ? (
                 <CategorizablePageLayout
-                    bottomDrawer={
+                    bottomDrawerContent={
                         <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
                     }
-                    rightSideDrawer={
+                    rightSideDrawerContent={
                         <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
                     }
+                    commandPanel={<Commands />}
                 >
-                    <DetailPresenterWithCommands />
+                    <DetailPresenter {...viewModel} />
                 </CategorizablePageLayout>
             ) : (
-                <DetailPresenterWithCommands />
+                <>
+                    <DetailPresenter {...viewModel} />
+                    <Commands />
+                </>
             )}
         </>
     );
