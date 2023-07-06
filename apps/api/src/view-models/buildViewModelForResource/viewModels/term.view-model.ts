@@ -19,7 +19,6 @@ export class TermViewModel extends BaseViewModel implements ITermViewModel {
         example: 'Jane Doe',
         description: 'The language speaker who contributed the term',
     })
-
     // TODO Use edge-connections with a `Contributor` resource for this instead
     @NonEmptyString({
         label: 'contributor',
@@ -28,20 +27,6 @@ export class TermViewModel extends BaseViewModel implements ITermViewModel {
     readonly contributor: string;
 
     // We should wrap the API Property using the View Model Schemas!
-    @ApiProperty({
-        example: 'word, phrase, or sentence in the language',
-        description: '',
-    })
-    @FromTerm
-    readonly term: string;
-
-    @ApiPropertyOptional({
-        example: 'He usually tells stories.',
-        description: 'translation into colonial language \\ gloss of the term',
-    })
-    @FromTerm
-    readonly termEnglish?: string;
-
     @ApiPropertyOptional({
         example: 'https://www.mysound.org/audio/hetellsstories.mp3',
         description: 'a url for an audio recording of the given term in the language',

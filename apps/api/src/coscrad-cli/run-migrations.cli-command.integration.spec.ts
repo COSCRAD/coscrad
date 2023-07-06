@@ -3,11 +3,12 @@ import { existsSync, readFileSync, rmSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
+import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { MultilingualText } from '../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { buildFakeTimersConfig } from '../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { AggregateType } from '../domain/types/AggregateType';
 import { ResourceType } from '../domain/types/ResourceType';
-import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { NotFound } from '../lib/types/not-found';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
@@ -15,8 +16,8 @@ import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
 import { ArangoCollectionId } from '../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { BASE_DIGITAL_ASSET_URL } from '../persistence/migrations/01/remove-base-digital-asset-url.migration';
-import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
+import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { CoscradCliModule } from './coscrad-cli.module';
 import { COSCRAD_LOGGER_TOKEN } from './logging';
 import { buildMockLogger } from './logging/__tests__';
@@ -180,9 +181,10 @@ describe(`run migrations`, () => {
                     // add an invalid term to the db
                     await testRepositoryProvider.addResourcesOfSingleType(ResourceType.term, [
                         getValidAggregateInstanceForTest(AggregateType.term).clone({
-                            // no name in either language
-                            term: undefined,
-                            termEnglish: undefined,
+                            // no text in any language
+                            text: new MultilingualText({
+                                items: [],
+                            }),
                         }),
                     ]);
                 });

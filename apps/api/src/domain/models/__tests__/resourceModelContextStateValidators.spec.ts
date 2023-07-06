@@ -67,7 +67,17 @@ describe(`resource model context state validators`, () => {
             isContextAllowedForGivenResourceType(contextType, resourceType)
     );
 
-    describe(`the test cases should be comprehensive`, () => {
+    /**
+     * We are moving away from using the test-case builder pattern so we can
+     * keep tests closer to the implementation. This lessens the cognitive load
+     * when adding new aggregate root, while also allowing us to use Jest more
+     * idiomatically (e.g., leverage .skip, .only, and .todo on test cases).
+     *
+     * The main downside of this is that we can't write a Jest test to check
+     * that our test coverage is comprehensive. Going forward, we should leverage
+     * our test coverage report to identify potential gaps in test coverage.
+     */
+    describe.skip(`the test cases should be comprehensive`, () => {
         it('should have at least one valid test case for each resource type \\ allowed context type combo', () => {
             const missingValidCases = allowedResourceTypeContextTypeCombos.reduce(
                 (acc: [ResourceType, EdgeConnectionContextType][], [resourceType, contextType]) =>

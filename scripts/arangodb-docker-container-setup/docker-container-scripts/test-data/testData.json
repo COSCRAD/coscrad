@@ -444,8 +444,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "term": "Chil-term-1",
-                "termEnglish": "Engl-term-1",
+                "text": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "Chil-term-1"
+                        },
+                        {
+                            "languageCode": "eng",
+                            "role": "free translation",
+                            "text": "Engl-term-1"
+                        }
+                    ]
+                },
                 "contributorId": "John Doe"
             },
             {
@@ -457,8 +469,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "term": "Chil-term-2",
-                "termEnglish": "Engl-term-2",
+                "text": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "Chil-term-2"
+                        },
+                        {
+                            "languageCode": "eng",
+                            "role": "free translation",
+                            "text": "Engl-term-2"
+                        }
+                    ]
+                },
                 "contributorId": "John Doe"
             },
             {
@@ -470,7 +494,15 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "term": "Chil-term-no-english",
+                "text": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "Chil-term-no-english"
+                        }
+                    ]
+                },
                 "contributorId": "Jane Deer"
             },
             {
@@ -484,7 +516,15 @@
                     ],
                     "allowedGroupIds": []
                 },
-                "term": "My Secret Term",
+                "text": {
+                    "items": [
+                        {
+                            "languageCode": "eng",
+                            "role": "original",
+                            "text": "My Secret Term"
+                        }
+                    ]
+                },
                 "contributorId": "This will be removed soon"
             },
             {
@@ -496,8 +536,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "term": "I am singing (lang)",
-                "termEnglish": "I am singing (Engl)",
+                "text": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "I am singing (lang)"
+                        },
+                        {
+                            "languageCode": "eng",
+                            "role": "free translation",
+                            "text": "I am singing (Engl)"
+                        }
+                    ]
+                },
                 "contributorId": "Sarah Smith",
                 "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/511.mp3"
             },
@@ -510,8 +562,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "term": "You are singing (lang)",
-                "termEnglish": "You are singing (Engl)",
+                "text": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "You are singing (lang)"
+                        },
+                        {
+                            "languageCode": "eng",
+                            "role": "free translation",
+                            "text": "You are singing (Engl)"
+                        }
+                    ]
+                },
                 "contributorId": "Sarah Smith",
                 "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/512.mp3"
             },
@@ -524,8 +588,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "term": "She is singing (lang)",
-                "termEnglish": "She is singing (Engl)",
+                "text": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "She is singing (lang)"
+                        },
+                        {
+                            "languageCode": "eng",
+                            "role": "free translation",
+                            "text": "She is singing (Engl)"
+                        }
+                    ]
+                },
                 "contributorId": "Sarah Smith",
                 "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/513.mp3"
             },
@@ -538,8 +614,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "term": "I am not singing (lang)",
-                "termEnglish": "I am not singing (Engl)",
+                "text": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "I am not singing (lang)"
+                        },
+                        {
+                            "languageCode": "eng",
+                            "role": "free translation",
+                            "text": "I am not singing (Engl)"
+                        }
+                    ]
+                },
                 "contributorId": "Sarah Smith",
                 "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/501.mp3"
             },
@@ -552,8 +640,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "term": "You are not singing (lang)",
-                "termEnglish": "You are not singing (Engl)",
+                "text": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "You are not singing (lang)"
+                        },
+                        {
+                            "languageCode": "eng",
+                            "role": "free translation",
+                            "text": "You are not singing (Engl)"
+                        }
+                    ]
+                },
                 "contributorId": "Sarah Smith",
                 "audioFilename": "https://coscrad.org/wp-content/uploads/2023/06/502.mp3"
             }
@@ -568,8 +668,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "name": "To Sing (lang)",
-                "nameEnglish": "To Sing (Engl)",
+                "name": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "To Sing (lang)"
+                        },
+                        {
+                            "languageCode": "eng",
+                            "role": "free translation",
+                            "text": "To Sing (Engl)"
+                        }
+                    ]
+                },
                 "entries": [
                     {
                         "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110511",
@@ -651,8 +763,20 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "name": "test VL 1 chil",
-                "nameEnglish": "test VL 1 engl",
+                "name": {
+                    "items": [
+                        {
+                            "languageCode": "clc",
+                            "role": "original",
+                            "text": "test VL 1 chil"
+                        },
+                        {
+                            "languageCode": "eng",
+                            "role": "free translation",
+                            "text": "test VL 1 engl"
+                        }
+                    ]
+                },
                 "entries": [
                     {
                         "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
@@ -693,7 +817,15 @@
                     "allowedUserIds": [],
                     "allowedGroupIds": []
                 },
-                "name": "test VL 2 CHIL- no engl name",
+                "name": {
+                    "items": [
+                        {
+                            "languageCode": "hai",
+                            "role": "original",
+                            "text": "test VL 2 CHIL- no engl name"
+                        }
+                    ]
+                },
                 "entries": [
                     {
                         "termId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -1631,11 +1763,12 @@
                         "role": "self",
                         "context": {
                             "type": "textField",
-                            "target": "term",
+                            "target": "text",
                             "charRange": [
                                 0,
                                 3
-                            ]
+                            ],
+                            "languageCode": "clc"
                         }
                     }
                 ],
@@ -1693,7 +1826,8 @@
                             "charRange": [
                                 0,
                                 1
-                            ]
+                            ],
+                            "languageCode": "clc"
                         }
                     }
                 ],
@@ -2188,11 +2322,12 @@
                         "role": "to",
                         "context": {
                             "type": "textField",
-                            "target": "term",
+                            "target": "text",
                             "charRange": [
                                 0,
                                 3
-                            ]
+                            ],
+                            "languageCode": "clc"
                         }
                     },
                     {
@@ -2203,7 +2338,8 @@
                             "charRange": [
                                 0,
                                 1
-                            ]
+                            ],
+                            "languageCode": "clc"
                         }
                     }
                 ],
@@ -2233,7 +2369,8 @@
                             "charRange": [
                                 0,
                                 1
-                            ]
+                            ],
+                            "languageCode": "clc"
                         }
                     },
                     {
@@ -2487,11 +2624,12 @@
                         "role": "from",
                         "context": {
                             "type": "textField",
-                            "target": "term",
+                            "target": "text",
                             "charRange": [
                                 0,
                                 3
-                            ]
+                            ],
+                            "languageCode": "clc"
                         }
                     }
                 ],
@@ -2685,11 +2823,12 @@
                         "role": "to",
                         "context": {
                             "type": "textField",
-                            "target": "term",
+                            "target": "text",
                             "charRange": [
                                 1,
                                 4
-                            ]
+                            ],
+                            "languageCode": "eng"
                         }
                     }
                 ],
