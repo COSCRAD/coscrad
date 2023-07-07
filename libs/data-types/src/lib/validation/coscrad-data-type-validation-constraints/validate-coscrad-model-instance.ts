@@ -19,15 +19,23 @@ export const validateCoscradModelInstance = (
     }
 
     const errorsFromKnownProperties = Object.entries(schema).reduce(
-        (allErrors: Error[], [propertyName, coscradDataTypeDefinition]): Error[] => [
-            ...allErrors,
-            ...validateCoscradModelProperty(
-                coscradDataTypeDefinition,
-                propertyName,
-                instance[propertyName],
-                forbidUnknownValues
-            ),
-        ],
+        (allErrors: Error[], [propertyName, coscradDataTypeDefinition]): Error[] => {
+            const propertyValue = instance[propertyName];
+
+            if (propertyName === 'lyrics') {
+                console.log(`right here bro!`);
+            }
+
+            return [
+                ...allErrors,
+                ...validateCoscradModelProperty(
+                    coscradDataTypeDefinition,
+                    propertyName,
+                    propertyValue,
+                    forbidUnknownValues
+                ),
+            ];
+        },
         []
     );
 

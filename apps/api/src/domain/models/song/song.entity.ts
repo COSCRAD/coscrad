@@ -93,7 +93,7 @@ export class Song extends Resource implements ITimeBoundable {
             (contributorAndRoleDTO) => new ContributorAndRole(contributorAndRoleDTO)
         );
 
-        if (isNullOrUndefined(lyrics)) this.lyrics = new MultilingualText(lyrics);
+        if (!isNullOrUndefined(lyrics)) this.lyrics = new MultilingualText(lyrics);
 
         this.audioURL = audioURL;
 
@@ -150,14 +150,16 @@ export class Song extends Resource implements ITimeBoundable {
 
     addLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
         return this.safeClone({
-            lyrics: this.lyrics.append(
-                new MultilingualTextItem({
-                    role: MultilingualTextItemRole.original,
-                    text,
-                    languageCode,
-                })
-            ),
-        } as unknown as DeepPartial<DTO<this>>);
+            lyrics: new MultilingualText({
+                items: [
+                    new MultilingualTextItem({
+                        text,
+                        languageCode,
+                        role: MultilingualTextItemRole.original,
+                    }),
+                ],
+            }),
+        } as DeepPartial<DTO<this>>);
     }
 
     getTimeBounds(): [number, number] {
