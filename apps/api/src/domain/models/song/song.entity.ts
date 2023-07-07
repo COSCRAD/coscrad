@@ -17,6 +17,7 @@ import { ITimeBoundable } from '../interfaces/ITimeBoundable';
 import { Resource } from '../resource.entity';
 import validateTimeRangeContextForModel from '../shared/contextValidators/validateTimeRangeContextForModel';
 import { ContributorAndRole } from './ContributorAndRole';
+import { CannotAddDuplicateSetOfLyricsForSongError } from './errors';
 
 const isOptional = true;
 
@@ -149,6 +150,8 @@ export class Song extends Resource implements ITimeBoundable {
     }
 
     addLyrics(text: string, languageCode: LanguageCode): ResultOrError<Song> {
+        if (this.hasLyrics()) return new CannotAddDuplicateSetOfLyricsForSongError(this);
+
         return this.safeClone({
             lyrics: new MultilingualText({
                 items: [
@@ -160,6 +163,10 @@ export class Song extends Resource implements ITimeBoundable {
                 ],
             }),
         } as DeepPartial<DTO<this>>);
+    }
+
+    hasLyrics(): boolean {
+        return this.lyrics instanceof MultilingualText;
     }
 
     getTimeBounds(): [number, number] {
