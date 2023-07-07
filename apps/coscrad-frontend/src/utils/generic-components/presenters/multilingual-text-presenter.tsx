@@ -20,18 +20,29 @@ export const MultilingualTextPresenter = ({
     const { items } = text;
 
     const textItemWithDefaultLanguage =
-        items.find((item) => item.languageCode === defaultLanguageCode) || null;
+        items?.find((item) => item.languageCode === defaultLanguageCode) || null;
 
     const translations = items?.filter((items) => items.languageCode !== defaultLanguageCode);
 
     return (
-        <Box>
+        <Box width={'fit-content'}>
             <Accordion variant="outlined">
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography variant="h4" margin={'auto 0'}>
                         {isNullOrUndefined(textItemWithDefaultLanguage)
                             ? 'Translations'
                             : textItemWithDefaultLanguage.text}
+                        {isNullOrUndefined(textItemWithDefaultLanguage) ? null : (
+                            <Tooltip
+                                title={`${getLabelForLanguage(
+                                    textItemWithDefaultLanguage.languageCode
+                                )}, '${textItemWithDefaultLanguage.role}'`}
+                            >
+                                <IconButton>
+                                    <LanguageIcon />
+                                </IconButton>
+                            </Tooltip>
+                        )}
                     </Typography>
                     {isNullOrUndefined(textItemWithDefaultLanguage) ? null : (
                         <Tooltip
