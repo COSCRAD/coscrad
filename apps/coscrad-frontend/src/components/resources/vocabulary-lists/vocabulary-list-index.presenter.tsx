@@ -1,6 +1,7 @@
-import { IVocabularyListViewModel } from '@coscrad/api-interfaces';
+import { IMultilingualText, IVocabularyListViewModel } from '@coscrad/api-interfaces';
 import { VocabularyListIndexState } from '../../../store/slices/resources/vocabulary-lists/types/vocabulary-list-index-state';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
@@ -18,6 +19,11 @@ export const VocabularyListIndexPresenter = ({
         name: ({ name }) => renderMultilingualTextCell(name),
     };
 
+    const matchers: Matchers<IVocabularyListViewModel> = {
+        name: ({ items }: IMultilingualText, search) =>
+            items.some(({ text }) => text.toLowerCase().includes(search.toLowerCase())),
+    };
+
     return (
         <IndexTable
             headingLabels={headingLabels}
@@ -25,7 +31,8 @@ export const VocabularyListIndexPresenter = ({
             cellRenderersDefinition={cellRenderersDefinition}
             // This should be a resource label from resource info
             heading={'Vocabulary Lists'}
-            filterableProperties={['name', 'nameEnglish']}
+            filterableProperties={['name']}
+            matchers={matchers}
         />
     );
 };
