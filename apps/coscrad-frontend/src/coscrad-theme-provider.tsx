@@ -35,6 +35,14 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                     fontWeight: 'bold',
                     marginBottom: '7px',
                 },
+                h6: {
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    marginBottom: '4px',
+                },
+                body1: {
+                    lineHeight: '1.1',
+                },
             },
             components: {
                 MuiTableCell: {

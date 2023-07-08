@@ -128,10 +128,11 @@ export const AggregatePage = ({
             {shouldEnableWebOfKnowledgeForResources &&
             isCategorizableCompositeIdentifier(compositeIdentifier) ? (
                 <CategorizablePageLayout
-                    bottomDrawerContent={
+                    compositeIdentifier={compositeIdentifier}
+                    selfNotesList={
                         <SelfNotesPanelContainer compositeIdentifier={compositeIdentifier} />
                     }
-                    rightSideDrawerContent={
+                    connectedResourcesList={
                         <ConnectedResourcesPanel compositeIdentifier={compositeIdentifier} />
                     }
                     commandPanel={<Commands />}
