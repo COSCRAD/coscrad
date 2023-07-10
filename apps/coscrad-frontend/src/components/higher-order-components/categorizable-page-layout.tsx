@@ -19,7 +19,7 @@ interface CategorizablePageLayoutProps {
 
 const DrawerHeader = styled(Box)(({ theme }) => ({
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     margin: theme.spacing(2, 4, 0, 4),
     justifyContent: 'space-between',
 }));
@@ -61,11 +61,23 @@ export const CategorizablePageLayout = ({
                     </IconButton>
                 </Tooltip>
             </Box>
-            <Drawer anchor="right" variant="persistent" open={rightSideDrawerOpen}>
+            <Drawer
+                anchor="right"
+                PaperProps={{
+                    sx: { width: '35vw' },
+                }}
+                variant="persistent"
+                open={rightSideDrawerOpen}
+            >
                 <DrawerHeader>
-                    <Typography variant="h2">
-                        Connections for {resourceType}/{id}
-                    </Typography>
+                    <Box sx={{ mb: 2 }}>
+                        <Typography variant="h3" sx={{ mb: 0 }}>
+                            Connected Resources
+                        </Typography>
+                        <Typography variant="subtitle2">
+                            for {resourceType}/{id}
+                        </Typography>
+                    </Box>
                     <Tooltip title="Close Panel">
                         <IconButton
                             onClick={() => {
@@ -78,11 +90,30 @@ export const CategorizablePageLayout = ({
                 </DrawerHeader>
                 <DrawerContentStack>{connectedResourcesList}</DrawerContentStack>
             </Drawer>
-            <Drawer anchor="bottom" variant="persistent" open={bottomDrawerOpen}>
+            <Drawer
+                anchor="bottom"
+                PaperProps={{
+                    sx: {
+                        height: '30vh',
+                        width: '90vw',
+                        margin: 'auto',
+                        borderLeft: '1px solid rgba(0, 0, 0, 0.12)',
+                        borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                        borderRadius: '20px 20px 0px 0px',
+                    },
+                }}
+                variant="persistent"
+                open={bottomDrawerOpen}
+            >
                 <DrawerHeader>
-                    <Typography variant="h2">
-                        Notes for {resourceType}/{id}
-                    </Typography>
+                    <Box sx={{ mb: 2 }}>
+                        <Typography variant="h3" sx={{ mb: 0 }}>
+                            Notes
+                        </Typography>
+                        <Typography variant="subtitle2">
+                            for {resourceType}/{id}
+                        </Typography>
+                    </Box>
                     <Tooltip title="Close Panel">
                         <IconButton
                             onClick={() => {

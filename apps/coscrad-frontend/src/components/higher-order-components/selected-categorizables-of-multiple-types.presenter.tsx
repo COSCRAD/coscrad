@@ -13,8 +13,7 @@ import {
     getCategorizableTypeForSliceKey,
 } from './use-loadable-categorizables';
 
-import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Typography } from '@mui/material';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 
 interface SelectedCategorizablesOfMultipleTypesPresenterProps<
     T extends IBaseViewModel = IBaseViewModel
@@ -33,9 +32,9 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
 }: SelectedCategorizablesOfMultipleTypesPresenterProps): JSX.Element => {
     return (
         <div data-testid="multiple-categorizables-view">
-            <Typography variant="h3">
+            {/* <Typography variant="h4">
                 {isNonEmptyString(heading) ? heading : 'Connected Resources'}
-            </Typography>
+            </Typography> */}
             {Object.entries(viewModelSnapshot)
                 // replace the slice name with corresponding categorizable type
                 .map(

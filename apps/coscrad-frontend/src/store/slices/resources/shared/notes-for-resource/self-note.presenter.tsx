@@ -1,10 +1,11 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import styled from '@emotion/styled';
 import { TextSnippet as TextSnippetIcon } from '@mui/icons-material';
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
 import { SelfConnectionNote } from '../../../notes/hooks/use-loadable-self-notes-for-resource';
-const Item = styled('div')(({ theme }) => ({
+
+const Item = styled(Box)(({ theme }) => ({
     padding: 0,
     marginBottom: '15px',
 }));
