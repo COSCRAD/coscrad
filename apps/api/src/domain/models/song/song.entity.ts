@@ -196,7 +196,7 @@ export class Song extends Resource implements ITimeBoundable {
     hasTranslation(languageCode: LanguageCode): boolean {
         if (!this.hasLyrics()) return false;
 
-        const searchResult = this.lyrics.in(languageCode);
+        const searchResult = this.lyrics.translate(languageCode);
 
         return !isNotFound(searchResult);
     }
