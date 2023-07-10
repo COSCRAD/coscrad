@@ -18,11 +18,13 @@ import { DTO } from '../../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
+import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { CannotAddDuplicateSetOfLyricsForSongError } from '../../errors';
+import { Song } from '../../song.entity';
 import { AddLyricsForSong } from './add-lyrics-for-song.command';
 
 const commandType = 'ADD_LYRICS_FOR_SONG';
@@ -102,6 +104,12 @@ describe(commandType, () => {
                         .fetchById(SongId);
 
                     expect(songSearchResult).not.toBe(NotFound);
+
+                    const song = songSearchResult as Song;
+
+                    expect(song.hasLyrics()).toBe(true);
+
+                    assertEventRecordPersisted(song, `LYRICS_ADDED_TO_SONG`, dummySystemUserId);
                 },
             });
         });

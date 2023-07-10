@@ -7,7 +7,7 @@ import { SongCompositeId } from '../create-song.command';
 @Command({
     type: 'ADD_LYRICS_FOR_SONG',
     label: 'Add Lyrics for existing Song',
-    description: 'add lyrics for existing song',
+    description: 'add lyrics for an existing song',
 })
 export class AddLyricsForSong implements ICommandBase {
     @NestedDataType(SongCompositeId, {
