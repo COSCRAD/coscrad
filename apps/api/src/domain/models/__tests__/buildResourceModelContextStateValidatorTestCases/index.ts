@@ -8,6 +8,9 @@ import buildSongResourceModelContextStateValidatorTestCase from './buildSongReso
 import buildSpatialFeatureResourceModelContextStateValidatorTestCase from './buildSpatialFeatureResourceModelContextStateValidatorTestCase';
 import buildVideoResourceModelContextStateValidatorTestCase from './buildVideoResourceModelContextStateValidatorTestCase';
 
+/**
+ * @deprecated Create a one-off unit test instead.
+ */
 export default () => {
     const testCases = [
         buildBibliographicReferenceResourceModelContextStateValidatorTestCase(),

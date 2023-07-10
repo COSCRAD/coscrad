@@ -30,12 +30,10 @@ process.env[BASE_DIGITAL_ASSET_URL] = baseDigitalAssetUrl;
 type OldPhotograph = Omit<Photograph, 'imageUrl'> & { filename?: string };
 
 /**
- * Note that we do not want to type these because we don't want future
- * model changes to break this test. In fact, we may just want to skip
- * this test now that the migration has successfully been run. We keep it
- * for posterity.
+ * This migration has been applied to all databases. We keep this test for
+ * posterity.
  */
-describe(`RemoveBaseDigitalAssetUrl`, () => {
+describe.skip(`RemoveBaseDigitalAssetUrl`, () => {
     let testDatabaseProvider: ArangoDatabaseProvider;
 
     let testQueryRunner: ArangoQueryRunner;
