@@ -1,4 +1,4 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { LanguageCode, MultilingualTextItemRole, ResourceType } from '@coscrad/api-interfaces';
 import { getConfig } from '../../../config';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
@@ -18,7 +18,18 @@ const dummyTerms = [
     {
         id: '14',
     },
-];
+].map((partial) => ({
+    ...partial,
+    name: {
+        items: [
+            {
+                languageCode: LanguageCode.Haida,
+                role: MultilingualTextItemRole.original,
+                text: `text for term: ${partial.id}`,
+            },
+        ],
+    },
+}));
 
 const endpoint = `${getConfig().apiUrl}/Resources/Terms`;
 
