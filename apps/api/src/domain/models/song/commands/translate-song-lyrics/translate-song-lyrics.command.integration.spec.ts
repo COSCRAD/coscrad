@@ -11,6 +11,7 @@ import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/ut
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
+import { isNotFound } from '../../../../../lib/types/not-found';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DTO } from '../../../../../types/DTO';
@@ -18,12 +19,14 @@ import { buildMultilingualTextWithSingleItem } from '../../../../common/build-mu
 import { MultilingualTextItem } from '../../../../common/entities/multilingual-text';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
+import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { NoLyricsToTranslateError } from '../../errors';
 import { SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError } from '../../errors/SongLyricsAlreadyHaveBeenTranslatedToGivenLanguageError';
+import { Song } from '../../song.entity';
 import { TranslateSongLyrics } from './translate-song-lyrics.command';
 
 const commandType = 'TRANSLATE_SONG_LYRICS';
@@ -79,23 +82,36 @@ describe(commandType, () => {
         await app.close();
     });
 
-    beforeAll(async () => {
-        await testRepositoryProvider.testSetup();
-    });
-
     beforeEach(async () => {
-        await testRepositoryProvider.testSetup();
+        await testRepositoryProvider.deleteAllResourcesOfGivenType(AggregateType.song);
     });
 
     describe(`when the command is valid`, () => {
         it(`should succeed with the expected updates to the database`, async () => {
-            assertCommandSuccess(commandAssertionDependencies, {
+            await assertCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
                 initialState: new DeluxeInMemoryStore({
                     [AggregateType.song]: [existingSong],
                 }).fetchFullSnapshotInLegacyFormat(),
                 buildValidCommandFSA,
-                // TODO check state
+                checkStateOnSuccess: async ({
+                    aggregateCompositeIdentifier: { id: songId },
+                    languageCode,
+                }: TranslateSongLyrics) => {
+                    const searchResult = await testRepositoryProvider
+                        .forResource(AggregateType.song)
+                        .fetchById(songId);
+
+                    expect(searchResult).toBeInstanceOf(Song);
+
+                    const song = searchResult as Song;
+
+                    const doesSongHaveTranslation = !isNotFound(song.lyrics.in(languageCode));
+
+                    expect(doesSongHaveTranslation).toBe(true);
+
+                    assertEventRecordPersisted(song, `SONG_LYRICS_TRANSLATED`, dummySystemUserId);
+                },
             });
         });
     });
