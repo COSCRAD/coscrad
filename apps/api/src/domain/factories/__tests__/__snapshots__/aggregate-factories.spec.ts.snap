@@ -278,7 +278,15 @@ Song {
   "getCompositeIdentifier": [Function],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
   "lengthMilliseconds": 3500,
-  "lyrics": "Mary had a little lamb, little lamb.",
+  "lyrics": MultilingualText {
+    "items": [
+      MultilingualTextItem {
+        "languageCode": "eng",
+        "role": "original",
+        "text": "Mary had a little lamb, little lamb.",
+      },
+    ],
+  },
   "published": true,
   "queryAccessControlList": AccessControlList {
     "allowedGroupIds": [],

@@ -109,7 +109,7 @@ describe(commandType, () => {
 
                     expect(song.hasLyrics()).toBe(true);
 
-                    assertEventRecordPersisted(song, `LYRICS_ADDED_TO_SONG`, dummySystemUserId);
+                    assertEventRecordPersisted(song, `LYRICS_ADDED_FOR_SONG`, dummySystemUserId);
                 },
             });
         });

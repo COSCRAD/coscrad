@@ -22,10 +22,6 @@ export const validateCoscradModelInstance = (
         (allErrors: Error[], [propertyName, coscradDataTypeDefinition]): Error[] => {
             const propertyValue = instance[propertyName];
 
-            if (propertyName === 'lyrics') {
-                console.log(`right here bro!`);
-            }
-
             return [
                 ...allErrors,
                 ...validateCoscradModelProperty(

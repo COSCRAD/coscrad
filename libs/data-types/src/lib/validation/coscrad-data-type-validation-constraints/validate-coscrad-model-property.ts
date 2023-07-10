@@ -76,10 +76,6 @@ export const validateCoscradModelProperty = (
 
     const isOptionallyOmitted = isOptional && isNullOrUndefined(actualPropertyValue);
 
-    if (propertyName === 'lyrics') {
-        console.log({ isOptionallyOmitted });
-    }
-
     /**
      * If this property is optional and not specified, all is well.
      */
